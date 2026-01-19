@@ -154,6 +154,8 @@ const Prices = () => {
     const [date, setDate] = useState('')
     const [time, setTime] = useState('')
     const [paymentMethod, setPaymentMethod] = useState('cash')
+    const [boardShow, setBoardShow] = useState(false)
+    const [boardName, setBoardName] = useState('')
     const [isVehicleListExpanded, setIsVehicleListExpanded] = useState(true)
     const [usdRate, setUsdRate] = useState(null)
 
@@ -484,6 +486,44 @@ const Prices = () => {
                             </div>
                         )}
                     </div>
+
+                    {/* Airport Greeting (Board Show) Option */}
+                    <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:border-gold/50">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center text-2xl">
+                                🛫
+                            </div>
+                            <div>
+                                <h4 className="text-navy font-bold text-lg">Airport Greeting (Board Show)</h4>
+                                <p className="text-gray-500 text-xs max-w-xs">Our driver will wait for you at the arrival terminal with your name on a board.</p>
+                            </div>
+                        </div>
+                        <div className="flex flex-col items-end gap-3">
+                            <div className="flex items-center gap-4">
+                                <span className="text-gold font-bold">+ Rs 2000.00</span>
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        className="sr-only peer"
+                                        checked={boardShow}
+                                        onChange={(e) => setBoardShow(e.target.checked)}
+                                    />
+                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
+                                </label>
+                            </div>
+
+                            {/* Input for Name on Board */}
+                            <div className={`transition-all duration-300 overflow-hidden ${boardShow ? 'max-h-16 opacity-100 w-full' : 'max-h-0 opacity-0 w-0'}`}>
+                                <input
+                                    type="text"
+                                    value={boardName}
+                                    onChange={(e) => setBoardName(e.target.value)}
+                                    placeholder="Name to display on board"
+                                    className="w-full bg-slate-50 border-none px-4 py-2 rounded-lg text-sm focus:ring-1 focus:ring-gold outline-none"
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Right: Summary & Quote */}
@@ -493,7 +533,8 @@ const Prices = () => {
                     </h3>
 
                     {(() => {
-                        const { total, breakdown } = calculatePrice(distance, vehicle, tripType)
+                        const { total: baseTotal, breakdown } = calculatePrice(distance, vehicle, tripType)
+                        const total = baseTotal + (boardShow ? 2000 : 0)
 
                         return (
                             <>
@@ -522,6 +563,12 @@ const Prices = () => {
                                                         <span className="text-gold font-bold">Rs {item.amount.toLocaleString()}</span>
                                                     </div>
                                                 ))}
+                                                {boardShow && (
+                                                    <div className="flex justify-between text-white/70">
+                                                        <span className="text-xs">Airport Greeting (Board Show)</span>
+                                                        <span className="text-gold font-bold">Rs 2,000</span>
+                                                    </div>
+                                                )}
                                                 {tripType === 'round-trip' && (
                                                     <div className="flex justify-between text-gold/80 pt-2 border-t border-white/5">
                                                         <span className="text-xs">× 2 (Round Trip)</span>
@@ -567,7 +614,8 @@ const Prices = () => {
                                             return
                                         }
                                         const usdText = usdRate ? ` (~$${(total * usdRate).toFixed(2)})` : ''
-                                        const msg = `Booking Request: %0AFrom: ${pickup.name}%0ATo: ${dropoff.name}%0ADistance: ${distance.toFixed(1)}km%0AVehicle: ${VEHICLE_PRICING[vehicle].name}%0ATrip: ${tripType}%0ADate: ${date}%0ATime: ${time}%0APayment: ${paymentMethod.toUpperCase()}%0ATotal: Rs ${total.toLocaleString()}${usdText}`
+                                        const boardText = boardShow ? `%0A---%0ABoard Show: YES (+Rs 2000)%0AName on Board: ${boardName}` : ''
+                                        const msg = `Booking Request: %0AFrom: ${pickup.name}%0ATo: ${dropoff.name}%0ADistance: ${distance.toFixed(1)}km%0AVehicle: ${VEHICLE_PRICING[vehicle].name}%0ATrip: ${tripType}%0ADate: ${date}%0ATime: ${time}%0APayment: ${paymentMethod.toUpperCase()}${boardText}%0ATotal: Rs ${total.toLocaleString()}${usdText}`
                                         window.open(`https://wa.me/94716885880?text=${msg}`, '_blank')
                                     }}
                                     className="w-full bg-gold text-navy font-extrabold py-6 rounded-2xl text-xl hover:scale-[1.02] transition-all shadow-2xl disabled:opacity-50 disabled:grayscale"
