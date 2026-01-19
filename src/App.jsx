@@ -43,16 +43,25 @@ const App = () => {
     return (
         <div className="font-sans text-slate-800 antialiased selection:bg-gold selection:text-navy">
             {/* Navbar */}
-            <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-navy/95 backdrop-blur-md shadow-lg py-4' : 'bg-transparent py-6'}`}>
+            <nav className="fixed w-full z-50 bg-white border-b-4 border-navy shadow-lg py-3 transition-all duration-300">
                 <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
-                    <Link to="/" className="flex items-center group">
+                    <Link to="/" className="flex items-center gap-3 md:gap-4 group">
                         {/* Cropping container for the logo */}
-                        <div className="relative h-12 md:h-16 overflow-hidden flex items-start">
+                        <div className="relative h-12 md:h-14 overflow-hidden flex items-start">
                             <img
                                 src="/logo.png"
                                 alt="AirportTaxis.lk"
-                                className="h-[140%] w-auto object-contain object-top filter brightness-0 invert group-hover:invert-0 group-hover:brightness-100 transition-all duration-300"
+                                className="h-full w-auto object-contain"
                             />
+                        </div>
+                        {/* Branding Text */}
+                        <div className="flex flex-col">
+                            <h1 className="text-navy font-extrabold text-sm md:text-xl tracking-tight leading-none uppercase">
+                                Airport Taxis (Pvt) Ltd
+                            </h1>
+                            <p className="text-[10px] md:text-xs text-slate-500 font-medium tracking-wide hidden sm:block">
+                                Best & trusted Airport transfers in Sri Lanka
+                            </p>
                         </div>
                     </Link>
 
@@ -76,8 +85,8 @@ const App = () => {
                             </div>
                         </div>
 
-                        <Link to="/prices" className={`text-sm font-bold uppercase tracking-wider hover:text-gold transition-colors ${location.pathname === '/prices' ? 'text-gold' : 'text-white/80'}`}>Rates</Link>
-                        <Link to="/contact" className={`text-sm font-bold uppercase tracking-wider hover:text-gold transition-colors ${location.pathname === '/contact' ? 'text-gold' : 'text-white/80'}`}>Contact</Link>
+                        <Link to="/prices" className={`text-sm font-bold uppercase tracking-wider hover:text-gold transition-colors ${location.pathname === '/prices' ? 'text-gold' : 'text-navy'}`}>Rates</Link>
+                        <Link to="/contact" className={`text-sm font-bold uppercase tracking-wider hover:text-gold transition-colors ${location.pathname === '/contact' ? 'text-gold' : 'text-navy'}`}>Contact</Link>
 
                         <a
                             href="tel:+94722885885"
@@ -90,32 +99,32 @@ const App = () => {
 
                     {/* Mobile Menu Button */}
                     <button
-                        className="md:hidden text-white"
+                        className="md:hidden text-navy border-2 border-navy rounded p-1"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     >
-                        {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
                 </div>
 
                 {/* Mobile Menu */}
                 {isMobileMenuOpen && (
-                    <div className="md:hidden absolute top-full left-0 w-full bg-navy border-t border-white/10 shadow-2xl max-h-[80vh] overflow-y-auto">
+                    <div className="md:hidden absolute top-full left-0 w-full bg-white border-t border-navy/10 shadow-2xl max-h-[80vh] overflow-y-auto">
                         <div className="flex flex-col p-6 gap-4">
-                            <Link to="/" className="text-lg font-bold text-white">Home</Link>
-                            <Link to="/about" className="text-lg font-bold text-white">About</Link>
+                            <Link to="/" className="text-lg font-bold text-navy">Home</Link>
+                            <Link to="/about" className="text-lg font-bold text-navy">About</Link>
                             <div className="space-y-2">
                                 <span className="text-lg font-bold text-gold">Services</span>
-                                <div className="pl-4 flex flex-col gap-2 border-l-2 border-white/10">
-                                    <Link to="/prices" className="text-white/80">Airport Transport</Link>
-                                    <Link to="/prices" className="text-white/80">Point to Point</Link>
-                                    <Link to="/contact" className="text-white/80">Train Booking</Link>
-                                    <Link to="/day-trips" className="text-white/80">Day Trips</Link>
-                                    <Link to="/tour-packages" className="text-white/80">Tour Packages</Link>
-                                    <Link to="/contact" className="text-white/80">Custom Tour</Link>
+                                <div className="pl-4 flex flex-col gap-2 border-l-2 border-navy/10">
+                                    <Link to="/prices" className="text-navy/80">Airport Transport</Link>
+                                    <Link to="/prices" className="text-navy/80">Point to Point</Link>
+                                    <Link to="/contact" className="text-navy/80">Train Booking</Link>
+                                    <Link to="/day-trips" className="text-navy/80">Day Trips</Link>
+                                    <Link to="/tour-packages" className="text-navy/80">Tour Packages</Link>
+                                    <Link to="/contact" className="text-navy/80">Custom Tour</Link>
                                 </div>
                             </div>
-                            <Link to="/prices" className="text-lg font-bold text-white">Rates</Link>
-                            <Link to="/contact" className="text-lg font-bold text-white">Contact</Link>
+                            <Link to="/prices" className="text-lg font-bold text-navy">Rates</Link>
+                            <Link to="/contact" className="text-lg font-bold text-navy">Contact</Link>
                         </div>
                     </div>
                 )}

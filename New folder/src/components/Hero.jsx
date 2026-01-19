@@ -2,7 +2,7 @@ import React from 'react'
 
 const Hero = ({ onBookClick }) => {
     return (
-        <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
+        <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-24 md:pt-0">
             {/* Background Image with Overlay */}
             <div className="absolute inset-0 z-0">
                 <img
@@ -14,28 +14,28 @@ const Hero = ({ onBookClick }) => {
             </div>
 
             <div className="relative z-10 max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-                <div className="text-white">
+                <div className="text-white text-center md:text-left">
                     <h4 className="text-gold font-bold tracking-[0.2em] uppercase mb-4 animate-fade-in"></h4>
                     <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6">
                         Your Premium <br />
                         <span className="text-gold">Airport Taxi</span> <br />
                         Partner in SL
                     </h1>
-                    <p className="text-lg text-white/80 mb-8 max-w-lg leading-relaxed">
+                    <p className="text-lg text-white/80 mb-8 max-w-lg leading-relaxed mx-auto md:mx-0">
                         Experience the safest and most comfortable airport transfers in Sri Lanka. 24/7 service with professional English-speaking drivers.
                     </p>
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                         <button
                             onClick={onBookClick}
-                            className="bg-gold hover:bg-gold-light text-navy px-8 py-4 rounded-full font-bold text-lg shadow-2xl transition-all hover:-translate-y-1"
+                            className="bg-gold hover:bg-gold-light text-navy px-8 py-3 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 active:scale-95"
                         >
                             Book Your Ride
                         </button>
                         <a
-                            href="#tours"
-                            className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-full font-bold text-lg transition-all"
+                            href="#calculator"
+                            className="bg-navy/90 hover:bg-navy backdrop-blur-md border border-white/20 text-white px-8 py-3 rounded-full font-bold text-lg shadow-xl transition-all active:scale-95"
                         >
-                            Explore Tours
+                            Get A Quote
                         </a>
                     </div>
                 </div>

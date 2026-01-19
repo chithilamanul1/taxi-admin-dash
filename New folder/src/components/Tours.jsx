@@ -5,21 +5,21 @@ const tourPackages = [
         id: 1,
         title: 'Galle Day Tour',
         description: 'Explore the historic Galle Fort, visit a turtle hatchery, and relax on the sandy beaches of Unawatuna.',
-        image: 'https://images.unsplash.com/photo-1627664819818-e147d6221422?q=80&w=2070&auto=format&fit=crop',
+        image: 'https://images.pexels.com/photos/16711948/pexels-photo-16711948.jpeg',
         price: '45'
     },
     {
         id: 2,
         title: 'Sigiriya & Dambulla',
         description: 'Climb the iconic Lion Rock fortress and visit the ancient golden temple of Dambulla.',
-        image: 'https://images.unsplash.com/photo-1588598133416-2f1854ee3e30?q=80&w=1974&auto=format&fit=crop',
+        image: 'https://images.pexels.com/photos/11138725/pexels-photo-11138725.jpeg',
         price: '75'
     },
     {
         id: 3,
         title: 'Kandy & Tea Gardens',
         description: 'Visit the Temple of the Tooth, enjoy a walk in Peradeniya gardens, and see the lush tea estates.',
-        image: 'https://images.unsplash.com/photo-1563214561-1250ec4693ae?q=80&w=2069&auto=format&fit=crop',
+        image: 'https://images.pexels.com/photos/31728099/pexels-photo-31728099.jpeg',
         price: '60'
     }
 ]
