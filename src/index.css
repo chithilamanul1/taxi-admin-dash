@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800&display=swap');
+@import "react-datepicker/dist/react-datepicker.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom DatePicker Styles */
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.react-datepicker__header {
+    background-color: #001C3D !important;
+    border-bottom: 2px solid #FFCC00 !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+    color: #FFF !important;
+}
+
+.react-datepicker__day--selected {
+    background-color: #FFCC00 !important;
+    color: #001C3D !important;
+    font-weight: bold;
+}
+
+.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item--selected {
+    background-color: #001C3D !important;
+    color: #FFCC00 !important;
+    font-weight: bold;
+}
+
+:root {
+    --navy: #001C3D;
+    --gold: #FFCC00;
+    --gold-dark: #E6B800;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f8fafc;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-fade-in-delay {
+    animation: fadeIn 0.8s ease-out 0.3s forwards;
+    opacity: 0;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--navy);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold);
+}
+
+html {
+    scroll-behavior: smooth;
+}
