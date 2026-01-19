@@ -12,8 +12,9 @@ const Footer = () => {
                             className="h-[140%] w-auto object-contain object-top filter brightness-0 invert"
                         />
                     </div>
+                    <br />
                     <p className="text-gray-400 max-w-sm mb-8 leading-relaxed">
-                        AirportTaxis.lk is Sri Lanka's leading airport transfer service, professionalized to serve international travelers with excellence and safety.
+                        Airport Taxis (Pvt) Ltd is Sri Lanka's leading airport transfer service, professionalized to serve international travelers with excellence and safety.
                     </p>
                     <div className="flex gap-4">
                         <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-navy transition-all">
@@ -62,7 +63,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className="max-w-6xl mx-auto px-6 pt-16 mt-16 border-t border-white/10 text-center text-gray-500 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
-                <p>&copy; 2026 AirportTaxi.lk. All rights reserved.</p>
+                <p>&copy; 2026 Airport Taxis (Pvt) Ltd. All rights reserved.</p>
                 <p>
                     Designed & Developed by <a href="https://seranex.org" target="_blank" rel="noopener noreferrer" className="text-gold font-bold hover:underline">Chithila Manul</a> | Seranex.org
                 </p>

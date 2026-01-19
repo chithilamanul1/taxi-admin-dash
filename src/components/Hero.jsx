@@ -26,17 +26,11 @@ const Hero = ({ onBookClick }) => {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                         <button
-                            onClick={onBookClick}
+                            onClick={() => window.location.href = '/prices'}
                             className="bg-gold hover:bg-gold-light text-navy px-8 py-3 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 active:scale-95"
                         >
                             Book Your Ride
                         </button>
-                        <a
-                            href="#calculator"
-                            className="bg-navy/90 hover:bg-navy backdrop-blur-md border border-white/20 text-white px-8 py-3 rounded-full font-bold text-lg shadow-xl transition-all active:scale-95"
-                        >
-                            Get A Quote
-                        </a>
                     </div>
                 </div>
 

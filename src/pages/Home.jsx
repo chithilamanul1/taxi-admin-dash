@@ -9,11 +9,11 @@ const Home = () => {
     return (
         <div>
             <Hero onBookClick={() => window.location.href = '/prices'} />
-            <Features />
-
             <div id="calculator" className="bg-slate-50 py-10">
                 <Prices />
             </div>
+
+            <Features />
 
             {/* Popular Routes Section */}
             <section className="py-20 px-6 max-w-7xl mx-auto">
@@ -34,8 +34,8 @@ const Home = () => {
                         <div className="absolute bottom-0 left-0 p-8 w-full">
                             <span className="bg-gold text-navy text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Top Choice</span>
                             <h3 className="text-2xl font-bold text-white mb-2">Airport to Mirissa</h3>
-                            <p className="text-white/80 text-sm mb-4">Starting from Southern Expressway</p>
-                            <div className="flex items-center gap-2 text-gold font-bold uppercase tracking-widest text-sm group-hover:gap-4 transition-all">
+                            <p className="text-gold font-bold text-lg mb-4">Starting from $59</p>
+                            <div className="flex items-center gap-2 text-white/80 font-bold uppercase tracking-widest text-sm group-hover:gap-4 transition-all">
                                 Get Quote <ArrowRight size={16} />
                             </div>
                         </div>
@@ -51,8 +51,8 @@ const Home = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/20 to-transparent"></div>
                         <div className="absolute bottom-0 left-0 p-8 w-full">
                             <h3 className="text-2xl font-bold text-white mb-2">Airport to Tangalle</h3>
-                            <p className="text-white/80 text-sm mb-4">Scenic coastal drive</p>
-                            <div className="flex items-center gap-2 text-gold font-bold uppercase tracking-widest text-sm group-hover:gap-4 transition-all">
+                            <p className="text-gold font-bold text-lg mb-4">Starting from $72</p>
+                            <div className="flex items-center gap-2 text-white/80 font-bold uppercase tracking-widest text-sm group-hover:gap-4 transition-all">
                                 Get Quote <ArrowRight size={16} />
                             </div>
                         </div>
@@ -68,8 +68,8 @@ const Home = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/20 to-transparent"></div>
                         <div className="absolute bottom-0 left-0 p-8 w-full">
                             <h3 className="text-2xl font-bold text-white mb-2">Airport to Sigiriya</h3>
-                            <p className="text-white/80 text-sm mb-4">Cultural Triangle Transfer</p>
-                            <div className="flex items-center gap-2 text-gold font-bold uppercase tracking-widest text-sm group-hover:gap-4 transition-all">
+                            <p className="text-gold font-bold text-lg mb-4">Starting from $50</p>
+                            <div className="flex items-center gap-2 text-white/80 font-bold uppercase tracking-widest text-sm group-hover:gap-4 transition-all">
                                 Get Quote <ArrowRight size={16} />
                             </div>
                         </div>

@@ -3,17 +3,12 @@ import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Lock } from '
 import _ from 'lodash'
 
 // Tiered Pricing Configuration (in LKR - Sri Lankan Rupees)
+// Tiered Pricing Configuration (in LKR - Sri Lankan Rupees)
 const VEHICLE_PRICING = {
     'mini-car': {
         name: 'MINI CAR',
         model: 'Wagon R',
-        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBZ8NtzOWXeZ1HJR_hUXALNKShNBfBbegYOg&s', // Keeping high quality for Mini Car (no link provided for this specifically in the list? User said "rate Changes Car category MINI CAR" but didn't link image? Ah, he listed links separate. He gave 5 links. 
-        // 1. Mini Bus
-        // 2. Sedan
-        // 3. Mini Van 5
-        // 4. Mini Van Every
-        // 5. KDH
-        // Missing Mini Car image link? I will keep the current one.
+        image: 'https://media.discordapp.net/attachments/1462329915969114142/1462884937278423320/WhatsApp_Image_2026-01-20_at_12.21.38_AM.jpeg?ex=696fd144&is=696e7fc4&hm=f296bc5911bca99114926272c7ec76cf9d887e612f9700310eb4f2e0e987f2b5&=&format=webp&width=590&height=590',
         maxPassengers: 3,
         tiers: [
             { max: 20, type: 'flat', price: 3500 },
@@ -25,7 +20,22 @@ const VEHICLE_PRICING = {
     'sedan': {
         name: 'SEDAN CAR',
         model: 'Prius / Axio',
-        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBisEjmBDLbsk6yQsAN_GZ3T7ZG6mWug7F1A&s', // User provided
+        image: '/vehicles/sedan.png',
+        maxPassengers: 3,
+        tiers: [
+            { max: 20, type: 'flat', price: 4500 },
+            { max: 40, type: 'flat', price: 6000 },
+            { max: 50, type: 'per_km', rate: 150 },
+            { max: 100, type: 'per_km', rate: 130 },
+            { max: 140, type: 'per_km', rate: 120 },
+            { max: 200, type: 'per_km', rate: 115 },
+            { max: Infinity, type: 'per_km', rate: 110 }
+        ]
+    },
+    'mini-van-every': {
+        name: 'MINI VAN (Every)',
+        model: 'Suzuki Every',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2L9OEAJA9HQg_xzY_GtWlN-Yqv1AFdZU4GQ&s',
         maxPassengers: 3,
         tiers: [
             { max: 20, type: 'flat', price: 4500 },
@@ -38,9 +48,9 @@ const VEHICLE_PRICING = {
         ]
     },
     'mini-van-05': {
-        name: 'MINI VAN (Seat 05)',
-        model: 'Every (4 Pax)',
-        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdqhcrZM1fAgQIjL8ggXc4OsxpxjrHb46J7w&s', // User provided
+        name: 'MINI VAN (4 Seat)',
+        model: 'Nissan / Toyota',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdx5EaadnBDrAlhagTwfCahOzAKtw4Hf7v87hUrkm5DfuKnQRV',
         maxPassengers: 4,
         tiers: [
             { max: 20, type: 'flat', price: 6000 },
@@ -51,25 +61,22 @@ const VEHICLE_PRICING = {
             { max: Infinity, type: 'per_km', rate: 120 }
         ]
     },
-    'mini-van-every': {
-        name: 'MINI VAN (Every)',
-        model: 'Hijet / Every',
-        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ9dAE5w_AePESvegq45rTuvda1zrSmIddBA&s', // User provided
-        maxPassengers: 5,
+    'suv': {
+        name: 'SUV',
+        model: 'Toyota C-HR',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwzEt5Vevj5WGIziGDp99bRtmCw_IqHuaT-A&s',
+        maxPassengers: 3,
         tiers: [
-            { max: 20, type: 'flat', price: 4500 },
-            { max: 40, type: 'flat', price: 6000 },
-            { max: 50, type: 'per_km', rate: 150 },
-            { max: 100, type: 'per_km', rate: 130 },
-            { max: 140, type: 'per_km', rate: 120 },
-            { max: 200, type: 'per_km', rate: 115 },
-            { max: Infinity, type: 'per_km', rate: 110 }
+            { max: 20, type: 'flat', price: 7000 },
+            { max: 40, type: 'flat', price: 12000 },
+            { max: 100, type: 'per_km', rate: 250 },
+            { max: Infinity, type: 'per_km', rate: 180 }
         ]
     },
     'kdh-van': {
-        name: 'KDH VAN',
-        model: 'Toyota KDH',
-        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1Fb7Dl0zMcmsLSzXO-ygwpXrugoVQmvlhew&s', // User provided
+        name: 'VAN',
+        model: 'Toyota KDH/Toyota Hiace',
+        image: 'https://i.pinimg.com/736x/4f/7e/66/4f7e6653336f101ed31e3687810d12ab.jpg',
         maxPassengers: 9,
         tiers: [
             { max: 20, type: 'flat', price: 6000 },
@@ -82,8 +89,8 @@ const VEHICLE_PRICING = {
     },
     'mini-bus': {
         name: 'MINI BUS',
-        model: 'Toyota Coaster',
-        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxcDWAxtdlq-M7iTsqvkG47X0zgUlllQOD_Q&s', // User provided
+        model: 'Toyota High Roof',
+        image: 'https://www.toyota.com.sg/showroom/new-models/-/media/27acd1d10dfc4ad29f13efd4415627c0.jpg',
         maxPassengers: 15,
         tiers: [
             { max: 20, type: 'flat', price: 7500 },
@@ -107,7 +114,7 @@ const calculatePrice = (distance, vehicleType, tripType) => {
 
     for (let tier of vehicle.tiers) {
         const tierStart = previousMax
-        const tierEnd = Math.min(tier.max, distance)
+        const tierEnd = (tier.max === Infinity) ? distance : Math.min(tier.max, distance)
         const tierKm = tierEnd - tierStart
 
         if (tierKm <= 0) break
@@ -153,7 +160,8 @@ const Prices = () => {
     const [passengers, setPassengers] = useState(1)
     const [date, setDate] = useState('')
     const [time, setTime] = useState('')
-    const [paymentMethod, setPaymentMethod] = useState('cash')
+    const [email, setEmail] = useState('')
+    const [paymentMethod, setPaymentMethod] = useState('card')
     const [boardShow, setBoardShow] = useState(false)
     const [boardName, setBoardName] = useState('')
     const [isVehicleListExpanded, setIsVehicleListExpanded] = useState(true)
@@ -229,7 +237,7 @@ const Prices = () => {
 
     return (
         <div className="pb-20 max-w-6xl mx-auto px-6">
-            <div className="py-12 text-center">
+            <div id="prices" className="py-12 text-center scroll-mt-32">
                 <h1 className="text-4xl md:text-5xl font-extrabold text-navy mb-4">Price <span className="text-gold">Calculator</span></h1>
                 <p className="text-gray-500 max-w-2xl mx-auto">Select your pickup and destination points for an instant, transparent quote.</p>
             </div>
@@ -342,6 +350,22 @@ const Prices = () => {
                         </div>
                     </div>
 
+                    {/* Passenger Details (Email added) */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
+                                <span className="text-gold">✉️</span> Your Email
+                            </label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="name@example.com"
+                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-gold outline-none"
+                            />
+                        </div>
+                    </div>
+
                     {/* Date, Time & Payment Method */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
@@ -378,6 +402,51 @@ const Prices = () => {
                                 <option value="cash">Cash to Driver</option>
                                 <option value="card">Card Payment</option>
                             </select>
+                        </div>
+                    </div>
+
+                    {/* Airport Greeting (Board Show) Option */}
+                    <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:border-gold/50 mb-8">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center text-2xl">
+                                🛫
+                            </div>
+                            <div>
+                                <h4 className="text-navy font-bold text-lg">Airport Greeting (Board Show)</h4>
+                                <p className="text-gray-500 text-xs max-w-xs">Our driver will wait for you at the arrival terminal with your name on a board.</p>
+                            </div>
+                        </div>
+                        <div className="flex flex-col items-end gap-3">
+                            <div className="flex flex-col items-end">
+                                <span className="text-gold font-bold text-lg">+ Rs 2,000.00</span>
+                                {usdRate && (
+                                    <span className="text-xs text-gray-400 font-medium">
+                                        (≈ ${(2000 * usdRate).toFixed(2)} USD)
+                                    </span>
+                                )}
+                            </div>
+                            <div className="flex items-center gap-4 mt-1">
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        className="sr-only peer"
+                                        checked={boardShow}
+                                        onChange={(e) => setBoardShow(e.target.checked)}
+                                    />
+                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
+                                </label>
+                            </div>
+
+                            {/* Input for Name on Board */}
+                            <div className={`transition-all duration-300 overflow-hidden ${boardShow ? 'max-h-16 opacity-100 w-full' : 'max-h-0 opacity-0 w-0'}`}>
+                                <input
+                                    type="text"
+                                    value={boardName}
+                                    onChange={(e) => setBoardName(e.target.value)}
+                                    placeholder="Name to display on board"
+                                    className="w-full bg-slate-50 border-none px-4 py-2 rounded-lg text-sm focus:ring-1 focus:ring-gold outline-none"
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -486,44 +555,6 @@ const Prices = () => {
                             </div>
                         )}
                     </div>
-
-                    {/* Airport Greeting (Board Show) Option */}
-                    <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:border-gold/50">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center text-2xl">
-                                🛫
-                            </div>
-                            <div>
-                                <h4 className="text-navy font-bold text-lg">Airport Greeting (Board Show)</h4>
-                                <p className="text-gray-500 text-xs max-w-xs">Our driver will wait for you at the arrival terminal with your name on a board.</p>
-                            </div>
-                        </div>
-                        <div className="flex flex-col items-end gap-3">
-                            <div className="flex items-center gap-4">
-                                <span className="text-gold font-bold">+ Rs 2000.00</span>
-                                <label className="relative inline-flex items-center cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        className="sr-only peer"
-                                        checked={boardShow}
-                                        onChange={(e) => setBoardShow(e.target.checked)}
-                                    />
-                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
-                                </label>
-                            </div>
-
-                            {/* Input for Name on Board */}
-                            <div className={`transition-all duration-300 overflow-hidden ${boardShow ? 'max-h-16 opacity-100 w-full' : 'max-h-0 opacity-0 w-0'}`}>
-                                <input
-                                    type="text"
-                                    value={boardName}
-                                    onChange={(e) => setBoardName(e.target.value)}
-                                    placeholder="Name to display on board"
-                                    className="w-full bg-slate-50 border-none px-4 py-2 rounded-lg text-sm focus:ring-1 focus:ring-gold outline-none"
-                                />
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 {/* Right: Summary & Quote */}
@@ -596,7 +627,7 @@ const Prices = () => {
 
                                 <div className="mb-10 text-center">
                                     <p className="text-white/60 uppercase tracking-widest text-xs mb-2">Estimated Total</p>
-                                    <div className="text-6xl font-extrabold text-gold leading-none pb-2">
+                                    <div className="text-4xl md:text-6xl font-extrabold text-gold leading-none pb-2 break-words">
                                         Rs {total.toLocaleString()}
                                     </div>
                                     {usdRate && total > 0 && (
@@ -615,7 +646,8 @@ const Prices = () => {
                                         }
                                         const usdText = usdRate ? ` (~$${(total * usdRate).toFixed(2)})` : ''
                                         const boardText = boardShow ? `%0A---%0ABoard Show: YES (+Rs 2000)%0AName on Board: ${boardName}` : ''
-                                        const msg = `Booking Request: %0AFrom: ${pickup.name}%0ATo: ${dropoff.name}%0ADistance: ${distance.toFixed(1)}km%0AVehicle: ${VEHICLE_PRICING[vehicle].name}%0ATrip: ${tripType}%0ADate: ${date}%0ATime: ${time}%0APayment: ${paymentMethod.toUpperCase()}${boardText}%0ATotal: Rs ${total.toLocaleString()}${usdText}`
+                                        const emailText = email ? `%0AEmail: ${email}` : ''
+                                        const msg = `Booking Request: %0AFrom: ${pickup.name}%0ATo: ${dropoff.name}%0ADistance: ${distance.toFixed(1)}km%0AVehicle: ${VEHICLE_PRICING[vehicle].name}%0ATrip: ${tripType}%0ADate: ${date}%0ATime: ${time}${emailText}%0APayment: ${paymentMethod.toUpperCase()}${boardText}%0ATotal: Rs ${total.toLocaleString()}${usdText}`
                                         window.open(`https://wa.me/94716885880?text=${msg}`, '_blank')
                                     }}
                                     className="w-full bg-gold text-navy font-extrabold py-6 rounded-2xl text-xl hover:scale-[1.02] transition-all shadow-2xl disabled:opacity-50 disabled:grayscale"
