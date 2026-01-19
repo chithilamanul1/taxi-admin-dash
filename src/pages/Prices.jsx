@@ -4,88 +4,94 @@ import _ from 'lodash'
 
 // Tiered Pricing Configuration (in LKR - Sri Lankan Rupees)
 const VEHICLE_PRICING = {
-    'flex': {
-        name: 'FLEX',
-        model: 'Suzuki Alto / Celerio',
-        image: 'https://images.pexels.com/photos/14537876/pexels-photo-14537876.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // Red Alto equivalent
-        maxPassengers: 2,
-        tiers: [
-            { max: 20, type: 'flat', price: 3000 },
-            { max: 35, type: 'flat', price: 3500 },
-            { max: 130, type: 'per_km', rate: 84 },
-            { max: Infinity, type: 'per_km', rate: 78 }
-        ]
-    },
     'mini-car': {
         name: 'MINI CAR',
         model: 'Wagon R',
-        image: 'https://images.pexels.com/photos/30521408/pexels-photo-30521408.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // Wagon R equivalent
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBZ8NtzOWXeZ1HJR_hUXALNKShNBfBbegYOg&s', // Keeping high quality for Mini Car (no link provided for this specifically in the list? User said "rate Changes Car category MINI CAR" but didn't link image? Ah, he listed links separate. He gave 5 links. 
+        // 1. Mini Bus
+        // 2. Sedan
+        // 3. Mini Van 5
+        // 4. Mini Van Every
+        // 5. KDH
+        // Missing Mini Car image link? I will keep the current one.
         maxPassengers: 3,
         tiers: [
-            { max: 20, type: 'flat', price: 3200 },
-            { max: 40, type: 'flat', price: 3800 },
-            { max: 130, type: 'per_km', rate: 88 },
-            { max: Infinity, type: 'per_km', rate: 82 }
+            { max: 20, type: 'flat', price: 3500 },
+            { max: 40, type: 'flat', price: 4000 },
+            { max: 130, type: 'per_km', rate: 100 },
+            { max: Infinity, type: 'per_km', rate: 92.50 }
         ]
     },
     'sedan': {
         name: 'SEDAN CAR',
         model: 'Prius / Axio',
-        image: 'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // White Sedan (Prius/Axio style)
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBisEjmBDLbsk6yQsAN_GZ3T7ZG6mWug7F1A&s', // User provided
         maxPassengers: 3,
         tiers: [
-            { max: 20, type: 'flat', price: 4200 },
-            { max: 40, type: 'flat', price: 5500 },
-            { max: 130, type: 'per_km', rate: 120 },
+            { max: 20, type: 'flat', price: 4500 },
+            { max: 40, type: 'flat', price: 6000 },
+            { max: 50, type: 'per_km', rate: 150 },
+            { max: 100, type: 'per_km', rate: 130 },
+            { max: 140, type: 'per_km', rate: 120 },
+            { max: 200, type: 'per_km', rate: 115 },
             { max: Infinity, type: 'per_km', rate: 110 }
         ]
     },
     'mini-van-05': {
         name: 'MINI VAN (Seat 05)',
         model: 'Every (4 Pax)',
-        image: 'https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // Small Van
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdqhcrZM1fAgQIjL8ggXc4OsxpxjrHb46J7w&s', // User provided
         maxPassengers: 4,
         tiers: [
-            { max: 20, type: 'flat', price: 5500 },
-            { max: 40, type: 'flat', price: 8000 },
-            { max: 130, type: 'per_km', rate: 160 },
-            { max: Infinity, type: 'per_km', rate: 130 }
+            { max: 20, type: 'flat', price: 6000 },
+            { max: 40, type: 'flat', price: 8500 },
+            { max: 100, type: 'per_km', rate: 200 },
+            { max: 140, type: 'per_km', rate: 160 },
+            { max: 200, type: 'per_km', rate: 130 },
+            { max: Infinity, type: 'per_km', rate: 120 }
         ]
     },
     'mini-van-every': {
         name: 'MINI VAN (Every)',
         model: 'Hijet / Every',
-        image: 'https://images.pexels.com/photos/2199293/pexels-photo-2199293.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // Hijet Style
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ9dAE5w_AePESvegq45rTuvda1zrSmIddBA&s', // User provided
         maxPassengers: 5,
         tiers: [
-            { max: 20, type: 'flat', price: 4200 },
-            { max: 40, type: 'flat', price: 5500 },
-            { max: 130, type: 'per_km', rate: 120 },
-            { max: Infinity, type: 'per_km', rate: 100 }
+            { max: 20, type: 'flat', price: 4500 },
+            { max: 40, type: 'flat', price: 6000 },
+            { max: 50, type: 'per_km', rate: 150 },
+            { max: 100, type: 'per_km', rate: 130 },
+            { max: 140, type: 'per_km', rate: 120 },
+            { max: 200, type: 'per_km', rate: 115 },
+            { max: Infinity, type: 'per_km', rate: 110 }
         ]
     },
     'kdh-van': {
         name: 'KDH VAN',
         model: 'Toyota KDH',
-        image: 'https://images.pexels.com/photos/29421727/pexels-photo-29421727.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // Large Van (KDH Style)
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1Fb7Dl0zMcmsLSzXO-ygwpXrugoVQmvlhew&s', // User provided
         maxPassengers: 9,
         tiers: [
-            { max: 20, type: 'flat', price: 5500 },
-            { max: 40, type: 'flat', price: 8000 },
-            { max: 130, type: 'per_km', rate: 180 },
-            { max: Infinity, type: 'per_km', rate: 150 }
+            { max: 20, type: 'flat', price: 6000 },
+            { max: 40, type: 'flat', price: 8500 },
+            { max: 100, type: 'per_km', rate: 200 },
+            { max: 140, type: 'per_km', rate: 160 },
+            { max: 200, type: 'per_km', rate: 130 },
+            { max: Infinity, type: 'per_km', rate: 120 }
         ]
     },
     'mini-bus': {
         name: 'MINI BUS',
         model: 'Toyota Coaster',
-        image: 'https://images.pexels.com/photos/27989569/pexels-photo-27989569.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // Mini Bus/Coaster
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxcDWAxtdlq-M7iTsqvkG47X0zgUlllQOD_Q&s', // User provided
         maxPassengers: 15,
         tiers: [
-            { max: 20, type: 'flat', price: 7000 },
-            { max: 40, type: 'flat', price: 11000 },
-            { max: 130, type: 'per_km', rate: 210 },
-            { max: Infinity, type: 'per_km', rate: 180 }
+            { max: 20, type: 'flat', price: 7500 },
+            { max: 40, type: 'flat', price: 12000 },
+            { max: 100, type: 'per_km', rate: 220 },
+            { max: 140, type: 'per_km', rate: 200 },
+            { max: 200, type: 'per_km', rate: 140 },
+            { max: Infinity, type: 'per_km', rate: 130 }
         ]
     }
 }
@@ -145,7 +151,14 @@ const Prices = () => {
     const [tripType, setTripType] = useState('one-way')
     const [vehicle, setVehicle] = useState('mini-car')
     const [passengers, setPassengers] = useState(1)
+    const [date, setDate] = useState('')
+    const [time, setTime] = useState('')
+    const [paymentMethod, setPaymentMethod] = useState('cash')
+    const [isVehicleListExpanded, setIsVehicleListExpanded] = useState(true)
     const [usdRate, setUsdRate] = useState(null)
+
+    // Refs for scrolling
+    const quoteRef = useRef(null)
 
     // Fetch live exchange rate (LKR -> USD)
     useEffect(() => {
@@ -327,66 +340,154 @@ const Prices = () => {
                         </div>
                     </div>
 
+                    {/* Date, Time & Payment Method */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
+                                <span className="text-gold">📅</span> Date
+                            </label>
+                            <input
+                                type="date"
+                                value={date}
+                                onChange={(e) => setDate(e.target.value)}
+                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-gold outline-none"
+                            />
+                        </div>
+                        <div>
+                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
+                                <span className="text-gold">⏰</span> Time
+                            </label>
+                            <input
+                                type="time"
+                                value={time}
+                                onChange={(e) => setTime(e.target.value)}
+                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-gold outline-none"
+                            />
+                        </div>
+                        <div>
+                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
+                                <span className="text-gold">💳</span> Payment
+                            </label>
+                            <select
+                                value={paymentMethod}
+                                onChange={(e) => setPaymentMethod(e.target.value)}
+                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-gold outline-none cursor-pointer"
+                            >
+                                <option value="cash">Cash to Driver</option>
+                                <option value="card">Card Payment</option>
+                            </select>
+                        </div>
+                    </div>
+
                     {/* Vehicle Selection */}
                     <div>
-                        <label className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3 block">Select Vehicle</label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {Object.entries(VEHICLE_PRICING).map(([key, v]) => {
-                                const isLocked = v.maxPassengers < passengers;
-                                return (
-                                    <button
-                                        key={key}
-                                        onClick={() => !isLocked && setVehicle(key)}
-                                        disabled={isLocked}
-                                        className={`relative w-full overflow-hidden rounded-2xl border-2 transition-all group text-left
-                                                ${vehicle === key
-                                                ? 'border-gold ring-2 ring-gold/20 shadow-lg'
-                                                : isLocked
-                                                    ? 'border-gray-100 opacity-60 cursor-not-allowed grayscale'
-                                                    : 'border-slate-100 hover:border-gold/50'
-                                            }`}
-                                    >
-                                        <div className="aspect-[16/9] w-full relative">
-                                            <img
-                                                src={v.image}
-                                                alt={v.name}
-                                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                            />
-                                            <div className={`absolute inset-0 bg-gradient-to-t from-navy/90 to-transparent ${vehicle === key ? 'opacity-90' : 'opacity-70 group-hover:opacity-60'}`}></div>
+                        <div className="flex items-center justify-between mb-3">
+                            <label className="text-sm font-bold text-gray-400 uppercase tracking-widest">Select Vehicle</label>
+                            {!isVehicleListExpanded && (
+                                <button
+                                    onClick={() => setIsVehicleListExpanded(true)}
+                                    className="text-xs font-bold text-gold hover:text-navy transition-colors uppercase tracking-widest flex items-center gap-1"
+                                >
+                                    Change Vehicle <ArrowRightLeft size={12} />
+                                </button>
+                            )}
+                        </div>
 
-                                            <div className="absolute bottom-0 left-0 w-full p-4 text-white">
-                                                <div className="font-bold text-sm mb-1">{v.name}</div>
-                                                <div className="text-xs text-white/70 flex items-center justify-between">
-                                                    <span>{v.model}</span>
-                                                    <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]">
-                                                        <Users size={10} /> {v.maxPassengers}
-                                                    </span>
-                                                </div>
-                                            </div>
+                        {/* Collapsed View (Selected Vehicle Only) */}
+                        {!isVehicleListExpanded && (
+                            <div
+                                onClick={() => setIsVehicleListExpanded(true)}
+                                className="relative w-full overflow-hidden rounded-2xl border-2 border-gold ring-2 ring-gold/20 shadow-lg cursor-pointer group"
+                            >
+                                <div className="aspect-[21/9] w-full relative">
+                                    <img
+                                        src={VEHICLE_PRICING[vehicle].image}
+                                        alt={VEHICLE_PRICING[vehicle].name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/40 to-transparent"></div>
+                                    <div className="absolute inset-0 p-6 flex flex-col justify-center text-white">
+                                        <div className="bg-gold text-navy text-xs font-bold px-3 py-1 rounded-full w-fit mb-2">SELECTED</div>
+                                        <div className="font-bold text-2xl mb-1">{VEHICLE_PRICING[vehicle].name}</div>
+                                        <div className="text-sm text-white/80">{VEHICLE_PRICING[vehicle].model}</div>
+                                        <div className="flex items-center gap-4 mt-3 text-xs font-bold text-gold uppercase tracking-widest">
+                                            <span>Click to Change</span>
+                                            <ArrowRightLeft size={14} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
-                                            {vehicle === key && (
-                                                <div className="absolute top-3 right-3 bg-gold text-navy p-1 rounded-full shadow-lg">
-                                                    <MapPin size={12} fill="currentColor" />
-                                                </div>
-                                            )}
+                        {/* Expanded Grid View */}
+                        {isVehicleListExpanded && (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fade-in">
+                                {Object.entries(VEHICLE_PRICING).map(([key, v]) => {
+                                    const isLocked = v.maxPassengers < passengers;
+                                    return (
+                                        <button
+                                            key={key}
+                                            onClick={() => {
+                                                if (!isLocked) {
+                                                    setVehicle(key)
+                                                    setIsVehicleListExpanded(false)
+                                                    // On mobile, smooth scroll to quote after selection
+                                                    if (window.innerWidth < 1024) {
+                                                        setTimeout(() => quoteRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100)
+                                                    }
+                                                }
+                                            }}
+                                            disabled={isLocked}
+                                            className={`relative w-full overflow-hidden rounded-2xl border-2 transition-all group text-left
+                                                    ${vehicle === key
+                                                    ? 'border-gold ring-2 ring-gold/20 shadow-lg'
+                                                    : isLocked
+                                                        ? 'border-gray-100 opacity-60 cursor-not-allowed grayscale'
+                                                        : 'border-slate-100 hover:border-gold/50'
+                                                }`}
+                                        >
+                                            <div className="aspect-[16/9] w-full relative">
+                                                <img
+                                                    src={v.image}
+                                                    alt={v.name}
+                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                                />
+                                                <div className={`absolute inset-0 bg-gradient-to-t from-navy/90 to-transparent ${vehicle === key ? 'opacity-90' : 'opacity-70 group-hover:opacity-60'}`}></div>
 
-                                            {isLocked && (
-                                                <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center">
-                                                    <div className="bg-red-500/90 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-sm">
-                                                        <Lock size={12} /> Small
+                                                <div className="absolute bottom-0 left-0 w-full p-4 text-white">
+                                                    <div className="font-bold text-sm mb-1">{v.name}</div>
+                                                    <div className="text-xs text-white/70 flex items-center justify-between">
+                                                        <span>{v.model}</span>
+                                                        <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]">
+                                                            <Users size={10} /> {v.maxPassengers}
+                                                        </span>
                                                     </div>
                                                 </div>
-                                            )}
-                                        </div>
-                                    </button>
-                                )
-                            })}
-                        </div>
+
+                                                {vehicle === key && (
+                                                    <div className="absolute top-3 right-3 bg-gold text-navy p-1 rounded-full shadow-lg">
+                                                        <MapPin size={12} fill="currentColor" />
+                                                    </div>
+                                                )}
+
+                                                {isLocked && (
+                                                    <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center">
+                                                        <div className="bg-red-500/90 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-sm">
+                                                            <Lock size={12} /> Small
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </button>
+                                    )
+                                })}
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 {/* Right: Summary & Quote */}
-                <div className="bg-navy rounded-[2.5rem] p-10 md:p-14 text-white shadow-3xl sticky top-28 flex flex-col h-fit">
+                <div ref={quoteRef} className="bg-navy rounded-[2.5rem] p-8 md:p-14 text-white shadow-3xl lg:sticky lg:top-28 flex flex-col h-fit">
                     <h3 className="text-gold text-2xl font-bold mb-8 flex items-center gap-3">
                         Trip Quote
                     </h3>
@@ -433,11 +534,13 @@ const Prices = () => {
                                 </div>
 
                                 {/* Important Notices */}
-                                <div className="bg-white/10 rounded-xl p-4 mb-8 text-xs text-white/80 space-y-2">
-                                    <div className="flex items-start gap-2">
-                                        <Info size={14} className="text-gold flex-shrink-0 mt-0.5" />
-                                        <p>Highway/Expressway tickets must be paid by the customer.</p>
+                                <div className="bg-red-500/10 border-2 border-red-500 rounded-xl p-4 mb-4 text-sm text-white space-y-2 animate-pulse">
+                                    <div className="flex items-start gap-2 font-bold text-red-200">
+                                        <Info size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
+                                        <p className="uppercase tracking-wide">Highway tickets needed for the trip must be paid by the customer.</p>
                                     </div>
+                                </div>
+                                <div className="bg-white/10 rounded-xl p-4 mb-8 text-xs text-white/80 space-y-2">
                                     <div className="flex items-start gap-2 font-bold text-white">
                                         <Info size={14} className="text-gold flex-shrink-0 mt-0.5" />
                                         <p>IMPORTANT: We accept card payments (Visa/Mastercard).</p>
@@ -459,8 +562,12 @@ const Prices = () => {
                                 <button
                                     disabled={!distance}
                                     onClick={() => {
+                                        if (!date || !time) {
+                                            alert("Please select a Date and Time for your trip.")
+                                            return
+                                        }
                                         const usdText = usdRate ? ` (~$${(total * usdRate).toFixed(2)})` : ''
-                                        const msg = `Quote Request: %0AFrom: ${pickup.name}%0ATo: ${dropoff.name}%0ADistance: ${distance.toFixed(1)}km%0AVehicle: ${VEHICLE_PRICING[vehicle].name}%0ATrip: ${tripType}%0ATotal: Rs ${total.toLocaleString()}${usdText}`
+                                        const msg = `Booking Request: %0AFrom: ${pickup.name}%0ATo: ${dropoff.name}%0ADistance: ${distance.toFixed(1)}km%0AVehicle: ${VEHICLE_PRICING[vehicle].name}%0ATrip: ${tripType}%0ADate: ${date}%0ATime: ${time}%0APayment: ${paymentMethod.toUpperCase()}%0ATotal: Rs ${total.toLocaleString()}${usdText}`
                                         window.open(`https://wa.me/94716885880?text=${msg}`, '_blank')
                                     }}
                                     className="w-full bg-gold text-navy font-extrabold py-6 rounded-2xl text-xl hover:scale-[1.02] transition-all shadow-2xl disabled:opacity-50 disabled:grayscale"
