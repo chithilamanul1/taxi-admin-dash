@@ -6,8 +6,8 @@ import _ from 'lodash'
 const VEHICLE_PRICING = {
     'mini-car': {
         name: 'MINI CAR',
-        model: 'Wagon R',
-        image: '/vehicles/minicar.jpg',
+        model: '',
+        image: '/vehicles/wagon-r.jpeg',
         maxPassengers: 2,
         specs: {
             luggage: 2,
@@ -23,7 +23,7 @@ const VEHICLE_PRICING = {
     },
     'sedan': {
         name: 'SEDAN',
-        model: 'Prius / Axio',
+        model: '',
         image: '/vehicles/sedan.png',
         maxPassengers: 3,
         specs: {
@@ -43,7 +43,7 @@ const VEHICLE_PRICING = {
     },
     'mini-van-every': {
         name: 'MINI VAN (Every)',
-        model: 'Suzuki Every',
+        model: '',
         image: '/vehicles/every.jpg',
         maxPassengers: 3,
         specs: {
@@ -63,7 +63,7 @@ const VEHICLE_PRICING = {
     },
     'mini-van-05': {
         name: 'MINI VAN (4 Seat)',
-        model: 'Nissan / Toyota',
+        model: '',
         image: '/vehicles/minivan-4.jpg',
         maxPassengers: 4,
         specs: {
@@ -82,7 +82,7 @@ const VEHICLE_PRICING = {
     },
     'suv': {
         name: 'SUV',
-        model: 'Toyota C-HR',
+        model: '',
         image: '/vehicles/vezel.jpg',
         maxPassengers: 3,
         specs: {
@@ -99,7 +99,7 @@ const VEHICLE_PRICING = {
     },
     'kdh-van': {
         name: 'VAN',
-        model: 'Toyota KDH',
+        model: '',
         image: '/vehicles/Van.jpg',
         maxPassengers: 6,
         imageScale: 0.9,
@@ -119,7 +119,7 @@ const VEHICLE_PRICING = {
     },
     'mini-bus': {
         name: 'MINI BUS',
-        model: 'Toyota Coaster',
+        model: '',
         image: '/vehicles/minibus.jpg',
         maxPassengers: 15,
         imageScale: 1.35,
@@ -484,7 +484,7 @@ const Prices = ({ initialDestination }) => {
                             </div>
                             <div>
                                 <h4 className="text-navy font-bold text-lg">Airport Greeting (Board Show)</h4>
-                                <p className="text-gray-500 text-xs max-w-xs">Our driver will wait for you at the arrival terminal with your name on a board.</p>
+                                <p className="text-gray-500 text-xs max-w-xs">Our driver will wait for you at the arrival terminal hall with your name on a board.</p>
                             </div>
                         </div>
                         <div className="flex flex-col items-end gap-3">
@@ -614,7 +614,7 @@ const Prices = ({ initialDestination }) => {
 
                         {/* Expanded Grid View */}
                         {isVehicleListExpanded && (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fade-in">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-fade-in mt-4">
                                 {Object.entries(VEHICLE_PRICING).map(([key, v]) => {
                                     const isLocked = v.maxPassengers < passengers;
                                     return (
@@ -631,63 +631,71 @@ const Prices = ({ initialDestination }) => {
                                                 }
                                             }}
                                             disabled={isLocked}
-                                            className={`relative w-full overflow-hidden rounded-2xl border-2 transition-all group text-left
+                                            className={`relative w-full overflow-hidden rounded-3xl border-2 transition-all group text-left bg-white p-4
                                                     ${vehicle === key
-                                                    ? 'border-gold ring-2 ring-gold/20 shadow-lg'
+                                                    ? 'border-gold shadow-xl scale-[1.02]'
                                                     : isLocked
                                                         ? 'border-gray-100 opacity-60 cursor-not-allowed grayscale'
-                                                        : 'border-slate-100 hover:border-gold/50'
+                                                        : 'border-transparent hover:border-gold/30 shadow-md hover:shadow-lg'
                                                 }`}
                                         >
-                                            <div className="aspect-[16/9] w-full relative">
-                                                <img
-                                                    src={v.image}
-                                                    alt={v.name}
-                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                                />
-                                                <div className={`absolute inset-0 bg-gradient-to-t from-navy/90 to-transparent ${vehicle === key ? 'opacity-90' : 'opacity-70 group-hover:opacity-60'}`}></div>
-
-                                                <div className="absolute bottom-0 left-0 w-full p-4 text-white">
-                                                    <div className="font-bold text-sm mb-1">{v.name}</div>
-                                                    <div className="text-xs text-white/70 flex flex-col gap-2">
-                                                        <span>{v.model}</span>
-                                                        <div className="flex flex-col gap-1 mt-1">
-                                                            <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-white/90">
-                                                                <Users size={10} className="text-gold" /> 1-{v.maxPassengers} PASSENGER
-                                                            </span>
-                                                            {v.specs && (
-                                                                <>
-                                                                    <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-white/90">
-                                                                        <Briefcase size={10} className="text-gold" /> {v.specs.luggage} LUGGAGE
-                                                                    </span>
-                                                                    <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-white/90">
-                                                                        <Briefcase size={10} className="text-gold scale-75" /> {v.specs.handLuggage} HAND LUGGAGE
-                                                                    </span>
-                                                                    {v.specs.ac && (
-                                                                        <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-white/90">
-                                                                            <Wind size={10} className="text-gold" /> AIR - CONDITIONING
-                                                                        </span>
-                                                                    )}
-                                                                </>
-                                                            )}
-                                                        </div>
-                                                    </div>
+                                            {/* Header */}
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div>
+                                                    <h3 className="font-extrabold text-navy text-xl">{v.name}</h3>
+                                                    <p className="text-xs text-gray-400 font-medium">{v.model}</p>
                                                 </div>
-
                                                 {vehicle === key && (
-                                                    <div className="absolute top-3 right-3 bg-gold text-navy p-1 rounded-full shadow-lg">
-                                                        <MapPin size={12} fill="currentColor" />
-                                                    </div>
-                                                )}
-
-                                                {isLocked && (
-                                                    <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center">
-                                                        <div className="bg-red-500/90 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-sm">
-                                                            <Lock size={12} /> Small
-                                                        </div>
+                                                    <div className="bg-gold text-navy p-1.5 rounded-full shadow-sm">
+                                                        <MapPin size={14} fill="currentColor" />
                                                     </div>
                                                 )}
                                             </div>
+
+                                            {/* Image */}
+                                            <div className="aspect-[16/9] w-full relative mb-4 flex items-center justify-center p-2">
+                                                <img
+                                                    src={v.image}
+                                                    alt={v.name}
+                                                    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                                                    style={{ transform: v.imageScale ? `scale(${v.imageScale})` : 'none' }}
+                                                />
+                                            </div>
+
+                                            {/* Specs List */}
+                                            <div className="space-y-2 border-t border-gray-100 pt-3">
+                                                <div className="flex items-center gap-3 text-sm font-bold text-gray-600">
+                                                    <div className="w-6 flex justify-center"><Users size={16} className="text-navy" /></div>
+                                                    <span>1 - {v.maxPassengers} Passengers</span>
+                                                </div>
+                                                {v.specs && (
+                                                    <>
+                                                        <div className="flex items-center gap-3 text-sm font-bold text-gray-600">
+                                                            <div className="w-6 flex justify-center"><Briefcase size={16} className="text-navy" /></div>
+                                                            <span>{v.specs.luggage} Luggages</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3 text-sm font-bold text-gray-600">
+                                                            <div className="w-6 flex justify-center"><Briefcase size={14} className="text-navy" /></div>
+                                                            <span>{v.specs.handLuggage} Hand Baggages</span>
+                                                        </div>
+                                                        {v.specs.ac && (
+                                                            <div className="flex items-center gap-3 text-sm font-bold text-gray-600">
+                                                                <div className="w-6 flex justify-center"><Wind size={16} className="text-navy" /></div>
+                                                                <span>Air Conditioning</span>
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </div>
+
+                                            {/* Locked Overlay */}
+                                            {isLocked && (
+                                                <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center z-10">
+                                                    <div className="bg-red-500/90 text-white px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 shadow-lg">
+                                                        <Lock size={14} /> Too Small
+                                                    </div>
+                                                </div>
+                                            )}
                                         </button>
                                     )
                                 })}
