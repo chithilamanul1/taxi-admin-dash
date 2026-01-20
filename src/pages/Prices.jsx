@@ -7,7 +7,7 @@ const VEHICLE_PRICING = {
     'mini-car': {
         name: 'MINI CAR',
         model: 'Wagon R',
-        image: '/vehicles/minicar.png',
+        image: '/vehicles/minicar.jpg',
         maxPassengers: 2,
         specs: {
             luggage: 2,
@@ -44,7 +44,7 @@ const VEHICLE_PRICING = {
     'mini-van-every': {
         name: 'MINI VAN (Every)',
         model: 'Suzuki Every',
-        image: 'https://media.discordapp.net/attachments/1462329915969114142/1462884935248384060/WhatsApp_Image_2026-01-20_at_12.07.14_AM.jpeg?ex=696fd143&is=696e7fc3&hm=4c0a2ebece5c8e5c93ccf60a7b4241a2559582f353bf773bc992de5eed5aaba1&=&format=webp',
+        image: '/vehicles/every.jpg',
         maxPassengers: 3,
         specs: {
             luggage: 3,
@@ -64,7 +64,7 @@ const VEHICLE_PRICING = {
     'mini-van-05': {
         name: 'MINI VAN (4 Seat)',
         model: 'Nissan / Toyota',
-        image: 'https://media.discordapp.net/attachments/1462329915969114142/1462884935718277356/WhatsApp_Image_2026-01-20_at_12.08.14_AM_1.jpeg?ex=696fd143&is=696e7fc3&hm=14409285b39103836b9238173e86fae7db369e56e5a89f1f9ab7784caf78e645&=&format=webp',
+        image: '/vehicles/minivan-4.jpg',
         maxPassengers: 4,
         specs: {
             luggage: 4,
@@ -83,7 +83,7 @@ const VEHICLE_PRICING = {
     'suv': {
         name: 'SUV',
         model: 'Toyota C-HR',
-        image: 'https://media.discordapp.net/attachments/1462329915969114142/1462884936213074116/WhatsApp_Image_2026-01-20_at_12.11.55_AM.jpeg?ex=696fd143&is=696e7fc3&hm=9b94943ba87aad29714a14cf3b52e02445ea9a6a53197f3affdab1b9c0f6c9d2&=&format=webp',
+        image: '/vehicles/vezel.jpg',
         maxPassengers: 3,
         specs: {
             luggage: 3,
@@ -99,9 +99,10 @@ const VEHICLE_PRICING = {
     },
     'kdh-van': {
         name: 'VAN',
-        model: '',
-        image: '/vehicles/kdh_van_new.png',
+        model: 'Toyota KDH',
+        image: '/vehicles/Van.jpg',
         maxPassengers: 6,
+        imageScale: 0.9,
         specs: {
             luggage: 7,
             handLuggage: 7,
@@ -118,9 +119,10 @@ const VEHICLE_PRICING = {
     },
     'mini-bus': {
         name: 'MINI BUS',
-        model: '',
-        image: '/vehicles/minibus_new.png',
+        model: 'Toyota Coaster',
+        image: '/vehicles/minibus.jpg',
         maxPassengers: 15,
+        imageScale: 1.35,
         specs: {
             luggage: 10,
             handLuggage: 8,
