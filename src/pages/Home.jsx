@@ -13,8 +13,6 @@ const Home = () => {
                 <Prices />
             </div>
 
-            <Features />
-
             {/* Popular Routes Section */}
             <section className="py-20 px-6 max-w-7xl mx-auto">
                 <div className="text-center mb-16">
@@ -76,6 +74,8 @@ const Home = () => {
                     </Link>
                 </div>
             </section>
+
+            <Features />
         </div>
     )
 }
