@@ -103,6 +103,7 @@ const VEHICLE_PRICING = {
         model: 'Toyota KDH',
         image: 'https://media.discordapp.net/attachments/1462329915969114142/1462884936829898945/WhatsApp_Image_2026-01-20_at_12.15.28_AM.jpeg?ex=696fd144&is=696e7fc4&hm=96c632334fede9b34071dbfc277d296e453b8ede5517f114de3d536b906be58c&=&format=webp',
         maxPassengers: 6,
+        imageScale: 0.9,
         specs: {
             luggage: 7,
             handLuggage: 7,
@@ -122,6 +123,7 @@ const VEHICLE_PRICING = {
         model: 'Toyota Coaster',
         image: '/vehicles/minibus.jpg',
         maxPassengers: 15,
+        imageScale: 1.35,
         specs: {
             luggage: 10,
             handLuggage: 8,
@@ -625,6 +627,7 @@ return (
                                                     <img
                                                         src={v.image}
                                                         alt={v.name}
+                                                        style={{ transform: `scale(${v.imageScale || 1})` }}
                                                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                                     />
                                                     <div className={`absolute inset-0 bg-gradient-to-t from-navy/90 to-transparent ${vehicle === key ? 'opacity-90' : 'opacity-70 group-hover:opacity-60'}`}></div>
