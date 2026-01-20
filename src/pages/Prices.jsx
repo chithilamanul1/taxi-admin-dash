@@ -22,7 +22,7 @@ const VEHICLE_PRICING = {
         ]
     },
     'sedan': {
-        name: 'SEDAN CAR',
+        name: 'SEDAN',
         model: 'Prius / Axio',
         image: '/vehicles/sedan.png',
         maxPassengers: 3,
@@ -573,15 +573,18 @@ const Prices = () => {
                                         <div className="font-bold text-2xl mb-1">{VEHICLE_PRICING[vehicle].name}</div>
                                         <div className="text-sm text-white/80 mb-2">{VEHICLE_PRICING[vehicle].model}</div>
                                         {VEHICLE_PRICING[vehicle].specs && (
-                                            <div className="flex flex-wrap items-center gap-3 mb-2 opacity-80">
-                                                <span className="flex items-center gap-1.5 text-xs font-medium">
-                                                    <Users size={14} className="text-gold" /> {VEHICLE_PRICING[vehicle].maxPassengers}
+                                            <div className="flex flex-col gap-1 mb-2 opacity-90">
+                                                <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
+                                                    <Users size={12} className="text-gold" /> 1-{VEHICLE_PRICING[vehicle].maxPassengers} PASSENGER
                                                 </span>
-                                                <span className="flex items-center gap-1.5 text-xs font-medium">
-                                                    <Briefcase size={14} className="text-gold" /> {VEHICLE_PRICING[vehicle].specs.luggage}L + {VEHICLE_PRICING[vehicle].specs.handLuggage}S
+                                                <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
+                                                    <Briefcase size={12} className="text-gold" /> {VEHICLE_PRICING[vehicle].specs.luggage} LUGGAGE
                                                 </span>
-                                                <span className="flex items-center gap-1.5 text-xs font-medium">
-                                                    <Wind size={14} className="text-gold" /> A/C
+                                                <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
+                                                    <Briefcase size={12} className="text-gold scale-75" /> {VEHICLE_PRICING[vehicle].specs.handLuggage} HAND LUGGAGE
+                                                </span>
+                                                <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
+                                                    <Wind size={12} className="text-gold" /> AIR - CONDITIONING
                                                 </span>
                                             </div>
                                         )}
@@ -633,21 +636,21 @@ const Prices = () => {
                                                     <div className="font-bold text-sm mb-1">{v.name}</div>
                                                     <div className="text-xs text-white/70 flex flex-col gap-2">
                                                         <span>{v.model}</span>
-                                                        <div className="flex flex-wrap items-center gap-2">
-                                                            <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]">
-                                                                <Users size={10} /> {v.maxPassengers}
+                                                        <div className="flex flex-col gap-1 mt-1">
+                                                            <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-white/90">
+                                                                <Users size={10} className="text-gold" /> 1-{v.maxPassengers} PASSENGER
                                                             </span>
                                                             {v.specs && (
                                                                 <>
-                                                                    <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]" title="Luggage">
-                                                                        <Briefcase size={10} /> {v.specs.luggage}
+                                                                    <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-white/90">
+                                                                        <Briefcase size={10} className="text-gold" /> {v.specs.luggage} LUGGAGE
                                                                     </span>
-                                                                    <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]" title="Hand Luggage">
-                                                                        <Briefcase size={10} className="scale-75" /> {v.specs.handLuggage}
+                                                                    <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-white/90">
+                                                                        <Briefcase size={10} className="text-gold scale-75" /> {v.specs.handLuggage} HAND LUGGAGE
                                                                     </span>
                                                                     {v.specs.ac && (
-                                                                        <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]" title="Air Conditioned">
-                                                                            <Wind size={10} /> A/C
+                                                                        <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-white/90">
+                                                                            <Wind size={10} className="text-gold" /> AIR - CONDITIONING
                                                                         </span>
                                                                     )}
                                                                 </>
