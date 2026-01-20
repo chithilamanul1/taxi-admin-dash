@@ -636,7 +636,7 @@ const Prices = ({ initialDestination }) => {
                                                 }
                                             }}
                                             disabled={isLocked}
-                                            className={`relative w-full overflow-hidden rounded-3xl border-2 transition-all group text-left bg-white p-4
+                                            className={`relative w-full overflow-hidden rounded-3xl border-2 transition-all group text-left bg-white p-6
                                                     ${vehicle === key
                                                     ? 'border-gold shadow-xl scale-[1.02]'
                                                     : isLocked
@@ -647,7 +647,7 @@ const Prices = ({ initialDestination }) => {
                                             {/* Header */}
                                             <div className="flex justify-between items-start mb-2">
                                                 <div>
-                                                    <h3 className="font-extrabold text-navy text-xl">{v.name}</h3>
+                                                    <h3 className="font-extrabold text-navy text-xl leading-relaxed pb-1">{v.name}</h3>
                                                     <p className="text-xs text-gray-400 font-medium">{v.model}</p>
                                                 </div>
                                                 {vehicle === key && (
