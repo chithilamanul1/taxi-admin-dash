@@ -98,8 +98,8 @@ const VEHICLE_PRICING = {
         ]
     },
     'kdh-van': {
-        name: 'KDH VAN',
-        model: 'Toyota KDH',
+        name: 'VAN',
+        model: '',
         image: '/vehicles/kdh_van_new.png',
         maxPassengers: 6,
         specs: {
@@ -118,7 +118,7 @@ const VEHICLE_PRICING = {
     },
     'mini-bus': {
         name: 'MINI BUS',
-        model: 'Toyota Coaster',
+        model: '',
         image: '/vehicles/minibus_new.png',
         maxPassengers: 15,
         specs: {
@@ -591,270 +591,271 @@ const Prices = () => {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         )}
 
-                                {/* Expanded Grid View */}
-                                {isVehicleListExpanded && (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fade-in">
-                                        {Object.entries(VEHICLE_PRICING).map(([key, v]) => {
-                                            const isLocked = v.maxPassengers < passengers;
-                                            return (
-                                                <button
-                                                    key={key}
-                                                    onClick={() => {
-                                                        if (!isLocked) {
-                                                            setVehicle(key)
-                                                            setIsVehicleListExpanded(false)
-                                                            // On mobile, smooth scroll to quote after selection
-                                                            if (window.innerWidth < 1024) {
-                                                                setTimeout(() => quoteRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100)
-                                                            }
-                                                        }
-                                                    }}
-                                                    disabled={isLocked}
-                                                    className={`relative w-full overflow-hidden rounded-2xl border-2 transition-all group text-left
+                        {/* Expanded Grid View */}
+                        {isVehicleListExpanded && (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fade-in">
+                                {Object.entries(VEHICLE_PRICING).map(([key, v]) => {
+                                    const isLocked = v.maxPassengers < passengers;
+                                    return (
+                                        <button
+                                            key={key}
+                                            onClick={() => {
+                                                if (!isLocked) {
+                                                    setVehicle(key)
+                                                    setIsVehicleListExpanded(false)
+                                                    // On mobile, smooth scroll to quote after selection
+                                                    if (window.innerWidth < 1024) {
+                                                        setTimeout(() => quoteRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100)
+                                                    }
+                                                }
+                                            }}
+                                            disabled={isLocked}
+                                            className={`relative w-full overflow-hidden rounded-2xl border-2 transition-all group text-left
                                                     ${vehicle === key
-                                                            ? 'border-gold ring-2 ring-gold/20 shadow-lg'
-                                                            : isLocked
-                                                                ? 'border-gray-100 opacity-60 cursor-not-allowed grayscale'
-                                                                : 'border-slate-100 hover:border-gold/50'
-                                                        }`}
-                                                >
-                                                    <div className="aspect-[16/9] w-full relative">
-                                                        <img
-                                                            src={v.image}
-                                                            alt={v.name}
-                                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                                        />
-                                                        <div className={`absolute inset-0 bg-gradient-to-t from-navy/90 to-transparent ${vehicle === key ? 'opacity-90' : 'opacity-70 group-hover:opacity-60'}`}></div>
+                                                    ? 'border-gold ring-2 ring-gold/20 shadow-lg'
+                                                    : isLocked
+                                                        ? 'border-gray-100 opacity-60 cursor-not-allowed grayscale'
+                                                        : 'border-slate-100 hover:border-gold/50'
+                                                }`}
+                                        >
+                                            <div className="aspect-[16/9] w-full relative">
+                                                <img
+                                                    src={v.image}
+                                                    alt={v.name}
+                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                                />
+                                                <div className={`absolute inset-0 bg-gradient-to-t from-navy/90 to-transparent ${vehicle === key ? 'opacity-90' : 'opacity-70 group-hover:opacity-60'}`}></div>
 
-                                                        <div className="absolute bottom-0 left-0 w-full p-4 text-white">
-                                                            <div className="font-bold text-sm mb-1">{v.name}</div>
-                                                            <div className="text-xs text-white/70 flex flex-col gap-2">
-                                                                <span>{v.model}</span>
-                                                                <div className="flex flex-wrap items-center gap-2">
-                                                                    <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]">
-                                                                        <Users size={10} /> {v.maxPassengers}
+                                                <div className="absolute bottom-0 left-0 w-full p-4 text-white">
+                                                    <div className="font-bold text-sm mb-1">{v.name}</div>
+                                                    <div className="text-xs text-white/70 flex flex-col gap-2">
+                                                        <span>{v.model}</span>
+                                                        <div className="flex flex-wrap items-center gap-2">
+                                                            <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]">
+                                                                <Users size={10} /> {v.maxPassengers}
+                                                            </span>
+                                                            {v.specs && (
+                                                                <>
+                                                                    <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]" title="Luggage">
+                                                                        <Briefcase size={10} /> {v.specs.luggage}
                                                                     </span>
-                                                                    {v.specs && (
-                                                                        <>
-                                                                            <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]" title="Luggage">
-                                                                                <Briefcase size={10} /> {v.specs.luggage}
-                                                                            </span>
-                                                                            <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]" title="Hand Luggage">
-                                                                                <Briefcase size={10} className="scale-75" /> {v.specs.handLuggage}
-                                                                            </span>
-                                                                            {v.specs.ac && (
-                                                                                <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]" title="Air Conditioned">
-                                                                                    <Wind size={10} /> A/C
-                                                                                </span>
-                                                                            )}
-                                                                        </>
+                                                                    <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]" title="Hand Luggage">
+                                                                        <Briefcase size={10} className="scale-75" /> {v.specs.handLuggage}
+                                                                    </span>
+                                                                    {v.specs.ac && (
+                                                                        <span className="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-full text-[10px]" title="Air Conditioned">
+                                                                            <Wind size={10} /> A/C
+                                                                        </span>
                                                                     )}
-                                                                </div>
-                                                            </div>
+                                                                </>
+                                                            )}
                                                         </div>
-
-                                                        {vehicle === key && (
-                                                            <div className="absolute top-3 right-3 bg-gold text-navy p-1 rounded-full shadow-lg">
-                                                                <MapPin size={12} fill="currentColor" />
-                                                            </div>
-                                                        )}
-
-                                                        {isLocked && (
-                                                            <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center">
-                                                                <div className="bg-red-500/90 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-sm">
-                                                                    <Lock size={12} /> Small
-                                                                </div>
-                                                            </div>
-                                                        )}
                                                     </div>
-                                                </button>
-                                            )
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-            </div>
-
-                    {/* Right: Summary & Quote */}
-                    <div ref={quoteRef} className="bg-navy rounded-[2.5rem] p-8 md:p-14 text-white shadow-3xl lg:sticky lg:top-28 flex flex-col h-fit">
-                        <h3 className="text-gold text-2xl font-bold mb-8 flex items-center gap-3">
-                            Trip Quote
-                        </h3>
-
-                        {(() => {
-                            const { total: baseTotal, breakdown } = calculatePrice(distance, vehicle, tripType)
-                            const total = baseTotal + (boardShow ? 2000 : 0)
-
-                            return (
-                                <>
-                                    <div className="space-y-6 flex-grow">
-                                        <div className="flex justify-between border-b border-white/10 pb-4">
-                                            <span className="text-white/60">Distance</span>
-                                            <span className="font-bold">{loading ? <Loader2 className="animate-spin inline" /> : (distance ? `${distance.toFixed(1)} km` : '--')}</span>
-                                        </div>
-                                        <div className="flex justify-between border-b border-white/10 pb-4 text-sm italic">
-                                            <span className="text-white/60">Vehicle</span>
-                                            <span className="capitalize">{VEHICLE_PRICING[vehicle]?.name}</span>
-                                        </div>
-                                        <div className="flex justify-between border-b border-white/10 pb-4 text-sm italic">
-                                            <span className="text-white/60">Trip Type</span>
-                                            <span className="capitalize">{tripType.replace('-', ' ')}</span>
-                                        </div>
-
-                                        {/* Price Breakdown */}
-                                        {breakdown.length > 0 && (
-                                            <div className="mt-4 pt-4 border-t border-white/10">
-                                                <p className="text-xs text-white/40 uppercase tracking-widest mb-3">Price Breakdown</p>
-                                                <div className="space-y-2 text-sm">
-                                                    {breakdown.map((item, idx) => (
-                                                        <div key={idx} className="flex justify-between text-white/70">
-                                                            <span className="text-xs">{item.range}: {item.description}</span>
-                                                            <span className="text-gold font-bold">Rs {item.amount.toLocaleString()}</span>
-                                                        </div>
-                                                    ))}
-                                                    {boardShow && (
-                                                        <div className="flex justify-between text-white/70">
-                                                            <span className="text-xs">Airport Greeting (Board Show)</span>
-                                                            <span className="text-gold font-bold">Rs 2,000</span>
-                                                        </div>
-                                                    )}
-                                                    {tripType === 'round-trip' && (
-                                                        <div className="flex justify-between text-gold/80 pt-2 border-t border-white/5">
-                                                            <span className="text-xs">× 2 (Round Trip)</span>
-                                                            <span className="font-bold">Rs {total.toLocaleString()}</span>
-                                                        </div>
-                                                    )}
                                                 </div>
+
+                                                {vehicle === key && (
+                                                    <div className="absolute top-3 right-3 bg-gold text-navy p-1 rounded-full shadow-lg">
+                                                        <MapPin size={12} fill="currentColor" />
+                                                    </div>
+                                                )}
+
+                                                {isLocked && (
+                                                    <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center">
+                                                        <div className="bg-red-500/90 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-sm">
+                                                            <Lock size={12} /> Small
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
-                                        )}
-                                    </div>
-
-                                    {/* Important Notices */}
-                                    <div className="bg-red-500/10 border-2 border-red-500 rounded-xl p-4 mb-4 text-sm text-white space-y-2 animate-pulse">
-                                        <div className="flex items-start gap-2 font-bold text-red-200">
-                                            <Info size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
-                                            <p className="uppercase tracking-wide">Highway tickets needed for the trip must be paid by the customer.</p>
-                                        </div>
-                                    </div>
-                                    <div className="bg-white/10 rounded-xl p-4 mb-8 text-xs text-white/80 space-y-2">
-                                        <div className="flex items-start gap-2 font-bold text-white">
-                                            <Info size={14} className="text-gold flex-shrink-0 mt-0.5" />
-                                            <p>IMPORTANT: We accept card payments (Visa/Mastercard).</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="mb-10 text-center">
-                                        <p className="text-white/60 uppercase tracking-widest text-xs mb-2">Estimated Total</p>
-                                        <div className="text-4xl md:text-6xl font-extrabold text-gold leading-none pb-2 break-words">
-                                            Rs {total.toLocaleString()}
-                                        </div>
-                                        {usdRate && total > 0 && (
-                                            <div className="text-xl font-medium text-white/50">
-                                                ≈ ${(total * usdRate).toFixed(2)} USD
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <button
-                                        disabled={!distance || loading}
-                                        onClick={async () => {
-                                            if (!date || !time) {
-                                                alert("Please select a Date and Time for your trip.")
-                                                return
-                                            }
-
-                                            // Set loading state
-                                            setLoading(true);
-
-                                            const tripDetails = {
-                                                pickup: pickup.name,
-                                                dropoff: dropoff.name,
-                                                distance: distance.toFixed(1) + " km",
-                                                vehicle: VEHICLE_PRICING[vehicle].name,
-                                                passengers: passengers,
-                                                tripType: tripType,
-                                                date: date,
-                                                time: time,
-                                                email: email || 'Not Provided',
-                                                whatsapp: whatsapp || 'Not Provided',
-                                                payment: paymentMethod.toUpperCase(),
-                                                boardShow: boardShow ? 'YES' : 'NO',
-                                                boardDetails: boardShow ? "Name: " + boardName + ", Flight: " + flightNumber + ", Arrival: " + arrivalDate + " @ " + arrivalTime : 'N/A',
-                                                total: "Rs " + total.toLocaleString(),
-                                                usdTotal: usdRate ? "$" + (total * usdRate).toFixed(2) : 'N/A'
-                                            }
-
-                                            // 1. Open WhatsApp Immediately (User Experience Priority)
-                                            const usdText = usdRate ? " (~$" + (total * usdRate).toFixed(2) + ")" : ''
-                                            const boardText = boardShow ? "%0A---%0ABoard Show: YES (+Rs 2000)%0AName: " + boardName + "%0AFlight: " + flightNumber + "%0AArrival: " + arrivalDate + " @ " + arrivalTime : ''
-                                            const emailText = email ? "%0AEmail: " + email : ''
-                                            const waText = whatsapp ? "%0AWhatsApp: " + whatsapp : ''
-                                            const msg = "Booking Request: %0AFrom: " + pickup.name + "%0ATo: " + dropoff.name + "%0ADistance: " + distance.toFixed(1) + "km%0AVehicle: " + VEHICLE_PRICING[vehicle].name + "%0ATrip: " + tripType + "%0ADate: " + date + "%0ATime: " + time + emailText + waText + "%0APayment: " + paymentMethod.toUpperCase() + boardText + "%0ATotal: Rs " + total.toLocaleString() + usdText
-
-                                            window.open("https://wa.me/94716885880?text=" + msg, '_blank')
-
-                                            // 2. Send to Discord Webhook
-                                            try {
-                                                await fetch("https://discord.com/api/webhooks/1463042919693815872/n3E2TD5Bwo9vOZ2KpF3dOAWZF9d7rUMPghS0e-FnjQ3DQrCdRTquulIMrf29cHCQFPff", {
-                                                    method: "POST",
-                                                    headers: { "Content-Type": "application/json" },
-                                                    body: JSON.stringify({
-                                                        username: "Booking Bot",
-                                                        embeds: [{
-                                                            title: "🚖 New Booking Request",
-                                                            color: 0xFFD700, // Gold color
-                                                            fields: [
-                                                                { name: "From", value: pickup.name || "N/A", inline: true },
-                                                                { name: "To", value: dropoff.name || "N/A", inline: true },
-                                                                { name: "Vehicle", value: VEHICLE_PRICING[vehicle].name, inline: true },
-                                                                { name: "Distance", value: distance.toFixed(1) + " km", inline: true },
-                                                                { name: "Passengers", value: String(passengers), inline: true },
-                                                                { name: "Total Price", value: "Rs " + total.toLocaleString(), inline: true },
-                                                                { name: "Contact", value: "Email: " + (email || 'N/A') + "\nWA: " + (whatsapp || 'N/A'), inline: false },
-                                                                { name: "Date & Time", value: date + " @ " + time, inline: true },
-                                                                { name: "Payment", value: paymentMethod.toUpperCase(), inline: true },
-                                                                { name: "Airport Greeting", value: boardShow ? "YES (+Rs 2000)\nName: " + boardName + "\nFlight: " + flightNumber + "\nArr: " + arrivalDate + " @ " + arrivalTime : "NO", inline: false }
-                                                            ]
-                                                        }]
-                                                    })
-                                                })
-                                            } catch (error) {
-                                                console.error("Discord webhook failed", error)
-                                            }
-
-                                            // 3. Send Background Email (Reliability Backup)
-                                            try {
-                                                await fetch("https://formsubmit.co/ajax/airporttaxis.lk@gmail.com", {
-                                                    method: "POST",
-                                                    headers: {
-                                                        'Content-Type': 'application/json',
-                                                        'Accept': 'application/json'
-                                                    },
-                                                    body: JSON.stringify({
-                                                        _subject: `New Booking: ${pickup.name} -> ${dropoff.name}`,
-                                                        ...tripDetails,
-                                                        _template: 'table'
-                                                    })
-                                                })
-                                            } catch (error) {
-                                                console.error("Background email failed", error) // Silent fail as WA is primary
-                                            } finally {
-                                                setLoading(false); // Reset loading state
-                                            }
-                                        }}
-                                        className="w-full bg-gold text-navy font-extrabold py-6 rounded-2xl text-xl hover:scale-[1.02] transition-all shadow-2xl disabled:opacity-50 disabled:grayscale"
-                                    >
-                                        {loading ? <Loader2 className="animate-spin mx-auto" /> : 'Book This Trip Now'}
-                                    </button>
-                                </>
-                            )
-                        })()}
-                    </div >
+                                        </button>
+                                    )
+                                })}
+                            </div>
+                        )}
+                    </div>
                 </div>
+
+                {/* Right: Summary & Quote */}
+                <div ref={quoteRef} className="bg-navy rounded-[2.5rem] p-8 md:p-14 text-white shadow-3xl lg:sticky lg:top-28 flex flex-col h-fit">
+                    <h3 className="text-gold text-2xl font-bold mb-8 flex items-center gap-3">
+                        Trip Quote
+                    </h3>
+
+                    {(() => {
+                        const { total: baseTotal, breakdown } = calculatePrice(distance, vehicle, tripType)
+                        const total = baseTotal + (boardShow ? 2000 : 0)
+
+                        return (
+                            <>
+                                <div className="space-y-6 flex-grow">
+                                    <div className="flex justify-between border-b border-white/10 pb-4">
+                                        <span className="text-white/60">Distance</span>
+                                        <span className="font-bold">{loading ? <Loader2 className="animate-spin inline" /> : (distance ? `${distance.toFixed(1)} km` : '--')}</span>
+                                    </div>
+                                    <div className="flex justify-between border-b border-white/10 pb-4 text-sm italic">
+                                        <span className="text-white/60">Vehicle</span>
+                                        <span className="capitalize">{VEHICLE_PRICING[vehicle]?.name}</span>
+                                    </div>
+                                    <div className="flex justify-between border-b border-white/10 pb-4 text-sm italic">
+                                        <span className="text-white/60">Trip Type</span>
+                                        <span className="capitalize">{tripType.replace('-', ' ')}</span>
+                                    </div>
+
+                                    {/* Price Breakdown */}
+                                    {breakdown.length > 0 && (
+                                        <div className="mt-4 pt-4 border-t border-white/10">
+                                            <p className="text-xs text-white/40 uppercase tracking-widest mb-3">Price Breakdown</p>
+                                            <div className="space-y-2 text-sm">
+                                                {breakdown.map((item, idx) => (
+                                                    <div key={idx} className="flex justify-between text-white/70">
+                                                        <span className="text-xs">{item.range}: {item.description}</span>
+                                                        <span className="text-gold font-bold">Rs {item.amount.toLocaleString()}</span>
+                                                    </div>
+                                                ))}
+                                                {boardShow && (
+                                                    <div className="flex justify-between text-white/70">
+                                                        <span className="text-xs">Airport Greeting (Board Show)</span>
+                                                        <span className="text-gold font-bold">Rs 2,000</span>
+                                                    </div>
+                                                )}
+                                                {tripType === 'round-trip' && (
+                                                    <div className="flex justify-between text-gold/80 pt-2 border-t border-white/5">
+                                                        <span className="text-xs">× 2 (Round Trip)</span>
+                                                        <span className="font-bold">Rs {total.toLocaleString()}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Important Notices */}
+                                <div className="bg-red-500/10 border-2 border-red-500 rounded-xl p-4 mb-4 text-sm text-white space-y-2 animate-pulse">
+                                    <div className="flex items-start gap-2 font-bold text-red-200">
+                                        <Info size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
+                                        <p className="uppercase tracking-wide">Highway tickets needed for the trip must be paid by the customer.</p>
+                                    </div>
+                                </div>
+                                <div className="bg-white/10 rounded-xl p-4 mb-8 text-xs text-white/80 space-y-2">
+                                    <div className="flex items-start gap-2 font-bold text-white">
+                                        <Info size={14} className="text-gold flex-shrink-0 mt-0.5" />
+                                        <p>IMPORTANT: We accept card payments (Visa/Mastercard).</p>
+                                    </div>
+                                </div>
+
+                                <div className="mb-10 text-center">
+                                    <p className="text-white/60 uppercase tracking-widest text-xs mb-2">Estimated Total</p>
+                                    <div className="text-4xl md:text-6xl font-extrabold text-gold leading-none pb-2 break-words">
+                                        Rs {total.toLocaleString()}
+                                    </div>
+                                    {usdRate && total > 0 && (
+                                        <div className="text-xl font-medium text-white/50">
+                                            ≈ ${(total * usdRate).toFixed(2)} USD
+                                        </div>
+                                    )}
+                                </div>
+
+                                <button
+                                    disabled={!distance || loading}
+                                    onClick={async () => {
+                                        if (!date || !time) {
+                                            alert("Please select a Date and Time for your trip.")
+                                            return
+                                        }
+
+                                        // Set loading state
+                                        setLoading(true);
+
+                                        const tripDetails = {
+                                            pickup: pickup.name,
+                                            dropoff: dropoff.name,
+                                            distance: distance.toFixed(1) + " km",
+                                            vehicle: VEHICLE_PRICING[vehicle].name,
+                                            passengers: passengers,
+                                            tripType: tripType,
+                                            date: date,
+                                            time: time,
+                                            email: email || 'Not Provided',
+                                            whatsapp: whatsapp || 'Not Provided',
+                                            payment: paymentMethod.toUpperCase(),
+                                            boardShow: boardShow ? 'YES' : 'NO',
+                                            boardDetails: boardShow ? "Name: " + boardName + ", Flight: " + flightNumber + ", Arrival: " + arrivalDate + " @ " + arrivalTime : 'N/A',
+                                            total: "Rs " + total.toLocaleString(),
+                                            usdTotal: usdRate ? "$" + (total * usdRate).toFixed(2) : 'N/A'
+                                        }
+
+                                        // 1. Open WhatsApp Immediately (User Experience Priority)
+                                        const usdText = usdRate ? " (~$" + (total * usdRate).toFixed(2) + ")" : ''
+                                        const boardText = boardShow ? "%0A---%0ABoard Show: YES (+Rs 2000)%0AName: " + boardName + "%0AFlight: " + flightNumber + "%0AArrival: " + arrivalDate + " @ " + arrivalTime : ''
+                                        const emailText = email ? "%0AEmail: " + email : ''
+                                        const waText = whatsapp ? "%0AWhatsApp: " + whatsapp : ''
+                                        const msg = "Booking Request: %0AFrom: " + pickup.name + "%0ATo: " + dropoff.name + "%0ADistance: " + distance.toFixed(1) + "km%0AVehicle: " + VEHICLE_PRICING[vehicle].name + "%0ATrip: " + tripType + "%0ADate: " + date + "%0ATime: " + time + emailText + waText + "%0APayment: " + paymentMethod.toUpperCase() + boardText + "%0ATotal: Rs " + total.toLocaleString() + usdText
+
+                                        window.open("https://wa.me/94716885880?text=" + msg, '_blank')
+
+                                        // 2. Send to Discord Webhook
+                                        try {
+                                            await fetch("https://discord.com/api/webhooks/1463042919693815872/n3E2TD5Bwo9vOZ2KpF3dOAWZF9d7rUMPghS0e-FnjQ3DQrCdRTquulIMrf29cHCQFPff", {
+                                                method: "POST",
+                                                headers: { "Content-Type": "application/json" },
+                                                body: JSON.stringify({
+                                                    username: "Booking Bot",
+                                                    embeds: [{
+                                                        title: "🚖 New Booking Request",
+                                                        color: 0xFFD700, // Gold color
+                                                        fields: [
+                                                            { name: "From", value: pickup.name || "N/A", inline: true },
+                                                            { name: "To", value: dropoff.name || "N/A", inline: true },
+                                                            { name: "Vehicle", value: VEHICLE_PRICING[vehicle].name, inline: true },
+                                                            { name: "Distance", value: distance.toFixed(1) + " km", inline: true },
+                                                            { name: "Passengers", value: String(passengers), inline: true },
+                                                            { name: "Total Price", value: "Rs " + total.toLocaleString(), inline: true },
+                                                            { name: "Contact", value: "Email: " + (email || 'N/A') + "\nWA: " + (whatsapp || 'N/A'), inline: false },
+                                                            { name: "Date & Time", value: date + " @ " + time, inline: true },
+                                                            { name: "Payment", value: paymentMethod.toUpperCase(), inline: true },
+                                                            { name: "Airport Greeting", value: boardShow ? "YES (+Rs 2000)\nName: " + boardName + "\nFlight: " + flightNumber + "\nArr: " + arrivalDate + " @ " + arrivalTime : "NO", inline: false }
+                                                        ]
+                                                    }]
+                                                })
+                                            })
+                                        } catch (error) {
+                                            console.error("Discord webhook failed", error)
+                                        }
+
+                                        // 3. Send Background Email (Reliability Backup)
+                                        try {
+                                            await fetch("https://formsubmit.co/ajax/airporttaxis.lk@gmail.com", {
+                                                method: "POST",
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    'Accept': 'application/json'
+                                                },
+                                                body: JSON.stringify({
+                                                    _subject: `New Booking: ${pickup.name} -> ${dropoff.name}`,
+                                                    ...tripDetails,
+                                                    _template: 'table'
+                                                })
+                                            })
+                                        } catch (error) {
+                                            console.error("Background email failed", error) // Silent fail as WA is primary
+                                        } finally {
+                                            setLoading(false); // Reset loading state
+                                        }
+                                    }}
+                                    className="w-full bg-gold text-navy font-extrabold py-6 rounded-2xl text-xl hover:scale-[1.02] transition-all shadow-2xl disabled:opacity-50 disabled:grayscale"
+                                >
+                                    {loading ? <Loader2 className="animate-spin mx-auto" /> : 'Book This Trip Now'}
+                                </button>
+                            </>
+                        )
+                    })()}
+                </div >
             </div>
-            )
+        </div>
+    )
 }
 
-            export default Prices
+export default Prices
