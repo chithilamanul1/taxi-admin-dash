@@ -181,7 +181,7 @@ const calculatePrice = (distance, vehicleType, tripType) => {
     return { total, breakdown, oneWayPrice }
 }
 
-const Prices = () => {
+const Prices = ({ initialDestination }) => {
     const [pickup, setPickup] = useState({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lon: 79.8837 })
     const [dropoff, setDropoff] = useState({ name: '', lat: null, lon: null })
     const [pickupSearch, setPickupSearch] = useState('Bandaranaike International Airport (CMB)')
@@ -225,6 +225,14 @@ const Prices = () => {
         }
         fetchRate()
     }, [])
+
+    // Handle initial destination from props (Popular Routes)
+    useEffect(() => {
+        if (initialDestination) {
+            setDropoffSearch(initialDestination)
+            searchLocation(initialDestination, setDropoffResults)
+        }
+    }, [initialDestination])
 
     // Auto-switch vehicle if passenger count exceeds capacity
     useEffect(() => {

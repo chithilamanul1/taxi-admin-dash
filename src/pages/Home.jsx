@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Hero from '../components/Hero'
 import Features from '../components/Features'
 import Prices from './Prices'
@@ -6,11 +6,24 @@ import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 
 const Home = () => {
+    const [selectedDest, setSelectedDest] = useState(null)
+
+    const handleRouteClick = (dest) => {
+        setSelectedDest(dest)
+        const element = document.getElementById('calculator')
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' })
+        }
+    }
+
     return (
         <div>
-            <Hero onBookClick={() => window.location.href = '/prices'} />
+            <Hero onBookClick={() => {
+                const element = document.getElementById('calculator')
+                if (element) element.scrollIntoView({ behavior: 'smooth' })
+            }} />
             <div id="calculator" className="bg-slate-50 py-10">
-                <Prices />
+                <Prices initialDestination={selectedDest} />
             </div>
 
             {/* Popular Routes Section */}
@@ -22,7 +35,7 @@ const Home = () => {
 
                 <div className="grid md:grid-cols-3 gap-8">
                     {/* Mirissa */}
-                    <Link to="/prices" className="group relative h-[400px] rounded-3xl overflow-hidden shadow-xl">
+                    <button onClick={() => handleRouteClick('Mirissa')} className="group relative h-[400px] rounded-3xl overflow-hidden shadow-xl w-full text-left">
                         <img
                             src="https://images.pexels.com/photos/1835718/pexels-photo-1835718.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                             alt="Airport to Mirissa"
@@ -37,10 +50,10 @@ const Home = () => {
                                 Get Quote <ArrowRight size={16} />
                             </div>
                         </div>
-                    </Link>
+                    </button>
 
                     {/* Tangalle */}
-                    <Link to="/prices" className="group relative h-[400px] rounded-3xl overflow-hidden shadow-xl">
+                    <button onClick={() => handleRouteClick('Tangalle')} className="group relative h-[400px] rounded-3xl overflow-hidden shadow-xl w-full text-left">
                         <img
                             src="https://images.pexels.com/photos/3355788/pexels-photo-3355788.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                             alt="Airport to Tangalle"
@@ -54,10 +67,10 @@ const Home = () => {
                                 Get Quote <ArrowRight size={16} />
                             </div>
                         </div>
-                    </Link>
+                    </button>
 
                     {/* Sigiriya */}
-                    <Link to="/prices" className="group relative h-[400px] rounded-3xl overflow-hidden shadow-xl">
+                    <button onClick={() => handleRouteClick('Sigiriya')} className="group relative h-[400px] rounded-3xl overflow-hidden shadow-xl w-full text-left">
                         <img
                             src="https://images.pexels.com/photos/13391116/pexels-photo-13391116.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                             alt="Airport to Sigiriya"
@@ -71,7 +84,7 @@ const Home = () => {
                                 Get Quote <ArrowRight size={16} />
                             </div>
                         </div>
-                    </Link>
+                    </button>
                 </div>
             </section>
 
