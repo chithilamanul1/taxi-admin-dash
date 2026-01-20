@@ -158,7 +158,7 @@ const calculatePrice = (distance, vehicleType, tripType) => {
             oneWayPrice = tier.price
             // Flat rate overrides previous base, so we reset breakdown
             breakdown = [{
-                range: `0 - ${ tierEnd.toFixed(0) } km`,
+                range: "0 - " + tierEnd.toFixed(0) + " km",
                 description: 'Flat rate',
                 amount: tier.price
             }]
