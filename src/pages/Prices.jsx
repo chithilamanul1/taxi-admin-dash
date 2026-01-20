@@ -9,6 +9,7 @@ const VEHICLE_PRICING = {
         model: '',
         image: '/vehicles/wagon-r.jpeg',
         maxPassengers: 2,
+        imageScale: 1.2,
         specs: {
             luggage: 2,
             handLuggage: 2,
@@ -26,6 +27,7 @@ const VEHICLE_PRICING = {
         model: '',
         image: '/vehicles/sedan.png',
         maxPassengers: 3,
+        imageScale: 1.25,
         specs: {
             luggage: 3,
             handLuggage: 3,
@@ -46,6 +48,7 @@ const VEHICLE_PRICING = {
         model: '',
         image: '/vehicles/every.jpg',
         maxPassengers: 3,
+        imageScale: 1.15,
         specs: {
             luggage: 3,
             handLuggage: 3,
@@ -66,6 +69,7 @@ const VEHICLE_PRICING = {
         model: '',
         image: '/vehicles/minivan-4.jpg',
         maxPassengers: 4,
+        imageScale: 1.15,
         specs: {
             luggage: 4,
             handLuggage: 4,
@@ -85,6 +89,7 @@ const VEHICLE_PRICING = {
         model: '',
         image: '/vehicles/vezel.jpg',
         maxPassengers: 3,
+        imageScale: 1.15,
         specs: {
             luggage: 3,
             handLuggage: 3,
@@ -102,7 +107,7 @@ const VEHICLE_PRICING = {
         model: '',
         image: '/vehicles/Van.jpg',
         maxPassengers: 6,
-        imageScale: 0.9,
+        imageScale: 1.35,
         specs: {
             luggage: 7,
             handLuggage: 7,
