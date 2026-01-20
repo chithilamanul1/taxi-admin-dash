@@ -126,11 +126,11 @@ const VEHICLE_PRICING = {
         name: 'MINI BUS',
         model: '',
         image: '/vehicles/minibus.jpg',
-        maxPassengers: 15,
+        maxPassengers: 7,
         imageScale: 1.35,
         specs: {
-            luggage: 10,
-            handLuggage: 8,
+            luggage: 7,
+            handLuggage: 7,
             ac: true
         },
         tiers: [
