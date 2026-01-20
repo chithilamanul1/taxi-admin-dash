@@ -9,7 +9,7 @@ const VEHICLE_PRICING = {
         model: '',
         image: '/vehicles/wagon-r.jpeg',
         maxPassengers: 2,
-        imageScale: 1.2,
+        imageScale: 1.50,
         specs: {
             luggage: 2,
             handLuggage: 2,
@@ -27,7 +27,7 @@ const VEHICLE_PRICING = {
         model: '',
         image: '/vehicles/sedan.png',
         maxPassengers: 3,
-        imageScale: 1.25,
+        imageScale: 1.50,
         specs: {
             luggage: 3,
             handLuggage: 3,
@@ -48,7 +48,7 @@ const VEHICLE_PRICING = {
         model: '',
         image: '/vehicles/every.jpg',
         maxPassengers: 3,
-        imageScale: 1.15,
+        imageScale: 1.50,
         specs: {
             luggage: 3,
             handLuggage: 3,
