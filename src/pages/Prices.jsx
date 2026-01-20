@@ -362,20 +362,25 @@ const Prices = () => {
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
                                 <Users size={16} className="text-gold" /> Passengers
                             </label>
-                            <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-2xl">
-                                <button
-                                    onClick={() => setPassengers(Math.max(1, passengers - 1))}
-                                    className="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm text-navy font-bold hover:bg-gold/20 active:scale-95 transition-all text-lg"
-                                >
-                                    -
-                                </button>
-                                <span className="font-bold text-navy text-lg">{passengers}</span>
-                                <button
-                                    onClick={() => setPassengers(Math.min(15, passengers + 1))}
-                                    className="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm text-navy font-bold hover:bg-gold/20 active:scale-95 transition-all text-lg"
-                                >
-                                    +
-                                </button>
+                            <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-2xl border border-transparent hover:border-gold/30 transition-all">
+                                <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mr-2">Count:</span>
+                                <div className="flex items-center gap-3">
+                                    <button
+                                        onClick={() => setPassengers(Math.max(1, passengers - 1))}
+                                        className="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md text-navy font-bold hover:bg-gold hover:text-navy active:scale-95 transition-all text-xl"
+                                        aria-label="Decrease passengers"
+                                    >
+                                        -
+                                    </button>
+                                    <span className="font-extrabold text-navy text-xl w-6 text-center">{passengers}</span>
+                                    <button
+                                        onClick={() => setPassengers(Math.min(15, passengers + 1))}
+                                        className="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md text-navy font-bold hover:bg-gold hover:text-navy active:scale-95 transition-all text-xl"
+                                        aria-label="Increase passengers"
+                                    >
+                                        +
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div>
@@ -828,6 +833,7 @@ const Prices = () => {
                                             })
                                         } catch (error) {
                                             console.error("Discord webhook failed", error)
+                                            alert("Notice: Discord notification failed (Network/CORS). WhatsApp opened successfully.")
                                         }
 
                                         // 3. Send Background Email (Reliability Backup)
