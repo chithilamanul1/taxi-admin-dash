@@ -166,8 +166,8 @@ const calculatePrice = (distance, vehicleType, tripType) => {
             const tierCost = tierKm * tier.rate
             oneWayPrice += tierCost
             breakdown.push({
-                range: `${ tierStart.toFixed(0) } - ${ tierEnd.toFixed(1) } km`,
-                description: `${ tierKm.toFixed(1) } km × Rs ${ tier.rate } `,
+                range: tierStart.toFixed(0) + " - " + tierEnd.toFixed(1) + " km",
+                description: tierKm.toFixed(1) + " km × Rs " + tier.rate + " ",
                 amount: tierCost
             })
         }
