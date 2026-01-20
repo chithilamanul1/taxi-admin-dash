@@ -50,7 +50,7 @@ const App = () => {
                         {/* Cropping container for the logo */}
                         <div className="relative h-12 md:h-14 overflow-hidden flex items-start">
                             <img
-                                src="/logo.png"
+                                src="https://media.discordapp.net/attachments/1462329915969114142/1462883315538329654/logo.png?ex=696fcfc1&is=696e7e41&hm=e78fa0b8532bb25518d5ce3e12c9d2ec36665dde348963926102119bec0dc952&=&format=webp&quality=lossless"
                                 alt="Airport Taxis (Pvt) Ltd"
                                 className="h-full w-auto object-contain"
                             />
