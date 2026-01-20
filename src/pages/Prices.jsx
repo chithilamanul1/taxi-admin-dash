@@ -357,7 +357,7 @@ const Prices = () => {
                     </div>
 
                     {/* Passengers & Trip Type Row */}
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
                                 <Users size={16} className="text-gold" /> Passengers
@@ -423,7 +423,7 @@ const Prices = () => {
                                 type="tel"
                                 value={whatsapp}
                                 onChange={(e) => setWhatsapp(e.target.value)}
-                                placeholder="+94 77 ..."
+                                placeholder="+1 66 77 88 99 ..."
                                 className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-gold outline-none"
                             />
                         </div>
