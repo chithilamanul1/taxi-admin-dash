@@ -4,6 +4,7 @@ import Post from '@/models/Post';
 export const revalidate = 3600; // Revalidate every hour
 
 export default async function sitemap() {
+    let posts = [];
     if (process.env.MONGO_URI) {
         try {
             await dbConnect();
