@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 export async function POST(req) {
     await dbConnect();
     try {
-        const { code, location } = await req.json(); // location is likely dropoff or pickup string
+        const { code, pickup, dropoff } = await req.json(); // pickup/dropoff are strings or objects? Expecting strings or extracting address
         const coupon = await Coupon.findOne({ code: code.toUpperCase(), isActive: true });
 
         if (!coupon) {
@@ -18,10 +18,17 @@ export async function POST(req) {
 
         // Location Check
         if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
-            if (!location) return NextResponse.json({ valid: false, message: 'Location required for this coupon' });
+            // Combine pickup and dropoff for checking
+            // Handle if they are objects (BookingWidget sends {name: ...}?) 
+            // Plan said we'd check Frontend logic. Let's assume strings for now, or handle objects.
 
-            const locLower = location.toLowerCase();
-            const matches = coupon.applicableLocations.some(loc => locLower.includes(loc.toLowerCase()));
+            const pickupText = (typeof pickup === 'object' ? pickup?.name : pickup) || '';
+            const dropoffText = (typeof dropoff === 'object' ? dropoff?.name : dropoff) || '';
+            const fullRoute = `${pickupText} ${dropoffText}`.toLowerCase();
+
+            if (!fullRoute.trim()) return NextResponse.json({ valid: false, message: 'Location required for this coupon' });
+
+            const matches = coupon.applicableLocations.some(loc => fullRoute.includes(loc.toLowerCase()));
 
             if (!matches) {
                 return NextResponse.json({ valid: false, message: 'Coupon not applicable for this location' });

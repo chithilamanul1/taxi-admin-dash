@@ -3,7 +3,13 @@
 
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResend = () => {
+    if (!process.env.RESEND_API_KEY) {
+        console.warn('[Email] RESEND_API_KEY is missing');
+        return null;
+    }
+    return new Resend(process.env.RESEND_API_KEY);
+};
 
 const OWNER_EMAIL = process.env.OWNER_EMAIL || 'airporttaxis.lk@gmail.com';
 const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxis <noreply@airporttaxis.lk>';
@@ -84,6 +90,9 @@ export async function sendLoginNotification(user) {
     `;
 
     try {
+        const resend = getResend();
+        if (!resend) return;
+
         await resend.emails.send({
             from: FROM_EMAIL,
             to: user.email,
@@ -163,13 +172,16 @@ export async function sendBookingConfirmation(booking) {
     // Send to customer
     if (booking.customerEmail) {
         try {
-            await resend.emails.send({
-                from: FROM_EMAIL,
-                to: booking.customerEmail,
-                subject: `✅ Booking Confirmed #${booking._id?.toString().slice(-8).toUpperCase()} - Airport Taxis`,
-                html: getBaseTemplate(customerContent, 'Booking Confirmation')
-            });
-            console.log('[Email] Booking confirmation sent to customer:', booking.customerEmail);
+            const resend = getResend();
+            if (resend) {
+                await resend.emails.send({
+                    from: FROM_EMAIL,
+                    to: booking.customerEmail,
+                    subject: `✅ Booking Confirmed #${booking._id?.toString().slice(-8).toUpperCase()} - Airport Taxis`,
+                    html: getBaseTemplate(customerContent, 'Booking Confirmation')
+                });
+                console.log('[Email] Booking confirmation sent to customer:', booking.customerEmail);
+            }
         } catch (error) {
             console.error('[Email] Failed to send customer booking confirmation:', error);
         }
@@ -206,13 +218,16 @@ export async function sendBookingConfirmation(booking) {
     `;
 
     try {
-        await resend.emails.send({
-            from: FROM_EMAIL,
-            to: OWNER_EMAIL,
-            subject: `🚨 NEW BOOKING #${booking._id?.toString().slice(-8).toUpperCase()} - ${booking.customerName || 'Guest'}`,
-            html: getBaseTemplate(ownerContent, 'New Booking Alert')
-        });
-        console.log('[Email] Booking notification sent to owner');
+        const resend = getResend();
+        if (resend) {
+            await resend.emails.send({
+                from: FROM_EMAIL,
+                to: OWNER_EMAIL,
+                subject: `🚨 NEW BOOKING #${booking._id?.toString().slice(-8).toUpperCase()} - ${booking.customerName || 'Guest'}`,
+                html: getBaseTemplate(ownerContent, 'New Booking Alert')
+            });
+            console.log('[Email] Booking notification sent to owner');
+        }
     } catch (error) {
         console.error('[Email] Failed to send owner booking notification:', error);
     }
@@ -259,13 +274,16 @@ export async function sendTripCompletedNotification(booking) {
 
     if (booking.customerEmail) {
         try {
-            await resend.emails.send({
-                from: FROM_EMAIL,
-                to: booking.customerEmail,
-                subject: '✅ Trip Completed - Thank You for Travelling with Us!',
-                html: getBaseTemplate(content, 'Trip Completed')
-            });
-            console.log('[Email] Trip completion notification sent to:', booking.customerEmail);
+            const resend = getResend();
+            if (resend) {
+                await resend.emails.send({
+                    from: FROM_EMAIL,
+                    to: booking.customerEmail,
+                    subject: '✅ Trip Completed - Thank You for Travelling with Us!',
+                    html: getBaseTemplate(content, 'Trip Completed')
+                });
+                console.log('[Email] Trip completion notification sent to:', booking.customerEmail);
+            }
         } catch (error) {
             console.error('[Email] Failed to send trip completion email:', error);
         }
@@ -304,13 +322,16 @@ export async function sendReviewThankYou(review) {
 
     if (review.userEmail) {
         try {
-            await resend.emails.send({
-                from: FROM_EMAIL,
-                to: review.userEmail,
-                subject: '⭐ Thank You for Your Review - Airport Taxis',
-                html: getBaseTemplate(content, 'Review Thank You')
-            });
-            console.log('[Email] Review thank you sent to:', review.userEmail);
+            const resend = getResend();
+            if (resend) {
+                await resend.emails.send({
+                    from: FROM_EMAIL,
+                    to: review.userEmail,
+                    subject: '⭐ Thank You for Your Review - Airport Taxis',
+                    html: getBaseTemplate(content, 'Review Thank You')
+                });
+                console.log('[Email] Review thank you sent to:', review.userEmail);
+            }
         } catch (error) {
             console.error('[Email] Failed to send review thank you:', error);
         }
@@ -368,13 +389,16 @@ export async function sendPaymentConfirmation(booking) {
 
     if (booking.customerEmail) {
         try {
-            await resend.emails.send({
-                from: FROM_EMAIL,
-                to: booking.customerEmail,
-                subject: `💳 Payment Confirmed - LKR ${booking.totalPrice?.toLocaleString()} - Airport Taxis`,
-                html: getBaseTemplate(content, 'Payment Confirmation')
-            });
-            console.log('[Email] Payment confirmation sent to:', booking.customerEmail);
+            const resend = getResend();
+            if (resend) {
+                await resend.emails.send({
+                    from: FROM_EMAIL,
+                    to: booking.customerEmail,
+                    subject: `💳 Payment Confirmed - LKR ${booking.totalPrice?.toLocaleString()} - Airport Taxis`,
+                    html: getBaseTemplate(content, 'Payment Confirmation')
+                });
+                console.log('[Email] Payment confirmation sent to:', booking.customerEmail);
+            }
         } catch (error) {
             console.error('[Email] Failed to send payment confirmation:', error);
         }
