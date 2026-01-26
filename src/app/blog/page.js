@@ -8,9 +8,18 @@ export const metadata = {
 };
 
 async function getPosts() {
-    await dbConnect();
-    const posts = await Post.find({ isPublished: true }).sort({ createdAt: -1 });
-    return posts;
+    if (!process.env.MONGO_URI) {
+        console.warn('Skipping blog posts: MONGO_URI missing');
+        return [];
+    }
+    try {
+        await dbConnect();
+        const posts = await Post.find({ isPublished: true }).sort({ createdAt: -1 });
+        return posts;
+    } catch (e) {
+        console.error('Blog Page DB Error:', e);
+        return [];
+    }
 }
 
 export default async function BlogPage() {
