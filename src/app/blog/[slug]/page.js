@@ -7,9 +7,15 @@ import ReactMarkdown from 'react-markdown';
 import BlogCoverImage from '../../../components/BlogCoverImage';
 
 async function getPost(slug) {
-    await dbConnect();
-    const post = await Post.findOne({ slug, isPublished: true });
-    return post;
+    if (!process.env.MONGO_URI) return null;
+    try {
+        await dbConnect();
+        const post = await Post.findOne({ slug, isPublished: true });
+        return post;
+    } catch (e) {
+        console.error('Blog Post DB Error:', e);
+        return null;
+    }
 }
 
 export async function generateMetadata({ params }) {

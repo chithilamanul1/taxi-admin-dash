@@ -6,6 +6,8 @@ import Link from 'next/link';
 import BookingActions from '@/components/BookingActions';
 import TrackingMap from '@/components/TrackingMap';
 
+export const dynamic = 'force-dynamic';
+
 export default async function BookingStatusPage({ params }) {
     await dbConnect();
 
