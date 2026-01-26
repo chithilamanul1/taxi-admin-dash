@@ -244,7 +244,9 @@ const BookingWidget = () => {
 
     const { total } = calculatePrice(distance, vehicle, tripType, vehiclePricing, waitingHours, hasNameBoard, couponCode);
 
-    const discountAmount = appliedOffer ? (total * (appliedOffer.discountPercentage / 100)) : 0;
+    const discountAmount = appliedOffer
+        ? (appliedOffer.discountAmount || (total * (appliedOffer.discountPercentage / 100)))
+        : 0;
     const finalTotal = Math.max(0, total - discountAmount);
 
     const handleBook = () => {
@@ -430,8 +432,49 @@ const BookingWidget = () => {
                                         placeholder="Coupon Code"
                                         value={couponCode}
                                         onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                        className="w-full h-full pl-14 pr-6 py-5 rounded-2xl bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-sm font-bold outline-none focus:border-emerald-600 dark:focus:border-emerald-500 transition-all uppercase text-emerald-900 dark:text-white placeholder:text-emerald-900/30 dark:placeholder:text-white/30"
+                                        className="w-full h-full pl-14 pr-24 py-5 rounded-2xl bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-sm font-bold outline-none focus:border-emerald-600 dark:focus:border-emerald-500 transition-all uppercase text-emerald-900 dark:text-white placeholder:text-emerald-900/30 dark:placeholder:text-white/30"
                                     />
+                                    <button
+                                        onClick={async () => {
+                                            if (!couponCode.trim()) return;
+                                            try {
+                                                const res = await fetch('/api/coupons/validate', {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({
+                                                        code: couponCode,
+                                                        pickup: pickup.name || pickupSearch,
+                                                        dropoff: dropoff.name || dropoffSearch
+                                                    })
+                                                });
+                                                const data = await res.json();
+                                                if (data.valid) {
+                                                    // Set applied offer logic manually or via existing state?
+                                                    // Existing state uses `activeOffers` (Array) and `appliedOffer` (Object).
+                                                    // I should adapt to that structure or add `couponDiscount` state.
+                                                    // Let's add `couponDiscount` state effectively by mocking an Offer object.
+                                                    const couponOffer = {
+                                                        _id: 'coupon-' + data.coupon.code,
+                                                        name: data.coupon.code,
+                                                        discountPercentage: data.coupon.discountType === 'percentage' ? data.coupon.value : 0,
+                                                        discountAmount: data.coupon.discountType === 'flat' ? data.coupon.value : 0,
+                                                        type: 'coupon'
+                                                    };
+                                                    setAppliedOffer(couponOffer);
+                                                    alert('Coupon Applied: ' + data.coupon.code);
+                                                } else {
+                                                    alert(data.message || 'Invalid Coupon');
+                                                    setAppliedOffer(null);
+                                                }
+                                            } catch (e) {
+                                                console.error(e);
+                                                alert('Validation failed');
+                                            }
+                                        }}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-900 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-800 transition-all"
+                                    >
+                                        Apply
+                                    </button>
                                 </div>
                             </div>
 

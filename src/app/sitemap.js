@@ -4,12 +4,15 @@ import Post from '@/models/Post';
 export const revalidate = 3600; // Revalidate every hour
 
 export default async function sitemap() {
-    await dbConnect();
-    let posts = [];
-    try {
-        posts = await Post.find({ isPublished: true }, 'slug updatedAt');
-    } catch (e) {
-        console.error(e);
+    if (process.env.MONGO_URI) {
+        try {
+            await dbConnect();
+            posts = await Post.find({ isPublished: true }, 'slug updatedAt');
+        } catch (e) {
+            console.error('Sitemap DB Error:', e);
+        }
+    } else {
+        console.warn('Skipping sitemap dynamic generation: MONGO_URI missing');
     }
 
     const blogUrls = posts.map((post) => ({
