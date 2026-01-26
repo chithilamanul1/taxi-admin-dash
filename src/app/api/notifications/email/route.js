@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialized lazily inside handler
 
 // Send booking confirmation email
 export async function POST(req) {
@@ -11,6 +11,12 @@ export async function POST(req) {
         if (!to || !bookingDetails) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
+
+        if (!process.env.RESEND_API_KEY) {
+            console.error('RESEND_API_KEY missing');
+            return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 });
+        }
+        const resend = new Resend(process.env.RESEND_API_KEY);
 
         const { data, error } = await resend.emails.send({
             from: 'Airport Taxi Tours <bookings@airporttaxitours.lk>',

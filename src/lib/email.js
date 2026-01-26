@@ -4,12 +4,11 @@ const FROM_EMAIL = 'Airport Taxi <onboarding@resend.dev>'; // Using default doma
 
 export const sendEmail = async ({ to, subject, html, text }) => {
     try {
+        const { Resend } = await import('resend');
         if (!process.env.RESEND_API_KEY) {
             console.error("RESEND_API_KEY is missing. Email skipped.");
             return { success: false, error: "Missing API Key" };
         }
-
-        const { Resend } = await import('resend');
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         const data = await resend.emails.send({
