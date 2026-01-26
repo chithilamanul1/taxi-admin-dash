@@ -3,8 +3,10 @@ import mongoose from 'mongoose';
 const MONGODB_URI = process.env.MONGO_URI || process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-    // Fallback for local dev if .env.local is being weird with encoding
-    console.warn('MONGO_URI not found in environment, checking fallback...');
+    // Fallback for local dev or build time without DB
+    console.warn('MONGO_URI not found.');
+    // PREVENT HANGING: Disable buffering so queries fail fast instead of waiting forever
+    mongoose.set('bufferCommands', false);
 }
 
 /**
