@@ -1,6 +1,8 @@
+'use client'
+
 import React from 'react'
 import { Calendar, Clock, MapPin, ArrowRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 const PACKAGES = [
     {
         title: "06 Days | 05 Nights Excursions",
@@ -71,8 +73,8 @@ const TourPackages = () => {
     return (
         <div className="pb-20">
             {/* Header */}
-            <div className="bg-navy py-16 md:py-24 text-center px-4">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Tour <span className="text-gold">Packages</span></h1>
+            <div className="bg-emerald-900 py-16 md:py-24 text-center px-4">
+                <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Tour <span className="text-emerald-600">Packages</span></h1>
                 <p className="text-white/60 max-w-2xl mx-auto">Discover the beauty of Sri Lanka with our curated multi-day tour experiences.</p>
             </div>
 
@@ -88,20 +90,20 @@ const TourPackages = () => {
                                     alt={pkg.title}
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
-                                <div className="absolute top-3 right-3 bg-navy/90 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">
+                                <div className="absolute top-3 right-3 bg-emerald-900/90 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">
                                     {pkg.duration}
                                 </div>
                             </div>
 
                             {/* Content */}
                             <div className="p-6">
-                                <h3 className="text-lg font-bold text-navy mb-1 line-clamp-1" title={pkg.title}>{pkg.title}</h3>
+                                <h3 className="text-lg font-bold text-emerald-900 mb-1 line-clamp-1" title={pkg.title}>{pkg.title}</h3>
                                 <p className="text-sm text-gray-500 mb-4">{pkg.subtitle}</p>
 
                                 <div className="flex items-end justify-between mt-4 pt-4 border-t border-gray-100">
                                     <div>
                                         <p className="text-xs text-gray-400 uppercase tracking-wider">Starting From</p>
-                                        <div className="text-2xl font-extrabold text-gold leading-none">
+                                        <div className="text-2xl font-extrabold text-emerald-600 leading-none">
                                             ${pkg.price}
                                             <span className="text-xs text-gray-400 font-medium ml-1">/pp</span>
                                         </div>
@@ -111,7 +113,7 @@ const TourPackages = () => {
                                             const msg = `Inquiry about Tour Package: ${pkg.title} (${pkg.subtitle})`
                                             window.open(`https://wa.me/94716885880?text=${msg}`, '_blank')
                                         }}
-                                        className="bg-navy text-white p-2 rounded-lg hover:bg-gold hover:text-navy transition-colors"
+                                        className="bg-emerald-900 text-white p-2 rounded-lg hover:bg-emerald-600 hover:text-emerald-900 transition-colors"
                                     >
                                         <ArrowRight size={20} />
                                     </button>
@@ -124,7 +126,7 @@ const TourPackages = () => {
 
             <div className="text-center mt-16">
                 <p className="text-gray-500 mb-6">Need a custom itinerary? We can tailor a trip just for you.</p>
-                <Link to="/contact" className="inline-block bg-gold text-navy font-bold px-8 py-3 rounded-xl hover:scale-105 transition-transform">
+                <Link href="/contact" className="inline-block bg-emerald-600 text-emerald-900 font-bold px-8 py-3 rounded-xl hover:scale-105 transition-transform">
                     Contact Us for Custom Tours
                 </Link>
             </div>

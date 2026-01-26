@@ -12,38 +12,38 @@ const Services = () => {
     return (
         <div className="pb-32">
             <div className="bg-slate-50 py-24 text-center">
-                <h1 className="text-navy text-5xl md:text-6xl font-extrabold mb-4">Our <span className="text-gold">Services</span></h1>
+                <h1 className="text-emerald-900 text-5xl md:text-6xl font-extrabold mb-4">Our <span className="text-emerald-600">Services</span></h1>
                 <p className="text-gray-400 max-w-lg mx-auto">Tailored transportation solutions for every type of traveler.</p>
             </div>
 
             <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10 -mt-10">
                 <div className="bg-white p-10 rounded-3xl shadow-xl relative overflow-hidden group border border-gray-100">
-                    <div className="w-16 h-16 bg-gold text-navy rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <div className="w-16 h-16 bg-emerald-600 text-emerald-900 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <Star />
                     </div>
-                    <h3 className="text-2xl font-bold text-navy mb-4">Budget Selection</h3>
+                    <h3 className="text-2xl font-bold text-emerald-900 mb-4">Budget Selection</h3>
                     <p className="text-gray-500 mb-8">Perfect for solo travelers or couples. Clean, air-conditioned compact cars at the lowest rates.</p>
                     <ul className="space-y-3">
                         <li className="flex items-center gap-2 text-sm text-gray-500"><CheckCircle2 className="text-green-500 w-4 h-4" /> Toyota Aqua / Vitz</li>
                         <li className="flex items-center gap-2 text-sm text-gray-500"><CheckCircle2 className="text-green-500 w-4 h-4" /> 2 Large Suitcases</li>
                     </ul>
                 </div>
-                <div className="bg-navy p-10 rounded-3xl shadow-2xl relative overflow-hidden group transform md:scale-105 z-10">
-                    <div className="w-16 h-16 bg-white text-navy rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <div className="bg-emerald-900 p-10 rounded-3xl shadow-2xl relative overflow-hidden group transform md:scale-105 z-10">
+                    <div className="w-16 h-16 bg-white text-emerald-900 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <Award />
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-4">Executive Sedan</h3>
                     <p className="text-white/60 mb-8">Premium comfort for families or business trips. Luxury sedans with extra legroom.</p>
                     <ul className="space-y-3">
-                        <li className="flex items-center gap-2 text-sm text-white/70"><CheckCircle2 className="text-gold w-4 h-4" /> Toyota Premio / Allion</li>
-                        <li className="flex items-center gap-2 text-sm text-white/70"><CheckCircle2 className="text-gold w-4 h-4" /> 3 Large Suitcases</li>
+                        <li className="flex items-center gap-2 text-sm text-white/70"><CheckCircle2 className="text-emerald-600 w-4 h-4" /> Toyota Premio / Allion</li>
+                        <li className="flex items-center gap-2 text-sm text-white/70"><CheckCircle2 className="text-emerald-600 w-4 h-4" /> 3 Large Suitcases</li>
                     </ul>
                 </div>
                 <div className="bg-white p-10 rounded-3xl shadow-xl relative overflow-hidden group border border-gray-100">
-                    <div className="w-16 h-16 bg-gold text-navy rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <div className="w-16 h-16 bg-emerald-600 text-emerald-900 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <Users />
                     </div>
-                    <h3 className="text-2xl font-bold text-navy mb-4">Luxury Van</h3>
+                    <h3 className="text-2xl font-bold text-emerald-900 mb-4">Luxury Van</h3>
                     <p className="text-gray-500 mb-8">Great for groups and large luggage. Spacious vans with professional drivers.</p>
                     <ul className="space-y-3">
                         <li className="flex items-center gap-2 text-sm text-gray-500"><CheckCircle2 className="text-green-500 w-4 h-4" /> KDH Flat Roof / High Roof</li>

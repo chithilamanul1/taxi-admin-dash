@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect, useRef } from 'react'
 import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Lock, Briefcase, Wind } from 'lucide-react'
 import _ from 'lodash'
@@ -289,20 +291,20 @@ const Prices = ({ initialDestination }) => {
     }, [pickup, dropoff])
 
     return (
-        <div className="pb-20 max-w-6xl mx-auto px-6">
+        <div className="pt-24 sm:pt-10 pb-20 max-w-6xl mx-auto px-6 dark:bg-slate-950 transition-colors">
             <div id="prices" className="py-12 text-center scroll-mt-32">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-navy mb-4">Price <span className="text-gold">Calculator</span></h1>
-                <p className="text-gray-500 max-w-2xl mx-auto">Select your pickup and destination points for an instant, transparent quote.</p>
+                <h1 className="text-4xl md:text-5xl font-extrabold text-emerald-900 dark:text-white mb-4">Price <span className="text-emerald-600 dark:text-emerald-400">Calculator</span></h1>
+                <p className="text-emerald-900/60 dark:text-white/60 max-w-2xl mx-auto">Select your pickup and destination points for an instant, transparent quote.</p>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-12 mt-8">
                 {/* Left: Input Controls */}
-                <div className="space-y-8 bg-white p-8 md:p-12 rounded-[2.5rem] shadow-xl border border-gray-100">
+                <div className="space-y-8 bg-white dark:bg-slate-900 p-8 md:p-12 rounded-[2.5rem] shadow-xl border border-gray-100 dark:border-white/5">
 
                     {/* Pickup Search */}
                     <div className="relative">
-                        <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                            <MapPin size={16} className="text-gold" /> Pickup Point
+                        <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
+                            <MapPin size={16} className="text-emerald-600 dark:text-emerald-400" /> Pickup Point
                         </label>
                         <input
                             type="text"
@@ -312,10 +314,10 @@ const Prices = ({ initialDestination }) => {
                                 debouncedSearchPickup(e.target.value)
                             }}
                             placeholder="Start searching..."
-                            className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-gold outline-none"
+                            className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white placeholder:text-gray-400/50"
                         />
                         {pickupResults.length > 0 && (
-                            <div className="absolute z-20 w-full mt-2 bg-white shadow-2xl rounded-2xl border border-gray-100 overflow-hidden">
+                            <div className="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-gray-100 dark:border-white/10 overflow-hidden">
                                 {pickupResults.map((r, i) => (
                                     <button
                                         key={i}
@@ -324,7 +326,7 @@ const Prices = ({ initialDestination }) => {
                                             setPickupSearch(r.name)
                                             setPickupResults([])
                                         }}
-                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 border-b border-gray-50 last:border-none flex items-center gap-3"
+                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-gray-50 dark:border-white/5 last:border-none flex items-center gap-3 text-emerald-900 dark:text-white"
                                     >
                                         <Navigation size={14} className="text-gray-400" />
                                         <span>{r.name}</span>
@@ -336,8 +338,8 @@ const Prices = ({ initialDestination }) => {
 
                     {/* Dropoff Search */}
                     <div className="relative">
-                        <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                            <MapPin size={16} className="text-navy" /> Destination
+                        <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
+                            <MapPin size={16} className="text-emerald-900 dark:text-emerald-400" /> Destination
                         </label>
                         <input
                             type="text"
@@ -347,10 +349,10 @@ const Prices = ({ initialDestination }) => {
                                 debouncedSearchDropoff(e.target.value)
                             }}
                             placeholder="Where are you going?"
-                            className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-gold outline-none"
+                            className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white placeholder:text-gray-400/50"
                         />
                         {dropoffResults.length > 0 && (
-                            <div className="absolute z-20 w-full mt-2 bg-white shadow-2xl rounded-2xl border border-gray-100 overflow-hidden">
+                            <div className="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-gray-100 dark:border-white/10 overflow-hidden">
                                 {dropoffResults.map((r, i) => (
                                     <button
                                         key={i}
@@ -359,7 +361,7 @@ const Prices = ({ initialDestination }) => {
                                             setDropoffSearch(r.name)
                                             setDropoffResults([])
                                         }}
-                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 border-b border-gray-50 last:border-none flex items-center gap-3"
+                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-gray-50 dark:border-white/5 last:border-none flex items-center gap-3 text-emerald-900 dark:text-white"
                                     >
                                         <Navigation size={14} className="text-gray-400" />
                                         <span>{r.name}</span>
@@ -372,23 +374,23 @@ const Prices = ({ initialDestination }) => {
                     {/* Passengers & Trip Type Row */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <Users size={16} className="text-gold" /> Passengers
+                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
+                                <Users size={16} className="text-emerald-600 dark:text-emerald-400" /> Passengers
                             </label>
-                            <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-2xl border border-transparent hover:border-gold/30 transition-all">
-                                <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mr-2">Count:</span>
+                            <div className="flex items-center justify-between bg-slate-50 dark:bg-white/5 px-4 py-3 rounded-2xl border border-transparent hover:border-emerald-600/30 transition-all">
+                                <span className="text-xs font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider mr-2">Count:</span>
                                 <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => setPassengers(Math.max(1, passengers - 1))}
-                                        className="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md text-navy font-bold hover:bg-gold hover:text-navy active:scale-95 transition-all text-xl"
+                                        className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-md text-emerald-900 dark:text-white font-bold hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white active:scale-95 transition-all text-xl"
                                         aria-label="Decrease passengers"
                                     >
                                         -
                                     </button>
-                                    <span className="font-extrabold text-navy text-xl w-6 text-center">{passengers}</span>
+                                    <span className="font-extrabold text-emerald-900 dark:text-white text-xl w-6 text-center">{passengers}</span>
                                     <button
                                         onClick={() => setPassengers(Math.min(15, passengers + 1))}
-                                        className="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md text-navy font-bold hover:bg-gold hover:text-navy active:scale-95 transition-all text-xl"
+                                        className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-md text-emerald-900 dark:text-white font-bold hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white active:scale-95 transition-all text-xl"
                                         aria-label="Increase passengers"
                                     >
                                         +
@@ -397,15 +399,15 @@ const Prices = ({ initialDestination }) => {
                             </div>
                         </div>
                         <div>
-                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <ArrowRightLeft size={16} className="text-navy" /> Trip Type
+                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
+                                <ArrowRightLeft size={16} className="text-emerald-900 dark:text-emerald-400" /> Trip Type
                             </label>
-                            <div className="flex bg-slate-50 p-1.5 rounded-2xl">
+                            <div className="flex bg-slate-50 dark:bg-white/5 p-1.5 rounded-2xl">
                                 {['one-way', 'round-trip'].map(t => (
                                     <button
                                         key={t}
                                         onClick={() => setTripType(t)}
-                                        className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${tripType === t ? 'bg-navy text-white shadow-md' : 'text-gray-400 hover:text-navy'}`}
+                                        className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${tripType === t ? 'bg-emerald-900 text-white shadow-md' : 'text-gray-400 hover:text-emerald-900'}`}
                                     >
                                         {t === 'one-way' ? 'One Way' : 'Return'}
                                     </button>
@@ -418,26 +420,26 @@ const Prices = ({ initialDestination }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-gold">✉️</span> Your Email
+                                <span className="text-emerald-600">✉️</span> Your Email
                             </label>
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="name@example.com"
-                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-gold outline-none"
+                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white"
                             />
                         </div>
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-gold">📱</span> WhatsApp No.
+                                <span className="text-emerald-600">📱</span> WhatsApp No.
                             </label>
                             <input
                                 type="tel"
                                 value={whatsapp}
                                 onChange={(e) => setWhatsapp(e.target.value)}
                                 placeholder="+1 66 77 88 99 ..."
-                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-gold outline-none"
+                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white"
                             />
                         </div>
                     </div>
@@ -446,55 +448,55 @@ const Prices = ({ initialDestination }) => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-gold">📅</span> Date
+                                <span className="text-emerald-600">📅</span> Date
                             </label>
                             <input
                                 type="date"
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
-                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-gold outline-none"
+                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 outline-none"
                             />
                         </div>
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-gold">⏰</span> Time
+                                <span className="text-emerald-600">⏰</span> Time
                             </label>
                             <input
                                 type="time"
                                 value={time}
                                 onChange={(e) => setTime(e.target.value)}
-                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-gold outline-none"
+                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 outline-none"
                             />
                         </div>
                         <div>
-                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-gold">💳</span> Payment
+                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
+                                <span className="text-emerald-600 dark:text-emerald-400">💳</span> Payment
                             </label>
                             <select
                                 value={paymentMethod}
                                 onChange={(e) => setPaymentMethod(e.target.value)}
-                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-gold outline-none cursor-pointer"
+                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none cursor-pointer text-emerald-900 dark:text-white"
                             >
-                                <option value="cash">Cash to Driver</option>
-                                <option value="card">Card Payment</option>
+                                <option value="cash" className="dark:bg-slate-900">Cash to Driver</option>
+                                <option value="card" className="dark:bg-slate-900">Card Payment</option>
                             </select>
                         </div>
                     </div>
 
                     {/* Airport Greeting (Board Show) Option */}
-                    <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:border-gold/50 mb-8">
+                    <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:border-emerald-600/50 mb-8">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center text-2xl">
+                            <div className="w-12 h-12 bg-emerald-900/10 dark:bg-white/5 rounded-full flex items-center justify-center text-2xl">
                                 🛫
                             </div>
                             <div>
-                                <h4 className="text-navy font-bold text-lg">Airport Greeting (Board Show)</h4>
-                                <p className="text-gray-500 text-xs max-w-xs">Our driver will wait for you at the arrival terminal hall with your name on a board.</p>
+                                <h4 className="text-emerald-900 dark:text-white font-bold text-lg">Airport Greeting (Board Show)</h4>
+                                <p className="text-gray-500 dark:text-slate-400 text-xs max-w-xs">Our driver will wait for you at the arrival terminal hall with your name on a board.</p>
                             </div>
                         </div>
                         <div className="flex flex-col items-end gap-3">
                             <div className="flex flex-col items-end">
-                                <span className="text-gold font-bold text-lg">+ Rs 2,000.00</span>
+                                <span className="text-emerald-600 font-bold text-lg">+ Rs 2,000.00</span>
                                 {usdRate && (
                                     <span className="text-xs text-gray-400 font-medium">
                                         (≈ ${(2000 * usdRate).toFixed(2)} USD)
@@ -509,7 +511,7 @@ const Prices = ({ initialDestination }) => {
                                         checked={boardShow}
                                         onChange={(e) => setBoardShow(e.target.checked)}
                                     />
-                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold"></div>
+                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
                                 </label>
                             </div>
 
@@ -523,7 +525,7 @@ const Prices = ({ initialDestination }) => {
                                             value={boardName}
                                             onChange={(e) => setBoardName(e.target.value)}
                                             placeholder="e.g. Mr. John Doe"
-                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-gold outline-none"
+                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
                                         />
                                     </div>
                                     <div>
@@ -533,7 +535,7 @@ const Prices = ({ initialDestination }) => {
                                             value={flightNumber}
                                             onChange={(e) => setFlightNumber(e.target.value)}
                                             placeholder="e.g. UL 504"
-                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-gold outline-none"
+                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
                                         />
                                     </div>
                                     <div className="grid grid-cols-2 gap-3">
@@ -543,7 +545,7 @@ const Prices = ({ initialDestination }) => {
                                                 type="date"
                                                 value={arrivalDate}
                                                 onChange={(e) => setArrivalDate(e.target.value)}
-                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-gold outline-none"
+                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
                                             />
                                         </div>
                                         <div>
@@ -552,7 +554,7 @@ const Prices = ({ initialDestination }) => {
                                                 type="time"
                                                 value={arrivalTime}
                                                 onChange={(e) => setArrivalTime(e.target.value)}
-                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-gold outline-none"
+                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
                                             />
                                         </div>
                                     </div>
@@ -568,7 +570,7 @@ const Prices = ({ initialDestination }) => {
                             {!isVehicleListExpanded && (
                                 <button
                                     onClick={() => setIsVehicleListExpanded(true)}
-                                    className="text-xs font-bold text-gold hover:text-navy transition-colors uppercase tracking-widest flex items-center gap-1"
+                                    className="text-xs font-bold text-emerald-600 hover:text-emerald-900 transition-colors uppercase tracking-widest flex items-center gap-1"
                                 >
                                     Change Vehicle <ArrowRightLeft size={12} />
                                 </button>
@@ -579,7 +581,7 @@ const Prices = ({ initialDestination }) => {
                         {!isVehicleListExpanded && (
                             <div
                                 onClick={() => setIsVehicleListExpanded(true)}
-                                className="relative w-full overflow-hidden rounded-2xl border-2 border-gold ring-2 ring-gold/20 shadow-lg cursor-pointer group"
+                                className="relative w-full overflow-hidden rounded-2xl border-2 border-emerald-600 ring-2 ring-emerald-600/20 shadow-lg cursor-pointer group"
                             >
                                 <div className="aspect-[21/9] w-full relative">
                                     <img
@@ -589,26 +591,26 @@ const Prices = ({ initialDestination }) => {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/40 to-transparent"></div>
                                     <div className="absolute inset-0 p-6 flex flex-col justify-center text-white">
-                                        <div className="bg-gold text-navy text-xs font-bold px-3 py-1 rounded-full w-fit mb-2">SELECTED</div>
+                                        <div className="bg-emerald-600 text-emerald-900 text-xs font-bold px-3 py-1 rounded-full w-fit mb-2">SELECTED</div>
                                         <div className="font-bold text-2xl mb-1">{VEHICLE_PRICING[vehicle].name}</div>
                                         <div className="text-sm text-white/80 mb-2">{VEHICLE_PRICING[vehicle].model}</div>
                                         {VEHICLE_PRICING[vehicle].specs && (
                                             <div className="flex flex-col gap-1 mb-2 opacity-90">
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Users size={12} className="text-gold" /> 1-{VEHICLE_PRICING[vehicle].maxPassengers} PASSENGER
+                                                    <Users size={12} className="text-emerald-600" /> 1-{VEHICLE_PRICING[vehicle].maxPassengers} PASSENGER
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Briefcase size={12} className="text-gold" /> {VEHICLE_PRICING[vehicle].specs.luggage} LUGGAGE
+                                                    <Briefcase size={12} className="text-emerald-600" /> {VEHICLE_PRICING[vehicle].specs.luggage} LUGGAGE
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Briefcase size={12} className="text-gold scale-75" /> {VEHICLE_PRICING[vehicle].specs.handLuggage} HAND LUGGAGE
+                                                    <Briefcase size={12} className="text-emerald-600 scale-75" /> {VEHICLE_PRICING[vehicle].specs.handLuggage} HAND LUGGAGE
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Wind size={12} className="text-gold" /> AIR - CONDITIONING
+                                                    <Wind size={12} className="text-emerald-600" /> AIR - CONDITIONING
                                                 </span>
                                             </div>
                                         )}
-                                        <div className="flex items-center gap-4 mt-1 text-xs font-bold text-gold uppercase tracking-widest">
+                                        <div className="flex items-center gap-4 mt-1 text-xs font-bold text-emerald-600 uppercase tracking-widest">
                                             <span>Click to Change</span>
                                             <ArrowRightLeft size={14} />
                                         </div>
@@ -636,22 +638,22 @@ const Prices = ({ initialDestination }) => {
                                                 }
                                             }}
                                             disabled={isLocked}
-                                            className={`relative w-full overflow-hidden rounded-3xl border-2 transition-all group text-left bg-white p-6
+                                            className={`relative w-full overflow-hidden rounded-3xl border-2 transition-all group text-left bg-white dark:bg-slate-800 p-6
                                                     ${vehicle === key
-                                                    ? 'border-gold shadow-xl scale-[1.02]'
+                                                    ? 'border-emerald-600 shadow-xl scale-[1.02]'
                                                     : isLocked
-                                                        ? 'border-gray-100 opacity-60 cursor-not-allowed grayscale'
-                                                        : 'border-transparent hover:border-gold/30 shadow-md hover:shadow-lg'
+                                                        ? 'border-gray-100 dark:border-white/5 opacity-60 cursor-not-allowed grayscale'
+                                                        : 'border-transparent dark:border-white/5 hover:border-emerald-600/30 shadow-md hover:shadow-lg'
                                                 }`}
                                         >
                                             {/* Header */}
                                             <div className="flex justify-between items-start mb-2">
                                                 <div>
-                                                    <h3 className="font-extrabold text-navy text-xl leading-relaxed pb-1">{v.name}</h3>
-                                                    <p className="text-xs text-gray-400 font-medium">{v.model}</p>
+                                                    <h3 className="font-extrabold text-emerald-900 dark:text-white text-xl leading-relaxed pb-1">{v.name}</h3>
+                                                    <p className="text-xs text-gray-400 dark:text-slate-500 font-medium">{v.model}</p>
                                                 </div>
                                                 {vehicle === key && (
-                                                    <div className="bg-gold text-navy p-1.5 rounded-full shadow-sm">
+                                                    <div className="bg-emerald-600 text-emerald-900 p-1.5 rounded-full shadow-sm">
                                                         <MapPin size={14} fill="currentColor" />
                                                     </div>
                                                 )}
@@ -670,22 +672,22 @@ const Prices = ({ initialDestination }) => {
                                             {/* Specs List */}
                                             <div className="space-y-2 border-t border-gray-100 pt-3">
                                                 <div className="flex items-center gap-3 text-sm font-bold text-gray-600">
-                                                    <div className="w-6 flex justify-center"><Users size={16} className="text-navy" /></div>
+                                                    <div className="w-6 flex justify-center"><Users size={16} className="text-emerald-900" /></div>
                                                     <span>1 - {v.maxPassengers} Passengers</span>
                                                 </div>
                                                 {v.specs && (
                                                     <>
                                                         <div className="flex items-center gap-3 text-sm font-bold text-gray-600">
-                                                            <div className="w-6 flex justify-center"><Briefcase size={16} className="text-navy" /></div>
+                                                            <div className="w-6 flex justify-center"><Briefcase size={16} className="text-emerald-900" /></div>
                                                             <span>{v.specs.luggage} Luggages</span>
                                                         </div>
                                                         <div className="flex items-center gap-3 text-sm font-bold text-gray-600">
-                                                            <div className="w-6 flex justify-center"><Briefcase size={14} className="text-navy" /></div>
+                                                            <div className="w-6 flex justify-center"><Briefcase size={14} className="text-emerald-900" /></div>
                                                             <span>{v.specs.handLuggage} Hand Baggages</span>
                                                         </div>
                                                         {v.specs.ac && (
-                                                            <div className="flex items-center gap-3 text-sm font-bold text-gray-600">
-                                                                <div className="w-6 flex justify-center"><Wind size={16} className="text-navy" /></div>
+                                                            <div className="flex items-center gap-3 text-sm font-bold text-gray-600 dark:text-slate-400">
+                                                                <div className="w-6 flex justify-center"><Wind size={16} className="text-emerald-900 dark:text-emerald-400" /></div>
                                                                 <span>Air Conditioning</span>
                                                             </div>
                                                         )}
@@ -710,8 +712,8 @@ const Prices = ({ initialDestination }) => {
                 </div>
 
                 {/* Right: Summary & Quote */}
-                <div ref={quoteRef} className="bg-navy rounded-[2.5rem] p-8 md:p-14 text-white shadow-3xl lg:sticky lg:top-28 flex flex-col h-fit">
-                    <h3 className="text-gold text-2xl font-bold mb-8 flex items-center gap-3">
+                <div ref={quoteRef} className="bg-emerald-900 rounded-[2.5rem] p-8 md:p-14 text-white shadow-3xl lg:sticky lg:top-28 flex flex-col h-fit">
+                    <h3 className="text-emerald-400 text-2xl font-bold mb-8 flex items-center gap-3">
                         Trip Quote
                     </h3>
 
@@ -743,17 +745,17 @@ const Prices = ({ initialDestination }) => {
                                                 {breakdown.map((item, idx) => (
                                                     <div key={idx} className="flex justify-between text-white/70">
                                                         <span className="text-xs">{item.range}: {item.description}</span>
-                                                        <span className="text-gold font-bold">Rs {item.amount.toLocaleString()}</span>
+                                                        <span className="text-emerald-400 font-bold">Rs {item.amount.toLocaleString()}</span>
                                                     </div>
                                                 ))}
                                                 {boardShow && (
                                                     <div className="flex justify-between text-white/70">
                                                         <span className="text-xs">Airport Greeting (Board Show)</span>
-                                                        <span className="text-gold font-bold">Rs 2,000</span>
+                                                        <span className="text-emerald-400 font-bold">Rs 2,000</span>
                                                     </div>
                                                 )}
                                                 {tripType === 'round-trip' && (
-                                                    <div className="flex justify-between text-gold/80 pt-2 border-t border-white/5">
+                                                    <div className="flex justify-between text-emerald-400/80 pt-2 border-t border-white/5">
                                                         <span className="text-xs">× 2 (Round Trip)</span>
                                                         <span className="font-bold">Rs {total.toLocaleString()}</span>
                                                     </div>
@@ -772,14 +774,14 @@ const Prices = ({ initialDestination }) => {
                                 </div>
                                 <div className="bg-white/10 rounded-xl p-4 mb-8 text-xs text-white/80 space-y-2">
                                     <div className="flex items-start gap-2 font-bold text-white">
-                                        <Info size={14} className="text-gold flex-shrink-0 mt-0.5" />
+                                        <Info size={14} className="text-emerald-400 flex-shrink-0 mt-0.5" />
                                         <p>IMPORTANT: We accept card payments (Visa/Mastercard).</p>
                                     </div>
                                 </div>
 
                                 <div className="mb-10 text-center">
                                     <p className="text-white/60 uppercase tracking-widest text-xs mb-2">Estimated Total</p>
-                                    <div className="text-4xl md:text-6xl font-extrabold text-gold leading-none pb-2 break-words">
+                                    <div className="text-4xl md:text-6xl font-extrabold text-emerald-400 leading-none pb-2 break-words">
                                         Rs {total.toLocaleString()}
                                     </div>
                                     {usdRate && total > 0 && (
@@ -827,7 +829,26 @@ const Prices = ({ initialDestination }) => {
 
                                         window.open("https://wa.me/94716885880?text=" + msg, '_blank')
 
-                                        // 2. Send to Discord Webhook
+                                        // 2. Save to Database (New Backend)
+                                        try {
+                                            fetch('/api/bookings', {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({
+                                                    pickupLocation: { address: pickup.name, lat: pickup.lat, lng: pickup.lon },
+                                                    dropoffLocation: { address: dropoff.name, lat: dropoff.lat, lng: dropoff.lon },
+                                                    vehicleType: vehicle,
+                                                    distanceKm: distance,
+                                                    totalPrice: total,
+                                                    guestPhone: whatsapp,
+                                                    date: date,
+                                                    time: time,
+                                                    status: 'pending'
+                                                })
+                                            }).catch(err => console.error("DB Save Background Error:", err));
+                                        } catch (err) { console.error("DB Save Error:", err) }
+
+                                        // 3. Send to Discord Webhook
                                         try {
                                             await fetch("https://discord.com/api/webhooks/1463042919693815872/n3E2TD5Bwo9vOZ2KpF3dOAWZF9d7rUMPghS0e-FnjQ3DQrCdRTquulIMrf29cHCQFPff", {
                                                 method: "POST",
@@ -877,7 +898,7 @@ const Prices = ({ initialDestination }) => {
                                             setLoading(false); // Reset loading state
                                         }
                                     }}
-                                    className="w-full bg-gold text-navy font-extrabold py-6 rounded-2xl text-xl hover:scale-[1.02] transition-all shadow-2xl disabled:opacity-50 disabled:grayscale"
+                                    className="w-full bg-emerald-600 text-emerald-900 font-extrabold py-6 rounded-2xl text-xl hover:scale-[1.02] transition-all shadow-2xl disabled:opacity-50 disabled:grayscale"
                                 >
                                     {loading ? <Loader2 className="animate-spin mx-auto" /> : 'Book This Trip Now'}
                                 </button>

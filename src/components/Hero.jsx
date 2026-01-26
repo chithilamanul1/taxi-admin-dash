@@ -1,76 +1,110 @@
-import React from 'react'
+'use client'
+
+import React, { useState, useEffect } from 'react'
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
+
+const heroImages = [
+    { src: '/hero.jpg', alt: 'Sri Lanka Beach' },
+    { src: '/sigiriya.jpg', alt: 'Sigiriya Rock Fortress' },
+    { src: '/ella.jpg', alt: 'Ella Nine Arch Bridge' },
+    { src: '/mirissa.jpg', alt: 'Mirissa Beach' },
+]
 
 const Hero = ({ onBookClick }) => {
+    const [currentSlide, setCurrentSlide] = useState(0)
+
+    // Auto-advance slideshow
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentSlide((prev) => (prev + 1) % heroImages.length)
+        }, 5000)
+        return () => clearInterval(timer)
+    }, [])
+
+    const goToSlide = (index) => setCurrentSlide(index)
+    const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length)
+    const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroImages.length)
+
+
     return (
-        <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-24 md:pt-0">
-            {/* Background Image with Overlay */}
+        <section className="relative min-h-[90vh] flex items-center justify-center pt-32 pb-20 md:pb-40 overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors">
+            {/* Background Slideshow */}
             <div className="absolute inset-0 z-0">
-                <img
-                    src="https://images.pexels.com/photos/19574565/pexels-photo-19574565.jpeg"
-                    alt="Sri Lanka Coastline"
-                    className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/60 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-900/60 to-transparent pointer-events-none z-10"></div>
+                {heroImages.map((image, index) => (
+                    <img
+                        key={index}
+                        src={image.src}
+                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+                        alt={image.alt}
+                    />
+                ))}
             </div>
 
-            <div className="relative z-10 max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-                <div className="text-white text-center md:text-left">
-                    <h4 className="text-gold font-bold tracking-[0.2em] uppercase mb-4 animate-fade-in"></h4>
-                    <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6">
-                        Your Premium <br />
-                        <span className="text-gold">Airport Taxi</span> <br />
-                        Partner in SL
-                    </h1>
-                    <p className="text-lg text-white/80 mb-8 max-w-lg leading-relaxed mx-auto md:mx-0">
-                        Experience the safest and most comfortable airport transfers in Sri Lanka. 24/7 service with professional English-speaking drivers.
+            {/* Slideshow Navigation */}
+            <div className="absolute bottom-32 right-10 z-20 flex items-center gap-4 hidden md:flex">
+                <button onClick={prevSlide} className="p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10">
+                    <ChevronLeft size={24} />
+                </button>
+                <button onClick={nextSlide} className="p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10">
+                    <ChevronRight size={24} />
+                </button>
+            </div>
+
+            {/* Content */}
+            <div className="container mx-auto px-6 relative z-10 text-left lg:text-left mt-[-5vh]">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-900/80 backdrop-blur-md border border-emerald-400/30 text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-4 animate-slide-up opacity-0 [animation-delay:0.2s] [animation-fill-mode:forwards] shadow-lg">
+                    <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    Sri Lanka's #1 Luxury Provider
+                </div>
+
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-[1.1] text-white animate-slide-up opacity-0 [animation-delay:0.4s] [animation-fill-mode:forwards] tracking-tight max-w-4xl">
+                    The Smart Way <br />to <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-200">Explore</span> Sri Lanka
+                </h1>
+
+                {/* Sri Lanka Info Text */}
+                <div className="max-w-2xl mb-8 animate-slide-up opacity-0 [animation-delay:0.5s] [animation-fill-mode:forwards]">
+                    <p className="text-lg md:text-xl text-white/90 leading-relaxed mb-6 font-medium text-shadow-sm">
+                        Reliable airport transfers and curated luxury tours.
+                        Professional service tailored to your journey.
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                        <button
-                            onClick={() => window.location.href = '/prices'}
-                            className="bg-gold hover:bg-gold-light text-navy px-8 py-3 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 active:scale-95"
-                        >
-                            Book Your Ride
-                        </button>
+                    <div className="flex flex-col gap-2 p-5 bg-emerald-950/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg max-w-xl">
+                        <p className="text-sm text-white/80 leading-relaxed">
+                            🇱🇰 <strong className="text-emerald-300">Premium Fleet & Service:</strong>
+                        </p>
+                        <ul className="text-xs md:text-sm text-white/70 space-y-1 ml-1">
+                            <li className="flex items-center gap-2">✓ Modern Air-Conditioned Vehicles</li>
+                            <li className="flex items-center gap-2">✓ English-Speaking Chauffeurs</li>
+                            <li className="flex items-center gap-2">✓ Fixed Prices (No Hidden Charges)</li>
+                        </ul>
                     </div>
                 </div>
 
-                {/* Floating Card Info */}
-                <div className="hidden md:block">
-                    <div className="glass-card p-10 rounded-3xl shadow-2xl border border-white/20 transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="w-12 h-12 bg-gold/20 rounded-xl flex items-center justify-center">
-                                <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p className="text-navy font-bold text-xl leading-none">24/7 Availability</p>
-                                <p className="text-gray-500 text-sm">Always on time, any time.</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="w-12 h-12 bg-gold/20 rounded-xl flex items-center justify-center">
-                                <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <p className="text-navy font-bold text-xl leading-none">Safe & Secure</p>
-                                <p className="text-gray-500 text-sm">Insured vehicles & verified drivers.</p>
-                            </div>
-                        </div>
-                        <div className="pt-6 border-t border-gray-100 italic text-gray-400 text-sm">
-                            "Trusted by 1000+ international tourists every month."
-                        </div>
-                    </div>
+                <div className="flex flex-wrap items-center justify-start gap-4 animate-slide-up opacity-0 [animation-delay:0.8s] [animation-fill-mode:forwards] pb-8 md:pb-0">
+                    <button
+                        onClick={onBookClick}
+                        className="group w-full sm:w-auto px-8 py-4 bg-emerald-600 text-white rounded-xl font-bold text-lg hover:bg-emerald-500 transition-all shadow-xl shadow-emerald-900/20 flex items-center justify-center gap-2 min-w-[200px]"
+                    >
+                        Plan Your Trip
+                        <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                    <a
+                        href="#tours"
+                        className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md text-white rounded-xl font-bold text-lg transition-all border border-white/20 hover:bg-white/20 text-center min-w-[200px]"
+                    >
+                        View Popular Tours
+                    </a>
                 </div>
             </div>
 
-            {/* Wave Divider */}
-            <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-                <svg className="relative block w-full h-[60px]" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C58,117.26,161.07,110.38,249.29,102.34c31.66-2.88,62-8.31,92.1-15.9Z" fill="#f8fafc"></path>
-                </svg>
+            {/* Vertical Text Ornament */}
+            <div className="absolute top-1/2 -translate-y-1/2 left-8 hidden 2xl:block opacity-30 select-none">
+                <div className="text-[10px] font-bold tracking-[0.5em] uppercase [writing-mode:vertical-rl] text-white h-64 border-r border-white/30 pr-4">
+                    EST. 2024 • COLOMBO • SRI LANKA
+                </div>
             </div>
         </section>
     )

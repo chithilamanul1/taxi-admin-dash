@@ -30,8 +30,8 @@ const Tours = () => {
             <div className="max-w-6xl mx-auto px-6">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                     <div className="max-w-xl">
-                        <h4 className="text-gold font-bold tracking-[0.2em] uppercase mb-4">Discover Paradise</h4>
-                        <h2 className="text-navy text-5xl font-extrabold">Exclusive Tour Packages</h2>
+                        <h4 className="text-emerald-600 font-bold tracking-[0.2em] uppercase mb-4">Discover Paradise</h4>
+                        <h2 className="text-emerald-900 text-5xl font-extrabold">Exclusive Tour Packages</h2>
                     </div>
                     <p className="text-gray-500 max-w-sm">
                         We provide custom day tours and multi-day packages to the most beautiful locations across Sri Lanka.
@@ -47,12 +47,12 @@ const Tours = () => {
                                     alt={pkg.title}
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
-                                <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full font-bold text-navy shadow-lg">
+                                <div className="absolute top-6 right-6 bg-white px-4 py-2 rounded-full font-bold text-emerald-900 shadow-lg border border-emerald-900/10">
                                     Starting ${pkg.price}
                                 </div>
                             </div>
                             <div className="p-8 flex-grow">
-                                <h3 className="text-2xl font-bold text-navy mb-4 group-hover:text-gold transition-colors">{pkg.title}</h3>
+                                <h3 className="text-2xl font-bold text-emerald-900 mb-4 group-hover:text-emerald-600 transition-colors">{pkg.title}</h3>
                                 <p className="text-gray-500 leading-relaxed mb-6">
                                     {pkg.description}
                                 </p>
@@ -60,7 +60,7 @@ const Tours = () => {
                             <div className="px-8 pb-8">
                                 <a
                                     href="#booking-section"
-                                    className="block text-center border-2 border-navy text-navy font-bold py-3 rounded-2xl hover:bg-navy hover:text-white transition-all"
+                                    className="block text-center border-2 border-emerald-900 text-emerald-900 font-bold py-3 rounded-2xl hover:bg-emerald-900 hover:text-white transition-all shadow-sm"
                                 >
                                     Book This Tour
                                 </a>

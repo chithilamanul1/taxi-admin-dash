@@ -1,0 +1,49 @@
+[2026-01-22T18:50:35.577Z] --- NIGHT MANAGER START ---
+[2026-01-22T18:50:35.580Z] Phase 1: Running Lint...
+[2026-01-22T18:50:35.581Z] Executing: npm run lint -- --format json
+[2026-01-22T18:50:37.296Z] Error executing npm run lint -- --format json: Command failed: npm run lint -- --format json
+npm error Missing script: "lint"
+npm error
+npm error Did you mean this?
+npm error   npm link # Symlink a package folder
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run
+npm error A complete log of this run can be found in: C:\Users\chith\AppData\Local\npm-cache\_logs\2026-01-22T18_50_35_964Z-debug-0.log
+
+[2026-01-22T18:50:37.300Z] Failed to parse lint output as JSON. Check npm configuration.
+[2026-01-22T18:50:37.303Z] Phase 2: Running Build...
+[2026-01-22T18:50:37.308Z] Executing: npm run build
+[2026-01-22T18:52:34.529Z] Error executing npm run build: Command failed: npm run build
+Failed to compile.
+
+./src/app/admin/dashboard/page.tsx
+Module not found: Can't resolve '@/components/ui/Card'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/admin/dashboard/page.tsx
+Module not found: Can't resolve '@/lib/mock-taxi-db'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/booking/page.tsx
+Module not found: Can't resolve '@/components/ui/Card'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/booking/page.tsx
+Module not found: Can't resolve '@/components/ui/Input'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./src/app/booking/page.tsx
+Module not found: Can't resolve '@/components/ui/Select'
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+> Build failed because of webpack errors
+
+[2026-01-22T18:52:34.713Z] Build FAILED. Check build_log.txt or terminal output.
+[2026-01-22T18:52:35.156Z] --- NIGHT MANAGER FINISHED ---

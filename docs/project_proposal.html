@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Proposal - Airport Taxi Tours Overhaul</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0A192F;
+            --secondary: #FFD700;
+            --accent: #64FFDA;
+            --text-main: #E6F1FF;
+            --text-dim: #8892B0;
+            --bg-main: #0B1121;
+            --bg-card: #112240;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--bg-card);
+            padding: 2rem;
+            position: fixed;
+            height: 100vh;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: var(--accent);
+        }
+
+        /* Content */
+        .main-content {
+            margin-left: 300px;
+            padding: 4rem;
+            max-width: 900px;
+        }
+
+        section {
+            margin-bottom: 6rem;
+            scroll-margin-top: 4rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin-top: 2rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text-dim);
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+
+        .pricing-table th,
+        .pricing-table td {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pricing-table th {
+            color: var(--secondary);
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .btn {
+            background-color: var(--secondary);
+            color: var(--primary);
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: rgba(100, 255, 218, 0.1);
+            color: var(--accent);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <nav class="sidebar">
+            <h2>Proposal</h2>
+            <ul>
+                <li><a href="#executive-summary">1. Executive Summary</a></li>
+                <li><a href="#project-objectives">2. Project Objectives</a></li>
+                <li><a href="#feature-breakdown">3. Feature Breakdown</a></li>
+                <li><a href="#technical-stack">4. Technical Architecture</a></li>
+                <li><a href="#ui-ux-design">5. Unique UI/UX Concept</a></li>
+                <li><a href="#booking-logic">6. Advanced Booking Logic</a></li>
+                <li><a href="#tours-system">7. Tours & Safaris</a></li>
+                <li><a href="#integrations">8. Third-Party Integrations</a></li>
+                <li><a href="#timeline">9. Development Timeline</a></li>
+                <li><a href="#investment">10. Investment & Costs</a></li>
+                <li><a href="#conclusion">11. Conclusion</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section id="executive-summary">
+                <span class="tag">Confidential</span>
+                <h1>Overhaul Proposal</h1>
+                <p>Prepared for <strong>Airport Taxi Tours</strong></p>
+                <h2>1. Executive Summary</h2>
+                <p>
+                    This proposal outlines a comprehensive digital transformation for the Airport Taxi Tours platform.
+                    Our goal is to evolve the current system into a world-class travel and transport management solution
+                    that offers
+                    unmatched user experience, precise pricing logic, and a premium aesthetic that builds trust and
+                    authority.
+                </p>
+                <p>
+                    By integrating multi-currency support, advanced tour categorization, and intelligent waiting charge
+                    calculations,
+                    the platform will cater to both local and international travelers with seamless efficiency.
+                </p>
+            </section>
+
+            <section id="project-objectives">
+                <h2>2. Project Objectives</h2>
+                <div class="card">
+                    <h3>Global Reach</h3>
+                    <p>Support major international currencies (USD, EUR, INR) alongside LKR to facilitate transparent
+                        pricing for global customers.</p>
+                </div>
+                <div class="card">
+                    <h3>Operational Excellence</h3>
+                    <p>Automate complex calculations like multi-stop routes, waiting charges, and dynamic vehicle rates.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>Unique Branding</h3>
+                    <p>Implement a "wow-factor" UI that distinguishes Airport Taxi Tours from generic competitors.</p>
+                </div>
+            </section>
+
+            <section id="feature-breakdown">
+                <h2>3. Feature Breakdown</h2>
+                <div class="card">
+                    <h3>Enhanced Booking Widget</h3>
+                    <ul>
+                        <li>Multi-location routing (up to 4 stops).</li>
+                        <li>"Current Location" detection for instant pickup requests.</li>
+                        <li>Plus/Minus controls for Adults, Children, Infants, and Bags.</li>
+                        <li>Waiting charge integration (Hourly rate × Duration).</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Restructured Tours Module</h3>
+                    <ul>
+                        <li>Categorization: Day Tours, City Tours, and Safari Adventures.</li>
+                        <li>Direct selection of tour dates and durations.</li>
+                        <li>Simplified pricing (Removal of complex driver/no-driver choices).</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Conversion & Trust</h3>
+                    <ul>
+                        <li>Real-time exchange rates for LKR, USD, INR, and EUR.</li>
+                        <li>TripAdvisor and Google Reviews live integration.</li>
+                        <li>Coupon and Discount code system.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="technical-stack">
+                <h2>4. Technical Architecture</h2>
+                <p>The platform will be built using a modern, high-performance stack:</p>
+                <ul>
+                    <li><span class="highlight">Frontend:</span> Next.js 15 (App Router) for SEO and speed.</li>
+                    <li><span class="highlight">Styling:</span> Tailwind CSS with custom premium tokens.</li>
+                    <li><span class="highlight">Backend:</span> Node.js with Mongoose (MongoDB) for robust data
+                        handling.</li>
+                    <li><span class="highlight">Authentication:</span> Next-Auth + Firebase for secure user management.
+                    </li>
+                    <li><span class="highlight">Maps:</span> OSRM Engine & Leaflet/Mapbox for route visualization.</li>
+                </ul>
+            </section>
+
+            <section id="ui-ux-design">
+                <h2>5. Unique UI/UX Concept</h2>
+                <p>
+                    We are moving away from standard templates. The new UI will feature:
+                </p>
+                <div class="card">
+                    <h3>Glassmorphism UI</h3>
+                    <p>Translucent cards and frosted-glass effects for a modern, futuristic feel.</p>
+                </div>
+                <div class="card">
+                    <h3>Dynamic Micro-Animations</h3>
+                    <p>Smooth transitions between booking steps and hover effects that make the site feel "alive".</p>
+                </div>
+                <div class="card">
+                    <h3>Dark Mode First</h3>
+                    <p>A premium "Night" theme option (Enterprise Dark) for a high-end visual experience.</p>
+                </div>
+            </section>
+
+            <section id="booking-logic">
+                <h2>6. Advanced Booking Logic</h2>
+                <p>
+                    The new logic will handle:
+                    <br><br>
+                    - <span class="highlight">Complex Distances:</span> Automated KM calculation via OSRM.
+                    <br>
+                    - <span class="highlight">Waiting Charges:</span> Special rates for Colombo, Kalutara, and Seeduwa
+                    zones ($100-$200/hr).
+                    <br>
+                    - <span class="highlight">Quotations:</span> Real-time PDF/HTML generation of trip estimates.
+                </p>
+            </section>
+
+            <section id="tours-system">
+                <h2>7. Tours & Safaris</h2>
+                <p>
+                    Tours are no longer just "rentals". They are curated experiences.
+                </p>
+                <div class="card">
+                    <h3>Day Tours</h3>
+                    <p>Quick escapes to Galle, Kandy, or Sigiriya.</p>
+                </div>
+                <div class="card">
+                    <h3>Safari</h3>
+                    <p>Integrated bookings for Yala, Udawalawe, and Minneriya.</p>
+                </div>
+            </section>
+
+            <section id="integrations">
+                <h2>8. Third-Party Integrations</h2>
+                <ul>
+                    <li><strong>ExchangeRates API:</strong> Live currency conversion.</li>
+                    <li><strong>TripAdvisor SDK:</strong> To pull verified traveler reviews.</li>
+                    <li><strong>Google Places API:</strong> For hyper-accurate address selection.</li>
+                </ul>
+            </section>
+
+            <section id="timeline">
+                <h2>9. Development Timeline</h2>
+                <p>Total Estimated Time: 4-6 Weeks</p>
+                <table class="pricing-table">
+                    <tr>
+                        <th>Phase</th>
+                        <th>Duration</th>
+                    </tr>
+                    <tr>
+                        <td>Research & UI Design</td>
+                        <td>1 Week</td>
+                    </tr>
+                    <li>
+                        <td>Core Engine Development</td>
+                        <td>2 Weeks</td>
+                        </tr>
+                    <li>
+                        <td>Integration & Testing</td>
+                        <td>1 Week</td>
+                        </tr>
+                    <li>
+                        <td>Deployment & Bug Fixes</td>
+                        <td>1 Week</td>
+                        </tr>
+                </table>
+            </section>
+
+            <section id="investment">
+                <h2>10. Investment & Costs</h2>
+                <p>The total project investment is structured as a fixed-fee package.</p>
+                <div class="card">
+                    <h3 style="color: var(--secondary)">Total Project Price: 45,000 LKR</h3>
+                    <p>This includes all features mentioned in this proposal.</p>
+                </div>
+
+                <h3>Breakdown</h3>
+                <table class="pricing-table">
+                    <tr>
+                        <th>Category</th>
+                        <th>Details</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>Frontend Development</td>
+                        <td>Premium UI, React 19, Next.js 15</td>
+                        <td>Included</td>
+                    </tr>
+                    <tr>
+                        <td>Backend Charges</td>
+                        <td>Database Setup, **Payment Gateway Integration Logic**</td>
+                        <td>Included</td>
+                    </tr>
+                    <tr>
+                        <td>API Integrations</td>
+                        <td>Maps, Currency, Reviews</td>
+                        <td>Included</td>
+                    </tr>
+                    <tr>
+                        <td>Support</td>
+                        <td>30 Days Post-Launch Support</td>
+                        <td>Included</td>
+                    </tr>
+                </table>
+                <p><em>*Note: Payment Gateway provider fees are handled by the backend charge allocation to ensure a
+                        clean final price for the client.</em></p>
+            </section>
+
+            <section id="conclusion">
+                <h2>11. Conclusion</h2>
+                <p>
+                    This overhaul is designed to position Airport Taxi Tours as a market leader in Sri Lanka.
+                    With a focus on trust, precision, and world-class design, we are confident this platform will exceed
+                    all business goals.
+                </p>
+                <a href="#" class="btn">Ready to Start?</a>
+            </section>
+
+        </main>
+    </div>
+
+</body>
+
+</html>
