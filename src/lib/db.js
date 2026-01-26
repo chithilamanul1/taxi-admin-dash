@@ -24,18 +24,19 @@ async function dbConnect() {
     }
 
     if (!cached.promise) {
-        const opts = {
-            bufferCommands: false,
-        };
-
         if (!MONGODB_URI) {
             console.error('MONGO_URI missing in dbConnect');
-            // Return a null promise or throw a specific error that can be caught? 
-            // In build context, we want to fail gracefully if possible, or simple throw so caller handles it.
-            // But caller `cached.promise` expects a promise.
-            // Let's resolve to null.
-            cached.promise = Promise.resolve(null);
+            // Mock connection object to prevent crashes
+            cached.promise = Promise.resolve({
+                connection: { readyState: 0 },
+                model: () => ({ find: () => [], findOne: () => null, create: () => null }),
+                models: {}
+            });
         } else {
+            const opts = {
+                bufferCommands: false,
+            };
+
             cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
                 return mongoose;
             });
