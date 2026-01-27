@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { Shield, CreditCard, Car, RefreshCw, AlertTriangle, Mail, Phone, MapPin, FileText, CheckCircle } from 'lucide-react'
+import Link from 'next/link'
 
 export default function TermsPage() {
     return (
@@ -283,9 +284,9 @@ export default function TermsPage() {
 
                 {/* Back to Home */}
                 <div className="text-center mt-12">
-                    <a href="/" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-emerald-900 rounded-2xl font-bold shadow-lg hover:bg-emerald-50 transition-all">
+                    <Link href="/" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-emerald-900 rounded-2xl font-bold shadow-lg hover:bg-emerald-50 transition-all">
                         ← Back to Home
-                    </a>
+                    </Link>
                 </div>
             </div>
         </main>

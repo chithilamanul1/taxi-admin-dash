@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Users, Briefcase, CheckCircle2, Lock, Car } from 'lucide-react';
+import { X, Users, Briefcase, CheckCircle2, Lock, Car, Loader2 } from 'lucide-react';
 
 const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelect, passengerCount, isLoading }) => {
     if (!isOpen) return null;
