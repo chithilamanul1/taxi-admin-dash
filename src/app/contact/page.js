@@ -1,4 +1,4 @@
-import Contact from '../../pages/Contact'
+import Contact from '../../components/views/Contact'
 
 export const metadata = {
     title: 'Contact Us - Airport Taxis Sri Lanka',

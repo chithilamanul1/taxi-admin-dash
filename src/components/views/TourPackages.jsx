@@ -1,8 +1,9 @@
 'use client'
 
 import React from 'react'
-import { Calendar, Clock, MapPin, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+
 const PACKAGES = [
     {
         title: "06 Days | 05 Nights Excursions",

@@ -2,12 +2,7 @@ import React from 'react'
 import { CheckCircle2, Star, ShieldCheck, CarFront } from 'lucide-react'
 
 const Services = () => {
-    const serviceItems = [
-        { title: 'Airport Transfers', desc: 'Seamless 24/7 transfers to and from Bandaranaike International Airport.', icon: <CarFront /> },
-        { title: 'Custom Day Tours', desc: 'Galle, Sigiriya, Kandy, or your own custom route.', icon: <MapPin /> },
-        { title: 'Multi-day Private Tours', desc: 'Comprehensive tours across all Sri Lankan heritage sites.', icon: <Navigation /> },
-        { title: 'Corporate Transport', desc: 'Reliable monthly or daily transport for executive needs.', icon: <Users /> }
-    ]
+
 
     return (
         <div className="pb-32">

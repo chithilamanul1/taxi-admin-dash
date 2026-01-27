@@ -1,53 +1,38 @@
-import { NextResponse } from 'next/server';
-import { jwtVerify } from 'jose';
+import { NextResponse } from "next/server";
 
-// We use 'jose' here because standard 'jsonwebtoken' often has issues in Edge Middleware
-// 'jose' is edge-compatible.
+export function middleware(request) {
+    const token =
+        request.cookies.get("next-auth.session-token") ||
+        request.cookies.get("__Secure-next-auth.session-token");
 
-const secret = new TextEncoder().encode(
-    process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || 'seranex_secret_key_12345'
-);
+    const { pathname } = request.nextUrl;
 
-export async function middleware(request) {
-    // Only intercept requests to /admin paths
-    if (request.nextUrl.pathname.startsWith('/admin')) {
+    // Allow public routes explicitly
+    if (
+        pathname.startsWith("/login") ||
+        pathname.startsWith("/api") ||
+        pathname.startsWith("/_next") ||
+        pathname === "/"
+    ) {
+        return NextResponse.next();
+    }
 
-        // Allow access to login page
-        if (request.nextUrl.pathname === '/admin/login') {
+    // Protect admin routes
+    if (pathname.startsWith("/admin") && !token) {
+        if (pathname === "/admin/login") {
             return NextResponse.next();
         }
+        return NextResponse.redirect(new URL("/admin/login", request.url));
+    }
 
-        const token = request.cookies.get('auth_token');
-
-        if (!token) {
-            const url = request.nextUrl.clone();
-            url.pathname = '/admin/login';
-            return NextResponse.redirect(url);
-        }
-
-        try {
-            const { payload } = await jwtVerify(token.value, secret);
-
-            // Check for admin role if needed (though middleware usually just checks authn)
-            if (payload.role !== 'admin') {
-                // Or redirect to unauthorized page
-                const url = request.nextUrl.clone();
-                url.pathname = '/';
-                return NextResponse.redirect(url);
-            }
-
-            return NextResponse.next();
-        } catch (e) {
-            // Token invalid or expired
-            const url = request.nextUrl.clone();
-            url.pathname = '/admin/login';
-            return NextResponse.redirect(url);
-        }
+    // If trying to access login page while logged in, redirect to dashboard
+    if (pathname === "/admin/login" && token) {
+        return NextResponse.redirect(new URL("/admin", request.url));
     }
 
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/admin/:path*'],
+    matcher: ["/admin/:path*"],
 };

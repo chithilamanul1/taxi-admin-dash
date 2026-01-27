@@ -1,4 +1,4 @@
-import Prices from '../../pages/Prices'
+import Prices from '../../components/views/Prices'
 
 export const metadata = {
     title: 'Taxi Prices & Calculator - Airport Taxis Sri Lanka',

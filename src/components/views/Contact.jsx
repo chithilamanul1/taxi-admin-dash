@@ -1,5 +1,5 @@
 import React from 'react'
-import BookingForm from '../components/BookingForm'
+import BookingForm from '../BookingForm'
 import { Mail, Phone, MapPin, MessageSquare } from 'lucide-react'
 
 const Contact = () => {

@@ -1,4 +1,4 @@
-import About from '../../pages/About'
+import About from '../../components/views/About'
 
 export const metadata = {
     title: 'About Us - Airport Taxis (Pvt) Ltd',

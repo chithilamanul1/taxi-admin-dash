@@ -1,4 +1,4 @@
-import Services from '../../pages/Services'
+import Services from '../../components/views/Services'
 
 export const metadata = {
     title: 'Our Services - Premium Taxi & Transport Services',
