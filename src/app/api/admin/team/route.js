@@ -41,7 +41,7 @@ export async function POST(req) {
         if (!isAdmin) {
             const { cookies } = await import('next/headers');
             const jwt = await import('jsonwebtoken');
-            const cookieStore = cookies();
+            const cookieStore = await cookies();
             const token = cookieStore.get('auth_token');
 
             if (token) {
