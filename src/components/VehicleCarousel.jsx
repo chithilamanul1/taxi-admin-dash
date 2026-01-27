@@ -64,7 +64,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
 
             <div
                 ref={scrollRef}
-                className="flex gap-4 overflow-x-auto pb-6 px-2 snap-x snap-mandatory scrollbar-hide -mx-2 md:mx-0"
+                className="flex gap-4 overflow-x-auto pb-6 px-4 snap-x snap-mandatory scrollbar-hide w-full"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {vehicles.map((vehicle) => {
