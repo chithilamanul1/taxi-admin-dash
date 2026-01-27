@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Phone, Mail, MapPin, Instagram, Twitter, Facebook, ArrowUpRight } from 'lucide-react'
 
 const Footer = () => {
@@ -44,18 +45,18 @@ const Footer = () => {
                         <div className="space-y-6">
                             <h4 className="text-sm font-bold uppercase tracking-widest text-emerald-400">Explore</h4>
                             <ul className="space-y-4 text-white/60 text-sm font-medium">
-                                <li><a href="/" className="hover:text-white transition-colors">Home</a></li>
-                                <li><a href="/day-trips" className="hover:text-white transition-colors">Day Trips</a></li>
-                                <li><a href="/tour-packages" className="hover:text-white transition-colors">Tour Packages</a></li>
-                                <li><a href="/prices" className="hover:text-white transition-colors">Rate Guide</a></li>
+                                <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
+                                <li><Link href="/day-trips" className="hover:text-white transition-colors">Day Trips</Link></li>
+                                <li><Link href="/tour-packages" className="hover:text-white transition-colors">Tour Packages</Link></li>
+                                <li><Link href="/prices" className="hover:text-white transition-colors">Rate Guide</Link></li>
                             </ul>
                         </div>
                         <div className="space-y-6">
                             <h4 className="text-sm font-bold uppercase tracking-widest text-emerald-400">Legal</h4>
                             <ul className="space-y-4 text-white/60 text-sm font-medium">
-                                <li><a href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                                <li><a href="/terms" className="hover:text-white transition-colors">Terms of Use</a></li>
-                                <li><a href="/refund-policy" className="hover:text-white transition-colors">Refund Policy</a></li>
+                                <li><Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                                <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Use</Link></li>
+                                <li><Link href="/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link></li>
                             </ul>
                         </div>
                     </div>
