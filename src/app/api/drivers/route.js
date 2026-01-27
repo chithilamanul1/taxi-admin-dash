@@ -27,8 +27,35 @@ export async function POST(req) {
             }, { status: 400 });
         }
 
+        // 1. Check if User exists, OR create new User
+        let user = await import('@/models/User').then(mod => mod.default.findOne({ phone: data.phone }));
+
+        if (!user) {
+            const bcrypt = await import('bcryptjs'); // Dynamic import for performance if not used elsewhere
+            const salt = await bcrypt.genSalt(10);
+            // Default password is last 4 digits of phone
+            const defaultPin = data.phone.slice(-4);
+            const hashedPassword = await bcrypt.hash(defaultPin, salt);
+
+            const User = await import('@/models/User').then(mod => mod.default);
+            user = await User.create({
+                name: data.name,
+                email: data.email || `driver.${data.phone}@airporttaxitours.lk`, // Dummy email if not provided
+                phone: data.phone,
+                password: hashedPassword,
+                role: 'driver'
+            });
+        }
+
+        // 2. Check if Driver profile exists
+        const existingDriver = await Driver.findOne({ vehicleNumber: data.vehicleNumber });
+        if (existingDriver) {
+            return NextResponse.json({ error: 'Driver with this vehicle number already exists' }, { status: 400 });
+        }
+
         const driver = new Driver({
-            name: data.name,
+            user: user._id, // Link to User
+            name: data.name, // Redundant but good for quick access
             phone: data.phone,
             email: data.email || '',
             vehicleType: data.vehicleType,

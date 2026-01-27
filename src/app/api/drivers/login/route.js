@@ -7,14 +7,20 @@ import User from '@/models/User';
 export async function POST(req) {
     try {
         await connectDB();
-        const { phone, pin } = await req.json();
+        const { phone: rawPhone, pin } = await req.json();
+
+        // Sanitize phone: remove spaces, dashes, etc.
+        const phone = rawPhone.replace(/\D/g, '');
+        console.log(`Driver Login Attempt: Raw "${rawPhone}" -> Cleaned "${phone}"`);
 
         // Find driver by phone (through user relation)
         // Correct approach: Find User first, then finding linked Driver
         const user = await User.findOne({ phone });
 
+        console.log('Driver Login - User Search Result:', user ? `Found User: ${user._id}` : 'User Not Found');
+
         if (!user) {
-            return NextResponse.json({ error: 'Driver account not found' }, { status: 404 });
+            return NextResponse.json({ error: `Driver account not found for number: ${phone}` }, { status: 404 });
         }
 
         const driver = await Driver.findOne({ user: user._id }).populate('user');

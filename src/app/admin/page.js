@@ -593,50 +593,395 @@ export default function AdminDashboard() {
                                                 key={vehicle._id || vehicle.vehicleType}
                                                 className="border-2 rounded-xl p-6 hover:border-emerald-900/20 transition-all"
                                             >
-                                                {/* Vehicle Header */}
-                                                <div className="flex items-center justify-between mb-4">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="w-20 h-14 bg-slate-100 rounded-lg overflow-hidden">
-                                                            {vehicle.image ? (
-                                                                <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-contain" />
-                                                            ) : (
-                                                                <div className="w-full h-full flex items-center justify-center">
-                                                                    <Car className="text-emerald-900" size={24} />
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div>
-                                                            <h3 className="font-bold text-emerald-900 text-lg">{vehicle.name}</h3>
-                                                            <p className="text-xs text-gray-400">{vehicle.capacity} pax • {vehicle.luggage} bags • {vehicle.vehicleType}</p>
-                                                        </div>
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-20 h-14 bg-slate-100 rounded-lg overflow-hidden">
+                                                        {vehicle.image ? (
+                                                            <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-contain" />
+                                                        ) : (
+                                                            <div className="w-full h-full flex items-center justify-center">
+                                                                <Car className="text-emerald-900" size={24} />
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                    <button
-                                                        onClick={() => {
-                                                            if (editingVehicle === vehicle.vehicleType) {
-                                                                setEditingVehicle(null)
-                                                            } else {
-                                                                setEditingVehicle(vehicle.vehicleType)
-                                                                setEditForm({
-                                                                    name: vehicle.name,
-                                                                    capacity: vehicle.capacity,
-                                                                    luggage: vehicle.luggage,
-                                                                    waitingCharges: vehicle.waitingCharges || [],
-                                                                    tiers: vehicle.tiers || []
-                                                                })
-                                                            }
-                                                        }}
-                                                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${editingVehicle === vehicle.vehicleType ? 'bg-red-100 text-red-600' : 'bg-emerald-600 text-emerald-900 hover:bg-emerald-600/80'}`}
-                                                    >
-                                                        {editingVehicle === vehicle.vehicleType ? 'Cancel' : 'Edit Rates'}
-                                                    </button>
+                                                    <div>
+                                                        <h3 className="font-bold text-emerald-900 text-lg">{vehicle.name}</h3>
+                                                        {pricingCategory === 'tours' ? (
+                                                            <p className="text-xs text-gray-400">Tour Package Rate</p>
+                                                        ) : (
+                                                            <p className="text-xs text-gray-400">{vehicle.capacity} pax • {vehicle.luggage} bags • {vehicle.vehicleType}</p>
+                                                        )}
+                                                    </div>
                                                 </div>
+                                                <button
+                                                    onClick={() => {
+                                                        if (editingVehicle === vehicle.vehicleType) {
+                                                            setEditingVehicle(null)
+                                                        } else {
+                                                            setEditingVehicle(vehicle.vehicleType)
+                                                            setEditForm({
+                                                                name: vehicle.name,
+                                                                capacity: vehicle.capacity,
+                                                                luggage: vehicle.luggage,
+                                                                waitingCharges: vehicle.waitingCharges || [],
+                                                                tiers: vehicle.tiers || []
+                                                            })
+                                                        }
+                                                    }}
+                                                    className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${editingVehicle === vehicle.vehicleType ? 'bg-red-100 text-red-600' : 'bg-emerald-600 text-emerald-900 hover:bg-emerald-600/80'}`}
+                                                >
+                                                    {editingVehicle === vehicle.vehicleType ? 'Cancel' : 'Edit Rates'}
+                                                </button>
+                                            </div>
 
-                                                {/* Tier Table */}
-                                                {editingVehicle === vehicle.vehicleType ? (
-                                                    <div className="space-y-4">
-                                                        {/* Image Upload */}
-                                                        <div className="flex items-center gap-4 p-3 bg-slate-50 rounded-lg">
-                                                            <span className="text-sm text-gray-500">Vehicle Image:</span>
+                                                {/* Tier Table */ }
+                                                { editingVehicle === vehicle.vehicleType ? (
+                                                <div className="space-y-4">
+                                                    {/* Image Upload */}
+                                                    <div className="flex items-center gap-4 p-3 bg-slate-50 rounded-lg">
+                                                        <span className="text-sm text-gray-500">Vehicle Image:</span>
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            onChange={async (e) => {
+                                                                const file = e.target.files[0]
+                                                                if (file) {
+                                                                    const formData = new FormData()
+                                                                    formData.append('file', file)
+                                                                    formData.append('vehicleType', vehicle.vehicleType)
+                                                                    const res = await fetch('/api/upload/vehicle', { method: 'POST', body: formData })
+                                                                    const data = await res.json()
+                                                                    if (data.path) {
+                                                                        await fetch(`/api/pricing/${vehicle.vehicleType}`, {
+                                                                            method: 'PUT',
+                                                                            headers: { 'Content-Type': 'application/json' },
+                                                                            body: JSON.stringify({ image: data.path })
+                                                                        })
+                                                                        setVehiclePricing(prev => prev.map(v => v.vehicleType === vehicle.vehicleType ? { ...v, image: data.path } : v))
+                                                                    }
+                                                                }
+                                                            }}
+                                                            className="text-sm"
+                                                        />
+                                                    </div>
+
+                                                    {/* Editable Tiers */}
+                                                    {/* Editable Tiers - Improved Layout */}
+                                                    <div className="overflow-x-auto border border-slate-200 rounded-lg">
+                                                        <table className="w-full text-sm">
+                                                            <thead className="bg-slate-50">
+                                                                <tr>
+                                                                    <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-24">Min KM</th>
+                                                                    <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-24">Max KM</th>
+                                                                    <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Type</th>
+                                                                    <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Flat (Rs)</th>
+                                                                    <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Rate (Rs/km)</th>
+                                                                    <th className="px-4 py-3 w-10"></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody className="divide-y divide-slate-100">
+                                                                {(editForm.tiers || []).map((tier, idx) => (
+                                                                    <tr key={idx} className="hover:bg-slate-50">
+                                                                        <td className="px-2 py-2">
+                                                                            <input type="number" value={tier.min} onChange={(e) => {
+                                                                                const newTiers = [...editForm.tiers]
+                                                                                newTiers[idx] = { ...newTiers[idx], min: Number(e.target.value) }
+                                                                                setEditForm({ ...editForm, tiers: newTiers })
+                                                                            }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none text-center" />
+                                                                        </td>
+                                                                        <td className="px-2 py-2">
+                                                                            <input type="number" value={tier.max} onChange={(e) => {
+                                                                                const newTiers = [...editForm.tiers]
+                                                                                newTiers[idx] = { ...newTiers[idx], max: Number(e.target.value) }
+                                                                                setEditForm({ ...editForm, tiers: newTiers })
+                                                                            }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none text-center" />
+                                                                        </td>
+                                                                        <td className="px-2 py-2">
+                                                                            <select value={tier.type} onChange={(e) => {
+                                                                                const newTiers = [...editForm.tiers]
+                                                                                newTiers[idx] = { ...newTiers[idx], type: e.target.value }
+                                                                                setEditForm({ ...editForm, tiers: newTiers })
+                                                                            }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none bg-white">
+                                                                                <option value="flat">Flat</option>
+                                                                                <option value="per_km">Per KM</option>
+                                                                            </select>
+                                                                        </td>
+                                                                        <td className="px-2 py-2">
+                                                                            <input type="number" value={tier.price || 0} onChange={(e) => {
+                                                                                const newTiers = [...editForm.tiers]
+                                                                                newTiers[idx] = { ...newTiers[idx], price: Number(e.target.value) }
+                                                                                setEditForm({ ...editForm, tiers: newTiers })
+                                                                            }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none disabled:opacity-50 disabled:bg-slate-100 text-right" disabled={tier.type !== 'flat'} />
+                                                                        </td>
+                                                                        <td className="px-2 py-2">
+                                                                            <input type="number" value={tier.rate || 0} onChange={(e) => {
+                                                                                const newTiers = [...editForm.tiers]
+                                                                                newTiers[idx] = { ...newTiers[idx], rate: Number(e.target.value) }
+                                                                                setEditForm({ ...editForm, tiers: newTiers })
+                                                                            }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none disabled:opacity-50 disabled:bg-slate-100 text-right" disabled={tier.type !== 'per_km'} />
+                                                                        </td>
+                                                                        <td className="px-2 py-2 text-center">
+                                                                            <button onClick={() => {
+                                                                                const newTiers = editForm.tiers.filter((_, i) => i !== idx)
+                                                                                setEditForm({ ...editForm, tiers: newTiers })
+                                                                            }} className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50"><X size={16} /></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                    {/* Waiting Charges Management */}
+                                                    <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-900/10 space-y-4">
+                                                        <div className="flex items-center justify-between">
+                                                            <h4 className="text-sm font-bold text-emerald-900 uppercase tracking-widest flex items-center gap-2">
+                                                                <Clock size={16} /> Tiered Waiting Charges
+                                                            </h4>
+                                                            <button
+                                                                onClick={() => {
+                                                                    const current = editForm.waitingCharges || []
+                                                                    setEditForm({ ...editForm, waitingCharges: [...current, 1000] })
+                                                                }}
+                                                                className="text-[10px] bg-white border border-emerald-900/10 px-3 py-1 rounded-lg font-bold text-emerald-900 hover:bg-emerald-100 transition-colors"
+                                                            >
+                                                                + Add Hour
+                                                            </button>
+                                                        </div>
+                                                        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+                                                            {(editForm.waitingCharges || []).map((charge, idx) => (
+                                                                <div key={idx} className="bg-white p-2 rounded-lg border border-emerald-900/10 relative group">
+                                                                    <label className="block text-[8px] font-bold text-emerald-900/40 uppercase mb-1">{idx + 1} Hour{idx > 0 && 's'}</label>
+                                                                    <div className="flex items-center gap-1">
+                                                                        <span className="text-[10px] font-bold text-emerald-900">Rs</span>
+                                                                        <input
+                                                                            type="number"
+                                                                            value={charge}
+                                                                            onChange={(e) => {
+                                                                                const newCharges = [...editForm.waitingCharges]
+                                                                                newCharges[idx] = Number(e.target.value)
+                                                                                setEditForm({ ...editForm, waitingCharges: newCharges })
+                                                                            }}
+                                                                            className="w-full bg-transparent outline-none font-bold text-xs text-emerald-900"
+                                                                        />
+                                                                    </div>
+                                                                    <button
+                                                                        onClick={() => {
+                                                                            const newCharges = editForm.waitingCharges.filter((_, i) => i !== idx)
+                                                                            setEditForm({ ...editForm, waitingCharges: newCharges })
+                                                                        }}
+                                                                        className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                                                    >
+                                                                        <X size={10} />
+                                                                    </button>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                        {(!editForm.waitingCharges || editForm.waitingCharges.length === 0) && (
+                                                            <p className="text-[10px] text-emerald-900/40 italic">No custom waiting charges defined. Will use default hourly rate.</p>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="flex gap-2 pt-2">
+                                                        <button
+                                                            onClick={() => {
+                                                                const lastTier = editForm.tiers[editForm.tiers.length - 1]
+                                                                const newMin = lastTier ? lastTier.max + 1 : 1
+                                                                setEditForm({
+                                                                    ...editForm,
+                                                                    tiers: [...editForm.tiers, { min: newMin, max: newMin + 50, type: 'per_km', price: 0, rate: 100 }]
+                                                                })
+                                                            }}
+                                                            className="text-sm bg-slate-100 px-3 py-1 rounded hover:bg-slate-200"
+                                                        >
+                                                            + Add Tier
+                                                        </button>
+                                                        <button
+                                                            onClick={async () => {
+                                                                const res = await fetch(`/api/pricing/${vehicle.vehicleType}?category=${pricingCategory}`, {
+                                                                    method: 'PUT',
+                                                                    headers: { 'Content-Type': 'application/json' },
+                                                                    body: JSON.stringify({ waitingCharges: editForm.waitingCharges, tiers: editForm.tiers, name: editForm.name, capacity: editForm.capacity, luggage: editForm.luggage })
+                                                                })
+                                                                if (res.ok) {
+                                                                    setVehiclePricing(prev => prev.map(v => v.vehicleType === vehicle.vehicleType ? { ...v, ...editForm } : v))
+                                                                    setEditingVehicle(null)
+                                                                }
+                                                            }}
+                                                            className="text-sm bg-emerald-900 text-white px-6 py-2 rounded-lg hover:bg-emerald-900/90 font-bold shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
+                                                        >
+                                                            Save {pricingCategory.replace('-', ' ')} Rates
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="overflow-x-auto">
+                                                    <table className="w-full text-sm">
+                                                        <thead>
+                                                            <tr className="bg-slate-50 text-gray-500">
+                                                                <th className="px-4 py-2 text-left">Distance Range</th>
+                                                                <th className="px-4 py-2 text-left">Type</th>
+                                                                <th className="px-4 py-2 text-right">Rate</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {(vehicle.tiers || []).map((tier, idx) => (
+                                                                <tr key={idx} className="border-b border-slate-100">
+                                                                    <td className="px-4 py-2 font-medium">{tier.min} - {tier.max >= 9999 ? '∞' : tier.max} km</td>
+                                                                    <td className="px-4 py-2">
+                                                                        <span className={`px-2 py-0.5 rounded text-xs ${tier.type === 'flat' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
+                                                                            {tier.type === 'flat' ? 'Flat Rate' : 'Per KM'}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td className="px-4 py-2 text-right font-bold text-emerald-900">
+                                                                        {tier.type === 'flat' ? `LKR ${tier.price?.toLocaleString()}` : `LKR ${tier.rate}/km`}
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            )}
+                                    </div>
+                                ))}
+                            </div>
+                                )}
+                        </div>
+                        </div>
+                    )}
+
+                {currentView === 'blog' && (
+                    <div className="space-y-6">
+                        <div className="bg-white rounded-xl shadow-sm p-6">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold text-emerald-900">Blog Posts</h2>
+                                <button
+                                    onClick={() => {
+                                        setPostForm({})
+                                        setEditingPost('NEW')
+                                    }}
+                                    className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
+                                >
+                                    <FileText size={16} /> Add New Post
+                                </button>
+                            </div>
+
+                            {/* Post List */}
+                            {isLoading ? (
+                                <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div></div>
+                            ) : (
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-sm">
+                                        <thead>
+                                            <tr className="bg-slate-50 text-gray-500">
+                                                <th className="px-4 py-3 text-left">Title</th>
+                                                <th className="px-4 py-3 text-left">Slug</th>
+                                                <th className="px-4 py-3 text-left">Status</th>
+                                                <th className="px-4 py-3 text-left">Date</th>
+                                                <th className="px-4 py-3 text-right">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {blogPosts.map(post => (
+                                                <tr key={post._id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                                                    <td className="px-4 py-3 font-medium text-emerald-900">{post.title}</td>
+                                                    <td className="px-4 py-3 text-gray-500">{post.slug}</td>
+                                                    <td className="px-4 py-3">
+                                                        <span className={`px-2 py-1 rounded text-xs font-bold ${post.isPublished ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                                                            {post.isPublished ? 'Published' : 'Draft'}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-4 py-3 text-gray-500">{new Date(post.createdAt).toLocaleDateString()}</td>
+                                                    <td className="px-4 py-3 text-right">
+                                                        <button
+                                                            onClick={() => {
+                                                                setPostForm(post)
+                                                                setEditingPost(post._id)
+                                                            }}
+                                                            className="text-emerald-900 hover:text-emerald-600 font-medium"
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                            {blogPosts.length === 0 && (
+                                                <tr><td colSpan="5" className="text-center py-8 text-gray-400">No posts found.</td></tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Add/Edit Post Modal */}
+                        {editingPost && (
+                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                                <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-6 h-[90vh] overflow-y-auto animate-fade-in-up">
+                                    <div className="flex justify-between items-center mb-6">
+                                        <h3 className="text-xl font-bold text-emerald-900">{editingPost === 'NEW' ? 'Create New Post' : 'Edit Post'}</h3>
+                                        <button onClick={() => setEditingPost(null)} className="text-gray-400 hover:text-gray-600"><X size={24} /></button>
+                                    </div>
+
+                                    <div className="space-y-6">
+                                        <div className="grid md:grid-cols-3 gap-6">
+                                            <div className="md:col-span-2 space-y-4">
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                                                    <input
+                                                        type="text"
+                                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
+                                                        value={postForm.title || ''}
+                                                        onChange={(e) => setPostForm({ ...postForm, title: e.target.value })}
+                                                        placeholder="Post Title"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Slug (auto-generated if empty)</label>
+                                                    <input
+                                                        type="text"
+                                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
+                                                        value={postForm.slug || ''}
+                                                        onChange={(e) => setPostForm({ ...postForm, slug: e.target.value })}
+                                                        placeholder="post-url-slug"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Content (HTML allowed)</label>
+                                                    <textarea
+                                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none h-64 font-mono text-sm"
+                                                        value={postForm.content || ''}
+                                                        onChange={(e) => setPostForm({ ...postForm, content: e.target.value })}
+                                                        placeholder="<p>Write your content here...</p>"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-4">
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                                    <select
+                                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none bg-white"
+                                                        value={postForm.isPublished ? 'true' : 'false'}
+                                                        onChange={(e) => setPostForm({ ...postForm, isPublished: e.target.value === 'true' })}
+                                                    >
+                                                        <option value="false">Draft</option>
+                                                        <option value="true">Published</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Cover Image</label>
+                                                    <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center hover:bg-slate-50 transition-colors">
+                                                        {postForm.coverImage ? (
+                                                            <div className="relative">
+                                                                <img src={postForm.coverImage} alt="Cover" className="w-full h-32 object-cover rounded mb-2" />
+                                                                <button
+                                                                    onClick={() => setPostForm({ ...postForm, coverImage: '' })}
+                                                                    className="text-red-500 text-xs hover:underline"
+                                                                >
+                                                                    Remove
+                                                                </button>
+                                                            </div>
+                                                        ) : (
                                                             <input
                                                                 type="file"
                                                                 accept="image/*"
@@ -645,664 +990,125 @@ export default function AdminDashboard() {
                                                                     if (file) {
                                                                         const formData = new FormData()
                                                                         formData.append('file', file)
-                                                                        formData.append('vehicleType', vehicle.vehicleType)
+                                                                        formData.append('vehicleType', 'blog-cover') // Reuse existing endpoint logic
                                                                         const res = await fetch('/api/upload/vehicle', { method: 'POST', body: formData })
                                                                         const data = await res.json()
                                                                         if (data.path) {
-                                                                            await fetch(`/api/pricing/${vehicle.vehicleType}`, {
-                                                                                method: 'PUT',
-                                                                                headers: { 'Content-Type': 'application/json' },
-                                                                                body: JSON.stringify({ image: data.path })
-                                                                            })
-                                                                            setVehiclePricing(prev => prev.map(v => v.vehicleType === vehicle.vehicleType ? { ...v, image: data.path } : v))
+                                                                            setPostForm({ ...postForm, coverImage: data.path })
                                                                         }
                                                                     }
                                                                 }}
-                                                                className="text-sm"
+                                                                className="text-xs w-full"
                                                             />
-                                                        </div>
-
-                                                        {/* Editable Tiers */}
-                                                        {/* Editable Tiers - Improved Layout */}
-                                                        <div className="overflow-x-auto border border-slate-200 rounded-lg">
-                                                            <table className="w-full text-sm">
-                                                                <thead className="bg-slate-50">
-                                                                    <tr>
-                                                                        <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-24">Min KM</th>
-                                                                        <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-24">Max KM</th>
-                                                                        <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Type</th>
-                                                                        <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Flat (Rs)</th>
-                                                                        <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Rate (Rs/km)</th>
-                                                                        <th className="px-4 py-3 w-10"></th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody className="divide-y divide-slate-100">
-                                                                    {(editForm.tiers || []).map((tier, idx) => (
-                                                                        <tr key={idx} className="hover:bg-slate-50">
-                                                                            <td className="px-2 py-2">
-                                                                                <input type="number" value={tier.min} onChange={(e) => {
-                                                                                    const newTiers = [...editForm.tiers]
-                                                                                    newTiers[idx] = { ...newTiers[idx], min: Number(e.target.value) }
-                                                                                    setEditForm({ ...editForm, tiers: newTiers })
-                                                                                }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none text-center" />
-                                                                            </td>
-                                                                            <td className="px-2 py-2">
-                                                                                <input type="number" value={tier.max} onChange={(e) => {
-                                                                                    const newTiers = [...editForm.tiers]
-                                                                                    newTiers[idx] = { ...newTiers[idx], max: Number(e.target.value) }
-                                                                                    setEditForm({ ...editForm, tiers: newTiers })
-                                                                                }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none text-center" />
-                                                                            </td>
-                                                                            <td className="px-2 py-2">
-                                                                                <select value={tier.type} onChange={(e) => {
-                                                                                    const newTiers = [...editForm.tiers]
-                                                                                    newTiers[idx] = { ...newTiers[idx], type: e.target.value }
-                                                                                    setEditForm({ ...editForm, tiers: newTiers })
-                                                                                }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none bg-white">
-                                                                                    <option value="flat">Flat</option>
-                                                                                    <option value="per_km">Per KM</option>
-                                                                                </select>
-                                                                            </td>
-                                                                            <td className="px-2 py-2">
-                                                                                <input type="number" value={tier.price || 0} onChange={(e) => {
-                                                                                    const newTiers = [...editForm.tiers]
-                                                                                    newTiers[idx] = { ...newTiers[idx], price: Number(e.target.value) }
-                                                                                    setEditForm({ ...editForm, tiers: newTiers })
-                                                                                }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none disabled:opacity-50 disabled:bg-slate-100 text-right" disabled={tier.type !== 'flat'} />
-                                                                            </td>
-                                                                            <td className="px-2 py-2">
-                                                                                <input type="number" value={tier.rate || 0} onChange={(e) => {
-                                                                                    const newTiers = [...editForm.tiers]
-                                                                                    newTiers[idx] = { ...newTiers[idx], rate: Number(e.target.value) }
-                                                                                    setEditForm({ ...editForm, tiers: newTiers })
-                                                                                }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none disabled:opacity-50 disabled:bg-slate-100 text-right" disabled={tier.type !== 'per_km'} />
-                                                                            </td>
-                                                                            <td className="px-2 py-2 text-center">
-                                                                                <button onClick={() => {
-                                                                                    const newTiers = editForm.tiers.filter((_, i) => i !== idx)
-                                                                                    setEditForm({ ...editForm, tiers: newTiers })
-                                                                                }} className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50"><X size={16} /></button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    ))}
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-
-                                                        {/* Waiting Charges Management */}
-                                                        <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-900/10 space-y-4">
-                                                            <div className="flex items-center justify-between">
-                                                                <h4 className="text-sm font-bold text-emerald-900 uppercase tracking-widest flex items-center gap-2">
-                                                                    <Clock size={16} /> Tiered Waiting Charges
-                                                                </h4>
-                                                                <button
-                                                                    onClick={() => {
-                                                                        const current = editForm.waitingCharges || []
-                                                                        setEditForm({ ...editForm, waitingCharges: [...current, 1000] })
-                                                                    }}
-                                                                    className="text-[10px] bg-white border border-emerald-900/10 px-3 py-1 rounded-lg font-bold text-emerald-900 hover:bg-emerald-100 transition-colors"
-                                                                >
-                                                                    + Add Hour
-                                                                </button>
-                                                            </div>
-                                                            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-                                                                {(editForm.waitingCharges || []).map((charge, idx) => (
-                                                                    <div key={idx} className="bg-white p-2 rounded-lg border border-emerald-900/10 relative group">
-                                                                        <label className="block text-[8px] font-bold text-emerald-900/40 uppercase mb-1">{idx + 1} Hour{idx > 0 && 's'}</label>
-                                                                        <div className="flex items-center gap-1">
-                                                                            <span className="text-[10px] font-bold text-emerald-900">Rs</span>
-                                                                            <input
-                                                                                type="number"
-                                                                                value={charge}
-                                                                                onChange={(e) => {
-                                                                                    const newCharges = [...editForm.waitingCharges]
-                                                                                    newCharges[idx] = Number(e.target.value)
-                                                                                    setEditForm({ ...editForm, waitingCharges: newCharges })
-                                                                                }}
-                                                                                className="w-full bg-transparent outline-none font-bold text-xs text-emerald-900"
-                                                                            />
-                                                                        </div>
-                                                                        <button
-                                                                            onClick={() => {
-                                                                                const newCharges = editForm.waitingCharges.filter((_, i) => i !== idx)
-                                                                                setEditForm({ ...editForm, waitingCharges: newCharges })
-                                                                            }}
-                                                                            className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                                                                        >
-                                                                            <X size={10} />
-                                                                        </button>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                            {(!editForm.waitingCharges || editForm.waitingCharges.length === 0) && (
-                                                                <p className="text-[10px] text-emerald-900/40 italic">No custom waiting charges defined. Will use default hourly rate.</p>
-                                                            )}
-                                                        </div>
-
-                                                        <div className="flex gap-2 pt-2">
-                                                            <button
-                                                                onClick={() => {
-                                                                    const lastTier = editForm.tiers[editForm.tiers.length - 1]
-                                                                    const newMin = lastTier ? lastTier.max + 1 : 1
-                                                                    setEditForm({
-                                                                        ...editForm,
-                                                                        tiers: [...editForm.tiers, { min: newMin, max: newMin + 50, type: 'per_km', price: 0, rate: 100 }]
-                                                                    })
-                                                                }}
-                                                                className="text-sm bg-slate-100 px-3 py-1 rounded hover:bg-slate-200"
-                                                            >
-                                                                + Add Tier
-                                                            </button>
-                                                            <button
-                                                                onClick={async () => {
-                                                                    const res = await fetch(`/api/pricing/${vehicle.vehicleType}?category=${pricingCategory}`, {
-                                                                        method: 'PUT',
-                                                                        headers: { 'Content-Type': 'application/json' },
-                                                                        body: JSON.stringify({ waitingCharges: editForm.waitingCharges, tiers: editForm.tiers, name: editForm.name, capacity: editForm.capacity, luggage: editForm.luggage })
-                                                                    })
-                                                                    if (res.ok) {
-                                                                        setVehiclePricing(prev => prev.map(v => v.vehicleType === vehicle.vehicleType ? { ...v, ...editForm } : v))
-                                                                        setEditingVehicle(null)
-                                                                    }
-                                                                }}
-                                                                className="text-sm bg-emerald-900 text-white px-6 py-2 rounded-lg hover:bg-emerald-900/90 font-bold shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
-                                                            >
-                                                                Save {pricingCategory.replace('-', ' ')} Rates
-                                                            </button>
-                                                        </div>
+                                                        )}
                                                     </div>
-                                                ) : (
-                                                    <div className="overflow-x-auto">
-                                                        <table className="w-full text-sm">
-                                                            <thead>
-                                                                <tr className="bg-slate-50 text-gray-500">
-                                                                    <th className="px-4 py-2 text-left">Distance Range</th>
-                                                                    <th className="px-4 py-2 text-left">Type</th>
-                                                                    <th className="px-4 py-2 text-right">Rate</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {(vehicle.tiers || []).map((tier, idx) => (
-                                                                    <tr key={idx} className="border-b border-slate-100">
-                                                                        <td className="px-4 py-2 font-medium">{tier.min} - {tier.max >= 9999 ? '∞' : tier.max} km</td>
-                                                                        <td className="px-4 py-2">
-                                                                            <span className={`px-2 py-0.5 rounded text-xs ${tier.type === 'flat' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
-                                                                                {tier.type === 'flat' ? 'Flat Rate' : 'Per KM'}
-                                                                            </span>
-                                                                        </td>
-                                                                        <td className="px-4 py-2 text-right font-bold text-emerald-900">
-                                                                            {tier.type === 'flat' ? `LKR ${tier.price?.toLocaleString()}` : `LKR ${tier.rate}/km`}
-                                                                        </td>
-                                                                    </tr>
-                                                                ))}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                )}
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">SEO Title</label>
+                                                    <input
+                                                        type="text"
+                                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                        value={postForm.seo?.metaTitle || ''}
+                                                        onChange={(e) => setPostForm({ ...postForm, seo: { ...postForm.seo, metaTitle: e.target.value } })}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
+                                                    <textarea
+                                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm h-24"
+                                                        value={postForm.seo?.metaDescription || ''}
+                                                        onChange={(e) => setPostForm({ ...postForm, seo: { ...postForm.seo, metaDescription: e.target.value } })}
+                                                    />
+                                                </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    {currentView === 'blog' && (
-                        <div className="space-y-6">
-                            <div className="bg-white rounded-xl shadow-sm p-6">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-2xl font-bold text-emerald-900">Blog Posts</h2>
-                                    <button
-                                        onClick={() => {
-                                            setPostForm({})
-                                            setEditingPost('NEW')
-                                        }}
-                                        className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
-                                    >
-                                        <FileText size={16} /> Add New Post
-                                    </button>
-                                </div>
-
-                                {/* Post List */}
-                                {isLoading ? (
-                                    <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div></div>
-                                ) : (
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-sm">
-                                            <thead>
-                                                <tr className="bg-slate-50 text-gray-500">
-                                                    <th className="px-4 py-3 text-left">Title</th>
-                                                    <th className="px-4 py-3 text-left">Slug</th>
-                                                    <th className="px-4 py-3 text-left">Status</th>
-                                                    <th className="px-4 py-3 text-left">Date</th>
-                                                    <th className="px-4 py-3 text-right">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {blogPosts.map(post => (
-                                                    <tr key={post._id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                                                        <td className="px-4 py-3 font-medium text-emerald-900">{post.title}</td>
-                                                        <td className="px-4 py-3 text-gray-500">{post.slug}</td>
-                                                        <td className="px-4 py-3">
-                                                            <span className={`px-2 py-1 rounded text-xs font-bold ${post.isPublished ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
-                                                                {post.isPublished ? 'Published' : 'Draft'}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-4 py-3 text-gray-500">{new Date(post.createdAt).toLocaleDateString()}</td>
-                                                        <td className="px-4 py-3 text-right">
-                                                            <button
-                                                                onClick={() => {
-                                                                    setPostForm(post)
-                                                                    setEditingPost(post._id)
-                                                                }}
-                                                                className="text-emerald-900 hover:text-emerald-600 font-medium"
-                                                            >
-                                                                Edit
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                                {blogPosts.length === 0 && (
-                                                    <tr><td colSpan="5" className="text-center py-8 text-gray-400">No posts found.</td></tr>
-                                                )}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Add/Edit Post Modal */}
-                            {editingPost && (
-                                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-                                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-6 h-[90vh] overflow-y-auto animate-fade-in-up">
-                                        <div className="flex justify-between items-center mb-6">
-                                            <h3 className="text-xl font-bold text-emerald-900">{editingPost === 'NEW' ? 'Create New Post' : 'Edit Post'}</h3>
-                                            <button onClick={() => setEditingPost(null)} className="text-gray-400 hover:text-gray-600"><X size={24} /></button>
                                         </div>
 
-                                        <div className="space-y-6">
-                                            <div className="grid md:grid-cols-3 gap-6">
-                                                <div className="md:col-span-2 space-y-4">
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                                                        <input
-                                                            type="text"
-                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
-                                                            value={postForm.title || ''}
-                                                            onChange={(e) => setPostForm({ ...postForm, title: e.target.value })}
-                                                            placeholder="Post Title"
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Slug (auto-generated if empty)</label>
-                                                        <input
-                                                            type="text"
-                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
-                                                            value={postForm.slug || ''}
-                                                            onChange={(e) => setPostForm({ ...postForm, slug: e.target.value })}
-                                                            placeholder="post-url-slug"
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Content (HTML allowed)</label>
-                                                        <textarea
-                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none h-64 font-mono text-sm"
-                                                            value={postForm.content || ''}
-                                                            onChange={(e) => setPostForm({ ...postForm, content: e.target.value })}
-                                                            placeholder="<p>Write your content here...</p>"
-                                                        />
-                                                    </div>
-                                                </div>
+                                        <div className="flex justify-end gap-3 pt-6 border-t">
+                                            <button
+                                                onClick={() => setEditingPost(null)}
+                                                className="px-6 py-2 text-gray-600 hover:bg-slate-100 rounded-lg font-medium transition-colors"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                onClick={async () => {
+                                                    const url = editingPost === 'NEW' ? '/api/blog' : `/api/blog/${postForm.slug}`
+                                                    const method = editingPost === 'NEW' ? 'POST' : 'PUT'
 
-                                                <div className="space-y-4">
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                                                        <select
-                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none bg-white"
-                                                            value={postForm.isPublished ? 'true' : 'false'}
-                                                            onChange={(e) => setPostForm({ ...postForm, isPublished: e.target.value === 'true' })}
-                                                        >
-                                                            <option value="false">Draft</option>
-                                                            <option value="true">Published</option>
-                                                        </select>
-                                                    </div>
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Cover Image</label>
-                                                        <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center hover:bg-slate-50 transition-colors">
-                                                            {postForm.coverImage ? (
-                                                                <div className="relative">
-                                                                    <img src={postForm.coverImage} alt="Cover" className="w-full h-32 object-cover rounded mb-2" />
-                                                                    <button
-                                                                        onClick={() => setPostForm({ ...postForm, coverImage: '' })}
-                                                                        className="text-red-500 text-xs hover:underline"
-                                                                    >
-                                                                        Remove
-                                                                    </button>
-                                                                </div>
-                                                            ) : (
-                                                                <input
-                                                                    type="file"
-                                                                    accept="image/*"
-                                                                    onChange={async (e) => {
-                                                                        const file = e.target.files[0]
-                                                                        if (file) {
-                                                                            const formData = new FormData()
-                                                                            formData.append('file', file)
-                                                                            formData.append('vehicleType', 'blog-cover') // Reuse existing endpoint logic
-                                                                            const res = await fetch('/api/upload/vehicle', { method: 'POST', body: formData })
-                                                                            const data = await res.json()
-                                                                            if (data.path) {
-                                                                                setPostForm({ ...postForm, coverImage: data.path })
-                                                                            }
-                                                                        }
-                                                                    }}
-                                                                    className="text-xs w-full"
-                                                                />
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1">SEO Title</label>
-                                                        <input
-                                                            type="text"
-                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
-                                                            value={postForm.seo?.metaTitle || ''}
-                                                            onChange={(e) => setPostForm({ ...postForm, seo: { ...postForm.seo, metaTitle: e.target.value } })}
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
-                                                        <textarea
-                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm h-24"
-                                                            value={postForm.seo?.metaDescription || ''}
-                                                            onChange={(e) => setPostForm({ ...postForm, seo: { ...postForm.seo, metaDescription: e.target.value } })}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                    const res = await fetch(url, {
+                                                        method: method,
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify(postForm)
+                                                    })
 
-                                            <div className="flex justify-end gap-3 pt-6 border-t">
-                                                <button
-                                                    onClick={() => setEditingPost(null)}
-                                                    className="px-6 py-2 text-gray-600 hover:bg-slate-100 rounded-lg font-medium transition-colors"
-                                                >
-                                                    Cancel
-                                                </button>
-                                                <button
-                                                    onClick={async () => {
-                                                        const url = editingPost === 'NEW' ? '/api/blog' : `/api/blog/${postForm.slug}`
-                                                        const method = editingPost === 'NEW' ? 'POST' : 'PUT'
-
-                                                        const res = await fetch(url, {
-                                                            method: method,
-                                                            headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify(postForm)
-                                                        })
-
-                                                        const data = await res.json()
-                                                        if (data.success) {
-                                                            alert('Post saved successfully!')
-                                                            setEditingPost(null)
-                                                            // Logic to refresh list
-                                                            fetch('/api/blog?isAdmin=true&limit=100').then(r => r.json()).then(d => d.success && setBlogPosts(d.data))
-                                                        } else {
-                                                            alert('Error: ' + data.error)
-                                                        }
-                                                    }}
-                                                    className="px-6 py-2 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-900/90 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
-                                                >
-                                                    {editingPost === 'NEW' ? 'Create Post' : 'Update Post'}
-                                                </button>
-                                            </div>
+                                                    const data = await res.json()
+                                                    if (data.success) {
+                                                        alert('Post saved successfully!')
+                                                        setEditingPost(null)
+                                                        // Logic to refresh list
+                                                        fetch('/api/blog?isAdmin=true&limit=100').then(r => r.json()).then(d => d.success && setBlogPosts(d.data))
+                                                    } else {
+                                                        alert('Error: ' + data.error)
+                                                    }
+                                                }}
+                                                className="px-6 py-2 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-900/90 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
+                                            >
+                                                {editingPost === 'NEW' ? 'Create Post' : 'Update Post'}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                            )}
-                        </div>
-                    )}
-
-                    {currentView === 'team' && (
-                        <div className="space-y-6">
-                            <div className="bg-white rounded-xl shadow-sm p-6">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-2xl font-bold text-emerald-900">Team Management</h2>
-                                    <button
-                                        onClick={() => {
-                                            setTeamForm({ permissions: [] })
-                                            setEditingTeam('NEW')
-                                        }}
-                                        className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
-                                    >
-                                        <Users size={16} /> Add New Admin
-                                    </button>
-                                </div>
-
-                                {isLoading ? (
-                                    <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div></div>
-                                ) : (
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-sm">
-                                            <thead>
-                                                <tr className="bg-slate-50 text-gray-500">
-                                                    <th className="px-4 py-3 text-left">Name</th>
-                                                    <th className="px-4 py-3 text-left">Email</th>
-                                                    <th className="px-4 py-3 text-left">Role</th>
-                                                    <th className="px-4 py-3 text-left">Permissions</th>
-                                                    <th className="px-4 py-3 text-right">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {teamMembers.map(member => (
-                                                    <tr key={member._id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                                                        <td className="px-4 py-3 font-medium text-emerald-900">{member.name}</td>
-                                                        <td className="px-4 py-3 text-gray-500">{member.email}</td>
-                                                        <td className="px-4 py-3 capitalize">{member.role}</td>
-                                                        <td className="px-4 py-3">
-                                                            <div className="flex flex-wrap gap-1">
-                                                                {member.permissions?.map(p => (
-                                                                    <span key={p} className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-xs">{p}</span>
-                                                                ))}
-                                                                {(!member.permissions || member.permissions.length === 0) && <span className="text-gray-400 text-xs">All Access (Super)</span>}
-                                                            </div>
-                                                        </td>
-                                                        <td className="px-4 py-3 text-right">
-                                                            <button className="text-gray-400 hover:text-emerald-900" title="Edit Permissions not implemented yet">•••</button>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                )}
                             </div>
+                        )}
+                    </div>
+                )}
 
-                            {/* Add Admin Modal */}
-                            {editingTeam && (
-                                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-                                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fade-in-up">
-                                        <h3 className="text-xl font-bold text-emerald-900 mb-4">Add New Admin</h3>
-                                        <div className="space-y-4">
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                                                <input
-                                                    type="text"
-                                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
-                                                    value={teamForm.name || ''}
-                                                    onChange={(e) => setTeamForm({ ...teamForm, name: e.target.value })}
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                                <input
-                                                    type="email"
-                                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
-                                                    value={teamForm.email || ''}
-                                                    onChange={(e) => setTeamForm({ ...teamForm, email: e.target.value })}
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                                                <input
-                                                    type="password"
-                                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
-                                                    value={teamForm.password || ''}
-                                                    onChange={(e) => setTeamForm({ ...teamForm, password: e.target.value })}
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-1">Permissions</label>
-                                                <div className="grid grid-cols-2 gap-3">
-                                                    {['manage_bookings', 'manage_vehicles', 'manage_content', 'manage_team'].map(perm => {
-                                                        const isChecked = teamForm.permissions?.includes(perm);
-                                                        return (
-                                                            <div
-                                                                key={perm}
-                                                                onClick={() => {
-                                                                    const current = teamForm.permissions || []
-                                                                    if (isChecked) {
-                                                                        setTeamForm({ ...teamForm, permissions: current.filter(p => p !== perm) })
-                                                                    } else {
-                                                                        setTeamForm({ ...teamForm, permissions: [...current, perm] })
-                                                                    }
-                                                                }}
-                                                                className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${isChecked ? 'bg-emerald-50 border-emerald-500' : 'bg-white border-slate-200 hover:border-emerald-200'}`}
-                                                            >
-                                                                <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-emerald-600 border-emerald-600' : 'bg-white border-slate-300'}`}>
-                                                                    {isChecked && <Check size={12} className="text-white" />}
-                                                                </div>
-                                                                <span className="capitalize text-sm font-medium text-slate-700">{perm.replace('_', ' ')}</span>
-                                                            </div>
-                                                        )
-                                                    })}
-                                                </div>
-                                            </div>
-
-                                            <div className="flex justify-end gap-3 pt-4">
-                                                <button
-                                                    onClick={() => setEditingTeam(null)}
-                                                    className="px-4 py-2 text-gray-600 hover:bg-slate-100 rounded-lg"
-                                                >
-                                                    Cancel
-                                                </button>
-                                                <button
-                                                    onClick={async () => {
-                                                        if (!teamForm.email || !teamForm.password) return alert('Email & Password required')
-                                                        const res = await fetch('/api/admin/team', {
-                                                            method: 'POST',
-                                                            headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify(teamForm)
-                                                        })
-                                                        const data = await res.json()
-                                                        if (data.success) {
-                                                            setTeamMembers([...teamMembers, data.data])
-                                                            setEditingTeam(null)
-                                                            alert('Admin added!')
-                                                        } else {
-                                                            alert(data.error)
-                                                        }
-                                                    }}
-                                                    className="px-6 py-2 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-900/90"
-                                                >
-                                                    Create User
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                    {currentView === 'bookings' && (
+                {currentView === 'team' && (
+                    <div className="space-y-6">
                         <div className="bg-white rounded-xl shadow-sm p-6">
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                                <div className="flex items-center gap-4">
-                                    <h2 className="text-2xl font-bold text-emerald-900">All Bookings</h2>
-                                    <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">{filteredBookings.length} total</span>
-                                </div>
-                                <div className="relative w-full sm:w-auto">
-                                    <input
-                                        type="text"
-                                        placeholder="Search by ID, Name, Phone..."
-                                        value={bookingSearch}
-                                        onChange={(e) => setBookingSearch(e.target.value)}
-                                        className="w-full sm:w-80 pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20 shadow-sm"
-                                    />
-                                    <div className="absolute left-3 top-2.5 text-gray-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                                    </div>
-                                </div>
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold text-emerald-900">Team Management</h2>
+                                <button
+                                    onClick={() => {
+                                        setTeamForm({ permissions: [] })
+                                        setEditingTeam('NEW')
+                                    }}
+                                    className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
+                                >
+                                    <Users size={16} /> Add New Admin
+                                </button>
                             </div>
 
-                            {filteredBookings.length === 0 ? (
-                                <div className="text-center py-12 text-gray-400 bg-slate-50 rounded-lg border border-dashed">
-                                    <p>No matching bookings found</p>
-                                </div>
+                            {isLoading ? (
+                                <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div></div>
                             ) : (
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-sm">
                                         <thead>
-                                            <tr className="bg-slate-50 text-gray-500 text-left">
-                                                <th className="px-4 py-3 rounded-l-lg">Booking ID</th>
-                                                <th className="px-4 py-3">Customer</th>
-                                                <th className="px-4 py-3">Route</th>
-                                                <th className="px-4 py-3">Date & Time</th>
-                                                <th className="px-4 py-3">Vehicle</th>
-                                                <th className="px-4 py-3 text-right">Amount</th>
-                                                <th className="px-4 py-3">Payment</th>
-                                                <th className="px-4 py-3 rounded-r-lg">Status</th>
+                                            <tr className="bg-slate-50 text-gray-500">
+                                                <th className="px-4 py-3 text-left">Name</th>
+                                                <th className="px-4 py-3 text-left">Email</th>
+                                                <th className="px-4 py-3 text-left">Role</th>
+                                                <th className="px-4 py-3 text-left">Permissions</th>
+                                                <th className="px-4 py-3 text-right">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {filteredBookings.map((booking) => (
-                                                <tr
-                                                    key={booking._id}
-                                                    onClick={() => setSelectedBooking(booking)}
-                                                    className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors"
-                                                >
-                                                    <td className="px-4 py-4 font-mono text-xs text-gray-400">
-                                                        {booking._id?.slice(-8) || 'N/A'}
-                                                    </td>
-                                                    <td className="px-4 py-4">
-                                                        <div className="font-medium text-emerald-900">{booking.customerName || booking.guestPhone || 'Guest'}</div>
-                                                        <div className="text-xs text-gray-400">{booking.guestPhone}</div>
-                                                    </td>
-                                                    <td className="px-4 py-4">
-                                                        <div className="text-xs">
-                                                            <span className="text-green-600">●</span> {booking.pickupLocation?.address?.split(',')[0] || 'N/A'}
-                                                        </div>
-                                                        <div className="text-xs">
-                                                            <span className="text-red-500">●</span> {booking.dropoffLocation?.address?.split(',')[0] || 'N/A'}
+                                            {teamMembers.map(member => (
+                                                <tr key={member._id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                                                    <td className="px-4 py-3 font-medium text-emerald-900">{member.name}</td>
+                                                    <td className="px-4 py-3 text-gray-500">{member.email}</td>
+                                                    <td className="px-4 py-3 capitalize">{member.role}</td>
+                                                    <td className="px-4 py-3">
+                                                        <div className="flex flex-wrap gap-1">
+                                                            {member.permissions?.map(p => (
+                                                                <span key={p} className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-xs">{p}</span>
+                                                            ))}
+                                                            {(!member.permissions || member.permissions.length === 0) && <span className="text-gray-400 text-xs">All Access (Super)</span>}
                                                         </div>
                                                     </td>
-                                                    <td className="px-4 py-4">
-                                                        <div className="font-medium">{booking.scheduledDate || 'Not set'}</div>
-                                                        <div className="text-xs text-gray-400">{booking.scheduledTime || ''}</div>
-                                                    </td>
-                                                    <td className="px-4 py-4 capitalize">
-                                                        {booking.vehicleType?.replace(/-/g, ' ') || 'N/A'}
-                                                    </td>
-                                                    <td className="px-4 py-4 text-right font-bold text-emerald-900">
-                                                        Rs {booking.totalPrice?.toLocaleString() || 0}
-                                                    </td>
-                                                    <td className="px-4 py-4">
-                                                        <span className={`px-2 py-1 rounded text-xs font-bold capitalize ${booking.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' :
-                                                            booking.paymentStatus === 'pending' ? 'bg-orange-100 text-orange-700' :
-                                                                'bg-gray-100 text-gray-600'
-                                                            }`}>
-                                                            {booking.paymentStatus || 'pending'}
-                                                        </span>
-                                                        <div className="text-xs text-gray-400 mt-1">{booking.paymentMethod || 'cash'}</div>
-                                                    </td>
-                                                    <td className="px-4 py-4">
-                                                        <span className={`px-2 py-1 rounded text-xs font-bold capitalize ${booking.status === 'completed' ? 'bg-green-100 text-green-700' :
-                                                            booking.status === 'ongoing' ? 'bg-blue-100 text-blue-700' :
-                                                                booking.status === 'pending' ? 'bg-orange-100 text-orange-700' :
-                                                                    booking.status === 'cancelled' ? 'bg-red-100 text-red-700' :
-                                                                        'bg-gray-100 text-gray-600'
-                                                            }`}>
-                                                            {booking.status || 'pending'}
-                                                        </span>
+                                                    <td className="px-4 py-3 text-right">
+                                                        <button className="text-gray-400 hover:text-emerald-900" title="Edit Permissions not implemented yet">•••</button>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -1310,597 +1116,793 @@ export default function AdminDashboard() {
                                     </table>
                                 </div>
                             )}
+                        </div>
 
-                            {/* Booking Detail Modal */}
-                            {selectedBooking && (
-                                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-                                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-                                        <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white z-10">
-                                            <div>
-                                                <h3 className="text-xl font-bold text-emerald-900">Booking Details</h3>
-                                                <p className="text-sm text-gray-500">ID: {selectedBooking._id}</p>
-                                            </div>
-                                            <button
-                                                onClick={() => setSelectedBooking(null)}
-                                                className="p-2 hover:bg-slate-100 rounded-full transition-colors"
-                                            >
-                                                <X size={24} className="text-gray-500" />
-                                            </button>
+                        {/* Add Admin Modal */}
+                        {editingTeam && (
+                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                                <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fade-in-up">
+                                    <h3 className="text-xl font-bold text-emerald-900 mb-4">Add New Admin</h3>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                            <input
+                                                type="text"
+                                                className="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                                value={teamForm.name || ''}
+                                                onChange={(e) => setTeamForm({ ...teamForm, name: e.target.value })}
+                                            />
                                         </div>
-
-                                        <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                                            {/* Customer Info */}
-                                            <div className="bg-slate-50 p-6 rounded-xl space-y-4">
-                                                <h4 className="font-bold text-emerald-900 flex items-center gap-2">
-                                                    <Users size={18} /> Customer Information
-                                                </h4>
-                                                <div className="space-y-3">
-                                                    <div>
-                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Name</span>
-                                                        <span className="font-medium">{selectedBooking.customerName || selectedBooking.guestPhone || 'N/A'}</span>
-                                                    </div>
-                                                    <div>
-                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Phone</span>
-                                                        <a href={`tel:${selectedBooking.guestPhone}`} className="font-medium text-emerald-600 hover:underline flex items-center gap-1">
-                                                            <Phone size={14} /> {selectedBooking.guestPhone || 'N/A'}
-                                                        </a>
-                                                    </div>
-                                                    <div>
-                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Email</span>
-                                                        <a href={`mailto:${selectedBooking.customerEmail}`} className="font-medium text-blue-600 hover:underline flex items-center gap-1">
-                                                            <Mail size={14} /> {selectedBooking.customerEmail || 'N/A'}
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* Journey Info */}
-                                            <div className="bg-slate-50 p-6 rounded-xl space-y-4">
-                                                <h4 className="font-bold text-emerald-900 flex items-center gap-2">
-                                                    <Car size={18} /> Journey Details
-                                                </h4>
-                                                <div className="space-y-3">
-                                                    <div>
-                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Route</span>
-                                                        <div className="mt-1 space-y-2">
-                                                            <div className="flex items-start gap-2">
-                                                                <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 flex-shrink-0"></div>
-                                                                <span className="text-sm leading-tight">{selectedBooking.pickupLocation?.address || 'N/A'}</span>
-                                                            </div>
-                                                            <div className="flex items-start gap-2">
-                                                                <div className="w-2 h-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></div>
-                                                                <span className="text-sm leading-tight">{selectedBooking.dropoffLocation?.address || 'N/A'}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="grid grid-cols-2 gap-4 pt-2">
-                                                        <div>
-                                                            <span className="text-xs text-gray-500 uppercase tracking-wider block">Distance</span>
-                                                            <span className="font-medium">{selectedBooking.distanceKm} km</span>
-                                                        </div>
-                                                        <div>
-                                                            <span className="text-xs text-gray-500 uppercase tracking-wider block">Vehicle</span>
-                                                            <span className="font-medium capitalize">{selectedBooking.vehicleType?.replace(/-/g, ' ')}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* Schedule Info */}
-                                            <div className="bg-slate-50 p-6 rounded-xl space-y-4">
-                                                <h4 className="font-bold text-emerald-900 flex items-center gap-2">
-                                                    <Calendar size={18} /> Schedule
-                                                </h4>
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    <div>
-                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Date</span>
-                                                        <span className="font-medium">{selectedBooking.scheduledDate}</span>
-                                                    </div>
-                                                    <div>
-                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Time</span>
-                                                        <span className="font-medium">{selectedBooking.scheduledTime}</span>
-                                                    </div>
-                                                    <div className="col-span-2">
-                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Flight Number</span>
-                                                        <span className="font-medium">{selectedBooking.flightNumber || 'Not provided'}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* Payment Info */}
-                                            <div className="bg-slate-50 p-6 rounded-xl space-y-4">
-                                                <h4 className="font-bold text-emerald-900 flex items-center gap-2">
-                                                    <CreditCard size={18} /> Payment & Status
-                                                </h4>
-                                                <div className="space-y-3">
-                                                    <div className="flex justify-between items-center">
-                                                        <span className="text-xs text-gray-500 uppercase tracking-wider">Total Amount</span>
-                                                        <span className="text-xl font-bold text-emerald-600">Rs {selectedBooking.totalPrice?.toLocaleString()}</span>
-                                                    </div>
-                                                    <div className="grid grid-cols-2 gap-4 pt-2">
-                                                        <div>
-                                                            <span className="text-xs text-gray-500 uppercase tracking-wider block">Method</span>
-                                                            <span className="font-medium capitalize">{selectedBooking.paymentMethod}</span>
-                                                        </div>
-                                                        <div>
-                                                            <span className="text-xs text-gray-500 uppercase tracking-wider block">Payment Status</span>
-                                                            <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold capitalize mt-1 ${selectedBooking.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' :
-                                                                selectedBooking.paymentStatus === 'pending' ? 'bg-orange-100 text-orange-700' :
-                                                                    'bg-gray-100 text-gray-600'
-                                                                }`}>
-                                                                {selectedBooking.paymentStatus}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Booking Status</span>
-                                                        <select
-                                                            className="mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-600"
-                                                            value={selectedStatus}
-                                                            onChange={(e) => setSelectedStatus(e.target.value)}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                            <input
+                                                type="email"
+                                                className="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                                value={teamForm.email || ''}
+                                                onChange={(e) => setTeamForm({ ...teamForm, email: e.target.value })}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                                            <input
+                                                type="password"
+                                                className="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                                value={teamForm.password || ''}
+                                                onChange={(e) => setTeamForm({ ...teamForm, password: e.target.value })}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Permissions</label>
+                                            <div className="grid grid-cols-2 gap-3">
+                                                {['manage_bookings', 'manage_vehicles', 'manage_content', 'manage_team'].map(perm => {
+                                                    const isChecked = teamForm.permissions?.includes(perm);
+                                                    return (
+                                                        <div
+                                                            key={perm}
+                                                            onClick={() => {
+                                                                const current = teamForm.permissions || []
+                                                                if (isChecked) {
+                                                                    setTeamForm({ ...teamForm, permissions: current.filter(p => p !== perm) })
+                                                                } else {
+                                                                    setTeamForm({ ...teamForm, permissions: [...current, perm] })
+                                                                }
+                                                            }}
+                                                            className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${isChecked ? 'bg-emerald-50 border-emerald-500' : 'bg-white border-slate-200 hover:border-emerald-200'}`}
                                                         >
-                                                            <option value="pending">Pending</option>
-                                                            <option value="confirmed">Confirmed</option>
-                                                            <option value="assigned">Assigned</option>
-                                                            <option value="ongoing">Ongoing</option>
-                                                            <option value="completed">Completed</option>
-                                                            <option value="cancelled">Cancelled</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                                            <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-emerald-600 border-emerald-600' : 'bg-white border-slate-300'}`}>
+                                                                {isChecked && <Check size={12} className="text-white" />}
+                                                            </div>
+                                                            <span className="capitalize text-sm font-medium text-slate-700">{perm.replace('_', ' ')}</span>
+                                                        </div>
+                                                    )
+                                                })}
                                             </div>
                                         </div>
 
-                                        <div className="p-6 border-t bg-gray-50 flex flex-wrap justify-end gap-3 md:gap-4 rounded-b-2xl">
+                                        <div className="flex justify-end gap-3 pt-4">
                                             <button
-                                                onClick={() => setSelectedBooking(null)}
-                                                className="px-6 py-2.5 text-gray-600 hover:bg-gray-200 rounded-lg font-bold transition-colors min-w-[100px]"
+                                                onClick={() => setEditingTeam(null)}
+                                                className="px-4 py-2 text-gray-600 hover:bg-slate-100 rounded-lg"
                                             >
-                                                Close
+                                                Cancel
                                             </button>
                                             <button
                                                 onClick={async () => {
-                                                    setUpdatingStatus(true)
-                                                    try {
-                                                        // Assuming we need a PUT endpoint to update status
-                                                        const res = await fetch(`/api/bookings/${selectedBooking._id}`, {
-                                                            method: 'PUT',
-                                                            headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify({ status: selectedStatus })
-                                                        })
-
-                                                        const data = await res.json()
-
-                                                        if (data.success) {
-                                                            // Update local state
-                                                            const updatedList = bookings.map(b =>
-                                                                b._id === selectedBooking._id ? { ...b, status: selectedStatus } : b
-                                                            )
-                                                            setBookings(updatedList)
-                                                            setSelectedBooking({ ...selectedBooking, status: selectedStatus })
-                                                            alert('Booking status updated successfully')
-                                                        } else {
-                                                            alert('Failed to update: ' + (data.error || 'Unknown error'))
-                                                        }
-                                                    } catch (err) {
-                                                        console.error(err)
-                                                        alert('An error occurred while updating status')
-                                                    } finally {
-                                                        setUpdatingStatus(false)
+                                                    if (!teamForm.email || !teamForm.password) return alert('Email & Password required')
+                                                    const res = await fetch('/api/admin/team', {
+                                                        method: 'POST',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify(teamForm)
+                                                    })
+                                                    const data = await res.json()
+                                                    if (data.success) {
+                                                        setTeamMembers([...teamMembers, data.data])
+                                                        setEditingTeam(null)
+                                                        alert('Admin added!')
+                                                    } else {
+                                                        alert(data.error)
                                                     }
                                                 }}
-                                                disabled={updatingStatus}
-                                                className="px-8 py-2.5 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-800 transition-all disabled:opacity-50 min-w-[140px] shadow-lg flex items-center justify-center gap-2"
+                                                className="px-6 py-2 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-900/90"
                                             >
-                                                {updatingStatus ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
-                                                {updatingStatus ? 'Saving...' : 'Save Changes'}
+                                                Create User
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                            )}
-                        </div>
-                    )}
+                            </div>
+                        )}
+                    </div>
+                )}
 
-                    {currentView === 'communications' && (
-                        <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-sm p-8">
-                            <h2 className="text-2xl font-bold text-emerald-900 mb-6 flex items-center gap-2">
-                                <Mail className="text-emerald-600" /> Email Center
-                            </h2>
-
-                            <div className="space-y-6">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
-                                    <select
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 bg-white"
-                                        value={emailForm.recipientType}
-                                        onChange={(e) => setEmailForm({ ...emailForm, recipientType: e.target.value })}
-                                    >
-                                        <option value="specific">Specific Email</option>
-                                        <option value="all_users">All Customers</option>
-                                        <option value="all_drivers">All Drivers</option>
-                                    </select>
-                                </div>
-
-                                {emailForm.recipientType === 'specific' && (
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                                        <input
-                                            type="email"
-                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
-                                            placeholder="customer@example.com"
-                                            value={emailForm.customEmail || ''}
-                                            onChange={(e) => setEmailForm({ ...emailForm, customEmail: e.target.value })}
-                                        />
-                                    </div>
-                                )}
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
-                                    <input
-                                        type="text"
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
-                                        placeholder="Important Update..."
-                                        value={emailForm.subject}
-                                        onChange={(e) => setEmailForm({ ...emailForm, subject: e.target.value })}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                                    <textarea
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 h-48"
-                                        placeholder="Write your message here..."
-                                        value={emailForm.message}
-                                        onChange={(e) => setEmailForm({ ...emailForm, message: e.target.value })}
-                                    />
-                                </div>
-
-                                <div className="flex justify-end pt-4">
-                                    <button
-                                        onClick={async () => {
-                                            setSendingEmail(true)
-                                            try {
-                                                const res = await fetch('/api/admin/email', {
-                                                    method: 'POST',
-                                                    headers: { 'Content-Type': 'application/json' },
-                                                    body: JSON.stringify(emailForm)
-                                                })
-                                                const data = await res.json()
-                                                if (data.success) {
-                                                    alert(`Sent ${data.sent} emails successfully!`)
-                                                    setEmailForm({ recipientType: 'specific', subject: '', message: '' })
-                                                } else {
-                                                    alert('Error: ' + data.error)
-                                                }
-                                            } catch (err) {
-                                                console.error(err)
-                                                alert('Failed to send emails')
-                                            } finally {
-                                                setSendingEmail(false)
-                                            }
-                                        }}
-                                        disabled={sendingEmail}
-                                        className="bg-emerald-900 text-white px-8 py-3 rounded-lg font-bold hover:bg-emerald-900/90 flex items-center gap-2 disabled:opacity-50"
-                                    >
-                                        {sendingEmail ? <Loader2 className="animate-spin" /> : <Mail size={18} />}
-                                        {sendingEmail ? 'Sending...' : 'Send Email'}
-                                    </button>
+                {currentView === 'bookings' && (
+                    <div className="bg-white rounded-xl shadow-sm p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                            <div className="flex items-center gap-4">
+                                <h2 className="text-2xl font-bold text-emerald-900">All Bookings</h2>
+                                <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">{filteredBookings.length} total</span>
+                            </div>
+                            <div className="relative w-full sm:w-auto">
+                                <input
+                                    type="text"
+                                    placeholder="Search by ID, Name, Phone..."
+                                    value={bookingSearch}
+                                    onChange={(e) => setBookingSearch(e.target.value)}
+                                    className="w-full sm:w-80 pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20 shadow-sm"
+                                />
+                                <div className="absolute left-3 top-2.5 text-gray-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                                 </div>
                             </div>
                         </div>
-                    )}
 
-                    {currentView === 'support' && (
-                        <div className="space-y-6">
-                            {!selectedTicket ? (
-                                <div className="bg-white rounded-xl shadow-sm p-6">
-                                    <h2 className="text-2xl font-bold text-emerald-900 mb-6">Support Tickets</h2>
-                                    {isLoading ? (
-                                        <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div></div>
-                                    ) : (
-                                        <div className="space-y-2">
-                                            {supportTickets.map(ticket => (
-                                                <div
-                                                    key={ticket._id}
-                                                    onClick={() => setSelectedTicket(ticket)}
-                                                    className="flex items-center justify-between p-4 border border-slate-100 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
-                                                >
-                                                    <div className="flex items-center gap-4">
-                                                        <div className={`w-3 h-3 rounded-full ${ticket.status === 'open' ? 'bg-green-500' : ticket.status === 'answered' ? 'bg-blue-500' : 'bg-gray-400'}`}></div>
-                                                        <div>
-                                                            <h3 className="font-bold text-emerald-900">{ticket.subject}</h3>
-                                                            <p className="text-sm text-gray-500">{ticket.user?.name} ({ticket.user?.email})</p>
+                        {filteredBookings.length === 0 ? (
+                            <div className="text-center py-12 text-gray-400 bg-slate-50 rounded-lg border border-dashed">
+                                <p>No matching bookings found</p>
+                            </div>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr className="bg-slate-50 text-gray-500 text-left">
+                                            <th className="px-4 py-3 rounded-l-lg">Booking ID</th>
+                                            <th className="px-4 py-3">Customer</th>
+                                            <th className="px-4 py-3">Route</th>
+                                            <th className="px-4 py-3">Date & Time</th>
+                                            <th className="px-4 py-3">Vehicle</th>
+                                            <th className="px-4 py-3 text-right">Amount</th>
+                                            <th className="px-4 py-3">Payment</th>
+                                            <th className="px-4 py-3 rounded-r-lg">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredBookings.map((booking) => (
+                                            <tr
+                                                key={booking._id}
+                                                onClick={() => setSelectedBooking(booking)}
+                                                className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors"
+                                            >
+                                                <td className="px-4 py-4 font-mono text-xs text-gray-400">
+                                                    {booking._id?.slice(-8) || 'N/A'}
+                                                </td>
+                                                <td className="px-4 py-4">
+                                                    <div className="font-medium text-emerald-900">{booking.customerName || booking.guestPhone || 'Guest'}</div>
+                                                    <div className="text-xs text-gray-400">{booking.guestPhone}</div>
+                                                </td>
+                                                <td className="px-4 py-4">
+                                                    <div className="text-xs">
+                                                        <span className="text-green-600">●</span> {booking.pickupLocation?.address?.split(',')[0] || 'N/A'}
+                                                    </div>
+                                                    <div className="text-xs">
+                                                        <span className="text-red-500">●</span> {booking.dropoffLocation?.address?.split(',')[0] || 'N/A'}
+                                                    </div>
+                                                </td>
+                                                <td className="px-4 py-4">
+                                                    <div className="font-medium">{booking.scheduledDate || 'Not set'}</div>
+                                                    <div className="text-xs text-gray-400">{booking.scheduledTime || ''}</div>
+                                                </td>
+                                                <td className="px-4 py-4 capitalize">
+                                                    {booking.vehicleType?.replace(/-/g, ' ') || 'N/A'}
+                                                </td>
+                                                <td className="px-4 py-4 text-right font-bold text-emerald-900">
+                                                    Rs {booking.totalPrice?.toLocaleString() || 0}
+                                                </td>
+                                                <td className="px-4 py-4">
+                                                    <span className={`px-2 py-1 rounded text-xs font-bold capitalize ${booking.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' :
+                                                        booking.paymentStatus === 'pending' ? 'bg-orange-100 text-orange-700' :
+                                                            'bg-gray-100 text-gray-600'
+                                                        }`}>
+                                                        {booking.paymentStatus || 'pending'}
+                                                    </span>
+                                                    <div className="text-xs text-gray-400 mt-1">{booking.paymentMethod || 'cash'}</div>
+                                                </td>
+                                                <td className="px-4 py-4">
+                                                    <span className={`px-2 py-1 rounded text-xs font-bold capitalize ${booking.status === 'completed' ? 'bg-green-100 text-green-700' :
+                                                        booking.status === 'ongoing' ? 'bg-blue-100 text-blue-700' :
+                                                            booking.status === 'pending' ? 'bg-orange-100 text-orange-700' :
+                                                                booking.status === 'cancelled' ? 'bg-red-100 text-red-700' :
+                                                                    'bg-gray-100 text-gray-600'
+                                                        }`}>
+                                                        {booking.status || 'pending'}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+                        {/* Booking Detail Modal */}
+                        {selectedBooking && (
+                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                                <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+                                    <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white z-10">
+                                        <div>
+                                            <h3 className="text-xl font-bold text-emerald-900">Booking Details</h3>
+                                            <p className="text-sm text-gray-500">ID: {selectedBooking._id}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => setSelectedBooking(null)}
+                                            className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+                                        >
+                                            <X size={24} className="text-gray-500" />
+                                        </button>
+                                    </div>
+
+                                    <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        {/* Customer Info */}
+                                        <div className="bg-slate-50 p-6 rounded-xl space-y-4">
+                                            <h4 className="font-bold text-emerald-900 flex items-center gap-2">
+                                                <Users size={18} /> Customer Information
+                                            </h4>
+                                            <div className="space-y-3">
+                                                <div>
+                                                    <span className="text-xs text-gray-500 uppercase tracking-wider block">Name</span>
+                                                    <span className="font-medium">{selectedBooking.customerName || selectedBooking.guestPhone || 'N/A'}</span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-xs text-gray-500 uppercase tracking-wider block">Phone</span>
+                                                    <a href={`tel:${selectedBooking.guestPhone}`} className="font-medium text-emerald-600 hover:underline flex items-center gap-1">
+                                                        <Phone size={14} /> {selectedBooking.guestPhone || 'N/A'}
+                                                    </a>
+                                                </div>
+                                                <div>
+                                                    <span className="text-xs text-gray-500 uppercase tracking-wider block">Email</span>
+                                                    <a href={`mailto:${selectedBooking.customerEmail}`} className="font-medium text-blue-600 hover:underline flex items-center gap-1">
+                                                        <Mail size={14} /> {selectedBooking.customerEmail || 'N/A'}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Journey Info */}
+                                        <div className="bg-slate-50 p-6 rounded-xl space-y-4">
+                                            <h4 className="font-bold text-emerald-900 flex items-center gap-2">
+                                                <Car size={18} /> Journey Details
+                                            </h4>
+                                            <div className="space-y-3">
+                                                <div>
+                                                    <span className="text-xs text-gray-500 uppercase tracking-wider block">Route</span>
+                                                    <div className="mt-1 space-y-2">
+                                                        <div className="flex items-start gap-2">
+                                                            <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 flex-shrink-0"></div>
+                                                            <span className="text-sm leading-tight">{selectedBooking.pickupLocation?.address || 'N/A'}</span>
+                                                        </div>
+                                                        <div className="flex items-start gap-2">
+                                                            <div className="w-2 h-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></div>
+                                                            <span className="text-sm leading-tight">{selectedBooking.dropoffLocation?.address || 'N/A'}</span>
                                                         </div>
                                                     </div>
-                                                    <div className="text-right">
-                                                        <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${ticket.priority === 'high' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'}`}>{ticket.priority}</span>
-                                                        <p className="text-xs text-gray-400 mt-1">{new Date(ticket.lastUpdated).toLocaleDateString()}</p>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-4 pt-2">
+                                                    <div>
+                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Distance</span>
+                                                        <span className="font-medium">{selectedBooking.distanceKm} km</span>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Vehicle</span>
+                                                        <span className="font-medium capitalize">{selectedBooking.vehicleType?.replace(/-/g, ' ')}</span>
                                                     </div>
                                                 </div>
-                                            ))}
-                                            {supportTickets.length === 0 && <p className="text-center text-gray-400 py-8">No tickets found.</p>}
+                                            </div>
                                         </div>
-                                    )}
-                                </div>
-                            ) : (
-                                <div className="max-w-4xl mx-auto">
-                                    <button
-                                        onClick={() => setSelectedTicket(null)}
-                                        className="mb-4 text-gray-500 hover:text-emerald-900 font-medium flex items-center gap-2"
-                                    >
-                                        ← Back to List
-                                    </button>
 
-                                    <div className="bg-white rounded-t-2xl shadow-sm p-6 border-b border-slate-100 flex justify-between items-start">
-                                        <div>
-                                            <h2 className="text-xl font-bold text-emerald-900 mb-1">{selectedTicket.subject}</h2>
-                                            <p className="text-sm text-gray-500">Customer: {selectedTicket.user?.name} ({selectedTicket.user?.email})</p>
+                                        {/* Schedule Info */}
+                                        <div className="bg-slate-50 p-6 rounded-xl space-y-4">
+                                            <h4 className="font-bold text-emerald-900 flex items-center gap-2">
+                                                <Calendar size={18} /> Schedule
+                                            </h4>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <span className="text-xs text-gray-500 uppercase tracking-wider block">Date</span>
+                                                    <span className="font-medium">{selectedBooking.scheduledDate}</span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-xs text-gray-500 uppercase tracking-wider block">Time</span>
+                                                    <span className="font-medium">{selectedBooking.scheduledTime}</span>
+                                                </div>
+                                                <div className="col-span-2">
+                                                    <span className="text-xs text-gray-500 uppercase tracking-wider block">Flight Number</span>
+                                                    <span className="font-medium">{selectedBooking.flightNumber || 'Not provided'}</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="flex gap-2">
-                                            <select
-                                                className="text-xs border rounded px-2 py-1 bg-white"
-                                                value={selectedTicket.status}
-                                                onChange={async (e) => {
-                                                    const newStatus = e.target.value
-                                                    const res = await fetch(`/api/support/${selectedTicket._id}`, {
-                                                        method: 'PUT',
-                                                        headers: { 'Content-Type': 'application/json' },
-                                                        body: JSON.stringify({ status: newStatus })
-                                                    })
-                                                    if (res.ok) setSelectedTicket({ ...selectedTicket, status: newStatus })
-                                                }}
-                                            >
-                                                <option value="open">Open</option>
-                                                <option value="answered">Answered</option>
-                                                <option value="closed">Closed</option>
-                                            </select>
+
+                                        {/* Payment Info */}
+                                        <div className="bg-slate-50 p-6 rounded-xl space-y-4">
+                                            <h4 className="font-bold text-emerald-900 flex items-center gap-2">
+                                                <CreditCard size={18} /> Payment & Status
+                                            </h4>
+                                            <div className="space-y-3">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-xs text-gray-500 uppercase tracking-wider">Total Amount</span>
+                                                    <span className="text-xl font-bold text-emerald-600">Rs {selectedBooking.totalPrice?.toLocaleString()}</span>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-4 pt-2">
+                                                    <div>
+                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Method</span>
+                                                        <span className="font-medium capitalize">{selectedBooking.paymentMethod}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Payment Status</span>
+                                                        <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold capitalize mt-1 ${selectedBooking.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' :
+                                                            selectedBooking.paymentStatus === 'pending' ? 'bg-orange-100 text-orange-700' :
+                                                                'bg-gray-100 text-gray-600'
+                                                            }`}>
+                                                            {selectedBooking.paymentStatus}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <span className="text-xs text-gray-500 uppercase tracking-wider block">Booking Status</span>
+                                                    <select
+                                                        className="mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-600"
+                                                        value={selectedStatus}
+                                                        onChange={(e) => setSelectedStatus(e.target.value)}
+                                                    >
+                                                        <option value="pending">Pending</option>
+                                                        <option value="confirmed">Confirmed</option>
+                                                        <option value="assigned">Assigned</option>
+                                                        <option value="ongoing">Ongoing</option>
+                                                        <option value="completed">Completed</option>
+                                                        <option value="cancelled">Cancelled</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="bg-slate-50 p-6 space-y-6 min-h-[400px] max-h-[600px] overflow-y-auto">
-                                        {selectedTicket.messages.map((msg, idx) => (
-                                            <div key={idx} className={`flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}`}>
-                                                <div className={`max-w-[80%] rounded-2xl p-4 ${msg.sender === 'admin'
-                                                    ? 'bg-emerald-900 text-white rounded-tr-none'
-                                                    : 'bg-white text-gray-800 shadow-sm rounded-tl-none'
-                                                    }`}>
-                                                    <p className="whitespace-pre-wrap text-sm">{msg.message}</p>
-                                                    <p className={`text-[10px] mt-2 opacity-70 ${msg.sender === 'admin' ? 'text-right' : 'text-left'}`}>
-                                                        {new Date(msg.timestamp).toLocaleString()} • {msg.sender}
-                                                    </p>
+                                    <div className="p-6 border-t bg-gray-50 flex flex-wrap justify-end gap-3 md:gap-4 rounded-b-2xl">
+                                        <button
+                                            onClick={() => setSelectedBooking(null)}
+                                            className="px-6 py-2.5 text-gray-600 hover:bg-gray-200 rounded-lg font-bold transition-colors min-w-[100px]"
+                                        >
+                                            Close
+                                        </button>
+                                        <button
+                                            onClick={async () => {
+                                                setUpdatingStatus(true)
+                                                try {
+                                                    // Assuming we need a PUT endpoint to update status
+                                                    const res = await fetch(`/api/bookings/${selectedBooking._id}`, {
+                                                        method: 'PUT',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify({ status: selectedStatus })
+                                                    })
+
+                                                    const data = await res.json()
+
+                                                    if (data.success) {
+                                                        // Update local state
+                                                        const updatedList = bookings.map(b =>
+                                                            b._id === selectedBooking._id ? { ...b, status: selectedStatus } : b
+                                                        )
+                                                        setBookings(updatedList)
+                                                        setSelectedBooking({ ...selectedBooking, status: selectedStatus })
+                                                        alert('Booking status updated successfully')
+                                                    } else {
+                                                        alert('Failed to update: ' + (data.error || 'Unknown error'))
+                                                    }
+                                                } catch (err) {
+                                                    console.error(err)
+                                                    alert('An error occurred while updating status')
+                                                } finally {
+                                                    setUpdatingStatus(false)
+                                                }
+                                            }}
+                                            disabled={updatingStatus}
+                                            className="px-8 py-2.5 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-800 transition-all disabled:opacity-50 min-w-[140px] shadow-lg flex items-center justify-center gap-2"
+                                        >
+                                            {updatingStatus ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
+                                            {updatingStatus ? 'Saving...' : 'Save Changes'}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {currentView === 'communications' && (
+                    <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-sm p-8">
+                        <h2 className="text-2xl font-bold text-emerald-900 mb-6 flex items-center gap-2">
+                            <Mail className="text-emerald-600" /> Email Center
+                        </h2>
+
+                        <div className="space-y-6">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
+                                <select
+                                    className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 bg-white"
+                                    value={emailForm.recipientType}
+                                    onChange={(e) => setEmailForm({ ...emailForm, recipientType: e.target.value })}
+                                >
+                                    <option value="specific">Specific Email</option>
+                                    <option value="all_users">All Customers</option>
+                                    <option value="all_drivers">All Drivers</option>
+                                </select>
+                            </div>
+
+                            {emailForm.recipientType === 'specific' && (
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                                    <input
+                                        type="email"
+                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                        placeholder="customer@example.com"
+                                        value={emailForm.customEmail || ''}
+                                        onChange={(e) => setEmailForm({ ...emailForm, customEmail: e.target.value })}
+                                    />
+                                </div>
+                            )}
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                                <input
+                                    type="text"
+                                    className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                    placeholder="Important Update..."
+                                    value={emailForm.subject}
+                                    onChange={(e) => setEmailForm({ ...emailForm, subject: e.target.value })}
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                                <textarea
+                                    className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 h-48"
+                                    placeholder="Write your message here..."
+                                    value={emailForm.message}
+                                    onChange={(e) => setEmailForm({ ...emailForm, message: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="flex justify-end pt-4">
+                                <button
+                                    onClick={async () => {
+                                        setSendingEmail(true)
+                                        try {
+                                            const res = await fetch('/api/admin/email', {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify(emailForm)
+                                            })
+                                            const data = await res.json()
+                                            if (data.success) {
+                                                alert(`Sent ${data.sent} emails successfully!`)
+                                                setEmailForm({ recipientType: 'specific', subject: '', message: '' })
+                                            } else {
+                                                alert('Error: ' + data.error)
+                                            }
+                                        } catch (err) {
+                                            console.error(err)
+                                            alert('Failed to send emails')
+                                        } finally {
+                                            setSendingEmail(false)
+                                        }
+                                    }}
+                                    disabled={sendingEmail}
+                                    className="bg-emerald-900 text-white px-8 py-3 rounded-lg font-bold hover:bg-emerald-900/90 flex items-center gap-2 disabled:opacity-50"
+                                >
+                                    {sendingEmail ? <Loader2 className="animate-spin" /> : <Mail size={18} />}
+                                    {sendingEmail ? 'Sending...' : 'Send Email'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {currentView === 'support' && (
+                    <div className="space-y-6">
+                        {!selectedTicket ? (
+                            <div className="bg-white rounded-xl shadow-sm p-6">
+                                <h2 className="text-2xl font-bold text-emerald-900 mb-6">Support Tickets</h2>
+                                {isLoading ? (
+                                    <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div></div>
+                                ) : (
+                                    <div className="space-y-2">
+                                        {supportTickets.map(ticket => (
+                                            <div
+                                                key={ticket._id}
+                                                onClick={() => setSelectedTicket(ticket)}
+                                                className="flex items-center justify-between p-4 border border-slate-100 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`w-3 h-3 rounded-full ${ticket.status === 'open' ? 'bg-green-500' : ticket.status === 'answered' ? 'bg-blue-500' : 'bg-gray-400'}`}></div>
+                                                    <div>
+                                                        <h3 className="font-bold text-emerald-900">{ticket.subject}</h3>
+                                                        <p className="text-sm text-gray-500">{ticket.user?.name} ({ticket.user?.email})</p>
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${ticket.priority === 'high' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'}`}>{ticket.priority}</span>
+                                                    <p className="text-xs text-gray-400 mt-1">{new Date(ticket.lastUpdated).toLocaleDateString()}</p>
                                                 </div>
                                             </div>
                                         ))}
+                                        {supportTickets.length === 0 && <p className="text-center text-gray-400 py-8">No tickets found.</p>}
                                     </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="max-w-4xl mx-auto">
+                                <button
+                                    onClick={() => setSelectedTicket(null)}
+                                    className="mb-4 text-gray-500 hover:text-emerald-900 font-medium flex items-center gap-2"
+                                >
+                                    ← Back to List
+                                </button>
 
-                                    <div className="bg-white rounded-b-2xl shadow-sm p-4">
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="text"
-                                                placeholder="Type your reply..."
-                                                className="flex-1 px-4 py-3 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-600/20"
-                                                value={adminReply}
-                                                onChange={e => setAdminReply(e.target.value)}
-                                                onKeyDown={async (e) => {
-                                                    if (e.key === 'Enter' && !e.shiftKey) {
-                                                        e.preventDefault();
-                                                        if (!adminReply.trim()) return;
-                                                        setSendingReply(true);
-                                                        try {
-                                                            const res = await fetch(`/api/support/${selectedTicket._id}`, {
-                                                                method: 'PUT',
-                                                                headers: { 'Content-Type': 'application/json' },
-                                                                body: JSON.stringify({ message: adminReply })
-                                                            });
-                                                            const data = await res.json();
-                                                            if (data.success) {
-                                                                setSelectedTicket(data.data);
-                                                                setAdminReply('');
-                                                            }
-                                                        } catch (err) {
-                                                            alert('Failed');
-                                                        } finally {
-                                                            setSendingReply(false);
-                                                        }
-                                                    }
-                                                }}
-                                            />
-                                            <button
-                                                onClick={async () => {
-                                                    if (!adminReply.trim()) return
-                                                    setSendingReply(true)
+                                <div className="bg-white rounded-t-2xl shadow-sm p-6 border-b border-slate-100 flex justify-between items-start">
+                                    <div>
+                                        <h2 className="text-xl font-bold text-emerald-900 mb-1">{selectedTicket.subject}</h2>
+                                        <p className="text-sm text-gray-500">Customer: {selectedTicket.user?.name} ({selectedTicket.user?.email})</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <select
+                                            className="text-xs border rounded px-2 py-1 bg-white"
+                                            value={selectedTicket.status}
+                                            onChange={async (e) => {
+                                                const newStatus = e.target.value
+                                                const res = await fetch(`/api/support/${selectedTicket._id}`, {
+                                                    method: 'PUT',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({ status: newStatus })
+                                                })
+                                                if (res.ok) setSelectedTicket({ ...selectedTicket, status: newStatus })
+                                            }}
+                                        >
+                                            <option value="open">Open</option>
+                                            <option value="answered">Answered</option>
+                                            <option value="closed">Closed</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="bg-slate-50 p-6 space-y-6 min-h-[400px] max-h-[600px] overflow-y-auto">
+                                    {selectedTicket.messages.map((msg, idx) => (
+                                        <div key={idx} className={`flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}`}>
+                                            <div className={`max-w-[80%] rounded-2xl p-4 ${msg.sender === 'admin'
+                                                ? 'bg-emerald-900 text-white rounded-tr-none'
+                                                : 'bg-white text-gray-800 shadow-sm rounded-tl-none'
+                                                }`}>
+                                                <p className="whitespace-pre-wrap text-sm">{msg.message}</p>
+                                                <p className={`text-[10px] mt-2 opacity-70 ${msg.sender === 'admin' ? 'text-right' : 'text-left'}`}>
+                                                    {new Date(msg.timestamp).toLocaleString()} • {msg.sender}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="bg-white rounded-b-2xl shadow-sm p-4">
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            placeholder="Type your reply..."
+                                            className="flex-1 px-4 py-3 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                            value={adminReply}
+                                            onChange={e => setAdminReply(e.target.value)}
+                                            onKeyDown={async (e) => {
+                                                if (e.key === 'Enter' && !e.shiftKey) {
+                                                    e.preventDefault();
+                                                    if (!adminReply.trim()) return;
+                                                    setSendingReply(true);
                                                     try {
                                                         const res = await fetch(`/api/support/${selectedTicket._id}`, {
                                                             method: 'PUT',
                                                             headers: { 'Content-Type': 'application/json' },
                                                             body: JSON.stringify({ message: adminReply })
-                                                        })
-                                                        const data = await res.json()
+                                                        });
+                                                        const data = await res.json();
                                                         if (data.success) {
-                                                            setSelectedTicket(data.data)
-                                                            setAdminReply('')
+                                                            setSelectedTicket(data.data);
+                                                            setAdminReply('');
                                                         }
-                                                    } catch (err) { alert('Failed') }
-                                                    finally { setSendingReply(false) }
-                                                }}
-                                                disabled={sendingReply || !adminReply.trim()}
-                                                className="bg-emerald-600 text-emerald-900 p-3 rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-50"
-                                            >
-                                                {sendingReply ? '...' : <div className="font-bold px-2">Send</div>}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                    {currentView === 'coupons' && (
-                        <div className="space-y-6">
-                            {/* Header */}
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <h2 className="text-3xl font-bold text-slate-800">Coupon Management</h2>
-                                    <p className="text-slate-500 mt-1">Create and manage promotional discount codes</p>
-                                </div>
-                            </div>
-
-                            {/* Create New Coupon Card */}
-                            <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-xl shadow-emerald-500/30">
-                                <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                                    <Percent size={20} />
-                                    Create New Coupon
-                                </h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-                                    <div className="lg:col-span-1">
-                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Code</label>
-                                        <input
-                                            placeholder="e.g. GALLE10"
-                                            value={newCoupon.code}
-                                            onChange={e => setNewCoupon({ ...newCoupon, code: e.target.value.toUpperCase() })}
-                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
+                                                    } catch (err) {
+                                                        alert('Failed');
+                                                    } finally {
+                                                        setSendingReply(false);
+                                                    }
+                                                }
+                                            }}
                                         />
-                                    </div>
-                                    <div className="lg:col-span-1">
-                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Type</label>
-                                        <select
-                                            value={newCoupon.discountType}
-                                            onChange={e => setNewCoupon({ ...newCoupon, discountType: e.target.value })}
-                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 text-white font-bold"
-                                        >
-                                            <option value="percentage" className="text-slate-800">Percentage (%)</option>
-                                            <option value="flat" className="text-slate-800">Flat (Rs)</option>
-                                        </select>
-                                    </div>
-                                    <div className="lg:col-span-1">
-                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Value</label>
-                                        <input
-                                            type="number"
-                                            placeholder="10"
-                                            value={newCoupon.value}
-                                            onChange={e => setNewCoupon({ ...newCoupon, value: e.target.value })}
-                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
-                                        />
-                                    </div>
-                                    <div className="lg:col-span-1">
-                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Expiry</label>
-                                        <input
-                                            type="date"
-                                            value={newCoupon.expiryDate}
-                                            onChange={e => setNewCoupon({ ...newCoupon, expiryDate: e.target.value })}
-                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 text-white font-bold"
-                                        />
-                                    </div>
-                                    <div className="lg:col-span-1">
-                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Location</label>
-                                        <input
-                                            placeholder="e.g. Galle"
-                                            value={newCoupon.locationsText || ''}
-                                            onChange={e => setNewCoupon({ ...newCoupon, locationsText: e.target.value })}
-                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
-                                        />
-                                    </div>
-                                    <div className="lg:col-span-1 flex items-end">
                                         <button
-                                            onClick={handleAddCoupon}
-                                            className="w-full p-3 bg-white text-emerald-600 font-bold rounded-xl hover:bg-emerald-50 transition-all hover:scale-105 shadow-lg"
+                                            onClick={async () => {
+                                                if (!adminReply.trim()) return
+                                                setSendingReply(true)
+                                                try {
+                                                    const res = await fetch(`/api/support/${selectedTicket._id}`, {
+                                                        method: 'PUT',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify({ message: adminReply })
+                                                    })
+                                                    const data = await res.json()
+                                                    if (data.success) {
+                                                        setSelectedTicket(data.data)
+                                                        setAdminReply('')
+                                                    }
+                                                } catch (err) { alert('Failed') }
+                                                finally { setSendingReply(false) }
+                                            }}
+                                            disabled={sendingReply || !adminReply.trim()}
+                                            className="bg-emerald-600 text-emerald-900 p-3 rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-50"
                                         >
-                                            + Create
+                                            {sendingReply ? '...' : <div className="font-bold px-2">Send</div>}
                                         </button>
                                     </div>
                                 </div>
                             </div>
+                        )}
+                    </div>
+                )}
 
-                            {/* Coupons Grid */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                {coupons.map(c => (
-                                    <div key={c._id} className="relative group bg-white rounded-2xl border-2 border-dashed border-slate-200 hover:border-emerald-300 overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1">
-                                        {/* Coupon Design */}
-                                        <div className="p-6">
-                                            <div className="flex items-start justify-between mb-4">
-                                                <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
-                                                    <Percent className="text-white" size={20} />
-                                                </div>
-                                                <button
-                                                    onClick={() => handleDeleteCoupon(c._id)}
-                                                    className="opacity-0 group-hover:opacity-100 p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                                                >
-                                                    <X size={18} />
-                                                </button>
+                {currentView === 'coupons' && (
+                    <div className="space-y-6">
+                        {/* Header */}
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h2 className="text-3xl font-bold text-slate-800">Coupon Management</h2>
+                                <p className="text-slate-500 mt-1">Create and manage promotional discount codes</p>
+                            </div>
+                        </div>
+
+                        {/* Create New Coupon Card */}
+                        <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-xl shadow-emerald-500/30">
+                            <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                                <Percent size={20} />
+                                Create New Coupon
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                                <div className="lg:col-span-1">
+                                    <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Code</label>
+                                    <input
+                                        placeholder="e.g. GALLE10"
+                                        value={newCoupon.code}
+                                        onChange={e => setNewCoupon({ ...newCoupon, code: e.target.value.toUpperCase() })}
+                                        className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
+                                    />
+                                </div>
+                                <div className="lg:col-span-1">
+                                    <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Type</label>
+                                    <select
+                                        value={newCoupon.discountType}
+                                        onChange={e => setNewCoupon({ ...newCoupon, discountType: e.target.value })}
+                                        className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 text-white font-bold"
+                                    >
+                                        <option value="percentage" className="text-slate-800">Percentage (%)</option>
+                                        <option value="flat" className="text-slate-800">Flat (Rs)</option>
+                                    </select>
+                                </div>
+                                <div className="lg:col-span-1">
+                                    <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Value</label>
+                                    <input
+                                        type="number"
+                                        placeholder="10"
+                                        value={newCoupon.value}
+                                        onChange={e => setNewCoupon({ ...newCoupon, value: e.target.value })}
+                                        className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
+                                    />
+                                </div>
+                                <div className="lg:col-span-1">
+                                    <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Expiry</label>
+                                    <input
+                                        type="date"
+                                        value={newCoupon.expiryDate}
+                                        onChange={e => setNewCoupon({ ...newCoupon, expiryDate: e.target.value })}
+                                        className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 text-white font-bold"
+                                    />
+                                </div>
+                                <div className="lg:col-span-1">
+                                    <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Location</label>
+                                    <input
+                                        placeholder="e.g. Galle"
+                                        value={newCoupon.locationsText || ''}
+                                        onChange={e => setNewCoupon({ ...newCoupon, locationsText: e.target.value })}
+                                        className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
+                                    />
+                                </div>
+                                <div className="lg:col-span-1 flex items-end">
+                                    <button
+                                        onClick={handleAddCoupon}
+                                        className="w-full p-3 bg-white text-emerald-600 font-bold rounded-xl hover:bg-emerald-50 transition-all hover:scale-105 shadow-lg"
+                                    >
+                                        + Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Coupons Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {coupons.map(c => (
+                                <div key={c._id} className="relative group bg-white rounded-2xl border-2 border-dashed border-slate-200 hover:border-emerald-300 overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1">
+                                    {/* Coupon Design */}
+                                    <div className="p-6">
+                                        <div className="flex items-start justify-between mb-4">
+                                            <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                                                <Percent className="text-white" size={20} />
                                             </div>
+                                            <button
+                                                onClick={() => handleDeleteCoupon(c._id)}
+                                                className="opacity-0 group-hover:opacity-100 p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                                            >
+                                                <X size={18} />
+                                            </button>
+                                        </div>
 
-                                            {/* Discount Display */}
-                                            <div className="mb-4">
-                                                <div className="text-4xl font-black text-slate-800">
-                                                    {c.value}{c.discountType === 'percentage' ? '%' : ''}
-                                                    <span className="text-lg font-bold text-slate-400 ml-1">
-                                                        {c.discountType === 'percentage' ? 'OFF' : 'LKR OFF'}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            {/* Code */}
-                                            <div className="bg-slate-100 rounded-xl p-3 flex items-center justify-between mb-4">
-                                                <code className="font-mono font-bold text-emerald-600 text-lg tracking-wider">{c.code}</code>
-                                                <button
-                                                    onClick={() => navigator.clipboard.writeText(c.code)}
-                                                    className="text-xs text-slate-400 hover:text-emerald-600"
-                                                >
-                                                    Copy
-                                                </button>
-                                            </div>
-
-                                            {/* Details */}
-                                            <div className="space-y-2 text-sm">
-                                                {c.applicableLocations && c.applicableLocations.length > 0 && (
-                                                    <div className="flex items-center gap-2 text-slate-600">
-                                                        <MapPin size={14} className="text-emerald-500" />
-                                                        <span>{c.applicableLocations.join(', ')}</span>
-                                                    </div>
-                                                )}
-                                                <div className="flex items-center gap-2 text-slate-500">
-                                                    <Calendar size={14} />
-                                                    <span>{c.expiryDate ? `Expires ${new Date(c.expiryDate).toLocaleDateString()}` : 'No expiry'}</span>
-                                                </div>
+                                        {/* Discount Display */}
+                                        <div className="mb-4">
+                                            <div className="text-4xl font-black text-slate-800">
+                                                {c.value}{c.discountType === 'percentage' ? '%' : ''}
+                                                <span className="text-lg font-bold text-slate-400 ml-1">
+                                                    {c.discountType === 'percentage' ? 'OFF' : 'LKR OFF'}
+                                                </span>
                                             </div>
                                         </div>
 
-                                        {/* Decorative circles */}
-                                        <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-100 rounded-full"></div>
-                                        <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-100 rounded-full"></div>
-                                    </div>
-                                ))}
-                            </div>
+                                        {/* Code */}
+                                        <div className="bg-slate-100 rounded-xl p-3 flex items-center justify-between mb-4">
+                                            <code className="font-mono font-bold text-emerald-600 text-lg tracking-wider">{c.code}</code>
+                                            <button
+                                                onClick={() => navigator.clipboard.writeText(c.code)}
+                                                className="text-xs text-slate-400 hover:text-emerald-600"
+                                            >
+                                                Copy
+                                            </button>
+                                        </div>
 
-                            {coupons.length === 0 && (
-                                <div className="bg-white rounded-2xl border-2 border-dashed border-slate-200 p-12 text-center">
-                                    <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                        <Percent className="text-slate-400" size={28} />
+                                        {/* Details */}
+                                        <div className="space-y-2 text-sm">
+                                            {c.applicableLocations && c.applicableLocations.length > 0 && (
+                                                <div className="flex items-center gap-2 text-slate-600">
+                                                    <MapPin size={14} className="text-emerald-500" />
+                                                    <span>{c.applicableLocations.join(', ')}</span>
+                                                </div>
+                                            )}
+                                            <div className="flex items-center gap-2 text-slate-500">
+                                                <Calendar size={14} />
+                                                <span>{c.expiryDate ? `Expires ${new Date(c.expiryDate).toLocaleDateString()}` : 'No expiry'}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <h3 className="text-lg font-bold text-slate-800 mb-2">No Coupons Yet</h3>
-                                    <p className="text-slate-500">Create your first coupon above to start offering discounts</p>
+
+                                    {/* Decorative circles */}
+                                    <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-100 rounded-full"></div>
+                                    <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-100 rounded-full"></div>
                                 </div>
-                            )}
+                            ))}
                         </div>
-                    )}
 
-                    {/* Reviews Management */}
-                    {currentView === 'reviews' && (
-                        <ReviewsManagement />
-                    )}
+                        {coupons.length === 0 && (
+                            <div className="bg-white rounded-2xl border-2 border-dashed border-slate-200 p-12 text-center">
+                                <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                    <Percent className="text-slate-400" size={28} />
+                                </div>
+                                <h3 className="text-lg font-bold text-slate-800 mb-2">No Coupons Yet</h3>
+                                <p className="text-slate-500">Create your first coupon above to start offering discounts</p>
+                            </div>
+                        )}
+                    </div>
+                )}
 
-                    {/* Drivers Fleet View */}
-                    {currentView === 'drivers' && (
-                        <DriversFleetView />
-                    )}
+                {/* Reviews Management */}
+                {currentView === 'reviews' && (
+                    <ReviewsManagement />
+                )}
 
-                    {/* Live Driver Map */}
-                    {currentView === 'live-map' && (
-                        <LiveDriverMap />
-                    )}
-                </div>
+                {/* Drivers Fleet View */}
+                {currentView === 'drivers' && (
+                    <DriversFleetView />
+                )}
+
+                {/* Live Driver Map */}
+                {currentView === 'live-map' && (
+                    <LiveDriverMap />
+                )}
             </div>
         </div>
+        </div >
     )
 }

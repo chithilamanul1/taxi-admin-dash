@@ -179,14 +179,29 @@ const DriversFleetView = ({ bookings = [] }) => {
                     </div>
                 ) : (
                     drivers.map(driver => (
-                        <div key={driver._id} className="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-white/5 hover:shadow-md transition-shadow">
+                        <div key={driver._id} className="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-white/5 hover:shadow-md transition-shadow relative group">
+                            {/* Delete Button */}
+                            <button
+                                onClick={async () => {
+                                    if (confirm('Are you sure you want to delete this driver?')) {
+                                        try {
+                                            await fetch(`/api/drivers/${driver._id}`, { method: 'DELETE' });
+                                            fetchDrivers();
+                                        } catch (e) { alert('Failed to delete'); }
+                                    }
+                                }}
+                                className="absolute top-4 right-4 p-2 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                            >
+                                <X size={16} />
+                            </button>
+
                             <div className="flex items-start justify-between mb-4">
                                 <div className="flex items-center gap-3">
                                     <div className={`w-12 h-12 rounded-full flex items-center justify-center ${driver.isOnline ? 'bg-green-100' : 'bg-gray-100'}`}>
                                         <User size={24} className={driver.isOnline ? 'text-green-600' : 'text-gray-400'} />
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-emerald-900 dark:text-white">{driver.user?.name || 'Driver'}</h4>
+                                        <h4 className="font-bold text-emerald-900 dark:text-white">{driver.user?.name || driver.name || 'Driver'}</h4>
                                         <p className="text-xs text-gray-500">{driver.vehicleNumber}</p>
                                     </div>
                                 </div>
@@ -222,7 +237,7 @@ const DriversFleetView = ({ bookings = [] }) => {
 
                             <div className="flex gap-2">
                                 <a
-                                    href={`tel:${driver.user?.phone}`}
+                                    href={`tel:${driver.user?.phone || driver.phone}`}
                                     className="flex-1 flex items-center justify-center gap-2 bg-emerald-50 text-emerald-700 py-2 rounded-lg text-sm font-bold hover:bg-emerald-100 transition-colors"
                                 >
                                     <Phone size={14} />

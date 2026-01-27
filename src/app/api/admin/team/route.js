@@ -30,7 +30,33 @@ export async function POST(req) {
         await dbConnect();
         const session = await getServerSession(authOptions);
 
-        if (!session || session.user.role !== 'admin') {
+        let isAdmin = false;
+
+        // 1. Check NextAuth Session
+        if (session && session.user.role === 'admin') {
+            isAdmin = true;
+        }
+
+        // 2. Check Custom Auth Token (if not already admin)
+        if (!isAdmin) {
+            const { cookies } = await import('next/headers');
+            const jwt = await import('jsonwebtoken');
+            const cookieStore = cookies();
+            const token = cookieStore.get('auth_token');
+
+            if (token) {
+                try {
+                    const decoded = jwt.default.verify(token.value, process.env.JWT_SECRET);
+                    if (decoded.role === 'admin') {
+                        isAdmin = true;
+                    }
+                } catch (err) {
+                    // Token invalid
+                }
+            }
+        }
+
+        if (!isAdmin) {
             return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
 
