@@ -13,20 +13,26 @@ export async function POST(req) {
         const phone = rawPhone.replace(/\D/g, '');
         console.log(`Driver Login Attempt: Raw "${rawPhone}" -> Cleaned "${phone}"`);
 
-        // Find driver by phone (through user relation)
-        // Correct approach: Find User first, then finding linked Driver
-        const user = await User.findOne({ phone });
+        // Search Strategy:
+        // 1. Try to find a User first (for the new system)
+        let user = await User.findOne({ phone });
+        let driver = null;
 
-        console.log('Driver Login - User Search Result:', user ? `Found User: ${user._id}` : 'User Not Found');
-
-        if (!user) {
-            return NextResponse.json({ error: `Driver account not found for number: ${phone}` }, { status: 404 });
+        if (user) {
+            driver = await Driver.findOne({ user: user._id }).populate('user');
         }
 
-        const driver = await Driver.findOne({ user: user._id }).populate('user');
+        // 2. Fallback: If no User found (or User has no linked driver), try finding Driver directly by phone
+        // This handles "Legacy" or "Broken" drivers created before the fix
+        if (!driver) {
+            console.log(`User-linked driver not found. Searching Driver collection directly for ${phone}...`);
+            driver = await Driver.findOne({ phone });
+            // If found here, we should ideally populate 'user' but it might be missing
+        }
 
         if (!driver) {
-            return NextResponse.json({ error: 'Driver profile not found' }, { status: 404 });
+            console.log('Driver Not Found in either collection');
+            return NextResponse.json({ error: `Driver account not found for number: ${phone}` }, { status: 404 });
         }
 
         // Simple PIN verification (in production, use hashed PINs)
