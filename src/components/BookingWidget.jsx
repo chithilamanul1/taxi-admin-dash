@@ -63,6 +63,22 @@ const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours,
     return { total: Math.round(total) };
 };
 
+// Internal Loader Component to avoid hook conflicts
+const GoogleMapsLoader = ({ onLoaded }) => {
+    const { isLoaded } = useJsApiLoader({
+        id: 'google-map-script',
+        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+        libraries,
+        // Removed preventGoogleFontsLoading to match LiveDriverMap options
+    });
+
+    useEffect(() => {
+        if (isLoaded && onLoaded) onLoaded();
+    }, [isLoaded, onLoaded]);
+
+    return null;
+};
+
 const BookingWidget = () => {
     const [activeOffers, setActiveOffers] = useState([]);
     const [appliedOffer, setAppliedOffer] = useState(null);
@@ -101,15 +117,9 @@ const BookingWidget = () => {
     const [isVehicleDrawerOpen, setIsVehicleDrawerOpen] = useState(false)
     const [bookingInitialData, setBookingInitialData] = useState({})
 
-    // Lazy Load Google Maps
-    const [loadScript, setLoadScript] = useState(false);
-
-    const { isLoaded, loadError } = useJsApiLoader({
-        id: 'google-map-script',
-        googleMapsApiKey: loadScript ? process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY : undefined,
-        libraries,
-        preventGoogleFontsLoading: true,
-    });
+    // Lazy Map Loading State
+    const [shouldLoadMap, setShouldLoadMap] = useState(false);
+    const [isMapReady, setIsMapReady] = useState(false);
 
     // Fetch Pricing based on Tab
     useEffect(() => {
@@ -159,7 +169,7 @@ const BookingWidget = () => {
     }, [activeTab])
 
     const handleGetCurrentLocation = () => {
-        setLoadScript(true);
+        setShouldLoadMap(true); // Trigger Load
         if (!navigator.geolocation) return;
         // Trigger Script Load if not loaded
         // However, we can use browser API without google maps script for lat/lon
@@ -172,7 +182,7 @@ const BookingWidget = () => {
                 // To get address name, we need Geocoder.
                 const { latitude, longitude } = pos.coords;
 
-                if (isLoaded) {
+                if (isMapReady) {
                     const geocoder = new window.google.maps.Geocoder();
                     const response = await geocoder.geocode({ location: { lat: latitude, lng: longitude } });
                     if (response.results[0]) {
@@ -196,7 +206,7 @@ const BookingWidget = () => {
 
     // Distance Calculation (Google Directions)
     useEffect(() => {
-        if (isLoaded && pickup.lat && dropoff.lat) {
+        if (isMapReady && pickup.lat && dropoff.lat) {
             const calculateRoute = async () => {
                 try {
                     const directionsService = new window.google.maps.DirectionsService();
@@ -228,7 +238,7 @@ const BookingWidget = () => {
             }
             calculateRoute()
         }
-    }, [isLoaded, pickup, dropoff, waypoints])
+    }, [isMapReady, pickup, dropoff, waypoints])
 
     // Fetch Marketing Offers
     useEffect(() => {
@@ -271,6 +281,9 @@ const BookingWidget = () => {
 
     return (
         <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4">
+            {/* Google Maps Loader (Conditional) */}
+            {shouldLoadMap && <GoogleMapsLoader onLoaded={() => setIsMapReady(true)} />}
+
             {/* Tab Navigation */}
             <div className="flex flex-wrap bg-slate-100 dark:bg-white/5 p-1 rounded-2xl w-full mb-6 md:mb-8 gap-1.5 shadow-sm border border-emerald-900/5" role="tablist">
                 {[
@@ -332,8 +345,8 @@ const BookingWidget = () => {
                                     value={pickupSearch}
                                     icon={MapPin}
                                     disabled={activeTab === 'pickup'}
-                                    isLoaded={isLoaded}
-                                    onFocus={() => setLoadScript(true)}
+                                    isLoaded={isMapReady}
+                                    onFocus={() => setShouldLoadMap(true)}
                                     onChange={(val) => setPickupSearch(val)}
                                     onSelect={(loc) => {
                                         setPickup({ name: loc.address, lat: loc.lat, lon: loc.lng });
@@ -385,8 +398,8 @@ const BookingWidget = () => {
                                                 <LocationInput
                                                     placeholder="Add Stop (Search City)"
                                                     icon={Navigation}
-                                                    isLoaded={isLoaded}
-                                                    onFocus={() => setLoadScript(true)}
+                                                    isLoaded={isMapReady}
+                                                    onFocus={() => setShouldLoadMap(true)}
                                                     onSelect={(loc) => {
                                                         setWaypoints([...waypoints, { name: loc.address, lat: loc.lat, lon: loc.lng }]);
                                                         setWaypointSearches([]);
@@ -421,8 +434,8 @@ const BookingWidget = () => {
                                     value={dropoffSearch}
                                     icon={MapPin}
                                     disabled={activeTab === 'drop'}
-                                    isLoaded={isLoaded}
-                                    onFocus={() => setLoadScript(true)}
+                                    isLoaded={isMapReady}
+                                    onFocus={() => setShouldLoadMap(true)}
                                     onChange={(val) => setDropoffSearch(val)}
                                     onSelect={(loc) => {
                                         setDropoff({ name: loc.address, lat: loc.lat, lon: loc.lng });

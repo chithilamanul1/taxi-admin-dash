@@ -33,7 +33,10 @@ export async function POST(req) {
         const isAdmin = (session?.user?.role === 'admin') || isCustomAdmin;
 
         if (!isAdmin) {
-            return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+            return NextResponse.json({
+                success: false,
+                error: `Unauthorized. Session: ${!!session}, Role: ${session?.user?.role}, Token: ${!!token}, CustomAdmin: ${isCustomAdmin}`
+            }, { status: 401 });
         }
 
         const { recipientType, customEmail, subject, message } = await req.json();
