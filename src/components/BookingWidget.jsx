@@ -111,7 +111,7 @@ const BookingWidget = () => {
     const [hasNameBoard, setHasNameBoard] = useState(false)
     const [couponCode, setCouponCode] = useState('')
     const [isLocating, setIsLocating] = useState(false)
-    const { convertPrice, currency } = useCurrency()
+    const { convertPrice, currency, changeCurrency, SUPPORTED_CURRENCIES } = useCurrency()
 
     const [isBookingOpen, setIsBookingOpen] = useState(false)
     const [isVehicleDrawerOpen, setIsVehicleDrawerOpen] = useState(false)
@@ -626,7 +626,35 @@ const BookingWidget = () => {
                         <div className="lg:border-l lg:border-emerald-900/10 dark:lg:border-white/10 lg:pl-8 flex flex-col justify-between h-full">
 
                             <div className="space-y-6">
-                                <h2 className="text-xl font-bold text-emerald-900 dark:text-white tracking-tight">Trip Summary</h2>
+                                <div className="flex justify-between items-center">
+                                    <h2 className="text-xl font-bold text-emerald-900 dark:text-white tracking-tight">Trip Summary</h2>
+
+                                    {/* Currency Dropdown */}
+                                    <div className="relative group">
+                                        <button
+                                            className="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-emerald-900 dark:text-white hover:bg-emerald-100 dark:hover:bg-white/10 transition-colors"
+                                            aria-label="Select currency"
+                                        >
+                                            <span className="text-emerald-600 dark:text-emerald-400 font-black">{currency}</span>
+                                            <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
+                                        </button>
+                                        <div className="absolute top-full right-0 mt-2 w-32 bg-white dark:bg-slate-900 rounded-xl shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-emerald-900/10 dark:border-slate-800 z-50">
+                                            {SUPPORTED_CURRENCIES.map(c => (
+                                                <button
+                                                    key={c.code}
+                                                    onClick={() => {
+                                                        changeCurrency(c.code);
+                                                        // Optional: re-fetch if needed, but convertPrice handles it visually
+                                                    }}
+                                                    className={`w-full text-left px-4 py-2 hover:bg-emerald-50 dark:hover:bg-white/5 transition-colors text-xs font-bold flex items-center gap-2 ${currency === c.code ? 'text-emerald-900 dark:text-emerald-400 bg-emerald-50 dark:bg-white/5' : 'text-slate-500 dark:text-slate-400'}`}
+                                                >
+                                                    <span className="text-sm">{c.flag}</span>
+                                                    <span>{c.code}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center text-sm">
