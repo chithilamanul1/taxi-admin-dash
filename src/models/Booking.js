@@ -35,8 +35,13 @@ const bookingSchema = new mongoose.Schema({
         default: 'pending'
     },
     driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver' },
-    paymentStatus: { type: String, enum: ['pending', 'paid', 'failed'], default: 'pending' },
+    paymentStatus: { type: String, enum: ['pending', 'paid', 'failed', 'partial'], default: 'pending' },
     paymentMethod: { type: String, enum: ['cash', 'card'], default: 'cash' },
+    paymentType: { type: String, enum: ['full', 'partial'], default: 'full' },
+    currency: { type: String, default: 'LKR' },
+    paidAmount: { type: Number, default: 0 }, // Amount to be paid online
+    balanceAmount: { type: Number, default: 0 }, // Amount filtered to be paid to driver
+    surchargeAmount: { type: Number, default: 0 }, // Added surcharges (convenience/cash fee)
     paymentReference: { type: String },
     paymentTimestamp: { type: Date },
     scheduledDate: { type: String },

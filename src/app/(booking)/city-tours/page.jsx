@@ -1,6 +1,6 @@
-import BookingWidget from '../../components/BookingWidget'
-import Navbar from '../../components/Navbar'
-import Footer from '../../components/Footer'
+import BookingWidget from '@/components/BookingWidget'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 
 export default function CityToursPage() {
     return (

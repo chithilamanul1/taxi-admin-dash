@@ -186,6 +186,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {} }) {
             const customerId = session?.user?.id;
             const isValidObjectId = (id) => typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id);
 
+            // Verify breakdown before sending
+            const { total, payNow, balance, surcharges } = getPriceBreakdown();
+
             // Map form data to Booking model schema
             const bookingData = {
                 customer: isValidObjectId(customerId) ? customerId : null,
@@ -209,7 +212,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {} }) {
                 passengerCount: formData.passengerCount,
                 distanceKm: distance,
                 waitingHours: formData.waitingHours,
-                totalPrice: totalPrice,
+
+                // Detailed Payment Breakdown
+                totalPrice: total,
+                paidAmount: payNow,
+                balanceAmount: balance,
+                surchargeAmount: surcharges,
+                paymentType: formData.paymentType, // 'full' or 'partial'
+                currency: currency || 'LKR',
+
                 scheduledDate: formData.date,
                 scheduledTime: formData.time,
                 customerName: formData.name,

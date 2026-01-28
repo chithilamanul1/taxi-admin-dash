@@ -95,6 +95,16 @@ export default function DriverLogin() {
                             {loading ? <Loader2 size={24} className="animate-spin" /> : <>Login <ChevronRight /></>}
                         </button>
                     </form>
+
+                    <div className="mt-8 text-center border-t border-gray-100 pt-6">
+                        <p className="text-gray-600 mb-2 font-medium">Want to join our fleet?</p>
+                        <button
+                            onClick={() => router.push('/driver/register')}
+                            className="text-emerald-700 font-bold hover:text-emerald-900 hover:underline transition-colors"
+                        >
+                            Register as a Driver
+                        </button>
+                    </div>
                 </div>
                 <div className="bg-slate-50 p-4 text-center text-xs text-gray-400">
                     &copy; 2026 Airport Taxi Tours. Driver App v1.0

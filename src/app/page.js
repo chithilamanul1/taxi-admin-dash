@@ -126,6 +126,42 @@ export default function Home() {
             <ReviewStatsBar />
             <GoogleReviews />
             <RecentPosts />
+            {/* Driver Recruitment CTA - New Addition */}
+            <section className="py-20 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+                <div className="max-w-6xl mx-auto px-6">
+                    <div className="bg-emerald-900 rounded-3xl p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
+                        {/* Background Pattern */}
+                        <div className="absolute inset-0 opacity-10">
+                            <Compass size={400} className="absolute -right-20 -bottom-20 text-white" />
+                        </div>
+
+                        <div className="relative z-10 max-w-xl text-center md:text-left">
+                            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">Are you a Driver?</h2>
+                            <p className="text-emerald-100 text-lg mb-8">
+                                Join our exclusive fleet of professional chauffeurs. Get consistent bookings, fair rates, and become part of Sri Lanka's premium transport network.
+                            </p>
+                            <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+                                <Link href="/driver/register" className="bg-white text-emerald-900 px-8 py-3 rounded-xl font-bold hover:bg-emerald-50 transition-colors inline-flex items-center gap-2">
+                                    Join Our Fleet <ArrowRight size={18} />
+                                </Link>
+                                <Link href="/driver/login" className="px-8 py-3 rounded-xl font-bold text-white border border-emerald-700 hover:bg-emerald-800 transition-colors">
+                                    Driver Login
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* Dashboard Preview Image using placeholder for now */}
+                        <div className="relative z-10 w-full md:w-1/3 aspect-video bg-emerald-800/50 rounded-xl border border-emerald-500/20 backdrop-blur-sm flex items-center justify-center p-6 text-center transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                            <div className="text-emerald-200">
+                                <Star size={48} className="mx-auto mb-2 text-amber-400" />
+                                <h3 className="font-bold text-white">Earn More</h3>
+                                <p className="text-xs mt-1">Accept rides, track earnings, and get paid weekly.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <Features />
         </div>
     )
