@@ -351,9 +351,9 @@ const BookingWidget = () => {
                                 {/* Add Waypoint Search */}
                                 {waypoints.length < 3 && (
                                     <>
-                                        {/* "Add Stop" Button - Visible when no active search */}
+                                        {/* "Add Stop" Button - Aligned with icons */}
                                         {waypointSearches.length === 0 && (
-                                            <div className="flex justify-center transition-all duration-300 py-1">
+                                            <div className="flex justify-start pl-14 py-1">
                                                 <button
                                                     onClick={() => setWaypointSearches([{ active: true }])}
                                                     className="text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center gap-1 hover:bg-emerald-50 dark:hover:bg-white/5 py-1.5 px-3 rounded-lg transition-colors"
@@ -387,11 +387,11 @@ const BookingWidget = () => {
                                     </>
                                 )}
 
-                                {/* Swap Button Visual */}
-                                <div className="flex justify-center -my-3 relative z-10">
+                                {/* Swap Button Visual - Aligned Left */}
+                                <div className="flex justify-end pr-6 -my-5 relative z-10 pointer-events-none">
                                     <button
                                         onClick={swapLocations}
-                                        className="w-8 h-8 bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-white/10 rounded-full flex items-center justify-center hover:scale-110 active:rotate-180 transition-all text-emerald-900 dark:text-white shadow-md"
+                                        className="w-8 h-8 pointer-events-auto bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-white/10 rounded-full flex items-center justify-center hover:scale-110 active:rotate-180 transition-all text-emerald-900 dark:text-white shadow-sm"
                                         aria-label="Swap pickup and dropoff locations"
                                     >
                                         <ArrowRightLeft size={14} />
@@ -418,7 +418,7 @@ const BookingWidget = () => {
                                 <button
                                     onClick={() => setHasNameBoard(!hasNameBoard)}
                                     aria-pressed={hasNameBoard}
-                                    className={`p-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-emerald-900 dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-emerald-900/10 dark:border-white/10 text-emerald-900/60 dark:text-white/60 hover:border-emerald-600/30'}`}
+                                    className={`h-16 px-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-emerald-900 dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-emerald-900/10 dark:border-white/10 text-emerald-900/60 dark:text-white/60 hover:border-emerald-600/30'}`}
                                 >
                                     <div className="flex items-center gap-3">
                                         <Signpost size={18} className={hasNameBoard ? 'text-emerald-600 dark:text-emerald-400' : ''} />
@@ -432,14 +432,14 @@ const BookingWidget = () => {
                                     </div>
                                 </button>
 
-                                <div className="relative h-14 md:h-auto">
-                                    <Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-900/40 dark:text-white/40" size={16} />
+                                <div className="relative h-16">
+                                    <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-900/40 dark:text-white/40" size={18} />
                                     <input
                                         type="text"
                                         placeholder="Coupon Code"
                                         value={couponCode}
                                         onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                        className="w-full h-full pl-12 pr-20 py-4 rounded-2xl bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-xs font-bold outline-none focus:border-emerald-600 dark:focus:border-emerald-500 transition-all uppercase text-emerald-900 dark:text-white placeholder:text-emerald-900/30 dark:placeholder:text-white/30"
+                                        className="w-full h-full pl-14 pr-20 rounded-2xl bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-sm font-bold outline-none focus:border-emerald-600 dark:focus:border-emerald-500 transition-all uppercase text-emerald-900 dark:text-white placeholder:text-emerald-900/30 dark:placeholder:text-white/30"
                                         aria-label="Coupon code"
                                     />
                                     <button
@@ -475,7 +475,7 @@ const BookingWidget = () => {
                                                 alert('Validation failed');
                                             }
                                         }}
-                                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-900 text-white px-3 py-1.5 rounded-xl text-[10px] font-bold hover:bg-emerald-800 transition-all"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-emerald-900 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-800 transition-all"
                                     >
                                         Apply
                                     </button>
