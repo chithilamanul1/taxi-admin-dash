@@ -2,8 +2,17 @@
 const nextConfig = {
     reactStrictMode: true,
     images: {
-        domains: ['localhost'],
-        unoptimized: true, // Temporary, can optimize later
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'images.unsplash.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'lh3.googleusercontent.com', // For Google Reviews/Profiles
+            }
+        ],
+        // unoptimized: true, // Commented out to enable Vercel Image Optimization
     },
     productionBrowserSourceMaps: false, // Security: Disable source maps in production
     // Keep Express backend separate
