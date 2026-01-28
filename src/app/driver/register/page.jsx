@@ -11,14 +11,8 @@ const STEPS = [
     { id: 4, title: 'Bank Info', icon: CreditCard },
 ];
 
-export const metadata = {
-    title: 'Driver Registration | Airport Taxi Tours Sri Lanka',
-    description: 'Join our premium fleet of drivers. Register now to start accepting airport transfer bookings and city tours. Best rates and consistent work.',
-    robots: {
-        index: true,
-        follow: true
-    }
-}
+// Metadata removed to fix "use client" error
+
 
 export default function DriverRegister() {
     const router = useRouter();
