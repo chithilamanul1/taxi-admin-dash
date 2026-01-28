@@ -75,7 +75,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                         <div
                             key={vehicle._id || vehicle.vehicleType}
                             className={`
-                                relative flex-shrink-0 w-[280px] snap-center rounded-2xl border-2 transition-all duration-300
+                                relative flex-shrink-0 w-[300px] snap-center rounded-2xl border-2 transition-all duration-300
                                 ${isSelected ? 'border-emerald-600 bg-emerald-600/5 shadow-xl ring-2 ring-emerald-600/20' : 'border-slate-100 dark:border-white/10 bg-white dark:bg-white/[0.03] shadow-sm hover:border-emerald-200 dark:hover:border-emerald-500/30'}
                                 ${!suitable ? 'opacity-70 grayscale-[0.5]' : 'cursor-pointer'}
                             `}
@@ -91,7 +91,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                 </div>
                             )}
 
-                            <div className="h-32 w-full p-2 bg-slate-50/50 rounded-t-2xl relative">
+                            <div className="h-40 w-full p-4 bg-slate-50/50 rounded-t-2xl relative flex items-center justify-center">
                                 <img
                                     src={vehicle.image}
                                     alt={vehicle.name}
@@ -105,10 +105,16 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                 </button>
                             </div>
 
-                            <div className="p-4">
-                                <div className="flex justify-between items-start mb-3">
-                                    <h4 className="font-black text-emerald-900 dark:text-white uppercase text-sm tracking-wide">{vehicle.name}</h4>
-                                    {suitable && <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${isSelected ? 'border-emerald-600 bg-emerald-600' : 'border-slate-300 dark:border-slate-600'}`}>
+                            <div className="p-5">
+                                <div className="flex justify-between items-start mb-4 h-12">
+                                    <h4 className="font-black text-emerald-900 dark:text-white uppercase text-sm tracking-wide leading-tight">
+                                        {vehicle.name.split('(').map((part, i) => (
+                                            <span key={i} className={i > 0 ? "block text-xs opacity-70 mt-0.5 normal-case" : "block"}>
+                                                {i > 0 ? `(${part}` : part}
+                                            </span>
+                                        ))}
+                                    </h4>
+                                    {suitable && <div className={`shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${isSelected ? 'border-emerald-600 bg-emerald-600' : 'border-slate-300 dark:border-slate-600'}`}>
                                         {isSelected && <div className="w-2 h-2 bg-white rounded-full" />}
                                     </div>}
                                 </div>

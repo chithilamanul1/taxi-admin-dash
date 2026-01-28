@@ -30,7 +30,7 @@ export default async function BlogPage() {
             {/* Hero Section */}
             <div className="bg-emerald-900 py-20">
                 <div className="container mx-auto px-4 text-center text-white">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 uppercase tracking-tight">Travel Chornicles</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4 uppercase tracking-tight">Travel Chronicles</h1>
                     <p className="text-xl text-white/60 max-w-2xl mx-auto">
                         Discover the beauty of Sri Lanka with our curated travel guides and tips.
                     </p>
