@@ -81,7 +81,7 @@ const LocationInput = ({
                 disabled={!ready || disabled}
                 placeholder={placeholder}
                 aria-label={label || placeholder || "Location input"}
-                className={`w-full pl-16 pr-14 h-16 rounded-2xl text-base sm:text-lg font-bold bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-emerald-900 dark:text-white outline-none focus:border-emerald-900 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 dark:focus:ring-emerald-500/10 transition-all placeholder:text-emerald-900/30 dark:placeholder:text-white/30 truncate 
+                className={`w-full pl-16 pr-14 h-16 rounded-2xl text-base sm:text-lg font-bold bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-emerald-900 dark:text-white outline-none focus:border-emerald-900 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 dark:focus:ring-emerald-500/10 transition-all placeholder:text-emerald-900/60 dark:placeholder:text-white/60 truncate 
                 ${disabled ? 'cursor-not-allowed bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-700' : 'group-hover:border-emerald-900/20'}`}
             />
 

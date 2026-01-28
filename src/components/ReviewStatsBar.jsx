@@ -52,6 +52,8 @@ const ReviewStatsBar = () => {
                             <img
                                 src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
                                 alt="Google"
+                                width="32"
+                                height="32"
                                 className="w-8 h-8"
                             />
                         </div>

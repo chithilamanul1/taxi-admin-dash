@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X } from 'lucide-react'
-import _ from 'lodash'
+
 import { useJsApiLoader } from '@react-google-maps/api'
 import ToursWidget from './ToursWidget'
 import RentalsWidget from './RentalsWidget'
@@ -433,7 +433,7 @@ const BookingWidget = () => {
                                 </button>
 
                                 <div className="relative h-16">
-                                    <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-900/40 dark:text-white/40" size={18} />
+                                    <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-900/70 dark:text-white/70" size={18} />
                                     <input
                                         type="text"
                                         placeholder="Coupon Code"
@@ -482,6 +482,41 @@ const BookingWidget = () => {
                                 </div>
                             </div>
 
+                            {/* Date & Time Selection */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="text-[10px] font-bold text-emerald-900/70 dark:text-white/70 uppercase tracking-widest mb-2 block pl-1">Date</label>
+                                    <div className="relative">
+                                        <input
+                                            type="date"
+                                            value={date}
+                                            min={new Date().toISOString().split('T')[0]}
+                                            onChange={(e) => setDate(e.target.value)}
+                                            className="w-full h-16 pl-4 pr-4 bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 rounded-2xl text-emerald-900 dark:text-white font-bold outline-none focus:border-emerald-600 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 transition-all w-full appearance-none"
+                                            aria-label="Pickup Date"
+                                        />
+                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-emerald-900/70 dark:text-white/70">
+                                            <Calendar size={18} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-bold text-emerald-900/70 dark:text-white/70 uppercase tracking-widest mb-2 block pl-1">Time</label>
+                                    <div className="relative">
+                                        <input
+                                            type="time"
+                                            value={time}
+                                            onChange={(e) => setTime(e.target.value)}
+                                            className="w-full h-16 pl-4 pr-4 bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 rounded-2xl text-emerald-900 dark:text-white font-bold outline-none focus:border-emerald-600 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 transition-all w-full appearance-none"
+                                            aria-label="Pickup Time"
+                                        />
+                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-emerald-900/70 dark:text-white/70">
+                                            <Clock size={18} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* Counters Grid */}
                             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                                 {[
@@ -491,7 +526,7 @@ const BookingWidget = () => {
                                     { id: 'bags', label: 'Bags' }
                                 ].map(c => (
                                     <div key={c.id} className="bg-emerald-50 dark:bg-white/[0.03] border border-emerald-900/5 dark:border-white/10 p-2 rounded-xl flex flex-col items-center justify-center transition-colors">
-                                        <span className="text-[9px] font-bold text-emerald-900/40 dark:text-white/40 uppercase tracking-widest mb-2">{c.label}</span>
+                                        <span className="text-[9px] font-bold text-emerald-900/70 dark:text-white/70 uppercase tracking-widest mb-2">{c.label}</span>
                                         <div className="flex items-center gap-3">
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, p[c.id] - 1) }))}
@@ -515,10 +550,11 @@ const BookingWidget = () => {
 
                             {/* Vehicle Selection - Unified for Desktop & Mobile */}
                             <div className="mt-4">
-                                <label className="text-[10px] font-bold text-emerald-900/40 dark:text-white/40 uppercase tracking-widest mb-2 block pl-1">Selected Vehicle</label>
+                                <label className="text-[10px] font-bold text-emerald-900/70 dark:text-white/70 uppercase tracking-widest mb-2 block pl-1">Selected Vehicle</label>
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
                                     className="w-full h-20 px-4 flex items-center justify-between bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 rounded-2xl hover:border-emerald-600 dark:hover:border-emerald-500 hover:shadow-md transition-all group"
+                                    aria-label="Select Vehicle"
                                 >
                                     <div className="flex items-center gap-4">
                                         <div className="w-14 h-12 bg-slate-50 dark:bg-white/10 rounded-xl flex items-center justify-center p-1">

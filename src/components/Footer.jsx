@@ -92,10 +92,10 @@ const Footer = () => {
 
                 {/* Bottom Bar */}
                 <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <p className="text-xs text-white/60 font-medium uppercase tracking-widest">
+                    <p className="text-xs text-white/80 font-medium uppercase tracking-widest">
                         © 2026 Airport Taxis (Pvt) Ltd. All rights reserved.
                     </p>
-                    <a href="https://seranex.org" target="_blank" className="group flex items-center gap-1.5 text-xs text-white/60 font-bold hover:text-white transition-all uppercase tracking-widest">
+                    <a href="https://seranex.org" target="_blank" className="group flex items-center gap-1.5 text-xs text-white/80 font-bold hover:text-white transition-all uppercase tracking-widest">
                         Developed by <span className="text-white">Chithila Manul</span>
                         <ArrowUpRight size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </a>

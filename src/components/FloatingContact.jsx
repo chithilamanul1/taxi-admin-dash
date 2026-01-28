@@ -54,6 +54,7 @@ export default function FloatingContact() {
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center shadow-2xl transition-all duration-500 hover:scale-105 active:scale-95 ${isOpen ? 'bg-white text-emerald-900 rotate-90 border border-emerald-900/10' : 'bg-emerald-900 text-white shadow-[0_15px_40px_-10px_rgba(6,78,59,0.4)]'}`}
+                aria-label={isOpen ? "Close contact menu" : "Open contact menu"}
             >
                 {isOpen ? <X size={28} /> : (
                     <div className="relative">

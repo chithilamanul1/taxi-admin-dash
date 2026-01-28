@@ -100,9 +100,23 @@ import SiteProtection from '../components/SiteProtection'
 
 // ... existing imports
 
+import { Inter, Montserrat } from 'next/font/google'
+
+const inter = Inter({
+    subsets: ['latin'],
+    variable: '--font-inter',
+    display: 'swap',
+})
+
+const montserrat = Montserrat({
+    subsets: ['latin'],
+    variable: '--font-montserrat',
+    display: 'swap',
+})
+
 export default function RootLayout({ children }) {
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en" suppressHydrationWarning className={`${inter.variable} ${montserrat.variable}`}>
             <head>
                 <script
                     type="application/ld+json"

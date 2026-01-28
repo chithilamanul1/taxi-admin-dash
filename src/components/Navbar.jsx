@@ -46,7 +46,7 @@ export default function Navbar() {
                     <div className="relative h-12 w-12 overflow-hidden bg-emerald-900/5 dark:bg-white/10 rounded-xl p-2 border border-emerald-900/10 dark:border-white/10 group-hover:scale-110 transition-transform">
                         <Image
                             src="/logo.png"
-                            alt="Airport Taxis"
+                            alt=""
                             fill
                             className="object-contain p-1"
                             sizes="48px"
@@ -108,6 +108,7 @@ export default function Navbar() {
                     <a
                         href="tel:+94722885885"
                         className="flex items-center gap-3 px-6 py-3 bg-emerald-900 text-white rounded-xl font-bold text-sm hover:scale-105 transition-all shadow-lg"
+                        aria-label="Call Specialist at +94 722 885 885"
                     >
                         <Phone size={16} />
                         0722 885 885

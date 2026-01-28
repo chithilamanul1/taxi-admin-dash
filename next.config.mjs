@@ -14,7 +14,7 @@ const nextConfig = {
         ],
         // unoptimized: true, // Commented out to enable Vercel Image Optimization
     },
-    productionBrowserSourceMaps: false, // Security: Disable source maps in production
+    productionBrowserSourceMaps: true, // Enabled for debugging/Lighthouse insights
     // Keep Express backend separate
     /*
     async rewrites() {
