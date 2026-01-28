@@ -1,5 +1,6 @@
 import dbConnect from '@/lib/db';
 import Post from '@/models/Post';
+import { destinations } from '@/lib/destinations';
 
 export const revalidate = 3600; // Revalidate every hour
 
@@ -31,5 +32,12 @@ export default async function sitemap() {
         { url: 'https://airporttaxis.lk/rates', lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
     ];
 
-    return [...staticRoutes, ...blogUrls];
+    const destinationUrls = destinations.map((dest) => ({
+        url: `https://airporttaxis.lk/destination/${dest.id}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.8,
+    }));
+
+    return [...staticRoutes, ...blogUrls, ...destinationUrls];
 }

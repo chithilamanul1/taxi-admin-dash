@@ -84,6 +84,15 @@ const jsonLd = {
         opens: '00:00',
         closes: '23:59',
     },
+    aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.9',
+        reviewCount: '150',
+    },
+    sameAs: [
+        'https://www.facebook.com/airporttaxistours',
+        'https://www.instagram.com/airporttaxistours',
+    ],
 }
 
 import { CurrencyProvider } from '../context/CurrencyContext'

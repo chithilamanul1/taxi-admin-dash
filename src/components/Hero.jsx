@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const heroImages = [
@@ -32,12 +33,19 @@ const Hero = ({ onBookClick }) => {
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-900/60 to-transparent pointer-events-none z-10"></div>
                 {heroImages.map((image, index) => (
-                    <img
+                    <div
                         key={index}
-                        src={image.src}
-                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
-                        alt={image.alt}
-                    />
+                        className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+                    >
+                        <Image
+                            src={image.src}
+                            alt={image.alt}
+                            fill
+                            priority={index === 0} // Prioritize the first image for LCP
+                            className="object-cover"
+                            quality={85}
+                        />
+                    </div>
                 ))}
             </div>
 
