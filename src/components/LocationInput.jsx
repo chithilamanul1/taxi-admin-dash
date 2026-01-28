@@ -80,6 +80,7 @@ const LocationInput = ({
                 onChange={handleInput}
                 disabled={!ready || disabled}
                 placeholder={placeholder}
+                aria-label={label || placeholder || "Location input"}
                 className={`w-full pl-16 pr-14 h-16 rounded-2xl text-base sm:text-lg font-bold bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-emerald-900 dark:text-white outline-none focus:border-emerald-900 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 dark:focus:ring-emerald-500/10 transition-all placeholder:text-emerald-900/30 dark:placeholder:text-white/30 truncate 
                 ${disabled ? 'cursor-not-allowed bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-700' : 'group-hover:border-emerald-900/20'}`}
             />
@@ -89,6 +90,7 @@ const LocationInput = ({
                 <button
                     onClick={() => { setValue("", false); clearSuggestions(); if (onChange) onChange(""); }}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-red-500 p-2"
+                    aria-label="Clear location"
                 >
                     <X size={16} />
                 </button>

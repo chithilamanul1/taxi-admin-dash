@@ -23,10 +23,10 @@ const Footer = () => {
                                 <span className="text-2xl font-black tracking-tighter">
                                     AIRPORT <span className="text-emerald-400">TAXIS</span>
                                 </span>
-                                <span className="text-[10px] font-bold text-emerald-400/70 uppercase tracking-widest">Sri Lanka (Pvt) Ltd</span>
+                                <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest opacity-80">Sri Lanka (Pvt) Ltd</span>
                             </div>
                         </div>
-                        <p className="text-white/60 max-w-md leading-relaxed">
+                        <p className="text-white/80 max-w-md leading-relaxed">
                             Redefining transportation in Sri Lanka through professional excellence,
                             premium comfort, and unwavering reliability. Your trusted partner for
                             airport transfers and curated tours.

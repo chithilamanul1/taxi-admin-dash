@@ -53,10 +53,18 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                     </span>
                 </h3>
                 <div className="flex gap-2">
-                    <button onClick={() => scroll('left')} className="p-2 rounded-full border border-emerald-900/10 hover:bg-emerald-50 text-emerald-900 transition-colors">
+                    <button
+                        onClick={() => scroll('left')}
+                        className="p-2 rounded-full border border-emerald-900/10 hover:bg-emerald-50 text-emerald-900 transition-colors"
+                        aria-label="Scroll left"
+                    >
                         <ChevronLeft size={16} />
                     </button>
-                    <button onClick={() => scroll('right')} className="p-2 rounded-full border border-emerald-900/10 hover:bg-emerald-50 text-emerald-900 transition-colors">
+                    <button
+                        onClick={() => scroll('right')}
+                        className="p-2 rounded-full border border-emerald-900/10 hover:bg-emerald-50 text-emerald-900 transition-colors"
+                        aria-label="Scroll right"
+                    >
                         <ChevronRight size={16} />
                     </button>
                 </div>
@@ -95,11 +103,14 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                 <img
                                     src={vehicle.image}
                                     alt={vehicle.name}
-                                    className="w-full h-full object-contain mix-blend-multiply"
+                                    width={200}
+                                    height={120}
+                                    className="w-auto h-full object-contain mix-blend-multiply"
                                 />
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setDetailVehicle(vehicle); }}
                                     className="absolute top-3 right-3 p-1.5 bg-white rounded-full shadow-sm text-emerald-900/40 hover:text-emerald-600 hover:scale-110 transition-all z-20"
+                                    aria-label={`View details for ${vehicle.name}`}
                                 >
                                     <Info size={16} />
                                 </button>

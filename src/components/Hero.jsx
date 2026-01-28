@@ -44,7 +44,7 @@ const Hero = ({ onBookClick }) => {
                             priority={index === 0} // Prioritize the first image for LCP
                             sizes="(max-width: 768px) 100vw, 100vw"
                             className="object-cover"
-                            quality={85}
+                            quality={60}
                         />
                     </div>
                 ))}
