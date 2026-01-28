@@ -11,12 +11,7 @@ export const destinations = [
         distance: "150 km",
         time: "2.5 hours",
         highlights: ["Whale Watching", "Coconut Tree Hill", "Secret Beach", "Surfing"],
-        pricing: {
-            "Mini Car": 59,
-            "Sedan": 65,
-            "Mini Van": 75,
-            "KDH Van": 85
-        }
+        pricing: { "Mini Car": 59, "Sedan": 65, "Mini Van": 75, "KDH Van": 85 }
     },
     {
         id: 'ella',
@@ -30,12 +25,7 @@ export const destinations = [
         distance: "210 km",
         time: "4.5 hours",
         highlights: ["Nine Arch Bridge", "Little Adam's Peak", "Ella Rock", "Ravana Falls"],
-        pricing: {
-            "Mini Car": 110,
-            "Sedan": 120,
-            "Mini Van": 135,
-            "KDH Van": 150
-        }
+        pricing: { "Mini Car": 110, "Sedan": 120, "Mini Van": 135, "KDH Van": 150 }
     },
     {
         id: 'sigiriya',
@@ -45,15 +35,192 @@ export const destinations = [
         badge: "Historic",
         img: "/sigiriya.jpg",
         meta: "Ancient Rock Fortress",
-        description: "Sigiriya or Sinhagiri is an ancient rock fortress located in the northern Matale District near the town of Dambulla in the Central Province, Sri Lanka. It is a site of historical and archaeological significance that is dominated by a massive column of rock around 180 metres high.",
+        description: "Sigiriya is an ancient rock fortress dominated by a massive column of rock nearly 200 meters high. It is a UNESCO World Heritage Site and the 8th Wonder of the World.",
         distance: "150 km",
         time: "3.5 hours",
         highlights: ["Sigiriya Lion Rock", "Pidurangala Rock", "Minneriya National Park", "Village Tour"],
-        pricing: {
-            "Mini Car": 90,
-            "Sedan": 100,
-            "Mini Van": 115,
-            "KDH Van": 130
-        }
+        pricing: { "Mini Car": 90, "Sedan": 100, "Mini Van": 115, "KDH Van": 130 }
+    },
+    {
+        id: 'kandy',
+        title: "Airport to Kandy",
+        name: "Kandy",
+        price: 65,
+        badge: "Cultural Capital",
+        img: "/destinations/kandy.jpg",
+        meta: "Hill Country Capital",
+        description: "Kandy is a large city in central Sri Lanka. It's set on a plateau surrounded by mountains, which are home to tea plantations and biodiverse rainforest. The city's heart is scenic Kandy Lake (Bogambara Lake).",
+        distance: "103 km",
+        time: "3 hours",
+        highlights: ["Temple of the Tooth", "Kandy Lake", "Botanical Gardens", "Cultural Dance"],
+        pricing: { "Mini Car": 65, "Sedan": 70, "Mini Van": 85, "KDH Van": 95 }
+    },
+    {
+        id: 'galle',
+        title: "Airport to Galle",
+        name: "Galle",
+        price: 55,
+        badge: "UNESCO Site",
+        img: "/destinations/galle.jpg",
+        meta: "Colonial Fort City",
+        description: "Galle is a city on the southwest coast of Sri Lanka. It's known for Galle Fort, the fortified old city founded by Portuguese colonists in the 16th century. Stone sea walls, expanded by the Dutch, encircle car-free streets.",
+        distance: "145 km",
+        time: "2 hours",
+        highlights: ["Galle Fort", "Lighthouse", "Dutch Museum", "Unawatuna Beach"],
+        pricing: { "Mini Car": 55, "Sedan": 60, "Mini Van": 75, "KDH Van": 85 }
+    },
+    {
+        id: 'arugambay',
+        title: "Airport to Arugam Bay",
+        name: "Arugam Bay",
+        price: 180,
+        badge: "Surfing Paradise",
+        img: "/destinations/arugambay.jpg",
+        meta: "East Coast Vibes",
+        description: "Arugam Bay is a bay on the Indian Ocean in the dry zone of Sri Lanka's southeast coast, and a historic settlement of the ancient Batticaloa Territory. It is a world-famous surfing destination.",
+        distance: "320 km",
+        time: "6.5 hours",
+        highlights: ["Surfing Points", "Elephant Rock", "Kumana National Park", "Lagoon Safari"],
+        pricing: { "Mini Car": 180, "Sedan": 195, "Mini Van": 210, "KDH Van": 230 }
+    },
+    {
+        id: 'bentota',
+        title: "Airport to Bentota",
+        name: "Bentota",
+        price: 45,
+        badge: "Water Sports",
+        img: "/destinations/bentota.jpg",
+        meta: "Golden Mile Beach",
+        description: "Bentota is a resort town on Sri Lanka’s southwest coast. Its long Bentota Beach stretches north, where it becomes a sandy strip known as Paradise Island, parallel to Bentota Lagoon.",
+        distance: "100 km",
+        time: "1.5 hours",
+        highlights: ["River Safari", "Brief Garden", "Water Sports", "Turtle Hatchery"],
+        pricing: { "Mini Car": 45, "Sedan": 50, "Mini Van": 65, "KDH Van": 75 }
+    },
+    {
+        id: 'hikkaduwa',
+        title: "Airport to Hikkaduwa",
+        name: "Hikkaduwa",
+        price: 50,
+        badge: "Coral Sanctuary",
+        img: "/destinations/hikkaduwa.jpg",
+        meta: "Party & Dive",
+        description: "Hikkaduwa is a seaside resort town in southwestern Sri Lanka. It’s known for its strong surf and beaches, including Hikkaduwa Beach, dotted with palm trees and lined with restaurants and bars.",
+        distance: "135 km",
+        time: "2 hours",
+        highlights: ["Coral Reef Snorkeling", "Turtle Hatchery", "Surfing", "Nightlife"],
+        pricing: { "Mini Car": 50, "Sedan": 55, "Mini Van": 70, "KDH Van": 80 }
+    },
+    {
+        id: 'unawatuna',
+        title: "Airport to Unawatuna",
+        name: "Unawatuna",
+        price: 58,
+        badge: "Beach Lovers",
+        img: "/destinations/unawatuna.jpg",
+        meta: "Horseshoe Bay",
+        description: "Unawatuna is a coastal town in Galle district of Sri Lanka. Unawatuna is a major tourist attraction in Sri Lanka and known for its beach and corals.",
+        distance: "150 km",
+        time: "2.5 hours",
+        highlights: ["Jungle Beach", "Japanese Peace Pagoda", "Beach Parties", "Diving"],
+        pricing: { "Mini Car": 58, "Sedan": 65, "Mini Van": 78, "KDH Van": 88 }
+    },
+    {
+        id: 'anuradhapura',
+        title: "Airport to Anuradhapura",
+        name: "Anuradhapura",
+        price: 95,
+        badge: "Ancient Capital",
+        img: "/destinations/anuradhapura.jpg",
+        meta: "Sacred City",
+        description: "Anuradhapura, a UNESCO World Heritage Site, was the center of Theravada Buddhism for many centuries. It is one of the oldest continuously inhabited cities in the world.",
+        distance: "170 km",
+        time: "3.5 hours",
+        highlights: ["Sri Maha Bodhi", "Ruwanwelisaya", "Isurumuniya", "Mihintale"],
+        pricing: { "Mini Car": 95, "Sedan": 105, "Mini Van": 120, "KDH Van": 135 }
+    },
+    {
+        id: 'nuwaraeliya',
+        title: "Airport to Nuwara Eliya",
+        name: "Nuwara Eliya",
+        price: 105,
+        badge: "Little England",
+        img: "/destinations/nuwaraeliya.jpg",
+        meta: "Tea Country",
+        description: "Nuwara Eliya is a city in the tea country hills of central Sri Lanka. The naturally landscaped Hakgala Botanical Gardens displays roses and tree ferns, and shelters monkeys and blue magpies.",
+        distance: "160 km",
+        time: "4.5 hours",
+        highlights: ["Tea Plantations", "Gregory Lake", "Horton Plains", "Victoria Park"],
+        pricing: { "Mini Car": 105, "Sedan": 115, "Mini Van": 130, "KDH Van": 145 }
+    },
+    {
+        id: 'yala',
+        title: "Airport to Yala / Tissa",
+        name: "Yala",
+        price: 135,
+        badge: "Safari Adventure",
+        img: "/destinations/yala.jpg",
+        meta: "Leopard Kingdom",
+        description: "Yala National Park is a huge area of forest, grassland and lagoons bordering the Indian Ocean, in southeast Sri Lanka. It’s home to wildlife such as leopards, elephants and crocodiles.",
+        distance: "245 km",
+        time: "4 hours",
+        highlights: ["Safari Game Drive", "Sithulpawwa Rock", "Camping", "Bird Watching"],
+        pricing: { "Mini Car": 135, "Sedan": 145, "Mini Van": 160, "KDH Van": 175 }
+    },
+    {
+        id: 'trincomalee',
+        title: "Airport to Trincomalee",
+        name: "Trincomalee",
+        price: 160,
+        badge: "East Coast Gem",
+        img: "/destinations/trincomalee.jpg",
+        meta: "Nilaveli Beach",
+        description: "Trincomalee is a port city on the northeast coast of Sri Lanka. Set on a peninsula, Fort Frederick was built by the Portuguese in the 17th century.",
+        distance: "235 km",
+        time: "5 hours",
+        highlights: ["Nilaveli Beach", "Pigeon Island", "Koneswaram Temple", "Marble Beach"],
+        pricing: { "Mini Car": 160, "Sedan": 170, "Mini Van": 190, "KDH Van": 210 }
+    },
+    {
+        id: 'pasikudah',
+        title: "Airport to Pasikudah",
+        name: "Pasikudah",
+        price: 175,
+        badge: "Luxury Beach",
+        img: "/destinations/pasikudah.jpg",
+        meta: "Shallow Waters",
+        description: "Pasikudah is a coastal resort town located about 35 kilometers northwest of Batticaloa, Batticaloa District, Sri Lanka. It used to be a popular tourist destination.",
+        distance: "265 km",
+        time: "5.5 hours",
+        highlights: ["Pasikudah Beach", "Kalkudah Beach", "Luxury Resorts", "Water Sports"],
+        pricing: { "Mini Car": 175, "Sedan": 185, "Mini Van": 200, "KDH Van": 220 }
+    },
+    {
+        id: 'tangalle',
+        title: "Airport to Tangalle",
+        name: "Tangalle",
+        price: 130,
+        badge: "Deep South",
+        img: "/destinations/tangalle.jpg",
+        meta: "Secluded Beaches",
+        description: "Tangalle is a large town in Hambantota District, Southern Province, Sri Lanka. It is known for its extensive stretches of wide, tropical beaches.",
+        distance: "200 km",
+        time: "3 hours",
+        highlights: ["Goyambokka Beach", "Turtle Watch", "Mulkirigala Temple", "Lagoon Kayaking"],
+        pricing: { "Mini Car": 130, "Sedan": 140, "Mini Van": 160, "KDH Van": 175 }
+    },
+    {
+        id: 'wilpattu',
+        title: "Airport to Wilpattu",
+        name: "Wilpattu",
+        price: 95,
+        badge: "Jungle Safari",
+        img: "/destinations/wilpattu.jpg",
+        meta: "Land of Lakes",
+        description: "Wilpattu National Park is a park located on the island of Sri Lanka. The unique feature of this park is the existence of 'Willus' (Natural lakes).",
+        distance: "140 km",
+        time: "3 hours",
+        highlights: ["Safari", "Leopards & Bears", "Camping", "Nature Trails"],
+        pricing: { "Mini Car": 95, "Sedan": 105, "Mini Van": 120, "KDH Van": 135 }
     }
 ];
