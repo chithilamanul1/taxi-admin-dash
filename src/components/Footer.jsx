@@ -32,8 +32,17 @@ const Footer = () => {
                             airport transfers and curated tours.
                         </p>
                         <div className="flex gap-4">
-                            {[Facebook, Instagram, Twitter].map((Icon, i) => (
-                                <a key={i} href="#" className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-emerald-400 hover:text-emerald-900 transition-all border border-white/5">
+                            {[
+                                { Icon: Facebook, label: "Facebook" },
+                                { Icon: Instagram, label: "Instagram" },
+                                { Icon: Twitter, label: "Twitter" }
+                            ].map(({ Icon, label }, i) => (
+                                <a
+                                    key={i}
+                                    href="#"
+                                    className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-emerald-400 hover:text-emerald-900 transition-all border border-white/5"
+                                    aria-label={`Visit our ${label} page`}
+                                >
                                     <Icon size={20} />
                                 </a>
                             ))}

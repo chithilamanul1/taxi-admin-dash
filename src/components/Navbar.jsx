@@ -82,7 +82,10 @@ export default function Navbar() {
 
                     {/* Currency Selector */}
                     <div className="relative group">
-                        <button className={`flex items-center gap-2 text-sm font-bold transition-colors px-4 py-2 rounded-xl border ${needsSolidBg ? 'text-emerald-900 border-emerald-900/10 bg-emerald-900/5' : 'text-white border-white/20 bg-emerald-900/40 backdrop-blur-sm'}`}>
+                        <button
+                            className={`flex items-center gap-2 text-sm font-bold transition-colors px-4 py-2 rounded-xl border ${needsSolidBg ? 'text-emerald-900 border-emerald-900/10 bg-emerald-900/5' : 'text-white border-white/20 bg-emerald-900/40 backdrop-blur-sm'}`}
+                            aria-label="Select currency"
+                        >
                             <Globe size={14} className="text-emerald-400" />
                             <span>{currency}</span>
                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
@@ -160,6 +163,8 @@ export default function Navbar() {
                 <button
                     className={`lg:hidden w-10 h-10 flex items-center justify-center rounded-xl border transition-all ${needsSolidBg ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+                    aria-expanded={isMobileMenuOpen}
                 >
                     {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>

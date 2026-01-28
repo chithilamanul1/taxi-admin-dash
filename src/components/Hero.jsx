@@ -31,7 +31,7 @@ const Hero = ({ onBookClick }) => {
         <section className="relative min-h-[90vh] flex items-center justify-center pt-32 pb-20 md:pb-40 overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors">
             {/* Background Slideshow */}
             <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-900/60 to-transparent pointer-events-none z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/95 via-emerald-900/70 to-black/30 pointer-events-none z-10"></div>
                 {heroImages.map((image, index) => (
                     <div
                         key={index}
@@ -42,6 +42,7 @@ const Hero = ({ onBookClick }) => {
                             alt={image.alt}
                             fill
                             priority={index === 0} // Prioritize the first image for LCP
+                            sizes="(max-width: 768px) 100vw, 100vw"
                             className="object-cover"
                             quality={85}
                         />
@@ -51,10 +52,18 @@ const Hero = ({ onBookClick }) => {
 
             {/* Slideshow Navigation */}
             <div className="absolute bottom-32 right-10 z-20 flex items-center gap-4 hidden md:flex">
-                <button onClick={prevSlide} className="p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10">
+                <button
+                    onClick={prevSlide}
+                    className="p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+                    aria-label="Previous slide"
+                >
                     <ChevronLeft size={24} />
                 </button>
-                <button onClick={nextSlide} className="p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10">
+                <button
+                    onClick={nextSlide}
+                    className="p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+                    aria-label="Next slide"
+                >
                     <ChevronRight size={24} />
                 </button>
             </div>

@@ -340,6 +340,7 @@ const BookingWidget = () => {
                                         <button
                                             onClick={() => setWaypoints(prev => prev.filter((_, i) => i !== idx))}
                                             className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-red-500 transition-colors p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+                                            aria-label="Remove stop"
                                         >
                                             <X size={16} />
                                         </button>
@@ -377,6 +378,7 @@ const BookingWidget = () => {
                                                 <button
                                                     onClick={() => setWaypointSearches([])}
                                                     className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-red-500 z-30"
+                                                    aria-label="Cancel add stop"
                                                 >
                                                     <X size={16} />
                                                 </button>
@@ -387,7 +389,11 @@ const BookingWidget = () => {
 
                                 {/* Swap Button Visual */}
                                 <div className="flex justify-center -my-3 relative z-10">
-                                    <button onClick={swapLocations} className="w-8 h-8 bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-white/10 rounded-full flex items-center justify-center hover:scale-110 active:rotate-180 transition-all text-emerald-900 dark:text-white shadow-md">
+                                    <button
+                                        onClick={swapLocations}
+                                        className="w-8 h-8 bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-white/10 rounded-full flex items-center justify-center hover:scale-110 active:rotate-180 transition-all text-emerald-900 dark:text-white shadow-md"
+                                        aria-label="Swap pickup and dropoff locations"
+                                    >
                                         <ArrowRightLeft size={14} />
                                     </button>
                                 </div>
@@ -411,6 +417,7 @@ const BookingWidget = () => {
                             <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                                 <button
                                     onClick={() => setHasNameBoard(!hasNameBoard)}
+                                    aria-pressed={hasNameBoard}
                                     className={`p-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-emerald-900 dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-emerald-900/10 dark:border-white/10 text-emerald-900/60 dark:text-white/60 hover:border-emerald-600/30'}`}
                                 >
                                     <div className="flex items-center gap-3">
@@ -433,6 +440,7 @@ const BookingWidget = () => {
                                         value={couponCode}
                                         onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                                         className="w-full h-full pl-12 pr-20 py-4 rounded-2xl bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-xs font-bold outline-none focus:border-emerald-600 dark:focus:border-emerald-500 transition-all uppercase text-emerald-900 dark:text-white placeholder:text-emerald-900/30 dark:placeholder:text-white/30"
+                                        aria-label="Coupon code"
                                     />
                                     <button
                                         onClick={async () => {
@@ -485,11 +493,19 @@ const BookingWidget = () => {
                                     <div key={c.id} className="bg-emerald-50 dark:bg-white/[0.03] border border-emerald-900/5 dark:border-white/10 p-2 rounded-xl flex flex-col items-center justify-center transition-colors">
                                         <span className="text-[9px] font-bold text-emerald-900/40 dark:text-white/40 uppercase tracking-widest mb-2">{c.label}</span>
                                         <div className="flex items-center gap-3">
-                                            <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, p[c.id] - 1) }))} className="w-6 h-6 rounded-lg bg-white dark:bg-white/10 border border-emerald-900/10 dark:border-white/10 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-white/20 transition-colors text-emerald-900 dark:text-white">
+                                            <button
+                                                onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, p[c.id] - 1) }))}
+                                                className="w-6 h-6 rounded-lg bg-white dark:bg-white/10 border border-emerald-900/10 dark:border-white/10 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-white/20 transition-colors text-emerald-900 dark:text-white"
+                                                aria-label={`Decrease ${c.label}`}
+                                            >
                                                 <Minus size={10} />
                                             </button>
-                                            <span className="font-extrabold text-sm text-emerald-900 dark:text-white min-w-[12px] text-center">{passengerCount[c.id]}</span>
-                                            <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: p[c.id] + 1 }))} className="w-6 h-6 rounded-lg bg-white dark:bg-white/10 border border-emerald-900/10 dark:border-white/10 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-white/20 transition-colors text-emerald-900 dark:text-white">
+                                            <span className="font-extrabold text-sm text-emerald-900 dark:text-white min-w-[12px] text-center" aria-live="polite">{passengerCount[c.id]}</span>
+                                            <button
+                                                onClick={() => setPassengerCount(p => ({ ...p, [c.id]: p[c.id] + 1 }))}
+                                                className="w-6 h-6 rounded-lg bg-white dark:bg-white/10 border border-emerald-900/10 dark:border-white/10 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-white/20 transition-colors text-emerald-900 dark:text-white"
+                                                aria-label={`Increase ${c.label}`}
+                                            >
                                                 <Plus size={10} />
                                             </button>
                                         </div>
