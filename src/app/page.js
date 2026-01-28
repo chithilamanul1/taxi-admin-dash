@@ -9,6 +9,7 @@ import Features from '../components/Features'
 import BookingModal from '../components/BookingModal'
 import BookingWidget from '../components/BookingWidget'
 import GoogleReviews from '../components/GoogleReviews'
+import ReviewStatsBar from '../components/ReviewStatsBar'
 import RecentPosts from '../components/RecentPosts'
 import SpecialOffersSection from '../components/SpecialOffersSection'
 
@@ -122,6 +123,7 @@ export default function Home() {
                 </div>
             </section>
 
+            <ReviewStatsBar />
             <GoogleReviews />
             <RecentPosts />
             <Features />
