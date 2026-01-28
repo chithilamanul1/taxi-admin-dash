@@ -96,7 +96,6 @@ const jsonLd = {
 }
 
 import { CurrencyProvider } from '../context/CurrencyContext'
-import SiteProtection from '../components/SiteProtection'
 
 // ... existing imports
 
@@ -131,7 +130,6 @@ export default function RootLayout({ children }) {
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                     <AuthProvider>
                         <CurrencyProvider>
-                            <SiteProtection />
                             <Navbar />
                             <main>{children}</main>
                             <FloatingContact />

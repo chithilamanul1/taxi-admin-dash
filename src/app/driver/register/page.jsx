@@ -14,6 +14,7 @@ const STEPS = [
 // Metadata removed to fix "use client" error
 
 
+
 export default function DriverRegister() {
     const router = useRouter();
     const [step, setStep] = useState(1);
