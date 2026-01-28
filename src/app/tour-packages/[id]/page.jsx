@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Check, Phone, MessageCircle, MapPin, Clock, Calendar, ArrowLeft } from 'lucide-react'
+import { Check, Phone, MessageCircle, MapPin, Clock, Calendar, ArrowLeft, Plus, Minus } from 'lucide-react'
 import { tourPackages } from '../../../data/tours-data'
 import { useState } from 'react'
 
@@ -15,6 +15,7 @@ export default function TourPackageDetails() {
     const tour = tourPackages.find(t => t.id === id) || tourPackages.find(t => t.title.includes(decodeURIComponent(id || '')))
 
     const [activeDay, setActiveDay] = useState(1)
+    const [memberCount, setMemberCount] = useState({ adults: 2, children: 0 })
 
     if (!tour) {
         return (
@@ -154,14 +155,61 @@ export default function TourPackageDetails() {
                             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-800/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-emerald-700/20 transition-colors" />
 
                             <h3 className="text-2xl font-bold text-white mb-2 relative z-10">Book This Tour</h3>
-                            <p className="text-emerald-200 mb-8 text-sm relative z-10">Contact our travel specialists to customize and book your perfect trip.</p>
+                            <p className="text-emerald-200 mb-6 text-sm relative z-10">Customize your trip with our travel specialists.</p>
+
+                            {/* Member Selection */}
+                            <div className="bg-emerald-800/50 rounded-xl p-4 mb-6 relative z-10 backdrop-blur-sm border border-emerald-700/30">
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-emerald-100 font-medium text-sm">Adults</span>
+                                        <div className="flex items-center gap-3 bg-emerald-900/50 rounded-lg p-1 border border-emerald-700/50">
+                                            <button
+                                                onClick={() => setMemberCount(prev => ({ ...prev, adults: Math.max(1, prev.adults - 1) }))}
+                                                className="w-8 h-8 flex items-center justify-center text-white hover:bg-emerald-700 rounded-md transition-colors"
+                                            >
+                                                <Minus size={14} />
+                                            </button>
+                                            <span className="text-white font-bold w-4 text-center">{memberCount.adults}</span>
+                                            <button
+                                                onClick={() => setMemberCount(prev => ({ ...prev, adults: prev.adults + 1 }))}
+                                                className="w-8 h-8 flex items-center justify-center text-white hover:bg-emerald-700 rounded-md transition-colors"
+                                            >
+                                                <Plus size={14} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-emerald-100 font-medium text-sm">Children</span>
+                                        <div className="flex items-center gap-3 bg-emerald-900/50 rounded-lg p-1 border border-emerald-700/50">
+                                            <button
+                                                onClick={() => setMemberCount(prev => ({ ...prev, children: Math.max(0, prev.children - 1) }))}
+                                                className="w-8 h-8 flex items-center justify-center text-white hover:bg-emerald-700 rounded-md transition-colors"
+                                            >
+                                                <Minus size={14} />
+                                            </button>
+                                            <span className="text-white font-bold w-4 text-center">{memberCount.children}</span>
+                                            <button
+                                                onClick={() => setMemberCount(prev => ({ ...prev, children: prev.children + 1 }))}
+                                                className="w-8 h-8 flex items-center justify-center text-white hover:bg-emerald-700 rounded-md transition-colors"
+                                            >
+                                                <Plus size={14} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div className="space-y-4 relative z-10">
-                                <a href="https://wa.me/+94716885880" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 w-full py-4 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl font-bold shadow-lg shadow-emerald-900/20 transition-all hover:scale-[1.02]">
-                                    <MessageCircle size={20} /> WhatsApp Us
+                                <a
+                                    href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking the "${tour.title}".\n\nPax: ${memberCount.adults} Adults, ${memberCount.children} Children\nPlease provide availability and a quote.`)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-center gap-3 w-full py-4 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl font-bold shadow-lg shadow-emerald-900/20 transition-all hover:scale-[1.02]"
+                                >
+                                    <MessageCircle size={20} /> WhatsApp Quote
                                 </a>
                                 <a href="tel:+94716885880" className="flex items-center justify-center gap-3 w-full py-4 bg-white hover:bg-slate-50 text-emerald-950 rounded-xl font-bold shadow-lg shadow-emerald-900/20 transition-all hover:scale-[1.02]">
-                                    <Phone size={20} /> Call Now
+                                    <Phone size={20} /> Direct Call
                                 </a>
                             </div>
                         </div>
