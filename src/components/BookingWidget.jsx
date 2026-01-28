@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X } from 'lucide-react'
 
+import Image from 'next/image'
 import { useJsApiLoader } from '@react-google-maps/api'
 import ToursWidget from './ToursWidget'
 import RentalsWidget from './RentalsWidget'
@@ -14,7 +15,7 @@ import LocationInput from './LocationInput'
 
 const libraries = ['places'];
 
-// ...
+// ... (calculatePrice helper remains same)
 
 // Helper to calculate price
 const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, couponCode) => {
@@ -100,11 +101,15 @@ const BookingWidget = () => {
     const [isVehicleDrawerOpen, setIsVehicleDrawerOpen] = useState(false)
     const [bookingInitialData, setBookingInitialData] = useState({})
 
+    // Lazy Load Google Maps
+    const [loadScript, setLoadScript] = useState(false);
+
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-        libraries
-    })
+        googleMapsApiKey: loadScript ? process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY : undefined,
+        libraries,
+        preventGoogleFontsLoading: true,
+    });
 
     // Fetch Pricing based on Tab
     useEffect(() => {
@@ -154,7 +159,11 @@ const BookingWidget = () => {
     }, [activeTab])
 
     const handleGetCurrentLocation = () => {
+        setLoadScript(true);
         if (!navigator.geolocation) return;
+        // Trigger Script Load if not loaded
+        // However, we can use browser API without google maps script for lat/lon
+        // But we need Geocoder for address name. So we wait/trigger.
         setIsLocating(true);
         navigator.geolocation.getCurrentPosition(async (pos) => {
             try {
@@ -263,7 +272,7 @@ const BookingWidget = () => {
     return (
         <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4">
             {/* Tab Navigation */}
-            <div className="flex flex-wrap bg-slate-100 dark:bg-white/5 p-1 rounded-2xl w-full mb-6 md:mb-8 gap-1.5 shadow-sm border border-emerald-900/5">
+            <div className="flex flex-wrap bg-slate-100 dark:bg-white/5 p-1 rounded-2xl w-full mb-6 md:mb-8 gap-1.5 shadow-sm border border-emerald-900/5" role="tablist">
                 {[
                     { id: 'pickup', label: 'Pick-up', icon: MapPin },
                     { id: 'drop', label: 'Airport Drop', icon: Navigation },
@@ -272,8 +281,12 @@ const BookingWidget = () => {
                 ].map(tab => (
                     <button
                         key={tab.id}
+                        role="tab"
+                        aria-selected={activeTab === tab.id}
+                        aria-controls={`panel-${tab.id}`}
+                        id={`tab-${tab.id}`}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all min-w-[120px] ${activeTab === tab.id ? 'bg-emerald-900 text-white shadow-lg' : 'text-emerald-900/50 dark:text-emerald-400/50 hover:bg-emerald-900/5'}`}
+                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all min-w-[120px] ${activeTab === tab.id ? 'bg-emerald-900 text-white shadow-lg' : 'text-emerald-900/80 dark:text-emerald-400/80 hover:bg-emerald-900/5'}`}
                     >
                         <tab.icon size={16} />
                         {tab.label}
@@ -290,12 +303,13 @@ const BookingWidget = () => {
                         <div className="space-y-6">
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div className="flex bg-emerald-900/5 dark:bg-white/5 p-1 rounded-xl border border-emerald-900/10 dark:border-white/10 w-full sm:w-auto gap-1">
-                                    <button onClick={() => setTripType('one-way')} className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all ${tripType === 'one-way' ? 'bg-emerald-900 text-white shadow-sm dark:bg-emerald-600' : 'text-emerald-900/50 hover:text-emerald-900 dark:text-white/50 dark:hover:text-white'}`}>One Way</button>
+                                    <button onClick={() => setTripType('one-way')} aria-label="One Way Trip" className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all ${tripType === 'one-way' ? 'bg-emerald-900 text-white shadow-sm dark:bg-emerald-600' : 'text-emerald-900/80 hover:text-emerald-900 dark:text-white/80 dark:hover:text-white'}`}>One Way</button>
                                     <button
                                         onClick={() => (activeTab !== 'pickup' && activeTab !== 'drop') && setTripType('round-trip')}
                                         disabled={activeTab === 'pickup' || activeTab === 'drop'}
+                                        aria-label="Round Trip"
                                         className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all relative
-                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-emerald-900 text-white shadow-sm dark:bg-emerald-600' : 'text-emerald-900/50 dark:text-white/50'}
+                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-emerald-900 text-white shadow-sm dark:bg-emerald-600' : 'text-emerald-900/80 dark:text-white/80'}
                                             ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-40 cursor-not-allowed' : 'hover:text-emerald-900 dark:hover:text-white'}
                                         `}
                                     >
@@ -305,7 +319,7 @@ const BookingWidget = () => {
                                         )}
                                     </button>
                                 </div>
-                                <button onClick={handleGetCurrentLocation} className="text-emerald-600 dark:text-emerald-400 text-xs font-bold hover:underline flex items-center gap-2 bg-emerald-50 dark:bg-white/5 px-4 py-2 rounded-xl border border-emerald-600/10 w-full sm:w-auto justify-center whitespace-nowrap">
+                                <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:underline flex items-center gap-2 bg-emerald-50 dark:bg-white/5 px-4 py-2 rounded-xl border border-emerald-600/10 w-full sm:w-auto justify-center whitespace-nowrap">
                                     {isLocating ? <Loader2 size={14} className="animate-spin" /> : <Zap size={14} />}
                                     Auto Detect
                                 </button>
@@ -319,6 +333,7 @@ const BookingWidget = () => {
                                     icon={MapPin}
                                     disabled={activeTab === 'pickup'}
                                     isLoaded={isLoaded}
+                                    onFocus={() => setLoadScript(true)}
                                     onChange={(val) => setPickupSearch(val)}
                                     onSelect={(loc) => {
                                         setPickup({ name: loc.address, lat: loc.lat, lon: loc.lng });
@@ -356,7 +371,8 @@ const BookingWidget = () => {
                                             <div className="flex justify-start pl-14 py-1">
                                                 <button
                                                     onClick={() => setWaypointSearches([{ active: true }])}
-                                                    className="text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center gap-1 hover:bg-emerald-50 dark:hover:bg-white/5 py-1.5 px-3 rounded-lg transition-colors"
+                                                    aria-label="Add Stop"
+                                                    className="text-emerald-700 dark:text-emerald-400 text-xs font-bold flex items-center gap-1 hover:bg-emerald-50 dark:hover:bg-white/5 py-1.5 px-3 rounded-lg transition-colors"
                                                 >
                                                     <Plus size={14} /> Add Stop
                                                 </button>
@@ -370,6 +386,7 @@ const BookingWidget = () => {
                                                     placeholder="Add Stop (Search City)"
                                                     icon={Navigation}
                                                     isLoaded={isLoaded}
+                                                    onFocus={() => setLoadScript(true)}
                                                     onSelect={(loc) => {
                                                         setWaypoints([...waypoints, { name: loc.address, lat: loc.lat, lon: loc.lng }]);
                                                         setWaypointSearches([]);
@@ -405,6 +422,7 @@ const BookingWidget = () => {
                                     icon={MapPin}
                                     disabled={activeTab === 'drop'}
                                     isLoaded={isLoaded}
+                                    onFocus={() => setLoadScript(true)}
                                     onChange={(val) => setDropoffSearch(val)}
                                     onSelect={(loc) => {
                                         setDropoff({ name: loc.address, lat: loc.lat, lon: loc.lng });
@@ -475,6 +493,7 @@ const BookingWidget = () => {
                                                 alert('Validation failed');
                                             }
                                         }}
+                                        aria-label="Apply Coupon"
                                         className="absolute right-3 top-1/2 -translate-y-1/2 bg-emerald-900 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-800 transition-all"
                                     >
                                         Apply
@@ -485,7 +504,7 @@ const BookingWidget = () => {
                             {/* Date & Time Selection */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="text-[10px] font-bold text-emerald-900/70 dark:text-white/70 uppercase tracking-widest mb-2 block pl-1">Date</label>
+                                    <label className="text-[10px] font-bold text-emerald-900 dark:text-white uppercase tracking-widest mb-2 block pl-1">Date</label>
                                     <div className="relative">
                                         <input
                                             type="date"
@@ -501,7 +520,7 @@ const BookingWidget = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="text-[10px] font-bold text-emerald-900/70 dark:text-white/70 uppercase tracking-widest mb-2 block pl-1">Time</label>
+                                    <label className="text-[10px] font-bold text-emerald-900 dark:text-white uppercase tracking-widest mb-2 block pl-1">Time</label>
                                     <div className="relative">
                                         <input
                                             type="time"
@@ -526,7 +545,7 @@ const BookingWidget = () => {
                                     { id: 'bags', label: 'Bags' }
                                 ].map(c => (
                                     <div key={c.id} className="bg-emerald-50 dark:bg-white/[0.03] border border-emerald-900/5 dark:border-white/10 p-2 rounded-xl flex flex-col items-center justify-center transition-colors">
-                                        <span className="text-[9px] font-bold text-emerald-900/70 dark:text-white/70 uppercase tracking-widest mb-2">{c.label}</span>
+                                        <span className="text-[9px] font-bold text-emerald-900 dark:text-white uppercase tracking-widest mb-2">{c.label}</span>
                                         <div className="flex items-center gap-3">
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, p[c.id] - 1) }))}
@@ -550,7 +569,7 @@ const BookingWidget = () => {
 
                             {/* Vehicle Selection - Unified for Desktop & Mobile */}
                             <div className="mt-4">
-                                <label className="text-[10px] font-bold text-emerald-900/70 dark:text-white/70 uppercase tracking-widest mb-2 block pl-1">Selected Vehicle</label>
+                                <label className="text-[10px] font-bold text-emerald-900 dark:text-white uppercase tracking-widest mb-2 block pl-1">Selected Vehicle</label>
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
                                     className="w-full h-20 px-4 flex items-center justify-between bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 rounded-2xl hover:border-emerald-600 dark:hover:border-emerald-500 hover:shadow-md transition-all group"
@@ -559,14 +578,22 @@ const BookingWidget = () => {
                                     <div className="flex items-center gap-4">
                                         <div className="w-14 h-12 bg-slate-50 dark:bg-white/10 rounded-xl flex items-center justify-center p-1">
                                             {vehiclePricing[vehicle]?.image ? (
-                                                <img src={vehiclePricing[vehicle].image} alt="Vehicle" className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal" />
+                                                <div className="relative w-full h-full">
+                                                    <Image
+                                                        src={vehiclePricing[vehicle].image}
+                                                        alt={vehiclePricing[vehicle]?.name || "Vehicle"}
+                                                        fill
+                                                        className="object-contain mix-blend-multiply dark:mix-blend-normal"
+                                                        sizes="64px"
+                                                    />
+                                                </div>
                                             ) : (
                                                 <Car className="text-emerald-900/40 dark:text-white/40" />
                                             )}
                                         </div>
                                         <div className="text-left">
                                             <p className="font-bold text-base text-emerald-900 dark:text-white">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
-                                            <div className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+                                            <div className="flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300 font-medium">
                                                 <span>{vehiclePricing[vehicle]?.capacity || 4} Passengers</span>
                                                 <span className="w-1 h-1 bg-emerald-600/30 rounded-full"></span>
                                                 <span>{vehiclePricing[vehicle]?.luggage || 2} Luggage</span>
@@ -584,7 +611,7 @@ const BookingWidget = () => {
                         <div className="lg:border-l lg:border-emerald-900/10 dark:lg:border-white/10 lg:pl-8 flex flex-col justify-between h-full">
 
                             <div className="space-y-6">
-                                <h3 className="text-xl font-bold text-emerald-900 dark:text-white tracking-tight">Trip Summary</h3>
+                                <h2 className="text-xl font-bold text-emerald-900 dark:text-white tracking-tight">Trip Summary</h2>
 
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center text-sm">

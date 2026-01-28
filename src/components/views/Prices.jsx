@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Lock, Briefcase, Wind } from 'lucide-react'
-import _ from 'lodash'
+import { debounce } from '@/lib/utils'
 
 // Tiered Pricing Configuration (in LKR - Sri Lankan Rupees)
 const VEHICLE_PRICING = {
@@ -269,8 +269,8 @@ const Prices = ({ initialDestination }) => {
         } catch (err) { console.error(err) }
     }
 
-    const debouncedSearchPickup = useRef(_.debounce((q) => searchLocation(q, setPickupResults), 500)).current
-    const debouncedSearchDropoff = useRef(_.debounce((q) => searchLocation(q, setDropoffResults), 500)).current
+    const debouncedSearchPickup = useRef(debounce((q) => searchLocation(q, setPickupResults), 500)).current
+    const debouncedSearchDropoff = useRef(debounce((q) => searchLocation(q, setDropoffResults), 500)).current
 
     // Calculate route using OSRM
     useEffect(() => {

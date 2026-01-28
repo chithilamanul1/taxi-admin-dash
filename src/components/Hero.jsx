@@ -105,7 +105,7 @@ const Hero = ({ onBookClick }) => {
                 <div className="flex flex-wrap items-center justify-start gap-4 animate-slide-up opacity-0 [animation-delay:0.8s] [animation-fill-mode:forwards] pb-8 md:pb-0">
                     <button
                         onClick={onBookClick}
-                        className="group w-full sm:w-auto px-8 py-4 bg-emerald-600 text-white rounded-xl font-bold text-lg hover:bg-emerald-500 transition-all shadow-xl shadow-emerald-900/20 flex items-center justify-center gap-2 min-w-[200px]"
+                        className="group w-full sm:w-auto px-8 py-4 bg-emerald-700 text-white rounded-xl font-bold text-lg hover:bg-emerald-600 transition-all shadow-xl shadow-emerald-900/20 flex items-center justify-center gap-2 min-w-[200px]"
                     >
                         Plan Your Trip
                         <ArrowRight className="group-hover:translate-x-1 transition-transform" />

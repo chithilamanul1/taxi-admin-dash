@@ -118,7 +118,10 @@ export default function Navbar() {
                     {status !== 'loading' && (
                         session ? (
                             <div className="relative group">
-                                <button className="relative w-10 h-10 rounded-full border border-emerald-900/10 bg-emerald-50 p-0.5 overflow-hidden">
+                                <button
+                                    className="relative w-10 h-10 rounded-full border border-emerald-900/10 bg-emerald-50 p-0.5 overflow-hidden"
+                                    aria-label="User profile"
+                                >
                                     {session.user?.image ? (
                                         <img src={session.user.image} alt={session.user.name} className="w-full h-full rounded-full object-cover" />
                                     ) : (

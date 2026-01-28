@@ -10,6 +10,7 @@ const LocationInput = ({
     value,       // Initial/External value text
     onChange,    // (text) => void
     onSelect,    // (location: { address, lat, lng }) => void
+    onFocus,     // () => void
     disabled,
     icon: Icon = MapPin,
     isLoaded     // Google Maps Script Loaded status
@@ -20,13 +21,22 @@ const LocationInput = ({
         suggestions: { status, data },
         setValue,
         clearSuggestions,
+        init,
     } = usePlacesAutocomplete({
+        initOnMount: false,
         requestOptions: {
             /* Define search scope here if needed, e.g., componentRestrictions: { country: "lk" } */
         },
         debounce: 300,
         cache: 24 * 60 * 60,
     });
+
+    // Initialize hook when script is loaded
+    useEffect(() => {
+        if (isLoaded) {
+            init();
+        }
+    }, [isLoaded, init]);
 
     // Sync external value
     useEffect(() => {
@@ -59,11 +69,13 @@ const LocationInput = ({
         // Fallback style if script not loaded or Loading
         return (
             <div className="relative group">
-                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-900/40 dark:text-emerald-400/40"><Icon size={22} /></div>
+                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-900/60 dark:text-emerald-400/60"><Icon size={22} /></div>
                 <input
-                    disabled={true}
-                    placeholder="Loading Maps..."
-                    className="w-full pl-16 pr-14 h-16 rounded-2xl text-base sm:text-lg font-bold bg-slate-100 dark:bg-white/5 border border-emerald-900/10 text-slate-400"
+                    value={value || ''}
+                    onChange={(e) => onChange && onChange(e.target.value)}
+                    onFocus={onFocus}
+                    placeholder={placeholder}
+                    className="w-full pl-16 pr-14 h-16 rounded-2xl text-base sm:text-lg font-bold bg-slate-100 dark:bg-white/5 border border-emerald-900/10 text-emerald-900 dark:text-white outline-none focus:border-emerald-900 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 dark:focus:ring-emerald-500/10 placeholder:text-emerald-900/40 dark:placeholder:text-white/40"
                 />
             </div>
         )
@@ -71,17 +83,18 @@ const LocationInput = ({
 
     return (
         <div className="relative group z-20">
-            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-900/40 dark:text-emerald-400/40">
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-900/70 dark:text-emerald-400/70">
                 <Icon size={22} />
             </div>
 
             <input
                 value={inputValue}
                 onChange={handleInput}
+                onFocus={onFocus}
                 disabled={!ready || disabled}
                 placeholder={placeholder}
                 aria-label={label || placeholder || "Location input"}
-                className={`w-full pl-16 pr-14 h-16 rounded-2xl text-base sm:text-lg font-bold bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-emerald-900 dark:text-white outline-none focus:border-emerald-900 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 dark:focus:ring-emerald-500/10 transition-all placeholder:text-emerald-900/60 dark:placeholder:text-white/60 truncate 
+                className={`w-full pl-16 pr-14 h-16 rounded-2xl text-base sm:text-lg font-bold bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-emerald-900 dark:text-white outline-none focus:border-emerald-900 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 dark:focus:ring-emerald-500/10 placeholder:text-emerald-900/80 dark:placeholder:text-white/80 truncate 
                 ${disabled ? 'cursor-not-allowed bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-700' : 'group-hover:border-emerald-900/20'}`}
             />
 

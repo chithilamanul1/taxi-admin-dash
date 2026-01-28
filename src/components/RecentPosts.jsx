@@ -32,9 +32,9 @@ export default function RecentPosts() {
                 <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-8 animate-slide-up">
                     <div className="max-w-2xl">
                         <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-emerald-900 dark:text-white font-heading">
-                            Travel <span className="text-emerald-600 dark:text-emerald-400">Insights</span>
+                            Travel <span className="text-emerald-700 dark:text-emerald-400">Insights</span>
                         </h2>
-                        <p className="text-emerald-900/60 dark:text-white/60 text-lg font-medium">Discover Sri Lanka through the eyes of our expert travel guides and professional chauffeurs.</p>
+                        <p className="text-emerald-900/80 dark:text-white/80 text-lg font-medium">Discover Sri Lanka through the eyes of our expert travel guides and professional chauffeurs.</p>
                     </div>
                     <Link href="/blog" className="px-8 py-4 bg-emerald-900 text-white rounded-xl text-xs font-bold uppercase tracking-[0.2em] shadow-lg hover:bg-emerald-800 transition-all flex items-center gap-2">
                         Read the Journal <ArrowRight size={14} />
@@ -72,14 +72,14 @@ export default function RecentPosts() {
                                     </div>
                                 </div>
                                 <div className="p-8 flex flex-col flex-1">
-                                    <h3 className="text-xl font-bold mb-4 leading-tight group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2 text-emerald-900 dark:text-white">
+                                    <h3 className="text-xl font-bold mb-4 leading-tight group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors line-clamp-2 text-emerald-900 dark:text-white">
                                         {post.title}
                                     </h3>
-                                    <p className="text-emerald-900/60 dark:text-white/60 text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
+                                    <p className="text-emerald-900/80 dark:text-white/80 text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
                                         {post.seo?.metaDescription || post.excerpt}
                                     </p>
                                     <div className="flex items-center justify-between border-t border-emerald-900/5 dark:border-white/5 pt-6 mt-auto">
-                                        <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
+                                        <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-widest">
                                             <Clock size={12} />
                                             5 MIN READ
                                         </div>

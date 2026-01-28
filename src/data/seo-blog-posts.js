@@ -53,7 +53,7 @@ Take the highway south to explore this UNESCO World Heritage site (2.5 hours).
 ## 5. Sigiriya Rock Fortress
 The 8th wonder of the world is reachable for a long day trip (3.5 hours one way).
         `,
-        coverImage: "https://images.unsplash.com/photo-1586060855263-d027bc9eb8d5?q=80&w=1000&auto=format&fit=crop",
+        image: "/sigiriya.jpg",
         isPublished: true,
         tags: ["Day Trips", "Sightseeing", "Itinerary"],
         seo: {
@@ -85,7 +85,7 @@ Don't get overcharged. Here is what you need to know about taxi fares in Sri Lan
 
 At **Airport Taxi Tours**, we offer all-inclusive fixed rates so you never have to worry about the meter!
         `,
-        coverImage: "https://images.unsplash.com/photo-1622312271887-cc351eb831e5?q=80&w=1000&auto=format&fit=crop",
+        coverImage: "/hero.jpg",
         isPublished: true,
         tags: ["Pricing", "Guides", "Safety"],
         seo: {

@@ -33,9 +33,9 @@ const Features = () => {
             <div className="container mx-auto px-6 relative z-10">
                 <div className="text-center mb-20 animate-slide-up">
                     <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-emerald-900 dark:text-white font-heading">
-                        Why Choose <span className="text-emerald-600 dark:text-emerald-400">Airport Taxis?</span>
+                        Why Choose <span className="text-emerald-700 dark:text-emerald-400">Airport Taxis?</span>
                     </h2>
-                    <p className="text-emerald-900/60 dark:text-white/60 max-w-2xl mx-auto text-lg">
+                    <p className="text-emerald-900/80 dark:text-white/80 max-w-2xl mx-auto text-lg">
                         Setting the standard for luxury transportation and tours in Sri Lanka since 2012.
                     </p>
                 </div>
@@ -47,11 +47,11 @@ const Features = () => {
                             className="group p-10 bg-white dark:bg-slate-900 rounded-3xl border border-emerald-900/10 dark:border-white/5 hover:border-emerald-600 shadow-sm hover:shadow-xl transition-all duration-500 animate-slide-up"
                             style={{ animationDelay: `${idx * 0.1}s` }}
                         >
-                            <div className="w-16 h-16 bg-emerald-50 dark:bg-white/5 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-emerald-900 dark:group-hover:bg-emerald-500 group-hover:text-white transition-all text-emerald-600 dark:text-emerald-400 border border-emerald-900/5 dark:border-white/5 shadow-sm">
+                            <div className="w-16 h-16 bg-emerald-50 dark:bg-white/5 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-emerald-900 dark:group-hover:bg-emerald-500 group-hover:text-white transition-all text-emerald-700 dark:text-emerald-400 border border-emerald-900/5 dark:border-white/5 shadow-sm">
                                 {feature.icon}
                             </div>
-                            <h3 className="text-xl font-bold mb-4 text-emerald-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors uppercase tracking-tight">{feature.title}</h3>
-                            <p className="text-emerald-900/60 dark:text-white/60 text-sm leading-relaxed">
+                            <h3 className="text-xl font-bold mb-4 text-emerald-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors uppercase tracking-tight">{feature.title}</h3>
+                            <p className="text-emerald-900/80 dark:text-white/80 text-sm leading-relaxed">
                                 {feature.description}
                             </p>
                         </div>

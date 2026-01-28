@@ -48,14 +48,8 @@ const ReviewStatsBar = () => {
                         href="#"
                         className="flex items-center gap-4 group hover:opacity-80 transition-opacity"
                     >
-                        <div className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center flex-shrink-0">
-                            <img
-                                src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-                                alt="Google"
-                                width="32"
-                                height="32"
-                                className="w-8 h-8"
-                            />
+                        <div className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center flex-shrink-0 font-bold text-xl">
+                            <span className="text-[#4285F4]">G</span>
                         </div>
                         <div className="flex flex-col">
                             <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Posted on</span>

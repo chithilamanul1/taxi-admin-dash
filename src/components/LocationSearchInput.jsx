@@ -1,7 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
 import { MapPin, Loader2, X } from 'lucide-react'
-import _ from 'lodash'
+import { debounce } from '@/lib/utils'
 
 export default function LocationSearchInput({
     label, icon: Icon = MapPin, placeholder,
@@ -45,7 +45,7 @@ export default function LocationSearchInput({
         setLoading(false)
     }
 
-    const debouncedSearch = useRef(_.debounce(searchLocation, 500)).current
+    const debouncedSearch = useRef(debounce(searchLocation, 500)).current
 
     const handleChange = (e) => {
         const val = e.target.value
