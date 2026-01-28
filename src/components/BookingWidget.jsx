@@ -513,15 +513,15 @@ const BookingWidget = () => {
                                 ))}
                             </div>
 
-                            {/* Vehicle Selection Mobile Trigger */}
-                            <div className="mt-6 lg:hidden">
-                                <label className="text-[10px] font-bold text-emerald-900/40 dark:text-white/40 uppercase tracking-widest mb-2 block">Selected Vehicle</label>
+                            {/* Vehicle Selection - Unified for Desktop & Mobile */}
+                            <div className="mt-4">
+                                <label className="text-[10px] font-bold text-emerald-900/40 dark:text-white/40 uppercase tracking-widest mb-2 block pl-1">Selected Vehicle</label>
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
-                                    className="w-full flex items-center justify-between p-3 bg-white dark:bg-white/5 border-2 border-emerald-600/20 dark:border-emerald-500/20 rounded-xl shadow-sm hover:border-emerald-600 dark:hover:border-emerald-500 transition-all group"
+                                    className="w-full h-20 px-4 flex items-center justify-between bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 rounded-2xl hover:border-emerald-600 dark:hover:border-emerald-500 hover:shadow-md transition-all group"
                                 >
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-slate-50 dark:bg-white/10 rounded-lg flex items-center justify-center p-1">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-14 h-12 bg-slate-50 dark:bg-white/10 rounded-xl flex items-center justify-center p-1">
                                             {vehiclePricing[vehicle]?.image ? (
                                                 <img src={vehiclePricing[vehicle].image} alt="Vehicle" className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal" />
                                             ) : (
@@ -529,24 +529,18 @@ const BookingWidget = () => {
                                             )}
                                         </div>
                                         <div className="text-left">
-                                            <p className="font-bold text-sm text-emerald-900 dark:text-white">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
-                                            <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Click to change</p>
+                                            <p className="font-bold text-base text-emerald-900 dark:text-white">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
+                                            <div className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+                                                <span>{vehiclePricing[vehicle]?.capacity || 4} Passengers</span>
+                                                <span className="w-1 h-1 bg-emerald-600/30 rounded-full"></span>
+                                                <span>{vehiclePricing[vehicle]?.luggage || 2} Luggage</span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="w-6 h-6 rounded-full bg-emerald-50 dark:bg-white/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                                        <ChevronDown size={14} />
+                                    <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-white/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                                        <ChevronDown size={16} />
                                     </div>
                                 </button>
-                            </div>
-
-                            {/* Vehicle Selection Carousel (Desktop) */}
-                            <div className="mt-6 hidden lg:block">
-                                <VehicleCarousel
-                                    vehicles={Object.values(vehiclePricing)}
-                                    selectedId={vehicle}
-                                    onSelect={setVehicle}
-                                    passengerCount={passengerCount}
-                                />
                             </div>
                         </div>
 
