@@ -108,10 +108,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                         </div>
                                     </div>
 
-                                    <div className="text-right shrink-0">
-                                        <p className="text-[10px] text-slate-400 dark:text-white/20 uppercase font-bold tracking-tighter">Per Km</p>
-                                        <p className="font-black text-emerald-900 dark:text-white">LKR {vehicle.perKmRate}</p>
-                                    </div>
+                                    {/* Per Km Rate Removed as per request */}
                                 </div>
                             );
                         })
