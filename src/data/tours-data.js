@@ -255,6 +255,7 @@ export const tourPackages = [
         currency: 'USD',
         priceType: 'Per Person',
         image: '/tours/6-days-cultural.jpg',
+        mapImage: '/tours/map-6-days.png', // Added map image
         destinations: ['Kandy', 'Sigiriya', 'Colombo'],
         highlights: [
             'Temple of the Tooth Relic',
@@ -268,7 +269,45 @@ export const tourPackages = [
             'Daily breakfast',
             'Private AC vehicle',
             'English-speaking driver',
-            'All entrance fees'
+            'All entrance fees',
+            'Meeting at the airport upon arrival and assistance during the stay',
+            'Transportation by air-conditioned vehicle according to the itinerary',
+            'Service of an English Speaking chauffeur up to 6 pax and Guide service included from 7 pax onwards',
+            'Accommodation at the Hotels as selected by you',
+            'Meal plan according to the itinerary',
+            'Two water bottles per day during tour'
+        ],
+        itinerary: [
+            {
+                day: 1,
+                title: 'Airport - Pinnawala - Kandy',
+                description: 'Upon arrival at Bandaranaike International Airport you will be greeted by the Airport Representative and Professional Chauffeur Guide at the arrival lounge. Then you will act out for Kandy. En route visit Pinnawala Elephant Orphanage. (Approx: 3 hours) Check in to the Hotel in Kandy. In the evening witness a cultural dance performance and visit the Temple of the Tooth Relic. Dinner and overnight stay at Kandy.'
+            },
+            {
+                day: 2,
+                title: 'Kandy - Matale - Sigiriya',
+                description: 'After breakfast leave for Sigiriya. En route visit a Spice Garden in Matale to see different spices for which Sri Lanka is famous for. Witness a Cookery demonstration. Proceed to Sigiriya. Afternoon climb the Sigiriya Lion Rock Fortress. Dinner and overnight stay at Sigiriya.'
+            },
+            {
+                day: 3,
+                title: 'Sigiriya - Polonnaruwa - Sigiriya',
+                description: 'After breakfast proceed to Polonnaruwa. Visit the ancient city of Polonnaruwa (A UNESCO World Heritage Site). Return to hotel. Afternoon take a jeep safari comfortably through the Kaudulla or Minneriya National Parks to see the elephants and other wild animals. Dinner and overnight stay at Sigiriya.'
+            },
+            {
+                day: 4,
+                title: 'Sigiriya - Dambulla - Colombo',
+                description: 'After breakfast leave for Colombo. En route visit Dambulla Cave Temple. (Golden Temple). Proceed to Colombo. Check in to the hotel. Evening at leisure or small city tour / shopping. Dinner and overnight stay at Colombo.'
+            },
+            {
+                day: 5,
+                title: 'Colombo - Airport',
+                description: 'After breakfast proceed to the airport for your departure flight. (Approx: 45 mins)'
+            },
+            {
+                day: 6,
+                title: 'End of Tour',
+                description: 'End of services. We wish you a safe flight back home.'
+            }
         ],
         description: 'Perfect introduction to Sri Lanka covering the cultural triangle, hill country, and capital city.'
     },

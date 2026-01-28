@@ -11,6 +11,8 @@ const STEPS = [
     { id: 3, title: 'Confirm', icon: CreditCard },
 ];
 
+import { useCurrency } from '../context/CurrencyContext';
+
 export default function BookingModal({ isOpen, onClose, initialData = {} }) {
     const { data: session } = useSession();
     const [step, setStep] = useState(1);
@@ -49,9 +51,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {} }) {
         }
     };
 
+    const { currency } = useCurrency(); // Import Currency Context
+
     const getPriceBreakdown = () => {
         const vehicleData = pricing.find(p => p.vehicleType === formData.vehicle);
-        if (!vehicleData || distance === 0) return { total: 0, subtotal: 0, surcharges: 0 };
+        if (!vehicleData || distance === 0) return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0 };
 
         const tiers = (vehicleData.tiers || []).sort((a, b) => a.min - b.min);
         let baseTotal = 0;
@@ -87,7 +91,22 @@ export default function BookingModal({ isOpen, onClose, initialData = {} }) {
         }
         if (formData.hasNameBoard) surcharges += 500;
 
-        let total = baseTotal + surcharges;
+        // Payment Method Surcharges per User Request
+        let paymentSurcharge = 0;
+        if (formData.paymentMethod === 'cash') {
+            // +5% for Cash
+            paymentSurcharge = (baseTotal + surcharges) * 0.05;
+        } else if (formData.paymentMethod === 'card') {
+            if (currency === 'USD') {
+                // +3.5% for USD Card
+                paymentSurcharge = (baseTotal + surcharges) * 0.035;
+            } else {
+                // +2.5% for LKR Card (default)
+                paymentSurcharge = (baseTotal + surcharges) * 0.025;
+            }
+        }
+
+        let total = baseTotal + surcharges + paymentSurcharge;
 
         // Coupon Logic
         if (verifiedCoupon) {
@@ -100,7 +119,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {} }) {
             total *= 0.9;
         }
 
-        return { total: Math.round(total), subtotal: Math.round(baseTotal), surcharges: Math.round(surcharges) };
+        const payNow = formData.paymentType === 'partial' ? total * 0.5 : total;
+        const balance = total - payNow;
+
+        return {
+            total: Math.round(total),
+            subtotal: Math.round(baseTotal),
+            surcharges: Math.round(surcharges + paymentSurcharge),
+            payNow: Math.round(payNow),
+            balance: Math.round(balance)
+        };
     };
 
     // Form State

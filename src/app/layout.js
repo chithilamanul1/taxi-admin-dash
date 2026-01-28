@@ -118,6 +118,10 @@ export default function RootLayout({ children }) {
     return (
         <html lang="en" suppressHydrationWarning className={`${inter.variable} ${montserrat.variable}`}>
             <head>
+                <link rel="preconnect" href="https://ipapi.co" />
+                <link rel="preconnect" href="https://api.exchangerate-api.com" />
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -79,9 +79,9 @@ export default function Navbar() {
                         </button>
                         <div className="absolute top-full left-0 mt-3 w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-emerald-900/10 dark:border-slate-800 flex flex-col">
                             {[
-                                { label: 'Day Tours', href: '/day-trips' },
-                                { label: 'City Tours', href: '/city-tours' }, // Placeholder based on request
-                                { label: 'Safari', href: '/safari' },         // Placeholder based on request
+                                { label: 'Day Tours', href: '/day-tours' },
+                                { label: 'City Tours', href: '/city-tours' },
+                                { label: 'Safari', href: '/safari' },
                                 { label: 'All Packages', href: '/tour-packages' }
                             ].map(sub => (
                                 <Link
@@ -240,7 +240,7 @@ export default function Navbar() {
                         <div className="grid grid-cols-2 gap-3">
                             {[
                                 { label: 'Home', href: '/', icon: '🏠' },
-                                { label: 'Day Tours', href: '/day-trips', icon: '🌴' },
+                                { label: 'Day Tours', href: '/day-tours', icon: '🌴' },
                                 { label: 'City Tours', href: '/city-tours', icon: '🏙️' },
                                 { label: 'Safari', href: '/safari', icon: '🐘' },
                                 { label: 'All Packages', href: '/tour-packages', icon: '🗺️' },

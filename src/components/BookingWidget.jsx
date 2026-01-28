@@ -79,12 +79,12 @@ const GoogleMapsLoader = ({ onLoaded }) => {
     return null;
 };
 
-const BookingWidget = () => {
+const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [activeOffers, setActiveOffers] = useState([]);
     const [appliedOffer, setAppliedOffer] = useState(null);
     const [vehiclePricing, setVehiclePricing] = useState({});
     const [isLoadingPricing, setIsLoadingPricing] = useState(true);
-    const [activeTab, setActiveTab] = useState('pickup');
+    const [activeTab, setActiveTab] = useState(defaultTab);
     const [tripType, setTripType] = useState('one-way');
     const [pickup, setPickup] = useState({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lon: 79.8837 })
     const [dropoff, setDropoff] = useState({ name: '', lat: null, lon: null })
@@ -287,7 +287,7 @@ const BookingWidget = () => {
             {/* Tab Navigation */}
             <div className="flex flex-wrap bg-slate-100 dark:bg-white/5 p-1 rounded-2xl w-full mb-6 md:mb-8 gap-1.5 shadow-sm border border-emerald-900/5" role="tablist">
                 {[
-                    { id: 'pickup', label: 'Pick-up', icon: MapPin },
+                    { id: 'pickup', label: 'Airport Pickup', icon: MapPin },
                     { id: 'drop', label: 'Airport Drop', icon: Navigation },
                     { id: 'ride', label: 'Ride Now', icon: Zap },
                     { id: 'tours', label: 'Tours', icon: Signpost }

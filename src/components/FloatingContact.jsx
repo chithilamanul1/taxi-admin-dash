@@ -28,15 +28,7 @@ export default function FloatingContact() {
                         </div>
                     </a>
 
-                    <a
-                        href="tel:+94722885885"
-                        className="group flex items-center gap-4"
-                    >
-                        <span className="bg-emerald-900 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Direct Call</span>
-                        <div className="w-14 h-14 bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-                            <PhoneCall size={24} />
-                        </div>
-                    </a>
+
 
                     <a
                         href="mailto:info@airporttaxi.lk"
