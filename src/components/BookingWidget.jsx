@@ -377,7 +377,7 @@ const BookingWidget = () => {
 
 
                                 {/* Add Waypoint Search */}
-                                {waypoints.length < 3 && (
+                                {waypoints.length < 4 && (
                                     <>
                                         {/* "Add Stop" Button - Aligned with icons */}
                                         {waypointSearches.length === 0 && (
@@ -446,22 +446,24 @@ const BookingWidget = () => {
 
                             {/* Extra Options Grid - Stack on LG, Grid on XL */}
                             <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                                <button
-                                    onClick={() => setHasNameBoard(!hasNameBoard)}
-                                    aria-pressed={hasNameBoard}
-                                    className={`h-16 px-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-emerald-900 dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-emerald-900/10 dark:border-white/10 text-emerald-900/60 dark:text-white/60 hover:border-emerald-600/30'}`}
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <Signpost size={18} className={hasNameBoard ? 'text-emerald-600 dark:text-emerald-400' : ''} />
-                                        <div className="text-left">
-                                            <span className="text-xs font-bold block">Name Board</span>
-                                            <span className="text-[10px] font-medium opacity-60">Meet & Greet</span>
+                                {activeTab === 'pickup' && (
+                                    <button
+                                        onClick={() => setHasNameBoard(!hasNameBoard)}
+                                        aria-pressed={hasNameBoard}
+                                        className={`h-16 px-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-emerald-900 dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-emerald-900/10 dark:border-white/10 text-emerald-900/60 dark:text-white/60 hover:border-emerald-600/30'}`}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <Signpost size={18} className={hasNameBoard ? 'text-emerald-600 dark:text-emerald-400' : ''} />
+                                            <div className="text-left">
+                                                <span className="text-xs font-bold block">Name Board</span>
+                                                <span className="text-[10px] font-medium opacity-60">Meet & Greet</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${hasNameBoard ? 'border-emerald-600 bg-emerald-600 dark:border-emerald-500 dark:bg-emerald-500' : 'border-emerald-900/20 dark:border-white/20'}`}>
-                                        {hasNameBoard && <Check size={12} className="text-white" />}
-                                    </div>
-                                </button>
+                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${hasNameBoard ? 'border-emerald-600 bg-emerald-600 dark:border-emerald-500 dark:bg-emerald-500' : 'border-emerald-900/20 dark:border-white/20'}`}>
+                                            {hasNameBoard && <Check size={12} className="text-white" />}
+                                        </div>
+                                    </button>
+                                )}
 
                                 <div className="relative h-16">
                                     <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-900/70 dark:text-white/70" size={18} />

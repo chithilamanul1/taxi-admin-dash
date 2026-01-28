@@ -62,10 +62,40 @@ export default function Navbar() {
 
                 {/* Desktop Nav */}
                 <div className="hidden lg:flex items-center gap-6">
+                    <Link
+                        href="/"
+                        className={`text-sm font-bold uppercase tracking-widest hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${pathname === '/' ? 'text-emerald-900 dark:text-white' : (needsSolidBg ? 'text-emerald-900/70 dark:text-slate-300' : 'text-white/80')}`}
+                    >
+                        Home
+                    </Link>
+
+                    {/* Tour Packages Dropdown */}
+                    <div className="relative group">
+                        <button
+                            className={`flex items-center gap-1 text-sm font-bold uppercase tracking-widest hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${pathname.includes('tour') || pathname.includes('day-trips') ? 'text-emerald-900 dark:text-white' : (needsSolidBg ? 'text-emerald-900/70 dark:text-slate-300' : 'text-white/80')}`}
+                        >
+                            Tour Packages
+                            <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
+                        </button>
+                        <div className="absolute top-full left-0 mt-3 w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-emerald-900/10 dark:border-slate-800 flex flex-col">
+                            {[
+                                { label: 'Day Tours', href: '/day-trips' },
+                                { label: 'City Tours', href: '/city-tours' }, // Placeholder based on request
+                                { label: 'Safari', href: '/safari' },         // Placeholder based on request
+                                { label: 'All Packages', href: '/tour-packages' }
+                            ].map(sub => (
+                                <Link
+                                    key={sub.href}
+                                    href={sub.href}
+                                    className="text-left px-5 py-2.5 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors text-sm font-bold text-emerald-900/80 dark:text-white/80 hover:text-emerald-900 dark:hover:text-white"
+                                >
+                                    {sub.label}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+
                     {[
-                        { label: 'Home', href: '/' },
-                        { label: 'Day Trips', href: '/day-trips' },
-                        { label: 'Tours', href: '/tour-packages' },
                         { label: 'Rates', href: '/prices' },
                         { label: 'Offers', href: '/offers' },
                         { label: 'Blog', href: '/blog' },
@@ -210,8 +240,10 @@ export default function Navbar() {
                         <div className="grid grid-cols-2 gap-3">
                             {[
                                 { label: 'Home', href: '/', icon: '🏠' },
-                                { label: 'Day Trips', href: '/day-trips', icon: '🌴' },
-                                { label: 'Tours', href: '/tour-packages', icon: '🗺️' },
+                                { label: 'Day Tours', href: '/day-trips', icon: '🌴' },
+                                { label: 'City Tours', href: '/city-tours', icon: '🏙️' },
+                                { label: 'Safari', href: '/safari', icon: '🐘' },
+                                { label: 'All Packages', href: '/tour-packages', icon: '🗺️' },
                                 { label: 'Rates', href: '/prices', icon: '💰' },
                                 { label: 'Offers', href: '/offers', icon: '🎁' },
                                 { label: 'Blog', href: '/blog', icon: '📝' },
