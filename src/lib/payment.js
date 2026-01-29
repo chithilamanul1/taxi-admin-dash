@@ -150,3 +150,32 @@ export function verifySampathSignature(data) {
     }
     return true;
 }
+
+/**
+ * Generate payload for a POST-based redirect (Form submission)
+ * Some versions of PayCorp/Sampath IPG use this instead of server-init
+ */
+export function generateSampathPayload(booking, returnUrl) {
+    const config = GATEWAY_CONFIG.sampath;
+
+    // Determine Client ID based on Currency
+    const currency = booking.currency || 'LKR';
+    const selectedClientId = config.clientIds[currency] || config.clientId;
+
+    // Amount in subunits (cents)
+    const amountInCents = Math.round((booking.paidAmount || booking.totalPrice) * 100);
+
+    // This is a generic structure. Actual fields depend on the specific IPG implementation.
+    // For many hosted pages, it's a signed request or a simple POST with client ID.
+    return {
+        action: config.apiUrl, // Or a specific hosted page URL
+        fields: {
+            clientId: selectedClientId,
+            amount: amountInCents.toString(),
+            currency: currency,
+            clientRef: booking._id.toString(),
+            returnUrl: returnUrl,
+            comment: `Booking #${booking._id.toString().slice(-6)}`
+        }
+    };
+}

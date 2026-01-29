@@ -8,7 +8,9 @@ import Link from 'next/link';
 // Server Action to get booking securely
 import { getBookingForPayment } from './actions';
 
-export default function PaymentRedirectPage() {
+import { Suspense } from 'react';
+
+function PaymentRedirectContent() {
     const searchParams = useSearchParams();
     const bookingId = searchParams.get('bookingId');
     const formRef = useRef(null);
@@ -94,5 +96,20 @@ export default function PaymentRedirectPage() {
                 )}
             </div>
         </div>
+    );
+}
+
+export default function PaymentRedirectPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen flex flex-col items-center justify-center bg-emerald-950 text-white relative overflow-hidden">
+                <div className="w-24 h-24 rounded-full bg-emerald-900/50 border border-emerald-500/20 flex items-center justify-center mb-8 relative">
+                    <div className="absolute inset-0 rounded-full border-t-2 border-emerald-400 animate-spin"></div>
+                </div>
+                <h1 className="text-3xl font-bold mb-3 tracking-tight">Loading Payment</h1>
+            </div>
+        }>
+            <PaymentRedirectContent />
+        </Suspense>
     );
 }
