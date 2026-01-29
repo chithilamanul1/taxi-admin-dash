@@ -4,7 +4,7 @@ import Transaction from '@/models/Transaction';
 import { NextResponse } from 'next/server';
 import { initiatePayCorpTransaction } from '@/lib/payment';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 
 // POST /api/driver/topup
 export async function POST(req) {

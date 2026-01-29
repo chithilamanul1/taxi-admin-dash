@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 /**
  * Payment Gateway Abstraction Layer
  * 
@@ -49,7 +51,6 @@ export function getActiveGateway() {
  */
 export async function initiatePayCorpTransaction(booking, returnUrl) {
     const config = GATEWAY_CONFIG.sampath;
-    const crypto = require('crypto');
 
     // Amount in CENTS
     // Note: Verify if PayCorp expects Cents for ALL currencies or just LKR.
@@ -138,7 +139,6 @@ export async function initiatePayCorpTransaction(booking, returnUrl) {
  */
 export function verifySampathSignature(data) {
     const config = GATEWAY_CONFIG.sampath;
-    const crypto = require('crypto');
 
     // Basic HMAC verification if 'hash' is provided
     if (data.hash && config.hmacSecret) {
