@@ -724,8 +724,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                     waypoints: waypoints,
                     tripType,
                     passengerCount,
-                    date: schedule.date,
-                    time: schedule.time
+                    date: date,
+                    time: time
                 }}
                 pricingCategory={pricingCategory}
             />
