@@ -354,7 +354,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     onFocus={() => setShouldLoadMap(true)}
                                     onChange={(val) => setPickupSearch(val)}
                                     onSelect={(loc) => {
-                                        setPickup({ name: loc.address, lat: loc.lat, lon: loc.lng });
+                                        setPickup({ name: loc.address, lat: loc.lat, lon: loc.lon });
                                         setPickupSearch(loc.address);
                                     }}
                                 />
@@ -406,7 +406,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     isLoaded={isMapReady}
                                                     onFocus={() => setShouldLoadMap(true)}
                                                     onSelect={(loc) => {
-                                                        setWaypoints([...waypoints, { name: loc.address, lat: loc.lat, lon: loc.lng }]);
+                                                        setWaypoints([...waypoints, { name: loc.address, lat: loc.lat, lon: loc.lon }]);
                                                         setWaypointSearches([]);
                                                     }}
                                                 />
@@ -443,7 +443,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     onFocus={() => setShouldLoadMap(true)}
                                     onChange={(val) => setDropoffSearch(val)}
                                     onSelect={(loc) => {
-                                        setDropoff({ name: loc.address, lat: loc.lat, lon: loc.lng });
+                                        setDropoff({ name: loc.address, lat: loc.lat, lon: loc.lon });
                                         setDropoffSearch(loc.address);
                                     }}
                                 />
