@@ -117,19 +117,3 @@ export async function POST(request) {
         );
     }
 }
-
-// GET handler for redirect-based callbacks (some gateways use GET)
-export async function GET(request) {
-    const { searchParams } = new URL(request.url);
-    const bookingId = searchParams.get('bookingId');
-    const status = searchParams.get('status');
-
-    // Redirect to appropriate page
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-
-    if (status === 'success') {
-        return NextResponse.redirect(`${baseUrl}/payment/success?bookingId=${bookingId}`);
-    } else {
-        return NextResponse.redirect(`${baseUrl}/payment/failed?bookingId=${bookingId}`);
-    }
-}
