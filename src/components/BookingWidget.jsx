@@ -12,6 +12,7 @@ import { useCurrency } from '../context/CurrencyContext'
 import VehicleSelectionDrawer from './VehicleSelectionDrawer'
 import VehicleCarousel from './VehicleCarousel'
 import LocationInput from './LocationInput'
+import SmartOfferNudge from './SmartOfferNudge'
 
 const libraries = ['places'];
 

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Loader2, ShieldCheck, Lock } from 'lucide-react';
-import { generateSampathPayload } from '@/lib/payment';
+import Link from 'next/link';
 
 // Server Action to get booking securely
 import { getBookingForPayment } from './actions';
@@ -59,7 +59,7 @@ export default function PaymentRedirectPage() {
                     </div>
                     <h1 className="text-xl font-bold text-slate-800 mb-2">Security Check Failed</h1>
                     <p className="text-slate-500 mb-6">{error}</p>
-                    <a href="/" className="text-sm font-bold text-emerald-900 hover:underline">Return to Home</a>
+                    <Link href="/" className="text-sm font-bold text-emerald-900 hover:underline">Return to Home</Link>
                 </div>
             </div>
         );
