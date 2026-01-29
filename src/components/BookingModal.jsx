@@ -13,7 +13,7 @@ const STEPS = [
 
 import { useCurrency } from '../context/CurrencyContext';
 
-export default function BookingModal({ isOpen, onClose, initialData = {} }) {
+export default function BookingModal({ isOpen, onClose, initialData = {}, pricingCategory = 'transfer' }) {
     const { data: session } = useSession();
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
