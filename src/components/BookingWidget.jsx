@@ -115,6 +115,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const { convertPrice, currency, changeCurrency, SUPPORTED_CURRENCIES } = useCurrency()
 
     const [isBookingOpen, setIsBookingOpen] = useState(false)
+    const [showModal, setShowModal] = useState(false)
     const [isVehicleDrawerOpen, setIsVehicleDrawerOpen] = useState(false)
     const [bookingInitialData, setBookingInitialData] = useState({})
 
