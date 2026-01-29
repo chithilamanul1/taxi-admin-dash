@@ -377,7 +377,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
 
                                 {/* Add Waypoint Search */}
-                                {waypoints.length < 4 && (
+                                {waypoints.length < 8 && (
                                     <>
                                         {/* "Add Stop" Button - Aligned with icons */}
                                         {waypointSearches.length === 0 && (
@@ -529,9 +529,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             className="w-full h-16 pl-4 pr-4 bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 rounded-2xl text-emerald-900 dark:text-white font-bold outline-none focus:border-emerald-600 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 transition-all w-full appearance-none"
                                             aria-label="Pickup Date"
                                         />
-                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-emerald-900/70 dark:text-white/70">
-                                            <Calendar size={18} />
-                                        </div>
                                     </div>
                                 </div>
                                 <div>
@@ -544,9 +541,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             className="w-full h-16 pl-4 pr-4 bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 rounded-2xl text-emerald-900 dark:text-white font-bold outline-none focus:border-emerald-600 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 transition-all w-full appearance-none"
                                             aria-label="Pickup Time"
                                         />
-                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-emerald-900/70 dark:text-white/70">
-                                            <Clock size={18} />
-                                        </div>
                                     </div>
                                 </div>
                             </div>

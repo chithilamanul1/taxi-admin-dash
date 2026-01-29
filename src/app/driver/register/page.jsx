@@ -42,21 +42,37 @@ export default function DriverRegister() {
         }
     };
 
+    const uploadFile = async (file, type) => {
+        if (!file) return null;
+        const data = new FormData();
+        data.append('file', file);
+        data.append('vehicleType', `driver-${formData.nic}-${type}`); // Use NIC to prefix files
+
+        const res = await fetch('/api/upload/vehicle', {
+            method: 'POST',
+            body: data
+        });
+        const result = await res.json();
+        return result.success ? result.path : null;
+    };
+
     const handleSubmit = async () => {
         setLoading(true);
         try {
-            // 1. Upload images first (Mocking Cloudinary upload for now)
-            // In production: Use FormData to send files to an upload API endpoint
+            // 1. Upload images
+            const licenseFrontPath = await uploadFile(formData.documents.licenseFront, 'license-front');
+            const licenseBackPath = await uploadFile(formData.documents.licenseBack, 'license-back');
+            const nicFrontPath = await uploadFile(formData.documents.nicFront, 'nic-front');
+            const nicBackPath = await uploadFile(formData.documents.nicBack, 'nic-back');
 
+            // 2. Prepare payload with real paths
             const payload = {
                 ...formData,
-                // Converting file objects to base64 or placeholder URLs for this demo
-                // Ideally, upload to S3/Cloudinary and send URLs
                 documents: {
-                    licenseFront: 'https://placehold.co/600x400?text=License+Front',
-                    licenseBack: 'https://placehold.co/600x400?text=License+Back',
-                    nicFront: 'https://placehold.co/600x400?text=NIC+Front',
-                    nicBack: 'https://placehold.co/600x400?text=NIC+Back',
+                    licenseFront: licenseFrontPath || '',
+                    licenseBack: licenseBackPath || '',
+                    nicFront: nicFrontPath || '',
+                    nicBack: nicBackPath || '',
                 }
             };
 
@@ -74,7 +90,7 @@ export default function DriverRegister() {
             }
         } catch (error) {
             console.error(error);
-            alert('An error occurred');
+            alert('An error occurred during registration. Please check your connection and try again.');
         } finally {
             setLoading(false);
         }

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Car, Phone, MapPin, User, Plus, CheckCircle, XCircle, Loader2, UserPlus, X, ShieldCheck, FileText, AlertCircle } from 'lucide-react';
+import { Car, Phone, MapPin, User, Plus, CheckCircle, XCircle, Loader2, UserPlus, X, ShieldCheck, FileText, AlertCircle, Trash2, MessageCircle } from 'lucide-react';
 
 const DriversFleetView = ({ bookings = [] }) => {
     const [drivers, setDrivers] = useState([]);
@@ -38,6 +38,22 @@ const DriversFleetView = ({ bookings = [] }) => {
             setDrivers([]);
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleDeleteDriver = async (driverId) => {
+        if (!confirm('Are you sure you want to PERMANENTLY DELETE this driver?')) return;
+        try {
+            const res = await fetch(`/api/drivers/${driverId}`, { method: 'DELETE' });
+            if (res.ok) {
+                setDrivers(drivers.filter(d => d._id !== driverId));
+                alert('Driver deleted successfully');
+            } else {
+                alert('Failed to delete driver');
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Error deleting driver');
         }
     };
 
@@ -236,6 +252,21 @@ const DriversFleetView = ({ bookings = [] }) => {
                                 <a href={`tel:${driver.phone}`} className="flex-1 flex items-center justify-center gap-2 bg-emerald-50 text-emerald-700 py-2 rounded-lg text-sm font-bold hover:bg-emerald-100 transition-colors">
                                     <Phone size={14} /> Call
                                 </a>
+                                <a
+                                    href={`https://wa.me/${driver.phone?.replace(/\D/g, '')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 flex items-center justify-center gap-2 bg-green-50 text-green-600 py-2 rounded-lg text-sm font-bold hover:bg-green-100 transition-colors border border-green-200"
+                                >
+                                    <MessageCircle size={14} /> Chat
+                                </a>
+                                <button
+                                    onClick={() => handleDeleteDriver(driver._id)}
+                                    className="w-10 flex items-center justify-center bg-red-50 text-red-500 rounded-lg hover:bg-red-100 transition-colors border border-red-100"
+                                    title="Delete Driver"
+                                >
+                                    <Trash2 size={16} />
+                                </button>
                             </div>
                         </div>
                     ))}

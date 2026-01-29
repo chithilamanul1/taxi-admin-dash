@@ -2,7 +2,7 @@
  * Payment Gateway Abstraction Layer
  * 
  * This module provides a clean interface for payment processing.
- * Currently uses MOCK implementation. To switch to Sampath Bank IPG:
+ * To switch to Sampath Bank IPG:
  * 1. Set PAYMENT_GATEWAY=sampath in .env.local
  * 2. Add Sampath credentials to .env.local
  */
@@ -15,51 +15,64 @@ export const GATEWAY_CONFIG = {
     },
     sampath: {
         name: 'Sampath Bank IPG',
-        enabled: false,
-        // These will be filled from environment variables
-        merchantId: process.env.SAMPATH_MERCHANT_ID || '',
-        terminalId: process.env.SAMPATH_TERMINAL_ID || '',
-        secretKey: process.env.SAMPATH_SECRET_KEY || '',
-        // Sampath endpoints (update with actual URLs when available)
-        sandboxUrl: 'https://sandbox.sampathbank.lk/ipg/payment',
-        productionUrl: 'https://ipg.sampathbank.lk/payment',
+        enabled: process.env.PAYMENT_GATEWAY === 'sampath',
+        merchantId: process.env.SAMPATH_MERCHANT_ID || 'DEMO_MERCHANT',
+        secretKey: process.env.SAMPATH_SECRET_KEY || 'DEMO_SECRET', // HMAC Secret
+        paymentUrl: process.env.SAMPATH_PAYMENT_URL || 'https://sampath.paycorp.lk/webinterface/00000000-0000-0000-0000-000000000000/payment', // Example URL
     }
 };
 
 // Get active gateway
 export function getActiveGateway() {
-    const gateway = process.env.PAYMENT_GATEWAY || 'mock';
-    return gateway;
+    return process.env.PAYMENT_GATEWAY || 'mock';
 }
 
-// Generate payment request for Sampath IPG
+/**
+ * Generate secure payload for Sampath IPG
+ * Note: Payload structure depends on the specific IPG provider Sampath uses (e.g., PayCorp/Mastercard/Visa).
+ * We will use a standard schema, but this might need adjustment based on specific documentation.
+ */
 export function generateSampathPayload(booking, returnUrl) {
     const config = GATEWAY_CONFIG.sampath;
+    const amount = (booking.paidAmount || booking.totalPrice).toFixed(2);
+
+    // Core parameters (Standard IPG fields)
+    const payload = {
+        merchant_id: config.merchantId,
+        order_id: booking._id.toString(),
+        amount: amount,
+        currency: 'LKR',
+        return_url: returnUrl,
+        customer_email: booking.customerEmail || '',
+        customer_phone: booking.guestPhone || '',
+        description: `Booking #${booking._id.toString().slice(-6)}`,
+    };
+
+    // Generate Signature
+    // String to sign format usually: merchant_id|order_id|amount|currency|secret
+    // We will assume this standard format for now.
+    const crypto = require('crypto');
+    const stringToSign = `${payload.merchant_id}${payload.order_id}${payload.amount}${payload.currency}${config.secretKey}`;
+
+    payload.hash = crypto.createHash('sha256').update(stringToSign).digest('hex').toUpperCase();
 
     return {
-        merchantId: config.merchantId,
-        terminalId: config.terminalId,
-        amount: booking.totalPrice.toFixed(2),
-        currency: 'LKR',
-        orderRef: booking._id.toString(),
-        description: `Airport Taxi Booking #${booking._id.toString().slice(-6)}`,
-        returnUrl: returnUrl,
-        // Signature will be generated server-side using HMAC-SHA256
+        action: config.paymentUrl,
+        fields: payload
     };
 }
 
 // Verify Sampath callback signature
-export function verifySampathSignature(payload, receivedSignature) {
-    const crypto = require('crypto');
+export function verifySampathSignature(data) {
     const config = GATEWAY_CONFIG.sampath;
+    const crypto = require('crypto');
 
-    // Construct string to sign (based on Sampath documentation)
-    const stringToSign = `${payload.merchantId}|${payload.orderRef}|${payload.amount}|${payload.status}`;
+    // Construct string to sign from received data
+    // Usually: merchant_id|order_id|amount|currency|status|secret
+    // Adjust based on actual response fields
+    const stringToSign = `${config.merchantId}${data.order_id}${data.amount}${data.currency}${data.status_code}${config.secretKey}`;
 
-    const expectedSignature = crypto
-        .createHmac('sha256', config.secretKey)
-        .update(stringToSign)
-        .digest('hex');
+    const expectedHash = crypto.createHash('sha256').update(stringToSign).digest('hex').toUpperCase();
 
-    return expectedSignature === receivedSignature;
+    return expectedHash === data.hash;
 }

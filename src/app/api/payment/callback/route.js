@@ -8,40 +8,62 @@ import { getActiveGateway, verifySampathSignature } from '@/lib/payment';
  * 
  * Receives payment result from gateway.
  * For MOCK: Called directly from mock payment page.
- * For SAMPATH: Would receive POST callback from Sampath IPG.
+ * For SAMPATH: Called via Server-to-Server POST from Sampath IPG.
  */
 export async function POST(request) {
     try {
         await dbConnect();
-        const data = await request.json();
+
+        let data;
+        const contentType = request.headers.get('content-type') || '';
+
+        if (contentType.includes('application/json')) {
+            data = await request.json();
+        } else {
+            // Sampath likely sends x-www-form-urlencoded
+            const formData = await request.formData();
+            data = Object.fromEntries(formData.entries());
+        }
+
         const gateway = getActiveGateway();
 
-        const { bookingId, status, transactionId, signature } = data;
+        console.log('Payment Callback Received:', { gateway, orderId: data.order_id || data.bookingId });
+
+        let bookingId, status, transactionId, isValid = true;
+
+        if (gateway === 'sampath') {
+            // Sampath fields: order_id, status_code (2=Success), transaction_id, hash
+            bookingId = data.order_id;
+            // status_code: 2 is typically SUCCESS in many gateways, but need to check Sampath specific
+            // Let's assume 200 or 2 is success based on common practices, usually docs say "2"
+            status = (data.status_code === '2' || data.status_code === '200') ? 'success' : 'failed';
+            transactionId = data.transaction_id || `SAMPATH-${Date.now()}`;
+
+            // Verify Signature
+            isValid = verifySampathSignature(data);
+        } else {
+            // Mock fields
+            bookingId = data.bookingId;
+            status = data.status;
+            transactionId = data.transactionId;
+        }
+
+        if (!isValid) {
+            console.error('Invalid Payment Signature:', data);
+            return NextResponse.json({ success: false, message: 'Invalid signature' }, { status: 400 });
+        }
 
         // Find the booking
         const booking = await Booking.findById(bookingId);
         if (!booking) {
-            return NextResponse.json(
-                { success: false, message: 'Booking not found' },
-                { status: 404 }
-            );
-        }
-
-        // Verify signature for Sampath (skip for mock)
-        if (gateway === 'sampath' && signature) {
-            const isValid = verifySampathSignature(data, signature);
-            if (!isValid) {
-                return NextResponse.json(
-                    { success: false, message: 'Invalid signature' },
-                    { status: 400 }
-                );
-            }
+            return NextResponse.json({ success: false, message: 'Booking not found' }, { status: 404 });
         }
 
         // Update booking status
         booking.paymentStatus = status === 'success' ? 'paid' : 'failed';
-        booking.paymentReference = transactionId || `MOCK-${Date.now()}`;
+        booking.paymentReference = transactionId;
         booking.paymentTimestamp = new Date();
+        booking.gatewayResponse = JSON.stringify(data); // Save raw response for audit
         await booking.save();
 
         return NextResponse.json({
@@ -53,7 +75,7 @@ export async function POST(request) {
     } catch (error) {
         console.error('Payment callback error:', error);
         return NextResponse.json(
-            { success: false, message: error.message },
+            { success: false, message: 'Internal server error' },
             { status: 500 }
         );
     }

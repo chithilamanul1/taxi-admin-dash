@@ -1,63 +1,10 @@
-'use client';
-
 import React, { useState } from 'react';
-import { MapPin, Clock, Star, ArrowRight, Calendar, Users, Zap, Search, ChevronRight } from 'lucide-react';
+import { Clock, Star, ArrowRight, ChevronRight, Zap } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
+import { tourPackages } from '../data/tours-data';
+import Link from 'next/link';
 
 const TOUR_CATEGORIES = ['Day Tours', 'City Tours', 'Safari'];
-
-const TOURS = [
-    {
-        id: 1,
-        category: 'Day Tours',
-        title: "Kandy Cultural Heritage",
-        image: "https://images.pexels.com/photos/17904082/pexels-photo-17904082/free-photo-of-kandy-lake-and-clouds.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        duration: "1 Day",
-        rating: 4.8,
-        price: 15000,
-        desc: "Temple of the Tooth, Royal Botanical Gardens & Cultural Dance Show."
-    },
-    {
-        id: 2,
-        category: 'Day Tours',
-        title: "Sigiriya Rock Fortress",
-        image: "https://images.pexels.com/photos/17903961/pexels-photo-17903961/free-photo-of-sigiriya-rock-fortress-sri-lanka.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        duration: "1 Day",
-        rating: 4.9,
-        price: 22000,
-        desc: "Climb the legendary Lion Rock and explore the Dambulla Cave Temples."
-    },
-    {
-        id: 3,
-        category: 'City Tours',
-        title: "Galle Fort Explorer",
-        image: "https://images.pexels.com/photos/10323337/pexels-photo-10323337.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        duration: "Full Day",
-        rating: 4.7,
-        price: 18000,
-        desc: "Stroll through the colonial-era ramparts and lighthouse of Galle."
-    },
-    {
-        id: 4,
-        category: 'Safari',
-        title: "Yala Wildlife Odyssey",
-        image: "https://images.pexels.com/photos/16053363/pexels-photo-16053363/free-photo-of-leopard-on-tree-branch.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        duration: "Full Day",
-        rating: 4.9,
-        price: 45000,
-        desc: "Spot the elusive Sri Lankan Leopard and Asian Elephants in the wild."
-    },
-    {
-        id: 5,
-        category: 'Safari',
-        title: "Udawalawe Sanctuary",
-        image: "https://images.pexels.com/photos/13359364/pexels-photo-13359364.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-        duration: "6 Hours",
-        rating: 4.8,
-        price: 38000,
-        desc: "An unparalleled experience watching wild elephant herds in their habitat."
-    }
-];
 
 const ToursWidget = () => {
     const [activeCategory, setActiveCategory] = useState('Day Tours');
@@ -65,7 +12,26 @@ const ToursWidget = () => {
     const [tourDuration, setTourDuration] = useState(1);
     const { convertPrice } = useCurrency();
 
-    const filteredTours = TOURS.filter(t => t.category === activeCategory);
+    // Map real tours to widget categories
+    const mappedTours = tourPackages.map(pkg => {
+        let category = 'Day Tours';
+        const lowerTitle = pkg.title.toLowerCase();
+
+        if (lowerTitle.includes('safari') || lowerTitle.includes('wildlife')) {
+            category = 'Safari';
+        } else if (lowerTitle.includes('city') || lowerTitle.includes('shopping') || pkg.id === 'colombo-city-tour') {
+            category = 'City Tours';
+        }
+
+        return {
+            ...pkg,
+            category,
+            desc: pkg.description,
+            rating: 4.8 // Default rating as we don't have this in data yet
+        };
+    });
+
+    const filteredTours = mappedTours.filter(t => t.category === activeCategory);
 
     return (
         <div className="space-y-10 animate-fade-in py-4">
@@ -112,8 +78,12 @@ const ToursWidget = () => {
 
             {/* Tours Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredTours.map((tour, idx) => {
-                    const finalPrice = tour.price * tourDuration;
+                {filteredTours.length > 0 ? filteredTours.map((tour, idx) => {
+                    const priceVal = parseFloat(tour.price || 0);
+                    // If it's a day tour, usually price is fixed per person, but widget logic multiplied by duration.
+                    // We'll keep the multiplication logic if user wants multi-day version of a day tour? 
+                    // Or maybe just show base price. Let's keep multiplication for now as it makes the widget interactive.
+                    const finalPrice = priceVal * tourDuration;
                     const converted = convertPrice(finalPrice);
 
                     return (
@@ -140,7 +110,7 @@ const ToursWidget = () => {
                                 <div className="flex items-center gap-3 text-emerald-600 text-[10px] font-bold uppercase tracking-widest mb-3">
                                     <Clock size={12} /> {tour.duration}
                                 </div>
-                                <h3 className="text-xl font-bold mb-3 leading-tight text-emerald-900 group-hover:text-emerald-600 transition-colors">{tour.title}</h3>
+                                <h3 className="text-xl font-bold mb-3 leading-tight text-emerald-900 group-hover:text-emerald-600 transition-colors line-clamp-2">{tour.title}</h3>
                                 <p className="text-emerald-900/60 text-sm leading-relaxed line-clamp-2 mb-6 flex-1">{tour.desc}</p>
 
                                 <div className="flex items-center justify-between pt-6 border-t border-emerald-900/10">
@@ -148,14 +118,18 @@ const ToursWidget = () => {
                                         <span className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">Starting From</span>
                                         <span className="text-xl font-black text-emerald-900">{converted.symbol} {converted.value.toLocaleString()}</span>
                                     </div>
-                                    <button className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-900 flex items-center justify-center group-hover:bg-emerald-900 group-hover:text-white transition-all duration-500 shadow-sm">
+                                    <Link href={`/tour-packages/${tour.id}`} className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-900 flex items-center justify-center group-hover:bg-emerald-900 group-hover:text-white transition-all duration-500 shadow-sm">
                                         <ChevronRight size={20} />
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
                     );
-                })}
+                }) : (
+                    <div className="col-span-full py-20 text-center text-gray-400">
+                        No tours found for this category.
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -37,10 +37,9 @@ export async function POST(req) {
             const chargeAmount = booking.paidAmount > 0 ? booking.paidAmount : booking.totalPrice;
             paymentUrl = `${baseUrl}/payment/mock?bookingId=${booking._id}&amount=${chargeAmount}`;
         } else if (gateway === 'sampath') {
-            // Sampath IPG: Generate signed redirect URL
-            const config = GATEWAY_CONFIG.sampath;
-            // TODO: Implement actual Sampath redirect when credentials are available
-            paymentUrl = `${config.sandboxUrl}?orderId=${booking._id}&amount=${booking.paidAmount}`;
+            // Sampath IPG: Return internal redirect URL
+            // This URL will handle the signature generation and auto-submission
+            paymentUrl = `${baseUrl}/payment/redirect?bookingId=${booking._id}`;
         }
 
         return NextResponse.json({

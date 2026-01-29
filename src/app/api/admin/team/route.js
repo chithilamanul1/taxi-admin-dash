@@ -46,7 +46,8 @@ export async function POST(req) {
 
             if (token) {
                 try {
-                    const decoded = jwt.default.verify(token.value, process.env.JWT_SECRET);
+                    const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET;
+                    const decoded = jwt.default.verify(token.value, secret);
                     if (decoded.role === 'admin') {
                         isAdmin = true;
                     }

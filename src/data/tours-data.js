@@ -11,8 +11,9 @@ export const dayTrips = [
         originalPrice: null,
         currency: 'USD',
         tags: ['Pickup available'],
-        image: '/tours/galle-bentota.jpg',
+        image: '/tours/maduriver.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Dehiwala', 'Mount Lavinia', 'Wadduwa', 'Kalutara'],
+        destinations: ['Bentota', 'Madu Ganga', 'Hikkaduwa', 'Galle Fort'],
         highlights: [
             'Bentota Beach photo stop',
             'Kosgoda Sea Turtle Conservation visit',
@@ -20,7 +21,10 @@ export const dayTrips = [
             'Hikkaduwa Beach visit',
             'Galle Fort sightseeing & sunset'
         ],
-        description: 'Experience the best of Sri Lanka\'s southern coast in one day. Visit turtle hatcheries, cruise through mangroves, and explore the historic Galle Fort.'
+        description: 'Experience the best of Sri Lanka\'s southern coast in one day. Visit turtle hatcheries, cruise through mangroves, and explore the historic Galle Fort.',
+        itinerary: [
+            { day: 1, title: 'South Coast Adventure', desc: 'Depart from Colombo and head to Bentota. Visit the Sea Turtle Conservation project, enjoy a boat safari on Madu River, proceed to Hikkaduwa details, and finally explore the Dutch Galle Fort.' }
+        ]
     },
     {
         id: 'kandy-pinnawala-day-trip',
@@ -33,6 +37,7 @@ export const dayTrips = [
         tags: ['Pickup available', 'New activity', '50% Off'],
         image: '/tours/kandy.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Wadduwa', 'Mount Lavinia'],
+        destinations: ['Pinnawala', 'Kandy', 'Peradeniya'],
         highlights: [
             'Pinnawala Elephant Orphanage',
             'Temple of the Tooth Relic',
@@ -40,7 +45,10 @@ export const dayTrips = [
             'Kandy Lake viewpoint',
             'Gem Museum visit'
         ],
-        description: 'Discover the cultural heart of Sri Lanka with visits to the sacred Temple of the Tooth, elephant orphanage, and the beautiful hill city of Kandy.'
+        description: 'Discover the cultural heart of Sri Lanka with visits to the sacred Temple of the Tooth, elephant orphanage, and the beautiful hill city of Kandy.',
+        itinerary: [
+            { day: 1, title: 'Hill Country Capital', desc: 'Visit the Pinnawala Elephant Orphanage to feed elephants. Proceed to Kandy to visit the Royal Botanical Gardens and the Sacred Temple of the Tooth Relic.' }
+        ]
     },
     {
         id: 'sigiriya-dambulla-safari',
@@ -53,6 +61,7 @@ export const dayTrips = [
         tags: ['Pickup available'],
         image: '/tours/sigiriya.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Kalutara', 'Bentota', 'Hikkaduwa', 'Galle'],
+        destinations: ['Sigiriya', 'Dambulla', 'Minneriya/Kaudulla'],
         highlights: [
             'Sigiriya Lion Rock climb',
             'Dambulla Cave Temple',
@@ -60,10 +69,13 @@ export const dayTrips = [
             'Traditional Sri Lankan lunch',
             'Wildlife viewing'
         ],
-        description: 'Climb the iconic Sigiriya Lion Rock, explore ancient cave temples, and enjoy a wildlife safari - all in one incredible day trip.'
+        description: 'Climb the iconic Sigiriya Lion Rock, explore ancient cave temples, and enjoy a wildlife safari - all in one incredible day trip.',
+        itinerary: [
+            { day: 1, title: 'Ancient Kingdoms & Wildlife', desc: 'Visit the Dambulla Cave Temple. Climb the Sigiriya Lion Rock fortress. Enjoy a village safari with traditional lunch and a wildlife jeep safari.' }
+        ]
     },
     {
-        id: 'sigiriya-dambulla-minneriya',
+        id: 'sigiriya-dambulla-minneriya-private',
         title: 'From Colombo | Negombo: Sigiriya, Dambulla and Minneriya Day Trip',
         type: 'private tour',
         duration: '24 hours',
@@ -71,8 +83,9 @@ export const dayTrips = [
         originalPrice: 127,
         currency: 'USD',
         tags: ['Small Groups', '10% Off'],
-        image: '/tours/sigiriya-minneriya.jpg',
+        image: '/tours/sigiriya2.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Dehiwala', 'Mount Lavinia', 'Wennappuwa'],
+        destinations: ['Sigiriya', 'Minneriya', 'Dambulla'],
         highlights: [
             'Sigiriya Lion Rock (2.5 hours)',
             'Minneriya National Park safari (4 hours)',
@@ -80,7 +93,10 @@ export const dayTrips = [
             'Elephant gathering (seasonal)',
             'Professional guide'
         ],
-        description: 'The ultimate cultural and wildlife experience combining Sigiriya, ancient temples, and the famous elephant gathering at Minneriya.'
+        description: 'The ultimate cultural and wildlife experience combining Sigiriya, ancient temples, and the famous elephant gathering at Minneriya.',
+        itinerary: [
+            { day: 1, title: 'Full Day Expedition', desc: 'Climb Sigiriya Rock, take a 4x4 safari in Minneriya National Park to see wild elephants, and visit the Dambulla Golden Temple.' }
+        ]
     },
     {
         id: 'private-sigiriya-dambulla',
@@ -91,117 +107,139 @@ export const dayTrips = [
         originalPrice: null,
         currency: 'USD',
         tags: ['Pickup available', 'Private'],
-        image: '/tours/sigiriya-private.jpg',
+        image: '/tours/sigiriya3.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Dehiwala', 'Mount Lavinia', 'Wennappuwa'],
+        destinations: ['Sigiriya', 'Dambulla'],
         highlights: [
             'Private vehicle & guide',
             'Dambulla breakfast stop',
             'Cave Temple exploration',
             'Sigiriya Rock guided climb',
-            'Local village lunch experience'
+            'Traditional lunch break'
         ],
-        description: 'Exclusive private tour to Sri Lanka\'s most iconic UNESCO sites with personal guide and flexible itinerary.'
+        description: 'A private, flexible tour to Sri Lanka\'s most famous UNESCO sites. Climb the rock fortress and explore the golden caves with your own guide.',
+        itinerary: [
+            { day: 1, title: 'UNESCO Heritage Tour', desc: 'Private transfer to Sigiriya and Dambulla. Climb the rock fortress and explore the ancient cave temple complex at your own pace.' }
+        ]
     },
     {
-        id: 'colombo-galle-bentota-private',
+        id: 'colombo-galle-bentota-day-trip',
         title: 'Colombo: Galle and Bentota Day Trip From Colombo City',
         type: 'private tour',
         duration: '14 hours',
         price: 70.25,
-        originalPrice: 74,
+        originalPrice: 74.00,
         currency: 'USD',
-        tags: ['New activity', '5% Off'],
-        image: '/tours/galle-private.jpg',
+        tags: ['New activity', 'Private'],
+        image: '/tours/galle.jpg',
         pickupLocations: ['Colombo', 'Dehiwala', 'Mount Lavinia', 'Negombo'],
+        destinations: ['Bentota', 'Madu River', 'Galle'],
         highlights: [
-            'Bentota Beach',
-            'Kosgoda Turtle Conservation',
-            'Madu River boat ride',
-            'Hikkaduwa Beach',
-            'Galle Fort walking tour'
+            'Bentota Beach visit',
+            'Kosgoda Sea Turtle Conservation',
+            'Madu Ganga boat safari (1 hour)',
+            'Hikkaduwa Beach photo stop',
+            'Galle Fort guided walk'
         ],
-        description: 'Private tour along the stunning southern coastline with beach stops, turtle sanctuary, river cruise, and historic fort exploration.'
+        description: 'A comprehensive day tour covering the best of the South Coast: turtles, boat safaris, pristine beaches, and colonial history.',
+        itinerary: [
+            { day: 1, title: 'Southern Coast Highlights', desc: 'Visit Bentota Beach, Kosgoda Turtle Hatchery, Madu River Boat Safari, and the UNESCO World Heritage Galle Fort.' }
+        ]
     },
     {
         id: 'colombo-city-tour',
-        title: 'Colombo Full Day City Tour',
+        title: 'Colombo Full day city tour',
         type: 'day trip',
         duration: '6 hours',
-        price: 39,
+        price: 39.00,
         originalPrice: null,
         currency: 'USD',
-        tags: ['Pickup available', 'New activity', 'Budget Friendly'],
+        tags: ['Pickup available', 'New activity'],
         image: '/tours/colombo.jpg',
-        pickupLocations: ['Colombo', 'Negombo'],
+        pickupLocations: ['Colombo City Limits'],
+        destinations: ['Colombo City'],
         highlights: [
             'Independence Square',
             'Gangaramaya Temple',
             'Colombo Lotus Tower',
-            'Galle Face Green',
-            'Pettah Market'
+            'Old Parliament & Lighthouse',
+            'Shopping at Pettah/City Centre'
         ],
-        description: 'Explore Sri Lanka\'s vibrant capital city - from colonial architecture to modern landmarks and bustling markets.'
+        description: 'Discover the vibrant capital of Colombo. Visit historic landmarks, modern attractions, and enjoy some shopping in this guided city tour.',
+        itinerary: [
+            { day: 1, title: 'Colombo City Tour', desc: 'Sightseeing in Colombo including Independence Square, Gangaramaya Temple, BMICH, and shopping at Odel or Pettah market.' }
+        ]
     },
     {
-        id: 'colombo-shopping-tour',
+        id: 'colombo-private-shopping',
         title: 'Colombo Private Day Tour and Shopping',
         type: 'private tour',
-        duration: '24 hours',
+        duration: 'Flex',
         price: 26.25,
         originalPrice: null,
         currency: 'USD',
-        tags: ['Pickup available', 'New activity', 'Best Value'],
-        image: '/tours/colombo-shopping.jpg',
-        pickupLocations: ['Colombo', 'Mirissa', 'Negombo', 'Galle', 'Bentota', 'Kandy', 'Hikkaduwa'],
+        tags: ['Pickup available', 'New activity'],
+        image: '/tours/colombo2.jpg',
+        pickupLocations: ['Colombo', 'Negombo', 'Kalutara', 'Galle', 'Bentota'],
+        destinations: ['Colombo'],
         highlights: [
+            'Customizable itinerary',
             'Independence Square',
-            'Gangaramaya Temple',
-            'Old Parliament House',
-            'Red Mosque (Jami Ul-Alfar)',
-            'Colombo Lotus Tower',
-            'Shopping time included'
+            'Jami Ul-Alfar Mosque (Red Mosque)',
+            'Shopping Malls & Markets',
+            'City sightseeing'
         ],
-        description: 'Perfect combination of sightseeing and shopping in Colombo with pickup from anywhere in Sri Lanka.'
+        description: 'A flexible private tour focused on Colombo\'s highlights and best shopping spots. Perfect for finding souvenirs and seeing the city sights.',
+        itinerary: [
+            { day: 1, title: 'Shopping & Sightseeing', desc: 'Customizable city tour focusing on shopping hotspots and key landmarks like the Red Mosque and Independence Square.' }
+        ]
     },
     {
         id: 'negombo-southern-coast',
         title: 'From Negombo: Southern Coast Highlights Private Day Tour',
         type: 'private tour',
         duration: '12 hours',
-        price: 120,
+        price: 120.00,
         originalPrice: null,
         currency: 'USD',
-        tags: ['Pickup available', 'New activity', 'Premium'],
-        image: '/tours/southern-coast.jpg',
+        tags: ['Pickup available', 'New activity'],
+        image: '/tours/galle2.jpg',
         pickupLocations: ['Negombo'],
+        destinations: ['Handunugoda', 'Ahangama', 'Galle'],
         highlights: [
-            'Handunugoda Tea Estate (Virgin White Tea)',
+            'Handunugoda Tea Estate',
             'Ahangama stilt fishermen',
-            'Galle Fort guided tour',
+            'Galle Fort lunch & tour',
             'Kosgoda Turtle Conservation',
             'Scenic coastal drive'
         ],
-        description: 'Premium private tour of Sri Lanka\'s beautiful southern coast with tea estate visit, marine life, and historic fortress.'
+        description: 'Depart from Negombo to explore the southern coast\'s tea estates, stilt fishermen, and the magnificent Galle Fort.',
+        itinerary: [
+            { day: 1, title: 'Tea, Stick Fishermen & Fort', desc: 'Visit the Handunugoda Tea Estate (Virgin White Tea), see stilt fishermen, and explore the Galle Dutch Fort.' }
+        ]
     },
     {
-        id: 'negombo-sigiriya-village',
+        id: 'negombo-sigiriya-safari',
         title: 'From Negombo: Sigiriya Dambulla and Village Safari Day Tour',
         type: 'private tour',
-        duration: '24 hours',
-        price: 80,
-        originalPrice: 89,
+        duration: 'Full Day',
+        price: 80.00,
+        originalPrice: 89.00,
         currency: 'USD',
-        tags: ['New activity', '10% Off'],
-        image: '/tours/sigiriya-village.jpg',
+        tags: ['New activity'],
+        image: '/tours/sigiriya4.jpg',
         pickupLocations: ['Negombo'],
+        destinations: ['Sigiriya', 'Habarana', 'Minneriya'],
         highlights: [
-            'Sigiriya sunrise climb',
-            'Habarana village experience',
-            'Minneriya wildlife safari',
-            'Dambulla Cave Temple',
-            'Traditional food tasting'
+            'Sigiriya Lion Rock sunrise/visit',
+            'Habarana village walk',
+            'Minneriya National Park Safari',
+            'Dambulla Royal Cave Temple'
         ],
-        description: 'Experience authentic Sri Lankan village life combined with ancient wonders and incredible wildlife.'
+        description: 'An action-packed day from Negombo features ancient fortress climbing, a village safari experience, and wildlife watching.',
+        itinerary: [
+            { day: 1, title: 'Adventure Trio', desc: 'Climb Sigiriya, enjoy a traditional village lunch and safari, and visit the Dambulla Cave Temple.' }
+        ]
     },
     {
         id: 'ambuluwawa-kandy',
@@ -211,292 +249,47 @@ export const dayTrips = [
         price: 67.55,
         originalPrice: 77.35,
         currency: 'USD',
-        tags: ['New activity', '13% Off'],
+        tags: ['New activity'],
         image: '/tours/ambuluwawa.jpg',
-        pickupLocations: ['Negombo', 'Katunayake', 'Seeduwa', 'Waikkal', 'Kochchikade'],
+        pickupLocations: ['Negombo', 'Katunayake', 'Waikkal'],
+        destinations: ['Ambuluwawa', 'Pinnawala', 'Kandy'],
         highlights: [
             'Pinnawala Elephant Orphanage',
-            'Ambuluwawa Tower (spiral staircase)',
-            'Ceylon Tea Factory tour',
-            'Gem Museum visit',
+            'Ambuluwawa Tower climb',
+            'Tea Factory & Museum',
             'Temple of the Tooth Relic',
-            'Kandy Lake viewpoint'
+            'Kandy City Viewpoint'
         ],
-        description: 'Unique day trip combining the stunning Ambuluwawa Tower with Kandy\'s cultural treasures and elephant encounters.'
+        description: 'Visit the biodiversity complex of Ambuluwawa Tower, see the elephants at Pinnawala, and explore the sacred city of Kandy.',
+        itinerary: [
+            { day: 1, title: 'Nature & Culture', desc: 'Visit the unique Ambuluwawa Tower, Pinnawala Elephant Orphanage, a Tea Factory, and Kandy Temple.' }
+        ]
     },
     {
-        id: 'galle-hikkaduwa-mirissa',
+        id: 'colombo-negombo-galle-mirissa',
         title: 'Colombo & Negombo To Galle | Hikkaduwa | Mirissa Day Tour',
         type: 'private tour',
-        duration: '8 hours',
+        duration: '8-10 hours',
         price: 94.56,
         originalPrice: 105.18,
         currency: 'USD',
-        tags: ['New activity', '10% Off'],
-        image: '/tours/mirissa.jpg',
+        tags: ['New activity'],
+        image: '/tours/galle3.jpg',
         pickupLocations: ['Negombo', 'Colombo'],
+        destinations: ['Madu River', 'Unawatuna', 'Galle', 'Mirissa'],
         highlights: [
-            'Madu River boat cruise',
-            'Kosgoda Turtle Conservation',
-            'Unawatuna Beach lunch',
+            'Madu Ganga River Safari',
+            'Kosgoda Turtle Hatchery',
+            'Unawatuna Beach',
             'Galle Fort exploration',
-            'Secret beach stop'
+            'Mirissa optional stop'
         ],
-        description: 'Discover Sri Lanka\'s most beautiful beaches from Hikkaduwa to Mirissa with historic Galle Fort.'
-    }
-];
-
-export const tourPackages = [
-    {
-        id: '6-days-cultural',
-        title: '06 Days | 05 Nights Excursions from Kandy, Sigiriya & Colombo',
-        duration: '6 Days / 5 Nights',
-        price: 300,
-        currency: 'USD',
-        priceType: 'Per Person',
-        image: '/tours/6-days-cultural.jpg',
-        mapImage: '/tours/map-6-days.png', // Added map image
-        destinations: ['Kandy', 'Sigiriya', 'Colombo'],
-        highlights: [
-            'Temple of the Tooth Relic',
-            'Sigiriya Rock Fortress',
-            'Dambulla Cave Temple',
-            'Colombo city tour',
-            'Tea plantation visit'
-        ],
-        includes: [
-            '5 nights accommodation',
-            'Daily breakfast',
-            'Private AC vehicle',
-            'English-speaking driver',
-            'All entrance fees',
-            'Meeting at the airport upon arrival and assistance during the stay',
-            'Transportation by air-conditioned vehicle according to the itinerary',
-            'Service of an English Speaking chauffeur up to 6 pax and Guide service included from 7 pax onwards',
-            'Accommodation at the Hotels as selected by you',
-            'Meal plan according to the itinerary',
-            'Two water bottles per day during tour'
-        ],
+        description: 'A perfect coastal getaway visiting the best beaches and cultural sites of the south, including a river safari and colonial fort visit.',
         itinerary: [
-            {
-                day: 1,
-                title: 'Airport - Pinnawala - Kandy',
-                description: 'Upon arrival at Bandaranaike International Airport you will be greeted by the Airport Representative and Professional Chauffeur Guide at the arrival lounge. Then you will act out for Kandy. En route visit Pinnawala Elephant Orphanage. (Approx: 3 hours) Check in to the Hotel in Kandy. In the evening witness a cultural dance performance and visit the Temple of the Tooth Relic. Dinner and overnight stay at Kandy.'
-            },
-            {
-                day: 2,
-                title: 'Kandy - Matale - Sigiriya',
-                description: 'After breakfast leave for Sigiriya. En route visit a Spice Garden in Matale to see different spices for which Sri Lanka is famous for. Witness a Cookery demonstration. Proceed to Sigiriya. Afternoon climb the Sigiriya Lion Rock Fortress. Dinner and overnight stay at Sigiriya.'
-            },
-            {
-                day: 3,
-                title: 'Sigiriya - Polonnaruwa - Sigiriya',
-                description: 'After breakfast proceed to Polonnaruwa. Visit the ancient city of Polonnaruwa (A UNESCO World Heritage Site). Return to hotel. Afternoon take a jeep safari comfortably through the Kaudulla or Minneriya National Parks to see the elephants and other wild animals. Dinner and overnight stay at Sigiriya.'
-            },
-            {
-                day: 4,
-                title: 'Sigiriya - Dambulla - Colombo',
-                description: 'After breakfast leave for Colombo. En route visit Dambulla Cave Temple. (Golden Temple). Proceed to Colombo. Check in to the hotel. Evening at leisure or small city tour / shopping. Dinner and overnight stay at Colombo.'
-            },
-            {
-                day: 5,
-                title: 'Colombo - Airport',
-                description: 'After breakfast proceed to the airport for your departure flight. (Approx: 45 mins)'
-            },
-            {
-                day: 6,
-                title: 'End of Tour',
-                description: 'End of services. We wish you a safe flight back home.'
-            }
-        ],
-        description: 'Perfect introduction to Sri Lanka covering the cultural triangle, hill country, and capital city.'
-    },
-    {
-        id: '10-days-northern',
-        title: 'Sri Lanka Classic & Northern Tour - 10 Days | 09 Nights',
-        duration: '10 Days / 9 Nights',
-        price: 350,
-        currency: 'USD',
-        priceType: 'Per Person',
-        image: '/tours/10-days-northern.jpg',
-        destinations: ['Colombo', 'Jaffna', 'Anuradhapura', 'Sigiriya', 'Kandy'],
-        highlights: [
-            'Jaffna Peninsula exploration',
-            'Anuradhapura ancient city',
-            'Sigiriya Rock climb',
-            'Kandy cultural sites',
-            'Northern cuisine experience'
-        ],
-        includes: [
-            '9 nights accommodation',
-            'Daily breakfast',
-            'Private AC vehicle',
-            'Ferry crossing to islands',
-            'All entrance fees'
-        ],
-        description: 'Comprehensive tour including the culturally rich Northern Province rarely visited by tourists.'
-    },
-    {
-        id: '8-days-kandy-bentota',
-        title: '08 Days Tour - Kandy, Nuwara Eliya & Bentota',
-        duration: '8 Days / 7 Nights',
-        price: 450,
-        currency: 'USD',
-        priceType: 'Per Person',
-        image: '/tours/8-days-hills.jpg',
-        destinations: ['Kandy', 'Nuwara Eliya', 'Bentota'],
-        highlights: [
-            'Scenic train ride to hill country',
-            'Tea plantation experience',
-            'Horton Plains National Park',
-            'Beach relaxation at Bentota',
-            'Water sports activities'
-        ],
-        includes: [
-            '7 nights accommodation',
-            'Daily breakfast',
-            'Train tickets',
-            'Private AC vehicle',
-            'All entrance fees'
-        ],
-        description: 'From misty mountains to sunny beaches - experience Sri Lanka\'s incredible diversity.'
-    },
-    {
-        id: '10-days-east-coast',
-        title: '10 Days - Nature, Culture & East Coast',
-        duration: '10 Days / 9 Nights',
-        price: 450,
-        currency: 'USD',
-        priceType: 'Per Person',
-        image: '/tours/10-days-east.jpg',
-        destinations: ['Colombo', 'Sigiriya', 'Trincomalee', 'Kandy'],
-        highlights: [
-            'Sigiriya Rock Fortress',
-            'Trincomalee beaches',
-            'Pigeon Island snorkeling',
-            'Whale watching (seasonal)',
-            'Hot water wells at Kanniya'
-        ],
-        includes: [
-            '9 nights accommodation',
-            'Daily breakfast',
-            'Snorkeling equipment',
-            'Private AC vehicle',
-            'All entrance fees'
-        ],
-        description: 'Explore Sri Lanka\'s unspoiled eastern coast combined with cultural triangle highlights.'
-    },
-    {
-        id: '12-days-complete',
-        title: 'Sri Lanka Culture Nature Tour - 12 Days | 11 Nights',
-        duration: '12 Days / 11 Nights',
-        price: 750,
-        currency: 'USD',
-        priceType: 'Per Person',
-        image: '/tours/12-days-complete.jpg',
-        destinations: ['Colombo', 'Sigiriya', 'Kandy', 'Ella', 'Yala', 'Galle'],
-        highlights: [
-            'Complete cultural triangle',
-            'Nine Arch Bridge',
-            'Yala Safari',
-            'Galle Fort',
-            'Southern beaches'
-        ],
-        includes: [
-            '11 nights accommodation',
-            'Daily breakfast',
-            'Safari jeep',
-            'Private AC vehicle',
-            'All entrance fees'
-        ],
-        description: 'The ultimate Sri Lanka experience covering every major attraction in comfort and style.'
-    },
-    {
-        id: '5-days-highlights',
-        title: '05 Days | 04 Nights - Kandy, Nuwara Eliya, Bentota, Colombo',
-        duration: '5 Days / 4 Nights',
-        price: 450,
-        currency: 'USD',
-        priceType: 'Per Person',
-        image: '/tours/5-days-highlights.jpg',
-        destinations: ['Kandy', 'Nuwara Eliya', 'Bentota', 'Colombo'],
-        highlights: [
-            'Temple of the Tooth',
-            'Tea country experience',
-            'Beach time at Bentota',
-            'Colombo shopping'
-        ],
-        includes: [
-            '4 nights accommodation',
-            'Daily breakfast',
-            'Private AC vehicle',
-            'All entrance fees'
-        ],
-        description: 'Short but comprehensive tour perfect for travelers with limited time.'
-    },
-    {
-        id: '10-days-ramayana',
-        title: '10 Days | 09 Nights Ramayana Trail Tour',
-        duration: '10 Days / 9 Nights',
-        price: 450,
-        currency: 'USD',
-        priceType: 'Per Person',
-        image: '/tours/ramayana-tour.jpg',
-        destinations: ['Colombo', 'Negombo', 'Munneswaram', 'Trincomalee', 'Kandy', 'Nuwara Eliya'],
-        highlights: [
-            'Ashok Vatika (Sita Eliya)',
-            'Munneswaram Temple',
-            'Koneswaram Temple',
-            'Divurumpola (Sita\'s trial)',
-            'Ravana Falls & Cave'
-        ],
-        includes: [
-            '9 nights accommodation',
-            'Daily breakfast',
-            'Temple offerings included',
-            'Private AC vehicle',
-            'All entrance fees'
-        ],
-        description: 'Follow the epic Ramayana trail across Sri Lanka visiting sacred sites connected to the ancient legend.'
-    },
-    {
-        id: '7-days-buddhist',
-        title: '07 Days | 06 Nights Buddhist Cultural Tour',
-        duration: '7 Days / 6 Nights',
-        price: 450,
-        currency: 'USD',
-        priceType: 'Per Person',
-        image: '/tours/buddhist-tour.jpg',
-        destinations: ['Colombo', 'Anuradhapura', 'Polonnaruwa', 'Sigiriya', 'Kandy'],
-        highlights: [
-            'Sri Maha Bodhi tree',
-            'Polonnaruwa ancient city',
-            'Dambulla Cave Temple',
-            'Temple of the Tooth Relic',
-            'Meditation experience'
-        ],
-        includes: [
-            '6 nights accommodation',
-            'Daily breakfast',
-            'Monastery visit',
-            'Private AC vehicle',
-            'All entrance fees'
-        ],
-        description: 'Spiritual journey through Sri Lanka\'s most sacred Buddhist sites and temples.'
+            { day: 1, title: 'Coastal Splendor', desc: 'River safari, turtle hatchery, Unawatuna Beach, Galle Fort, and optional visit to Mirissa.' }
+        ]
     }
 ];
 
-// Helper function to get tours by category
-export const getToursByType = (type) => {
-    return dayTrips.filter(trip => trip.type === type);
-};
-
-// Get featured tours (those with discounts)
-export const getFeaturedTours = () => {
-    return dayTrips.filter(trip => trip.originalPrice !== null);
-};
-
-// Get budget-friendly tours (under $50)
-export const getBudgetTours = () => {
-    return dayTrips.filter(trip => trip.price < 50);
-};
+// Combine into a main export if needed, or just export dayTrips as tourPackages
+export const tourPackages = dayTrips;
