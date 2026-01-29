@@ -37,9 +37,17 @@ export async function POST(req) {
             const chargeAmount = booking.paidAmount > 0 ? booking.paidAmount : booking.totalPrice;
             paymentUrl = `${baseUrl}/payment/mock?bookingId=${booking._id}&amount=${chargeAmount}`;
         } else if (gateway === 'sampath') {
-            // Sampath IPG: Return internal redirect URL
-            // This URL will handle the signature generation and auto-submission
-            paymentUrl = `${baseUrl}/payment/redirect?bookingId=${booking._id}`;
+            // Sampath PayCorp (REST API)
+            const { initiatePayCorpTransaction } = require('@/lib/payment');
+            const returnUrl = `${baseUrl}/api/payment/callback`; // We will use a dedicated callback route
+
+            const result = await initiatePayCorpTransaction(booking, returnUrl);
+
+            if (result.success) {
+                paymentUrl = result.paymentUrl;
+            } else {
+                throw new Error(result.message || 'Payment initiation failed');
+            }
         }
 
         return NextResponse.json({

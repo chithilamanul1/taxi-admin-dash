@@ -1,92 +1,55 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
-import User from '@/models/User';
-import Driver from '@/models/Driver';
-import bcrypt from 'bcryptjs';
+import Pricing from '@/models/Pricing';
 
 export async function GET() {
     try {
         await dbConnect();
 
-        const results = {
-            admin: 'skipped',
-            driver: 'skipped'
-        };
+        // Check for Ride Now pricing
+        const rideNowPrices = await Pricing.find({ category: 'ride-now' });
 
-        // 1. Seed Admin
-        const adminEmail = 'admin@airporttaxitours.lk';
-        const existingAdmin = await User.findOne({ email: adminEmail });
-
-        if (!existingAdmin) {
-            // Manually hash password since we might bypass middleware or want explicit control
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash('admin', salt);
-
-            await User.create({
-                name: 'Super Admin',
-                email: adminEmail,
-                password: hashedPassword, // 'admin'
-                role: 'admin',
-                isAdmin: true
-            });
-            results.admin = 'created';
-        }
-
-        // 2. Seed Driver (0774844637)
-        const driverPhone = '0774844637';
-        const existingDriverUser = await User.findOne({ phone: driverPhone });
-
-        if (!existingDriverUser) {
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash('driver123', salt);
-
-            // Create User first
-            const newDriverUser = await User.create({
-                name: 'Test Driver',
-                email: 'driver@test.com',
-                phone: driverPhone,
-                password: hashedPassword,
-                role: 'driver'
-            });
-
-            // Create Driver Profile
-            await Driver.create({
-                user: newDriverUser._id,
-                vehicleType: 'mini-car',
-                vehicleNumber: 'CAB-1234',
-                licenseNumber: 'LIC-5678',
-                status: 'available',
-                isOnline: false
-            });
-            results.driver = 'created';
-        } else {
-            // Check if Driver profile exists for this user, if not create it
-            const profile = await Driver.findOne({ user: existingDriverUser._id });
-            if (!profile) {
-                await Driver.create({
-                    user: existingDriverUser._id,
+        if (rideNowPrices.length === 0) {
+            const rideNowData = [
+                {
                     vehicleType: 'mini-car',
-                    vehicleNumber: 'CAB-1234',
-                    licenseNumber: 'LIC-5678',
-                    status: 'available',
-                    isOnline: false
-                });
-                results.driver = 'profile_fixed';
-            }
+                    category: 'ride-now',
+                    name: 'Mini Car (Ride Now)',
+                    basePrice: 500, // Higher base
+                    baseKm: 1,      // Lower base KM
+                    perKmRate: 150, // Higher per KM (Airport might be ~100)
+                    image: '/images/mini-car.png',
+                    isActive: true
+                },
+                {
+                    vehicleType: 'sedan',
+                    category: 'ride-now',
+                    name: 'Sedan (Ride Now)',
+                    basePrice: 600,
+                    baseKm: 1,
+                    perKmRate: 180,
+                    image: '/images/sedan.png',
+                    isActive: true
+                },
+                {
+                    vehicleType: 'kdh-van',
+                    category: 'ride-now',
+                    name: 'KDH Van (Ride Now)',
+                    basePrice: 1000,
+                    baseKm: 1,
+                    perKmRate: 250,
+                    image: '/images/kdh.png',
+                    isActive: true
+                }
+            ];
+
+            await Pricing.insertMany(rideNowData);
+            return NextResponse.json({ success: true, message: 'Seeded Ride Now prices.' });
+        } else {
+            return NextResponse.json({ success: true, message: 'Ride Now prices already exist.', count: rideNowPrices.length });
         }
-
-        return NextResponse.json({
-            success: true,
-            message: 'Database Seeded Successfully',
-            details: results,
-            credentials: {
-                admin: { email: 'admin@airporttaxitours.lk', pass: 'admin' },
-                driver: { phone: '0774844637', pin: '4637' }
-            }
-        });
-
     } catch (error) {
-        console.error('Seeding Error:', error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        console.error('Seeding error:', error);
+        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }

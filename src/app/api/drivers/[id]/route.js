@@ -27,6 +27,17 @@ export async function PUT(req, { params }) {
         const { id } = await params;
         const data = await req.json();
 
+        const currentDriver = await Driver.findById(id);
+        if (!currentDriver) return NextResponse.json({ error: 'Driver not found' }, { status: 404 });
+
+        // -- WALLET GATE CHECK --
+        if (data.isOnline === true && currentDriver.walletBalance < currentDriver.minBalanceThreshold) {
+            return NextResponse.json({
+                error: 'Insufficient Balance',
+                message: `Minimum balance of ${currentDriver.minBalanceThreshold} LKR required. Current: ${currentDriver.walletBalance} LKR`
+            }, { status: 403 });
+        }
+
         const driver = await Driver.findByIdAndUpdate(
             id,
             { $set: data },

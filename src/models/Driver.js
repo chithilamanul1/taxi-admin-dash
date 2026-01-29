@@ -34,11 +34,17 @@ const driverSchema = new mongoose.Schema({
         accountName: { type: String }
     },
 
+    // Operational Status
     isOnline: { type: Boolean, default: false },
     currentLocation: {
-        lat: { type: Number },
-        lng: { type: Number }
+        lat: Number,
+        lng: Number,
     },
+
+    // Wallet & Commission
+    walletBalance: { type: Number, default: 0 },
+    minBalanceThreshold: { type: Number, default: 5000 },
+
     status: { type: String, enum: ['free', 'busy'], default: 'free' },
     ratings: { type: Number, default: 5.0 },
     totalRides: { type: Number, default: 0 }

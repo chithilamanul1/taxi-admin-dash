@@ -279,6 +279,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         setDropoff(t); setDropoffSearch(ts);
     }
 
+    // Determine Pricing Category
+    const pricingCategory = ['pickup', 'drop'].includes(activeTab) ? 'airport-transfer' : 'ride-now';
+
     return (
         <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4">
             {/* Google Maps Loader (Conditional) */}
@@ -315,15 +318,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         {/* Section 1: Inputs */}
                         <div className="space-y-6">
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                                <div className="flex bg-emerald-900/5 dark:bg-white/5 p-1 rounded-xl border border-emerald-900/10 dark:border-white/10 w-full sm:w-auto gap-1">
-                                    <button onClick={() => setTripType('one-way')} aria-label="One Way Trip" className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all ${tripType === 'one-way' ? 'bg-emerald-900 text-white shadow-sm dark:bg-emerald-600' : 'text-emerald-900/80 hover:text-emerald-900 dark:text-white/80 dark:hover:text-white'}`}>One Way</button>
+                                <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 w-full sm:w-auto gap-1 shadow-sm">
+                                    <button onClick={() => setTripType('one-way')} aria-label="One Way Trip" className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-bold transition-all ${tripType === 'one-way' ? 'bg-slate-900 text-white shadow-md dark:bg-white dark:text-slate-900' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'}`}>One Way</button>
                                     <button
                                         onClick={() => (activeTab !== 'pickup' && activeTab !== 'drop') && setTripType('round-trip')}
                                         disabled={activeTab === 'pickup' || activeTab === 'drop'}
                                         aria-label="Round Trip"
-                                        className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all relative
-                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-emerald-900 text-white shadow-sm dark:bg-emerald-600' : 'text-emerald-900/80 dark:text-white/80'}
-                                            ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-40 cursor-not-allowed' : 'hover:text-emerald-900 dark:hover:text-white'}
+                                        className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-bold transition-all relative
+                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-slate-900 text-white shadow-md dark:bg-white dark:text-slate-900' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'}
+                                            ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-40 cursor-not-allowed' : ''}
                                         `}
                                     >
                                         Round Trip
@@ -332,9 +335,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         )}
                                     </button>
                                 </div>
-                                <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:underline flex items-center gap-2 bg-emerald-50 dark:bg-white/5 px-4 py-2 rounded-xl border border-emerald-600/10 w-full sm:w-auto justify-center whitespace-nowrap">
-                                    {isLocating ? <Loader2 size={14} className="animate-spin" /> : <Zap size={14} />}
-                                    Auto Detect
+                                <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="text-amber-900 dark:text-amber-100 text-xs font-bold hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 px-6 py-3 rounded-xl border border-amber-200 dark:border-amber-700/50 w-full sm:w-auto justify-center whitespace-nowrap shadow-sm hover:shadow-md hover:bg-amber-200 dark:hover:bg-amber-900/50">
+                                    {isLocating ? <Loader2 size={14} className="animate-spin text-amber-600" /> : <Zap size={14} className="fill-amber-500 text-amber-600" />}
+                                    Auto Detect Location
                                 </button>
                             </div>
 
@@ -459,7 +462,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 <span className="text-[10px] font-medium opacity-60">Meet & Greet</span>
                                             </div>
                                         </div>
-                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${hasNameBoard ? 'border-emerald-600 bg-emerald-600 dark:border-emerald-500 dark:bg-emerald-500' : 'border-emerald-900/20 dark:border-white/20'}`}>
+                                        <div className="w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${hasNameBoard ? 'border-emerald-600 bg-emerald-600 dark:border-emerald-500 dark:bg-emerald-500' : 'border-emerald-900/20 dark:border-white/20'}">
                                             {hasNameBoard && <Check size={12} className="text-white" />}
                                         </div>
                                     </button>
@@ -707,7 +710,31 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 )}
             </div>
 
-            <BookingModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} initialData={bookingInitialData} />
+            {/* Booking Modal */}
+            <BookingModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                initialData={{
+                    pickup: pickup.name,
+                    pickupCoords: { lat: pickup.lat, lon: pickup.lon },
+                    dropoff: dropoff.name,
+                    dropoffCoords: { lat: dropoff.lat, lon: dropoff.lon },
+                    waypoints: waypoints,
+                    tripType,
+                    passengerCount,
+                    date: schedule.date,
+                    time: schedule.time
+                }}
+                pricingCategory={pricingCategory}
+            />
+
+            {/* Smart Offer Nudge */}
+            <SmartOfferNudge
+                offer={appliedOffer}
+                onClose={() => setAppliedOffer(null)}
+            />
+
+            {/* Vehicle Selection Drawer */}
             <VehicleSelectionDrawer
                 isOpen={isVehicleDrawerOpen}
                 onClose={() => setIsVehicleDrawerOpen(false)}
@@ -717,8 +744,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 passengerCount={passengerCount}
                 isLoading={isLoadingPricing}
             />
-        </div >
-    )
+
+            {/* Google Map Script */}
+            <GoogleMapsLoader onLoaded={() => setIsScriptLoaded(true)} />
+        </div>
+    );
 }
 
 export default BookingWidget

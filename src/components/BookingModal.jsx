@@ -158,9 +158,19 @@ export default function BookingModal({ isOpen, onClose, initialData = {} }) {
     useEffect(() => {
         if (isOpen) {
             setFormData(prev => ({ ...prev, ...initialData }));
-            fetch('/api/pricing').then(res => res.json()).then(data => { if (Array.isArray(data)) setPricing(data); });
+            // Fetch pricing based on category
+            fetch(`/api/pricing?category=${pricingCategory}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (Array.isArray(data)) {
+                        setPricing(data);
+                    } else {
+                        setPricing([]);
+                    }
+                })
+                .catch(err => console.error("Error fetching pricing:", err));
         }
-    }, [isOpen, initialData]);
+    }, [isOpen, initialData, pricingCategory]);
 
     useEffect(() => {
         if (formData.pickupCoords && formData.dropoffCoords) {

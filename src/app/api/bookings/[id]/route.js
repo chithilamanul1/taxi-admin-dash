@@ -108,9 +108,50 @@ export async function PATCH(request, { params }) {
         // Log to Discord
         await logBookingStatusChanged(booking, status, changedBy);
 
-        // If completed, send completion email to customer
-        if (status === 'completed' && booking.customerEmail) {
-            await sendTripCompletedNotification(booking);
+        // If completed, deduct commission and notify
+        if (status === 'completed') {
+            update.completedAt = completedAt || new Date();
+
+            // --- COMMISSION LOGIC ---
+            // 1. Get the driver assigned to this booking
+            // Note: 'booking' variable currently holds the OLD doc before update if we use findByIdAndUpdate above immediately.
+            // But we can use 'existingBooking' if driver didn't change, or 'assignedDriver' if passed.
+            // Safest is to get the final state or use existing if not changing.
+
+            const driverId = assignedDriver || existingBooking.driver;
+
+            if (driverId) {
+                const { default: Driver } = await import('@/models/Driver');
+                const { default: Transaction } = await import('@/models/Transaction');
+
+                const driverDoc = await Driver.findById(driverId);
+                if (driverDoc) {
+                    const commissionRate = 0.10; // 10%
+                    const commissionAmount = Math.round(existingBooking.totalPrice * commissionRate);
+
+                    // Deduct
+                    driverDoc.walletBalance -= commissionAmount;
+                    await driverDoc.save();
+
+                    // Log Transaction
+                    await Transaction.create({
+                        driver: driverId,
+                        type: 'deduction',
+                        amount: commissionAmount,
+                        balanceAfter: driverDoc.walletBalance,
+                        description: `Commission for Trip #${existingBooking._id.toString().slice(-6)}`,
+                        referenceId: existingBooking._id,
+                        status: 'completed'
+                    });
+
+                    console.log(`Commission deducted: ${commissionAmount} from Driver ${driverId}`);
+                }
+            }
+            // ------------------------
+
+            if (booking.customerEmail) {
+                await sendTripCompletedNotification(booking);
+            }
         }
 
         return NextResponse.json({
