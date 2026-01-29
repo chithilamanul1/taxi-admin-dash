@@ -313,7 +313,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             </div>
 
             {/* Widget Main Content */}
-            <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-5 lg:p-8 shadow-xl border border-emerald-900/10 dark:border-white/10 animate-slide-up transition-colors duration-300">
+            <div className="bg-gradient-to-br from-emerald-50 via-white to-amber-50/30 dark:from-slate-900 dark:via-slate-900 dark:to-emerald-950/30 rounded-[2rem] p-5 lg:p-8 shadow-xl border-2 border-emerald-200/50 dark:border-emerald-800/30 animate-slide-up transition-colors duration-300">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12">
