@@ -320,14 +320,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         {/* Section 1: Inputs */}
                         <div className="space-y-6">
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                                <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 w-full sm:w-auto gap-1 shadow-sm">
-                                    <button onClick={() => setTripType('one-way')} aria-label="One Way Trip" className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-bold transition-all ${tripType === 'one-way' ? 'bg-slate-900 text-white shadow-md dark:bg-white dark:text-slate-900' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'}`}>One Way</button>
+                                <div className="flex bg-emerald-100 dark:bg-emerald-900/30 p-1.5 rounded-xl border-2 border-emerald-200 dark:border-emerald-700/50 w-full sm:w-auto gap-1 shadow-sm">
+                                    <button onClick={() => setTripType('one-way')} aria-label="One Way Trip" className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-bold transition-all ${tripType === 'one-way' ? 'bg-emerald-800 text-white shadow-md dark:bg-emerald-600' : 'text-emerald-700 hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-white hover:bg-emerald-200/50 dark:hover:bg-emerald-800/30'}`}>One Way</button>
                                     <button
                                         onClick={() => (activeTab !== 'pickup' && activeTab !== 'drop') && setTripType('round-trip')}
                                         disabled={activeTab === 'pickup' || activeTab === 'drop'}
                                         aria-label="Round Trip"
                                         className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-bold transition-all relative
-                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-slate-900 text-white shadow-md dark:bg-white dark:text-slate-900' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'}
+                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-emerald-800 text-white shadow-md dark:bg-emerald-600' : 'text-emerald-700 hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-white hover:bg-emerald-200/50 dark:hover:bg-emerald-800/30'}
                                             ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-40 cursor-not-allowed' : ''}
                                         `}
                                     >
@@ -368,7 +368,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             type="text"
                                             readOnly
                                             value={wp.name}
-                                            className="w-full pl-16 pr-12 h-14 rounded-2xl text-sm font-bold bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-emerald-900/60 dark:text-white/60"
+                                            className="w-full pl-16 pr-12 h-14 rounded-2xl text-sm font-bold bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-200 dark:border-emerald-800/50 text-emerald-900 dark:text-white"
                                         />
                                         <button
                                             onClick={() => setWaypoints(prev => prev.filter((_, i) => i !== idx))}
@@ -747,8 +747,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 isLoading={isLoadingPricing}
             />
 
-            {/* Google Map Script */}
-            <GoogleMapsLoader onLoaded={() => setIsScriptLoaded(true)} />
         </div>
     );
 }

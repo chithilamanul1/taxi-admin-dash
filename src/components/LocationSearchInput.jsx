@@ -79,7 +79,7 @@ export default function LocationSearchInput({
                     onFocus={() => query && setIsOpen(true)}
                     placeholder={placeholder}
                     required={required}
-                    className="w-full h-12 md:h-14 bg-white border border-emerald-900/10 pl-12 pr-10 rounded-2xl outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-900/5 transition-all font-bold text-sm text-emerald-900 truncate"
+                    className="w-full h-12 md:h-14 bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-200 dark:border-emerald-800/50 pl-12 pr-10 rounded-2xl outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/20 transition-all font-bold text-sm text-emerald-900 dark:text-white truncate placeholder:text-emerald-900/40 dark:placeholder:text-emerald-400/40"
                 />
                 {loading && <div className="absolute right-4 top-1/2 -translate-y-1/2"><Loader2 className="animate-spin text-emerald-600" size={16} /></div>}
                 {query && !loading && (
