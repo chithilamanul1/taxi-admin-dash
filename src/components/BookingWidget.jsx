@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X } from 'lucide-react'
 
 import Image from 'next/image'
-import { useJsApiLoader } from '@react-google-maps/api'
 import ToursWidget from './ToursWidget'
 import RentalsWidget from './RentalsWidget'
 import BookingModal from './BookingModal'
@@ -14,7 +13,6 @@ import VehicleCarousel from './VehicleCarousel'
 import LocationInput from './LocationInput'
 import SmartOfferNudge from './SmartOfferNudge'
 
-const libraries = ['places'];
 
 // ... (calculatePrice helper remains same)
 
@@ -65,20 +63,6 @@ const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours,
 };
 
 // Internal Loader Component to avoid hook conflicts
-const GoogleMapsLoader = ({ onLoaded }) => {
-    const { isLoaded } = useJsApiLoader({
-        id: 'google-map-script',
-        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-        libraries,
-        // Removed preventGoogleFontsLoading to match LiveDriverMap options
-    });
-
-    useEffect(() => {
-        if (isLoaded && onLoaded) onLoaded();
-    }, [isLoaded, onLoaded]);
-
-    return null;
-};
 
 const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [activeOffers, setActiveOffers] = useState([]);
@@ -119,9 +103,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [isVehicleDrawerOpen, setIsVehicleDrawerOpen] = useState(false)
     const [bookingInitialData, setBookingInitialData] = useState({})
 
-    // Lazy Map Loading State
-    const [shouldLoadMap, setShouldLoadMap] = useState(false);
-    const [isMapReady, setIsMapReady] = useState(false);
 
     // Fetch Pricing based on Tab
     useEffect(() => {
@@ -287,7 +268,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     return (
         <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4">
             {/* Google Maps Loader (Conditional) */}
-            {shouldLoadMap && <GoogleMapsLoader onLoaded={() => setIsMapReady(true)} />}
 
             {/* Tab Navigation */}
             <div className="flex flex-wrap bg-slate-100 dark:bg-white/5 p-1 rounded-2xl w-full mb-6 md:mb-8 gap-1.5 shadow-sm border border-emerald-900/5" role="tablist">
@@ -350,8 +330,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     value={pickupSearch}
                                     icon={MapPin}
                                     disabled={activeTab === 'pickup'}
-                                    isLoaded={isMapReady}
-                                    onFocus={() => setShouldLoadMap(true)}
                                     onChange={(val) => setPickupSearch(val)}
                                     onSelect={(loc) => {
                                         setPickup({ name: loc.address, lat: loc.lat, lon: loc.lon });
@@ -403,8 +381,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 <LocationInput
                                                     placeholder="Add Stop (Search City)"
                                                     icon={Navigation}
-                                                    isLoaded={isMapReady}
-                                                    onFocus={() => setShouldLoadMap(true)}
                                                     onSelect={(loc) => {
                                                         setWaypoints([...waypoints, { name: loc.address, lat: loc.lat, lon: loc.lon }]);
                                                         setWaypointSearches([]);
@@ -439,8 +415,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     value={dropoffSearch}
                                     icon={MapPin}
                                     disabled={activeTab === 'drop'}
-                                    isLoaded={isMapReady}
-                                    onFocus={() => setShouldLoadMap(true)}
                                     onChange={(val) => setDropoffSearch(val)}
                                     onSelect={(loc) => {
                                         setDropoff({ name: loc.address, lat: loc.lat, lon: loc.lon });
