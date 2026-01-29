@@ -60,7 +60,7 @@ export default function TourPackageDetails() {
                         <div className="flex flex-wrap items-center gap-6 text-white/90 font-medium text-lg">
                             <div className="flex items-center gap-2">
                                 <span className="text-2xl md:text-3xl font-bold text-emerald-400">{tour.currency} {tour.price}</span>
-                                <span className="text-sm opacity-70">{tour.priceType}</span>
+                                <span className="text-sm opacity-70">{tour.priceType || 'Person'}</span>
                             </div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@ export default function TourPackageDetails() {
                             </p>
 
                             <div className="mt-8 flex flex-wrap gap-3">
-                                {tour.destinations.map(dest => (
+                                {tour.destinations?.map(dest => (
                                     <div key={dest} className="px-4 py-2 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800 flex items-center gap-2">
                                         <MapPin size={16} className="text-emerald-600 dark:text-emerald-400" />
                                         <span className="font-bold text-emerald-900 dark:text-emerald-300 text-sm">{dest}</span>
@@ -96,8 +96,8 @@ export default function TourPackageDetails() {
                                     <Calendar className="text-emerald-600" /> Itinerary
                                 </h2>
                                 <div className="space-y-6">
-                                    {tour.itinerary.map((item, index) => (
-                                        <div key={item.day} className={`relative pl-8 pb-8 border-l-2 ${index === tour.itinerary.length - 1 ? 'border-transparent' : 'border-emerald-100 dark:border-slate-800'}`}>
+                                    {tour.itinerary?.map((item, index) => (
+                                        <div key={item.day} className={`relative pl-8 pb-8 border-l-2 ${index === (tour.itinerary?.length - 1 || 0) ? 'border-transparent' : 'border-emerald-100 dark:border-slate-800'}`}>
                                             <button
                                                 onClick={() => setActiveDay(activeDay === item.day ? null : item.day)}
                                                 className={`absolute -left-[11px] top-0 w-5 h-5 rounded-full border-2 transition-all ${activeDay === item.day ? 'bg-emerald-600 border-emerald-600 scale-125' : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 hover:border-emerald-400'}`}
@@ -118,7 +118,7 @@ export default function TourPackageDetails() {
                                                 <div className={`grid transition-all duration-300 ease-in-out ${activeDay === item.day ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'}`}>
                                                     <div className="overflow-hidden">
                                                         <p className="text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-950/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800/50">
-                                                            {item.description}
+                                                            {item.desc || item.description}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -218,7 +218,7 @@ export default function TourPackageDetails() {
                         <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl border border-emerald-900/5 dark:border-slate-800">
                             <h3 className="text-lg font-bold text-emerald-900 dark:text-white mb-6 uppercase tracking-wider">Package Includes</h3>
                             <ul className="space-y-4">
-                                {tour.includes.map((item, i) => (
+                                {tour.includes?.map((item, i) => (
                                     <li key={i} className="flex gap-3 text-sm text-slate-600 dark:text-slate-400 group">
                                         <div className="shrink-0 w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center group-hover:bg-emerald-200 dark:group-hover:bg-emerald-900/50 transition-colors">
                                             <Check size={12} className="text-emerald-600 dark:text-emerald-400" />

@@ -14,6 +14,8 @@ export const dayTrips = [
         image: '/tours/maduriver.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Dehiwala', 'Mount Lavinia', 'Wadduwa', 'Kalutara'],
         destinations: ['Bentota', 'Madu Ganga', 'Hikkaduwa', 'Galle Fort'],
+        includes: ['Private Car', 'Driver Guide', 'All Fuel', 'Hotel Pickup/Drop'],
+        priceType: 'Person',
         highlights: [
             'Bentota Beach photo stop',
             'Kosgoda Sea Turtle Conservation visit',
@@ -21,6 +23,8 @@ export const dayTrips = [
             'Hikkaduwa Beach visit',
             'Galle Fort sightseeing & sunset'
         ],
+        includes: ['Private Car', 'Driver Guide', 'All Fuel', 'Hotel Pickup/Drop'],
+        priceType: 'Person',
         description: 'Experience the best of Sri Lanka\'s southern coast in one day. Visit turtle hatcheries, cruise through mangroves, and explore the historic Galle Fort.',
         itinerary: [
             { day: 1, title: 'South Coast Adventure', desc: 'Depart from Colombo and head to Bentota. Visit the Sea Turtle Conservation project, enjoy a boat safari on Madu River, proceed to Hikkaduwa details, and finally explore the Dutch Galle Fort.' }
@@ -38,6 +42,8 @@ export const dayTrips = [
         image: '/tours/kandy.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Wadduwa', 'Mount Lavinia'],
         destinations: ['Pinnawala', 'Kandy', 'Peradeniya'],
+        includes: ['Private Car', 'Driver Guide', 'All Fuel', 'Hotel Pickup/Drop'],
+        priceType: 'Person',
         highlights: [
             'Pinnawala Elephant Orphanage',
             'Temple of the Tooth Relic',
@@ -62,6 +68,8 @@ export const dayTrips = [
         image: '/tours/sigiriya.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Kalutara', 'Bentota', 'Hikkaduwa', 'Galle'],
         destinations: ['Sigiriya', 'Dambulla', 'Minneriya/Kaudulla'],
+        includes: ['Private Car', 'Driver Guide', 'All Fuel', 'Hotel Pickup/Drop'],
+        priceType: 'Person',
         highlights: [
             'Sigiriya Lion Rock climb',
             'Dambulla Cave Temple',
@@ -86,6 +94,8 @@ export const dayTrips = [
         image: '/tours/sigiriya2.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Dehiwala', 'Mount Lavinia', 'Wennappuwa'],
         destinations: ['Sigiriya', 'Minneriya', 'Dambulla'],
+        includes: ['Private Car', 'Driver Guide', 'All Fuel', 'Hotel Pickup/Drop'],
+        priceType: 'Person',
         highlights: [
             'Sigiriya Lion Rock (2.5 hours)',
             'Minneriya National Park safari (4 hours)',
@@ -110,6 +120,8 @@ export const dayTrips = [
         image: '/tours/sigiriya3.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Dehiwala', 'Mount Lavinia', 'Wennappuwa'],
         destinations: ['Sigiriya', 'Dambulla'],
+        includes: ['Private Car', 'Driver Guide', 'All Fuel', 'Hotel Pickup/Drop'],
+        priceType: 'Person',
         highlights: [
             'Private vehicle & guide',
             'Dambulla breakfast stop',
@@ -134,6 +146,8 @@ export const dayTrips = [
         image: '/tours/galle.jpg',
         pickupLocations: ['Colombo', 'Dehiwala', 'Mount Lavinia', 'Negombo'],
         destinations: ['Bentota', 'Madu River', 'Galle'],
+        includes: ['Private Car', 'Driver Guide', 'All Fuel', 'Hotel Pickup/Drop'],
+        priceType: 'Person',
         highlights: [
             'Bentota Beach visit',
             'Kosgoda Sea Turtle Conservation',
@@ -158,6 +172,8 @@ export const dayTrips = [
         image: '/tours/colombo.jpg',
         pickupLocations: ['Colombo City Limits'],
         destinations: ['Colombo City'],
+        includes: ['Private Car', 'Driver Guide', 'All Fuel', 'Hotel Pickup/Drop'],
+        priceType: 'Person',
         highlights: [
             'Independence Square',
             'Gangaramaya Temple',
@@ -182,6 +198,8 @@ export const dayTrips = [
         image: '/tours/colombo2.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Kalutara', 'Galle', 'Bentota'],
         destinations: ['Colombo'],
+        includes: ['Private Car', 'Driver Guide', 'All Fuel', 'Hotel Pickup/Drop'],
+        priceType: 'Person',
         highlights: [
             'Customizable itinerary',
             'Independence Square',
@@ -206,6 +224,8 @@ export const dayTrips = [
         image: '/tours/galle2.jpg',
         pickupLocations: ['Negombo'],
         destinations: ['Handunugoda', 'Ahangama', 'Galle'],
+        includes: ['Private Car', 'Driver Guide', 'All Fuel', 'Hotel Pickup/Drop'],
+        priceType: 'Person',
         highlights: [
             'Handunugoda Tea Estate',
             'Ahangama stilt fishermen',
@@ -230,6 +250,8 @@ export const dayTrips = [
         image: '/tours/sigiriya4.jpg',
         pickupLocations: ['Negombo'],
         destinations: ['Sigiriya', 'Habarana', 'Minneriya'],
+        includes: ['Private Car', 'Driver Guide', 'All Fuel', 'Hotel Pickup/Drop'],
+        priceType: 'Person',
         highlights: [
             'Sigiriya Lion Rock sunrise/visit',
             'Habarana village walk',
@@ -253,6 +275,8 @@ export const dayTrips = [
         image: '/tours/ambuluwawa.jpg',
         pickupLocations: ['Negombo', 'Katunayake', 'Waikkal'],
         destinations: ['Ambuluwawa', 'Pinnawala', 'Kandy'],
+        includes: ['Private Car', 'Driver Guide', 'All Fuel', 'Hotel Pickup/Drop'],
+        priceType: 'Person',
         highlights: [
             'Pinnawala Elephant Orphanage',
             'Ambuluwawa Tower climb',
@@ -277,6 +301,8 @@ export const dayTrips = [
         image: '/tours/galle3.jpg',
         pickupLocations: ['Negombo', 'Colombo'],
         destinations: ['Madu River', 'Unawatuna', 'Galle', 'Mirissa'],
+        includes: ['Private Car', 'Driver Guide', 'All Fuel', 'Hotel Pickup/Drop'],
+        priceType: 'Person',
         highlights: [
             'Madu Ganga River Safari',
             'Kosgoda Turtle Hatchery',

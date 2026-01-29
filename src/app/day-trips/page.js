@@ -84,7 +84,7 @@ export default function DayTripsPage() {
                                 <div className="absolute inset-0 bg-black/20" />
                                 {/* Tags */}
                                 <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                                    {trip.tags.slice(0, 2).map((tag, i) => (
+                                    {trip.tags?.slice(0, 2).map((tag, i) => (
                                         <span key={i} className="px-3 py-1 bg-white/90 text-emerald-900 text-xs font-bold rounded-full">
                                             {tag}
                                         </span>
@@ -123,7 +123,7 @@ export default function DayTripsPage() {
                                 {/* Highlights */}
                                 <div className="mb-4">
                                     <div className="flex flex-wrap gap-1">
-                                        {trip.highlights.slice(0, 3).map((h, i) => (
+                                        {trip.highlights?.slice(0, 3).map((h, i) => (
                                             <span key={i} className="text-xs bg-emerald-50 text-emerald-700 px-2 py-1 rounded">
                                                 {h}
                                             </span>
