@@ -135,15 +135,6 @@ export default function Navbar() {
                         </div>
                     </div>
 
-                    {/* CTA */}
-                    <a
-                        href="tel:+94722885885"
-                        className="flex items-center gap-3 px-6 py-3 bg-emerald-900 text-white rounded-xl font-bold text-sm hover:scale-105 transition-all shadow-lg"
-                        aria-label="Call Specialist at +94 722 885 885"
-                    >
-                        <Phone size={16} />
-                        0722 885 885
-                    </a>
 
                     {/* User Auth */}
                     {status !== 'loading' && (
