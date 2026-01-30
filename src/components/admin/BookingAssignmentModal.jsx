@@ -30,6 +30,8 @@ export default function BookingAssignmentModal({ booking, onClose, onAssignSucce
         }
     };
 
+    const commissionAmount = (booking.totalPrice || 0) * 0.10; // 10% Commission
+
     const handleAssign = async () => {
         if (!selectedDriver) return;
         setAssigning(true);
@@ -40,7 +42,8 @@ export default function BookingAssignmentModal({ booking, onClose, onAssignSucce
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     assignedDriver: selectedDriver._id,
-                    status: 'assigned' // or 'ongoing' depending on workflow
+                    status: 'assigned', // or 'ongoing' depending on workflow
+                    commission: commissionAmount // Pass commission to backend for deduction
                 })
             });
 
@@ -100,48 +103,62 @@ export default function BookingAssignmentModal({ booking, onClose, onAssignSucce
                         <p className="text-center text-slate-400 py-8">No verified drivers found.</p>
                     ) : (
                         <div className="space-y-2">
-                            {drivers.map(driver => (
-                                <div
-                                    key={driver._id}
-                                    onClick={() => setSelectedDriver(driver)}
-                                    className={`p-3 rounded-xl border cursor-pointer transition-all flex justify-between items-center ${selectedDriver?._id === driver._id
-                                            ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 ring-1 ring-emerald-500'
-                                            : 'border-slate-200 dark:border-white/10 hover:border-emerald-300'
-                                        }`}
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${driver.status === 'free' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
-                                            <Car size={18} />
+                            {drivers.map(driver => {
+                                const hasFunds = (driver.walletBalance || 0) >= 5000;
+                                return (
+                                    <div
+                                        key={driver._id}
+                                        onClick={() => hasFunds && setSelectedDriver(driver)}
+                                        className={`p-3 rounded-xl border transition-all flex justify-between items-center ${!hasFunds ? 'opacity-50 cursor-not-allowed bg-slate-50' : 'cursor-pointer'} ${selectedDriver?._id === driver._id
+                                                ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 ring-1 ring-emerald-500'
+                                                : 'border-slate-200 dark:border-white/10 hover:border-emerald-300'
+                                            }`}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${driver.status === 'free' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                                                <Car size={18} />
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-slate-900 dark:text-white text-sm">{driver.name}</p>
+                                                <div className="flex items-center gap-2 text-xs text-slate-500">
+                                                    <span>{driver.vehicleNumber}</span>
+                                                    <span className={`font-mono font-bold ${hasFunds ? 'text-emerald-600' : 'text-red-500'}`}>
+                                                        Rs {(driver.walletBalance || 0).toLocaleString()}
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p className="font-bold text-slate-900 dark:text-white text-sm">{driver.name}</p>
-                                            <p className="text-xs text-slate-500">{driver.vehicleModel} • {driver.vehicleNumber}</p>
+                                        <div className="text-right">
+                                            <div className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${driver.status === 'free' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                                                {driver.status}
+                                            </div>
+                                            {!hasFunds && <span className="text-[9px] text-red-500 font-bold block mt-1">Low Balance</span>}
+                                            {selectedDriver?._id === driver._id && <Check size={16} className="text-emerald-600 ml-auto mt-1" />}
                                         </div>
                                     </div>
-                                    <div className="text-right">
-                                        <div className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${driver.status === 'free' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
-                                            {driver.status}
-                                        </div>
-                                        {selectedDriver?._id === driver._id && <Check size={16} className="text-emerald-600 ml-auto mt-1" />}
-                                    </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     )}
                 </div>
 
-                <div className="p-6 border-t dark:border-white/10 bg-slate-50 dark:bg-white/5 rounded-b-2xl flex gap-3">
-                    <button onClick={onClose} className="flex-1 py-3 font-bold text-slate-500 hover:bg-slate-200 rounded-xl transition-colors">Cancel</button>
-                    <button
-                        onClick={handleAssign}
-                        disabled={!selectedDriver || assigning}
-                        className="flex-[2] py-3 bg-emerald-900 text-white rounded-xl font-bold hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
-                    >
-                        {assigning ? <Loader2 className="animate-spin" /> : <MessageCircle size={18} />}
-                        {assigning ? 'Assigning...' : 'Assign & WhatsApp'}
-                    </button>
+                <div className="px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-t dark:border-white/10">
+                    <div className="flex justify-between items-center mb-4 text-xs">
+                        <span className="text-slate-500">Trip Value: <strong>Rs {booking.totalPrice?.toLocaleString()}</strong></span>
+                        <span className="text-emerald-600">Commission (10%): <strong>- Rs {commissionAmount.toLocaleString()}</strong></span>
+                    </div>
+                    <div className="flex gap-3">
+                        <button onClick={onClose} className="flex-1 py-3 font-bold text-slate-500 hover:bg-slate-200 rounded-xl transition-colors">Cancel</button>
+                        <button
+                            onClick={handleAssign}
+                            disabled={!selectedDriver || assigning}
+                            className="flex-[2] py-3 bg-emerald-900 text-white rounded-xl font-bold hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
+                        >
+                            {assigning ? <Loader2 className="animate-spin" /> : <MessageCircle size={18} />}
+                            {assigning ? 'Assigning...' : 'Assign & WhatsApp'}
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    );
+            );
 }

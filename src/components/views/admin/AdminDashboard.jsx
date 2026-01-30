@@ -764,6 +764,29 @@ function AdminSupportController() {
                                 <span>ID: {activeTicket._id}</span>
                             </div>
                         </div>
+                        <div className="p-6 border-t dark:border-white/10 bg-gray-50 dark:bg-slate-800 flex justify-end gap-3 rounded-b-2xl">
+                            <button
+                                onClick={() => setViewingBooking(null)}
+                                className="px-6 py-2 rounded-lg font-bold text-slate-500 hover:bg-slate-200 dark:hover:bg-white/5 transition-colors"
+                            >
+                                Close
+                            </button>
+                            {viewingBooking.status === 'pending' || viewingBooking.status === 'paid' ? (
+                                <button
+                                    onClick={() => {
+                                        setBookingToAssign(viewingBooking);
+                                        setViewingBooking(null);
+                                    }}
+                                    className="px-6 py-2 rounded-lg font-bold bg-emerald-600 text-white hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-900/20"
+                                >
+                                    Assign Driver
+                                </button>
+                            ) : null}
+                            <button className="px-6 py-2 rounded-lg font-bold bg-emerald-900 text-white hover:bg-emerald-800 transition-colors shadow-lg shadow-emerald-900/20">
+                                <CheckCircle size={18} className="inline mr-2" />
+                                Save Changes
+                            </button>
+                        </div>
 
                         <div className="flex-1 overflow-y-auto p-4 space-y-4">
                             {activeTicket.messages.map((msg, i) => (

@@ -136,12 +136,13 @@ export async function PATCH(request, { params }) {
                     // Log Transaction
                     await Transaction.create({
                         driver: driverId,
-                        type: 'deduction',
+                        type: 'debit',
                         amount: commissionAmount,
                         balanceAfter: driverDoc.walletBalance,
                         description: `Commission for Trip #${existingBooking._id.toString().slice(-6)}`,
                         referenceId: existingBooking._id,
-                        status: 'completed'
+                        status: 'completed',
+                        performedBy: 'System'
                     });
 
                     console.log(`Commission deducted: ${commissionAmount} from Driver ${driverId}`);

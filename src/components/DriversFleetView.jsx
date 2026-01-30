@@ -10,6 +10,10 @@ const DriversFleetView = ({ bookings = [] }) => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [assignModal, setAssignModal] = useState({ open: false, bookingId: null });
     const [approvalModal, setApprovalModal] = useState(null); // Driver object to approve
+    const [topupModal, setTopupModal] = useState(null); // Driver object to top up
+    const [topupAmount, setTopupAmount] = useState('');
+    const [topupReceipt, setTopupReceipt] = useState(null); // File
+    const [receiptPreview, setReceiptPreview] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [newDriver, setNewDriver] = useState({
         name: '',
@@ -60,6 +64,53 @@ const DriversFleetView = ({ bookings = [] }) => {
     // Filter drivers based on tab
     const activeDrivers = drivers.filter(d => d.verificationStatus === 'verified' || !d.verificationStatus); // Support legacy drivers without status
     const pendingDrivers = drivers.filter(d => d.verificationStatus === 'pending' || d.verificationStatus === 'unverified');
+
+    // Top Up Wallet Logic
+    const handleTopUp = async (e) => {
+        e.preventDefault();
+        if (!topupAmount || isNaN(topupAmount)) return;
+        setIsSubmitting(true);
+        try {
+            let receiptUrl = null;
+
+            // Upload receipt if exists
+            if (topupReceipt) {
+                const formData = new FormData();
+                formData.append('file', topupReceipt);
+                const uploadRes = await fetch('/api/upload', { method: 'POST', body: formData });
+                const uploadData = await uploadRes.json();
+                if (uploadData.success) {
+                    receiptUrl = uploadData.url;
+                }
+            }
+
+            const res = await fetch(`/api/drivers/${topupModal._id}/wallet`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'topup',
+                    amount: topupAmount,
+                    receiptUrl
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert(`Successfully added Rs ${topupAmount} to wallet`);
+                setTopupModal(null);
+                setTopupAmount('');
+                setTopupReceipt(null);
+                setReceiptPreview(null);
+                fetchDrivers();
+            } else {
+                alert(data.error);
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Top up failed');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     // Approve Driver Logic
     const handleApprove = async (driverId, action) => {
@@ -248,6 +299,22 @@ const DriversFleetView = ({ bookings = [] }) => {
                                     <p className={`font-bold capitalize ${driver.status === 'free' ? 'text-green-600' : 'text-orange-600'}`}>{driver.status}</p>
                                 </div>
                             </div>
+
+                            {/* Wallet Section */}
+                            <div className="mb-4 bg-emerald-50/50 dark:bg-emerald-900/10 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/20 flex justify-between items-center">
+                                <div>
+                                    <p className="text-[10px] text-emerald-800 dark:text-emerald-400 font-bold uppercase tracking-wider">Wallet Balance</p>
+                                    <p className={`font-mono font-bold text-lg ${driver.walletBalance < 5000 ? 'text-red-600' : 'text-emerald-900 dark:text-emerald-300'}`}>
+                                        Rs {(driver.walletBalance || 0).toLocaleString()}
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => setTopupModal(driver)}
+                                    className="bg-emerald-900 text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-emerald-800"
+                                >
+                                    + Top Up
+                                </button>
+                            </div>
                             <div className="flex gap-2">
                                 <a href={`tel:${driver.phone}`} className="flex-1 flex items-center justify-center gap-2 bg-emerald-50 text-emerald-700 py-2 rounded-lg text-sm font-bold hover:bg-emerald-100 transition-colors">
                                     <Phone size={14} /> Call
@@ -345,6 +412,77 @@ const DriversFleetView = ({ bookings = [] }) => {
                                 Approve & Create Account
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Top Up Modal */}
+            {topupModal && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-sm p-6 animate-slide-up">
+                        <h3 className="text-lg font-bold text-emerald-900 dark:text-white mb-4">Top Up Wallet</h3>
+                        <p className="text-sm text-gray-500 mb-4">Adding funds for <strong>{topupModal.name}</strong></p>
+
+                        <form onSubmit={handleTopUp}>
+                            <div className="mb-4">
+                                <label className="block text-xs font-bold text-gray-400 uppercase mb-1">Amount (LKR)</label>
+                                <input
+                                    type="number"
+                                    className="w-full p-3 border rounded-xl font-mono text-lg font-bold outline-none ring-emerald-500 focus:ring-2"
+                                    placeholder="5000"
+                                    value={topupAmount}
+                                    onChange={e => setTopupAmount(e.target.value)}
+                                    required
+                                    min="100"
+                                />
+                            </div>
+
+                            <div className="mb-6">
+                                <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Proof of Transfer (Receipt)</label>
+                                <div className="border-2 border-dashed border-gray-200 dark:border-white/10 rounded-xl p-4 text-center hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer relative">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                        onChange={(e) => {
+                                            const file = e.target.files[0];
+                                            if (file) {
+                                                setTopupReceipt(file);
+                                                setReceiptPreview(URL.createObjectURL(file));
+                                            }
+                                        }}
+                                    />
+                                    {receiptPreview ? (
+                                        <div className="relative">
+                                            <img src={receiptPreview} className="h-32 mx-auto rounded-lg object-contain" />
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setTopupReceipt(null);
+                                                    setReceiptPreview(null);
+                                                }}
+                                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-md hover:bg-red-600"
+                                            >
+                                                <X size={12} />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="text-gray-400">
+                                            <FileText className="mx-auto mb-2" size={24} />
+                                            <p className="text-xs">Click to upload receipt image</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3">
+                                <button type="button" onClick={() => setTopupModal(null)} className="flex-1 py-3 bg-gray-100 dark:bg-white/10 rounded-xl font-bold text-gray-500">Cancel</button>
+                                <button type="submit" disabled={isSubmitting} className="flex-1 py-3 bg-emerald-900 text-white rounded-xl font-bold flex justify-center items-center gap-2">
+                                    {isSubmitting ? <Loader2 className="animate-spin" size={18} /> : <span>Confirm</span>}
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

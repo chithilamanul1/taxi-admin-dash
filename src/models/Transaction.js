@@ -1,14 +1,19 @@
 import mongoose from 'mongoose';
 
-const TransactionSchema = new mongoose.Schema({
+const transactionSchema = new mongoose.Schema({
     driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver', required: true },
-    type: { type: String, enum: ['deposit', 'deduction', 'adjustment'], required: true },
+    type: { type: String, enum: ['credit', 'debit'], required: true },
     amount: { type: Number, required: true },
     balanceAfter: { type: Number, required: true },
     description: { type: String, required: true },
-    referenceId: { type: String }, // bookingId or paymentId
+    receiptUrl: { type: String }, // For top-ups
+    referenceId: { type: mongoose.Schema.Types.ObjectId }, // Booking ID or other ref
     status: { type: String, enum: ['pending', 'completed', 'failed'], default: 'completed' },
-    metadata: { type: Object }
-}, { timestamps: true });
+    performedBy: { type: String } // Admin name or 'System'
+}, {
+    timestamps: true
+});
 
-export default mongoose.models.Transaction || mongoose.model('Transaction', TransactionSchema);
+const Transaction = mongoose.models.Transaction || mongoose.model('Transaction', transactionSchema);
+
+export default Transaction;
