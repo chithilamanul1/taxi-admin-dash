@@ -13,6 +13,10 @@ export default function DriverDashboard() {
     const [isOnline, setIsOnline] = useState(false);
     const [gpsStatus, setGpsStatus] = useState('off'); // 'off', 'tracking', 'error'
     const [lastLocation, setLastLocation] = useState(null);
+    const [showTopupModal, setShowTopupModal] = useState(false);
+    const [topupAmount, setTopupAmount] = useState('5000');
+    const [customAmount, setCustomAmount] = useState('');
+    const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
     // GPS Location update function
     const updateLocation = useCallback(async (lat, lng) => {
@@ -154,6 +158,50 @@ export default function DriverDashboard() {
         }
     };
 
+    const handlePayment = async () => {
+        const amount = topupAmount === 'custom' ? customAmount : topupAmount;
+        if (!amount || amount < 5000) {
+            alert('Minimum topup amount is Rs 5,000');
+            return;
+        }
+
+        setIsProcessingPayment(true);
+        try {
+            // Check if mock payment or real
+            // For now, simulating a card payment via a new API
+            const res = await fetch('/api/payment/create-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount,
+                    driverId: driver._id,
+                    description: `Wallet Topup - ${driver.name}`
+                })
+            });
+            const data = await res.json();
+
+            if (data.url) {
+                // Redirect to payment gateway (or mock page)
+                window.location.href = data.url;
+            } else if (data.success) {
+                // Direct success (Mock)
+                alert('Payment Successful! Wallet Updated.');
+                setShowTopupModal(false);
+                // Refresh driver data
+                const driverRes = await fetch(`/api/drivers/${driver._id}`);
+                const driverData = await driverRes.json();
+                setDriver(driverData);
+            } else {
+                alert('Payment Failed: ' + data.error);
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Payment Error');
+        } finally {
+            setIsProcessingPayment(false);
+        }
+    };
+
     const filteredBookings = bookings.filter(b => {
         if (activeTab === 'pending') return b.status === 'pending' || b.status === 'assigned';
         if (activeTab === 'ongoing') return b.status === 'ongoing';
@@ -197,8 +245,8 @@ export default function DriverDashboard() {
                         <button
                             onClick={toggleOnlineStatus}
                             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition-all ${isOnline
-                                    ? 'bg-green-500 text-white'
-                                    : 'bg-white/10 text-white hover:bg-white/20'
+                                ? 'bg-green-500 text-white'
+                                : 'bg-white/10 text-white hover:bg-white/20'
                                 }`}
                         >
                             {isOnline ? (
@@ -226,8 +274,8 @@ export default function DriverDashboard() {
                 {isOnline && (
                     <div className="max-w-4xl mx-auto mt-4">
                         <div className={`flex items-center gap-2 text-sm px-4 py-2 rounded-lg ${gpsStatus === 'tracking' ? 'bg-green-500/20 text-green-300' :
-                                gpsStatus === 'error' ? 'bg-red-500/20 text-red-300' :
-                                    'bg-white/10 text-white/70'
+                            gpsStatus === 'error' ? 'bg-red-500/20 text-red-300' :
+                                'bg-white/10 text-white/70'
                             }`}>
                             <Navigation size={14} className={gpsStatus === 'tracking' ? 'animate-pulse' : ''} />
                             {gpsStatus === 'tracking' && (
@@ -249,7 +297,7 @@ export default function DriverDashboard() {
 
             {/* Stats */}
             <div className="max-w-4xl mx-auto p-6">
-                <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     {[
                         { label: 'Pending', count: bookings.filter(b => b.status === 'pending' || b.status === 'assigned').length, color: 'bg-yellow-500' },
                         { label: 'Ongoing', count: bookings.filter(b => b.status === 'ongoing').length, color: 'bg-blue-500' },
@@ -262,6 +310,27 @@ export default function DriverDashboard() {
                             <p className="text-sm text-gray-600">{stat.label}</p>
                         </div>
                     ))}
+
+                    {/* Wallet Stat */}
+                    <div className="bg-white rounded-xl p-4 shadow-sm relative overflow-hidden">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-sm text-gray-600 mb-1">Wallet Balance</p>
+                                <p className={`text-2xl font-mono font-bold ${(driver?.walletBalance || 0) < 5000 ? 'text-red-600' : 'text-emerald-900'}`}>
+                                    Rs {(driver?.walletBalance || 0).toLocaleString()}
+                                </p>
+                            </div>
+                            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-700 font-bold">
+                                💰
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => setShowTopupModal(true)}
+                            className="w-full mt-3 bg-emerald-900 text-white py-2 rounded-lg text-sm font-bold hover:bg-emerald-800 transition-colors"
+                        >
+                            + Top Up
+                        </button>
+                    </div>
                 </div>
 
                 {/* Tabs */}
@@ -356,6 +425,76 @@ export default function DriverDashboard() {
                     )}
                 </div>
             </div>
-        </div>
+            {/* Top Up Modal */}
+            {
+                showTopupModal && (
+                    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className="text-xl font-bold text-emerald-900">Top Up Wallet</h3>
+                                <button onClick={() => setShowTopupModal(false)} className="p-2 hover:bg-gray-100 rounded-full"><XCircle size={24} className="text-gray-400" /></button>
+                            </div>
+
+                            <p className="text-sm text-gray-500 mb-4">Select an amount to add to your wallet. Minimum amount is <strong>Rs 5,000</strong>.</p>
+
+                            <div className="grid grid-cols-2 gap-3 mb-4">
+                                <button
+                                    onClick={() => { setTopupAmount('5000'); setCustomAmount(''); }}
+                                    className={`py-3 rounded-xl font-bold border-2 transition-all ${topupAmount === '5000' ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 text-gray-500 hover:border-emerald-200'}`}
+                                >
+                                    Rs 5,000
+                                </button>
+                                <button
+                                    onClick={() => { setTopupAmount('10000'); setCustomAmount(''); }}
+                                    className={`py-3 rounded-xl font-bold border-2 transition-all ${topupAmount === '10000' ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 text-gray-500 hover:border-emerald-200'}`}
+                                >
+                                    Rs 10,000
+                                </button>
+                            </div>
+
+                            <div className="mb-6">
+                                <button
+                                    onClick={() => setTopupAmount('custom')}
+                                    className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all mb-2 flex items-center gap-3 ${topupAmount === 'custom' ? 'border-emerald-500 bg-white ring-1 ring-emerald-500' : 'border-gray-200 bg-gray-50'}`}
+                                >
+                                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${topupAmount === 'custom' ? 'border-emerald-500' : 'border-gray-400'}`}>
+                                        {topupAmount === 'custom' && <div className="w-2 h-2 rounded-full bg-emerald-500" />}
+                                    </div>
+                                    <span className={topupAmount === 'custom' ? 'text-emerald-900 font-bold' : 'text-gray-500'}>Custom Amount</span>
+                                </button>
+
+                                {topupAmount === 'custom' && (
+                                    <div className="animate-fade-in-down">
+                                        <input
+                                            type="number"
+                                            placeholder="Enter amount (Min 5000)"
+                                            className="w-full p-3 border-2 border-emerald-100 rounded-xl font-mono text-lg font-bold outline-none focus:border-emerald-500"
+                                            value={customAmount}
+                                            onChange={(e) => setCustomAmount(e.target.value)}
+                                            min="5000"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            <button
+                                onClick={handlePayment}
+                                disabled={isProcessingPayment}
+                                className="w-full py-4 bg-emerald-900 text-white rounded-xl font-bold text-lg hover:bg-emerald-800 transition-colors flex justify-center items-center gap-2 shadow-lg shadow-emerald-900/20"
+                            >
+                                {isProcessingPayment ? <Loader2 className="animate-spin" /> : 'Pay Securely'}
+                            </button>
+
+                            <div className="mt-4 flex justify-center gap-4 opacity-50">
+                                {/* Payment Logos (Text for now) */}
+                                <span className="text-xs font-bold text-gray-400">VISA</span>
+                                <span className="text-xs font-bold text-gray-400">MasterCard</span>
+                                <span className="text-xs font-bold text-gray-400">Sampath Bank</span>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        </div >
     );
 }
