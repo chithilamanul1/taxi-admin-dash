@@ -55,12 +55,9 @@ const TourPackages = () => {
 
                                 <div className="mt-auto pt-4 border-t border-gray-100 flex items-end justify-between">
                                     <div>
-                                        <p className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Per Person</p>
+                                        <p className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Price</p>
                                         <div className="flex items-baseline gap-1">
-                                            <span className="text-lg font-extrabold text-emerald-600">${pkg.price}</span>
-                                            {pkg.originalPrice && (
-                                                <span className="text-xs text-slate-300 line-through">${pkg.originalPrice}</span>
-                                            )}
+                                            <span className="text-sm font-bold text-emerald-600">Contact for Quote</span>
                                         </div>
                                     </div>
                                     <div className="flex gap-2">

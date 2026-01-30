@@ -18,7 +18,14 @@ const bookingSchema = new mongoose.Schema({
         lat: { type: Number },
         lng: { type: Number }
     },
-    vehicleType: { type: String, required: true },
+    vehicleType: { type: String, required: false }, // Made optional for tours
+    type: { type: String, enum: ['transfer', 'tour'], default: 'transfer' }, // New Type Field
+    tourDetails: {
+        tourId: String,
+        tourTitle: String,
+        duration: String,
+        inclusions: [String]
+    },
     tripType: { type: String, enum: ['one-way', 'round-trip'], default: 'one-way' },
     passengerCount: {
         adults: { type: Number, default: 1 },
@@ -26,9 +33,9 @@ const bookingSchema = new mongoose.Schema({
         infants: { type: Number, default: 0 },
         bags: { type: Number, default: 0 }
     },
-    distanceKm: { type: Number, required: true },
+    distanceKm: { type: Number },
     waitingHours: { type: Number, default: 0 },
-    totalPrice: { type: Number, required: true },
+    totalPrice: { type: Number }, // Can be 0 for inquiries
     status: {
         type: String,
         enum: ['pending', 'assigned', 'ongoing', 'completed', 'cancelled'],

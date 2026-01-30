@@ -149,6 +149,10 @@ const AdminDashboard = () => {
                         <Users size={20} />
                         <span className={`${!sidebarOpen && 'hidden'}`}>Bookings</span>
                     </button>
+                    <button onClick={() => setCurrentView('tours')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'tours' ? 'bg-emerald-600 text-emerald-900' : 'hover:bg-white/10'}`}>
+                        <MapPin size={20} />
+                        <span className={`${!sidebarOpen && 'hidden'}`}>Tours</span>
+                    </button>
                 </nav>
             </div>
 
@@ -364,8 +368,58 @@ const AdminDashboard = () => {
                         </div>
                     )}
 
+
                     {currentView === 'drivers' && (
                         <DriversFleetView bookings={bookings} />
+                    )}
+
+                    {currentView === 'tours' && (
+                        <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-8 border border-white/5">
+                            <h3 className="text-lg font-bold text-emerald-900 dark:text-white mb-4">Tour Booking Inquiries</h3>
+                            <div className="overflow-x-auto">
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="text-left text-sm text-slate-500 border-b">
+                                            <th className="pb-3">ID</th>
+                                            <th className="pb-3">Tour Name</th>
+                                            <th className="pb-3">Customer</th>
+                                            <th className="pb-3">Date</th>
+                                            <th className="pb-3">Pax</th>
+                                            <th className="pb-3">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="text-sm">
+                                        {bookings.filter(b => b.type === 'tour').length === 0 ? (
+                                            <tr>
+                                                <td colSpan="6" className="py-8 text-center text-gray-400">No tour inquiries yet.</td>
+                                            </tr>
+                                        ) : (
+                                            bookings.filter(b => b.type === 'tour').map((booking) => (
+                                                <tr key={booking._id} className="border-b dark:border-white/5 last:border-0 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors text-emerald-900 dark:text-white">
+                                                    <td className="py-4 font-medium text-emerald-900 dark:text-emerald-400">#{booking._id.slice(-6)}</td>
+                                                    <td className="py-4 font-bold">{booking.tourDetails?.tourTitle || 'Custom Tour'}</td>
+                                                    <td className="py-4">
+                                                        <div>{booking.customerName}</div>
+                                                        <div className="text-xs text-gray-400">{booking.guestPhone}</div>
+                                                    </td>
+                                                    <td className="py-4">{booking.scheduledDate}</td>
+                                                    <td className="py-4 font-medium">{booking.passengerCount?.adults}Ad, {booking.passengerCount?.children}Ch</td>
+                                                    <td className="py-4">
+                                                        <span className={`px-2 py-1 rounded text-xs font-bold capitalize
+                                                                    ${booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                                booking.status === 'ongoing' ? 'bg-blue-100 text-blue-800' :
+                                                                    booking.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-gray-100'
+                                                            }`}>
+                                                            {booking.status}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     )}
 
                     {/* EDIT MODAL OVERLAY */}

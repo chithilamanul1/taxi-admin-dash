@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Check, Phone, MessageCircle, MapPin, Clock, Calendar, ArrowLeft, Plus, Minus } from 'lucide-react'
 import { tourPackages } from '../../../data/tours-data'
 import { useState } from 'react'
+import TourBookingModal from '../../../components/TourBookingModal'
 
 export default function TourPackageDetails() {
     const params = useParams()
@@ -16,6 +17,7 @@ export default function TourPackageDetails() {
 
     const [activeDay, setActiveDay] = useState(1)
     const [memberCount, setMemberCount] = useState({ adults: 2, children: 0 })
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     if (!tour) {
         return (
@@ -41,7 +43,7 @@ export default function TourPackageDetails() {
                     priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
-                <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 lg:p-20">
+                <div className="absolute bottom-0 left-0 w-full p-6 pb-24 md:p-12 md:pb-28 lg:p-20 lg:pb-32">
                     <div className="max-w-7xl mx-auto">
                         <Link href="/tour-packages" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors font-medium">
                             <ArrowLeft size={20} /> Back to Packages
@@ -98,9 +100,8 @@ export default function TourPackageDetails() {
                                 <div className="space-y-6">
                                     {tour.itinerary?.map((item, index) => (
                                         <div key={item.day} className={`relative pl-8 pb-8 border-l-2 ${index === (tour.itinerary?.length - 1 || 0) ? 'border-transparent' : 'border-emerald-100 dark:border-slate-800'}`}>
-                                            <button
-                                                onClick={() => setActiveDay(activeDay === item.day ? null : item.day)}
-                                                className={`absolute -left-[11px] top-0 w-5 h-5 rounded-full border-2 transition-all ${activeDay === item.day ? 'bg-emerald-600 border-emerald-600 scale-125' : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 hover:border-emerald-400'}`}
+                                            <div
+                                                className={`absolute -left-[9px] top-0 w-4 h-4 rounded-full border-2 transition-all ${activeDay === item.day ? 'bg-emerald-600 border-emerald-600' : 'bg-white dark:bg-slate-800 border-emerald-200 dark:border-slate-600'}`}
                                             />
                                             <div className="flex flex-col gap-2">
                                                 <button
@@ -200,19 +201,31 @@ export default function TourPackageDetails() {
                             </div>
 
                             <div className="space-y-4 relative z-10">
+                                <button
+                                    onClick={() => setIsModalOpen(true)}
+                                    className="flex items-center justify-center gap-3 w-full py-4 bg-white hover:bg-slate-50 text-emerald-950 rounded-xl font-bold shadow-lg shadow-emerald-900/20 transition-all hover:scale-[1.02]"
+                                >
+                                    <Calendar size={20} /> Book Now
+                                </button>
                                 <a
                                     href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking the "${tour.title}".\n\nPax: ${memberCount.adults} Adults, ${memberCount.children} Children\nPlease provide availability and a quote.`)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center justify-center gap-3 w-full py-4 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl font-bold shadow-lg shadow-emerald-900/20 transition-all hover:scale-[1.02]"
                                 >
-                                    <MessageCircle size={20} /> WhatsApp Quote
-                                </a>
-                                <a href="tel:+94716885880" className="flex items-center justify-center gap-3 w-full py-4 bg-white hover:bg-slate-50 text-emerald-950 rounded-xl font-bold shadow-lg shadow-emerald-900/20 transition-all hover:scale-[1.02]">
-                                    <Phone size={20} /> Direct Call
+                                    <MessageCircle size={20} /> WhatsApp Inquiry
                                 </a>
                             </div>
                         </div>
+
+                        {/* Booking Modal */}
+                        <TourBookingModal
+                            isOpen={isModalOpen}
+                            onClose={() => setIsModalOpen(false)}
+                            tourTitle={tour.title}
+                            tourId={tour.id}
+                            duration={tour.duration}
+                        />
 
                         {/* Includes List */}
                         <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl border border-emerald-900/5 dark:border-slate-800">

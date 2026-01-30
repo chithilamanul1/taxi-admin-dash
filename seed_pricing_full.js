@@ -57,61 +57,121 @@ async function seed() {
             console.log('Index vehicleType_1 not found or already dropped (safe to ignore).');
         }
 
-        // 1. Seed Airport Transfer
-        const airportCount = await Pricing.countDocuments({ category: 'airport-transfer' });
-        console.log(`Existing Airport Transfer entries: ${airportCount}`);
+        // 1. Seed Airport Transfer - Force Update
+        await Pricing.deleteMany({ category: 'airport-transfer' });
+        console.log('Cleared existing Airport Transfer entries.');
 
-        if (airportCount === 0) {
-            console.log('Seeding Airport Transfer...');
-            await Pricing.insertMany([
-                {
-                    vehicleType: 'car',
-                    category: 'airport-transfer',
-                    name: 'Comfort Car',
-                    basePrice: 50, // USD essentially (or LKR base)
-                    baseKm: 0,
-                    perKmRate: 0.60, // USD/km approx
-                    maxPassengers: 3,
-                    maxLuggage: 2,
-                    image: 'https://i.ibb.co/cyGjk85/sedan.png',
-                    isActive: true
-                },
-                {
-                    vehicleType: 'van',
-                    category: 'airport-transfer',
-                    name: 'Mini Van',
-                    basePrice: 60,
-                    baseKm: 0,
-                    perKmRate: 0.80,
-                    maxPassengers: 6,
-                    maxLuggage: 4,
-                    image: 'https://i.ibb.co/hR0K00y/van.png',
-                    isActive: true
-                },
-                {
-                    vehicleType: 'minibus',
-                    category: 'airport-transfer',
-                    name: 'Mini Bus',
-                    basePrice: 100,
-                    baseKm: 0,
-                    perKmRate: 1.20,
-                    maxPassengers: 12,
-                    maxLuggage: 10,
-                    image: 'https://i.ibb.co/5L00H1K/minibus.png',
-                    isActive: true
-                }
-            ]);
-            console.log('Seeded Airport Transfer.');
-        } else {
-            console.log('Airport Transfer already seeded.');
-        }
+        console.log('Seeding Airport Transfer...');
+        const commonFeatures = ['Air Conditioning', 'Bluetooth', 'USB Charging'];
+
+        await Pricing.insertMany([
+            {
+                vehicleType: 'mini-car',
+                category: 'airport-transfer',
+                name: 'Mini Car (Budget)',
+                basePrice: 40,
+                baseKm: 0,
+                perKmRate: 0.50,
+                maxPassengers: 2,
+                maxLuggage: 2,
+                handLuggage: 2,
+                features: commonFeatures,
+                image: '/vehicles/wagon-r.jpeg',
+                isActive: true
+            },
+            {
+                vehicleType: 'sedan',
+                category: 'airport-transfer',
+                name: 'Sedan Car',
+                basePrice: 50,
+                baseKm: 0,
+                perKmRate: 0.60,
+                maxPassengers: 3,
+                maxLuggage: 3,
+                handLuggage: 3,
+                features: commonFeatures,
+                image: '/vehicles/sedan.png',
+                isActive: true
+            },
+            {
+                vehicleType: 'mini-van-every',
+                category: 'airport-transfer',
+                name: 'Mini Van (Every)',
+                basePrice: 55,
+                baseKm: 0,
+                perKmRate: 0.70,
+                maxPassengers: 3,
+                maxLuggage: 3,
+                handLuggage: 3,
+                features: commonFeatures,
+                image: '/vehicles/every.jpg',
+                isActive: true
+            },
+            {
+                vehicleType: 'van',
+                category: 'airport-transfer',
+                name: 'KDH Van',
+                basePrice: 65,
+                baseKm: 0,
+                perKmRate: 0.85,
+                maxPassengers: 6,
+                maxLuggage: 7,
+                handLuggage: 7,
+                features: commonFeatures,
+                image: '/vehicles/kdh.png',
+                isActive: true
+            },
+            {
+                vehicleType: 'suv',
+                category: 'airport-transfer',
+                name: 'SUV (Luxury)',
+                basePrice: 90,
+                baseKm: 0,
+                perKmRate: 1.00,
+                maxPassengers: 3,
+                maxLuggage: 3,
+                handLuggage: 3,
+                features: [...commonFeatures, 'Leather Seats'],
+                image: '/vehicles/suv.jpg',
+                isActive: true
+            },
+            {
+                vehicleType: 'mini-bus',
+                category: 'airport-transfer',
+                name: 'Bus',
+                basePrice: 110,
+                baseKm: 0,
+                perKmRate: 1.30,
+                maxPassengers: 16,
+                maxLuggage: 20,
+                handLuggage: 20,
+                features: [...commonFeatures, 'TV', 'Microphone'],
+                image: '/vehicles/minibus.jpg',
+                isActive: true
+            },
+            {
+                vehicleType: 'coach',
+                category: 'airport-transfer',
+                name: 'Coach Bus',
+                basePrice: 150,
+                baseKm: 0,
+                perKmRate: 1.80,
+                maxPassengers: 45,
+                maxLuggage: 45,
+                handLuggage: 50,
+                features: [...commonFeatures, 'TV', 'Microphone', 'Reclining Seats'],
+                image: '/vehicles/coach.jpg',
+                isActive: true
+            }
+        ]);
+        console.log('Seeded Airport Transfer with detailed specs.');
 
         // 2. Seed Ride Now - Force Update
         await Pricing.deleteMany({ category: 'ride-now' });
         console.log('Cleared existing Ride Now entries.');
 
         console.log('Seeding Ride Now...');
-        const commonFeatures = ['Air Conditioning', 'Bluetooth', 'USB Charging'];
+        // commonFeatures is already defined above
 
         await Pricing.insertMany([
             {
