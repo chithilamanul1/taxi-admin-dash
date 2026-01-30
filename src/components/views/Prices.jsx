@@ -274,7 +274,7 @@ const Prices = ({ initialDestination }) => {
 
     // Calculate route using OSRM
     useEffect(() => {
-        if (pickup.lat && dropoff.lat) {
+        if (pickup.lat && pickup.lon && dropoff.lat && dropoff.lon) {
             const getDistance = async () => {
                 setLoading(true)
                 try {

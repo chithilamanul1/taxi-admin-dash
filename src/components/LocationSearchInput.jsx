@@ -35,7 +35,7 @@ export default function LocationSearchInput({
         if (!q || q.length < 3) return
         setLoading(true)
         try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=5&countrycodes=lk`)
+            const res = await fetch(`/api/proxy/nominatim?q=${encodeURIComponent(q)}`);
             if (res.ok) {
                 const data = await res.json()
                 setResults(data)

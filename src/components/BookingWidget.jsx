@@ -158,7 +158,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             try {
                 const { latitude, longitude } = pos.coords;
                 // Reverse Geocode with Nominatim
-                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+                const res = await fetch(`/api/proxy/nominatim?lat=${latitude}&lon=${longitude}`);
                 const data = await res.json();
 
                 const loc = {
@@ -182,7 +182,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     // Distance Calculation (Google Directions)
     // Distance Calculation (OSRM)
     useEffect(() => {
-        if (pickup.lat && dropoff.lat) {
+        if (pickup.lat && pickup.lon && dropoff.lat && dropoff.lon) {
             const calculateRoute = async () => {
                 try {
                     // OSRM Format: {lon},{lat};{lon},{lat}

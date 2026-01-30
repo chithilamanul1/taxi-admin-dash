@@ -173,7 +173,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     }, [isOpen, initialData, pricingCategory]);
 
     useEffect(() => {
-        if (formData.pickupCoords && formData.dropoffCoords) {
+        if (
+            formData.pickupCoords?.lat && formData.pickupCoords?.lon &&
+            formData.dropoffCoords?.lat && formData.dropoffCoords?.lon
+        ) {
             const coords = [
                 `${formData.pickupCoords.lon},${formData.pickupCoords.lat}`,
                 ...formData.waypoints.map(wp => `${wp.lon},${wp.lat}`),
@@ -181,7 +184,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             ].join(';');
             fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=false`)
                 .then(res => res.json())
-                .then(data => { if (data.routes?.[0]) setDistance(data.routes[0].distance / 1000); });
+                .then(data => { if (data.routes?.[0]) setDistance(data.routes[0].distance / 1000); })
+                .catch(err => console.error("OSRM Error:", err));
         }
     }, [formData.pickupCoords, formData.dropoffCoords, formData.waypoints]);
 
