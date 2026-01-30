@@ -36,7 +36,7 @@ const ReviewStatsBar = () => {
                         </div>
                         <div className="flex flex-col items-start pl-4 border-l border-slate-200 dark:border-slate-700">
                             <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-black text-slate-900 dark:text-white">5.0</span>
+                                <span className="text-2xl font-black text-slate-900 dark:text-white">4.7</span>
                                 <span className="text-sm text-slate-400 font-bold">/5</span>
                             </div>
                             <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wide">Recommended</span>
@@ -45,7 +45,9 @@ const ReviewStatsBar = () => {
 
                     {/* Google */}
                     <a
-                        href="#"
+                        href="https://g.page/r/YOUR_GOOGLE_REVIEW_LINK"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="flex items-center gap-4 group hover:opacity-80 transition-opacity"
                     >
                         <div className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-100 flex items-center justify-center flex-shrink-0 font-bold text-xl">

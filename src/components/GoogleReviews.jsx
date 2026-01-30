@@ -30,6 +30,24 @@ const FALLBACK_REVIEWS = [
 
 const GoogleReviews = () => {
     const [reviews, setReviews] = useState(FALLBACK_REVIEWS);
+    const [rating, setRating] = useState(5.0);
+    const [totalReviews, setTotalReviews] = useState('300+');
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Fetch real Google reviews
+        fetch('/api/reviews/google')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.data?.reviews?.length > 0) {
+                    setReviews(data.data.reviews);
+                    setRating(data.data.rating || 5.0);
+                    setTotalReviews(data.data.totalReviews || '300+');
+                }
+            })
+            .catch(err => console.error('Failed to fetch reviews:', err))
+            .finally(() => setLoading(false));
+    }, []);
 
     return (
         <section className="py-20 bg-slate-50 dark:bg-slate-900 overflow-hidden relative">
@@ -44,8 +62,8 @@ const GoogleReviews = () => {
                         See what our customers say about their journey with Airport Taxi Tours.
                     </p>
                     <div className="flex items-center justify-center gap-2 text-yellow-500">
-                        {[...Array(5)].map((_, i) => <Star key={i} size={24} fill="currentColor" />)}
-                        <span className="text-emerald-900 dark:text-white font-bold ml-2">5.0 Customer Rating</span>
+                        {[...Array(5)].map((_, i) => <Star key={i} size={24} fill={i < Math.floor(rating) ? "currentColor" : "none"} className={i < rating ? "" : "text-slate-300"} />)}
+                        <span className="text-emerald-900 dark:text-white font-bold ml-2">{rating.toFixed(1)} Customer Rating</span>
                     </div>
                 </div>
 
