@@ -50,7 +50,7 @@ const LocationInput = ({
         try {
             // Use Nominatim API (bounded to Sri Lanka for better relevance if needed, but general for now)
             // viewbox=79.5,5.8,82.0,9.9&bounded=1 for Sri Lanka bias
-            const response = await fetch(`/api/proxy/nominatim?q=${encodeURIComponent(text)}`);
+            const response = await fetch(`/api/proxy/photon?q=${encodeURIComponent(text)}`);
             const data = await response.json();
             setSuggestions(data);
             setShowSuggestions(true);
