@@ -10,7 +10,7 @@ const ReviewStatsBar = () => {
 
                     {/* TripAdvisor */}
                     <a
-                        href="https://www.tripadvisor.com/"
+                        href="https://www.tripadvisor.com/Attraction_Review-g1500185-d33021905-Reviews-Airport_Cab_LK-Katunayake_Negombo_Western_Province.html"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-4 group hover:opacity-80 transition-opacity"
