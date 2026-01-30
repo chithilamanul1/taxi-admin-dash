@@ -194,6 +194,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const { total: totalPrice, subtotal, surcharges } = getPriceBreakdown();
 
     const handleSubmit = async () => {
+        console.log("Submitting Booking... Step 1");
         setLoading(true);
         try {
             // Sanitize customer ID (prevent Google ID string from causing CastError)
@@ -201,7 +202,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const isValidObjectId = (id) => typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id);
 
             // Verify breakdown before sending
+            console.log("Getting Price Breakdown...");
             const { total, payNow, balance, surcharges } = getPriceBreakdown();
+            console.log("Price Breakdown:", { total, payNow });
+
+            if (total === 0) {
+                alert("Error: Total price is 0. Please re-select vehicle.");
+                setLoading(false);
+                return;
+            }
 
             // Map form data to Booking model schema
             const bookingData = {
@@ -232,7 +241,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 paidAmount: payNow,
                 balanceAmount: balance,
                 surchargeAmount: surcharges,
-                paymentType: formData.paymentType, // 'full' or 'partial'
+                paymentType: formData.paymentType || 'full', // Default to full if undefined
                 currency: currency || 'LKR',
 
                 scheduledDate: formData.date,
@@ -250,12 +259,18 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 notes: formData.notes
             };
 
+            console.log("Sending booking data:", bookingData);
+
             const res = await fetch('/api/payment/initiate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(bookingData),
             });
+
+            console.log("Response status:", res.status);
             const data = await res.json();
+            console.log("Response data:", data);
+
             if (data.success) {
                 // Save guest booking to local storage if not logged in
                 if (!session && data.bookingId) {
@@ -273,8 +288,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 alert('Booking failed: ' + (data.message || data.error || 'Server error'));
             }
         } catch (error) {
-            console.error(error);
-            alert('An error occurred during booking.');
+            console.error("Submit Error:", error);
+            alert('An error occurred during booking: ' + error.message);
         } finally {
             setLoading(false);
         }
