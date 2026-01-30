@@ -238,7 +238,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
     const handleBook = () => {
         setBookingInitialData({ pickup: pickup.name, pickupCoords: { lat: pickup.lat, lon: pickup.lon }, dropoff: dropoff.name, dropoffCoords: { lat: dropoff.lat, lon: dropoff.lon }, waypoints, passengerCount, tripType, waitingHours, vehicle, date, time })
-        setIsBookingOpen(true)
+        setShowModal(true)
     };
 
     const swapLocations = () => {

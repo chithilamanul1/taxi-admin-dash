@@ -106,54 +106,50 @@ async function seed() {
             console.log('Airport Transfer already seeded.');
         }
 
-        // 2. Seed Ride Now
-        const rideNowCount = await Pricing.countDocuments({ category: 'ride-now' });
-        console.log(`Existing Ride Now entries: ${rideNowCount}`);
+        // 2. Seed Ride Now - Force Update
+        await Pricing.deleteMany({ category: 'ride-now' });
+        console.log('Cleared existing Ride Now entries.');
 
-        if (rideNowCount === 0) {
-            console.log('Seeding Ride Now...');
-            await Pricing.insertMany([
-                {
-                    vehicleType: 'mini-car',
-                    category: 'ride-now',
-                    name: 'Mini Car (Ride Now)',
-                    basePrice: 500, // LKR
-                    baseKm: 1,
-                    perKmRate: 150,
-                    maxPassengers: 2,
-                    maxLuggage: 1,
-                    image: 'https://i.ibb.co/cyGjk85/sedan.png',
-                    isActive: true
-                },
-                {
-                    vehicleType: 'sedan',
-                    category: 'ride-now',
-                    name: 'Sedan (Ride Now)',
-                    basePrice: 600,
-                    baseKm: 1,
-                    perKmRate: 180,
-                    maxPassengers: 4,
-                    maxLuggage: 2,
-                    image: 'https://i.ibb.co/cyGjk85/sedan.png',
-                    isActive: true
-                },
-                {
-                    vehicleType: 'van',
-                    category: 'ride-now',
-                    name: 'MIni Van (Ride Now)',
-                    basePrice: 1000,
-                    baseKm: 1,
-                    perKmRate: 250,
-                    maxPassengers: 6,
-                    maxLuggage: 4,
-                    image: 'https://i.ibb.co/hR0K00y/van.png',
-                    isActive: true
-                }
-            ]);
-            console.log('Seeded Ride Now.');
-        } else {
-            console.log('Ride Now already seeded.');
-        }
+        console.log('Seeding Ride Now...');
+        await Pricing.insertMany([
+            {
+                vehicleType: 'mini-car',
+                category: 'ride-now',
+                name: 'Mini Car (Ride Now)',
+                basePrice: 500, // LKR
+                baseKm: 1,
+                perKmRate: 150,
+                maxPassengers: 2,
+                maxLuggage: 1,
+                image: '/vehicles/wagon-r.jpeg',
+                isActive: true
+            },
+            {
+                vehicleType: 'sedan',
+                category: 'ride-now',
+                name: 'Sedan (Ride Now)',
+                basePrice: 600,
+                baseKm: 1,
+                perKmRate: 180,
+                maxPassengers: 4,
+                maxLuggage: 2,
+                image: '/vehicles/sedan.png',
+                isActive: true
+            },
+            {
+                vehicleType: 'van',
+                category: 'ride-now',
+                name: 'Mini Van (Ride Now)',
+                basePrice: 1000,
+                baseKm: 1,
+                perKmRate: 250,
+                maxPassengers: 7,
+                maxLuggage: 4,
+                image: '/vehicles/kdh.png',
+                isActive: true
+            }
+        ]);
+        console.log('Seeded Ride Now with local images.');
 
         process.exit(0);
     } catch (e) {
