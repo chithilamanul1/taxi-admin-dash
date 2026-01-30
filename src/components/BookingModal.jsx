@@ -5,13 +5,13 @@ import { useSession, signIn } from 'next-auth/react';
 import { X, MapPin, User, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost } from 'lucide-react';
 import LocationSearchInput from './LocationSearchInput';
 
+import { useCurrency } from '../context/CurrencyContext';
+
 const STEPS = [
     { id: 1, title: 'Route', icon: MapPin },
     { id: 2, title: 'Details', icon: User },
     { id: 3, title: 'Confirm', icon: CreditCard },
 ];
-
-import { useCurrency } from '../context/CurrencyContext';
 
 export default function BookingModal({ isOpen, onClose, initialData = {}, pricingCategory = 'transfer' }) {
     const { data: session } = useSession();

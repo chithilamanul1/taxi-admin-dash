@@ -1,10 +1,11 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Loader2, CheckCircle, CreditCard } from 'lucide-react';
 
-export default function MockGateway() {
+function MockGatewayContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const amount = searchParams.get('amount');
@@ -101,5 +102,13 @@ export default function MockGateway() {
                 </p>
             </div>
         </div>
+    );
+}
+
+export default function MockGateway() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 className="animate-spin text-blue-600" size={48} /></div>}>
+            <MockGatewayContent />
+        </Suspense>
     );
 }
