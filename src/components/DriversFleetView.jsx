@@ -307,13 +307,22 @@ const DriversFleetView = ({ bookings = [] }) => {
                                             {/* In production, use real images via next/image */}
                                             <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
                                                 {url ? (
-                                                    <img src={url} alt={key} className="w-full h-full object-cover" />
+                                                    <img
+                                                        src={url}
+                                                        alt={key}
+                                                        className="w-full h-full object-cover"
+                                                        onError={(e) => {
+                                                            e.target.onerror = null;
+                                                            e.target.src = "https://placehold.co/600x400?text=File+Not+Found"; // Or a local placeholder
+                                                            e.target.parentElement.innerHTML = '<span class="text-xs text-red-400 font-bold">Image Load Failed</span>';
+                                                        }}
+                                                    />
                                                 ) : (
                                                     <span className="text-xs text-gray-400 italic">No file</span>
                                                 )}
                                             </div>
                                             {url && (
-                                                <a href={url} target="_blank" className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white font-bold text-sm transition-opacity rounded-xl">View Full</a>
+                                                <a href={url} target="_blank" className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white font-bold text-sm transition-opacity rounded-xl z-10">View Link</a>
                                             )}
                                         </div>
                                     ))}

@@ -1,8 +1,9 @@
 'use client'
 
 import React, { useState } from 'react';
-import { MapPin, Users, Calendar, Settings, DollarSign, LogOut, Search, Activity, Bell, MessageSquare, Send, Shield, CheckCircle, Clock } from 'lucide-react';
+import { MapPin, Users, Calendar, Settings, DollarSign, LogOut, Search, Activity, Bell, MessageSquare, Send, Shield, CheckCircle, Clock, Car } from 'lucide-react';
 import DriversFleetView from '../../components/DriversFleetView';
+import BookingAssignmentModal from '../../components/admin/BookingAssignmentModal';
 
 // Mock Data Removed. Using Real API.
 
@@ -11,8 +12,14 @@ const AdminDashboard = () => {
     const [currentView, setCurrentView] = useState('dashboard');
     const [vehiclePricing, setVehiclePricing] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [editingVehicle, setEditingVehicle] = useState(null); // Vehicle object being edited
-    const [editForm, setEditForm] = useState({}); // Form state
+    // State for Editing Vehicle
+    const [editingVehicle, setEditingVehicle] = useState(null);
+    const [editForm, setEditForm] = useState({});
+
+    // State for Booking Assignment
+    const [bookingToAssign, setBookingToAssign] = useState(null);
+
+    const [bookings, setBookings] = useState([]);
 
     // Fetch Pricing Data
     React.useEffect(() => {
@@ -338,10 +345,32 @@ const AdminDashboard = () => {
                                                             }}
                                                             className="text-xs bg-emerald-900 text-white px-3 py-1.5 rounded hover:bg-emerald-800"
                                                         >
-                                                            Settle Cash
-                                                        </button>
-                                                    )}
-                                                </td>
+                                                            {(booking.totalPrice - (booking.paidAmount || 0)) > 0 && (
+                                                                <button
+                                                                    onClick={async () => {
+                                                                        if (!confirm(`Mark Rs ${(booking.totalPrice - (booking.paidAmount || 0)).toLocaleString()} as PAID in CASH?`)) return;
+                                                                        // Implementation of Cash Settlement
+                                                                        alert('Feature Pending: API update required to settle balance.');
+                                                                    }}
+                                                                    className="text-xs bg-emerald-900 text-white px-3 py-1.5 rounded hover:bg-emerald-800 block mb-1 w-full"
+                                                                >
+                                                                    Settle Cash
+                                                                </button>
+                                                            )}
+
+                                                            {booking.status === 'pending' || booking.status === 'paid' ? (
+                                                                <button
+                                                                    onClick={() => setBookingToAssign(booking)}
+                                                                    className="text-xs border border-emerald-600 text-emerald-600 px-3 py-1.5 rounded hover:bg-emerald-50 block w-full font-bold"
+                                                                >
+                                                                    Assign Driver
+                                                                </button>
+                                                            ) : booking.assignedDriver && (
+                                                                <span className="text-[10px] text-gray-500 font-bold block text-center">
+                                                                    <Car size={12} className="inline mr-1" /> Driver Assigned
+                                                                </span>
+                                                            )}
+                                                        </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -463,153 +492,170 @@ const AdminDashboard = () => {
                         </div>
                     )}
 
-                    {/* EDIT MODAL OVERLAY */}
-                    {editingVehicle && (
-                        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-white/5">
-                                <h2 className="text-xl font-bold text-emerald-900 dark:text-white mb-4">Edit Configuration: {editingVehicle.name}</h2>
+            </div>
+                    )}
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                    <div>
-                                        <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Display Name</label>
-                                        <input
-                                            value={editForm.name || ''}
-                                            onChange={(e) => handleFormChange(e, 'name')}
-                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Category</label>
-                                        <select
-                                            disabled // Category shouldn't be changed usually, distinct logic
-                                            value={editForm.category || 'airport-transfer'}
-                                            className="w-full p-2 bg-slate-100 dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-gray-500 cursor-not-allowed"
-                                        >
-                                            <option value="airport-transfer">Airport Transfer</option>
-                                            <option value="ride-now">Ride Now</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Passengers (Pax)</label>
-                                        <input
-                                            type="number"
-                                            value={editForm.capacity || ''}
-                                            onChange={(e) => handleFormChange(e, 'capacity')}
-                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Luggage</label>
-                                        <input
-                                            type="number"
-                                            value={editForm.luggage || ''}
-                                            onChange={(e) => handleFormChange(e, 'luggage')}
-                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Hand Luggage</label>
-                                        <input
-                                            type="number"
-                                            value={editForm.handLuggage || ''}
-                                            onChange={(e) => handleFormChange(e, 'handLuggage')}
-                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
-                                        />
-                                    </div>
-                                </div>
+            {/* ASSIGNMENT MODAL OVERLAY */}
+            {bookingToAssign && (
+                <BookingAssignmentModal
+                    booking={bookingToAssign}
+                    onClose={() => setBookingToAssign(null)}
+                    onAssignSuccess={() => {
+                        // Refresh bookings
+                        // In a real app we might re-fetch from API, here we rely on the modal closing and maybe a manual reload or notification
+                        alert('Driver Assigned Successfully!');
+                        setBookingToAssign(null);
+                    }}
+                />
+            )}
 
-                                <div className="space-y-4 border-t dark:border-white/10 pt-4">
-                                    <div className="flex justify-between items-center">
-                                        <label className="block text-lg font-bold text-gray-700 dark:text-slate-200">Pricing Tiers</label>
-                                        <button
-                                            onClick={() => {
-                                                const newTiers = [...(editForm.tiers || [])];
-                                                newTiers.push({ min: 0, max: 0, type: 'per_km', rate: 0, price: 0 });
-                                                setEditForm({ ...editForm, tiers: newTiers });
-                                            }}
-                                            className="text-sm bg-emerald-100 text-emerald-700 font-bold px-3 py-1 rounded hover:bg-emerald-200"
-                                        >
-                                            + Add Tier
-                                        </button>
-                                    </div>
+            {/* EDIT MODAL OVERLAY */}
+            {editingVehicle && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-white/5">
+                        <h2 className="text-xl font-bold text-emerald-900 dark:text-white mb-4">Edit Configuration: {editingVehicle.name}</h2>
 
-                                    <div className="space-y-3">
-                                        {editForm.tiers?.map((tier, i) => (
-                                            <div key={i} className="flex gap-2 items-center bg-slate-50 dark:bg-white/5 p-3 rounded-lg border dark:border-white/10 shadow-sm">
-                                                <div className="w-[15%]">
-                                                    <label className="text-xs font-bold text-gray-500">Min KM</label>
-                                                    <input
-                                                        type="number"
-                                                        value={tier.min || 0}
-                                                        onChange={(e) => handleFormChange(e, 'min', i)}
-                                                        className="w-full p-1 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-sm text-center"
-                                                    />
-                                                </div>
-                                                <div className="w-[15%]">
-                                                    <label className="text-xs font-bold text-gray-500">Max KM</label>
-                                                    <input
-                                                        value={tier.max || ''}
-                                                        onChange={(e) => handleFormChange(e, 'max', i)}
-                                                        className="w-full p-1 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-sm text-center"
-                                                        placeholder="∞"
-                                                    />
-                                                </div>
-                                                <div className="w-[25%]">
-                                                    <label className="text-xs font-bold text-gray-500">Calculation</label>
-                                                    <select
-                                                        value={tier.type}
-                                                        onChange={(e) => handleFormChange(e, 'type', i)}
-                                                        className="w-full p-1 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-sm"
-                                                    >
-                                                        <option value="flat">Fixed Price (Package)</option>
-                                                        <option value="per_km">Per KM Rate</option>
-                                                    </select>
-                                                </div>
-                                                <div className="w-[25%] px-2">
-                                                    <label className="text-xs font-bold text-emerald-600 block mb-1 text-center">
-                                                        {tier.type === 'flat' ? 'Price (LKR)' : 'Rate (LKR)'}
-                                                    </label>
-                                                    <input
-                                                        type="number"
-                                                        value={tier.type === 'flat' ? (tier.price || '') : (tier.rate || '')}
-                                                        onChange={(e) => handleFormChange(e, tier.type === 'flat' ? 'price' : 'rate', i)}
-                                                        className="w-full p-1 font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded text-sm text-center"
-                                                    />
-                                                </div>
-                                                <div className="w-[5%] flex justify-end">
-                                                    <button
-                                                        onClick={() => {
-                                                            const newTiers = editForm.tiers.filter((_, idx) => idx !== i);
-                                                            setEditForm({ ...editForm, tiers: newTiers });
-                                                        }}
-                                                        className="text-red-400 hover:text-red-600 font-bold px-2"
-                                                    >
-                                                        ✕
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="flex justify-end gap-3 mt-6">
-                                    <button
-                                        onClick={() => setEditingVehicle(null)}
-                                        className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        onClick={handleSavePricing}
-                                        className="px-6 py-2 bg-emerald-600 text-emerald-900 font-bold rounded shadow hover:bg-yellow-400"
-                                    >
-                                        Save Changes
-                                    </button>
-                                </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Display Name</label>
+                                <input
+                                    value={editForm.name || ''}
+                                    onChange={(e) => handleFormChange(e, 'name')}
+                                    className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Category</label>
+                                <select
+                                    disabled // Category shouldn't be changed usually, distinct logic
+                                    value={editForm.category || 'airport-transfer'}
+                                    className="w-full p-2 bg-slate-100 dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-gray-500 cursor-not-allowed"
+                                >
+                                    <option value="airport-transfer">Airport Transfer</option>
+                                    <option value="ride-now">Ride Now</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Passengers (Pax)</label>
+                                <input
+                                    type="number"
+                                    value={editForm.capacity || ''}
+                                    onChange={(e) => handleFormChange(e, 'capacity')}
+                                    className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Luggage</label>
+                                <input
+                                    type="number"
+                                    value={editForm.luggage || ''}
+                                    onChange={(e) => handleFormChange(e, 'luggage')}
+                                    className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Hand Luggage</label>
+                                <input
+                                    type="number"
+                                    value={editForm.handLuggage || ''}
+                                    onChange={(e) => handleFormChange(e, 'handLuggage')}
+                                    className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                />
                             </div>
                         </div>
-                    )}
-                </main>
+
+                        <div className="space-y-4 border-t dark:border-white/10 pt-4">
+                            <div className="flex justify-between items-center">
+                                <label className="block text-lg font-bold text-gray-700 dark:text-slate-200">Pricing Tiers</label>
+                                <button
+                                    onClick={() => {
+                                        const newTiers = [...(editForm.tiers || [])];
+                                        newTiers.push({ min: 0, max: 0, type: 'per_km', rate: 0, price: 0 });
+                                        setEditForm({ ...editForm, tiers: newTiers });
+                                    }}
+                                    className="text-sm bg-emerald-100 text-emerald-700 font-bold px-3 py-1 rounded hover:bg-emerald-200"
+                                >
+                                    + Add Tier
+                                </button>
+                            </div>
+
+                            <div className="space-y-3">
+                                {editForm.tiers?.map((tier, i) => (
+                                    <div key={i} className="flex gap-2 items-center bg-slate-50 dark:bg-white/5 p-3 rounded-lg border dark:border-white/10 shadow-sm">
+                                        <div className="w-[15%]">
+                                            <label className="text-xs font-bold text-gray-500">Min KM</label>
+                                            <input
+                                                type="number"
+                                                value={tier.min || 0}
+                                                onChange={(e) => handleFormChange(e, 'min', i)}
+                                                className="w-full p-1 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-sm text-center"
+                                            />
+                                        </div>
+                                        <div className="w-[15%]">
+                                            <label className="text-xs font-bold text-gray-500">Max KM</label>
+                                            <input
+                                                value={tier.max || ''}
+                                                onChange={(e) => handleFormChange(e, 'max', i)}
+                                                className="w-full p-1 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-sm text-center"
+                                                placeholder="∞"
+                                            />
+                                        </div>
+                                        <div className="w-[25%]">
+                                            <label className="text-xs font-bold text-gray-500">Calculation</label>
+                                            <select
+                                                value={tier.type}
+                                                onChange={(e) => handleFormChange(e, 'type', i)}
+                                                className="w-full p-1 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-sm"
+                                            >
+                                                <option value="flat">Fixed Price (Package)</option>
+                                                <option value="per_km">Per KM Rate</option>
+                                            </select>
+                                        </div>
+                                        <div className="w-[25%] px-2">
+                                            <label className="text-xs font-bold text-emerald-600 block mb-1 text-center">
+                                                {tier.type === 'flat' ? 'Price (LKR)' : 'Rate (LKR)'}
+                                            </label>
+                                            <input
+                                                type="number"
+                                                value={tier.type === 'flat' ? (tier.price || '') : (tier.rate || '')}
+                                                onChange={(e) => handleFormChange(e, tier.type === 'flat' ? 'price' : 'rate', i)}
+                                                className="w-full p-1 font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded text-sm text-center"
+                                            />
+                                        </div>
+                                        <div className="w-[5%] flex justify-end">
+                                            <button
+                                                onClick={() => {
+                                                    const newTiers = editForm.tiers.filter((_, idx) => idx !== i);
+                                                    setEditForm({ ...editForm, tiers: newTiers });
+                                                }}
+                                                className="text-red-400 hover:text-red-600 font-bold px-2"
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end gap-3 mt-6">
+                            <button
+                                onClick={() => setEditingVehicle(null)}
+                                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleSavePricing}
+                                className="px-6 py-2 bg-emerald-600 text-emerald-900 font-bold rounded shadow hover:bg-yellow-400"
+                            >
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </main>
             </div >
         </div >
     );
@@ -694,7 +740,7 @@ function AdminSupportController() {
                         <div className="flex justify-between mb-1">
                             <span className="font-bold text-emerald-900 dark:text-white truncate pr-2">{ticket.subject}</span>
                             <span className={`text-[10px] px-2 py-0.5 rounded uppercase font-bold ${ticket.status === 'open' ? 'bg-red-100 text-red-700' :
-                                    ticket.status === 'pending_user' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'
+                                ticket.status === 'pending_user' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'
                                 }`}>
                                 {ticket.status.replace('_', ' ')}
                             </span>
@@ -723,8 +769,8 @@ function AdminSupportController() {
                             {activeTicket.messages.map((msg, i) => (
                                 <div key={i} className={`flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`max-w-[80%] p-3 rounded-2xl ${msg.sender === 'admin'
-                                            ? 'bg-emerald-600 text-white rounded-tr-none'
-                                            : 'bg-white dark:bg-slate-800 border dark:border-white/10 text-slate-700 dark:text-slate-300 rounded-tl-none shadow-sm'
+                                        ? 'bg-emerald-600 text-white rounded-tr-none'
+                                        : 'bg-white dark:bg-slate-800 border dark:border-white/10 text-slate-700 dark:text-slate-300 rounded-tl-none shadow-sm'
                                         }`}>
                                         <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
                                         <p className="text-[10px] opacity-60 text-right mt-1">
