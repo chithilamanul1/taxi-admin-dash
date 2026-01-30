@@ -286,13 +286,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         <div className="space-y-6">
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div className="flex bg-emerald-100 dark:bg-emerald-900/30 p-1.5 rounded-xl border-2 border-emerald-200 dark:border-emerald-700/50 w-full sm:w-auto gap-1 shadow-sm">
-                                    <button onClick={() => setTripType('one-way')} aria-label="One Way Trip" className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-bold transition-all ${tripType === 'one-way' ? 'bg-emerald-800 text-white shadow-md dark:bg-emerald-600' : 'text-emerald-700 hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-white hover:bg-emerald-200/50 dark:hover:bg-emerald-800/30'}`}>One Way</button>
+                                    <button onClick={() => setTripType('one-way')} aria-label="One Way Trip" className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-bold transition-all ${tripType === 'one-way' ? 'bg-black text-white shadow-md' : 'text-emerald-700 hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-white hover:bg-emerald-200/50 dark:hover:bg-emerald-800/30'}`}>One Way</button>
                                     <button
                                         onClick={() => (activeTab !== 'pickup' && activeTab !== 'drop') && setTripType('round-trip')}
                                         disabled={activeTab === 'pickup' || activeTab === 'drop'}
                                         aria-label="Round Trip"
                                         className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-bold transition-all relative
-                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-emerald-800 text-white shadow-md dark:bg-emerald-600' : 'text-emerald-700 hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-white hover:bg-emerald-200/50 dark:hover:bg-emerald-800/30'}
+                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-black text-white shadow-md' : 'text-emerald-700 hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-white hover:bg-emerald-200/50 dark:hover:bg-emerald-800/30'}
                                             ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-40 cursor-not-allowed' : ''}
                                         `}
                                     >
@@ -590,10 +590,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     {/* Currency Dropdown */}
                                     <div className="relative group">
                                         <button
-                                            className="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-emerald-900 dark:text-white hover:bg-emerald-100 dark:hover:bg-white/10 transition-colors"
+                                            className="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-black text-white shadow-md hover:bg-slate-800 transition-colors"
                                             aria-label="Select currency"
                                         >
-                                            <span className="text-emerald-600 dark:text-emerald-400 font-black">{currency}</span>
+                                            <span className="font-black">{currency}</span>
                                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
                                         </button>
                                         <div className="absolute top-full right-0 mt-2 w-32 bg-white dark:bg-slate-900 rounded-xl shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-emerald-900/10 dark:border-slate-800 z-50">
@@ -602,9 +602,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     key={c.code}
                                                     onClick={() => {
                                                         changeCurrency(c.code);
-                                                        // Optional: re-fetch if needed, but convertPrice handles it visually
                                                     }}
-                                                    className={`w-full text-left px-4 py-2 hover:bg-emerald-50 dark:hover:bg-white/5 transition-colors text-xs font-bold flex items-center gap-2 ${currency === c.code ? 'text-emerald-900 dark:text-emerald-400 bg-emerald-50 dark:bg-white/5' : 'text-slate-500 dark:text-slate-400'}`}
+                                                    className={`w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors text-xs font-bold flex items-center gap-2 ${currency === c.code ? 'bg-black text-white' : 'text-slate-500 dark:text-slate-400'}`}
                                                 >
                                                     <span className="text-sm">{c.flag}</span>
                                                     <span>{c.code}</span>

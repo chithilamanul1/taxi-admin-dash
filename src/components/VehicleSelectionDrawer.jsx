@@ -105,6 +105,9 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                             <div className="flex items-center gap-1">
                                                 <Briefcase size={12} className="text-emerald-600" /> {vehicle.luggage}
                                             </div>
+                                            <div className="flex items-center gap-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-600"><path d="M6 20h12a2 2 0 0 0 2-2V8H4v10a2 2 0 0 0 2 2Z" /><path d="M8 8V6a4 4 0 0 1 8 0v2" /></svg> {vehicle.handLuggage || 0}
+                                            </div>
                                         </div>
                                     </div>
 

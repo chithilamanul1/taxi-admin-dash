@@ -8,7 +8,7 @@ import { ThemeProvider } from '../components/ThemeProvider'
 export const metadata = {
     title: 'Airport Taxis (Pvt) Ltd - Premium Airport Transfer Service in Sri Lanka',
     description: 'Professional airport taxi and transfer service in Sri Lanka. Book reliable rides from Bandaranaike International Airport (CMB) to any destination. 24/7 service with English-speaking drivers.',
-    keywords: 'airport taxi Sri Lanka, CMB airport transfer, Sri Lanka taxi service, Colombo airport transportation, Bandaranaike airport taxi',
+    keywords: 'airport taxi Sri Lanka, CMB airport transfer, Sri Lanka taxi service, Colombo airport transportation, Bandaranaike airport taxi, AirportTaxi, TaxiService, AirportTransfer, TourismSupport, RideWithUs, TravelEasy, BookNow, OnTimeEveryTime, ExploreWithUs, SafeTravel, HassleFreeTravel, BestTaxiService, TrustedByThousands, CustomerFirst, TravelInComfort, LocalTours, CityTours, TravelSafe, TourWithUs, DiscoverMore, ToTheAirport, FromTheAirport, AirportPickup, AirportDropOff, FlightTransfer, RideToAirport, NeverMissAFlight, ReliableTaxi, TravelMadeEasy, TaxiNearMe, 24x7Taxi',
     authors: [{ name: 'Airport Taxis (Pvt) Ltd' }],
     creator: 'Airport Taxis (Pvt) Ltd',
     publisher: 'Airport Taxis (Pvt) Ltd',
