@@ -57,7 +57,9 @@ const TourPackages = () => {
                                     <div>
                                         <p className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Price</p>
                                         <div className="flex items-baseline gap-1">
-                                            <span className="text-sm font-bold text-emerald-600">Contact for Quote</span>
+                                            <span className="text-sm font-bold text-emerald-600">
+                                                Rs {Math.round(pkg.price * 300).toLocaleString()} <span className="text-[10px] text-gray-400 font-normal">per person</span>
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="flex gap-2">

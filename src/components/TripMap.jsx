@@ -10,7 +10,7 @@ export default function TripMap({ pickup, dropoff, waypoints = [] }) {
 
     useEffect(() => {
         loadGoogleMapsScript().then(() => {
-            if (window.google && !directionsRenderer) {
+            if (window.google && !directionsRenderer && mapRef.current) {
                 const map = new window.google.maps.Map(mapRef.current, {
                     zoom: 7,
                     center: { lat: 7.8731, lng: 80.7718 }, // Sri Lanka Center

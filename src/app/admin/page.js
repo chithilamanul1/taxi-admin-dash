@@ -36,6 +36,11 @@ export default function AdminDashboard() {
     const [selectedBooking, setSelectedBooking] = useState(null)
     const [selectedStatus, setSelectedStatus] = useState('pending')
     const [updatingStatus, setUpdatingStatus] = useState(false)
+    const [drivers, setDrivers] = useState([])
+    const [selectedDriver, setSelectedDriver] = useState('')
+    const [notifications, setNotifications] = useState([])
+    const [showNotifications, setShowNotifications] = useState(false)
+    const [unreadCount, setUnreadCount] = useState(0)
 
     // Filter bookings based on search
     const filteredBookings = useMemo(() => {
@@ -111,6 +116,41 @@ export default function AdminDashboard() {
                     .then(data => { if (Array.isArray(data)) setCoupons(data) })
                     .catch(console.error)
             }
+
+            if (currentView === 'pricing') {
+                setIsLoading(true)
+                fetch(`/api/pricing?category=${pricingCategory}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && Array.isArray(data.data)) {
+                            setVehiclePricing(data.data)
+                        } else {
+                            setVehiclePricing([])
+                        }
+                        setIsLoading(false)
+                    })
+                    .catch(err => {
+                        console.error(err)
+                        setIsLoading(false)
+                    })
+            }
+
+            // Always fetch drivers for assignment
+            fetch('/api/drivers')
+                .then(res => res.json())
+                .then(data => { if (Array.isArray(data)) setDrivers(data) })
+                .catch(console.error)
+
+            // Fetch Notifications
+            fetch('/api/admin/notifications')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        setNotifications(data.data)
+                        setUnreadCount(data.unreadCount)
+                    }
+                })
+                .catch(console.error)
         }
 
         // Initial fetch
@@ -120,14 +160,41 @@ export default function AdminDashboard() {
         const interval = setInterval(fetchData, 10000)
 
         return () => clearInterval(interval)
-    }, [currentView])
+    }, [currentView, pricingCategory])
+
+    const markNotificationRead = async (id) => {
+        try {
+            await fetch('/api/admin/notifications', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            })
+            setNotifications(prev => prev.map(n => n._id === id ? { ...n, isRead: true } : n))
+            setUnreadCount(prev => Math.max(0, prev - 1))
+        } catch (e) { console.error(e) }
+    }
+
+    const markAllNotificationsRead = async () => {
+        try {
+            await fetch('/api/admin/notifications', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ markAllRead: true })
+            })
+            setNotifications(prev => prev.map(n => ({ ...n, isRead: true })))
+            setUnreadCount(0)
+        } catch (e) { console.error(e) }
+    }
 
     // Calculate Real Stats
     const stats = useMemo(() => {
-        const totalRevenue = bookings.reduce((sum, b) => sum + (b.totalPrice || 0), 0)
-        const activeRides = bookings.filter(b => b.status === 'ongoing' || b.status === 'assigned').length
+        const totalRevenue = bookings
+            .filter(b => b.status === 'completed') // Only count completed bookings for revenue
+            .reduce((sum, b) => sum + (b.totalPrice || 0), 0)
+
+        const activeRides = bookings.filter(b => b.status === 'ongoing' || b.status === 'assigned' || b.status === 'driver-assigned').length
         const pendingBookings = bookings.filter(b => b.status === 'pending').length
-        const onlineDrivers = 8
+        const onlineDrivers = drivers.filter(d => d.isOnline).length
 
         return [
             { title: 'Total Revenue', value: `LKR ${totalRevenue.toLocaleString()}`, icon: DollarSign, color: 'text-green-500' },
@@ -135,7 +202,7 @@ export default function AdminDashboard() {
             { title: 'Online Drivers', value: onlineDrivers.toString(), icon: Users, color: 'text-emerald-600' },
             { title: 'Pending Bookings', value: pendingBookings.toString(), icon: Bell, color: 'text-red-500' },
         ]
-    }, [bookings])
+    }, [bookings, drivers])
 
     const updateBookingStatus = async (id, status) => {
         try {
@@ -257,10 +324,52 @@ export default function AdminDashboard() {
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
-                        <button className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-600 relative">
-                            <Bell size={20} />
-                            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
-                        </button>
+                        <div className="relative">
+                            <button
+                                onClick={() => setShowNotifications(!showNotifications)}
+                                className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-600 relative"
+                            >
+                                <Bell size={20} />
+                                {unreadCount > 0 && (
+                                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                                        {unreadCount}
+                                    </span>
+                                )}
+                            </button>
+
+                            {/* Notifications Dropdown */}
+                            {showNotifications && (
+                                <div className="absolute top-12 right-0 w-80 bg-white rounded-xl shadow-2xl border border-slate-100 z-50 overflow-hidden animate-fade-in-up">
+                                    <div className="p-3 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                                        <h3 className="font-bold text-sm text-slate-700">Notifications</h3>
+                                        <button onClick={markAllNotificationsRead} className="text-xs text-emerald-600 hover:underline">Mark all read</button>
+                                    </div>
+                                    <div className="max-h-80 overflow-y-auto">
+                                        {notifications.length === 0 ? (
+                                            <div className="p-8 text-center text-gray-400 text-sm">No notifications</div>
+                                        ) : (
+                                            notifications.map(notification => (
+                                                <div
+                                                    key={notification._id}
+                                                    onClick={() => !notification.isRead && markNotificationRead(notification._id)}
+                                                    className={`p-3 border-b border-slate-50 hover:bg-slate-50 transition-colors cursor-pointer ${!notification.isRead ? 'bg-emerald-50/50' : ''}`}
+                                                >
+                                                    <div className="flex gap-3">
+                                                        <div className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${!notification.isRead ? 'bg-emerald-500' : 'bg-gray-300'}`}></div>
+                                                        <div>
+                                                            <p className={`text-sm ${!notification.isRead ? 'font-semibold text-slate-800' : 'text-slate-600'}`}>{notification.title}</p>
+                                                            <p className="text-xs text-slate-500 mt-1">{notification.message}</p>
+                                                            <p className="text-[10px] text-slate-400 mt-2">{new Date(notification.createdAt).toLocaleString()}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
                         <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-500/30">
                             A
                         </div>
@@ -452,9 +561,9 @@ export default function AdminDashboard() {
                     {currentView === 'pricing' && (
                         <div className="space-y-6">
                             <div className="bg-white rounded-xl shadow-sm p-6">
-                                <div className="flex items-center justify-between mb-6">
+                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                                     <h2 className="text-2xl font-bold text-emerald-900">Vehicle Pricing & Tiers</h2>
-                                    <div className="flex gap-2">
+                                    <div className="flex flex-wrap gap-2">
                                         <button
                                             onClick={() => {
                                                 setEditForm({})
@@ -1336,7 +1445,11 @@ export default function AdminDashboard() {
                                             {filteredBookings.map((booking) => (
                                                 <tr
                                                     key={booking._id}
-                                                    onClick={() => setSelectedBooking(booking)}
+                                                    onClick={() => {
+                                                        setSelectedBooking(booking)
+                                                        setSelectedStatus(booking.status)
+                                                        setSelectedDriver(booking.driver || '')
+                                                    }}
                                                     className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors"
                                                 >
                                                     <td className="px-4 py-4 font-mono text-xs text-gray-400">
@@ -1347,12 +1460,24 @@ export default function AdminDashboard() {
                                                         <div className="text-xs text-gray-400">{booking.guestPhone}</div>
                                                     </td>
                                                     <td className="px-4 py-4">
-                                                        <div className="text-xs">
-                                                            <span className="text-green-600">●</span> {booking.pickupLocation?.address?.split(',')[0] || 'N/A'}
-                                                        </div>
-                                                        <div className="text-xs">
-                                                            <span className="text-red-500">●</span> {booking.dropoffLocation?.address?.split(',')[0] || 'N/A'}
-                                                        </div>
+                                                        {booking.type === 'tour' && booking.tourDetails ? (
+                                                            <div>
+                                                                <div className="font-bold text-emerald-900">{booking.tourDetails.tourTitle}</div>
+                                                                <div className="text-xs text-gray-500">ID: {booking.tourDetails.tourId || 'N/A'}</div>
+                                                                {booking.tourDetails.duration && (
+                                                                    <div className="text-xs text-gray-400">{booking.tourDetails.duration}</div>
+                                                                )}
+                                                            </div>
+                                                        ) : (
+                                                            <>
+                                                                <div className="text-xs">
+                                                                    <span className="text-green-600">●</span> {booking.pickupLocation?.address?.split(',')[0] || 'N/A'}
+                                                                </div>
+                                                                <div className="text-xs">
+                                                                    <span className="text-red-500">●</span> {booking.dropoffLocation?.address?.split(',')[0] || 'N/A'}
+                                                                </div>
+                                                            </>
+                                                        )}
                                                     </td>
                                                     <td className="px-4 py-4">
                                                         <div className="font-medium">{booking.scheduledDate || 'Not set'}</div>
@@ -1440,17 +1565,30 @@ export default function AdminDashboard() {
                                                 </h4>
                                                 <div className="space-y-3">
                                                     <div>
-                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Route</span>
-                                                        <div className="mt-1 space-y-2">
-                                                            <div className="flex items-start gap-2">
-                                                                <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 flex-shrink-0"></div>
-                                                                <span className="text-sm leading-tight">{selectedBooking.pickupLocation?.address || 'N/A'}</span>
+                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">{selectedBooking.type === 'tour' ? 'Tour Details' : 'Route'}</span>
+                                                        {selectedBooking.type === 'tour' && selectedBooking.tourDetails ? (
+                                                            <div className="mt-1 space-y-1">
+                                                                <div className="font-bold text-emerald-900">{selectedBooking.tourDetails.tourTitle}</div>
+                                                                <div className="text-sm text-gray-600 font-mono">ID: {selectedBooking.tourDetails.tourId}</div>
+                                                                <div className="text-sm text-gray-600 mb-2">Duration: {selectedBooking.tourDetails.duration}</div>
+                                                                {selectedBooking.pickupLocation?.address && selectedBooking.pickupLocation.address !== 'Tour Pickup (TBD)' && (
+                                                                    <div className="text-xs text-gray-500 mt-2">
+                                                                        <span className="font-bold">Pickup:</span> {selectedBooking.pickupLocation.address}
+                                                                    </div>
+                                                                )}
                                                             </div>
-                                                            <div className="flex items-start gap-2">
-                                                                <div className="w-2 h-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></div>
-                                                                <span className="text-sm leading-tight">{selectedBooking.dropoffLocation?.address || 'N/A'}</span>
+                                                        ) : (
+                                                            <div className="mt-1 space-y-2">
+                                                                <div className="flex items-start gap-2">
+                                                                    <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 flex-shrink-0"></div>
+                                                                    <span className="text-sm leading-tight">{selectedBooking.pickupLocation?.address || 'N/A'}</span>
+                                                                </div>
+                                                                <div className="flex items-start gap-2">
+                                                                    <div className="w-2 h-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></div>
+                                                                    <span className="text-sm leading-tight">{selectedBooking.dropoffLocation?.address || 'N/A'}</span>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        )}
                                                     </div>
                                                     <div className="grid grid-cols-2 gap-4 pt-2">
                                                         <div>
@@ -1526,6 +1664,26 @@ export default function AdminDashboard() {
                                                             <option value="cancelled">Cancelled</option>
                                                         </select>
                                                     </div>
+                                                    <div>
+                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Assign Driver</span>
+                                                        <select
+                                                            className="mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-600"
+                                                            value={selectedDriver}
+                                                            onChange={(e) => {
+                                                                setSelectedDriver(e.target.value)
+                                                                if (e.target.value && selectedStatus === 'pending') {
+                                                                    setSelectedStatus('assigned')
+                                                                }
+                                                            }}
+                                                        >
+                                                            <option value="">-- Select Driver --</option>
+                                                            {drivers.map(driver => (
+                                                                <option key={driver._id} value={driver._id}>
+                                                                    {driver.name} ({driver.vehicleNumber} - {driver.vehicleType})
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1545,7 +1703,10 @@ export default function AdminDashboard() {
                                                         const res = await fetch(`/api/bookings/${selectedBooking._id}`, {
                                                             method: 'PUT',
                                                             headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify({ status: selectedStatus })
+                                                            body: JSON.stringify({
+                                                                status: selectedStatus,
+                                                                assignedDriver: selectedDriver || null
+                                                            })
                                                         })
 
                                                         const data = await res.json()
@@ -1970,16 +2131,12 @@ export default function AdminDashboard() {
                     )}
 
                     {/* Drivers Fleet View */}
-                    {currentView === 'drivers' && (
-                        <DriversFleetView />
-                    )}
+                    {currentView === 'drivers' && <DriversFleetView />}
 
                     {/* Live Driver Map */}
-                    {currentView === 'live-map' && (
-                        <LiveDriverMap />
-                    )}
+                    {currentView === 'live-map' && <LiveDriverMap />}
                 </div>
-            </div>
+            </div >
         </div >
     )
 }

@@ -6,7 +6,7 @@ import { sendEmail } from '@/lib/email-service';
 export async function POST(req) {
     try {
         const body = await req.json();
-        const { name, email, phone, date, adults, children, specialRequests, tourTitle, tourId, duration } = body;
+        const { name, email, phone, date, adults, children, specialRequests, tourTitle, tourId, duration, totalPrice, currency } = body;
 
         if (!process.env.MONGODB_URI) {
             return NextResponse.json({ message: 'Database configuration error' }, { status: 500 });
@@ -38,11 +38,10 @@ export async function POST(req) {
             pickupLocation: { address: 'Tour Pickup (TBD)', lat: 0, lng: 0 }, // Placeholder
             dropoffLocation: { address: 'Tour Dropoff (TBD)', lat: 0, lng: 0 }, // Placeholder
             distanceKm: 0,
-            totalPrice: 0, // Quote based
+            totalPrice: totalPrice || 0, // Saved from frontend calculation
+            currency: currency || 'USD',
             nameBoard: {
-                text: specialRequests // Storing notes here or in a new field if needed, but notes aren't in schema yet. Adding notes to NameBoard text as a hack or just ignoring. Ideally schema needs 'notes'. 
-                // Let's use nameBoard.text for now or add a notes field. Schema doesn't have notes. 
-                // Actually, I'll append to nameBoard.text for visibility in admin.
+                text: specialRequests
             }
         });
 

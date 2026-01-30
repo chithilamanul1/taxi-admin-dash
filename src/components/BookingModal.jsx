@@ -23,7 +23,32 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const [couponInput, setCouponInput] = useState('');
     const [couponLoading, setCouponLoading] = useState(false);
 
-    // ... (keep useEffects)
+    // Form State - declared early so functions below can access it
+    const [formData, setFormData] = useState({
+        vehicle: initialData.vehicle || 'mini-car',
+        pickup: initialData.pickup || '',
+        pickupCoords: initialData.pickupCoords || null,
+        waypoints: initialData.waypoints || [],
+        dropoff: initialData.dropoff || '',
+        dropoffCoords: initialData.dropoffCoords || null,
+        tripType: initialData.tripType || 'one-way',
+        passengerCount: initialData.passengerCount || { adults: 1, children: 0, infants: 0, bags: 0 },
+        waitingHours: initialData.waitingHours || 0,
+        hasNameBoard: initialData.hasNameBoard || false,
+        nameBoardText: initialData.nameBoardText || '',
+        couponCode: initialData.couponCode || '',
+        date: initialData.date || '',
+        time: initialData.time || '',
+        name: initialData.name || '',
+        phone: initialData.phone || '',
+        email: initialData.email || '',
+        flightNumber: initialData.flightNumber || '',
+        notes: initialData.notes || '',
+        paymentMethod: 'cash',
+        paymentType: 'full', // 'full' or 'partial'
+    });
+
+    // Coupon handlers
 
     const handleApplyCoupon = async () => {
         if (!couponInput.trim()) return;
@@ -134,31 +159,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     // Extract calculated values for render
     const { total: totalPrice, subtotal, surcharges, payNow, balance: balanceAmount } = getPriceBreakdown();
 
-    // Form State
-    const [formData, setFormData] = useState({
-        vehicle: initialData.vehicle || 'mini-car',
-        pickup: initialData.pickup || '',
-        pickupCoords: initialData.pickupCoords || null,
-        waypoints: initialData.waypoints || [],
-        dropoff: initialData.dropoff || '',
-        dropoffCoords: initialData.dropoffCoords || null,
-        tripType: initialData.tripType || 'one-way',
-        passengerCount: initialData.passengerCount || { adults: 1, children: 0, infants: 0, bags: 0 },
-        waitingHours: initialData.waitingHours || 0,
-        hasNameBoard: initialData.hasNameBoard || false,
-        nameBoardText: initialData.nameBoardText || '',
-        couponCode: initialData.couponCode || '',
-        date: initialData.date || '',
-        time: initialData.time || '',
-        name: initialData.name || '',
-        phone: initialData.phone || '',
-        email: initialData.email || '',
-        flightNumber: initialData.flightNumber || '',
-        notes: initialData.notes || '',
-        paymentMethod: 'cash',
-        paymentType: 'full', // 'full' or 'partial'
-    });
-
+    // useEffects for data fetching
     useEffect(() => {
         if (isOpen) {
             setFormData(prev => ({ ...prev, ...initialData }));

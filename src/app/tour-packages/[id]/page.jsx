@@ -61,7 +61,7 @@ export default function TourPackageDetails() {
                         </h1>
                         <div className="flex flex-wrap items-center gap-6 text-white/90 font-medium text-lg">
                             <div className="flex items-center gap-2">
-                                <span className="text-2xl md:text-3xl font-bold text-emerald-400">{tour.currency} {tour.price}</span>
+                                <span className="text-2xl md:text-3xl font-bold text-emerald-400">Rs {Math.round(tour.price * 300).toLocaleString()}</span>
                                 <span className="text-sm opacity-70">{tour.priceType || 'Person'}</span>
                             </div>
                         </div>
@@ -225,6 +225,8 @@ export default function TourPackageDetails() {
                             tourTitle={tour.title}
                             tourId={tour.id}
                             duration={tour.duration}
+                            price={Math.round(tour.price * 300)}
+                            currency="LKR"
                         />
 
                         {/* Includes List */}

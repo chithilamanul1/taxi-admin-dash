@@ -1,4 +1,4 @@
-import React from 'react'
+'use client'
 
 import React from 'react'
 import { tourPackages } from '../data/tours-data'
@@ -32,7 +32,7 @@ const Tours = () => {
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
                                 <div className="absolute top-6 right-6 bg-white px-4 py-2 rounded-full font-bold text-emerald-900 shadow-lg border border-emerald-900/10 flex items-center gap-2">
-                                    Starting ${pkg.price}
+                                    From Rs {Math.round(pkg.price * 300).toLocaleString()}
                                 </div>
                                 <div className="absolute bottom-4 left-4 bg-emerald-900/90 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm shadow flex items-center gap-1">
                                     <Clock size={12} /> {pkg.duration}
@@ -62,7 +62,7 @@ const Tours = () => {
                     </Link>
                 </div>
             </div>
-        </section>
+        </section >
     )
 }
 

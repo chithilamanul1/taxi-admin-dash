@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { X, Calendar, User, Mail, Phone, Users, Loader2, CheckCircle } from 'lucide-react';
 
-const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration }) => {
+const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price, currency }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState('');
@@ -26,6 +26,8 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration }) => {
         setError('');
 
         try {
+            const totalPrice = price ? (formData.adults + formData.children) * price : 0;
+
             const res = await fetch('/api/bookings/tour', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -33,7 +35,9 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration }) => {
                     ...formData,
                     tourTitle,
                     tourId,
-                    duration
+                    duration,
+                    totalPrice,
+                    currency
                 })
             });
 
@@ -192,6 +196,15 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration }) => {
                                 onChange={(e) => setFormData({ ...formData, specialRequests: e.target.value })}
                             />
                         </div>
+
+                        {price && (
+                            <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl flex justify-between items-center">
+                                <span className="text-sm font-bold text-emerald-900 dark:text-emerald-100 uppercase tracking-wider">Estimated Total</span>
+                                <span className="text-xl font-black text-emerald-900 dark:text-white">
+                                    {currency} {((formData.adults + formData.children) * price).toLocaleString()}
+                                </span>
+                            </div>
+                        )}
 
                         <button
                             type="submit"
