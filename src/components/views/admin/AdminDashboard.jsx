@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
-import { Users, Car, MapPin, DollarSign, Activity, Bell } from 'lucide-react';
+import { MapPin, Users, Calendar, Settings, DollarSign, LogOut, Search, Activity, Bell, MessageSquare, Send, Shield, CheckCircle, Clock } from 'lucide-react';
 import DriversFleetView from '../../components/DriversFleetView';
 
 // Mock Data Removed. Using Real API.
@@ -153,6 +153,14 @@ const AdminDashboard = () => {
                         <MapPin size={20} />
                         <span className={`${!sidebarOpen && 'hidden'}`}>Tours</span>
                     </button>
+                    <button onClick={() => setCurrentView('gateway')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'gateway' ? 'bg-emerald-600 text-emerald-900' : 'hover:bg-white/10'}`}>
+                        <Activity size={20} />
+                        <span className={`${!sidebarOpen && 'hidden'}`}>Gateway</span>
+                    </button>
+                    <button onClick={() => setCurrentView('support')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'support' ? 'bg-emerald-600 text-emerald-900' : 'hover:bg-white/10'}`}>
+                        <MessageSquare size={20} />
+                        <span className={`${!sidebarOpen && 'hidden'}`}>Support</span>
+                    </button>
                 </nav>
             </div>
 
@@ -219,6 +227,7 @@ const AdminDashboard = () => {
                                                     <th className="pb-3">Type</th>
                                                     <th className="pb-3">Route</th>
                                                     <th className="pb-3">Price</th>
+                                                    <th className="pb-3">Balance</th>
                                                     <th className="pb-3">Status</th>
                                                 </tr>
                                             </thead>
@@ -238,6 +247,9 @@ const AdminDashboard = () => {
                                                                 <div className="max-w-[150px] truncate" title={booking.dropoffLocation?.address}>{booking.dropoffLocation?.address?.split(',')[0]}</div>
                                                             </td>
                                                             <td className="py-4 font-bold">Rs {booking.totalPrice?.toLocaleString()}</td>
+                                                            <td className="py-4 font-bold text-red-500">
+                                                                {(booking.totalPrice - (booking.paidAmount || 0)) > 0 ? `Rs ${(booking.totalPrice - (booking.paidAmount || 0)).toLocaleString()}` : '-'}
+                                                            </td>
                                                             <td className="py-4">
                                                                 <span className={`px-2 py-1 rounded text-xs font-bold capitalize
                                                                     ${booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
@@ -281,7 +293,9 @@ const AdminDashboard = () => {
                                             <th className="pb-3">Route</th>
                                             <th className="pb-3">Date</th>
                                             <th className="pb-3">Price</th>
+                                            <th className="pb-3">Balance</th>
                                             <th className="pb-3">Status</th>
+                                            <th className="pb-3">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody className="text-sm">
@@ -302,6 +316,9 @@ const AdminDashboard = () => {
                                                     <div className="text-xs text-gray-400 dark:text-slate-500">{booking.scheduledTime}</div>
                                                 </td>
                                                 <td className="py-4 font-bold">Rs {booking.totalPrice?.toLocaleString()}</td>
+                                                <td className="py-4 font-bold text-red-500">
+                                                    {(booking.totalPrice - (booking.paidAmount || 0)) > 0 ? `Rs ${(booking.totalPrice - (booking.paidAmount || 0)).toLocaleString()}` : '-'}
+                                                </td>
                                                 <td className="py-4">
                                                     <span className={`px-2 py-1 rounded text-xs font-bold capitalize
                                                                 ${booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
@@ -310,6 +327,20 @@ const AdminDashboard = () => {
                                                         }`}>
                                                         {booking.status}
                                                     </span>
+                                                </td>
+                                                <td className="py-4">
+                                                    {(booking.totalPrice - (booking.paidAmount || 0)) > 0 && (
+                                                        <button
+                                                            onClick={async () => {
+                                                                if (!confirm(`Mark Rs ${(booking.totalPrice - (booking.paidAmount || 0)).toLocaleString()} as PAID in CASH?`)) return;
+                                                                // Implementation of Cash Settlement
+                                                                alert('Feature Pending: API update required to settle balance.');
+                                                            }}
+                                                            className="text-xs bg-emerald-900 text-white px-3 py-1.5 rounded hover:bg-emerald-800"
+                                                        >
+                                                            Settle Cash
+                                                        </button>
+                                                    )}
                                                 </td>
                                             </tr>
                                         ))}
@@ -419,6 +450,16 @@ const AdminDashboard = () => {
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                    )}
+
+                    {currentView === 'support' && (
+                        <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-8 border border-white/5 h-[calc(100vh-140px)] flex flex-col">
+                            <h2 className="text-2xl font-bold text-emerald-900 dark:text-white mb-6 flex items-center gap-2">
+                                <MessageSquare className="text-emerald-600" /> Support Tickets
+                            </h2>
+
+                            <AdminSupportController />
                         </div>
                     )}
 
@@ -569,9 +610,159 @@ const AdminDashboard = () => {
                         </div>
                     )}
                 </main>
+            </div >
+        </div >
+    );
+};
+
+function AdminSupportController() {
+    const [tickets, setTickets] = useState([]);
+    const [activeTicket, setActiveTicket] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [reply, setReply] = useState('');
+    const [sending, setSending] = useState(false);
+    const chatEndRef = useRef(null);
+
+    const fetchTickets = async () => {
+        try {
+            const res = await fetch('/api/support/tickets');
+            const data = await res.json();
+            if (data.success) setTickets(data.tickets);
+        } catch (e) { console.error(e); } finally { setLoading(false); }
+    };
+
+    useEffect(() => { fetchTickets(); }, []);
+
+    // Poll for new messages when chat is open
+    useEffect(() => {
+        let interval;
+        if (activeTicket) {
+            interval = setInterval(async () => {
+                try {
+                    const res = await fetch('/api/support/tickets');
+                    const data = await res.json();
+                    if (data.success) {
+                        setTickets(data.tickets);
+                        // Update active ticket
+                        const updated = data.tickets.find(t => t._id === activeTicket._id);
+                        if (updated && updated.messages.length !== activeTicket.messages.length) {
+                            setActiveTicket(updated);
+                        }
+                    }
+                } catch (e) { }
+            }, 5000);
+        }
+        return () => clearInterval(interval);
+    }, [activeTicket]);
+
+    useEffect(() => {
+        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [activeTicket?.messages]);
+
+    const sendReply = async (e) => {
+        e.preventDefault();
+        if (!reply.trim()) return;
+        setSending(true);
+        try {
+            const res = await fetch(`/api/support/tickets/${activeTicket._id}/message`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: reply })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setActiveTicket(data.ticket);
+                setReply('');
+                fetchTickets(); // Refresh list status
+            }
+        } catch (e) { alert('Failed to send'); }
+        finally { setSending(false); }
+    };
+
+    if (loading) return <div className="p-10"><div className="animate-spin w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full mx-auto"></div></div>;
+
+    return (
+        <div className="flex flex-1 gap-6 overflow-hidden">
+            {/* Ticket List */}
+            <div className="w-1/3 bg-slate-50 dark:bg-white/5 rounded-xl border dark:border-white/10 overflow-y-auto">
+                {tickets.map(ticket => (
+                    <div
+                        key={ticket._id}
+                        onClick={() => setActiveTicket(ticket)}
+                        className={`p-4 border-b dark:border-white/5 cursor-pointer hover:bg-white dark:hover:bg-white/10 transition-colors ${activeTicket?._id === ticket._id ? 'bg-white dark:bg-white/10 border-l-4 border-l-emerald-600' : ''}`}
+                    >
+                        <div className="flex justify-between mb-1">
+                            <span className="font-bold text-emerald-900 dark:text-white truncate pr-2">{ticket.subject}</span>
+                            <span className={`text-[10px] px-2 py-0.5 rounded uppercase font-bold ${ticket.status === 'open' ? 'bg-red-100 text-red-700' :
+                                    ticket.status === 'pending_user' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'
+                                }`}>
+                                {ticket.status.replace('_', ' ')}
+                            </span>
+                        </div>
+                        <p className="text-xs text-slate-500 mb-2">
+                            {ticket.customer?.name || ticket.guestDetails?.name || 'Guest'}
+                        </p>
+                        <p className="text-xs text-slate-400 truncate">{ticket.messages[ticket.messages.length - 1]?.message}</p>
+                    </div>
+                ))}
+            </div>
+
+            {/* Chat Area */}
+            <div className="flex-1 bg-slate-50 dark:bg-white/5 rounded-xl border dark:border-white/10 flex flex-col overflow-hidden">
+                {activeTicket ? (
+                    <>
+                        <div className="p-4 border-b dark:border-white/10 bg-white dark:bg-slate-900">
+                            <h3 className="font-bold text-lg text-emerald-900 dark:text-white">{activeTicket.subject}</h3>
+                            <div className="flex gap-4 text-xs text-slate-500">
+                                <span>User: {activeTicket.customer?.email}</span>
+                                <span>ID: {activeTicket._id}</span>
+                            </div>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                            {activeTicket.messages.map((msg, i) => (
+                                <div key={i} className={`flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}`}>
+                                    <div className={`max-w-[80%] p-3 rounded-2xl ${msg.sender === 'admin'
+                                            ? 'bg-emerald-600 text-white rounded-tr-none'
+                                            : 'bg-white dark:bg-slate-800 border dark:border-white/10 text-slate-700 dark:text-slate-300 rounded-tl-none shadow-sm'
+                                        }`}>
+                                        <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                                        <p className="text-[10px] opacity-60 text-right mt-1">
+                                            {msg.sender === 'admin' ? 'You' : 'User'} • {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                            <div ref={chatEndRef} />
+                        </div>
+
+                        <div className="p-4 bg-white dark:bg-slate-900 border-t dark:border-white/10">
+                            <form onSubmit={sendReply} className="flex gap-2">
+                                <input
+                                    value={reply}
+                                    onChange={e => setReply(e.target.value)}
+                                    className="flex-1 p-3 bg-slate-100 dark:bg-slate-800 border-none rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all dark:text-white"
+                                    placeholder="Type a reply..."
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={sending}
+                                    className="p-3 bg-emerald-900 text-white rounded-xl hover:bg-emerald-800 disabled:opacity-50"
+                                >
+                                    <Send size={20} />
+                                </button>
+                            </form>
+                        </div>
+                    </>
+                ) : (
+                    <div className="flex-1 flex flex-col items-center justify-center text-slate-400">
+                        <MessageSquare size={48} className="mb-4 opacity-20" />
+                        <p>Select a ticket to view conversation</p>
+                    </div>
+                )}
             </div>
         </div>
     );
-};
+}
 
 export default AdminDashboard;

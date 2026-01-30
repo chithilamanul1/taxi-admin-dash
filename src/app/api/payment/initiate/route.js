@@ -48,6 +48,10 @@ export async function POST(req) {
             } else {
                 throw new Error(result.message || 'Payment initiation failed');
             }
+        } else if (gateway === 'payhere') {
+            // PayHere (Form Post)
+            // We redirect to an intermediate page that will auto-submit the form
+            paymentUrl = `${baseUrl}/payment/payhere?bookingId=${booking._id}`;
         }
 
         return NextResponse.json({

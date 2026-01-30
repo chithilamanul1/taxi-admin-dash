@@ -31,13 +31,79 @@ export const GATEWAY_CONFIG = {
             'GBP': process.env.SAMPATH_CLIENT_ID_GBP || '14007944',
             'INR': process.env.SAMPATH_CLIENT_ID_IND || '14007945'
         }
+    },
+    payhere: {
+        name: 'PayHere',
+        enabled: process.env.PAYMENT_GATEWAY === 'payhere',
+        merchantId: process.env.PAYHERE_MERCHANT_ID || '121XXXX',
+        merchantSecret: process.env.PAYHERE_SECRET || '458XXXXXXXXXXXX', // NOT the app secret, the merchant secret
+        url: process.env.NODE_ENV === 'production'
+            ? 'https://www.payhere.lk/pay/checkout'
+            : 'https://sandbox.payhere.lk/pay/checkout'
     }
 };
 
 // Get active gateway
 export function getActiveGateway() {
-    return process.env.PAYMENT_GATEWAY || 'mock';
+    return process.env.PAYMENT_GATEWAY || 'mock'; // Default to mock if undefined
 }
+
+/**
+ * Generate PayHere MD5 Hash
+ * Format: merchant_id + order_id + amount + currency + StatusCode + md5(secret)
+ * But for Request: merchant_id + order_id + amount + currency + md5(secret)  (As per PayHere docs for checkout)
+ */
+export function generatePayHereHash(merchantId, orderId, amount, currency, merchantSecret) {
+    const formattedAmount = parseFloat(amount).toFixed(2); // Ensure 2 decimal places
+    const hashedSecret = crypto.createHash('md5').update(merchantSecret).digest('hex').toUpperCase();
+    const stringToHash = merchantId + orderId + formattedAmount + currency + hashedSecret;
+    return crypto.createHash('md5').update(stringToHash).digest('hex').toUpperCase();
+}
+
+
+/**
+ * Initiate PayHere Payment
+ * Returns the data needed to render the form on the frontend/intermediate page
+ */
+export function initiatePayHereTransaction(booking, returnUrl, cancelUrl, notifyUrl) {
+    const config = GATEWAY_CONFIG.payhere;
+    const amount = booking.paidAmount || booking.totalPrice;
+    const currency = 'LKR'; // PayHere usually LKR, update if needed
+
+    // Hash generation
+    const hash = generatePayHereHash(
+        config.merchantId,
+        booking._id.toString(),
+        amount,
+        currency,
+        config.merchantSecret
+    );
+
+    return {
+        success: true,
+        method: 'POST',
+        url: config.url,
+        params: {
+            merchant_id: config.merchantId,
+            return_url: returnUrl,
+            cancel_url: cancelUrl,
+            notify_url: notifyUrl,
+            order_id: booking._id.toString(),
+            items: `Booking #${booking._id.toString().slice(-6)} - ${booking.vehicleType}`,
+            currency: currency,
+            amount: parseFloat(amount).toFixed(2),
+            first_name: booking.customerName?.split(' ')[0] || 'Guest',
+            last_name: booking.customerName?.split(' ').slice(1).join(' ') || '',
+            email: booking.customerEmail || 'no-email@example.com',
+            phone: booking.guestPhone || '0000000000',
+            address: booking.pickupLocation?.address || 'Sri Lanka',
+            city: 'Colombo',
+            country: 'Sri Lanka',
+            hash: hash
+        }
+    };
+}
+
 
 /**
  * Generate secure payload for Sampath IPG
@@ -50,8 +116,9 @@ export function getActiveGateway() {
  * Operation: PAYMENT_INIT
  */
 export async function initiatePayCorpTransaction(booking, returnUrl) {
+    // ... (Existing PayCorp logic)
     const config = GATEWAY_CONFIG.sampath;
-
+    // ... rest of function remains same, ensuring we don't break existing
     // Amount in CENTS
     // Note: Verify if PayCorp expects Cents for ALL currencies or just LKR.
     // Usually Standard: 100 cents = 1 Unit.
@@ -113,6 +180,14 @@ export async function initiatePayCorpTransaction(booking, returnUrl) {
                 reqId: data.reqId
             };
         } else {
+            // Fallback for DEV without real keys if not mock
+            if (process.env.NODE_ENV === 'development') {
+                console.log("DEV MODE: Returning mock URL due to error.");
+                return {
+                    success: true,
+                    paymentUrl: `/payment/mock?bookingId=${booking._id}`,
+                }
+            }
             return {
                 success: false,
                 message: data.message || "Payment Initialization Failed"

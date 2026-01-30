@@ -131,6 +131,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         };
     };
 
+    // Extract calculated values for render
+    const { total: totalPrice, subtotal, surcharges, payNow, balance: balanceAmount } = getPriceBreakdown();
+
     // Form State
     const [formData, setFormData] = useState({
         vehicle: initialData.vehicle || 'mini-car',
@@ -153,6 +156,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         flightNumber: initialData.flightNumber || '',
         notes: initialData.notes || '',
         paymentMethod: 'cash',
+        paymentType: 'full', // 'full' or 'partial'
     });
 
     useEffect(() => {
@@ -191,7 +195,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
 
 
-    const { total: totalPrice, subtotal, surcharges } = getPriceBreakdown();
+    // Removed duplicate declaration
 
     const handleSubmit = async () => {
         console.log("Submitting Booking... Step 1");
@@ -434,9 +438,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 <div className="w-full md:w-auto">
                                     <div className="flex items-center gap-2 text-emerald-400 mb-1">
                                         <Zap size={14} fill="currentColor" />
-                                        <span className="text-[10px] font-extrabold uppercase tracking-widest">Pricing Overview</span>
+                                        <span className="text-[10px] font-extrabold uppercase tracking-widest">{formData.paymentType === 'partial' ? 'Pay Now' : 'Total Price'}</span>
                                     </div>
-                                    <div className="text-2xl md:text-4xl font-black leading-tight">Rs {totalPrice.toLocaleString()}</div>
+                                    <div className="text-2xl md:text-4xl font-black leading-tight">Rs {payNow.toLocaleString()}</div>
                                     {formData.couponCode && <div className="text-[10px] text-emerald-300 font-bold uppercase mt-1">Coupon {formData.couponCode} Applied</div>}
                                 </div>
                                 <div className="text-left md:text-right w-full md:w-auto border-t md:border-t-0 border-white/10 pt-3 md:pt-0">
@@ -534,9 +538,23 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <span>Surcharges</span>
                                             <span className="text-emerald-900 font-bold">Rs {surcharges.toLocaleString()}</span>
                                         </div>
-                                        <div className="pt-4 border-t border-emerald-900/10 flex justify-between items-end">
-                                            <span className="font-black text-emerald-600 uppercase tracking-[0.2em]">Total Amount</span>
-                                            <span className="text-xl md:text-2xl font-black text-emerald-900">Rs {totalPrice.toLocaleString()}</span>
+                                        <div className="pt-4 border-t border-emerald-900/10 space-y-2">
+                                            <div className="flex justify-between items-end">
+                                                <span className="font-bold text-emerald-900/60 uppercase text-xs">Total Amount</span>
+                                                <span className="text-xl font-bold text-emerald-900/60">Rs {totalPrice.toLocaleString()}</span>
+                                            </div>
+
+                                            <div className="flex justify-between items-end">
+                                                <span className="font-black text-emerald-600 uppercase tracking-[0.2em]">{formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Payable'}</span>
+                                                <span className="text-2xl md:text-3xl font-black text-emerald-900">Rs {payNow.toLocaleString()}</span>
+                                            </div>
+
+                                            {formData.paymentType === 'partial' && (
+                                                <div className="flex justify-between items-end pt-2 border-t border-dashed border-emerald-900/20">
+                                                    <span className="font-bold text-red-500 uppercase text-xs tracking-wider">Balance Due</span>
+                                                    <span className="text-lg font-bold text-red-500">Rs {balanceAmount.toLocaleString()}</span>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

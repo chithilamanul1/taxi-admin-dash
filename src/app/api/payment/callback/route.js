@@ -103,6 +103,13 @@ export async function POST(request) {
         booking.gatewayResponse = JSON.stringify(data); // Save raw response for audit
         await booking.save();
 
+        // Send Receipt if successful
+        if (status === 'success') {
+            const { sendPaymentConfirmation } = require('@/lib/email-service');
+            await sendPaymentConfirmation(booking).catch(err => console.error("Error sending receipt:", err));
+        }
+
+
         return NextResponse.json({
             success: true,
             bookingId: booking._id,
