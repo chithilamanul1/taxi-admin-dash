@@ -152,76 +152,61 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     }, [activeTab])
 
     const handleGetCurrentLocation = () => {
-        setShouldLoadMap(true); // Trigger Load
         if (!navigator.geolocation) return;
-        // Trigger Script Load if not loaded
-        // However, we can use browser API without google maps script for lat/lon
-        // But we need Geocoder for address name. So we wait/trigger.
         setIsLocating(true);
         navigator.geolocation.getCurrentPosition(async (pos) => {
             try {
-                // Use Google Geocoder if loaded, else fallback? Or just component logic?
-                // For simplicity, we can rely on browser coords. 
-                // To get address name, we need Geocoder.
                 const { latitude, longitude } = pos.coords;
+                // Reverse Geocode with Nominatim
+                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+                const data = await res.json();
 
-                if (isMapReady) {
-                    const geocoder = new window.google.maps.Geocoder();
-                    const response = await geocoder.geocode({ location: { lat: latitude, lng: longitude } });
-                    if (response.results[0]) {
-                        const loc = {
-                            name: response.results[0].formatted_address,
-                            lat: latitude,
-                            lon: longitude
-                        };
-                        setPickup(loc);
-                        setPickupSearch(loc.name);
-                    }
-                } else {
-                    // Fallback without name if script fails?
-                    setPickup({ name: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`, lat: latitude, lon: longitude });
-                    setPickupSearch(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
-                }
-
-            } catch (err) { console.error(err); } finally { setIsLocating(false); }
+                const loc = {
+                    name: data.display_name || `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,
+                    lat: latitude,
+                    lon: longitude
+                };
+                setPickup(loc);
+                setPickupSearch(loc.name);
+            } catch (err) {
+                console.error("Locating Error:", err);
+                // Fallback to coords
+                setPickup({ name: `${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`, lat: pos.coords.latitude, lon: pos.coords.longitude });
+                setPickupSearch(`${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
+            } finally {
+                setIsLocating(false);
+            }
         }, () => setIsLocating(false));
     }
 
     // Distance Calculation (Google Directions)
+    // Distance Calculation (OSRM)
     useEffect(() => {
-        if (isMapReady && pickup.lat && dropoff.lat) {
+        if (pickup.lat && dropoff.lat) {
             const calculateRoute = async () => {
                 try {
-                    const directionsService = new window.google.maps.DirectionsService();
+                    // OSRM Format: {lon},{lat};{lon},{lat}
+                    let coordsString = `${pickup.lon},${pickup.lat};${dropoff.lon},${dropoff.lat}`;
 
-                    const waypointsList = waypoints.map(w => ({
-                        location: { lat: w.lat, lng: w.lon },
-                        stopover: true
-                    }));
+                    // Add waypoints if any
+                    if (waypoints.length > 0) {
+                        const wpString = waypoints.map(w => `${w.lon},${w.lat}`).join(';');
+                        coordsString = `${pickup.lon},${pickup.lat};${wpString};${dropoff.lon},${dropoff.lat}`;
+                    }
 
-                    const result = await directionsService.route({
-                        origin: { lat: pickup.lat, lng: pickup.lon },
-                        destination: { lat: dropoff.lat, lng: dropoff.lon },
-                        waypoints: waypointsList,
-                        travelMode: window.google.maps.TravelMode.DRIVING,
-                    });
+                    const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${coordsString}?overview=false`);
+                    const data = await res.json();
 
-                    if (result.routes.length > 0) {
-                        const route = result.routes[0];
-                        let totalMeters = 0;
-                        route.legs.forEach(leg => {
-                            totalMeters += leg.distance.value;
-                        });
-                        setDistance(totalMeters / 1000);
+                    if (data.routes && data.routes.length > 0) {
+                        setDistance(data.routes[0].distance / 1000); // meters to km
                     }
                 } catch (err) {
-                    console.error("Directions Error:", err);
-                    // Fallback to straight line or 0?
+                    console.error("OSRM Routing Error:", err);
                 }
             }
             calculateRoute()
         }
-    }, [isMapReady, pickup, dropoff, waypoints])
+    }, [pickup, dropoff, waypoints])
 
     // Fetch Marketing Offers
     useEffect(() => {

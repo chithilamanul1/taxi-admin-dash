@@ -98,6 +98,7 @@ export default function Navbar() {
                     {[
                         { label: 'Rates', href: '/prices' },
                         { label: 'Offers', href: '/offers' },
+                        { label: 'Reviews', href: '/reviews' },
                         { label: 'Blog', href: '/blog' },
                         { label: 'Contact', href: '/contact' },
                     ].map(item => (
@@ -246,6 +247,7 @@ export default function Navbar() {
                                 { label: 'All Packages', href: '/tour-packages', icon: '🗺️' },
                                 { label: 'Rates', href: '/prices', icon: '💰' },
                                 { label: 'Offers', href: '/offers', icon: '🎁' },
+                                { label: 'Reviews', href: '/reviews', icon: '⭐' },
                                 { label: 'Blog', href: '/blog', icon: '📝' },
                                 { label: 'Contact', href: '/contact', icon: '📞' }
                             ].map(item => (
