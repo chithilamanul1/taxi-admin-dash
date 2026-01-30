@@ -47,7 +47,7 @@ const AdminDashboard = () => {
 
     const handleSavePricing = async () => {
         try {
-            const res = await fetch(`/api/pricing/${editingVehicle.vehicleType}`, {
+            const res = await fetch(`/api/pricing/${editingVehicle.vehicleType}?category=${editForm.category}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editForm)
@@ -426,9 +426,9 @@ const AdminDashboard = () => {
                     {editingVehicle && (
                         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-white/5">
-                                <h2 className="text-xl font-bold text-emerald-900 dark:text-white mb-4">Edit Pricing: {editingVehicle.name}</h2>
+                                <h2 className="text-xl font-bold text-emerald-900 dark:text-white mb-4">Edit Configuration: {editingVehicle.name}</h2>
 
-                                <div className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                     <div>
                                         <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Display Name</label>
                                         <input
@@ -438,61 +438,116 @@ const AdminDashboard = () => {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Model</label>
-                                        <input
-                                            value={editForm.model || ''}
-                                            onChange={(e) => handleFormChange(e, 'model')}
-                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
-                                        />
-                                    </div>
-                                    <div>
                                         <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Category</label>
                                         <select
+                                            disabled // Category shouldn't be changed usually, distinct logic
                                             value={editForm.category || 'airport-transfer'}
-                                            onChange={(e) => handleFormChange(e, 'category')}
-                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                            className="w-full p-2 bg-slate-100 dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-gray-500 cursor-not-allowed"
                                         >
                                             <option value="airport-transfer">Airport Transfer</option>
                                             <option value="ride-now">Ride Now</option>
                                         </select>
                                     </div>
-
                                     <div>
-                                        <label className="block text-sm font-bold text-gray-700 dark:text-slate-400 mb-2">Pricing Tiers</label>
-                                        <div className="space-y-3">
-                                            {editForm.tiers?.map((tier, i) => (
-                                                <div key={i} className="flex gap-2 items-center bg-slate-50 dark:bg-white/5 p-2 rounded border dark:border-white/10">
-                                                    <div className="w-1/4">
-                                                        <label className="text-xs text-gray-500 dark:text-slate-500">Max KM</label>
-                                                        <input
-                                                            value={tier.max || ''}
-                                                            onChange={(e) => handleFormChange(e, 'max', i)}
-                                                            className="w-full p-1 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-sm text-emerald-900 dark:text-white"
-                                                            placeholder="Infinity for last"
-                                                        />
-                                                    </div>
-                                                    <div className="w-1/4">
-                                                        <label className="text-xs text-gray-500 dark:text-slate-500">Type</label>
-                                                        <select
-                                                            value={tier.type}
-                                                            onChange={(e) => handleFormChange(e, 'type', i)}
-                                                            className="w-full p-1 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-sm text-emerald-900 dark:text-white"
-                                                        >
-                                                            <option value="flat">Flat Rate</option>
-                                                            <option value="per_km">Per KM</option>
-                                                        </select>
-                                                    </div>
-                                                    <div className="w-1/4">
-                                                        <label className="text-xs text-gray-500 dark:text-slate-500">{tier.type === 'flat' ? 'Price' : 'Rate'}</label>
-                                                        <input
-                                                            value={tier.type === 'flat' ? (tier.price || '') : (tier.rate || '')}
-                                                            onChange={(e) => handleFormChange(e, tier.type === 'flat' ? 'price' : 'rate', i)}
-                                                            className="w-full p-1 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-sm text-emerald-900 dark:text-white"
-                                                        />
-                                                    </div>
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Passengers (Pax)</label>
+                                        <input
+                                            type="number"
+                                            value={editForm.capacity || ''}
+                                            onChange={(e) => handleFormChange(e, 'capacity')}
+                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Luggage</label>
+                                        <input
+                                            type="number"
+                                            value={editForm.luggage || ''}
+                                            onChange={(e) => handleFormChange(e, 'luggage')}
+                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Hand Luggage</label>
+                                        <input
+                                            type="number"
+                                            value={editForm.handLuggage || ''}
+                                            onChange={(e) => handleFormChange(e, 'handLuggage')}
+                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4 border-t dark:border-white/10 pt-4">
+                                    <div className="flex justify-between items-center">
+                                        <label className="block text-lg font-bold text-gray-700 dark:text-slate-200">Pricing Tiers</label>
+                                        <button
+                                            onClick={() => {
+                                                const newTiers = [...(editForm.tiers || [])];
+                                                newTiers.push({ min: 0, max: 0, type: 'per_km', rate: 0, price: 0 });
+                                                setEditForm({ ...editForm, tiers: newTiers });
+                                            }}
+                                            className="text-sm bg-emerald-100 text-emerald-700 font-bold px-3 py-1 rounded hover:bg-emerald-200"
+                                        >
+                                            + Add Tier
+                                        </button>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        {editForm.tiers?.map((tier, i) => (
+                                            <div key={i} className="flex gap-2 items-center bg-slate-50 dark:bg-white/5 p-3 rounded-lg border dark:border-white/10 shadow-sm">
+                                                <div className="w-[15%]">
+                                                    <label className="text-xs font-bold text-gray-500">Min KM</label>
+                                                    <input
+                                                        type="number"
+                                                        value={tier.min || 0}
+                                                        onChange={(e) => handleFormChange(e, 'min', i)}
+                                                        className="w-full p-1 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-sm text-center"
+                                                    />
                                                 </div>
-                                            ))}
-                                        </div>
+                                                <div className="w-[15%]">
+                                                    <label className="text-xs font-bold text-gray-500">Max KM</label>
+                                                    <input
+                                                        value={tier.max || ''}
+                                                        onChange={(e) => handleFormChange(e, 'max', i)}
+                                                        className="w-full p-1 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-sm text-center"
+                                                        placeholder="∞"
+                                                    />
+                                                </div>
+                                                <div className="w-[25%]">
+                                                    <label className="text-xs font-bold text-gray-500">Calculation</label>
+                                                    <select
+                                                        value={tier.type}
+                                                        onChange={(e) => handleFormChange(e, 'type', i)}
+                                                        className="w-full p-1 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-sm"
+                                                    >
+                                                        <option value="flat">Fixed Price (Package)</option>
+                                                        <option value="per_km">Per KM Rate</option>
+                                                    </select>
+                                                </div>
+                                                <div className="w-[25%] px-2">
+                                                    <label className="text-xs font-bold text-emerald-600 block mb-1 text-center">
+                                                        {tier.type === 'flat' ? 'Price (LKR)' : 'Rate (LKR)'}
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        value={tier.type === 'flat' ? (tier.price || '') : (tier.rate || '')}
+                                                        onChange={(e) => handleFormChange(e, tier.type === 'flat' ? 'price' : 'rate', i)}
+                                                        className="w-full p-1 font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded text-sm text-center"
+                                                    />
+                                                </div>
+                                                <div className="w-[5%] flex justify-end">
+                                                    <button
+                                                        onClick={() => {
+                                                            const newTiers = editForm.tiers.filter((_, idx) => idx !== i);
+                                                            setEditForm({ ...editForm, tiers: newTiers });
+                                                        }}
+                                                        className="text-red-400 hover:text-red-600 font-bold px-2"
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
 

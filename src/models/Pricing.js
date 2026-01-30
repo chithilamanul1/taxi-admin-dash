@@ -42,26 +42,27 @@ pricingSchema.index({ vehicleType: 1, category: 1 }, { unique: true });
 // Calculate price based on distance, trip type, and waiting hours
 pricingSchema.methods.calculatePrice = function (distanceKm, tripType = 'one-way', waitingHours = 0) {
     let totalPrice = 0;
-    let remainingKm = distanceKm;
 
-    // Sort tiers by min km
-    const sortedTiers = [...this.tiers].sort((a, b) => a.min - b.min);
+    // 1. Find the matching tier based on TOTAL distance
+    // Tiers should be defined as ranges: 0-20, 21-40, 41-50, etc.
+    // We look for the tier where min <= distance <= max
+    const matchingTier = this.tiers.find(t => distanceKm >= t.min && distanceKm <= (t.max || Infinity));
 
-    for (const tier of sortedTiers) {
-        if (remainingKm <= 0) break;
-
-        const tierStart = tier.min;
-        const tierEnd = tier.max;
-        const kmInTier = Math.min(remainingKm, tierEnd - tierStart + 1);
-
-        if (distanceKm >= tierStart) {
-            if (tier.type === 'flat') {
-                totalPrice = tier.price;
-            } else if (tier.type === 'per_km') {
-                const kmToCharge = Math.min(remainingKm, tierEnd - Math.max(tierStart, distanceKm - remainingKm + 1) + 1);
-                totalPrice += kmToCharge * tier.rate;
-            }
-            remainingKm -= kmInTier;
+    if (matchingTier) {
+        if (matchingTier.type === 'flat') {
+            totalPrice = matchingTier.price;
+        } else if (matchingTier.type === 'per_km') {
+            // For Per KM, usually it implies Total Distance * Rate for this tier
+            totalPrice = distanceKm * matchingTier.rate;
+        }
+    } else {
+        // Fallback: Use Base Price + (Dist - BaseKm) * PerKmRate
+        // This handles cases where no tier is defined (legacy)
+        if (distanceKm <= this.baseKm) {
+            totalPrice = this.basePrice;
+        } else {
+            const extraKm = distanceKm - this.baseKm;
+            totalPrice = this.basePrice + (extraKm * this.perKmRate);
         }
     }
 
@@ -75,6 +76,7 @@ pricingSchema.methods.calculatePrice = function (distanceKm, tripType = 'one-way
         if (this.waitingCharges && this.waitingCharges.length >= waitingHours) {
             totalPrice += this.waitingCharges[waitingHours - 1];
         } else {
+            // Fallback hourly rate
             totalPrice += waitingHours * (this.hourlyRate || 0);
         }
     }

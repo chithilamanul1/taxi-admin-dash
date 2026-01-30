@@ -49,245 +49,122 @@ async function seed() {
         await mongoose.connect(MONGODB_URI);
         console.log('Connected.');
 
-        // Drop legacy index if exists
-        try {
-            await Pricing.collection.dropIndex('vehicleType_1');
-            console.log('Dropped legacy index: vehicleType_1');
-        } catch (e) {
-            console.log('Index vehicleType_1 not found or already dropped (safe to ignore).');
-        }
-
-        // 1. Seed Airport Transfer - Force Update
-        await Pricing.deleteMany({ category: 'airport-transfer' });
-        console.log('Cleared existing Airport Transfer entries.');
-
-        console.log('Seeding Airport Transfer...');
         const commonFeatures = ['Air Conditioning', 'Bluetooth', 'USB Charging'];
 
-        await Pricing.insertMany([
-            {
-                vehicleType: 'mini-car',
-                category: 'airport-transfer',
-                name: 'Mini Car (Budget)',
-                basePrice: 40,
-                baseKm: 0,
-                perKmRate: 0.50,
-                maxPassengers: 2,
-                maxLuggage: 2,
-                handLuggage: 2,
-                features: commonFeatures,
-                image: '/vehicles/wagon-r.jpeg',
-                isActive: true
-            },
-            {
-                vehicleType: 'sedan',
-                category: 'airport-transfer',
-                name: 'Sedan Car',
-                basePrice: 50,
-                baseKm: 0,
-                perKmRate: 0.60,
-                maxPassengers: 3,
-                maxLuggage: 3,
-                handLuggage: 3,
-                features: commonFeatures,
-                image: '/vehicles/sedan.png',
-                isActive: true
-            },
-            {
-                vehicleType: 'mini-van-every',
-                category: 'airport-transfer',
-                name: 'Mini Van (Every)',
-                basePrice: 55,
-                baseKm: 0,
-                perKmRate: 0.70,
-                maxPassengers: 3,
-                maxLuggage: 3,
-                handLuggage: 3,
-                features: commonFeatures,
-                image: '/vehicles/every.jpg',
-                isActive: true
-            },
-            {
-                vehicleType: 'van',
-                category: 'airport-transfer',
-                name: 'KDH Van',
-                basePrice: 65,
-                baseKm: 0,
-                perKmRate: 0.85,
-                maxPassengers: 6,
-                maxLuggage: 7,
-                handLuggage: 7,
-                features: commonFeatures,
-                image: '/vehicles/kdh.png',
-                isActive: true
-            },
-            {
-                vehicleType: 'suv',
-                category: 'airport-transfer',
-                name: 'SUV (Luxury)',
-                basePrice: 90,
-                baseKm: 0,
-                perKmRate: 1.00,
-                maxPassengers: 3,
-                maxLuggage: 3,
-                handLuggage: 3,
-                features: [...commonFeatures, 'Leather Seats'],
-                image: '/vehicles/suv.jpg',
-                isActive: true
-            },
-            {
-                vehicleType: 'mini-bus',
-                category: 'airport-transfer',
-                name: 'Bus',
-                basePrice: 110,
-                baseKm: 0,
-                perKmRate: 1.30,
-                maxPassengers: 16,
-                maxLuggage: 20,
-                handLuggage: 20,
-                features: [...commonFeatures, 'TV', 'Microphone'],
-                image: '/vehicles/minibus.jpg',
-                isActive: true
-            },
-            {
-                vehicleType: 'coach',
-                category: 'airport-transfer',
-                name: 'Coach Bus',
-                basePrice: 150,
-                baseKm: 0,
-                perKmRate: 1.80,
-                maxPassengers: 45,
-                maxLuggage: 45,
-                handLuggage: 50,
-                features: [...commonFeatures, 'TV', 'Microphone', 'Reclining Seats'],
-                image: '/vehicles/coach.jpg',
-                isActive: true
-            }
-        ]);
-        console.log('Seeded Airport Transfer with detailed specs.');
+        // --- TIER DEFINITIONS ---
+        // 'flat': Price is the TOTAL price for that range.
+        // 'per_km': Price is Distance * Rate.
+        const miniVanEveryAirportTiers = [
+            { min: 0, max: 20, type: 'flat', price: 4500 },
+            { min: 21, max: 40, type: 'flat', price: 6000 },
+            { min: 41, max: 50, type: 'per_km', rate: 150 },
+            { min: 51, max: 100, type: 'per_km', rate: 130 },
+            { min: 101, max: 140, type: 'per_km', rate: 120 },
+            { min: 141, max: 200, type: 'per_km', rate: 115 },
+            { min: 201, max: 9999, type: 'per_km', rate: 110 }
+        ];
 
-        // 2. Seed Ride Now - Force Update
+        const miniVanEveryRideTiers = [
+            { min: 0, max: 20, type: 'flat', price: 4501 }, // Distinct Rate for Ride Now
+            { min: 21, max: 40, type: 'flat', price: 6000 },
+            { min: 41, max: 50, type: 'per_km', rate: 150 },
+            { min: 51, max: 100, type: 'per_km', rate: 130 },
+            { min: 101, max: 140, type: 'per_km', rate: 120 },
+            { min: 141, max: 200, type: 'per_km', rate: 115 },
+            { min: 201, max: 9999, type: 'per_km', rate: 110 }
+        ];
+
+        // --- VEHICLE TEMPLATES ---
+        const vehicles = {
+            miniCar: {
+                vehicleType: 'mini-car',
+                name: 'Mini Car (Budget)',
+                image: '/vehicles/wagon-r.jpeg', // Assuming local asset or can update if user provides
+                capacity: 3, luggage: 2, handLuggage: 2,
+                basePrice: 3500, baseKm: 20, perKmRate: 90,
+                features: commonFeatures
+            },
+            sedan: {
+                vehicleType: 'sedan',
+                name: 'Sedan Car',
+                image: '/vehicles/sedan.png',
+                capacity: 4, luggage: 3, handLuggage: 3,
+                basePrice: 4500, baseKm: 20, perKmRate: 110,
+                features: commonFeatures
+            },
+            miniVanEvery: {
+                vehicleType: 'mini-van-every',
+                name: 'Mini Van (Every)',
+                image: 'https://www.suzukicycles.org/photos/Every/1999_Every/1999_Every-Joypop-Turbo_brochure_450.jpg',
+                capacity: 4, luggage: 4, handLuggage: 2,
+                basePrice: 4500, baseKm: 20, perKmRate: 150,
+                features: commonFeatures,
+                tiers: [] // Set dynamically
+            },
+            kdhVan: {
+                vehicleType: 'kdh-van',
+                name: 'KDH High Roof Van',
+                image: 'https://i.pinimg.com/736x/4f/7e/66/4f7e6653336f101ed31e3687810d12ab.jpg',
+                capacity: 9, luggage: 8, handLuggage: 5,
+                basePrice: 8500, baseKm: 40, perKmRate: 180,
+                features: commonFeatures
+            },
+            suv: {
+                vehicleType: 'suv',
+                name: 'SUV (Luxury)',
+                image: '/vehicles/suv.jpg',
+                capacity: 4, luggage: 4, handLuggage: 3,
+                basePrice: 8000, baseKm: 20, perKmRate: 160,
+                features: [...commonFeatures, 'Leather Seats']
+            },
+            bus: {
+                vehicleType: 'bus',
+                name: 'Mini Bus (26-Seater)',
+                image: 'https://i.pinimg.com/originals/cc/9b/87/cc9b87eebb1ad09c91649c8dc24f9164.png',
+                capacity: 16, luggage: 10, handLuggage: 10,
+                basePrice: 15000, baseKm: 40, perKmRate: 250,
+                features: [...commonFeatures, 'TV', 'Microphone']
+            },
+            coach: {
+                vehicleType: 'coach-bus',
+                name: 'Luxury Coach Bus',
+                image: 'https://img.freepik.com/premium-photo/white-bus-with-black-windows_1019429-43040.jpg?semt=ais_user_personalization&w=740&q=80',
+                capacity: 45, luggage: 50, handLuggage: 45,
+                basePrice: 25000, baseKm: 40, perKmRate: 450,
+                features: [...commonFeatures, 'TV', 'Reclining Seats']
+            }
+        };
+
+        // --- 1. SEED AIRPORT TRANSFER ---
+        await Pricing.deleteMany({ category: 'airport-transfer' });
+        console.log('Cleared Airport Transfer.');
+
+        await Pricing.insertMany([
+            { ...vehicles.miniCar, category: 'airport-transfer' },
+            { ...vehicles.sedan, category: 'airport-transfer' },
+            { ...vehicles.miniVanEvery, category: 'airport-transfer', tiers: miniVanEveryAirportTiers },
+            { ...vehicles.kdhVan, category: 'airport-transfer' },
+            { ...vehicles.suv, category: 'airport-transfer' },
+            { ...vehicles.bus, category: 'airport-transfer' },
+            { ...vehicles.coach, category: 'airport-transfer' }
+        ]);
+        console.log('Seeded Airport Transfer (Full Fleet).');
+
+
+        // --- 2. SEED RIDE NOW ---
         await Pricing.deleteMany({ category: 'ride-now' });
-        console.log('Cleared existing Ride Now entries.');
-
-        console.log('Seeding Ride Now...');
-        // commonFeatures is already defined above
+        console.log('Cleared Ride Now.');
 
         await Pricing.insertMany([
-            {
-                vehicleType: 'mini-car',
-                category: 'ride-now',
-                name: 'Mini Car (Budget)',
-                basePrice: 500,
-                baseKm: 1,
-                perKmRate: 150,
-                maxPassengers: 2,
-                maxLuggage: 2,
-                handLuggage: 2,
-                features: commonFeatures,
-                image: '/vehicles/wagon-r.jpeg',
-                isActive: true
-            },
-            {
-                vehicleType: 'sedan',
-                category: 'ride-now',
-                name: 'Sedan Car',
-                basePrice: 600,
-                baseKm: 1,
-                perKmRate: 180,
-                maxPassengers: 3,
-                maxLuggage: 3,
-                handLuggage: 3,
-                features: commonFeatures,
-                image: '/vehicles/sedan.png',
-                isActive: true
-            },
-            {
-                vehicleType: 'mini-van-every',
-                category: 'ride-now',
-                name: 'Mini Van (Every)',
-                basePrice: 800,
-                baseKm: 1,
-                perKmRate: 200,
-                maxPassengers: 3,
-                maxLuggage: 3,
-                handLuggage: 3,
-                features: commonFeatures,
-                image: '/vehicles/every.jpg',
-                isActive: true
-            },
-            {
-                vehicleType: 'mini-van-05', // Using as "Mini Van 4 Seat"
-                category: 'ride-now',
-                name: 'Mini Van (4-5 Seat)',
-                basePrice: 900,
-                baseKm: 1,
-                perKmRate: 220,
-                maxPassengers: 4,
-                maxLuggage: 4,
-                handLuggage: 4,
-                features: commonFeatures,
-                image: '/vehicles/minivan-4.jpg',
-                isActive: false // User didn't strictly ask for this but implied by list order, keeping safer fallback
-            },
-            {
-                vehicleType: 'van', // Mapping standard VAN
-                category: 'ride-now',
-                name: 'KDH Van',
-                basePrice: 1000,
-                baseKm: 1,
-                perKmRate: 250,
-                maxPassengers: 6,
-                maxLuggage: 7,
-                handLuggage: 7,
-                features: commonFeatures,
-                image: '/vehicles/kdh.png',
-                isActive: true
-            },
-            {
-                vehicleType: 'suv',
-                category: 'ride-now',
-                name: 'SUV (Luxury)',
-                basePrice: 1500,
-                baseKm: 1,
-                perKmRate: 350,
-                maxPassengers: 3,
-                maxLuggage: 3,
-                handLuggage: 3,
-                features: [...commonFeatures, 'Leather Seats'],
-                image: '/vehicles/suv.jpg',
-                isActive: true
-            },
-            {
-                vehicleType: 'mini-bus',
-                category: 'ride-now',
-                name: 'Bus',
-                basePrice: 2000,
-                baseKm: 1,
-                perKmRate: 450,
-                maxPassengers: 16, // 10-16
-                maxLuggage: 20,
-                handLuggage: 20,
-                features: [...commonFeatures, 'TV', 'Microphone'],
-                image: '/vehicles/minibus.jpg',
-                isActive: true
-            },
-            {
-                vehicleType: 'coach',
-                category: 'ride-now',
-                name: 'Coach Bus',
-                basePrice: 3000,
-                baseKm: 1,
-                perKmRate: 600,
-                maxPassengers: 45, // 16-45
-                maxLuggage: 45,
-                handLuggage: 50,
-                features: [...commonFeatures, 'TV', 'Microphone', 'Reclining Seats'],
-                image: '/vehicles/coach.jpg', // Placeholder, user might need to upload
-                isActive: true
-            }
+            { ...vehicles.miniCar, category: 'ride-now' },
+            { ...vehicles.sedan, category: 'ride-now' },
+            { ...vehicles.miniVanEvery, category: 'ride-now', tiers: miniVanEveryRideTiers, basePrice: 4501 }, // Distinct base price just in case
+            { ...vehicles.kdhVan, category: 'ride-now' },
+            { ...vehicles.suv, category: 'ride-now' },
+            { ...vehicles.bus, category: 'ride-now' },
+            { ...vehicles.coach, category: 'ride-now' }
         ]);
-        console.log('Seeded Ride Now with detailed specs including Coach.');
+        console.log('Seeded Ride Now (Full Fleet).');
 
         process.exit(0);
     } catch (e) {
