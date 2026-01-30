@@ -13,7 +13,7 @@ const STEPS = [
     { id: 3, title: 'Confirm', icon: CreditCard },
 ];
 
-export default function BookingModal({ isOpen, onClose, initialData = {}, pricingCategory = 'transfer' }) {
+export default function BookingModal({ isOpen, onClose, initialData = {}, pricingCategory = 'airport-transfer' }) {
     const { data: session } = useSession();
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);

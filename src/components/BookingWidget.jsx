@@ -12,6 +12,7 @@ import VehicleSelectionDrawer from './VehicleSelectionDrawer'
 import VehicleCarousel from './VehicleCarousel'
 import LocationInput from './LocationInput'
 import SmartOfferNudge from './SmartOfferNudge'
+import TripMap from './TripMap'
 
 
 // ... (calculatePrice helper remains same)
@@ -613,6 +614,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                 </div>
 
+                                <TripMap pickup={pickup} dropoff={dropoff} waypoints={waypoints} />
+
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center text-sm">
                                         <span className="text-emerald-900/40 dark:text-white/40">Est. Distance</span>
@@ -650,9 +653,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             {convertPrice(finalTotal).symbol} {convertPrice(finalTotal).value.toLocaleString()}
                                         </span>
                                     </div>
-                                    <span className="text-emerald-600 dark:text-emerald-400 font-bold text-xs bg-emerald-50 dark:bg-emerald-900/50 px-3 py-1 rounded-full uppercase tracking-tighter flex items-center gap-1">
-                                        <Check size={12} /> ALL INCLUSIVE
-                                    </span>
                                 </div>
 
                                 <button

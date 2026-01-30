@@ -10,12 +10,9 @@ const BASE_CURRENCY = 'LKR';
 const SUPPORTED_CURRENCIES = [
     { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: '🇱🇰' },
     { code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸' },
-    { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳' },
     { code: 'EUR', symbol: '€', name: 'Euro', flag: '🇪🇺' },
+    { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳' },
     { code: 'GBP', symbol: '£', name: 'British Pound', flag: '🇬🇧' },
-    { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', flag: '🇦🇺' },
-    { code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', flag: '🇨🇦' },
-    { code: 'AED', symbol: 'AED', name: 'UAE Dirham', flag: '🇦🇪' },
 ];
 
 export function CurrencyProvider({ children }) {
