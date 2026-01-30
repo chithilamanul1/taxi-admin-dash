@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 
-const FROM_EMAIL = 'Airport Taxi <onboarding@resend.dev>'; // Using default domain until user sets up custom domain
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxi <onboarding@resend.dev>';
 
 export const sendEmail = async ({ to, subject, html, text }) => {
     try {
