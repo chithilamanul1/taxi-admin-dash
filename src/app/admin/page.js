@@ -641,13 +641,20 @@ export default function AdminDashboard() {
                                                 </div>
                                                 <div>
                                                     <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Code (Type)</label>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="e.g. luxury-sedan"
-                                                        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 focus:border-transparent outline-none transition-all"
+                                                    <select
+                                                        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 focus:border-transparent outline-none transition-all bg-white"
                                                         value={editForm.vehicleType || ''}
                                                         onChange={(e) => setEditForm({ ...editForm, vehicleType: e.target.value })}
-                                                    />
+                                                    >
+                                                        <option value="">Select Type</option>
+                                                        <option value="mini-car">Mini Car</option>
+                                                        <option value="sedan">Sedan</option>
+                                                        <option value="mini-van-every">Mini Van (Every)</option>
+                                                        <option value="mini-van-05">Mini Van (05)</option>
+                                                        <option value="suv">SUV</option>
+                                                        <option value="kdh-van">KDH Van</option>
+                                                        <option value="mini-bus">Mini Bus</option>
+                                                    </select>
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-4">
                                                     <div>
