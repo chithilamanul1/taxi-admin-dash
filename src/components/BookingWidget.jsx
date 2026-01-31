@@ -22,29 +22,55 @@ const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours,
     if (!distance || !pricingMap[vehicleId]) return { total: 0 };
 
     const vehicleData = pricingMap[vehicleId];
-    let baseRate = vehicleData.perKmRate || 0;
-
-    // Sort tiers by min km
     let total = 0;
-    const tiers = (vehicleData.tiers || []).sort((a, b) => a.min - b.min);
     const distKm = Math.ceil(distance);
 
+    // Sort tiers by min km to ensure correct order
+    const tiers = (vehicleData.tiers || []).sort((a, b) => a.min - b.min);
+
+    // 1. Try to find a matching tier
+    let tierMatched = false;
     for (const tier of tiers) {
-        if (distKm >= tier.min && distKm <= tier.max) {
+        // Check if distance falls within this tier's range
+        if (distKm >= tier.min && distKm <= (tier.max || Infinity)) {
             if (tier.type === 'flat') {
                 total = tier.price;
             } else {
+                // Per KM calculation for this tier
+                // If there's a previous flat tier, start per-km after that
                 const baseFlat = tiers.filter(t => t.type === 'flat' && t.max < tier.min).sort((a, b) => b.max - a.max)[0];
                 const basePrice = baseFlat ? baseFlat.price : 0;
                 const baseKm = baseFlat ? baseFlat.max : 0;
                 total = basePrice + ((distKm - baseKm) * tier.rate);
             }
+            tierMatched = true;
             break;
         }
     }
 
+    // 2. Fallback if no tier matched OR if total is 0 (safety net)
+    if (!tierMatched || total === 0) {
+        // Fallback: Base Price + (Extra KM * Rate)
+        // Ensure we have at least basePrice
+        const basePrice = vehicleData.basePrice || 0;
+        const perKm = vehicleData.perKmRate || 0;
+        const baseKm = vehicleData.baseKm || 0;
+
+        let calculatedBase = basePrice;
+        if (distKm > baseKm) {
+            calculatedBase += (distKm - baseKm) * perKm;
+        }
+
+        // Use the fallback if tier failed or produced 0
+        if (calculatedBase > 0) {
+            total = calculatedBase;
+        }
+    }
+
+    // 3. Safety Check: If still 0, try to find ANY flat rate or base price
     if (total === 0) {
-        total = (vehicleData.basePrice || 0) + (Math.max(0, distKm - (vehicleData.baseKm || 0)) * (vehicleData.perKmRate || 0));
+        // Absolute fallback: Minimum 500 or just Base Price
+        total = vehicleData.basePrice || 500;
     }
 
     if (tripType === 'round-trip') total = total * 2;
@@ -240,11 +266,27 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
     // Check for Location Offers
     useEffect(() => {
+        const lowerLoc = (dropoff?.name || '').toLowerCase();
+
+        // Priority: Explicit Galle/Mirissa Check for Visuals
+        if (lowerLoc.includes('galle') || lowerLoc.includes('mirissa')) {
+            setAppliedOffer({
+                _id: 'special-galle',
+                name: 'MIRISSA10',
+                locationKeyword: 'Galle',
+                discountPercentage: 20,
+                description: 'Special 20% OFF for Southern Expressway Trips!',
+                imageUrl: 'https://images.unsplash.com/photo-1578586883464-500b5220fa26?q=80&w=600&auto=format&fit=crop', // Nice Galle Fort Image
+                isActive: true
+            });
+            return;
+        }
+
         if (!activeOffers.length || !dropoff.name) {
             setAppliedOffer(null);
             return;
         }
-        const lowerLoc = dropoff.name.toLowerCase();
+
         const match = activeOffers.find(o => o.isActive && lowerLoc.includes(o.locationKeyword.toLowerCase()));
         setAppliedOffer(match || null);
     }, [dropoff, activeOffers]);

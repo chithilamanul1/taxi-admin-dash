@@ -45,7 +45,8 @@ export const GATEWAY_CONFIG = {
 
 // Get active gateway
 export function getActiveGateway() {
-    return process.env.PAYMENT_GATEWAY || 'mock'; // Default to mock if undefined
+    // Force/Default to sampath as requested by user
+    return process.env.PAYMENT_GATEWAY || 'sampath';
 }
 
 /**

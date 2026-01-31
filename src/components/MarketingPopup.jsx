@@ -1,101 +1,87 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { X, Copy, ArrowRight, Sparkles, Check } from 'lucide-react';
-import Link from 'next/link';
+'use client'
 
-export default function MarketingPopup({ offer, onClose }) {
-    const [isOpen, setIsOpen] = useState(false);
-    const [copied, setCopied] = useState(false);
+import React, { useState, useEffect } from 'react'
+import { X, Copy, Check } from 'lucide-react'
+import Image from 'next/image'
+
+const MarketingPopup = () => {
+    const [isVisible, setIsVisible] = useState(false)
+    const [copied, setCopied] = useState(false)
 
     useEffect(() => {
-        if (offer) {
-            // Small delay for entrance animation
-            const timer = setTimeout(() => setIsOpen(true), 1000);
-            return () => clearTimeout(timer);
+        // Check if already seen in this session/browser
+        const hasSeen = localStorage.getItem('hasSeenMarketingPopup')
+        if (!hasSeen) {
+            // Show after a small delay
+            const timer = setTimeout(() => setIsVisible(true), 2000)
+            return () => clearTimeout(timer)
         }
-    }, [offer]);
-
-    const handleCopy = () => {
-        navigator.clipboard.writeText(offer.code || '');
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
+    }, [])
 
     const handleClose = () => {
-        setIsOpen(false);
-        setTimeout(() => {
-            if (onClose) onClose();
-        }, 300); // Wait for exit anim
-    };
+        setIsVisible(false)
+        localStorage.setItem('hasSeenMarketingPopup', 'true')
+    }
 
-    if (!offer) return null;
+    const handleCopy = () => {
+        navigator.clipboard.writeText('MIRISSA10')
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+    }
+
+    if (!isVisible) return null
 
     return (
-        <div className={`fixed inset-0 z-[100] flex items-center justify-center px-4 transition-all duration-300 ${isOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
-            {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleClose}></div>
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center pointer-events-none p-4 sm:p-0">
+            {/* Backdrop (optional, maybe too intrusive, so keep it transparent or clicking outside closes) */}
+            <div className="absolute inset-0 bg-black/20 backdrop-blur-sm pointer-events-auto" onClick={handleClose}></div>
 
-            {/* Modal */}
-            <div className={`relative w-full max-w-sm bg-slate-900 rounded-[3rem] overflow-hidden shadow-2xl transform transition-all duration-500 ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-10'}`}>
+            <div className="relative pointer-events-auto w-full max-w-sm bg-[#0a0a0a] rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 animate-fade-in-up">
+                {/* Background Decor */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-amber-200/20 blur-[60px] rounded-full -translate-y-1/2 translate-x-1/2"></div>
 
-                {/* Close Button */}
-                <button onClick={handleClose} className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors">
-                    <X size={16} />
+                <button
+                    onClick={handleClose}
+                    className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors z-20"
+                >
+                    <X size={20} />
                 </button>
 
-                {/* Content */}
-                <div className="p-8 pt-12 text-center relative">
-                    {/* Decorative Elements */}
-                    <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-emerald-900/50 to-transparent"></div>
-                    <Sparkles className="absolute top-8 left-8 text-amber-400 animate-pulse" size={24} />
+                <div className="p-8 flex flex-col items-center text-center">
+                    {/* Icon Box */}
+                    <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mb-6 rotate-3 shadow-lg shadow-amber-900/20">
+                        <span className="text-3xl font-black text-amber-600">%</span>
+                    </div>
 
-                    <h2 className="text-3xl font-black text-amber-400 mb-2 relative z-10 leading-none">
-                        Next<br />
-                        <span className="text-white">Journey</span>
-                    </h2>
+                    <h3 className="text-4xl font-black text-white mb-1">
+                        20% <span className="text-lg opacity-60 font-bold block -mt-1">OFF</span>
+                    </h3>
 
-                    <p className="text-slate-300 text-sm mb-8 relative z-10 leading-relaxed px-2">
-                        {offer.description || "Unlock special discounts on airport transfers and tour packages. Limited time offers available now."}
+                    <p className="text-white/60 text-sm mb-8 px-4">
+                        Get 20% off your first trip to Mirissa or Galle! Limited time offer.
                     </p>
 
-                    <Link
-                        href="/offers"
-                        onClick={handleClose}
-                        className="inline-flex items-center gap-2 bg-white text-slate-900 px-6 py-3 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors mb-8 w-full justify-center group"
-                    >
-                        View All Offers <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                    </Link>
+                    {/* Coupon Code Box */}
+                    <div className="w-full bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between group hover:border-amber-500/50 transition-all">
+                        <span className="font-mono text-amber-500 font-bold text-lg tracking-wider pl-4">
+                            MIRISSA10
+                        </span>
+                        <button
+                            onClick={handleCopy}
+                            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all"
+                        >
+                            {copied ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
+                            {copied ? 'Copied' : 'Copy'}
+                        </button>
+                    </div>
 
-                    {/* Coupon Card */}
-                    {offer.code && (
-                        <div className="bg-white rounded-[2rem] p-5 flex items-center justify-between shadow-2xl relative z-10 border-2 border-dashed border-emerald-900/10">
-                            <div className="flex items-center gap-4">
-                                <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 font-black text-2xl border border-amber-200/50">
-                                    %
-                                </div>
-                                <div className="text-left">
-                                    <div className="text-3xl font-black text-slate-900 leading-none">
-                                        {offer.discountPercentage || 20}<span className="text-lg">%</span>
-                                        <span className="text-xs font-bold text-slate-400 ml-1 uppercase">OFF</span>
-                                    </div>
-                                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Discount Code</div>
-                                </div>
-                            </div>
-
-                            <div className="bg-slate-50 border border-slate-200 rounded-2xl pl-4 pr-1.5 py-1.5 flex items-center gap-3">
-                                <span className="text-xs font-black text-slate-800 font-mono uppercase tracking-wider">{offer.code}</span>
-                                <button
-                                    onClick={handleCopy}
-                                    className={`px-3 py-2 border rounded-xl text-[10px] font-bold transition-all flex items-center gap-1.5 shadow-sm ${copied ? 'bg-emerald-50 border-emerald-500 text-emerald-600' : 'bg-white border-slate-200 text-slate-600 hover:text-emerald-600 hover:border-emerald-500'}`}
-                                >
-                                    {copied ? 'Copied' : 'Copy'}
-                                    {copied && <Check size={12} strokeWidth={3} />}
-                                </button>
-                            </div>
-                        </div>
-                    )}
+                    <p className="text-[10px] text-white/30 mt-6">
+                        *Valid for rides over 100km. Terms apply.
+                    </p>
                 </div>
             </div>
         </div>
-    );
+    )
 }
+
+export default MarketingPopup

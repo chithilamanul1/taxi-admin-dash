@@ -189,12 +189,10 @@ const GoogleReviews = () => {
 
                 <div className="mt-12 text-center md:text-left">
                     <a
-                        href="https://www.google.com/search?q=Airport+Taxi+Tours+Sri+Lanka+reviews"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href="/reviews"
                         className="text-white hover:text-emerald-400 font-bold text-xl md:text-2xl inline-flex items-center gap-3 transition-all border-b-2 border-dashed border-white/30 hover:border-emerald-500 pb-2"
                     >
-                        Read all reviews on Google <ChevronRight size={20} className="text-white/50" />
+                        Read all reviews <ChevronRight size={20} className="text-white/50" />
                     </a>
                 </div>
             </div>

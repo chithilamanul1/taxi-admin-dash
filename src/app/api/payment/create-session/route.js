@@ -15,6 +15,7 @@ export async function POST(req) {
         }
 
         const gateway = getActiveGateway();
+        console.log("PAYMENT DEBUG: Active Gateway is:", gateway, "Env Var:", process.env.PAYMENT_GATEWAY);
 
         // 1. Create a Pending Transaction Record
         const transaction = await Transaction.create({
