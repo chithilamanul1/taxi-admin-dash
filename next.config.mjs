@@ -12,6 +12,7 @@ const nextConfig = {
                 hostname: 'lh3.googleusercontent.com', // For Google Reviews/Profiles
             }
         ],
+        formats: ['image/avif', 'image/webp'],
         // unoptimized: true, // Commented out to enable Vercel Image Optimization
     },
     productionBrowserSourceMaps: true, // Enabled for debugging/Lighthouse insights

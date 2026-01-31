@@ -14,7 +14,11 @@ export async function GET(req) {
         if (activeOnly === 'true') query.isActive = true;
 
         const tours = await Tour.find(query).sort({ order: 1, createdAt: -1 });
-        return NextResponse.json({ success: true, count: tours.length, data: tours });
+        return NextResponse.json({ success: true, count: tours.length, data: tours }, {
+            headers: {
+                'Cache-Control': 's-maxage=3600, stale-while-revalidate=59'
+            }
+        });
     } catch (error) {
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }

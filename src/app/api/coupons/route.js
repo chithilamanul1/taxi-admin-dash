@@ -42,7 +42,11 @@ export async function GET(req) {
         }
 
         const coupons = await Coupon.find(query).sort({ createdAt: -1 });
-        return NextResponse.json(coupons);
+        const responseHeaders = isPublic ? {
+            'Cache-Control': 's-maxage=600, stale-while-revalidate=30'
+        } : {};
+
+        return NextResponse.json(coupons, { headers: responseHeaders });
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

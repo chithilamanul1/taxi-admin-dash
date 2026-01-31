@@ -12,7 +12,11 @@ export async function GET(req) {
         if (category) filter.category = category;
 
         const pricing = await Pricing.find(filter);
-        return NextResponse.json(pricing);
+        return NextResponse.json(pricing, {
+            headers: {
+                'Cache-Control': 's-maxage=3600, stale-while-revalidate=59'
+            }
+        });
     } catch (error) {
         console.error('Error fetching pricing:', error);
         return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
