@@ -1115,7 +1115,7 @@ export default function AdminDashboard() {
                                                                     Save {pricingCategory.replace('-', ' ')} Rates
                                                                 </button>
                                                             </div>
-                                                        </div>
+                                                        </>
                                                         ) :
                                                         pricingCategory === 'rentals' ? (
                                                         <div className="grid md:grid-cols-3 gap-6 p-4 bg-emerald-50 rounded-xl border border-emerald-900/10">
