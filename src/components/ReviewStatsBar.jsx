@@ -2,7 +2,29 @@
 
 import React from 'react';
 
+import React, { useEffect, useState } from 'react';
+
 const ReviewStatsBar = () => {
+    const [stats, setStats] = useState({ rating: '5.0', count: '300+' });
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const res = await fetch('/api/tripadvisor');
+                const data = await res.json();
+                if (data.success && data.rating) {
+                    setStats({
+                        rating: data.rating,
+                        count: `${data.num_reviews} Reviews`
+                    });
+                }
+            } catch (err) {
+                console.error('Failed to load TripAdvisor stats', err);
+            }
+        };
+        fetchStats();
+    }, []);
+
     return (
         <section className="bg-white dark:bg-slate-900 border-b border-emerald-900/5 dark:border-white/5 py-8">
             <div className="container mx-auto px-6">
@@ -10,7 +32,7 @@ const ReviewStatsBar = () => {
 
                     {/* TripAdvisor */}
                     <a
-                        href="https://www.tripadvisor.com/Attraction_Review-g1500185-d33021905-Reviews-Airport_Cab_LK-Katunayake_Negombo_Western_Province.html"
+                        href="https://www.tripadvisor.com/Attraction_Review-g297896-d33986804-Reviews-Airport_Taxi_Tours_Sri_Lanka-Galle_Galle_District_Southern_Province.html"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-4 group hover:opacity-80 transition-opacity"
@@ -36,10 +58,10 @@ const ReviewStatsBar = () => {
                         </div>
                         <div className="flex flex-col items-start pl-4 border-l border-slate-200 dark:border-slate-700">
                             <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-black text-slate-900 dark:text-white">4.7</span>
+                                <span className="text-2xl font-black text-slate-900 dark:text-white">{stats.rating}</span>
                                 <span className="text-sm text-slate-400 font-bold">/5</span>
                             </div>
-                            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wide">Recommended</span>
+                            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wide">{stats.count}</span>
                         </div>
                     </a>
 
