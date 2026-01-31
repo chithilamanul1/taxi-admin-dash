@@ -7,7 +7,8 @@ const transactionSchema = new mongoose.Schema({
     balanceAfter: { type: Number, required: true },
     description: { type: String, required: true },
     receiptUrl: { type: String }, // For top-ups
-    referenceId: { type: mongoose.Schema.Types.ObjectId }, // Booking ID or other ref
+    referenceId: { type: mongoose.Schema.Types.ObjectId }, // Booking ID or other ref (Internal)
+    paymentReference: { type: String }, // External Gateway Reference (ReqID/TxnID)
     status: { type: String, enum: ['pending', 'completed', 'failed'], default: 'completed' },
     performedBy: { type: String } // Admin name or 'System'
 }, {

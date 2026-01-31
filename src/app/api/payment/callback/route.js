@@ -26,43 +26,89 @@ export async function GET(request) {
 
         await dbConnect();
 
+        let transaction;
+
         // 2. Find Booking by reqId (paymentReference)
         // If not found, try by clientRef if available
         let booking = await Booking.findOne({ paymentReference: reqid });
 
         if (!booking && clientRef) {
-            booking = await Booking.findById(clientRef);
+            booking = await Booking.findById(clientRef).catch(() => null);
         }
 
+        // 3. If no booking, check for Transaction (Driver Top-up)
         if (!booking) {
-            console.error(`Booking not found for reqid: ${reqid}`);
-            return NextResponse.redirect(`${baseUrl}/payment/error?reason=booking_not_found`);
+            const { default: Transaction } = await import('@/models/Transaction');
+            transaction = await Transaction.findOne({ paymentReference: reqid });
+
+            if (!transaction && clientRef) {
+                transaction = await Transaction.findById(clientRef).catch(() => null);
+            }
         }
 
-        // 3. Step C: Call PAYMENT_COMPLETE (Server-to-Server Verification)
-        const verification = await completePayCorpTransaction(reqid, process.env.SAMPATH_CLIENT_ID); // Or derive ClientID from currency
+        if (!booking && !transaction) {
+            console.error(`Booking/Transaction not found for reqid: ${reqid}`);
+            return NextResponse.redirect(`${baseUrl}/payment/error?reason=record_not_found`);
+        }
+
+        // 4. Verify Payment (Server-to-Server)
+        // We use the same verification function for both
+        const verification = await completePayCorpTransaction(reqid, process.env.SAMPATH_CLIENT_ID);
 
         if (verification.success) {
-            // 4. Update Booking to PAID
-            booking.paymentStatus = 'paid';
-            booking.paymentReference = verification.data.txnId || reqid; // Use actual txnId if available
-            booking.gatewayResponse = JSON.stringify(verification.data);
-            booking.paymentTimestamp = new Date();
-            await booking.save();
 
-            // 5. Send Receipt
-            await sendPaymentConfirmation(booking).catch(err => console.error("Error sending receipt:", err));
+            if (booking) {
+                // ... Booking Logic ...
+                booking.paymentStatus = 'paid';
+                booking.paymentReference = verification.data.txnId || reqid;
+                booking.gatewayResponse = JSON.stringify(verification.data);
+                booking.paymentTimestamp = new Date();
+                await booking.save();
+                await sendPaymentConfirmation(booking).catch(err => console.error("Error sending receipt:", err));
+                return NextResponse.redirect(`${baseUrl}/payment/success?bookingId=${booking._id}&provider=sampath`);
+            }
 
-            // 6. Redirect to Success
-            return NextResponse.redirect(`${baseUrl}/payment/success?bookingId=${booking._id}&provider=sampath`);
+            if (transaction) {
+                // ... Transaction Logic ...
+                // Prevent double crediting
+                if (transaction.status === 'completed') {
+                    return NextResponse.redirect(`${baseUrl}/driver?topup=success`);
+                }
+
+                transaction.status = 'completed';
+                transaction.paymentReference = verification.data.txnId || reqid;
+                await transaction.save();
+
+                // Credit Driver Wallet
+                const { default: Driver } = await import('@/models/Driver');
+                const driver = await Driver.findById(transaction.driver);
+                if (driver) {
+                    driver.walletBalance += transaction.amount;
+                    await driver.save();
+                    // Update transaction snapshot
+                    transaction.balanceAfter = driver.walletBalance;
+                    await transaction.save();
+                }
+
+                return NextResponse.redirect(`${baseUrl}/driver?topup=success`);
+            }
+
         } else {
-            // Payment Failed or Verification Failed
+            // Payment Failed
             console.error("Payment Verification Failed:", verification.message);
-            booking.paymentStatus = 'failed';
-            booking.gatewayResponse = JSON.stringify(verification.data);
-            await booking.save();
 
-            return NextResponse.redirect(`${baseUrl}/payment/error?bookingId=${booking._id}&reason=payment_failed`);
+            if (booking) {
+                booking.paymentStatus = 'failed';
+                booking.gatewayResponse = JSON.stringify(verification.data);
+                await booking.save();
+                return NextResponse.redirect(`${baseUrl}/payment/error?bookingId=${booking._id}&reason=payment_failed`);
+            }
+
+            if (transaction) {
+                transaction.status = 'failed';
+                await transaction.save();
+                return NextResponse.redirect(`${baseUrl}/driver?topup=failed`);
+            }
         }
 
     } catch (error) {
