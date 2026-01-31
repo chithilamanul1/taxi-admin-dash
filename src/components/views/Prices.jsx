@@ -880,7 +880,7 @@ const Prices = ({ initialDestination }) => {
 
                                         // 3. Send Background Email (Reliability Backup)
                                         try {
-                                            await fetch("https://formsubmit.co/ajax/airporttaxis.lk@gmail.com", {
+                                            await fetch("https://formsubmit.co/ajax/info@airporttaxi.lk", {
                                                 method: "POST",
                                                 headers: {
                                                     'Content-Type': 'application/json',

@@ -13,7 +13,7 @@ export async function POST(req) {
 
         const testBooking = await Booking.create({
             customerName: 'System Admin',
-            customerEmail: process.env.ADMIN_EMAIL || 'admin@airporttaxis.lk',
+            customerEmail: process.env.ADMIN_EMAIL || 'admin@airporttaxi.lk',
             guestPhone: '0000000000',
             pickupLocation: { address: 'Gateway Connection Test' },
             dropoffLocation: { address: 'HQ' },

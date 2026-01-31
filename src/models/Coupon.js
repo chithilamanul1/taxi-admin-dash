@@ -24,18 +24,12 @@ const CouponSchema = new mongoose.Schema({
         type: Number,
         default: null
     },
-    usedCount: {
-        type: Number,
-        default: 0
-    },
-    isActive: {
-        type: Boolean,
-        default: true
-    },
-    applicableLocations: {
-        type: [String],
-        default: [] // e.g. ['galle', 'kandy'] - if empty, valid everywhere
-    }
+    usedCount: { type: Number, default: 0 },
+    isActive: { type: Boolean, default: true },
+    description: { type: String, default: '' },
+    imageUrl: { type: String, default: '' },
+    displayInWidget: { type: Boolean, default: false },
+    applicableLocations: [String] // Array of city names like ['Colombo', 'Negombo']
 }, { timestamps: true });
 
 export default mongoose.models.Coupon || mongoose.model('Coupon', CouponSchema);

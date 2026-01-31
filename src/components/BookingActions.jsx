@@ -55,7 +55,7 @@ export default function BookingActions({ booking }) {
         doc.setFontSize(10);
         doc.setTextColor(100, 100, 100);
         doc.text('Thank you for choosing Airport Taxis Sri Lanka.', 20, finalY + 20);
-        doc.text('Contact: +94 722 885 885 | airporttaxis.lk@gmail.com', 20, finalY + 26);
+        doc.text('Contact: +94 722 885 885 | info@airporttaxi.lk', 20, finalY + 26);
 
         doc.save(`receipt_${booking._id.slice(-6)}.pdf`);
     };

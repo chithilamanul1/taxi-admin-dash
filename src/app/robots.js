@@ -7,6 +7,6 @@ export default function robots() {
                 disallow: ['/admin/', '/api/', '/booking/', '/payment/'],
             }
         ],
-        sitemap: 'https://airporttaxis.lk/sitemap.xml',
+        sitemap: 'https://airporttaxi.lk/sitemap.xml',
     }
 }

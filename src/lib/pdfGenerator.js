@@ -13,7 +13,7 @@ export const generateBookingPDF = (booking) => {
     doc.setFontSize(10);
     doc.setTextColor(100);
     doc.text("118/5 St. Joseph Street, Grandpass, Colombo 14", 105, 26, { align: "center" });
-    doc.text("Hotline: 0722 885 885 | Email: airporttaxis.lk@gmail.com", 105, 31, { align: "center" });
+    doc.text("Hotline: 0722 885 885 | Email: info@airporttaxi.lk", 105, 31, { align: "center" });
 
     // -- Title --
     doc.setDrawColor(200);

@@ -27,7 +27,16 @@ export default function AdminDashboard() {
     const [selectedTicket, setSelectedTicket] = useState(null)
     const [supportTickets, setSupportTickets] = useState([])
     const [coupons, setCoupons] = useState([])
-    const [newCoupon, setNewCoupon] = useState({ code: '', discountType: 'percentage', value: '', expiryDate: '', locationsText: '' })
+    const [newCoupon, setNewCoupon] = useState({
+        code: '',
+        discountType: 'percentage',
+        value: '',
+        expiryDate: '',
+        locationsText: '',
+        description: '',
+        imageUrl: '',
+        displayInWidget: false
+    })
     const [ordering, setOrdering] = useState('newest'); // or whatever
     const [emailForm, setEmailForm] = useState({ recipientType: 'specific', customEmail: '', subject: '', message: '' })
     const [sendingEmail, setSendingEmail] = useState(false)
@@ -70,7 +79,16 @@ export default function AdminDashboard() {
             if (res.ok) {
                 const data = await res.json();
                 setCoupons([data, ...coupons]);
-                setNewCoupon({ code: '', discountType: 'percentage', value: '', expiryDate: '', locationsText: '' });
+                setNewCoupon({
+                    code: '',
+                    discountType: 'percentage',
+                    value: '',
+                    expiryDate: '',
+                    locationsText: '',
+                    description: '',
+                    imageUrl: '',
+                    displayInWidget: false
+                });
             } else { alert('Failed to create coupon'); }
         } catch (e) { console.error(e); }
     }
@@ -1992,8 +2010,8 @@ export default function AdminDashboard() {
                                     <Percent size={20} />
                                     Create New Coupon
                                 </h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-                                    <div className="lg:col-span-1">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                                    <div>
                                         <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Code</label>
                                         <input
                                             placeholder="e.g. GALLE10"
@@ -2002,7 +2020,7 @@ export default function AdminDashboard() {
                                             className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
                                         />
                                     </div>
-                                    <div className="lg:col-span-1">
+                                    <div>
                                         <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Type</label>
                                         <select
                                             value={newCoupon.discountType}
@@ -2013,7 +2031,7 @@ export default function AdminDashboard() {
                                             <option value="flat" className="text-slate-800">Flat (Rs)</option>
                                         </select>
                                     </div>
-                                    <div className="lg:col-span-1">
+                                    <div>
                                         <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Value</label>
                                         <input
                                             type="number"
@@ -2023,7 +2041,7 @@ export default function AdminDashboard() {
                                             className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
                                         />
                                     </div>
-                                    <div className="lg:col-span-1">
+                                    <div>
                                         <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Expiry</label>
                                         <input
                                             type="date"
@@ -2032,7 +2050,7 @@ export default function AdminDashboard() {
                                             className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 text-white font-bold"
                                         />
                                     </div>
-                                    <div className="lg:col-span-1">
+                                    <div>
                                         <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Location</label>
                                         <input
                                             placeholder="e.g. Galle"
@@ -2041,12 +2059,42 @@ export default function AdminDashboard() {
                                             className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
                                         />
                                     </div>
-                                    <div className="lg:col-span-1 flex items-end">
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-4">
+                                    <div className="lg:col-span-2">
+                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Description</label>
+                                        <input
+                                            placeholder="e.g. Get 10% off on your next trip to Galle"
+                                            value={newCoupon.description}
+                                            onChange={e => setNewCoupon({ ...newCoupon, description: e.target.value })}
+                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
+                                        />
+                                    </div>
+                                    <div className="lg:col-span-1">
+                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Image URL</label>
+                                        <input
+                                            placeholder="https://..."
+                                            value={newCoupon.imageUrl}
+                                            onChange={e => setNewCoupon({ ...newCoupon, imageUrl: e.target.value })}
+                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
+                                        />
+                                    </div>
+                                    <div className="lg:col-span-1 flex items-center gap-3 pt-4">
+                                        <button
+                                            onClick={() => setNewCoupon({ ...newCoupon, displayInWidget: !newCoupon.displayInWidget })}
+                                            className={`w-12 h-6 rounded-full transition-colors relative ${newCoupon.displayInWidget ? 'bg-emerald-400' : 'bg-white/20'}`}
+                                        >
+                                            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${newCoupon.displayInWidget ? 'left-7' : 'left-1'}`}></div>
+                                        </button>
+                                        <span className="text-xs font-bold text-emerald-100 uppercase tracking-wider">Display in Widget</span>
+                                    </div>
+                                    <div className="flex items-end">
                                         <button
                                             onClick={handleAddCoupon}
                                             className="w-full p-3 bg-white text-emerald-600 font-bold rounded-xl hover:bg-emerald-50 transition-all hover:scale-105 shadow-lg"
                                         >
-                                            + Create
+                                            + Create Coupon
                                         </button>
                                     </div>
                                 </div>
@@ -2071,7 +2119,7 @@ export default function AdminDashboard() {
                                             </div>
 
                                             {/* Discount Display */}
-                                            <div className="mb-4">
+                                            <div className="mb-2">
                                                 <div className="text-4xl font-black text-slate-800">
                                                     {c.value}{c.discountType === 'percentage' ? '%' : ''}
                                                     <span className="text-lg font-bold text-slate-400 ml-1">
@@ -2079,6 +2127,26 @@ export default function AdminDashboard() {
                                                     </span>
                                                 </div>
                                             </div>
+
+                                            {/* Description */}
+                                            {c.description && (
+                                                <p className="text-xs text-slate-500 mb-4 line-clamp-2">{c.description}</p>
+                                            )}
+
+                                            {/* Image Preview if exists */}
+                                            {c.imageUrl && (
+                                                <div className="mb-4 rounded-lg overflow-hidden h-20 bg-slate-50 border border-slate-100">
+                                                    <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" />
+                                                </div>
+                                            )}
+
+                                            {/* Widget Display Link */}
+                                            {c.displayInWidget && (
+                                                <div className="mb-3 flex items-center gap-1.5">
+                                                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                                    <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Visible in Widget</span>
+                                                </div>
+                                            )}
 
                                             {/* Code */}
                                             <div className="bg-slate-100 rounded-xl p-3 flex items-center justify-between mb-4">

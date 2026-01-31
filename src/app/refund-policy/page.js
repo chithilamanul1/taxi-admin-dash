@@ -100,7 +100,7 @@ export default function RefundPolicyPage() {
                                         <span className="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold shrink-0">1</span>
                                         <div>
                                             <p className="font-bold text-slate-900">Contact Us</p>
-                                            <p className="text-slate-600">Email us at <a href="mailto:airporttaxis.lk@gmail.com" className="text-emerald-600">airporttaxis.lk@gmail.com</a> or call <a href="tel:+94722885885" className="text-emerald-600">+94 722 885 885</a></p>
+                                            <p className="text-slate-600">Email us at <a href="mailto:info@airporttaxi.lk" className="text-emerald-600">info@airporttaxi.lk</a> or call <a href="tel:+94722885885" className="text-emerald-600">+94 722 885 885</a></p>
                                         </div>
                                     </li>
                                     <li className="flex gap-4">
@@ -121,7 +121,7 @@ export default function RefundPolicyPage() {
                             </div>
                         </section>
 
-                        {/* Refund Process */}
+                        {/* Refund Processing */}
                         <section>
                             <h2 className="text-2xl font-bold text-emerald-900 mb-4 flex items-center gap-3">
                                 <CreditCard size={24} className="text-emerald-600" />
@@ -175,18 +175,22 @@ export default function RefundPolicyPage() {
                         {/* Contact */}
                         <section className="bg-emerald-50 rounded-2xl p-6">
                             <h3 className="font-bold text-emerald-900 text-lg mb-4">Need Help with a Refund?</h3>
-                            <div className="space-y-3">
-                                <div className="flex items-center gap-3 text-slate-600">
-                                    <Mail size={18} className="text-emerald-600" />
-                                    <a href="mailto:airporttaxis.lk@gmail.com" className="hover:text-emerald-600">airporttaxis.lk@gmail.com</a>
+                            <div className="space-y-4">
+                                <div className="flex flex-col gap-1">
+                                    <p className="text-sm text-slate-500 font-medium">
+                                        Official Refund Policy of Airport Taxis (Pvt) Ltd. Last updated January 2024.
+                                    </p>
+                                    <a href="mailto:info@airporttaxi.lk" className="flex items-center gap-2 text-emerald-600 font-bold hover:underline">
+                                        <Mail size={16} /> info@airporttaxi.lk
+                                    </a>
                                 </div>
                                 <div className="flex items-center gap-3 text-slate-600">
                                     <Phone size={18} className="text-emerald-600" />
-                                    <a href="tel:+94722885885" className="hover:text-emerald-600">+94 722 885 885</a>
+                                    <a href="tel:+94722885885" className="hover:text-emerald-600 font-medium">+94 722 885 885</a>
                                 </div>
                                 <div className="flex items-start gap-3 text-slate-600">
                                     <MapPin size={18} className="text-emerald-600 shrink-0 mt-1" />
-                                    <span>118/5 St. Joseph Street, Grandpass, Colombo 14</span>
+                                    <span className="text-sm">118/5 St. Joseph Street, Grandpass, Colombo 14</span>
                                 </div>
                             </div>
                         </section>

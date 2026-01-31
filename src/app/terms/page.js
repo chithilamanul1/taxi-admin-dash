@@ -256,7 +256,7 @@ export default function TermsPage() {
                                     </div>
                                     <div className="flex items-center gap-3 text-slate-600">
                                         <Mail size={18} className="text-emerald-600" />
-                                        <a href="mailto:airporttaxis.lk@gmail.com" className="hover:text-emerald-600">airporttaxis.lk@gmail.com</a>
+                                        <a href="mailto:info@airporttaxi.lk" className="hover:text-emerald-600">info@airporttaxi.lk</a>
                                     </div>
                                 </div>
                             </div>

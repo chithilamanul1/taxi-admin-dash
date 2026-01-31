@@ -37,7 +37,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <p className="text-sm text-white/40 uppercase tracking-widest">Email Us</p>
-                                    <p className="text-xl font-bold">airporttaxis.lk@gmail.com</p>
+                                    <p className="text-xl font-bold">info@airporttaxi.lk</p>
                                 </div>
                             </div>
                             <div className="flex gap-4 items-center">

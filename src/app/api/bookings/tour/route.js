@@ -49,7 +49,7 @@ export async function POST(req) {
         try {
             // 1. Admin Notification
             await sendEmail({
-                to: process.env.ADMIN_EMAIL || 'admin@airporttaxis.lk', // Fallback
+                to: process.env.ADMIN_EMAIL || 'admin@airporttaxi.lk', // Fallback
                 subject: `New Tour Inquiry: ${tourTitle}`,
                 html: `
                     <div style="font-family: sans-serif; color: #333;">

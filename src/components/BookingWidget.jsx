@@ -103,6 +103,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [showModal, setShowModal] = useState(false)
     const [isVehicleDrawerOpen, setIsVehicleDrawerOpen] = useState(false)
     const [bookingInitialData, setBookingInitialData] = useState({})
+    const [availableCoupons, setAvailableCoupons] = useState([])
+    const [isLoadingCoupons, setIsLoadingCoupons] = useState(false)
 
 
     // Fetch Pricing based on Tab
@@ -217,6 +219,23 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 if (data.offers) setActiveOffers(data.offers);
             })
             .catch(err => console.error("Error fetching offers:", err));
+    }, []);
+
+    // Fetch Available Coupons for Widget
+    useEffect(() => {
+        const fetchCoupons = async () => {
+            setIsLoadingCoupons(true);
+            try {
+                const res = await fetch('/api/coupons?public=true');
+                const data = await res.json();
+                if (Array.isArray(data)) setAvailableCoupons(data);
+            } catch (e) {
+                console.error("Error fetching coupons:", e);
+            } finally {
+                setIsLoadingCoupons(false);
+            }
+        };
+        fetchCoupons();
     }, []);
 
     // Check for Location Offers
@@ -550,6 +569,57 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         Apply
                                     </button>
                                 </div>
+
+                                {/* Visual Coupon Selector */}
+                                {availableCoupons.length > 0 && (
+                                    <div className="lg:col-span-2 space-y-3 animate-fade-in">
+                                        <div className="flex items-center gap-2 px-1">
+                                            <Tag size={12} className="text-emerald-600" />
+                                            <span className="text-[10px] font-bold text-emerald-900/50 uppercase tracking-widest">Available Offers</span>
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            {availableCoupons.map((c) => (
+                                                <button
+                                                    key={c._id}
+                                                    onClick={() => {
+                                                        setCouponCode(c.code);
+                                                        const couponOffer = {
+                                                            _id: 'coupon-' + c.code,
+                                                            name: c.code,
+                                                            discountPercentage: c.discountType === 'percentage' ? c.value : 0,
+                                                            discountAmount: c.discountType === 'flat' ? c.value : 0,
+                                                            type: 'coupon'
+                                                        };
+                                                        setAppliedOffer(couponOffer);
+                                                    }}
+                                                    className={`group relative flex items-center gap-4 p-3 rounded-2xl border-2 border-dashed transition-all hover:shadow-lg hover:-translate-y-0.5 text-left ${appliedOffer?.name === c.code ? 'border-emerald-500 bg-emerald-50/50' : 'border-emerald-900/10 bg-white hover:border-emerald-500/30'}`}
+                                                >
+                                                    <div className="w-12 h-12 rounded-xl bg-emerald-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                                                        {c.imageUrl ? (
+                                                            <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <Percent size={20} className="text-emerald-600" />
+                                                        )}
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex items-center justify-between">
+                                                            <span className="text-xs font-black text-emerald-900 group-hover:text-emerald-600 transition-colors uppercase truncate">{c.code}</span>
+                                                            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded uppercase">
+                                                                {c.value}{c.discountType === 'percentage' ? '%' : ''} OFF
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-[10px] text-slate-500 font-medium line-clamp-1 mt-0.5">{c.description || 'Promotional Discount'}</p>
+                                                    </div>
+                                                    {appliedOffer?.name === c.code && (
+                                                        <div className="absolute -top-2 -right-2 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
+                                                            <Check size={14} />
+                                                        </div>
+                                                    )}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Date & Time Selection */}

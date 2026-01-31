@@ -24,13 +24,24 @@ async function isAdmin() {
     return false;
 }
 
-export async function GET() {
+export async function GET(req) {
+    const { searchParams } = new URL(req.url);
+    const isPublic = searchParams.get('public') === 'true';
+
     await dbConnect();
-    if (!(await isAdmin())) {
+
+    if (!isPublic && !(await isAdmin())) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
     try {
-        const coupons = await Coupon.find().sort({ createdAt: -1 });
+        const query = isPublic ? { displayInWidget: true, isActive: true } : {};
+        // Add a check for expiry date if public
+        if (isPublic) {
+            query.expiryDate = { $gt: new Date() };
+        }
+
+        const coupons = await Coupon.find(query).sort({ createdAt: -1 });
         return NextResponse.json(coupons);
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });

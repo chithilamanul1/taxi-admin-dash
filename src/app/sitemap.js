@@ -16,28 +16,33 @@ export default async function sitemap() {
     } else {
         console.warn('Skipping sitemap dynamic generation: MONGO_URI missing');
     }
+    return posts;
+}
 
-    const blogUrls = posts.map((post) => ({
-        url: `https://airporttaxis.lk/blog/${post.slug}`,
-        lastModified: new Date(post.updatedAt),
+export default async function sitemap() {
+    const posts = await getPosts();
+    const blogEntries = posts.map(post => ({
+        url: `https://airporttaxi.lk/blog/${post.slug}`,
+        lastModified: post.updatedAt || new Date(),
         changeFrequency: 'weekly',
-        priority: 0.8,
+        priority: 0.7,
     }));
 
-    const staticRoutes = [
-        { url: 'https://airporttaxis.lk', lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
-        { url: 'https://airporttaxis.lk/blog', lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
-        { url: 'https://airporttaxis.lk/contact', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
-        { url: 'https://airporttaxis.lk/about', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
-        { url: 'https://airporttaxis.lk/rates', lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
+    const staticEntries = [
+        { url: 'https://airporttaxi.lk', lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
+        { url: 'https://airporttaxi.lk/blog', lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
+        { url: 'https://airporttaxi.lk/contact', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
+        { url: 'https://airporttaxi.lk/about', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
+        { url: 'https://airporttaxi.lk/rates', lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
+        { url: 'https://airporttaxi.lk/terms', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.3 },
     ];
 
-    const destinationUrls = destinations.map((dest) => ({
-        url: `https://airporttaxis.lk/destination/${dest.id}`,
+    const destEntries = destinations.map(dest => ({
+        url: `https://airporttaxi.lk/destination/${dest.id}`,
         lastModified: new Date(),
         changeFrequency: 'weekly',
-        priority: 0.8,
+        priority: 0.6,
     }));
 
-    return [...staticRoutes, ...blogUrls, ...destinationUrls];
+    return [...staticEntries, ...blogEntries, ...destEntries];
 }

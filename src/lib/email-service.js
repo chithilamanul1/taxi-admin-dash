@@ -11,9 +11,9 @@ const getResend = () => {
     return new Resend(process.env.RESEND_API_KEY);
 };
 
-const OWNER_EMAIL = process.env.OWNER_EMAIL || 'airporttaxis.lk@gmail.com';
-const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxis <noreply@airporttaxis.lk>';
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://airporttaxis.lk';
+const OWNER_EMAIL = process.env.OWNER_EMAIL || 'info@airporttaxi.lk';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxis <noreply@airporttaxi.lk>';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://airporttaxi.lk';
 
 // ============================================
 // PREMIUM EMAIL TEMPLATE SYSTEM
@@ -101,7 +101,7 @@ const getPremiumTemplate = (content, title = 'Airport Taxis Sri Lanka') => `
                                                     </a>
                                                 </td>
                                                 <td style="padding: 0 10px;">
-                                                    <a href="mailto:airporttaxis.lk@gmail.com" style="display: inline-block; width: 40px; height: 40px; background-color: ${COLORS.darkCard}; border-radius: 50%; text-align: center; line-height: 40px; text-decoration: none; border: 1px solid ${COLORS.border};">
+                                                    <a href="mailto:info@airporttaxi.lk" style="display: inline-block; width: 40px; height: 40px; background-color: ${COLORS.darkCard}; border-radius: 50%; text-align: center; line-height: 40px; text-decoration: none; border: 1px solid ${COLORS.border};">
                                                         ✉️
                                                     </a>
                                                 </td>

@@ -62,7 +62,7 @@ ${boardInfo}
 
         try {
             // Email disabled for testing
-            // await fetch("https://formsubmit.co/ajax/airporttaxis.lk@gmail.com", {
+            // await fetch("https://formsubmit.co/ajax/info@airporttaxi.lk", {
             //     method: "POST",
             //     headers: {
             //         "Content-Type": "application/json",
@@ -89,7 +89,7 @@ ${boardInfo}
         } catch (error) {
             console.error("Email submission failed:", error)
         } finally {
-            // const waBody = `New Booking Request:%0D%0AName: ${formData.name}%0D%0AFlight Number: ${formData.flightNumber}%0D%0AArrival Date: ${formattedDate}%0D%0AArrival Time: ${formattedTime}%0D%0APassengers: ${formData.passengers}%0D%0ADestination: ${formData.destination}%0D%0A%0D%0A${formData.boardShow ? `Board Show: YES (Name: ${formData.boardName})%0D%0A` : ''}%0D%0ASent from AirportTaxis.lk`
+            // const waBody = `New Booking Request:%0D%0AName: ${formData.name}%0D%0AFlight Number: ${formData.flightNumber}%0D%0AArrival Date: ${formattedDate}%0D%0AArrival Time: ${formattedTime}%0D%0APassengers: ${formData.passengers}%0D%0ADestination: ${formData.destination}%0D%0A%0D%0A${formData.boardShow ? `Board Show: YES (Name: ${formData.boardName})%0D%0A` : ''}%0D%0ASent from AirportTaxi.lk`
             // window.location.href = `https://wa.me/94716885880?text=${waBody}`
             alert("Booking request simulated (Email & WhatsApp disabled for testing)");
             setIsSubmitting(false)

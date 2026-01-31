@@ -1,5 +1,5 @@
 // Day Trips and Tour Packages Data
-// Sourced from airporttaxis.lk
+// Sourced from dynamic catalog
 
 export const dayTrips = [
     {

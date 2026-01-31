@@ -111,7 +111,7 @@ const Terms = () => {
                         <p className="font-bold text-emerald-900">AIRPORT TAXIS (PVT) LTD</p>
                         <p className="text-sm text-gray-600">Reg. No: PV 00342552</p>
                         <p className="text-sm text-gray-600 mt-2">118/5 ST JOSEPH STREET , GRANDPASS , COLOMBO 14</p>
-                        <p className="text-sm text-gray-600 mt-1">Phone: +94 722 885 885 · Email: airporttaxis.lk@gmail.com</p>
+                        <p className="text-sm text-gray-600 mt-1">Phone: +94 722 885 885 · Email: info@airporttaxi.lk</p>
                     </div>
 
                     <h3 className="text-emerald-900 font-bold mt-8 mb-4">13. Agreement</h3>

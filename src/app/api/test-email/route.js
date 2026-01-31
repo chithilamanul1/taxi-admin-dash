@@ -4,10 +4,10 @@ import { Resend } from 'resend';
 export async function GET(req) {
     try {
         const apiKey = process.env.RESEND_API_KEY;
-        const fromEmail = process.env.FROM_EMAIL || 'Airport Taxis <noreply@airporttaxis.lk>';
+        const fromEmail = process.env.FROM_EMAIL || 'Airport Taxis <noreply@airporttaxi.lk>';
         // Allow overriding 'to' email via query param, default to a safe test email or the owner email for safety
         const { searchParams } = new URL(req.url);
-        const toEmail = searchParams.get('to') || 'airporttaxis.lk@gmail.com';
+        const toEmail = searchParams.get('to') || 'info@airporttaxi.lk';
 
         if (!apiKey) {
             return NextResponse.json({ error: 'Missing RESEND_API_KEY env var' }, { status: 500 });
