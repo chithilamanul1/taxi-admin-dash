@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import Booking from '@/models/Booking';
-import { sendEmail } from '@/lib/email-service';
+import { sendEmail } from '@/lib/email';
 
 export async function POST(req) {
     try {
