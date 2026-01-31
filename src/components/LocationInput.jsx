@@ -11,7 +11,8 @@ const LocationInput = ({
     onFocus,
     disabled,
     icon: Icon = MapPin,
-    isLoaded // IGNORED: No longer depends on Google Script
+    isLoaded, // IGNORED: No longer depends on Google Script
+    zIndex
 }) => {
     const [query, setQuery] = useState(value || '');
     const [suggestions, setSuggestions] = useState([]);
@@ -85,7 +86,7 @@ const LocationInput = ({
     };
 
     return (
-        <div className={`relative group ${props.zIndex || 'z-20'}`} ref={wrapperRef}>
+        <div className={`relative group ${zIndex || 'z-20'}`} ref={wrapperRef}>
             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-900/70 dark:text-emerald-400/70">
                 <Icon size={22} />
             </div>
