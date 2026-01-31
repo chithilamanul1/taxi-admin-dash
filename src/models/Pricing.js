@@ -32,7 +32,8 @@ const pricingSchema = new mongoose.Schema({
     hourlyRate: { type: Number, default: 0 }, // Fallback if waitingCharges not defined
     waitingCharges: { type: [Number], default: [] }, // Specific rates for [1hr, 2hr, 3hr...]
     tiers: [tierSchema],
-    isActive: { type: Boolean, default: true }
+    isActive: { type: Boolean, default: true },
+    sortOrder: { type: Number, default: 99 } // For custom display order
 }, {
     timestamps: true
 });
