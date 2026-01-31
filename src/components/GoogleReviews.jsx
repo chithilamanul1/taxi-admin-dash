@@ -41,16 +41,43 @@ const GoogleReviews = () => {
     const scrollContainerRef = useRef(null);
 
     useEffect(() => {
-        fetch('/api/reviews/google')
-            .then(res => res.json())
-            .then(data => {
-                if (data.success && data.data?.reviews?.length > 0) {
-                    setReviews(data.data.reviews);
-                    setRating(data.data.rating || 4.9);
-                    setTotalReviews(data.data.totalReviews || 128);
+        const loadReviews = async () => {
+            try {
+                // Fetch Google Reviews
+                const googleRes = await fetch('/api/reviews/google');
+                const googleData = await googleRes.json();
+
+                // Fetch Website Reviews (Revives)
+                const websiteRes = await fetch('/api/reviews?homepage=true&limit=20');
+                const websiteData = await websiteRes.json();
+
+                let combinedReviews = [...FALLBACK_REVIEWS];
+
+                if (googleData.success && googleData.data?.reviews?.length > 0) {
+                    combinedReviews = [...googleData.data.reviews];
+                    setRating(googleData.data.rating || 4.9);
+                    setTotalReviews(googleData.data.totalReviews || 128);
                 }
-            })
-            .catch(err => console.error('Failed to fetch reviews:', err));
+
+                if (websiteData.success && websiteData.reviews?.length > 0) {
+                    // Map website reviews to match Google review structure if needed
+                    const mappedWebsiteReviews = websiteData.reviews.map(r => ({
+                        author_name: r.userName,
+                        rating: r.rating,
+                        text: r.comment,
+                        relative_time_description: 'Verified Customer',
+                        profile_photo_url: r.userImage || null
+                    }));
+                    combinedReviews = [...combinedReviews, ...mappedWebsiteReviews];
+                }
+
+                setReviews(combinedReviews);
+            } catch (err) {
+                console.error('Failed to fetch reviews:', err);
+            }
+        };
+
+        loadReviews();
     }, []);
 
     const scroll = (direction) => {
@@ -160,14 +187,14 @@ const GoogleReviews = () => {
                     ))}
                 </div>
 
-                <div className="mt-8 text-center md:text-left">
+                <div className="mt-12 text-center md:text-left">
                     <a
-                        href="https://www.google.com/search?q=AirportCab.lk+reviews"
+                        href="https://www.google.com/search?q=Airport+Taxi+Tours+Sri+Lanka+reviews"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-emerald-500 hover:text-white font-bold text-sm inline-flex items-center gap-2 transition-colors border-b border-dashed border-emerald-500/50 hover:border-white pb-0.5"
+                        className="text-white hover:text-emerald-400 font-bold text-xl md:text-2xl inline-flex items-center gap-3 transition-all border-b-2 border-dashed border-white/30 hover:border-emerald-500 pb-2"
                     >
-                        Read all reviews on Google <ChevronRight size={14} />
+                        Read all reviews on Google <ChevronRight size={20} className="text-white/50" />
                     </a>
                 </div>
             </div>

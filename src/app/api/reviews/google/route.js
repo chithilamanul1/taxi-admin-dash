@@ -4,7 +4,7 @@ export async function GET(req) {
     try {
         const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
-        // AirportCab.lk / Airport Taxis Sri Lanka Place ID
+        // Airport Taxi Tours / Airport Taxis Sri Lanka Place ID
         // You can find your Place ID at: https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder
         const placeId = process.env.GOOGLE_PLACE_ID || 'ChIJN1t_tDeuEmsRUsoyG83frY4'; // Replace with actual place ID
 
