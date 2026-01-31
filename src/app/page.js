@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, MapPin, Star, Compass } from 'lucide-react'
@@ -12,9 +12,45 @@ import GoogleReviews from '../components/GoogleReviews'
 import ReviewStatsBar from '../components/ReviewStatsBar'
 import RecentPosts from '../components/RecentPosts'
 import SpecialOffersSection from '../components/SpecialOffersSection'
+import MarketingPopup from '../components/MarketingPopup'
 
 export default function Home() {
     const [isBookingOpen, setIsBookingOpen] = useState(false);
+    const [marketingOffer, setMarketingOffer] = useState(null);
+
+    useEffect(() => {
+        const checkMarketing = async () => {
+            // Check usage limit (Session or Time based)
+            // For now, let's say once per session or 1 hour
+            const lastSeen = localStorage.getItem('last_marketing_popup');
+            const now = Date.now();
+            // 24 hours cooldown? Or simpler "seen_session"
+            if (lastSeen && (now - parseInt(lastSeen) < 86400000)) { // 24 hours
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/admin/marketing');
+                const data = await res.json();
+                if (data.offers && data.offers.length > 0) {
+                    // Filter active offers that are NOT just location keywords (which are for Nudge)
+                    // Or prioritize "popup" type if we had it. For now, active global offers.
+                    const active = data.offers.find(o => o.isActive && o.code); // simple selection
+                    if (active) {
+                        setMarketingOffer(active);
+                    }
+                }
+            } catch (e) { console.error("Marketing fetch error", e) }
+        };
+        // Small delay to not interfere with critical rendering
+        const t = setTimeout(checkMarketing, 2000);
+        return () => clearTimeout(t);
+    }, []);
+
+    const handlePopupClose = () => {
+        setMarketingOffer(null);
+        localStorage.setItem('last_marketing_popup', Date.now().toString());
+    };
 
     return (
         <div className="bg-white dark:bg-slate-950 overflow-hidden transition-colors duration-300">
@@ -26,6 +62,11 @@ export default function Home() {
             <BookingModal
                 isOpen={isBookingOpen}
                 onClose={() => setIsBookingOpen(false)}
+            />
+
+            <MarketingPopup
+                offer={marketingOffer}
+                onClose={handlePopupClose}
             />
 
             {/* Quick CTA - Refined */}
