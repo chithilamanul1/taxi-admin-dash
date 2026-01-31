@@ -583,43 +583,43 @@ export default function AdminDashboard() {
                     {currentView === 'pricing' && (
                         <div className="space-y-6">
                             <div className="bg-white rounded-xl shadow-sm p-6">
-                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                                     <h2 className="text-2xl font-bold text-emerald-900">Vehicle Pricing & Tiers</h2>
-                                    <div className="flex flex-wrap items-center gap-3">
-                                        <button
-                                            onClick={() => {
-                                                setEditForm({})
-                                                setEditingVehicle('NEW')
-                                            }}
-                                            className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
-                                        >
-                                            <Car size={16} /> Add New Vehicle
-                                        </button>
+                                    <div className="flex items-center gap-3">
                                         <button
                                             onClick={() => {
                                                 if (confirm('Are you sure you want to delete all entries for this category and reset to default? This will only affect Airport Transfer.')) {
                                                     fetch('/api/seed').then(() => window.location.reload())
                                                 }
                                             }}
-                                            className="text-xs bg-slate-100 px-3 py-2 rounded hover:bg-slate-200 transition-colors"
+                                            className="text-xs text-slate-500 hover:text-red-600 font-medium px-3 py-2 transition-colors"
                                         >
-                                            Reset to Default
+                                            Reset Defaults
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setEditForm({})
+                                                setEditingVehicle('NEW')
+                                            }}
+                                            className="bg-emerald-900 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-emerald-800 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
+                                        >
+                                            <Car size={18} /> Add Vehicle
                                         </button>
                                     </div>
                                 </div>
 
                                 {/* Category Tabs */}
-                                <div className="flex bg-slate-100 p-1 rounded-xl mb-6 w-fit">
+                                <div className="flex bg-slate-100 p-1.5 rounded-xl mb-8 w-full overflow-x-auto no-scrollbar">
                                     {[
                                         { id: 'airport-transfer', label: 'Airport Transfer' },
                                         { id: 'ride-now', label: 'Ride Now / P2P' },
                                         { id: 'tours', label: 'Tour Packages' },
-                                        { id: 'rentals', label: 'Vehicle Rentals' }
+                                        { id: 'rentals', label: 'Rentals' }
                                     ].map(cat => (
                                         <button
                                             key={cat.id}
                                             onClick={() => setPricingCategory(cat.id)}
-                                            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${pricingCategory === cat.id ? 'bg-emerald-900 text-white shadow-sm' : 'text-gray-500 hover:text-emerald-900'}`}
+                                            className={`flex-1 min-w-[120px] px-4 py-2.5 rounded-lg text-sm font-bold transition-all whitespace-nowrap ${pricingCategory === cat.id ? 'bg-white text-emerald-900 shadow-md ring-1 ring-emerald-900/5' : 'text-slate-500 hover:text-emerald-900 hover:bg-slate-200/50'}`}
                                         >
                                             {cat.label}
                                         </button>
@@ -720,445 +720,460 @@ export default function AdminDashboard() {
                                     </div>
                                 )}
 
-                                {isLoading ? (
-                                    <div className="flex items-center justify-center py-12">
-                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div>
-                                    </div>
+                                <div className="flex flex-col items-center justify-center py-24 text-center">
+                                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-emerald-900 mb-4"></div>
+                                    <p className="text-slate-400 text-sm font-medium animate-pulse">Loading rates...</p>
+                                </div>
+                                ) : vehiclePricing.length === 0 ? (
+                                <div className="flex flex-col items-center justify-center py-16 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50/50">
+                                    <Car className="text-slate-300 mb-3" size={48} />
+                                    <h3 className="text-lg font-bold text-slate-700">No Vehicles Found</h3>
+                                    <p className="text-slate-500 text-sm mb-6">Start by adding a vehicle to this category.</p>
+                                    <button
+                                        onClick={() => {
+                                            setEditForm({})
+                                            setEditingVehicle('NEW')
+                                        }}
+                                        className="text-emerald-900 font-bold hover:underline text-sm"
+                                    >
+                                        + Add First Vehicle
+                                    </button>
+                                </div>
                                 ) : (
-                                    <div className="space-y-6">
-                                        {vehiclePricing.map((vehicle) => (
-                                            <div
-                                                key={vehicle._id || vehicle.vehicleType}
-                                                className="border-2 rounded-xl p-6 hover:border-emerald-900/20 transition-all"
-                                            >
-                                                <div className="flex items-center justify-between mb-4">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="w-20 h-14 bg-slate-100 rounded-lg overflow-hidden">
-                                                            {vehicle.image ? (
-                                                                <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-contain" />
-                                                            ) : (
-                                                                <div className="w-full h-full flex items-center justify-center">
-                                                                    <Car className="text-emerald-900" size={24} />
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div>
-                                                            <h3 className="font-bold text-emerald-900 text-lg">{vehicle.name}</h3>
-                                                            {pricingCategory === 'tours' ? (
-                                                                <p className="text-xs text-gray-400">Tour Package Rate</p>
-                                                            ) : (
-                                                                <p className="text-xs text-gray-400">{vehicle.capacity} pax • {vehicle.luggage} bags • {vehicle.vehicleType}</p>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                    <button
-                                                        onClick={() => {
-                                                            if (editingVehicle === vehicle.vehicleType) {
-                                                                setEditingVehicle(null)
-                                                            } else {
-                                                                setEditingVehicle(vehicle.vehicleType)
-                                                                setEditForm({
-                                                                    name: vehicle.name,
-                                                                    capacity: vehicle.capacity,
-                                                                    luggage: vehicle.luggage,
-                                                                    waitingCharges: vehicle.waitingCharges || [],
-                                                                    waitingCharges: vehicle.waitingCharges || [],
-                                                                    tiers: vehicle.tiers || [],
-                                                                    basePrice: vehicle.basePrice,
-                                                                    baseKm: vehicle.baseKm,
-                                                                    perKmRate: vehicle.perKmRate
-                                                                })
-                                                            }
-                                                        }}
-                                                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${editingVehicle === vehicle.vehicleType ? 'bg-red-100 text-red-600' : 'bg-emerald-600 text-emerald-900 hover:bg-emerald-600/80'}`}
-                                                    >
-                                                        {editingVehicle === vehicle.vehicleType ? 'Cancel' : 'Edit Rates'}
-                                                    </button>
-                                                </div>
-
-                                                {/* Tier Table */}
-                                                {editingVehicle === vehicle.vehicleType ? (
-                                                    <div className="space-y-4">
-                                                        {/* Image Upload */}
-                                                        <div className="flex items-center gap-4 p-3 bg-slate-50 rounded-lg">
-                                                            <span className="text-sm text-gray-500">Vehicle Image:</span>
-                                                            <input
-                                                                type="file"
-                                                                accept="image/*"
-                                                                onChange={async (e) => {
-                                                                    const file = e.target.files[0]
-                                                                    if (file) {
-                                                                        const formData = new FormData()
-                                                                        formData.append('file', file)
-                                                                        formData.append('vehicleType', vehicle.vehicleType)
-                                                                        const res = await fetch('/api/upload/vehicle', { method: 'POST', body: formData })
-                                                                        const data = await res.json()
-                                                                        if (data.path) {
-                                                                            await fetch(`/api/pricing/${vehicle.vehicleType}`, {
-                                                                                method: 'PUT',
-                                                                                headers: { 'Content-Type': 'application/json' },
-                                                                                body: JSON.stringify({ image: data.path })
-                                                                            })
-                                                                            setVehiclePricing(prev => prev.map(v => v.vehicleType === vehicle.vehicleType ? { ...v, image: data.path } : v))
-                                                                        }
-                                                                    }
-                                                                }}
-                                                                className="text-sm"
-                                                            />
-                                                        </div>
-
-                                                        {/* Rentals Specific UI */}
-                                                        {pricingCategory === 'rentals' ? (
-                                                            <div className="p-4 bg-yellow-50 text-yellow-800 rounded-lg text-sm">
-                                                                Rentals use flat rates per booking duration. Configurations coming soon.
-                                                            </div>
+                                <div className="space-y-6">
+                                    {vehiclePricing.map((vehicle) => (
+                                        <div
+                                            key={vehicle._id || vehicle.vehicleType}
+                                            className="border-2 rounded-xl p-6 hover:border-emerald-900/20 transition-all"
+                                        >
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-20 h-14 bg-slate-100 rounded-lg overflow-hidden">
+                                                        {vehicle.image ? (
+                                                            <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-contain" />
                                                         ) : (
-                                                            <>
-                                                                <div className="border rounded-xl overflow-hidden">
-                                                                    <div className="bg-slate-100 px-4 py-2 border-b flex justify-between items-center">
-                                                                        <h4 className="font-bold text-slate-700">Pricing Tiers</h4>
-                                                                        <button
-                                                                            onClick={() => {
-                                                                                const newTiers = [...(editForm.tiers || [])];
-                                                                                newTiers.push({ min: 0, max: 0, type: 'per_km', price: 0, rate: 0 });
-                                                                                setEditForm({ ...editForm, tiers: newTiers });
-                                                                            }}
-                                                                            className="text-xs bg-emerald-600 text-white px-2 py-1 rounded hover:bg-emerald-700"
-                                                                        >
-                                                                            + Add Tier
-                                                                        </button>
-                                                                    </div>
-                                                                    <table className="w-full text-xs text-left">
-                                                                        <thead>
-                                                                            <tr className="bg-slate-50 border-b">
-                                                                                <th className="px-3 py-2">Min Km</th>
-                                                                                <th className="px-3 py-2">Max Km</th>
-                                                                                <th className="px-3 py-2">Type</th>
-                                                                                <th className="px-3 py-2">Value (Rs)</th>
-                                                                                <th className="px-3 py-2">Action</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody className="divide-y">
-                                                                            {(editForm.tiers || []).map((tier, idx) => (
-                                                                                <tr key={idx}>
-                                                                                    <td className="px-3 py-2">
-                                                                                        <input
-                                                                                            type="number"
-                                                                                            className="w-16 border rounded p-1"
-                                                                                            value={tier.min}
-                                                                                            onChange={(e) => {
-                                                                                                const newTiers = [...editForm.tiers];
-                                                                                                newTiers[idx].min = parseFloat(e.target.value);
-                                                                                                setEditForm({ ...editForm, tiers: newTiers });
-                                                                                            }}
-                                                                                        />
-                                                                                    </td>
-                                                                                    <td className="px-3 py-2">
-                                                                                        <input
-                                                                                            type="number"
-                                                                                            className="w-16 border rounded p-1"
-                                                                                            value={tier.max}
-                                                                                            onChange={(e) => {
-                                                                                                const newTiers = [...editForm.tiers];
-                                                                                                newTiers[idx].max = parseFloat(e.target.value);
-                                                                                                setEditForm({ ...editForm, tiers: newTiers });
-                                                                                            }}
-                                                                                        />
-                                                                                    </td>
-                                                                                    <td className="px-3 py-2">
-                                                                                        <select
-                                                                                            className="border rounded p-1"
-                                                                                            value={tier.type}
-                                                                                            onChange={(e) => {
-                                                                                                const newTiers = [...editForm.tiers];
-                                                                                                newTiers[idx].type = e.target.value;
-                                                                                                setEditForm({ ...editForm, tiers: newTiers });
-                                                                                            }}
-                                                                                        >
-                                                                                            <option value="per_km">Per KM (Rate)</option>
-                                                                                            <option value="flat">Flat Price</option>
-                                                                                        </select>
-                                                                                    </td>
-                                                                                    <td className="px-3 py-2">
-                                                                                        <input
-                                                                                            type="number"
-                                                                                            className="w-20 border rounded p-1"
-                                                                                            placeholder={tier.type === 'flat' ? 'Price' : 'Rate'}
-                                                                                            value={tier.type === 'flat' ? tier.price : tier.rate}
-                                                                                            onChange={(e) => {
-                                                                                                const newTiers = [...editForm.tiers];
-                                                                                                const val = parseFloat(e.target.value);
-                                                                                                if (tier.type === 'flat') newTiers[idx].price = val;
-                                                                                                else newTiers[idx].rate = val;
-                                                                                                setEditForm({ ...editForm, tiers: newTiers });
-                                                                                            }}
-                                                                                        />
-                                                                                    </td>
-                                                                                    <td className="px-3 py-2">
-                                                                                        <button
-                                                                                            onClick={() => {
-                                                                                                const newTiers = editForm.tiers.filter((_, i) => i !== idx);
-                                                                                                setEditForm({ ...editForm, tiers: newTiers });
-                                                                                            }}
-                                                                                            className="text-red-500 hover:bg-red-50 p-1 rounded"
-                                                                                        >
-                                                                                            <X size={14} />
-                                                                                        </button>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            ))}
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-
-                                                                {/* Base Rates Fallback */}
-                                                                <div className="grid grid-cols-3 gap-4 p-4 bg-slate-50 rounded-xl">
-                                                                    <div>
-                                                                        <label className="block text-xs font-medium text-slate-500 mb-1">Base Price (Fallback)</label>
-                                                                        <input
-                                                                            type="number"
-                                                                            value={editForm.basePrice || 0}
-                                                                            onChange={(e) => setEditForm({ ...editForm, basePrice: parseFloat(e.target.value) })}
-                                                                            className="w-full border rounded p-2 text-sm"
-                                                                        />
-                                                                    </div>
-                                                                    <div>
-                                                                        <label className="block text-xs font-medium text-slate-500 mb-1">Base KM</label>
-                                                                        <input
-                                                                            type="number"
-                                                                            value={editForm.baseKm || 0}
-                                                                            onChange={(e) => setEditForm({ ...editForm, baseKm: parseFloat(e.target.value) })}
-                                                                            className="w-full border rounded p-2 text-sm"
-                                                                        />
-                                                                    </div>
-                                                                    <div>
-                                                                        <label className="block text-xs font-medium text-slate-500 mb-1">Per KM Rate</label>
-                                                                        <input
-                                                                            type="number"
-                                                                            value={editForm.perKmRate || 0}
-                                                                            onChange={(e) => setEditForm({ ...editForm, perKmRate: parseFloat(e.target.value) })}
-                                                                            className="w-full border rounded p-2 text-sm"
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            </>
+                                                            <div className="w-full h-full flex items-center justify-center">
+                                                                <Car className="text-emerald-900" size={24} />
+                                                            </div>
                                                         )}
-                                                        {pricingCategory === 'rentals' ? (
-                                                            <div className="grid md:grid-cols-3 gap-6 p-4 bg-emerald-50 rounded-xl border border-emerald-900/10 mb-4">
-                                                                <div>
-                                                                    <label className="block text-xs font-bold text-emerald-900 uppercase tracking-widest mb-2">Daily Rate (Rs)</label>
-                                                                    <input
-                                                                        type="number"
-                                                                        value={editForm.basePrice || 0}
-                                                                        onChange={(e) => setEditForm({ ...editForm, basePrice: Number(e.target.value) })}
-                                                                        className="w-full px-4 py-3 bg-white border border-emerald-900/10 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none font-bold text-emerald-900 text-lg"
-                                                                    />
-                                                                    <p className="text-[10px] text-gray-400 mt-1">Cost per day</p>
-                                                                </div>
-                                                                <div>
-                                                                    <label className="block text-xs font-bold text-emerald-900 uppercase tracking-widest mb-2">Included KM</label>
-                                                                    <input
-                                                                        type="number"
-                                                                        value={editForm.baseKm || 0}
-                                                                        onChange={(e) => setEditForm({ ...editForm, baseKm: Number(e.target.value) })}
-                                                                        className="w-full px-4 py-3 bg-white border border-emerald-900/10 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none font-bold text-emerald-900 text-lg"
-                                                                    />
-                                                                    <p className="text-[10px] text-gray-400 mt-1">KM included in daily rate</p>
-                                                                </div>
-                                                                <div>
-                                                                    <label className="block text-xs font-bold text-emerald-900 uppercase tracking-widest mb-2">Excess Rate (Rs/km)</label>
-                                                                    <input
-                                                                        type="number"
-                                                                        value={editForm.perKmRate || 0}
-                                                                        onChange={(e) => setEditForm({ ...editForm, perKmRate: Number(e.target.value) })}
-                                                                        className="w-full px-4 py-3 bg-white border border-emerald-900/10 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none font-bold text-emerald-900 text-lg"
-                                                                    />
-                                                                    <p className="text-[10px] text-gray-400 mt-1">Charged after limit</p>
-                                                                </div>
-                                                            </div>
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="font-bold text-emerald-900 text-lg">{vehicle.name}</h3>
+                                                        {pricingCategory === 'tours' ? (
+                                                            <p className="text-xs text-gray-400">Tour Package Rate</p>
                                                         ) : (
-                                                            <>
-                                                                {/* Editable Tiers - Improved Layout */}
-                                                                <div className="overflow-x-auto border border-slate-200 rounded-lg">
-                                                                    <table className="w-full text-sm">
-                                                                        <thead className="bg-slate-50">
-                                                                            <tr>
-                                                                                <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-24">Min KM</th>
-                                                                                <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-24">Max KM</th>
-                                                                                <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Type</th>
-                                                                                <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Flat (Rs)</th>
-                                                                                <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Rate (Rs/km)</th>
-                                                                                <th className="px-4 py-3 w-10"></th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody className="divide-y divide-slate-100">
-                                                                            {(editForm.tiers || []).map((tier, idx) => (
-                                                                                <tr key={idx} className="hover:bg-slate-50">
-                                                                                    <td className="px-2 py-2">
-                                                                                        <input type="number" value={tier.min} onChange={(e) => {
-                                                                                            const newTiers = [...editForm.tiers]
-                                                                                            newTiers[idx] = { ...newTiers[idx], min: Number(e.target.value) }
-                                                                                            setEditForm({ ...editForm, tiers: newTiers })
-                                                                                        }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none text-center" />
-                                                                                    </td>
-                                                                                    <td className="px-2 py-2">
-                                                                                        <input type="number" value={tier.max} onChange={(e) => {
-                                                                                            const newTiers = [...editForm.tiers]
-                                                                                            newTiers[idx] = { ...newTiers[idx], max: Number(e.target.value) }
-                                                                                            setEditForm({ ...editForm, tiers: newTiers })
-                                                                                        }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none text-center" />
-                                                                                    </td>
-                                                                                    <td className="px-2 py-2">
-                                                                                        <select value={tier.type} onChange={(e) => {
-                                                                                            const newTiers = [...editForm.tiers]
-                                                                                            newTiers[idx] = { ...newTiers[idx], type: e.target.value }
-                                                                                            setEditForm({ ...editForm, tiers: newTiers })
-                                                                                        }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none bg-white">
-                                                                                            <option value="flat">Flat</option>
-                                                                                            <option value="per_km">Per KM</option>
-                                                                                        </select>
-                                                                                    </td>
-                                                                                    <td className="px-2 py-2">
-                                                                                        <input type="number" value={tier.price || 0} onChange={(e) => {
-                                                                                            const newTiers = [...editForm.tiers]
-                                                                                            newTiers[idx] = { ...newTiers[idx], price: Number(e.target.value) }
-                                                                                            setEditForm({ ...editForm, tiers: newTiers })
-                                                                                        }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none disabled:opacity-50 disabled:bg-slate-100 text-right" disabled={tier.type !== 'flat'} />
-                                                                                    </td>
-                                                                                    <td className="px-2 py-2">
-                                                                                        <input type="number" value={tier.rate || 0} onChange={(e) => {
-                                                                                            const newTiers = [...editForm.tiers]
-                                                                                            newTiers[idx] = { ...newTiers[idx], rate: Number(e.target.value) }
-                                                                                            setEditForm({ ...editForm, tiers: newTiers })
-                                                                                        }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none disabled:opacity-50 disabled:bg-slate-100 text-right" disabled={tier.type !== 'per_km'} />
-                                                                                    </td>
-                                                                                    <td className="px-2 py-2 text-center">
-                                                                                        <button onClick={() => {
-                                                                                            const newTiers = editForm.tiers.filter((_, i) => i !== idx)
-                                                                                            setEditForm({ ...editForm, tiers: newTiers })
-                                                                                        }} className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50"><X size={16} /></button>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            ))}
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
+                                                            <p className="text-xs text-gray-400">{vehicle.capacity} pax • {vehicle.luggage} bags • {vehicle.vehicleType}</p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    onClick={() => {
+                                                        if (editingVehicle === vehicle.vehicleType) {
+                                                            setEditingVehicle(null)
+                                                        } else {
+                                                            setEditingVehicle(vehicle.vehicleType)
+                                                            setEditForm({
+                                                                name: vehicle.name,
+                                                                capacity: vehicle.capacity,
+                                                                luggage: vehicle.luggage,
+                                                                waitingCharges: vehicle.waitingCharges || [],
+                                                                waitingCharges: vehicle.waitingCharges || [],
+                                                                tiers: vehicle.tiers || [],
+                                                                basePrice: vehicle.basePrice,
+                                                                baseKm: vehicle.baseKm,
+                                                                perKmRate: vehicle.perKmRate
+                                                            })
+                                                        }
+                                                    }}
+                                                    className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${editingVehicle === vehicle.vehicleType ? 'bg-red-100 text-red-600' : 'bg-emerald-600 text-emerald-900 hover:bg-emerald-600/80'}`}
+                                                >
+                                                    {editingVehicle === vehicle.vehicleType ? 'Cancel' : 'Edit Rates'}
+                                                </button>
+                                            </div>
 
-                                                                {/* Waiting Charges Management */}
-                                                                <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-900/10 space-y-4">
-                                                                    <div className="flex items-center justify-between">
-                                                                        <h4 className="text-sm font-bold text-emerald-900 uppercase tracking-widest flex items-center gap-2">
-                                                                            <Clock size={16} /> Tiered Waiting Charges
-                                                                        </h4>
-                                                                        <button
-                                                                            onClick={() => {
-                                                                                const current = editForm.waitingCharges || []
-                                                                                setEditForm({ ...editForm, waitingCharges: [...current, 1000] })
-                                                                            }}
-                                                                            className="text-[10px] bg-white border border-emerald-900/10 px-3 py-1 rounded-lg font-bold text-emerald-900 hover:bg-emerald-100 transition-colors"
-                                                                        >
-                                                                            + Add Hour
-                                                                        </button>
-                                                                    </div>
-                                                                    <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-                                                                        {(editForm.waitingCharges || []).map((charge, idx) => (
-                                                                            <div key={idx} className="bg-white p-2 rounded-lg border border-emerald-900/10 relative group">
-                                                                                <label className="block text-[8px] font-bold text-emerald-900/40 uppercase mb-1">{idx + 1} Hour{idx > 0 && 's'}</label>
-                                                                                <div className="flex items-center gap-1">
-                                                                                    <span className="text-[10px] font-bold text-emerald-900">Rs</span>
-                                                                                    <input
-                                                                                        type="number"
-                                                                                        value={charge}
-                                                                                        onChange={(e) => {
-                                                                                            const newCharges = [...editForm.waitingCharges]
-                                                                                            newCharges[idx] = Number(e.target.value)
-                                                                                            setEditForm({ ...editForm, waitingCharges: newCharges })
-                                                                                        }}
-                                                                                        className="w-full bg-transparent outline-none font-bold text-xs text-emerald-900"
-                                                                                    />
-                                                                                </div>
-                                                                                <button
-                                                                                    onClick={() => {
-                                                                                        const newCharges = editForm.waitingCharges.filter((_, i) => i !== idx)
-                                                                                        setEditForm({ ...editForm, waitingCharges: newCharges })
-                                                                                    }}
-                                                                                    className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                                                                                >
-                                                                                    <X size={10} />
-                                                                                </button>
-                                                                            </div>
-                                                                        ))}
-                                                                    </div>
-                                                                    {(!editForm.waitingCharges || editForm.waitingCharges.length === 0) && (
-                                                                        <p className="text-[10px] text-emerald-900/40 italic">No custom waiting charges defined. Will use default hourly rate.</p>
-                                                                    )}
-                                                                </div>
+                                            {/* Tier Table */}
+                                            {editingVehicle === vehicle.vehicleType ? (
+                                                <div className="space-y-4">
+                                                    {/* Image Upload */}
+                                                    <div className="flex items-center gap-4 p-3 bg-slate-50 rounded-lg">
+                                                        <span className="text-sm text-gray-500">Vehicle Image:</span>
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            onChange={async (e) => {
+                                                                const file = e.target.files[0]
+                                                                if (file) {
+                                                                    const formData = new FormData()
+                                                                    formData.append('file', file)
+                                                                    formData.append('vehicleType', vehicle.vehicleType)
+                                                                    const res = await fetch('/api/upload/vehicle', { method: 'POST', body: formData })
+                                                                    const data = await res.json()
+                                                                    if (data.path) {
+                                                                        await fetch(`/api/pricing/${vehicle.vehicleType}`, {
+                                                                            method: 'PUT',
+                                                                            headers: { 'Content-Type': 'application/json' },
+                                                                            body: JSON.stringify({ image: data.path })
+                                                                        })
+                                                                        setVehiclePricing(prev => prev.map(v => v.vehicleType === vehicle.vehicleType ? { ...v, image: data.path } : v))
+                                                                    }
+                                                                }
+                                                            }}
+                                                            className="text-sm"
+                                                        />
+                                                    </div>
 
-                                                                <div className="flex gap-2 pt-2">
+                                                    {/* Rentals Specific UI */}
+                                                    {pricingCategory === 'rentals' ? (
+                                                        <div className="p-4 bg-yellow-50 text-yellow-800 rounded-lg text-sm">
+                                                            Rentals use flat rates per booking duration. Configurations coming soon.
+                                                        </div>
+                                                    ) : (
+                                                        <>
+                                                            <div className="border rounded-xl overflow-hidden">
+                                                                <div className="bg-slate-100 px-4 py-2 border-b flex justify-between items-center">
+                                                                    <h4 className="font-bold text-slate-700">Pricing Tiers</h4>
                                                                     <button
                                                                         onClick={() => {
-                                                                            const lastTier = editForm.tiers[editForm.tiers.length - 1]
-                                                                            const newMin = lastTier ? lastTier.max + 1 : 1
-                                                                            setEditForm({
-                                                                                ...editForm,
-                                                                                tiers: [...editForm.tiers, { min: newMin, max: newMin + 50, type: 'per_km', price: 0, rate: 100 }]
-                                                                            })
+                                                                            const newTiers = [...(editForm.tiers || [])];
+                                                                            newTiers.push({ min: 0, max: 0, type: 'per_km', price: 0, rate: 0 });
+                                                                            setEditForm({ ...editForm, tiers: newTiers });
                                                                         }}
-                                                                        className="text-sm bg-slate-100 px-3 py-1 rounded hover:bg-slate-200"
+                                                                        className="text-xs bg-emerald-600 text-white px-2 py-1 rounded hover:bg-emerald-700"
                                                                     >
                                                                         + Add Tier
                                                                     </button>
+                                                                </div>
+                                                                <table className="w-full text-xs text-left">
+                                                                    <thead>
+                                                                        <tr className="bg-slate-50 border-b">
+                                                                            <th className="px-3 py-2">Min Km</th>
+                                                                            <th className="px-3 py-2">Max Km</th>
+                                                                            <th className="px-3 py-2">Type</th>
+                                                                            <th className="px-3 py-2">Value (Rs)</th>
+                                                                            <th className="px-3 py-2">Action</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody className="divide-y">
+                                                                        {(editForm.tiers || []).map((tier, idx) => (
+                                                                            <tr key={idx}>
+                                                                                <td className="px-3 py-2">
+                                                                                    <input
+                                                                                        type="number"
+                                                                                        className="w-16 border rounded p-1"
+                                                                                        value={tier.min}
+                                                                                        onChange={(e) => {
+                                                                                            const newTiers = [...editForm.tiers];
+                                                                                            newTiers[idx].min = parseFloat(e.target.value);
+                                                                                            setEditForm({ ...editForm, tiers: newTiers });
+                                                                                        }}
+                                                                                    />
+                                                                                </td>
+                                                                                <td className="px-3 py-2">
+                                                                                    <input
+                                                                                        type="number"
+                                                                                        className="w-16 border rounded p-1"
+                                                                                        value={tier.max}
+                                                                                        onChange={(e) => {
+                                                                                            const newTiers = [...editForm.tiers];
+                                                                                            newTiers[idx].max = parseFloat(e.target.value);
+                                                                                            setEditForm({ ...editForm, tiers: newTiers });
+                                                                                        }}
+                                                                                    />
+                                                                                </td>
+                                                                                <td className="px-3 py-2">
+                                                                                    <select
+                                                                                        className="border rounded p-1"
+                                                                                        value={tier.type}
+                                                                                        onChange={(e) => {
+                                                                                            const newTiers = [...editForm.tiers];
+                                                                                            newTiers[idx].type = e.target.value;
+                                                                                            setEditForm({ ...editForm, tiers: newTiers });
+                                                                                        }}
+                                                                                    >
+                                                                                        <option value="per_km">Per KM (Rate)</option>
+                                                                                        <option value="flat">Flat Price</option>
+                                                                                    </select>
+                                                                                </td>
+                                                                                <td className="px-3 py-2">
+                                                                                    <input
+                                                                                        type="number"
+                                                                                        className="w-20 border rounded p-1"
+                                                                                        placeholder={tier.type === 'flat' ? 'Price' : 'Rate'}
+                                                                                        value={tier.type === 'flat' ? tier.price : tier.rate}
+                                                                                        onChange={(e) => {
+                                                                                            const newTiers = [...editForm.tiers];
+                                                                                            const val = parseFloat(e.target.value);
+                                                                                            if (tier.type === 'flat') newTiers[idx].price = val;
+                                                                                            else newTiers[idx].rate = val;
+                                                                                            setEditForm({ ...editForm, tiers: newTiers });
+                                                                                        }}
+                                                                                    />
+                                                                                </td>
+                                                                                <td className="px-3 py-2">
+                                                                                    <button
+                                                                                        onClick={() => {
+                                                                                            const newTiers = editForm.tiers.filter((_, i) => i !== idx);
+                                                                                            setEditForm({ ...editForm, tiers: newTiers });
+                                                                                        }}
+                                                                                        className="text-red-500 hover:bg-red-50 p-1 rounded"
+                                                                                    >
+                                                                                        <X size={14} />
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        ))}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+
+                                                            {/* Base Rates Fallback */}
+                                                            <div className="grid grid-cols-3 gap-4 p-4 bg-slate-50 rounded-xl">
+                                                                <div>
+                                                                    <label className="block text-xs font-medium text-slate-500 mb-1">Base Price (Fallback)</label>
+                                                                    <input
+                                                                        type="number"
+                                                                        value={editForm.basePrice || 0}
+                                                                        onChange={(e) => setEditForm({ ...editForm, basePrice: parseFloat(e.target.value) })}
+                                                                        className="w-full border rounded p-2 text-sm"
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <label className="block text-xs font-medium text-slate-500 mb-1">Base KM</label>
+                                                                    <input
+                                                                        type="number"
+                                                                        value={editForm.baseKm || 0}
+                                                                        onChange={(e) => setEditForm({ ...editForm, baseKm: parseFloat(e.target.value) })}
+                                                                        className="w-full border rounded p-2 text-sm"
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <label className="block text-xs font-medium text-slate-500 mb-1">Per KM Rate</label>
+                                                                    <input
+                                                                        type="number"
+                                                                        value={editForm.perKmRate || 0}
+                                                                        onChange={(e) => setEditForm({ ...editForm, perKmRate: parseFloat(e.target.value) })}
+                                                                        className="w-full border rounded p-2 text-sm"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                    {pricingCategory === 'rentals' ? (
+                                                        <div className="grid md:grid-cols-3 gap-6 p-4 bg-emerald-50 rounded-xl border border-emerald-900/10 mb-4">
+                                                            <div>
+                                                                <label className="block text-xs font-bold text-emerald-900 uppercase tracking-widest mb-2">Daily Rate (Rs)</label>
+                                                                <input
+                                                                    type="number"
+                                                                    value={editForm.basePrice || 0}
+                                                                    onChange={(e) => setEditForm({ ...editForm, basePrice: Number(e.target.value) })}
+                                                                    className="w-full px-4 py-3 bg-white border border-emerald-900/10 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none font-bold text-emerald-900 text-lg"
+                                                                />
+                                                                <p className="text-[10px] text-gray-400 mt-1">Cost per day</p>
+                                                            </div>
+                                                            <div>
+                                                                <label className="block text-xs font-bold text-emerald-900 uppercase tracking-widest mb-2">Included KM</label>
+                                                                <input
+                                                                    type="number"
+                                                                    value={editForm.baseKm || 0}
+                                                                    onChange={(e) => setEditForm({ ...editForm, baseKm: Number(e.target.value) })}
+                                                                    className="w-full px-4 py-3 bg-white border border-emerald-900/10 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none font-bold text-emerald-900 text-lg"
+                                                                />
+                                                                <p className="text-[10px] text-gray-400 mt-1">KM included in daily rate</p>
+                                                            </div>
+                                                            <div>
+                                                                <label className="block text-xs font-bold text-emerald-900 uppercase tracking-widest mb-2">Excess Rate (Rs/km)</label>
+                                                                <input
+                                                                    type="number"
+                                                                    value={editForm.perKmRate || 0}
+                                                                    onChange={(e) => setEditForm({ ...editForm, perKmRate: Number(e.target.value) })}
+                                                                    className="w-full px-4 py-3 bg-white border border-emerald-900/10 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none font-bold text-emerald-900 text-lg"
+                                                                />
+                                                                <p className="text-[10px] text-gray-400 mt-1">Charged after limit</p>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <>
+                                                            {/* Editable Tiers - Improved Layout */}
+                                                            <div className="overflow-x-auto border border-slate-200 rounded-lg">
+                                                                <table className="w-full text-sm">
+                                                                    <thead className="bg-slate-50">
+                                                                        <tr>
+                                                                            <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-24">Min KM</th>
+                                                                            <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-24">Max KM</th>
+                                                                            <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Type</th>
+                                                                            <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Flat (Rs)</th>
+                                                                            <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Rate (Rs/km)</th>
+                                                                            <th className="px-4 py-3 w-10"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody className="divide-y divide-slate-100">
+                                                                        {(editForm.tiers || []).map((tier, idx) => (
+                                                                            <tr key={idx} className="hover:bg-slate-50">
+                                                                                <td className="px-2 py-2">
+                                                                                    <input type="number" value={tier.min} onChange={(e) => {
+                                                                                        const newTiers = [...editForm.tiers]
+                                                                                        newTiers[idx] = { ...newTiers[idx], min: Number(e.target.value) }
+                                                                                        setEditForm({ ...editForm, tiers: newTiers })
+                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none text-center" />
+                                                                                </td>
+                                                                                <td className="px-2 py-2">
+                                                                                    <input type="number" value={tier.max} onChange={(e) => {
+                                                                                        const newTiers = [...editForm.tiers]
+                                                                                        newTiers[idx] = { ...newTiers[idx], max: Number(e.target.value) }
+                                                                                        setEditForm({ ...editForm, tiers: newTiers })
+                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none text-center" />
+                                                                                </td>
+                                                                                <td className="px-2 py-2">
+                                                                                    <select value={tier.type} onChange={(e) => {
+                                                                                        const newTiers = [...editForm.tiers]
+                                                                                        newTiers[idx] = { ...newTiers[idx], type: e.target.value }
+                                                                                        setEditForm({ ...editForm, tiers: newTiers })
+                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none bg-white">
+                                                                                        <option value="flat">Flat</option>
+                                                                                        <option value="per_km">Per KM</option>
+                                                                                    </select>
+                                                                                </td>
+                                                                                <td className="px-2 py-2">
+                                                                                    <input type="number" value={tier.price || 0} onChange={(e) => {
+                                                                                        const newTiers = [...editForm.tiers]
+                                                                                        newTiers[idx] = { ...newTiers[idx], price: Number(e.target.value) }
+                                                                                        setEditForm({ ...editForm, tiers: newTiers })
+                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none disabled:opacity-50 disabled:bg-slate-100 text-right" disabled={tier.type !== 'flat'} />
+                                                                                </td>
+                                                                                <td className="px-2 py-2">
+                                                                                    <input type="number" value={tier.rate || 0} onChange={(e) => {
+                                                                                        const newTiers = [...editForm.tiers]
+                                                                                        newTiers[idx] = { ...newTiers[idx], rate: Number(e.target.value) }
+                                                                                        setEditForm({ ...editForm, tiers: newTiers })
+                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none disabled:opacity-50 disabled:bg-slate-100 text-right" disabled={tier.type !== 'per_km'} />
+                                                                                </td>
+                                                                                <td className="px-2 py-2 text-center">
+                                                                                    <button onClick={() => {
+                                                                                        const newTiers = editForm.tiers.filter((_, i) => i !== idx)
+                                                                                        setEditForm({ ...editForm, tiers: newTiers })
+                                                                                    }} className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50"><X size={16} /></button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        ))}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+
+                                                            {/* Waiting Charges Management */}
+                                                            <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-900/10 space-y-4">
+                                                                <div className="flex items-center justify-between">
+                                                                    <h4 className="text-sm font-bold text-emerald-900 uppercase tracking-widest flex items-center gap-2">
+                                                                        <Clock size={16} /> Tiered Waiting Charges
+                                                                    </h4>
                                                                     <button
-                                                                        onClick={async () => {
-                                                                            const res = await fetch(`/api/pricing/${vehicle.vehicleType}?category=${pricingCategory}`, {
-                                                                                method: 'PUT',
-                                                                                headers: { 'Content-Type': 'application/json' },
-                                                                                body: JSON.stringify({ waitingCharges: editForm.waitingCharges, tiers: editForm.tiers, name: editForm.name, capacity: editForm.capacity, luggage: editForm.luggage, basePrice: editForm.basePrice, baseKm: editForm.baseKm, perKmRate: editForm.perKmRate })
-                                                                            })
-                                                                            if (res.ok) {
-                                                                                setVehiclePricing(prev => prev.map(v => v.vehicleType === vehicle.vehicleType ? { ...v, ...editForm } : v))
-                                                                                setEditingVehicle(null)
-                                                                            }
+                                                                        onClick={() => {
+                                                                            const current = editForm.waitingCharges || []
+                                                                            setEditForm({ ...editForm, waitingCharges: [...current, 1000] })
                                                                         }}
-                                                                        className="text-sm bg-emerald-900 text-white px-6 py-2 rounded-lg hover:bg-emerald-900/90 font-bold shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
+                                                                        className="text-[10px] bg-white border border-emerald-900/10 px-3 py-1 rounded-lg font-bold text-emerald-900 hover:bg-emerald-100 transition-colors"
                                                                     >
-                                                                        Save {pricingCategory.replace('-', ' ')} Rates
+                                                                        + Add Hour
                                                                     </button>
                                                                 </div>
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                ) : (
-                                                    <div className="overflow-x-auto mt-4 border-t pt-4">
-                                                        <table className="w-full text-sm">
-                                                            <thead>
-                                                                <tr className="bg-slate-50 text-gray-500">
-                                                                    <th className="px-4 py-2 text-left">Distance Range</th>
-                                                                    <th className="px-4 py-2 text-left">Type</th>
-                                                                    <th className="px-4 py-2 text-right">Rate</th>
+                                                                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+                                                                    {(editForm.waitingCharges || []).map((charge, idx) => (
+                                                                        <div key={idx} className="bg-white p-2 rounded-lg border border-emerald-900/10 relative group">
+                                                                            <label className="block text-[8px] font-bold text-emerald-900/40 uppercase mb-1">{idx + 1} Hour{idx > 0 && 's'}</label>
+                                                                            <div className="flex items-center gap-1">
+                                                                                <span className="text-[10px] font-bold text-emerald-900">Rs</span>
+                                                                                <input
+                                                                                    type="number"
+                                                                                    value={charge}
+                                                                                    onChange={(e) => {
+                                                                                        const newCharges = [...editForm.waitingCharges]
+                                                                                        newCharges[idx] = Number(e.target.value)
+                                                                                        setEditForm({ ...editForm, waitingCharges: newCharges })
+                                                                                    }}
+                                                                                    className="w-full bg-transparent outline-none font-bold text-xs text-emerald-900"
+                                                                                />
+                                                                            </div>
+                                                                            <button
+                                                                                onClick={() => {
+                                                                                    const newCharges = editForm.waitingCharges.filter((_, i) => i !== idx)
+                                                                                    setEditForm({ ...editForm, waitingCharges: newCharges })
+                                                                                }}
+                                                                                className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                                                            >
+                                                                                <X size={10} />
+                                                                            </button>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                                {(!editForm.waitingCharges || editForm.waitingCharges.length === 0) && (
+                                                                    <p className="text-[10px] text-emerald-900/40 italic">No custom waiting charges defined. Will use default hourly rate.</p>
+                                                                )}
+                                                            </div>
+
+                                                            <div className="flex gap-2 pt-2">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        const lastTier = editForm.tiers[editForm.tiers.length - 1]
+                                                                        const newMin = lastTier ? lastTier.max + 1 : 1
+                                                                        setEditForm({
+                                                                            ...editForm,
+                                                                            tiers: [...editForm.tiers, { min: newMin, max: newMin + 50, type: 'per_km', price: 0, rate: 100 }]
+                                                                        })
+                                                                    }}
+                                                                    className="text-sm bg-slate-100 px-3 py-1 rounded hover:bg-slate-200"
+                                                                >
+                                                                    + Add Tier
+                                                                </button>
+                                                                <button
+                                                                    onClick={async () => {
+                                                                        const res = await fetch(`/api/pricing/${vehicle.vehicleType}?category=${pricingCategory}`, {
+                                                                            method: 'PUT',
+                                                                            headers: { 'Content-Type': 'application/json' },
+                                                                            body: JSON.stringify({ waitingCharges: editForm.waitingCharges, tiers: editForm.tiers, name: editForm.name, capacity: editForm.capacity, luggage: editForm.luggage, basePrice: editForm.basePrice, baseKm: editForm.baseKm, perKmRate: editForm.perKmRate })
+                                                                        })
+                                                                        if (res.ok) {
+                                                                            setVehiclePricing(prev => prev.map(v => v.vehicleType === vehicle.vehicleType ? { ...v, ...editForm } : v))
+                                                                            setEditingVehicle(null)
+                                                                        }
+                                                                    }}
+                                                                    className="text-sm bg-emerald-900 text-white px-6 py-2 rounded-lg hover:bg-emerald-900/90 font-bold shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
+                                                                >
+                                                                    Save {pricingCategory.replace('-', ' ')} Rates
+                                                                </button>
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <div className="overflow-x-auto mt-4 border-t pt-4">
+                                                    <table className="w-full text-sm">
+                                                        <thead>
+                                                            <tr className="bg-slate-50 text-gray-500">
+                                                                <th className="px-4 py-2 text-left">Distance Range</th>
+                                                                <th className="px-4 py-2 text-left">Type</th>
+                                                                <th className="px-4 py-2 text-right">Rate</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {(vehicle.tiers || []).map((tier, idx) => (
+                                                                <tr key={idx} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+                                                                    <td className="px-4 py-2 font-medium bg-white">{tier.min} - {tier.max >= 9999 ? '∞' : tier.max} km</td>
+                                                                    <td className="px-4 py-2 bg-white">
+                                                                        <span className={`px-2 py-0.5 rounded text-xs ${tier.type === 'flat' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
+                                                                            {tier.type === 'flat' ? 'Flat Rate' : 'Per KM'}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td className="px-4 py-2 text-right font-bold text-emerald-900 bg-white">
+                                                                        {tier.type === 'flat' ? `LKR ${tier.price?.toLocaleString()}` : `LKR ${tier.rate}/km`}
+                                                                    </td>
                                                                 </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {(vehicle.tiers || []).map((tier, idx) => (
-                                                                    <tr key={idx} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                                                                        <td className="px-4 py-2 font-medium bg-white">{tier.min} - {tier.max >= 9999 ? '∞' : tier.max} km</td>
-                                                                        <td className="px-4 py-2 bg-white">
-                                                                            <span className={`px-2 py-0.5 rounded text-xs ${tier.type === 'flat' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
-                                                                                {tier.type === 'flat' ? 'Flat Rate' : 'Per KM'}
-                                                                            </span>
-                                                                        </td>
-                                                                        <td className="px-4 py-2 text-right font-bold text-emerald-900 bg-white">
-                                                                            {tier.type === 'flat' ? `LKR ${tier.price?.toLocaleString()}` : `LKR ${tier.rate}/km`}
-                                                                        </td>
-                                                                    </tr>
-                                                                ))}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
                                 )}
                             </div>
                         </div>
