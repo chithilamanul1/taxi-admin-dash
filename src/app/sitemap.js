@@ -4,23 +4,24 @@ import { destinations } from '@/lib/destinations';
 
 export const revalidate = 3600; // Revalidate every hour
 
-export default async function sitemap() {
-    let posts = [];
+async function getPosts() {
     if (process.env.MONGO_URI) {
         try {
             await dbConnect();
-            posts = await Post.find({ isPublished: true }, 'slug updatedAt');
+            const posts = await Post.find({ isPublished: true }, 'slug updatedAt');
+            return posts || [];
         } catch (e) {
             console.error('Sitemap DB Error:', e);
+            return [];
         }
-    } else {
-        console.warn('Skipping sitemap dynamic generation: MONGO_URI missing');
     }
-    return posts;
+    console.warn('Skipping sitemap dynamic generation: MONGO_URI missing');
+    return [];
 }
 
 export default async function sitemap() {
     const posts = await getPosts();
+
     const blogEntries = posts.map(post => ({
         url: `https://airporttaxi.lk/blog/${post.slug}`,
         lastModified: post.updatedAt || new Date(),
