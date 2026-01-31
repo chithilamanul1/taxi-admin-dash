@@ -1,46 +1,70 @@
 import dbConnect from '@/lib/db';
 import Booking from '@/models/Booking';
 import { NextResponse } from 'next/server';
-import { getActiveGateway, verifySampathSignature } from '@/lib/payment';
+import { getActiveGateway, verifySampathSignature, completePayCorpTransaction } from '@/lib/payment';
+import { sendPaymentConfirmation } from '@/lib/email-service';
 
 /**
- * POST /api/payment/callback
- * 
- * Receives payment result from gateway.
- * For MOCK: Called directly from mock payment page.
- * For SAMPATH: Called via Server-to-Server POST from Sampath IPG.
- */
-/**
  * GET /api/payment/callback
- * Handle PayCorp Redirect
+ * Handle PayCorp Redirect (Step B -> Step C)
  */
 export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url);
-        const data = Object.fromEntries(searchParams.entries());
-        console.log('PayCorp Callback (GET):', data);
+        const reqid = searchParams.get('reqid');
+        const clientRef = searchParams.get('clientRef');
 
-        // Typical PayCorp Redirect Params: reqid, clientRef, responseCode, responseMessage
-        const bookingId = data.clientRef;
-        const responseCode = data.responseCode;
+        console.log('PayCorp Callback (GET):', { reqid, clientRef });
 
-        // Since we don't have the "Complete" API details, we'll optimistically redirect
-        // or show an error based on responseCode (if present).
-        // 00 = Success is common, but let's check.
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
-        if (bookingId) {
-            const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-            // If manual verification is needed, we could redirect to a loading page.
-            // For now, redirect to success/failure based on generic check
-
-            // NOTE: Verification Step C is missing from provided docs. 
-            // We will assume success if we get a callback with a reqid for now, 
-            // or check responseCode if available.
-
-            return NextResponse.redirect(`${baseUrl}/payment/success?bookingId=${bookingId}&provider=sampath`);
+        // 1. Validate Input
+        if (!reqid) {
+            console.error("Missing reqid in callback");
+            return NextResponse.redirect(`${baseUrl}/payment/error?reason=missing_reqid`);
         }
 
-        return NextResponse.json({ message: "Callback received", data });
+        await dbConnect();
+
+        // 2. Find Booking by reqId (paymentReference)
+        // If not found, try by clientRef if available
+        let booking = await Booking.findOne({ paymentReference: reqid });
+
+        if (!booking && clientRef) {
+            booking = await Booking.findById(clientRef);
+        }
+
+        if (!booking) {
+            console.error(`Booking not found for reqid: ${reqid}`);
+            return NextResponse.redirect(`${baseUrl}/payment/error?reason=booking_not_found`);
+        }
+
+        // 3. Step C: Call PAYMENT_COMPLETE (Server-to-Server Verification)
+        const verification = await completePayCorpTransaction(reqid, process.env.SAMPATH_CLIENT_ID); // Or derive ClientID from currency
+
+        if (verification.success) {
+            // 4. Update Booking to PAID
+            booking.paymentStatus = 'paid';
+            booking.paymentReference = verification.data.txnId || reqid; // Use actual txnId if available
+            booking.gatewayResponse = JSON.stringify(verification.data);
+            booking.paymentTimestamp = new Date();
+            await booking.save();
+
+            // 5. Send Receipt
+            await sendPaymentConfirmation(booking).catch(err => console.error("Error sending receipt:", err));
+
+            // 6. Redirect to Success
+            return NextResponse.redirect(`${baseUrl}/payment/success?bookingId=${booking._id}&provider=sampath`);
+        } else {
+            // Payment Failed or Verification Failed
+            console.error("Payment Verification Failed:", verification.message);
+            booking.paymentStatus = 'failed';
+            booking.gatewayResponse = JSON.stringify(verification.data);
+            await booking.save();
+
+            return NextResponse.redirect(`${baseUrl}/payment/error?bookingId=${booking._id}&reason=payment_failed`);
+        }
+
     } catch (error) {
         console.error("Callback GET Error:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });

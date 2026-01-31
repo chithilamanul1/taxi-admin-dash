@@ -9,6 +9,7 @@ const STEPS = [
     { id: 2, title: 'Vehicle Details', icon: Car },
     { id: 3, title: 'Documents', icon: ShieldCheck },
     { id: 4, title: 'Bank Info', icon: CreditCard },
+    { id: 5, title: 'Initial Payment', icon: CreditCard },
 ];
 
 // Metadata removed to fix "use client" error
@@ -23,6 +24,7 @@ export default function DriverRegister() {
         name: '', phone: '', email: '', password: '', address: '', nic: '',
         vehicleType: 'Car', vehicleModel: '', vehicleNumber: '', vehicleYear: '',
         bankName: '', branch: '', accountNumber: '', accountName: '',
+        initialDepositAmount: '5000', initialDepositReceipt: null,
         documents: { licenseFront: null, licenseBack: null, nicFront: null, nicBack: null }
     });
 
@@ -31,14 +33,15 @@ export default function DriverRegister() {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleFileChange = (e, docName) => {
+    const handleFileChange = (e, field, isDoc = true) => {
         const file = e.target.files[0];
         if (file) {
-            // In a real app, verify size/type here
-            setFormData(prev => ({
-                ...prev,
-                documents: { ...prev.documents, [docName]: file }
-            }));
+            setFormData(prev => {
+                if (isDoc) {
+                    return { ...prev, documents: { ...prev.documents, [field]: file } };
+                }
+                return { ...prev, [field]: file };
+            });
         }
     };
 
@@ -64,6 +67,7 @@ export default function DriverRegister() {
             const licenseBackPath = await uploadFile(formData.documents.licenseBack, 'license-back');
             const nicFrontPath = await uploadFile(formData.documents.nicFront, 'nic-front');
             const nicBackPath = await uploadFile(formData.documents.nicBack, 'nic-back');
+            const depositReceiptPath = await uploadFile(formData.initialDepositReceipt, 'deposit-receipt');
 
             // 2. Prepare payload with real paths
             const payload = {
@@ -73,6 +77,10 @@ export default function DriverRegister() {
                     licenseBack: licenseBackPath || '',
                     nicFront: nicFrontPath || '',
                     nicBack: nicBackPath || '',
+                },
+                initialDeposit: {
+                    amount: Number(formData.initialDepositAmount),
+                    receipt: depositReceiptPath || ''
                 }
             };
 
@@ -196,6 +204,29 @@ export default function DriverRegister() {
                             </div>
                         </div>
                     )}
+
+                    {step === 5 && (
+                        <div className="space-y-6 animate-fade-in-up">
+                            <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
+                                <ShieldCheck className="text-amber-400" size={20} /> Initial Payment
+                            </h3>
+                            <div className="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                                <p className="text-sm text-slate-400 mb-2 font-bold uppercase">Bank Transfer Details</p>
+                                <div className="space-y-1 text-slate-200 font-mono text-sm">
+                                    <p>Bank: <span className="text-amber-400">Sampath Bank</span></p>
+                                    <p>Account Name: <span className="text-amber-400">Airport Taxi Tours</span></p>
+                                    <p>Account No: <span className="text-amber-400 text-lg font-bold">1234 5678 9012</span></p>
+                                    <p>Branch: <span className="text-amber-400">Colombo Super Branch</span></p>
+                                </div>
+                                <p className="text-xs text-slate-500 mt-4">Please transfer a minimum of <span className="text-slate-300 font-bold">Rs 5,000</span> to activate your account.</p>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-6">
+                                <Input label="Amount Paid (LKR)" name="initialDepositAmount" value={formData.initialDepositAmount} onChange={handleInputChange} placeholder="5000" type="number" />
+                                <FileUpload label="Payment Receipt" id="receipt" onChange={(e) => handleFileChange(e, 'initialDepositReceipt', false)} file={formData.initialDepositReceipt} />
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Footer Controls */}
@@ -207,7 +238,7 @@ export default function DriverRegister() {
                         <ChevronLeft size={16} /> <span className="hidden md:inline">{step === 1 ? 'Cancel' : 'Back'}</span>
                     </button>
 
-                    {step < 4 ? (
+                    {step < 5 ? (
                         <button
                             onClick={() => setStep(step + 1)}
                             className="flex items-center gap-2 px-8 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-sm font-black uppercase tracking-wider transition-colors shadow-lg shadow-amber-500/20"

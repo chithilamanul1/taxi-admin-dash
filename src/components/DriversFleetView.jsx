@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Car, Phone, MapPin, User, Plus, CheckCircle, XCircle, Loader2, UserPlus, X, ShieldCheck, FileText, AlertCircle, Trash2, MessageCircle } from 'lucide-react';
+import { Car, Phone, MapPin, User, Plus, CheckCircle, XCircle, Loader2, UserPlus, X, ShieldCheck, FileText, AlertCircle, Trash2, MessageCircle, Wallet } from 'lucide-react';
 
 const DriversFleetView = ({ bookings = [] }) => {
     const [drivers, setDrivers] = useState([]);
@@ -396,6 +396,49 @@ const DriversFleetView = ({ bookings = [] }) => {
                                 </div>
                             </div>
                         </div>
+
+                        {approvalModal.initialDeposit && approvalModal.initialDeposit.amount > 0 && (
+                            <div className="p-6 border-t border-gray-100 bg-amber-50/50">
+                                <h4 className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <Wallet size={16} /> Initial Deposit Verification
+                                </h4>
+                                <div className="grid grid-cols-2 gap-6">
+                                    <div className="bg-white p-4 rounded-xl border border-amber-100 shadow-sm">
+                                        <p className="text-xs text-gray-400 font-bold uppercase mb-1">Declared Amount</p>
+                                        <p className="text-2xl font-mono font-bold text-emerald-900">Rs {approvalModal.initialDeposit.amount.toLocaleString()}</p>
+                                        <div className="mt-2 text-xs text-amber-700 bg-amber-100 px-2 py-1 rounded inline-block font-bold">
+                                            Status: {approvalModal.initialDeposit.status}
+                                        </div>
+                                    </div>
+
+                                    <div className="border rounded-xl p-3 bg-white hover:border-emerald-500 transition-colors group relative">
+                                        <p className="text-xs font-bold text-gray-500 mb-2">Receipt Proof</p>
+                                        <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
+                                            {approvalModal.initialDeposit.receipt ? (
+                                                <img
+                                                    src={approvalModal.initialDeposit.receipt}
+                                                    className="w-full h-full object-cover"
+                                                    alt="Deposit Receipt"
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = "https://placehold.co/600x400?text=No+Receipt";
+                                                        e.target.parentElement.innerHTML = '<span class="text-xs text-red-400 font-bold">Image Load Failed</span>';
+                                                    }}
+                                                />
+                                            ) : (
+                                                <span className="text-xs text-gray-400 italic">No receipt uploaded</span>
+                                            )}
+                                        </div>
+                                        {approvalModal.initialDeposit.receipt && (
+                                            <a href={approvalModal.initialDeposit.receipt} target="_blank" className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white font-bold text-sm transition-opacity rounded-xl z-10">View Full Receipt</a>
+                                        )}
+                                    </div>
+                                </div>
+                                <p className="text-xs text-gray-500 mt-4 italic">
+                                    * Approving this driver will automatically credit <strong>Rs {approvalModal.initialDeposit.amount.toLocaleString()}</strong> to their wallet.
+                                </p>
+                            </div>
+                        )}
                         <div className="p-6 border-t border-gray-100 bg-gray-50 flex gap-4">
                             <button
                                 onClick={() => handleApprove(approvalModal._id, 'reject')}

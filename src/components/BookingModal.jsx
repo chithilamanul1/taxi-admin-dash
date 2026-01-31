@@ -19,7 +19,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const [loading, setLoading] = useState(false);
     const [pricing, setPricing] = useState([]);
     const [distance, setDistance] = useState(0);
-    const [verifiedCoupon, setVerifiedCoupon] = useState(null);
+    const [verifiedCoupon, setVerifiedCoupon] = useState(initialData.verifiedCoupon || null);
     const [couponInput, setCouponInput] = useState('');
     const [couponLoading, setCouponLoading] = useState(false);
 

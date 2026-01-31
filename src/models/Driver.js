@@ -21,6 +21,12 @@ const driverSchema = new mongoose.Schema({
         policeReport: { type: String },
     },
 
+    initialDeposit: {
+        amount: { type: Number },
+        receipt: { type: String },
+        status: { type: String, enum: ['pending', 'verified', 'rejected'], default: 'pending' }
+    },
+
     verificationStatus: {
         type: String,
         enum: ['unverified', 'pending', 'verified', 'rejected'],

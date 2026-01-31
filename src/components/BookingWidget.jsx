@@ -238,7 +238,27 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const finalTotal = Math.max(0, total - discountAmount);
 
     const handleBook = () => {
-        setBookingInitialData({ pickup: pickup.name, pickupCoords: { lat: pickup.lat, lon: pickup.lon }, dropoff: dropoff.name, dropoffCoords: { lat: dropoff.lat, lon: dropoff.lon }, waypoints, passengerCount, tripType, waitingHours, vehicle, date, time })
+        const verifiedCoupon = appliedOffer ? {
+            code: appliedOffer.name,
+            discountType: appliedOffer.discountPercentage > 0 ? 'percentage' : 'flat',
+            value: appliedOffer.discountPercentage > 0 ? appliedOffer.discountPercentage : appliedOffer.discountAmount
+        } : null;
+
+        setBookingInitialData({
+            pickup: pickup.name,
+            pickupCoords: { lat: pickup.lat, lon: pickup.lon },
+            dropoff: dropoff.name,
+            dropoffCoords: { lat: dropoff.lat, lon: dropoff.lon },
+            waypoints,
+            passengerCount,
+            tripType,
+            waitingHours,
+            vehicle,
+            date,
+            time,
+            couponCode: verifiedCoupon ? verifiedCoupon.code : '',
+            verifiedCoupon
+        })
         setShowModal(true)
     };
 

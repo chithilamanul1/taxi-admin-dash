@@ -180,14 +180,7 @@ export async function initiatePayCorpTransaction(booking, returnUrl) {
                 reqId: data.reqId
             };
         } else {
-            // Fallback for DEV without real keys if not mock
-            if (process.env.NODE_ENV === 'development') {
-                console.log("DEV MODE: Returning mock URL due to error.");
-                return {
-                    success: true,
-                    paymentUrl: `/payment/mock?bookingId=${booking._id}`,
-                }
-            }
+
             return {
                 success: false,
                 message: data.message || "Payment Initialization Failed"
@@ -196,14 +189,6 @@ export async function initiatePayCorpTransaction(booking, returnUrl) {
 
     } catch (error) {
         console.error("PayCorp Init Error:", error);
-        // Fallback for DEV without real keys
-        if (process.env.NODE_ENV === 'development') {
-            console.log("DEV MODE: Returning mock URL due to error.");
-            return {
-                success: true,
-                paymentUrl: `/payment/mock?bookingId=${booking._id}`,
-            }
-        }
         return { success: false, message: error.message };
     }
 }
@@ -253,4 +238,65 @@ export function generateSampathPayload(booking, returnUrl) {
             comment: `Booking #${booking._id.toString().slice(-6)}`
         }
     };
+}
+
+/**
+ * Complete PayCorp Transaction (Server-to-Server)
+ * Endpoint: /rest/service/proxy
+ * Operation: PAYMENT_COMPLETE
+ */
+export async function completePayCorpTransaction(reqId, clientId) {
+    const config = GATEWAY_CONFIG.sampath;
+    const msgId = crypto.randomUUID();
+    const reqDate = new Date().toISOString();
+
+    // Use provided clientId or default
+    const actualClientId = clientId || config.clientId;
+
+    const payload = {
+        version: "1.5",
+        msgId: msgId,
+        operation: "PAYMENT_COMPLETE",
+        requestDate: reqDate,
+        requestData: {
+            clientId: actualClientId,
+            reqid: reqId
+        }
+    };
+
+    console.log("PayCorp Complete Payload:", JSON.stringify(payload, null, 2));
+
+    try {
+        const res = await fetch(config.apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'AUTHTOKEN': config.authToken,
+                'Host': 'sampath.paycorp.lk'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        console.log("PayCorp Complete Response:", data);
+
+        const responseCode = data.responseData?.responseCode || data.responseCode;
+
+        if (responseCode === '00') {
+            return {
+                success: true,
+                data: data
+            };
+        } else {
+            return {
+                success: false,
+                message: data.message || `Payment Failed: ${responseCode}`,
+                data: data
+            };
+        }
+
+    } catch (error) {
+        console.error("PayCorp Complete Error:", error);
+        return { success: false, message: error.message };
+    }
 }

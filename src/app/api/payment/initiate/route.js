@@ -44,6 +44,10 @@ export async function POST(req) {
             const result = await initiatePayCorpTransaction(booking, returnUrl);
 
             if (result.success) {
+                // Save reqId for tracking
+                booking.paymentReference = result.reqId;
+                await booking.save();
+
                 paymentUrl = result.paymentUrl;
             } else {
                 throw new Error(result.message || 'Payment initiation failed');
