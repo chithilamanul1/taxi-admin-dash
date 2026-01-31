@@ -1,18 +1,11 @@
 import { NextResponse } from 'next/server';
-import { getTripAdvisorData } from '@/lib/tripadvisor';
+import { getTripAdvisorData, getTripAdvisorReviews } from '@/lib/tripadvisor';
 
 export async function GET() {
     try {
-        const data = await getTripAdvisorData();
+        const reviews = await getTripAdvisorReviews();
 
-        if (!data) {
-            return NextResponse.json(
-                { success: false, error: 'Failed to fetch data' },
-                { status: 500 }
-            );
-        }
-
-        return NextResponse.json({ success: true, ...data });
+        return NextResponse.json({ success: true, ...data, reviews });
     } catch (error) {
         return NextResponse.json(
             { success: false, error: 'Internal Server Error' },

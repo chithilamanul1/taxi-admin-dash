@@ -43,20 +43,37 @@ const GoogleReviews = () => {
     useEffect(() => {
         const loadReviews = async () => {
             try {
-                // Fetch Google Reviews
-                const googleRes = await fetch('/api/reviews/google');
-                const googleData = await googleRes.json();
-
-                // Fetch Website Reviews (Revives)
-                const websiteRes = await fetch('/api/reviews?homepage=true&limit=20');
-                const websiteData = await websiteRes.json();
+                // Fetch TripAdvisor Reviews
+                const tripRes = await fetch('/api/tripadvisor');
+                const tripData = await tripRes.json();
 
                 let combinedReviews = [...FALLBACK_REVIEWS];
 
                 if (googleData.success && googleData.data?.reviews?.length > 0) {
-                    combinedReviews = [...googleData.data.reviews];
+                    combinedReviews = googleData.data.reviews.map(r => ({ ...r, source: 'google' }));
                     setRating(googleData.data.rating || 4.9);
                     setTotalReviews(googleData.data.totalReviews || 128);
+                }
+
+                if (tripData.success && tripData.reviews?.length > 0) {
+                    const mappedTripAdvisor = tripData.reviews.map(r => ({
+                        author_name: r.user.username,
+                        rating: Number(r.rating),
+                        text: r.text,
+                        relative_time_description: new Date(r.published_date).toLocaleDateString(),
+                        profile_photo_url: r.user.avatar,
+                        source: 'tripadvisor',
+                        source_icon: 'https://static.tacdn.com/img2/brand_refresh/Tripadvisor_lockup_horizontal_secondary_registered.svg'
+                    }));
+
+                    // Interleave reviews for better mix
+                    const mixed = [];
+                    const maxLength = Math.max(combinedReviews.length, mappedTripAdvisor.length);
+                    for (let i = 0; i < maxLength; i++) {
+                        if (combinedReviews[i]) mixed.push(combinedReviews[i]);
+                        if (mappedTripAdvisor[i]) mixed.push(mappedTripAdvisor[i]);
+                    }
+                    combinedReviews = mixed;
                 }
 
                 if (websiteData.success && websiteData.reviews?.length > 0) {
@@ -66,7 +83,8 @@ const GoogleReviews = () => {
                         rating: r.rating,
                         text: r.comment,
                         relative_time_description: 'Verified Customer',
-                        profile_photo_url: r.userImage || null
+                        profile_photo_url: r.userImage || null,
+                        source: 'website'
                     }));
                     combinedReviews = [...combinedReviews, ...mappedWebsiteReviews];
                 }
@@ -161,15 +179,28 @@ const GoogleReviews = () => {
                             <Quote size={40} className="absolute top-6 right-6 text-emerald-100 group-hover:text-emerald-200 transition-colors" />
 
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="w-12 h-12 rounded-full overflow-hidden bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-lg">
-                                    {review.profile_photo_url ? (
-                                        <img src={review.profile_photo_url} alt={review.author_name} className="w-full h-full object-cover" />
-                                    ) : (
-                                        review.author_name.charAt(0)
+                                <div className="relative">
+                                    <div className="w-12 h-12 rounded-full overflow-hidden bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-lg">
+                                        {review.profile_photo_url ? (
+                                            <img src={review.profile_photo_url} alt={review.author_name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            review.author_name.charAt(0)
+                                        )}
+                                    </div>
+                                    {/* Source Badge */}
+                                    {review.source === 'tripadvisor' && (
+                                        <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-sm border border-slate-100 w-6 h-6 flex items-center justify-center">
+                                            <img src="https://static.tacdn.com/img2/brand_refresh/Tripadvisor_lockup_horizontal_secondary_registered.svg" alt="TA" className="w-full h-full object-contain" />
+                                        </div>
+                                    )}
+                                    {review.source === 'google' && (
+                                        <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-sm border border-slate-100 w-6 h-6 flex items-center justify-center">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="G" className="w-full h-full object-contain" />
+                                        </div>
                                     )}
                                 </div>
                                 <div>
-                                    <h4 className="font-bold text-slate-900">{review.author_name}</h4>
+                                    <h4 className="font-bold text-slate-900 text-sm">{review.author_name}</h4>
                                     <p className="text-xs text-slate-500">{review.relative_time_description}</p>
                                 </div>
                             </div>
