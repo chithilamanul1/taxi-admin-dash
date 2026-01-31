@@ -7,10 +7,14 @@ export default function TripMap({ pickup, dropoff, waypoints = [] }) {
     const mapRef = useRef(null);
     const [directionsRenderer, setDirectionsRenderer] = useState(null);
     const [directionsService, setDirectionsService] = useState(null);
+    const [mapInitialized, setMapInitialized] = useState(false);
 
+    // Initialize map when coordinates are available and ref exists
     useEffect(() => {
+        if (!pickup?.lat || !dropoff?.lat || mapInitialized) return;
+
         loadGoogleMapsScript().then(() => {
-            if (window.google && !directionsRenderer && mapRef.current) {
+            if (window.google && mapRef.current && !directionsRenderer) {
                 const map = new window.google.maps.Map(mapRef.current, {
                     zoom: 7,
                     center: { lat: 7.8731, lng: 80.7718 }, // Sri Lanka Center
@@ -36,9 +40,10 @@ export default function TripMap({ pickup, dropoff, waypoints = [] }) {
 
                 setDirectionsRenderer(dr);
                 setDirectionsService(new window.google.maps.DirectionsService());
+                setMapInitialized(true);
             }
         });
-    }, []);
+    }, [pickup?.lat, dropoff?.lat, mapInitialized, directionsRenderer]);
 
     useEffect(() => {
         if (directionsService && directionsRenderer && pickup?.lat && dropoff?.lat) {
