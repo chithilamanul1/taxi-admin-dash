@@ -29,7 +29,7 @@ export async function POST(req) {
 
         // 2. Generate payment URL based on gateway
         let paymentUrl;
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
 
         if (gateway === 'mock') {
             // Mock payment: Redirect to our mock payment page

@@ -326,10 +326,34 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         )}
                                     </button>
                                 </div>
-                                <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="text-amber-900 dark:text-amber-100 text-xs font-bold hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 px-6 py-3 rounded-xl border border-amber-200 dark:border-amber-700/50 w-full sm:w-auto justify-center whitespace-nowrap shadow-sm hover:shadow-md hover:bg-amber-200 dark:hover:bg-amber-900/50">
-                                    {isLocating ? <Loader2 size={14} className="animate-spin text-amber-600" /> : <Zap size={14} className="fill-amber-500 text-amber-600" />}
-                                    Auto Detect Location
-                                </button>
+
+                                <div className="flex items-center gap-2 w-full sm:w-auto">
+                                    {/* Currency Selector */}
+                                    <div className="relative group z-30">
+                                        <button className="flex items-center gap-1 bg-white dark:bg-slate-800 border border-emerald-200 dark:border-slate-700 rounded-xl px-3 py-3 text-xs font-bold text-slate-700 dark:text-slate-300 hover:border-emerald-500 transition-colors shadow-sm">
+                                            <span>{SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag}</span>
+                                            <span>{currency}</span>
+                                            <ChevronDown size={14} />
+                                        </button>
+                                        <div className="absolute top-full right-0 mt-2 w-32 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden hidden group-hover:block animate-fade-in">
+                                            {SUPPORTED_CURRENCIES.map(c => (
+                                                <button
+                                                    key={c.code}
+                                                    onClick={() => changeCurrency(c.code)}
+                                                    className={`w-full text-left px-4 py-3 text-xs font-bold flex items-center gap-2 hover:bg-emerald-50 dark:hover:bg-slate-700 transition-colors ${currency === c.code ? 'text-emerald-600 bg-emerald-50 dark:bg-slate-700' : 'text-slate-600 dark:text-slate-400'}`}
+                                                >
+                                                    <span>{c.flag}</span>
+                                                    <span>{c.code}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-amber-900 dark:text-amber-100 text-xs font-bold hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 px-4 py-3 rounded-xl border border-amber-200 dark:border-amber-700/50 justify-center whitespace-nowrap shadow-sm hover:shadow-md hover:bg-amber-200 dark:hover:bg-amber-900/50">
+                                        {isLocating ? <Loader2 size={14} className="animate-spin text-amber-600" /> : <Zap size={14} className="fill-amber-500 text-amber-600" />}
+                                        Auto Detect
+                                    </button>
+                                </div>
                             </div>
 
                             <div className="space-y-3">
@@ -340,6 +364,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     icon={MapPin}
                                     disabled={activeTab === 'pickup'}
                                     onChange={(val) => setPickupSearch(val)}
+                                    zIndex="z-50"
                                     onSelect={(loc) => {
                                         setPickup({ name: loc.address, lat: loc.lat, lon: loc.lon });
                                         setPickupSearch(loc.address);
@@ -411,6 +436,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 <LocationInput
                                                     placeholder="Add Stop (Search City)"
                                                     icon={Navigation}
+                                                    zIndex="z-40"
                                                     onSelect={(loc) => {
                                                         setWaypoints([...waypoints, { name: loc.address, lat: loc.lat, lon: loc.lon, waitingTime: 0 }]);
                                                         setWaypointSearches([]);
@@ -444,6 +470,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     placeholder="Drop-off Location"
                                     value={dropoffSearch}
                                     icon={MapPin}
+                                    zIndex="z-30"
                                     disabled={activeTab === 'drop'}
                                     onChange={(val) => setDropoffSearch(val)}
                                     onSelect={(loc) => {
@@ -694,7 +721,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <div className="flex flex-col">
                                         <span className="text-[10px] font-bold text-emerald-900/40 dark:text-white/40 uppercase tracking-widest">Grand Total</span>
                                         <span className="text-4xl font-black text-emerald-900 dark:text-white">
-                                            {convertPrice(finalTotal).symbol} {convertPrice(finalTotal).value.toLocaleString()}
+                                            {finalTotal > 0 ? (
+                                                <>
+                                                    {convertPrice(finalTotal).symbol} {convertPrice(finalTotal).value.toLocaleString()}
+                                                </>
+                                            ) : (
+                                                <span className="text-slate-300 dark:text-slate-700">---</span>
+                                            )}
                                         </span>
                                         {/* Secondary Currency Display */}
                                         <div className="text-sm font-bold text-emerald-900/50 dark:text-white/50 mt-1">

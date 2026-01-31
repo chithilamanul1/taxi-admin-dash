@@ -16,7 +16,7 @@ export async function GET(request) {
 
         console.log('PayCorp Callback (GET):', { reqid, clientRef });
 
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
 
         // 1. Validate Input
         if (!reqid) {
