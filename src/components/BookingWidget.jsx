@@ -592,27 +592,38 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         };
                                                         setAppliedOffer(couponOffer);
                                                     }}
-                                                    className={`group relative flex items-center gap-4 p-3 rounded-2xl border-2 border-dashed transition-all hover:shadow-lg hover:-translate-y-0.5 text-left ${appliedOffer?.name === c.code ? 'border-emerald-500 bg-emerald-50/50' : 'border-emerald-900/10 bg-white hover:border-emerald-500/30'}`}
+                                                    className={`group relative flex items-center justify-between gap-4 p-5 rounded-[2rem] border-2 border-dashed transition-all hover:shadow-2xl hover:-translate-y-1 text-left ${appliedOffer?.name === c.code ? 'border-emerald-500 bg-emerald-50/80 shadow-emerald-500/10' : 'border-emerald-900/10 bg-white hover:border-emerald-500/40 shadow-xl shadow-slate-200/50 dark:shadow-none dark:bg-slate-900/50'}`}
                                                 >
-                                                    <div className="w-12 h-12 rounded-xl bg-emerald-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
-                                                        {c.imageUrl ? (
-                                                            <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" />
-                                                        ) : (
-                                                            <Percent size={20} className="text-emerald-600" />
-                                                        )}
-                                                    </div>
-                                                    <div className="flex-1 min-w-0">
-                                                        <div className="flex items-center justify-between">
-                                                            <span className="text-xs font-black text-emerald-900 group-hover:text-emerald-600 transition-colors uppercase truncate">{c.code}</span>
-                                                            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded uppercase">
-                                                                {c.value}{c.discountType === 'percentage' ? '%' : ''} OFF
-                                                            </span>
+                                                    <div className="flex items-center gap-4 min-w-0">
+                                                        <div className="w-14 h-14 rounded-2xl bg-amber-100 dark:bg-amber-900/30 flex-shrink-0 flex items-center justify-center overflow-hidden border border-amber-200/50">
+                                                            {c.imageUrl ? (
+                                                                <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" />
+                                                            ) : (
+                                                                <span className="text-xl font-bold text-amber-600">%</span>
+                                                            )}
                                                         </div>
-                                                        <p className="text-[10px] text-slate-500 font-medium line-clamp-1 mt-0.5">{c.description || 'Promotional Discount'}</p>
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="flex flex-col">
+                                                                <span className="text-2xl font-black text-slate-900 dark:text-white leading-tight">
+                                                                    {c.value}{c.discountType === 'percentage' ? '%' : ''}
+                                                                    <span className="text-sm font-bold text-slate-400 ml-1 uppercase">OFF</span>
+                                                                </span>
+                                                                <div className="flex items-center gap-2 mt-2">
+                                                                    <div className="px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center gap-2">
+                                                                        <span className="text-xs font-black text-amber-700 dark:text-amber-500 uppercase tracking-wider">{c.code}</span>
+                                                                        <div className="h-3 w-px bg-slate-300 dark:bg-white/10"></div>
+                                                                        <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1 group-hover:text-emerald-500 transition-colors">
+                                                                            {appliedOffer?.name === c.code ? 'Applied' : 'Apply'}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
+
                                                     {appliedOffer?.name === c.code && (
-                                                        <div className="absolute -top-2 -right-2 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
-                                                            <Check size={14} />
+                                                        <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-emerald-500/30 animate-pulse">
+                                                            <Check size={18} strokeWidth={3} />
                                                         </div>
                                                     )}
                                                 </button>

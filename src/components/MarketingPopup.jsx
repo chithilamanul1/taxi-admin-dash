@@ -36,7 +36,7 @@ export default function MarketingPopup({ offer, onClose }) {
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleClose}></div>
 
             {/* Modal */}
-            <div className={`relative w-full max-w-sm bg-slate-900 rounded-[2rem] overflow-hidden shadow-2xl transform transition-all duration-500 ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-10'}`}>
+            <div className={`relative w-full max-w-sm bg-slate-900 rounded-[3rem] overflow-hidden shadow-2xl transform transition-all duration-500 ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-10'}`}>
 
                 {/* Close Button */}
                 <button onClick={handleClose} className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors">
@@ -68,27 +68,28 @@ export default function MarketingPopup({ offer, onClose }) {
 
                     {/* Coupon Card */}
                     {offer.code && (
-                        <div className="bg-white rounded-2xl p-4 flex items-center justify-between shadow-lg relative z-10">
+                        <div className="bg-white rounded-[2rem] p-5 flex items-center justify-between shadow-2xl relative z-10 border-2 border-dashed border-emerald-900/10">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 font-black text-xl">
+                                <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 font-black text-2xl border border-amber-200/50">
                                     %
                                 </div>
                                 <div className="text-left">
-                                    <div className="text-2xl font-black text-slate-900 leading-none">
-                                        {offer.discountPercentage || 20}% <span className="text-xs font-bold text-slate-500 uppercase">OFF</span>
+                                    <div className="text-3xl font-black text-slate-900 leading-none">
+                                        {offer.discountPercentage || 20}<span className="text-lg">%</span>
+                                        <span className="text-xs font-bold text-slate-400 ml-1 uppercase">OFF</span>
                                     </div>
-                                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Discount Code</div>
+                                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Discount Code</div>
                                 </div>
                             </div>
 
-                            <div className="bg-slate-50 border border-slate-200 rounded-xl pl-3 pr-1 py-1 flex items-center gap-2">
-                                <span className="text-xs font-bold text-slate-700 font-mono uppercase">{offer.code}</span>
+                            <div className="bg-slate-50 border border-slate-200 rounded-2xl pl-4 pr-1.5 py-1.5 flex items-center gap-3">
+                                <span className="text-xs font-black text-slate-800 font-mono uppercase tracking-wider">{offer.code}</span>
                                 <button
                                     onClick={handleCopy}
-                                    className={`px-2 py-1.5 border rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 ${copied ? 'bg-emerald-50 border-emerald-200 text-emerald-600' : 'bg-white border-slate-200 text-slate-500 hover:text-emerald-600 hover:border-emerald-200'}`}
+                                    className={`px-3 py-2 border rounded-xl text-[10px] font-bold transition-all flex items-center gap-1.5 shadow-sm ${copied ? 'bg-emerald-50 border-emerald-500 text-emerald-600' : 'bg-white border-slate-200 text-slate-600 hover:text-emerald-600 hover:border-emerald-500'}`}
                                 >
                                     {copied ? 'Copied' : 'Copy'}
-                                    {copied && <Check size={10} />}
+                                    {copied && <Check size={12} strokeWidth={3} />}
                                 </button>
                             </div>
                         </div>
