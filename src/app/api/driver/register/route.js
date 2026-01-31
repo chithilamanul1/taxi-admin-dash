@@ -28,30 +28,38 @@ export async function POST(req) {
         }
 
         // 3. Create Driver Record
-        // In a real app, 'data.documents' keys would be S3/Cloudinary URLs here
         const newDriver = await Driver.create({
             ...data,
-            name: data.name,
+            name: data.name || 'Unknown Driver',
             phone: data.phone,
-            email: data.email,
+            email: data.email || undefined,
             nic: data.nic,
-            address: data.address,
+            address: data.address || '',
 
-            vehicleType: data.vehicleType,
-            vehicleModel: data.vehicleModel,
+            vehicleType: data.vehicleType || 'sedan',
+            vehicleModel: data.vehicleModel || '',
             vehicleNumber: data.vehicleNumber,
-            vehicleYear: data.vehicleYear,
+            vehicleYear: data.vehicleYear || '',
 
             bankDetails: {
-                bankName: data.bankName,
-                branch: data.branch,
-                accountNumber: data.accountNumber,
-                accountName: data.accountName
+                bankName: data.bankName || '',
+                branch: data.branch || '',
+                accountNumber: data.accountNumber || '',
+                accountName: data.accountName || ''
             },
 
-            documents: data.documents, // Assuming frontend sends object with URL strings
+            // Ensure documents are saved even if they come in a flat structure or nested
+            documents: {
+                licenseFront: data.documents?.licenseFront || data.licenseFront || '',
+                licenseBack: data.documents?.licenseBack || data.licenseBack || '',
+                nicFront: data.documents?.nicFront || data.nicFront || '',
+                nicBack: data.documents?.nicBack || data.nicBack || '',
+                vehicleFront: data.documents?.vehicleFront || data.vehicleFront || '',
+                vehicleBack: data.documents?.vehicleBack || data.vehicleBack || '',
+                depositReceipt: data.documents?.depositReceipt || data.depositReceipt || '',
+            },
 
-            verificationStatus: 'pending', // Needs admin approval to become 'verified' and get a User account
+            verificationStatus: 'pending',
             status: 'free',
             isOnline: false
         });

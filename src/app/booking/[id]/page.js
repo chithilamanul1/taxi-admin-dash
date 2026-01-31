@@ -1,7 +1,7 @@
 import dbConnect from '@/lib/db';
 import Booking from '@/models/Booking';
 import { notFound } from 'next/navigation';
-import { CheckCircle, MapPin, Calendar, Clock, Car } from 'lucide-react';
+import { CheckCircle, MapPin, Calendar, Clock, Car, Star, Phone, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import BookingActions from '@/components/BookingActions';
 import TrackingMap from '@/components/TrackingMap';
@@ -50,13 +50,68 @@ export default async function BookingStatusPage({ params }) {
 
                 <div className="p-8 space-y-8">
                     {/* Status Banner */}
-                    <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3 items-start">
-                        <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center shrink-0 mt-0.5"><div className="w-2 h-2 bg-blue-500 rounded-full"></div></div>
-                        <div>
-                            <p className="text-blue-900 font-bold text-sm">Processing Request</p>
-                            <p className="text-blue-700/80 text-xs mt-1">We have received your booking. Our team will assign a driver and contact you shortly via WhatsApp/Phone.</p>
+                    {/* Status Banner */}
+                    {!booking.driver ? (
+                        <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 flex gap-3 items-start">
+                            <div className="w-5 h-5 bg-amber-100 rounded-full flex items-center justify-center shrink-0 mt-0.5"><div className="w-2 h-2 bg-amber-500 rounded-full"></div></div>
+                            <div>
+                                <p className="text-amber-900 font-bold text-sm">Processing Your Request</p>
+                                <p className="text-amber-700/80 text-xs mt-1">We have received your booking. A professional driver will be assigned shortly. You'll receive a WhatsApp notification once assigned.</p>
+                            </div>
                         </div>
-                    </div>
+                    ) : (
+                        <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex gap-3 items-start">
+                            <div className="w-5 h-5 bg-emerald-100 rounded-full flex items-center justify-center shrink-0 mt-0.5"><div className="w-2 h-2 bg-emerald-500 rounded-full"></div></div>
+                            <div>
+                                <p className="text-emerald-900 font-bold text-sm">Driver Assigned & Ready</p>
+                                <p className="text-emerald-700/80 text-xs mt-1">Your journey is confirmed. {booking.driver.name} has been assigned to your trip.</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Driver Profile Section (Premium Look) */}
+                    {booking.driver && (
+                        <div className="bg-white border border-emerald-900/10 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform"></div>
+                            <div className="flex items-center gap-5 relative z-10">
+                                <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg border-2 border-white">
+                                    {booking.driver.name?.[0]}
+                                </div>
+                                <div className="space-y-1">
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Verified Chauffeur</p>
+                                        <div className="flex items-center gap-1 text-amber-500">
+                                            <Star size={10} fill="currentColor" />
+                                            <span className="text-[10px] font-bold">{booking.driver.ratings || 5.0}</span>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-xl font-black text-emerald-900 leading-tight">{booking.driver.name}</h3>
+                                    <div className="flex items-center gap-3 text-xs text-slate-500 font-bold">
+                                        <span className="flex items-center gap-1"><CheckCircle size={12} className="text-emerald-500" /> {booking.driver.totalRides || 0}+ Trips</span>
+                                        <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
+                                        <span>English Speaking</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex flex-col items-center md:items-end gap-3 relative z-10 w-full md:w-auto border-t md:border-t-0 pt-4 md:pt-0 mt-4 md:mt-0">
+                                <div className="flex flex-col items-center md:items-end">
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Vehicle Plate</p>
+                                    <div className="bg-slate-900 text-white px-4 py-2 rounded-xl font-mono font-bold tracking-tighter text-lg shadow-xl shadow-slate-900/20 border border-slate-800">
+                                        {booking.driver.vehicleNumber}
+                                    </div>
+                                </div>
+                                <div className="flex gap-2 w-full">
+                                    <a href={`tel:${booking.driver.phone}`} className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-slate-100 text-slate-700 p-3 rounded-xl font-bold text-sm hover:bg-slate-200 transition-all">
+                                        <Phone size={16} />
+                                    </a>
+                                    <a href={`https://wa.me/${booking.driver.phone.replace(/[^0-9]/g, '')}`} target="_blank" className="flex-[3] md:flex-none flex items-center justify-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-500/20">
+                                        <MessageSquare size={16} />
+                                        WhatsApp
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Live Tracking Map */}
                     <TrackingMap

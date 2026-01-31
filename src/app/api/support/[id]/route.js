@@ -48,9 +48,11 @@ export async function PUT(req, { params }) {
 
         // Update logic
         if (message) {
+            const sender = isAdmin ? 'admin' : 'user';
+
             ticket.messages.push({
-                sender: isAdmin ? 'admin' : 'user',
-                message,
+                sender: sender,
+                message: message,
                 timestamp: new Date()
             });
             ticket.lastUpdated = new Date();

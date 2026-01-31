@@ -55,19 +55,30 @@ export async function POST(req) {
 
         const driver = new Driver({
             user: user._id, // Link to User
-            name: data.name, // Redundant but good for quick access
+            name: data.name,
             phone: data.phone,
-            email: data.email || '',
+            email: data.email || undefined, // Use undefined so sparse index works
+            nic: data.nic || undefined, // Use undefined so sparse index works
             vehicleType: data.vehicleType,
             vehicleNumber: data.vehicleNumber,
             isOnline: false,
-            status: 'free'
+            status: 'free',
+            verificationStatus: 'verified'
         });
 
         await driver.save();
         return NextResponse.json(driver, { status: 201 });
     } catch (error) {
         console.error('Error creating driver:', error);
+
+        // Handle MongoDB Duplicate Key Error (E11000)
+        if (error.code === 11000) {
+            const field = Object.keys(error.keyPattern)[0];
+            return NextResponse.json({
+                error: `A driver with this ${field} already exists.`
+            }, { status: 400 });
+        }
+
         return NextResponse.json({ error: error.message || 'Failed to create driver' }, { status: 500 });
     }
 }

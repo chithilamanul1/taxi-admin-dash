@@ -15,6 +15,7 @@ const DriversFleetView = ({ bookings = [] }) => {
     const [topupReceipt, setTopupReceipt] = useState(null); // File
     const [receiptPreview, setReceiptPreview] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [lightbox, setLightbox] = useState({ open: false, url: '', title: '' });
     const [newDriver, setNewDriver] = useState({
         name: '',
         phone: '',
@@ -202,6 +203,45 @@ const DriversFleetView = ({ bookings = [] }) => {
 
     if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-emerald-600" size={32} /></div>;
 
+    // Lightbox Component
+    const Lightbox = ({ url, title, onClose }) => (
+        <div
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center p-4 md:p-12 animate-in fade-in duration-300"
+            onClick={onClose}
+        >
+            <button
+                onClick={onClose}
+                className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-[110]"
+            >
+                <X size={28} />
+            </button>
+            <div
+                className="relative max-w-5xl w-full h-full flex flex-col items-center justify-center gap-4"
+                onClick={e => e.stopPropagation()}
+            >
+                <div className="text-center">
+                    <h3 className="text-white text-xl font-bold mb-1">{title}</h3>
+                    <p className="text-white/50 text-xs uppercase tracking-widest font-bold">Image Preview</p>
+                </div>
+                <div className="relative w-full h-[80vh] flex items-center justify-center">
+                    <img
+                        src={url}
+                        alt={title}
+                        className="max-w-full max-h-full object-contain rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-500"
+                    />
+                </div>
+                <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-full text-sm font-bold backdrop-blur-sm transition-all border border-white/10"
+                >
+                    Open in New Tab
+                </a>
+            </div>
+        </div>
+    );
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -225,8 +265,11 @@ const DriversFleetView = ({ bookings = [] }) => {
                             {pendingDrivers.length > 0 && <span className="bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">{pendingDrivers.length}</span>}
                         </button>
                     </div>
-                    <button onClick={() => setShowAddModal(true)} className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-xl font-bold hover:bg-emerald-700 transition-colors">
-                        <Plus size={18} /> Add Driver
+                    <button
+                        onClick={() => setShowAddModal(true)}
+                        className="flex items-center gap-2 bg-orange-600 text-white px-6 py-2.5 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-orange-700 transition-all shadow-lg shadow-orange-600/20 active:scale-95 shrink-0"
+                    >
+                        <Plus size={18} strokeWidth={3} /> Add Driver
                     </button>
                 </div>
             </div>
@@ -242,23 +285,23 @@ const DriversFleetView = ({ bookings = [] }) => {
                         </div>
                     ) : (
                         pendingDrivers.map(driver => (
-                            <div key={driver._id} className="bg-white p-6 rounded-2xl shadow-sm border border-orange-100 flex items-center justify-between">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-orange-50 rounded-full flex items-center justify-center text-orange-600 font-bold text-lg">
+                            <div key={driver._id} className="bg-white p-6 rounded-3xl shadow-sm border border-orange-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-all hover:shadow-md">
+                                <div className="flex items-center gap-4 flex-1">
+                                    <div className="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600 font-black text-2xl border border-orange-100 shadow-sm shrink-0">
                                         {driver.name.charAt(0)}
                                     </div>
-                                    <div>
-                                        <h4 className="font-bold text-emerald-900">{driver.name}</h4>
-                                        <div className="flex gap-3 text-xs text-gray-500 mt-1">
-                                            <span className="flex items-center gap-1"><Phone size={12} /> {driver.phone}</span>
-                                            <span className="flex items-center gap-1"><Car size={12} /> {driver.vehicleModel} ({driver.vehicleNumber})</span>
+                                    <div className="min-w-0">
+                                        <h4 className="font-black text-xl text-emerald-900 truncate">{driver.name}</h4>
+                                        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 mt-1 font-bold">
+                                            <span className="flex items-center gap-1.5"><Phone size={14} className="text-orange-500" /> {driver.phone}</span>
+                                            <span className="flex items-center gap-1.5"><Car size={14} className="text-orange-500" /> {driver.vehicleModel} <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded uppercase">{driver.vehicleNumber}</span></span>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex gap-3">
+                                <div className="w-full md:w-auto shrink-0 mt-2 md:mt-0">
                                     <button
                                         onClick={() => setApprovalModal(driver)}
-                                        className="px-4 py-2 bg-emerald-900 text-white rounded-lg text-xs font-bold uppercase tracking-wide hover:bg-emerald-800 transition-colors"
+                                        className="w-full md:w-auto px-8 py-4 bg-slate-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-emerald-900 transition-all shadow-xl shadow-slate-900/10 active:scale-95"
                                     >
                                         Review Application
                                     </button>
@@ -369,27 +412,36 @@ const DriversFleetView = ({ bookings = [] }) => {
                                 <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Documents</h4>
                                 <div className="grid grid-cols-2 gap-4">
                                     {approvalModal.documents && Object.entries(approvalModal.documents).map(([key, url]) => (
-                                        <div key={key} className="border rounded-xl p-3 hover:border-emerald-500 transition-colors cursor-pointer group relative">
+                                        <div
+                                            key={key}
+                                            className="border rounded-xl p-3 hover:border-emerald-500 transition-colors cursor-pointer group relative bg-slate-50/50"
+                                            onClick={() => url && setLightbox({ open: true, url, title: key.replace(/([A-Z])/g, ' $1').trim() })}
+                                        >
                                             <p className="text-xs font-bold text-gray-500 capitalize mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</p>
-                                            {/* In production, use real images via next/image */}
-                                            <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
+                                            <div className="aspect-video bg-white rounded-lg flex items-center justify-center overflow-hidden border border-gray-100 shadow-inner">
                                                 {url ? (
                                                     <img
                                                         src={url}
                                                         alt={key}
-                                                        className="w-full h-full object-cover"
+                                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                                         onError={(e) => {
                                                             e.target.onerror = null;
-                                                            e.target.src = "https://placehold.co/600x400?text=File+Not+Found"; // Or a local placeholder
-                                                            e.target.parentElement.innerHTML = '<span class="text-xs text-red-400 font-bold">Image Load Failed</span>';
+                                                            e.target.src = "https://placehold.co/600x400?text=File+Not+Found";
+                                                            e.target.className = "w-full h-full object-contain p-4 opacity-50";
                                                         }}
                                                     />
                                                 ) : (
-                                                    <span className="text-xs text-gray-400 italic">No file</span>
+                                                    <div className="flex flex-col items-center gap-1 opacity-20">
+                                                        <FileText size={20} />
+                                                        <span className="text-[10px] uppercase font-black">No file</span>
+                                                    </div>
                                                 )}
                                             </div>
                                             {url && (
-                                                <a href={url} target="_blank" className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white font-bold text-sm transition-opacity rounded-xl z-10">View Link</a>
+                                                <div className="absolute inset-0 bg-emerald-900/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white font-bold text-xs transition-opacity rounded-xl z-10 backdrop-blur-[2px]">
+                                                    <Plus size={20} className="mb-1" />
+                                                    Click to view
+                                                </div>
                                             )}
                                         </div>
                                     ))}
@@ -411,26 +463,35 @@ const DriversFleetView = ({ bookings = [] }) => {
                                         </div>
                                     </div>
 
-                                    <div className="border rounded-xl p-3 bg-white hover:border-emerald-500 transition-colors group relative">
+                                    <div
+                                        className="border rounded-xl p-3 bg-white hover:border-emerald-500 transition-colors group relative cursor-pointer"
+                                        onClick={() => approvalModal.initialDeposit.receipt && setLightbox({ open: true, url: approvalModal.initialDeposit.receipt, title: 'Initial Deposit Receipt' })}
+                                    >
                                         <p className="text-xs font-bold text-gray-500 mb-2">Receipt Proof</p>
-                                        <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
+                                        <div className="aspect-video bg-gray-50 rounded-lg flex items-center justify-center overflow-hidden border border-gray-100">
                                             {approvalModal.initialDeposit.receipt ? (
                                                 <img
                                                     src={approvalModal.initialDeposit.receipt}
-                                                    className="w-full h-full object-cover"
+                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                                     alt="Deposit Receipt"
                                                     onError={(e) => {
                                                         e.target.onerror = null;
                                                         e.target.src = "https://placehold.co/600x400?text=No+Receipt";
-                                                        e.target.parentElement.innerHTML = '<span class="text-xs text-red-400 font-bold">Image Load Failed</span>';
+                                                        e.target.className = "w-full h-full object-contain p-4 opacity-50";
                                                     }}
                                                 />
                                             ) : (
-                                                <span className="text-xs text-gray-400 italic">No receipt uploaded</span>
+                                                <div className="flex flex-col items-center gap-1 opacity-20 text-gray-400">
+                                                    <FileText size={20} />
+                                                    <span className="text-[10px] uppercase font-black text-center px-4">No receipt uploaded</span>
+                                                </div>
                                             )}
                                         </div>
                                         {approvalModal.initialDeposit.receipt && (
-                                            <a href={approvalModal.initialDeposit.receipt} target="_blank" className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white font-bold text-sm transition-opacity rounded-xl z-10">View Full Receipt</a>
+                                            <div className="absolute inset-0 bg-emerald-900/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white font-bold text-xs transition-opacity rounded-xl z-10 backdrop-blur-[2px]">
+                                                <Plus size={20} className="mb-1" />
+                                                Click to view
+                                            </div>
                                         )}
                                     </div>
                                 </div>
@@ -547,6 +608,14 @@ const DriversFleetView = ({ bookings = [] }) => {
                         </form>
                     </div>
                 </div>
+            )}
+            {/* Lightbox Rendering */}
+            {lightbox.open && (
+                <Lightbox
+                    url={lightbox.url}
+                    title={lightbox.title}
+                    onClose={() => setLightbox({ ...lightbox, open: false })}
+                />
             )}
         </div>
     );

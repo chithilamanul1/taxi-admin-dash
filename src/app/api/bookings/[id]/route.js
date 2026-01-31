@@ -178,7 +178,9 @@ export async function GET(request, { params }) {
 
         const { id } = await params;
 
-        const booking = await Booking.findById(id).lean();
+        const booking = await Booking.findById(id)
+            .populate('driver', 'name phone vehicleNumber vehicleType vehicleModel ratings totalRides')
+            .lean();
 
         if (!booking) {
             return NextResponse.json(
