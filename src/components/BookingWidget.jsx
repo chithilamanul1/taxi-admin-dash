@@ -97,7 +97,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [hasNameBoard, setHasNameBoard] = useState(false)
     const [couponCode, setCouponCode] = useState('')
     const [isLocating, setIsLocating] = useState(false)
-    const { convertPrice, currency, changeCurrency, SUPPORTED_CURRENCIES } = useCurrency()
+    const { convertPrice, currency, changeCurrency, SUPPORTED_CURRENCIES, rates } = useCurrency()
 
     const [isBookingOpen, setIsBookingOpen] = useState(false)
     const [showModal, setShowModal] = useState(false)
@@ -230,7 +230,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         setAppliedOffer(match || null);
     }, [dropoff, activeOffers]);
 
-    const { total } = calculatePrice(distance, vehicle, tripType, vehiclePricing, waitingHours, hasNameBoard, couponCode);
+
+    // Calculate total waiting hours including waypoints
+    const totalWaitingHours = waitingHours + waypoints.reduce((sum, wp) => sum + (wp.waitingTime || 0), 0);
+    const { total } = calculatePrice(distance, vehicle, tripType, vehiclePricing, totalWaitingHours, hasNameBoard, couponCode);
 
     const discountAmount = appliedOffer
         ? (appliedOffer.discountAmount || (total * (appliedOffer.discountPercentage / 100)))
@@ -252,7 +255,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             waypoints,
             passengerCount,
             tripType,
-            waitingHours,
+            waitingHours: totalWaitingHours,
             vehicle,
             date,
             time,
@@ -346,17 +349,38 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 {/* Waypoints List */}
                                 {waypoints.map((wp, idx) => (
-                                    <div key={idx} className="relative group animate-slide-up">
-                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-900/40 dark:text-emerald-400/40"><Navigation size={18} /></div>
+                                    <div key={idx} className="relative group animate-slide-up bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border-2 border-emerald-200 dark:border-emerald-800/50 p-1 flex items-center">
+                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-900/40 dark:text-emerald-400/40 pointer-events-none z-10">
+                                            <Navigation size={18} />
+                                        </div>
                                         <input
                                             type="text"
                                             readOnly
                                             value={wp.name}
-                                            className="w-full pl-16 pr-12 h-14 rounded-2xl text-sm font-bold bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-200 dark:border-emerald-800/50 text-emerald-900 dark:text-white"
+                                            className="flex-1 pl-12 pr-4 h-12 bg-transparent border-none text-sm font-bold text-emerald-900 dark:text-white outline-none"
                                         />
+
+                                        {/* Per-Waypoint Waiting Time Dropdown */}
+                                        <div className="flex items-center gap-1 border-l border-emerald-900/10 dark:border-white/10 px-2">
+                                            <Clock size={14} className="text-emerald-900/40 dark:text-white/40" />
+                                            <select
+                                                value={wp.waitingTime || 0}
+                                                onChange={(e) => {
+                                                    const newWps = [...waypoints];
+                                                    newWps[idx].waitingTime = parseInt(e.target.value);
+                                                    setWaypoints(newWps);
+                                                }}
+                                                className="bg-transparent text-xs font-bold text-emerald-900 dark:text-white outline-none cursor-pointer w-16 appearance-none"
+                                            >
+                                                {[0, 1, 2, 3, 4, 5, 6].map(h => (
+                                                    <option key={h} value={h}>{h} hr{h !== 1 ? 's' : ''}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+
                                         <button
                                             onClick={() => setWaypoints(prev => prev.filter((_, i) => i !== idx))}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-red-500 transition-colors p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"
+                                            className="ml-2 mr-2 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                                             aria-label="Remove stop"
                                         >
                                             <X size={16} />
@@ -388,7 +412,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     placeholder="Add Stop (Search City)"
                                                     icon={Navigation}
                                                     onSelect={(loc) => {
-                                                        setWaypoints([...waypoints, { name: loc.address, lat: loc.lat, lon: loc.lon }]);
+                                                        setWaypoints([...waypoints, { name: loc.address, lat: loc.lat, lon: loc.lon, waitingTime: 0 }]);
                                                         setWaypointSearches([]);
                                                     }}
                                                 />
@@ -672,6 +696,16 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         <span className="text-4xl font-black text-emerald-900 dark:text-white">
                                             {convertPrice(finalTotal).symbol} {convertPrice(finalTotal).value.toLocaleString()}
                                         </span>
+                                        {/* Secondary Currency Display */}
+                                        <div className="text-sm font-bold text-emerald-900/50 dark:text-white/50 mt-1">
+                                            {(() => {
+                                                const secCode = currency === 'LKR' ? 'USD' : 'LKR';
+                                                const secRate = rates ? (rates[secCode] || 1) : 1;
+                                                const secValue = Math.ceil(finalTotal * secRate);
+                                                const secSymbol = SUPPORTED_CURRENCIES.find(c => c.code === secCode)?.symbol || secCode;
+                                                return `approx. ${secSymbol} ${secValue.toLocaleString()}`;
+                                            })()}
+                                        </div>
                                     </div>
                                 </div>
 
