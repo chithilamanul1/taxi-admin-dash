@@ -103,7 +103,7 @@ export default function AdminDashboard() {
 
 
     useEffect(() => {
-        const fetchData = () => {
+        const fetchData = (isBackground = false) => {
             if (currentView === 'dashboard' || currentView === 'bookings') {
                 fetch('/api/bookings')
                     .then(res => {
@@ -138,11 +138,13 @@ export default function AdminDashboard() {
             }
 
             if (currentView === 'pricing') {
-                setIsLoading(true)
+                if (!isBackground) setIsLoading(true)
                 fetch(`/api/pricing?category=${pricingCategory}`)
                     .then(res => res.json())
                     .then(data => {
-                        if (data.success && Array.isArray(data.data)) {
+                        if (Array.isArray(data)) {
+                            setVehiclePricing(data)
+                        } else if (data.success && Array.isArray(data.data)) {
                             setVehiclePricing(data.data)
                         } else {
                             setVehiclePricing([])
@@ -177,7 +179,7 @@ export default function AdminDashboard() {
         fetchData()
 
         // Auto-refresh every 10 seconds
-        const interval = setInterval(fetchData, 10000)
+        const interval = setInterval(() => fetchData(true), 10000)
 
         return () => clearInterval(interval)
     }, [currentView, pricingCategory])
@@ -583,7 +585,7 @@ export default function AdminDashboard() {
                             <div className="bg-white rounded-xl shadow-sm p-6">
                                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                                     <h2 className="text-2xl font-bold text-emerald-900">Vehicle Pricing & Tiers</h2>
-                                    <div className="flex flex-wrap gap-2">
+                                    <div className="flex flex-wrap items-center gap-3">
                                         <button
                                             onClick={() => {
                                                 setEditForm({})
@@ -599,7 +601,7 @@ export default function AdminDashboard() {
                                                     fetch('/api/seed').then(() => window.location.reload())
                                                 }
                                             }}
-                                            className="text-xs bg-slate-100 px-3 py-1 rounded hover:bg-slate-200"
+                                            className="text-xs bg-slate-100 px-3 py-2 rounded hover:bg-slate-200 transition-colors"
                                         >
                                             Reset to Default
                                         </button>
