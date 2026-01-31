@@ -2171,7 +2171,10 @@ export default function AdminDashboard() {
                                 {/* Live Driver Map */}
                                 {currentView === 'live-map' && <LiveDriverMap />}
                             </div>
-                        </div >
-            </div >
+                        </div>
+            </div>
+        </div>
+        </div>
+        </div>
                 )
 }
