@@ -959,7 +959,8 @@ export default function AdminDashboard() {
                                                                     </div>
                                                                 </div>
                                                             </>
-                                                    )}
+                                                        )}
+
                                                             {pricingCategory === 'rentals' ? (
                                                                 <div className="grid md:grid-cols-3 gap-6 p-4 bg-emerald-50 rounded-xl border border-emerald-900/10 mb-4">
                                                                     <div>
