@@ -95,7 +95,7 @@ async function seed() {
             miniVanEvery: {
                 vehicleType: 'mini-van-every',
                 name: 'Mini Van (Every)',
-                image: 'https://www.suzukicycles.org/photos/Every/1999_Every/1999_Every-Joypop-Turbo_brochure_450.jpg',
+                image: '/vehicles/every.jpg',
                 capacity: 4, luggage: 4, handLuggage: 2,
                 basePrice: 4500, baseKm: 20, perKmRate: 150,
                 features: commonFeatures,
@@ -104,7 +104,7 @@ async function seed() {
             kdhVan: {
                 vehicleType: 'kdh-van',
                 name: 'KDH High Roof Van',
-                image: 'https://i.pinimg.com/736x/4f/7e/66/4f7e6653336f101ed31e3687810d12ab.jpg',
+                image: '/vehicles/kdh.png',
                 capacity: 9, luggage: 8, handLuggage: 5,
                 basePrice: 8500, baseKm: 40, perKmRate: 180,
                 features: commonFeatures
@@ -120,7 +120,7 @@ async function seed() {
             bus: {
                 vehicleType: 'bus',
                 name: 'Mini Bus (26-Seater)',
-                image: 'https://i.pinimg.com/originals/cc/9b/87/cc9b87eebb1ad09c91649c8dc24f9164.png',
+                image: '/vehicles/minibus.jpg',
                 capacity: 16, luggage: 10, handLuggage: 10,
                 basePrice: 15000, baseKm: 40, perKmRate: 250,
                 features: [...commonFeatures, 'TV', 'Microphone']
@@ -128,7 +128,7 @@ async function seed() {
             coach: {
                 vehicleType: 'coach-bus',
                 name: 'Luxury Coach Bus',
-                image: 'https://img.freepik.com/premium-photo/white-bus-with-black-windows_1019429-43040.jpg?semt=ais_user_personalization&w=740&q=80',
+                image: '/vehicles/minibus.jpg',
                 capacity: 45, luggage: 50, handLuggage: 45,
                 basePrice: 25000, baseKm: 40, perKmRate: 450,
                 features: [...commonFeatures, 'TV', 'Reclining Seats']
