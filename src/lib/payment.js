@@ -119,19 +119,45 @@ export function initiatePayHereTransaction(booking, returnUrl, cancelUrl, notify
 export async function initiatePayCorpTransaction(booking, returnUrl) {
     // ... (Existing PayCorp logic)
     const config = GATEWAY_CONFIG.sampath;
-    // ... rest of function remains same, ensuring we don't break existing
-    // Amount in CENTS
-    // Note: Verify if PayCorp expects Cents for ALL currencies or just LKR.
-    // Usually Standard: 100 cents = 1 Unit.
-    const amountInCents = Math.round((booking.paidAmount || booking.totalPrice) * 100);
-    const msgId = crypto.randomUUID();
-    const reqDate = new Date().toISOString();
 
-    // Determine Client ID based on Currency
+    // Determine Currency and Client ID
     const currency = booking.currency || 'LKR';
     const selectedClientId = config.clientIds[currency] || config.clientId;
 
-    console.log(`Initiating PayCorp for ${currency} using ClientID: ${selectedClientId}`);
+    // Amount in LKR (this is the base amount stored in booking)
+    const amountLKR = booking.paidAmount || booking.totalPrice;
+
+    // Convert LKR to target currency if not LKR
+    let convertedAmount = amountLKR;
+    if (currency !== 'LKR') {
+        try {
+            // Fetch live exchange rates
+            const ratesRes = await fetch('https://api.exchangerate-api.com/v4/latest/LKR');
+            const ratesData = await ratesRes.json();
+
+            if (ratesData && ratesData.rates && ratesData.rates[currency]) {
+                // Convert LKR to target currency
+                // Rate is LKR -> Currency (e.g., LKR 1 = USD 0.003)
+                convertedAmount = amountLKR * ratesData.rates[currency];
+                console.log(`Currency Conversion: ${amountLKR} LKR -> ${convertedAmount.toFixed(2)} ${currency} (Rate: ${ratesData.rates[currency]})`);
+            } else {
+                console.warn(`Exchange rate not found for ${currency}, using LKR amount`);
+                // Fall back to LKR if conversion fails
+            }
+        } catch (error) {
+            console.error('Failed to fetch exchange rates for payment:', error);
+            // Fall back to LKR amount
+        }
+    }
+
+    // Amount in CENTS (subunits)
+    // For USD/EUR/GBP: 100 cents = 1 unit
+    // For LKR: 100 cents = 1 LKR
+    const amountInCents = Math.round(convertedAmount * 100);
+    const msgId = crypto.randomUUID();
+    const reqDate = new Date().toISOString();
+
+    console.log(`Initiating PayCorp for ${currency} using ClientID: ${selectedClientId}, Amount: ${amountInCents} cents (${convertedAmount.toFixed(2)} ${currency})`);
 
     // Build JSON Payload
     const requestData = {
