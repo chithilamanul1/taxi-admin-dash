@@ -72,9 +72,24 @@ export default function SpecialOffersSection() {
                             {loading ? (
                                 <div className="h-40 bg-white/5 rounded-2xl animate-pulse"></div>
                             ) : coupons.map((coupon) => (
-                                <div key={coupon._id} className="bg-white rounded-2xl p-5 shadow-lg hover:translate-y-[-4px] transition-transform">
+                                <div
+                                    key={coupon._id}
+                                    onClick={() => {
+                                        // Construct URL params
+                                        const params = new URLSearchParams();
+                                        params.set('coupon', coupon.code);
+                                        // If coupon has applicable locations, use the first one as destination
+                                        if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
+                                            params.set('destination', coupon.applicableLocations[0]);
+                                        }
+
+                                        // Navigate to home with params (scroll to top)
+                                        window.location.href = `/?${params.toString()}#booking`;
+                                    }}
+                                    className="bg-white rounded-2xl p-5 shadow-lg hover:translate-y-[-4px] transition-transform cursor-pointer group/card"
+                                >
                                     <div className="flex justify-between items-start mb-4">
-                                        <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                                        <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center group-hover/card:bg-emerald-200 transition-colors">
                                             <Percent size={20} className="text-emerald-600" />
                                         </div>
                                         <div className="text-3xl font-black text-emerald-900">
@@ -82,11 +97,17 @@ export default function SpecialOffersSection() {
                                             <span className="text-xs font-bold text-slate-400 block -mt-1 uppercase text-right">Off</span>
                                         </div>
                                     </div>
-                                    <div className="p-3 bg-slate-50 rounded-xl border border-dashed border-slate-200 flex justify-between items-center">
-                                        <code className="font-mono font-bold text-emerald-700">{coupon.code}</code>
+                                    <div className="p-3 bg-slate-50 rounded-xl border border-dashed border-slate-200 group-hover/card:border-emerald-300 transition-colors flex justify-between items-center">
+                                        <div className="flex flex-col">
+                                            <code className="font-mono font-bold text-emerald-700">{coupon.code}</code>
+                                            <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mt-0.5">Click to Apply</span>
+                                        </div>
                                         <button
-                                            onClick={() => copyToClipboard(coupon.code)}
-                                            className="text-xs font-bold text-slate-400 hover:text-emerald-600 flex items-center gap-1"
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevent card click
+                                                copyToClipboard(coupon.code);
+                                            }}
+                                            className="text-xs font-bold text-slate-400 hover:text-emerald-600 flex items-center gap-1 z-10 p-2 hover:bg-white rounded-lg transition-colors"
                                         >
                                             {copiedCode === coupon.code ? <Check size={14} /> : <Copy size={14} />}
                                             {copiedCode === coupon.code ? 'Copied' : 'Copy'}

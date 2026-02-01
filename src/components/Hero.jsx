@@ -111,10 +111,10 @@ const Hero = ({ onBookClick }) => {
                         <ArrowRight className="group-hover:translate-x-1 transition-transform" />
                     </button>
                     <a
-                        href="#tours"
+                        href="#offers"
                         className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md text-white rounded-xl font-bold text-lg transition-all border border-white/20 hover:bg-white/20 text-center min-w-[200px]"
                     >
-                        View Popular Tours
+                        See Offers
                     </a>
                 </div>
             </div>

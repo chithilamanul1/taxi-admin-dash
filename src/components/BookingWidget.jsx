@@ -158,6 +158,35 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         if (activeTab !== 'tours') fetchPricing();
     }, [activeTab]);
 
+    // URL Params Effect for Offers
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const couponParam = params.get('coupon');
+        const destParam = params.get('destination');
+
+        if (couponParam) {
+            setCouponCode(couponParam);
+            // Verify coupon automatically if present
+            verifyCoupon(couponParam);
+
+            // Clean up URL
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, '', newUrl);
+        }
+
+        if (destParam) {
+            setDropoff({
+                address: destParam,
+                lat: null,
+                lon: null,
+                name: destParam
+            });
+            setDropoffSearch(destParam);
+            setActiveTab('pickup');
+        }
+
+    }, []);
+
     // Tab Logic - reset fields based on mode
     useEffect(() => {
         if (activeTab === 'pickup') {
@@ -896,7 +925,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                     tripType,
                     passengerCount,
                     date: date,
-                    time: time
+                    time: time,
+                    couponCode: couponCode // Pass coupon code to modal
                 }}
                 pricingCategory={pricingCategory}
             />
