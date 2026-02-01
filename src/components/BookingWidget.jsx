@@ -166,8 +166,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
         if (couponParam) {
             setCouponCode(couponParam);
-            // Verify coupon automatically if present
-            verifyCoupon(couponParam);
+            // Coupon verification will happen in the modal
 
             // Clean up URL
             const newUrl = window.location.pathname;
