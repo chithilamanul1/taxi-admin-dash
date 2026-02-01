@@ -448,7 +448,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 </div>
                             </div>
 
-                            <div className="space-y-3">
+                            <div className="space-y-4 md:space-y-3">
                                 {/* Pickup Input */}
                                 <LocationInput
                                     placeholder="Pick-up Location"
@@ -546,11 +546,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </>
                                 )}
 
-                                {/* Swap Button Visual - Aligned Left */}
-                                <div className="flex justify-end pr-6 -my-5 relative z-10 pointer-events-none">
+                                {/* Swap Button Visual - Floating between inputs */}
+                                <div className="relative h-0 z-30 flex justify-end pr-6 pointer-events-none">
                                     <button
                                         onClick={swapLocations}
-                                        className="w-8 h-8 pointer-events-auto bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-white/10 rounded-full flex items-center justify-center hover:scale-110 active:rotate-180 transition-all text-emerald-900 dark:text-white shadow-sm"
+                                        className="w-8 h-8 -translate-y-1/2 pointer-events-auto bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-white/10 rounded-full flex items-center justify-center hover:scale-110 active:rotate-180 transition-all text-emerald-900 dark:text-white shadow-sm"
                                         aria-label="Swap pickup and dropoff locations"
                                     >
                                         <ArrowRightLeft size={14} />
@@ -707,7 +707,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             </div>
 
                             {/* Date & Time Selection */}
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label className="text-[10px] font-bold text-emerald-900 dark:text-white uppercase tracking-widest mb-2 block pl-1">Date</label>
                                     <div className="relative">
