@@ -755,12 +755,13 @@ export default function AdminDashboard() {
                                                             } else {
                                                                 setEditingVehicle(vehicle.vehicleType)
                                                                 setEditForm({
+                                                                    _id: vehicle._id,
                                                                     name: vehicle.name,
                                                                     capacity: vehicle.capacity,
                                                                     luggage: vehicle.luggage,
                                                                     waitingCharges: vehicle.waitingCharges || [],
-                                                                    waitingCharges: vehicle.waitingCharges || [],
                                                                     tiers: vehicle.tiers || [],
+                                                                    features: vehicle.features || [],
                                                                     basePrice: vehicle.basePrice,
                                                                     baseKm: vehicle.baseKm,
                                                                     perKmRate: vehicle.perKmRate
@@ -770,6 +771,23 @@ export default function AdminDashboard() {
                                                         className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${editingVehicle === vehicle.vehicleType ? 'bg-red-100 text-red-600' : 'bg-emerald-600 text-emerald-900 hover:bg-emerald-600/80'}`}
                                                     >
                                                         {editingVehicle === vehicle.vehicleType ? 'Cancel' : 'Edit Rates'}
+                                                    </button>
+                                                    <button
+                                                        onClick={async () => {
+                                                            if (confirm('Are you sure you want to delete this vehicle?')) {
+                                                                const res = await fetch(`/api/pricing?id=${vehicle._id}`, { method: 'DELETE' });
+                                                                if (res.ok) {
+                                                                    setVehiclePricing(prev => prev.filter(v => v._id !== vehicle._id));
+                                                                    alert('Deleted successfully');
+                                                                } else {
+                                                                    alert('Failed to delete');
+                                                                }
+                                                            }
+                                                        }}
+                                                        className="px-2 py-2 text-red-500 hover:bg-red-50 rounded-lg"
+                                                        title="Delete Vehicle"
+                                                    >
+                                                        <X size={18} />
                                                     </button>
                                                 </div>
 
@@ -1091,6 +1109,49 @@ export default function AdminDashboard() {
                                                                     )}
                                                                 </div>
 
+                                                                {/* Features Management */}
+                                                                <div className="p-4 bg-blue-50 rounded-xl border border-blue-900/10 space-y-4">
+                                                                    <div className="flex items-center justify-between">
+                                                                        <h4 className="text-sm font-bold text-blue-900 uppercase tracking-widest flex items-center gap-2">
+                                                                            <FileText size={16} /> Key Features / Details
+                                                                        </h4>
+                                                                        <button
+                                                                            onClick={() => {
+                                                                                const current = editForm.features || []
+                                                                                setEditForm({ ...editForm, features: [...current, 'New Feature'] })
+                                                                            }}
+                                                                            className="text-[10px] bg-white border border-blue-900/10 px-3 py-1 rounded-lg font-bold text-blue-900 hover:bg-blue-100 transition-colors"
+                                                                        >
+                                                                            + Add Feature
+                                                                        </button>
+                                                                    </div>
+                                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                                                        {(editForm.features || []).map((feature, idx) => (
+                                                                            <div key={idx} className="flex gap-2">
+                                                                                <input
+                                                                                    type="text"
+                                                                                    value={feature}
+                                                                                    onChange={(e) => {
+                                                                                        const newFeatures = [...editForm.features]
+                                                                                        newFeatures[idx] = e.target.value
+                                                                                        setEditForm({ ...editForm, features: newFeatures })
+                                                                                    }}
+                                                                                    className="w-full bg-white border border-blue-900/10 px-3 py-1.5 rounded-lg outline-none text-xs text-blue-900"
+                                                                                />
+                                                                                <button
+                                                                                    onClick={() => {
+                                                                                        const newFeatures = editForm.features.filter((_, i) => i !== idx)
+                                                                                        setEditForm({ ...editForm, features: newFeatures })
+                                                                                    }}
+                                                                                    className="p-1 text-red-500 hover:bg-red-50 rounded"
+                                                                                >
+                                                                                    <X size={14} />
+                                                                                </button>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+
                                                                 <div className="flex gap-2 pt-2">
                                                                     <button
                                                                         onClick={() => {
@@ -1107,14 +1168,18 @@ export default function AdminDashboard() {
                                                                     </button>
                                                                     <button
                                                                         onClick={async () => {
-                                                                            const res = await fetch(`/api/pricing/${vehicle.vehicleType}?category=${pricingCategory}`, {
+                                                                            const res = await fetch(`/api/pricing`, {
                                                                                 method: 'PUT',
                                                                                 headers: { 'Content-Type': 'application/json' },
-                                                                                body: JSON.stringify({ waitingCharges: editForm.waitingCharges, tiers: editForm.tiers, name: editForm.name, capacity: editForm.capacity, luggage: editForm.luggage, basePrice: editForm.basePrice, baseKm: editForm.baseKm, perKmRate: editForm.perKmRate })
+                                                                                body: JSON.stringify(editForm)
                                                                             })
                                                                             if (res.ok) {
-                                                                                setVehiclePricing(prev => prev.map(v => v.vehicleType === vehicle.vehicleType ? { ...v, ...editForm } : v))
+                                                                                setVehiclePricing(prev => prev.map(v => v._id === editForm._id ? { ...v, ...editForm } : v))
                                                                                 setEditingVehicle(null)
+                                                                                alert('Saved successfully!')
+                                                                            } else {
+                                                                                const err = await res.json();
+                                                                                alert('Error: ' + (err.error || 'Failed to save'));
                                                                             }
                                                                         }}
                                                                         className="text-sm bg-emerald-900 text-white px-6 py-2 rounded-lg hover:bg-emerald-900/90 font-bold shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"

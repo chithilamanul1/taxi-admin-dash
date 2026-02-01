@@ -107,3 +107,29 @@ export async function PUT(req) {
         return NextResponse.json({ success: false, error: 'Failed to update vehicle' }, { status: 500 });
     }
 }
+export async function DELETE(req) {
+    try {
+        if (!(await isAdmin())) {
+            return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+        }
+
+        await dbConnect();
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get('id');
+
+        if (!id) {
+            return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+        }
+
+        const deleted = await Pricing.findByIdAndDelete(id);
+
+        if (!deleted) {
+            return NextResponse.json({ success: false, error: 'Vehicle not found' }, { status: 404 });
+        }
+
+        return NextResponse.json({ success: true, message: 'Vehicle deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting vehicle:', error);
+        return NextResponse.json({ success: false, error: 'Failed to delete vehicle' }, { status: 500 });
+    }
+}
