@@ -336,7 +336,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const pricingCategory = ['pickup', 'drop'].includes(activeTab) ? 'airport-transfer' : 'ride-now';
 
     return (
-        <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4 overflow-x-hidden">
+        <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4">
             {/* Google Maps Loader (Conditional) */}
 
             {/* Tab Navigation */}
