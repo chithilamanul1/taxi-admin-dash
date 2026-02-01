@@ -1,6 +1,6 @@
 
 const TRIPADVISOR_API_KEY = process.env.TRIPADVISOR_API_KEY;
-const LOCATION_ID = '33986804'; // From existing widget
+const LOCATION_ID = process.env.TRIPADVISOR_LOCATION_ID || '33986804'; // Allow env override
 const BASE_URL = 'https://api.content.tripadvisor.com/api/v1/location';
 
 export async function getTripAdvisorData() {
@@ -38,7 +38,7 @@ export async function getTripAdvisorReviews() {
     if (!TRIPADVISOR_API_KEY) return [];
 
     try {
-        const res = await fetch(`${BASE_URL}/${LOCATION_ID}/reviews?key=${TRIPADVISOR_API_KEY}&language=en`, {
+        const res = await fetch(`${BASE_URL}/${LOCATION_ID}/reviews?key=${TRIPADVISOR_API_KEY}&language=en&limit=50`, {
             next: { revalidate: 3600 }
         });
 

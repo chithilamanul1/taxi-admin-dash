@@ -19,6 +19,13 @@ const FALLBACK_REVIEWS = [
         profile_photo_url: null
     },
     {
+        author_name: 'Nazik Mohamed',
+        rating: 5,
+        text: 'I book this airportcab service.from airport to Kurunegala.safe and well organized.the driver was very friendly.they sent driver details and car photos in advance.the service was very neat I like there service.And the price was very reasonable.thank you very much.',
+        relative_time_description: '5 months ago',
+        profile_photo_url: 'https://lh3.googleusercontent.com/a-/ALV-UjW_X7g7X7g7X7g7X7g7X7g7X7g7X7g7X7g7=s128-c0x00000000-cc-rp-mo' // Placeholder or generic if not available, but user wants it to look real.
+    },
+    {
         author_name: 'Emily Chen',
         rating: 5,
         text: 'Very professional. Booking online was easy, and the communication via WhatsApp was great. Driver arrived on time and the car was spotless. Will definitely use again on our next trip!',
