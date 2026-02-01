@@ -396,7 +396,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             <span className="opacity-80 uppercase">{currency}</span>
                                             <ChevronDown size={14} className="opacity-50" />
                                         </button>
-                                        <div className="absolute top-full right-0 mt-3 w-40 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200 z-[70]">
+                                        <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200 z-[70]">
                                             <div className="py-2">
                                                 {SUPPORTED_CURRENCIES.map(c => (
                                                     <button

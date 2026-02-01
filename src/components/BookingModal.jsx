@@ -622,13 +622,49 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             { id: 'cash', label: 'Cash Payment', icon: '💵', desc: 'Pay directly to chauffeur' },
                                             { id: 'card', label: 'Online Payment', icon: '💳', desc: 'Secure digital transaction' },
                                         ].map(m => (
-                                            <button key={m.id} onClick={() => setFormData({ ...formData, paymentMethod: m.id })} className={`p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left ${formData.paymentMethod === m.id ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}>
-                                                <span className="text-3xl md:text-4xl">{m.icon}</span>
-                                                <div>
-                                                    <p className="font-bold text-emerald-900 text-sm tracking-tight">{m.label}</p>
-                                                    <p className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">{m.desc}</p>
-                                                </div>
-                                            </button>
+                                            <div key={m.id}>
+                                                <button onClick={() => setFormData({ ...formData, paymentMethod: m.id })} className={`w-full p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left ${formData.paymentMethod === m.id ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}>
+                                                    <span className="text-3xl md:text-4xl">{m.icon}</span>
+                                                    <div>
+                                                        <p className="font-bold text-emerald-900 text-sm tracking-tight">{m.label}</p>
+                                                        <p className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">{m.desc}</p>
+                                                    </div>
+                                                </button>
+
+                                                {/* Payment Options (Full vs 50%) for Card */}
+                                                {formData.paymentMethod === 'card' && m.id === 'card' && (
+                                                    <div className="mt-3 ml-4 pl-4 border-l-2 border-emerald-900/10 space-y-3 animate-slide-up">
+                                                        <button
+                                                            onClick={() => setFormData({ ...formData, paymentType: 'full' })}
+                                                            className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'full' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
+                                                        >
+                                                            <div className="flex items-center gap-3">
+                                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'full' ? 'border-white' : 'border-slate-400'}`}>
+                                                                    {formData.paymentType === 'full' && <div className="w-2 h-2 rounded-full bg-white"></div>}
+                                                                </div>
+                                                                <span className="text-xs font-bold uppercase tracking-wide">Pay Full Amount</span>
+                                                            </div>
+                                                            <span className="text-xs font-bold text-emerald-400">100%</span>
+                                                        </button>
+
+                                                        <button
+                                                            onClick={() => setFormData({ ...formData, paymentType: 'partial' })}
+                                                            className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'partial' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
+                                                        >
+                                                            <div className="flex items-center gap-3">
+                                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'partial' ? 'border-white' : 'border-slate-400'}`}>
+                                                                    {formData.paymentType === 'partial' && <div className="w-2 h-2 rounded-full bg-white"></div>}
+                                                                </div>
+                                                                <div className="text-left">
+                                                                    <span className="text-xs font-bold uppercase tracking-wide block">Pay Advance Only</span>
+                                                                    <span className="text-[10px] opacity-60">Pay balance to driver</span>
+                                                                </div>
+                                                            </div>
+                                                            <span className="text-xs font-bold text-amber-400">50%</span>
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
                                         ))}
                                     </div>
                                 </div>

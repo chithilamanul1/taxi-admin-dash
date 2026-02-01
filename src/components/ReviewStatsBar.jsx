@@ -26,7 +26,7 @@ const ReviewStatsBar = () => {
     return (
         <section className="bg-white dark:bg-slate-900 border-b border-emerald-900/5 dark:border-white/5 py-8">
             <div className="container mx-auto px-6">
-                <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
+                <div className="flex flex-wrap items-center justify-center gap-8 md:gap-24">
 
                     {/* TripAdvisor */}
                     <a
