@@ -3,7 +3,9 @@
 import React, { useEffect, useState } from 'react';
 
 const ReviewStatsBar = () => {
-    const [stats, setStats] = useState({ rating: '5.0', count: '300+' });
+    const [stats, setStats] = useState({ rating: '5.0', count: '400+' });
+    const [googleStats, setGoogleStats] = useState({ rating: '5.0', count: '300+' });
+    const [taStats, setTaStats] = useState({ rating: '5.0', count: '100+' });
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -14,17 +16,14 @@ const ReviewStatsBar = () => {
                     fetch('/api/reviews/google')
                 ]);
 
-                let totalCount = 0;
-                let weightedRatingSum = 0;
-
                 // Process TripAdvisor
                 if (tripRes.status === 'fulfilled') {
                     const data = await tripRes.value.json();
                     if (data.success && data.rating) {
-                        const count = parseInt(data.num_reviews) || 0;
-                        const rating = parseFloat(data.rating) || 0;
-                        totalCount += count;
-                        weightedRatingSum += (rating * count);
+                        setTaStats({
+                            rating: parseFloat(data.rating).toFixed(1),
+                            count: `${data.num_reviews}+ Reviews`
+                        });
                     }
                 }
 
@@ -32,24 +31,15 @@ const ReviewStatsBar = () => {
                 if (googleRes.status === 'fulfilled') {
                     const data = await googleRes.value.json();
                     if (data.success && data.data) {
-                        const count = parseInt(data.data.totalReviews) || 0;
-                        const rating = parseFloat(data.data.rating) || 0;
-                        totalCount += count;
-                        weightedRatingSum += (rating * count);
+                        setGoogleStats({
+                            rating: parseFloat(data.data.rating).toFixed(1),
+                            count: `${data.data.totalReviews}+ Reviews`
+                        });
                     }
                 }
 
-                if (totalCount > 0) {
-                    const finalRating = (weightedRatingSum / totalCount).toFixed(1);
-                    setStats({
-                        rating: finalRating,
-                        count: `${totalCount}+ Reviews`
-                    });
-                } else {
-                    // Fallback to default if both fail
-                    setStats({ rating: '5.0', count: '400+ Reviews' });
-                }
-
+                // Calculate Combined for general badge if needed (keeping original stats for safety)
+                // However, we are showing separate blocks now to match user request
             } catch (err) {
                 console.error('Failed to load review stats', err);
             }
@@ -71,12 +61,6 @@ const ReviewStatsBar = () => {
                         className="flex items-center gap-4 group hover:opacity-80 transition-opacity"
                     >
                         <div className="w-12 h-12 relative flex-shrink-0">
-                            <img
-                                src="https://static.tacdn.com/img2/brand_refresh/Tripadvisor_lockup_horizontal_secondary_registered.svg"
-                                alt="TripAdvisor"
-                                className="w-full h-full object-contain hidden" // Using SVG below for better control or keeping this as backup
-                            />
-                            {/* Custom Owl Icon Circle Match */}
                             <div className="w-12 h-12 bg-[#00AA6C] rounded-full flex items-center justify-center text-white">
                                 <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm10 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z" />
@@ -91,10 +75,10 @@ const ReviewStatsBar = () => {
                         </div>
                         <div className="flex flex-col items-start pl-4 border-l border-slate-200 dark:border-slate-700">
                             <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-black text-slate-900 dark:text-white">{stats.rating}</span>
+                                <span className="text-2xl font-black text-slate-900 dark:text-white">{taStats.rating}</span>
                                 <span className="text-sm text-slate-400 font-bold">/5</span>
                             </div>
-                            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wide">{stats.count}</span>
+                            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wide">{taStats.count}</span>
                         </div>
                     </a>
 
@@ -114,10 +98,10 @@ const ReviewStatsBar = () => {
                         </div>
                         <div className="flex flex-col items-start pl-4 border-l border-slate-200 dark:border-slate-700">
                             <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-black text-slate-900 dark:text-white">5.0</span>
+                                <span className="text-2xl font-black text-slate-900 dark:text-white">{googleStats.rating}</span>
                                 <span className="text-sm text-slate-400 font-bold">/5</span>
                             </div>
-                            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wide">300+ Reviews</span>
+                            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wide">{googleStats.count}</span>
                         </div>
                     </a>
 
