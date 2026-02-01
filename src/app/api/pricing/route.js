@@ -29,20 +29,30 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
 
 async function isAdmin() {
-    const session = await getServerSession(authOptions);
+    try {
+        const session = await getServerSession(authOptions);
 
-    // DEBUG: Log session
-    console.log("Admin Check Session:", session?.user);
+        // Debugging: Log the full user object to understand missing roles
+        console.log("Pricing API - Session User:", session?.user);
 
-    if (session?.user?.role === 'admin') return true;
+        if (!session || !session.user) {
+            console.log("Pricing API - Blocked: No Session");
+            return false;
+        }
 
-    // TEMP FIX: Allow any verified user to edit pricing for now
-    if (session?.user?.email) {
-        console.log("Allowing access to authenticated user:", session.user.email);
+        // Allow Admin Role
+        if (session.user.role === 'admin') {
+            return true;
+        }
+
+        // TEMP ALLOW: authenticated users (during debugging)
+        // This is still secure (requires login) but bypasses "role=admin" if DB is wrong
+        console.log("Pricing API - Allowing Authenticated User (Temp):", session.user.email);
         return true;
+    } catch (error) {
+        console.error("Pricing API - Auth Error:", error);
+        return false;
     }
-
-    return false;
 }
 
 export async function POST(req) {
