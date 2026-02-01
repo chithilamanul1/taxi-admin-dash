@@ -5,13 +5,13 @@ import Image from 'next/image'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const heroImages = [
-    { src: '/Hero/elephants.jpg', alt: 'Sri Lanka Elephants' },
-    { src: '/Hero/ella.jpg', alt: 'Ella Nine Arch Bridge' },
-    { src: '/Hero/izanuradapura.jpg', alt: 'Anuradhapura' },
-    { src: '/Hero/monkey.jpg', alt: 'Wildlife' },
-    { src: '/Hero/sigiriya.jpg', alt: 'Sigiriya Lion Rock' },
-    { src: '/Hero/tower.jpg', alt: 'Lotus Tower Colombo' },
-    { src: '/Hero/view.jpg', alt: 'Scenic Views' },
+    { src: '/hero/elephants.jpg', alt: 'Sri Lanka Elephants' },
+    { src: '/hero/ella.jpg', alt: 'Ella Nine Arch Bridge' },
+    { src: '/hero/izanuradapura.jpg', alt: 'Anuradhapura' },
+    { src: '/hero/monkey.jpg', alt: 'Wildlife' },
+    { src: '/hero/sigiriya.jpg', alt: 'Sigiriya Lion Rock' },
+    { src: '/hero/tower.jpg', alt: 'Lotus Tower Colombo' },
+    { src: '/hero/view.jpg', alt: 'Scenic Views' },
 ]
 
 const Hero = ({ onBookClick }) => {
