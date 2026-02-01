@@ -7,19 +7,18 @@ import { Star, User, Loader2, Quote, MapPin } from 'lucide-react';
 import Image from 'next/image';
 
 export default function ReviewsPage() {
-    const [data, setData] = useState(null);
+    const [googleData, setGoogleData] = useState(null);
     const [tripAdvisorData, setTripAdvisorData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState('google');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch Google Reviews
-                const res = await fetch('/api/google-reviews');
-                if (res.ok) {
-                    const json = await res.json();
-                    setData(json);
+                // Fetch Google Reviews (Real API)
+                const res = await fetch('/api/reviews/google');
+                const json = await res.json();
+                if (json.success && json.data) {
+                    setGoogleData(json.data);
                 }
 
                 // Fetch TripAdvisor Reviews
@@ -38,6 +37,31 @@ export default function ReviewsPage() {
         fetchData();
     }, []);
 
+    // Calculate Combined Stats
+    const getCombinedStats = () => {
+        let totalCount = 0;
+        let weightedScore = 0;
+
+        if (googleData) {
+            const count = googleData.totalReviews || 0;
+            const rating = googleData.rating || 0;
+            totalCount += count;
+            weightedScore += (count * rating);
+        }
+
+        if (tripAdvisorData) {
+            const count = parseInt(tripAdvisorData.num_reviews) || 0;
+            const rating = parseFloat(tripAdvisorData.rating) || 0;
+            totalCount += count;
+            weightedScore += (count * rating);
+        }
+
+        const avgRating = totalCount > 0 ? (weightedScore / totalCount).toFixed(1) : '5.0';
+        return { rating: avgRating, count: totalCount };
+    };
+
+    const combinedStats = getCombinedStats();
+
     return (
         <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
             <Navbar />
@@ -54,7 +78,7 @@ export default function ReviewsPage() {
                     </p>
 
                     {/* Overall Rating Badge */}
-                    {!loading && data && (
+                    {!loading && (
                         <div className="mt-8 inline-flex items-center gap-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/20">
                             <div className="flex text-yellow-500">
                                 {[...Array(5)].map((_, i) => (
@@ -62,138 +86,149 @@ export default function ReviewsPage() {
                                 ))}
                             </div>
                             <div className="text-left leading-tight">
-                                <div className="font-bold text-xl">{data.rating} / 5.0</div>
-                                <div className="text-xs text-white/70">{data.userRatingCount}+ Verified Reviews</div>
+                                <div className="font-bold text-xl">{combinedStats.rating} / 5.0</div>
+                                <div className="text-xs text-white/70">{combinedStats.count > 0 ? combinedStats.count : '400+'}+ Verified Reviews</div>
                             </div>
-                            <div className="ml-2 w-px h-8 bg-white/20"></div>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google" className="w-6 h-6" />
                         </div>
                     )}
                 </div>
             </div>
 
-            {/* Reviews Grid */}
-            <div className="container mx-auto px-4 py-16">
-                {/* Reviews Toggle */}
-                <div className="flex justify-center mb-12">
-                    <div className="bg-white dark:bg-slate-800 p-1 rounded-xl shadow-sm border border-emerald-900/10 inline-flex">
-                        <button
-                            onClick={() => setActiveTab('google')}
-                            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'google'
-                                ? 'bg-emerald-600 text-white shadow-md'
-                                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50'
-                                }`}
-                        >
-                            Google Reviews
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('tripadvisor')}
-                            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'tripadvisor'
-                                ? 'bg-[#00af87] text-white shadow-md'
-                                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50'
-                                }`}
-                        >
-                            TripAdvisor
-                        </button>
-                    </div>
-                </div>
+            {/* Reviews Content */}
+            <div className="container mx-auto px-4 py-16 space-y-20">
 
                 {loading ? (
                     <div className="flex justify-center items-center h-64">
                         <Loader2 className="animate-spin text-emerald-600" size={48} />
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {activeTab === 'google' && data?.reviews?.map((review, i) => (
-                            <div key={i} className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-emerald-900/5 dark:border-white/5 shadow-sm hover:shadow-xl transition-all duration-300 group">
-                                <div className="flex justify-between items-start mb-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-12 h-12 rounded-full overflow-hidden bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center border border-emerald-200 dark:border-emerald-800 relative">
-                                            {review.authorAttribution?.photoUri ? (
-                                                <img
-                                                    src={review.authorAttribution.photoUri}
-                                                    alt={review.authorAttribution.displayName}
-                                                    className="w-full h-full object-cover"
-                                                    referrerPolicy="no-referrer"
-                                                />
-                                            ) : (
-                                                <User className="text-emerald-600 dark:text-emerald-400" size={20} />
-                                            )}
-                                            <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 border shadow-sm">
-                                                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" className="w-4 h-4" alt="G" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h3 className="font-bold text-slate-900 dark:text-white text-sm">
-                                                {review.authorAttribution?.displayName || 'Anonymous Traveler'}
-                                            </h3>
-                                            <div className="text-xs text-slate-500 flex items-center gap-1">
-                                                <span>{review.relativePublishTimeDescription}</span>
-                                            </div>
+                    <>
+                        {/* Google Reviews Section */}
+                        {googleData?.reviews?.length > 0 && (
+                            <section>
+                                <div className="flex items-center gap-4 mb-8 border-b border-emerald-900/10 dark:border-white/10 pb-4">
+                                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm border">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google" className="w-6 h-6" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-emerald-900 dark:text-white">Google Reviews</h2>
+                                        <div className="flex items-center gap-2 text-sm text-slate-500">
+                                            <span className="font-bold text-emerald-600">{googleData.rating} Rating</span>
+                                            <span>•</span>
+                                            <span>{googleData.totalReviews} Reviews</span>
                                         </div>
                                     </div>
-                                    <Quote className="text-emerald-900/10 dark:text-white/10 group-hover:text-emerald-600/20 transition-colors" size={40} />
                                 </div>
 
-                                <div className="flex gap-0.5 text-yellow-400 mb-4">
-                                    {[...Array(5)].map((_, starIdx) => (
-                                        <Star
-                                            key={starIdx}
-                                            size={16}
-                                            fill={starIdx < review.rating ? "currentColor" : "none"}
-                                            className={starIdx < review.rating ? "" : "text-slate-200 dark:text-slate-700"}
-                                        />
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {googleData.reviews.map((review, i) => (
+                                        <div key={i} className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-emerald-900/5 dark:border-white/5 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                                            <div className="flex justify-between items-start mb-6">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-12 h-12 rounded-full overflow-hidden bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center border border-emerald-200 dark:border-emerald-800 relative">
+                                                        {review.profile_photo_url ? (
+                                                            <img
+                                                                src={review.profile_photo_url}
+                                                                alt={review.author_name}
+                                                                className="w-full h-full object-cover"
+                                                                referrerPolicy="no-referrer"
+                                                            />
+                                                        ) : (
+                                                            <User className="text-emerald-600 dark:text-emerald-400" size={20} />
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="font-bold text-slate-900 dark:text-white text-sm">
+                                                            {review.author_name || 'Anonymous Traveler'}
+                                                        </h3>
+                                                        <div className="text-xs text-slate-500 flex items-center gap-1">
+                                                            <span>{review.relative_time_description}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <Quote className="text-emerald-900/10 dark:text-white/10 group-hover:text-emerald-600/20 transition-colors" size={40} />
+                                            </div>
+
+                                            <div className="flex gap-0.5 text-yellow-400 mb-4">
+                                                {[...Array(5)].map((_, starIdx) => (
+                                                    <Star
+                                                        key={starIdx}
+                                                        size={16}
+                                                        fill={starIdx < review.rating ? "currentColor" : "none"}
+                                                        className={starIdx < review.rating ? "" : "text-slate-200 dark:text-slate-700"}
+                                                    />
+                                                ))}
+                                            </div>
+
+                                            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm">
+                                                "{review.text}"
+                                            </p>
+                                        </div>
                                     ))}
                                 </div>
+                            </section>
+                        )}
 
-                                <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm">
-                                    "{review.text?.text}"
-                                </p>
-                            </div>
-                        ))}
-
-                        {activeTab === 'tripadvisor' && tripAdvisorData?.reviews?.map((review, i) => (
-                            <div key={i} className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-[#00af87]/10 dark:border-white/5 shadow-sm hover:shadow-xl hover:shadow-[#00af87]/10 transition-all duration-300 group">
-                                <div className="flex justify-between items-start mb-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-12 h-12 rounded-full overflow-hidden bg-[#00af87]/10 flex items-center justify-center border border-[#00af87]/20 relative">
-                                            {review.user?.avatar ? (
-                                                <img
-                                                    src={review.user.avatar}
-                                                    alt={review.user.username}
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            ) : (
-                                                <span className="font-bold text-[#00af87] text-lg">{review.user.username?.charAt(0)}</span>
-                                            )}
-                                            <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 border shadow-sm">
-                                                <img src="https://static.tacdn.com/img2/brand_refresh/Tripadvisor_lockup_horizontal_secondary_registered.svg" className="w-4 h-4 object-contain" alt="TA" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h3 className="font-bold text-slate-900 dark:text-white text-sm">
-                                                {review.user?.username || 'Traveler'}
-                                            </h3>
-                                            <div className="text-xs text-slate-500 flex items-center gap-1">
-                                                <span>{new Date(review.published_date).toLocaleDateString()}</span>
-                                            </div>
+                        {/* TripAdvisor Reviews Section */}
+                        {tripAdvisorData?.reviews?.length > 0 && (
+                            <section>
+                                <div className="flex items-center gap-4 mb-8 border-b border-emerald-900/10 dark:border-white/10 pb-4">
+                                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm border">
+                                        <img src="https://static.tacdn.com/img2/brand_refresh/Tripadvisor_lockup_horizontal_secondary_registered.svg" alt="TripAdvisor" className="w-6 h-6 object-contain" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-emerald-900 dark:text-white">TripAdvisor Reviews</h2>
+                                        <div className="flex items-center gap-2 text-sm text-slate-500">
+                                            <span className="font-bold text-[#00af87]">{tripAdvisorData.rating} Rating</span>
+                                            <span>•</span>
+                                            <span>{tripAdvisorData.num_reviews} Reviews</span>
                                         </div>
                                     </div>
-                                    <Quote className="text-[#00af87]/10 group-hover:text-[#00af87]/20 transition-colors" size={40} />
                                 </div>
 
-                                <div className="flex gap-0.5 text-[#00af87] mb-4">
-                                    {[...Array(5)].map((_, starIdx) => (
-                                        <div key={starIdx} className={`w-3 h-3 rounded-full ${starIdx < Number(review.rating) ? 'bg-[#00af87]' : 'bg-slate-200'}`}></div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {tripAdvisorData.reviews.map((review, i) => (
+                                        <div key={i} className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-[#00af87]/10 dark:border-white/5 shadow-sm hover:shadow-xl hover:shadow-[#00af87]/10 transition-all duration-300 group">
+                                            <div className="flex justify-between items-start mb-6">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-12 h-12 rounded-full overflow-hidden bg-[#00af87]/10 flex items-center justify-center border border-[#00af87]/20 relative">
+                                                        {review.user?.avatar ? (
+                                                            <img
+                                                                src={review.user.avatar}
+                                                                alt={review.user.username}
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            <span className="font-bold text-[#00af87] text-lg">{review.user.username?.charAt(0)}</span>
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="font-bold text-slate-900 dark:text-white text-sm">
+                                                            {review.user?.username || 'Traveler'}
+                                                        </h3>
+                                                        <div className="text-xs text-slate-500 flex items-center gap-1">
+                                                            <span>{new Date(review.published_date).toLocaleDateString()}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <Quote className="text-[#00af87]/10 group-hover:text-[#00af87]/20 transition-colors" size={40} />
+                                            </div>
+
+                                            <div className="flex gap-0.5 text-[#00af87] mb-4">
+                                                {[...Array(5)].map((_, starIdx) => (
+                                                    <div key={starIdx} className={`w-3 h-3 rounded-full ${starIdx < Number(review.rating) ? 'bg-[#00af87]' : 'bg-slate-200'}`}></div>
+                                                ))}
+                                            </div>
+
+                                            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm">
+                                                "{review.text}"
+                                            </p>
+                                        </div>
                                     ))}
                                 </div>
-
-                                <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm">
-                                    "{review.text}"
-                                </p>
-                            </div>
-                        ))}
-                    </div>
+                            </section>
+                        )}
+                    </>
                 )}
 
                 {/* CTA Section */}
