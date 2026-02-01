@@ -595,11 +595,17 @@ export default function AdminDashboard() {
                                         </button>
                                         <button
                                             onClick={() => {
-                                                if (confirm('Are you sure you want to delete all entries for this category and reset to default? This will only affect Airport Transfer.')) {
-                                                    fetch('/api/seed').then(() => window.location.reload())
+                                                if (confirm('WARNING: This will delete ALL pricing data (Airport, P2P, Tours) and reset to defaults. Continue?')) {
+                                                    fetch('/api/debug/seed-data', { method: 'POST' })
+                                                        .then(res => res.json())
+                                                        .then(data => {
+                                                            alert(data.message);
+                                                            window.location.reload();
+                                                        })
+                                                        .catch(err => alert('Failed to reset'));
                                                 }
                                             }}
-                                            className="text-xs bg-slate-100 px-3 py-1 rounded hover:bg-slate-200"
+                                            className="text-xs bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200"
                                         >
                                             Reset to Default
                                         </button>
