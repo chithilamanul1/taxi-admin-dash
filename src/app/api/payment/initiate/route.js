@@ -24,6 +24,8 @@ export async function POST(req) {
             paymentMethod: data.paymentMethod || 'card',
         });
 
+        console.log(`[Payment Init] Booking: ${booking._id} | Type: ${booking.paymentType} | Total: ${booking.totalPrice} | Charging: ${booking.paidAmount || booking.totalPrice}`);
+
         // Log to Discord
         await logBookingCreated(booking).catch(console.error);
 
