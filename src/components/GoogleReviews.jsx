@@ -43,55 +43,70 @@ const GoogleReviews = () => {
     useEffect(() => {
         const loadReviews = async () => {
             try {
-                // Fetch TripAdvisor Reviews
-                const tripRes = await fetch('/api/tripadvisor');
-                const tripData = await tripRes.json();
+                // Fetch both reviews in parallel
+                const [googleRes, tripRes] = await Promise.allSettled([
+                    fetch('/api/reviews/google'),
+                    fetch('/api/tripadvisor')
+                ]);
 
-                let combinedReviews = [...FALLBACK_REVIEWS];
+                let googleReviews = [];
+                let tripReviews = [];
+                let newRating = 4.9;
+                let newTotal = 128;
 
-                if (googleData.success && googleData.data?.reviews?.length > 0) {
-                    combinedReviews = googleData.data.reviews.map(r => ({ ...r, source: 'google' }));
-                    setRating(googleData.data.rating || 4.9);
-                    setTotalReviews(googleData.data.totalReviews || 128);
-                }
-
-                if (tripData.success && tripData.reviews?.length > 0) {
-                    const mappedTripAdvisor = tripData.reviews.map(r => ({
-                        author_name: r.user.username,
-                        rating: Number(r.rating),
-                        text: r.text,
-                        relative_time_description: new Date(r.published_date).toLocaleDateString(),
-                        profile_photo_url: r.user.avatar,
-                        source: 'tripadvisor',
-                        source_icon: 'https://static.tacdn.com/img2/brand_refresh/Tripadvisor_lockup_horizontal_secondary_registered.svg'
-                    }));
-
-                    // Interleave reviews for better mix
-                    const mixed = [];
-                    const maxLength = Math.max(combinedReviews.length, mappedTripAdvisor.length);
-                    for (let i = 0; i < maxLength; i++) {
-                        if (combinedReviews[i]) mixed.push(combinedReviews[i]);
-                        if (mappedTripAdvisor[i]) mixed.push(mappedTripAdvisor[i]);
+                // Process Google Reviews
+                if (googleRes.status === 'fulfilled') {
+                    const googleData = await googleRes.value.json();
+                    if (googleData.success && googleData.data?.reviews?.length > 0) {
+                        googleReviews = googleData.data.reviews.map(r => ({
+                            author_name: r.author_name,
+                            rating: r.rating,
+                            text: r.text,
+                            relative_time_description: r.relative_time_description,
+                            profile_photo_url: r.profile_photo_url,
+                            source: 'google'
+                        }));
+                        newRating = googleData.data.rating || 4.9;
+                        newTotal = googleData.data.totalReviews || 128;
                     }
-                    combinedReviews = mixed;
                 }
 
-                if (websiteData.success && websiteData.reviews?.length > 0) {
-                    // Map website reviews to match Google review structure if needed
-                    const mappedWebsiteReviews = websiteData.reviews.map(r => ({
-                        author_name: r.userName,
-                        rating: r.rating,
-                        text: r.comment,
-                        relative_time_description: 'Verified Customer',
-                        profile_photo_url: r.userImage || null,
-                        source: 'website'
-                    }));
-                    combinedReviews = [...combinedReviews, ...mappedWebsiteReviews];
+                // Process TripAdvisor Reviews
+                if (tripRes.status === 'fulfilled') {
+                    const tripData = await tripRes.value.json();
+                    if (tripData.success && tripData.reviews?.length > 0) {
+                        tripReviews = tripData.reviews.map(r => ({
+                            author_name: r.user.username,
+                            rating: Number(r.rating),
+                            text: r.text,
+                            relative_time_description: new Date(r.published_date).toLocaleDateString(),
+                            profile_photo_url: r.user.avatar,
+                            source: 'tripadvisor',
+                            source_icon: 'https://static.tacdn.com/img2/brand_refresh/Tripadvisor_lockup_horizontal_secondary_registered.svg'
+                        }));
+                    }
+                }
+
+                // Merge and Interleave
+                let combinedReviews = [];
+                const maxLength = Math.max(googleReviews.length, tripReviews.length);
+
+                if (maxLength > 0) {
+                    for (let i = 0; i < maxLength; i++) {
+                        if (googleReviews[i]) combinedReviews.push(googleReviews[i]);
+                        if (tripReviews[i]) combinedReviews.push(tripReviews[i]);
+                    }
+                } else {
+                    combinedReviews = [...FALLBACK_REVIEWS];
                 }
 
                 setReviews(combinedReviews);
+                setRating(newRating);
+                setTotalReviews(newTotal);
+
             } catch (err) {
                 console.error('Failed to fetch reviews:', err);
+                // Keep fallback reviews on error
             }
         };
 
