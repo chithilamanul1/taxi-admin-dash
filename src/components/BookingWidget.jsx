@@ -336,7 +336,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const pricingCategory = ['pickup', 'drop'].includes(activeTab) ? 'airport-transfer' : 'ride-now';
 
     return (
-        <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4">
+        <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4 overflow-x-hidden">
             {/* Google Maps Loader (Conditional) */}
 
             {/* Tab Navigation */}
@@ -363,12 +363,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             </div>
 
             {/* Widget Main Content */}
-            <div className="bg-gradient-to-br from-emerald-50 via-white to-amber-50/30 dark:from-slate-900 dark:via-slate-900 dark:to-emerald-950/30 rounded-[2rem] p-5 lg:p-8 shadow-xl border-2 border-emerald-200/50 dark:border-emerald-800/30 animate-slide-up transition-colors duration-300 overflow-hidden">
+            <div className="bg-gradient-to-br from-emerald-50 via-white to-amber-50/30 dark:from-slate-900 dark:via-slate-900 dark:to-emerald-950/30 rounded-[2rem] p-5 lg:p-8 shadow-xl border-2 border-emerald-200/50 dark:border-emerald-800/30 animate-slide-up transition-colors duration-300">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
-                    <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12">
+                    <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
                         {/* Section 1: Inputs */}
-                        <div className="space-y-6">
+                        <div className="space-y-6 min-w-0">
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div className="flex bg-emerald-100 dark:bg-emerald-900/30 p-1.5 rounded-xl border-2 border-emerald-200 dark:border-emerald-700/50 w-full sm:w-auto gap-1 shadow-sm">
                                     <button onClick={() => setTripType('one-way')} aria-label="One Way Trip" className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-bold transition-all ${tripType === 'one-way' ? 'bg-black text-white shadow-md' : 'text-emerald-700 hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-white hover:bg-emerald-200/50 dark:hover:bg-emerald-800/30'}`}>One Way</button>
