@@ -76,7 +76,23 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         }
     };
 
-    const { currency } = useCurrency(); // Import Currency Context
+    const { currency, rates } = useCurrency(); // Import Currency Context
+
+    // Currency conversion helper
+    const SUPPORTED_CURRENCIES = [
+        { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: '🇱🇰' },
+        { code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸' },
+        { code: 'EUR', symbol: '€', name: 'Euro', flag: '🇪🇺' },
+        { code: 'GBP', symbol: '£', name: 'British Pound', flag: '🇬🇧' },
+        { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳' },
+    ];
+
+    const convertToAllCurrencies = (amountLKR) => {
+        return SUPPORTED_CURRENCIES.map(c => ({
+            ...c,
+            value: Math.ceil(amountLKR * (rates?.[c.code] || 1))
+        }));
+    };
 
     const getPriceBreakdown = () => {
         const vehicleData = pricing.find(p => p.vehicleType === formData.vehicle);
@@ -435,18 +451,32 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
                             </div>
 
-                            <div className="p-5 md:p-8 bg-emerald-900 rounded-[2rem] text-white flex flex-col md:flex-row items-start md:items-center justify-between shadow-xl gap-4 md:gap-0">
-                                <div className="w-full md:w-auto">
-                                    <div className="flex items-center gap-2 text-emerald-400 mb-1">
-                                        <Zap size={14} fill="currentColor" />
-                                        <span className="text-[10px] font-extrabold uppercase tracking-widest">{formData.paymentType === 'partial' ? 'Pay Now' : 'Total Price'}</span>
+                            <div className="p-5 md:p-8 bg-emerald-900 rounded-[2rem] text-white flex flex-col shadow-xl gap-4">
+                                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0">
+                                    <div className="w-full md:w-auto">
+                                        <div className="flex items-center gap-2 text-emerald-400 mb-1">
+                                            <Zap size={14} fill="currentColor" />
+                                            <span className="text-[10px] font-extrabold uppercase tracking-widest">{formData.paymentType === 'partial' ? 'Pay Now' : 'Total Price'}</span>
+                                        </div>
+                                        <div className="text-2xl md:text-4xl font-black leading-tight">Rs {payNow.toLocaleString()}</div>
+                                        {formData.couponCode && <div className="text-[10px] text-emerald-300 font-bold uppercase mt-1">Coupon {formData.couponCode} Applied</div>}
                                     </div>
-                                    <div className="text-2xl md:text-4xl font-black leading-tight">Rs {payNow.toLocaleString()}</div>
-                                    {formData.couponCode && <div className="text-[10px] text-emerald-300 font-bold uppercase mt-1">Coupon {formData.couponCode} Applied</div>}
+                                    <div className="text-left md:text-right w-full md:w-auto border-t md:border-t-0 border-white/10 pt-3 md:pt-0">
+                                        <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Route Distance</div>
+                                        <div className="text-lg md:text-xl font-bold text-white">{distance.toFixed(1)} KM</div>
+                                    </div>
                                 </div>
-                                <div className="text-left md:text-right w-full md:w-auto border-t md:border-t-0 border-white/10 pt-3 md:pt-0">
-                                    <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Route Distance</div>
-                                    <div className="text-lg md:text-xl font-bold text-white">{distance.toFixed(1)} KM</div>
+                                {/* Multi-Currency Display */}
+                                <div className="border-t border-white/10 pt-4">
+                                    <div className="text-[9px] font-bold text-white/50 uppercase tracking-widest mb-2">Price in All Currencies</div>
+                                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                                        {convertToAllCurrencies(payNow).map(c => (
+                                            <div key={c.code} className={`px-3 py-2 rounded-xl text-center ${c.code === 'LKR' ? 'bg-emerald-700/50 ring-1 ring-emerald-400/50' : 'bg-white/5'}`}>
+                                                <div className="text-[10px] text-white/60">{c.flag} {c.code}</div>
+                                                <div className="text-sm font-bold text-white">{c.symbol} {c.value.toLocaleString()}</div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
