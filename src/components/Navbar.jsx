@@ -61,7 +61,7 @@ export default function Navbar() {
                 </Link>
 
                 {/* Desktop Nav */}
-                <div className="hidden lg:flex items-center gap-6">
+                <div className="hidden lg:flex items-center gap-4 xl:gap-6">
                     <Link
                         href="/"
                         className={`text-sm font-bold uppercase tracking-widest hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${pathname === '/' ? 'text-emerald-900 dark:text-white' : (needsSolidBg ? 'text-emerald-900/70 dark:text-slate-300' : 'text-white/80')}`}

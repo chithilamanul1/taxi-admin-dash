@@ -8,18 +8,53 @@ const ReviewStatsBar = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await fetch('/api/tripadvisor');
-                const data = await res.json();
-                if (data.success && data.rating) {
-                    setStats({
-                        rating: data.rating,
-                        count: `${data.num_reviews} Reviews`
-                    });
+                // Fetch both stats in parallel
+                const [tripRes, googleRes] = await Promise.allSettled([
+                    fetch('/api/tripadvisor'),
+                    fetch('/api/reviews/google')
+                ]);
+
+                let totalCount = 0;
+                let weightedRatingSum = 0;
+
+                // Process TripAdvisor
+                if (tripRes.status === 'fulfilled') {
+                    const data = await tripRes.value.json();
+                    if (data.success && data.rating) {
+                        const count = parseInt(data.num_reviews) || 0;
+                        const rating = parseFloat(data.rating) || 0;
+                        totalCount += count;
+                        weightedRatingSum += (rating * count);
+                    }
                 }
+
+                // Process Google
+                if (googleRes.status === 'fulfilled') {
+                    const data = await googleRes.value.json();
+                    if (data.success && data.data) {
+                        const count = parseInt(data.data.totalReviews) || 0;
+                        const rating = parseFloat(data.data.rating) || 0;
+                        totalCount += count;
+                        weightedRatingSum += (rating * count);
+                    }
+                }
+
+                if (totalCount > 0) {
+                    const finalRating = (weightedRatingSum / totalCount).toFixed(1);
+                    setStats({
+                        rating: finalRating,
+                        count: `${totalCount}+ Reviews`
+                    });
+                } else {
+                    // Fallback to default if both fail
+                    setStats({ rating: '5.0', count: '400+ Reviews' });
+                }
+
             } catch (err) {
-                console.error('Failed to load TripAdvisor stats', err);
+                console.error('Failed to load review stats', err);
             }
         };
+
         fetchStats();
     }, []);
 
