@@ -53,31 +53,28 @@ async function updateImages() {
         console.log('Updated Mini Van (Every):', updateEvery.modifiedCount);
 
         // 2. Update Mini Bus (Actual Bus) -> bus.jpg
-        // Note: User said "bus is the normal bus".
-        // We need to ensure 'mini-bus' vehicle type has the bus image.
+        // Note: DB type is 'bus' (not 'mini-bus')
         const updateMiniBus = await Pricing.updateMany(
-            { vehicleType: 'mini-bus' },
+            { vehicleType: 'bus' },
             { $set: { image: '/vehicles/bus.jpg', name: 'Mini Bus (26 Seater)' } }
         );
         console.log('Updated Mini Bus:', updateMiniBus.modifiedCount);
 
-        // 3. Update KDH High Roof -> minibus.jpg (Legacy name, but correct image content per user)
-        // User said: "minibus is acidentaly renamed it is kdh highroof"
-        // So 'kdh-van' should use '/vehicles/minibus.jpg'
+        // 3. Update KDH High Roof (kdh-van) -> minibus.jpg
         const updateKDH = await Pricing.updateMany(
             { vehicleType: 'kdh-van' },
             { $set: { image: '/vehicles/minibus.jpg', name: 'KDH High Roof Van' } }
         );
         console.log('Updated KDH High Roof:', updateKDH.modifiedCount);
 
-        // 4. Create/Update Normal KDH -> van.png
+        // 4. Create/Update Normal KDH -> kdh.jpg
         const normalKDH = await Pricing.findOne({ vehicleType: 'normal-kdh', category: 'airport-transfer' });
         if (!normalKDH) {
             const newKDH = await Pricing.create({
                 vehicleType: 'normal-kdh',
                 category: 'airport-transfer',
                 name: 'Normal KDH Van',
-                image: '/vehicles/van.png',
+                image: '/vehicles/kdh.jpg',
                 capacity: 9,
                 luggage: 6,
                 basePrice: 6000,
@@ -90,7 +87,7 @@ async function updateImages() {
         } else {
             const updateNormal = await Pricing.updateOne(
                 { _id: normalKDH._id },
-                { $set: { image: '/vehicles/van.png', name: 'Normal KDH Van' } }
+                { $set: { image: '/vehicles/kdh.jpg', name: 'Normal KDH Van' } }
             );
             console.log('Updated Normal KDH Van:', updateNormal.modifiedCount);
         }
