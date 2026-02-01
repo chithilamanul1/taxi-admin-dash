@@ -214,56 +214,51 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         navigator.geolocation.getCurrentPosition(async (pos) => {
             try {
                 const { latitude, longitude } = pos.coords;
-                // Reverse Geocode with Nominatim
-                const res = await fetch(`/api/proxy/nominatim?lat=${latitude}&lon=${longitude}`);
-                const data = await res.json();
 
-                const loc = {
-                    name: data.display_name || `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,
-                    lat: latitude,
-                    lon: longitude
-                };
-                setPickup(loc);
-                setPickupSearch(loc.name);
+                // Load Google Maps Script if not already loaded (Generic check)
+                if (!window.google || !window.google.maps || !window.google.maps.Geocoder) {
+                    // Ideally rely on it being loaded, but basic safety
+                    // In this app structure, LocationInput loads it fast. 
+                    // If not loaded, we might fail here, but assuming script is present:
+                }
+
+                if (window.google && window.google.maps) {
+                    const geocoder = new window.google.maps.Geocoder();
+                    geocoder.geocode({ location: { lat: latitude, lng: longitude } }, (results, status) => {
+                        if (status === 'OK' && results[0]) {
+                            const loc = {
+                                name: results[0].formatted_address,
+                                lat: latitude,
+                                lon: longitude
+                            };
+                            setPickup(loc);
+                            setPickupSearch(loc.name);
+                        } else {
+                            // Fallback to coords
+                            setPickup({ name: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`, lat: latitude, lon: longitude });
+                            setPickupSearch(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+                        }
+                        setIsLocating(false);
+                    });
+                } else {
+                    // Very fallback
+                    setPickup({ name: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`, lat: latitude, lon: longitude });
+                    setPickupSearch(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+                    setIsLocating(false);
+                }
+
             } catch (err) {
                 console.error("Locating Error:", err);
-                // Fallback to coords
-                setPickup({ name: `${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`, lat: pos.coords.latitude, lon: pos.coords.longitude });
-                setPickupSearch(`${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
-            } finally {
                 setIsLocating(false);
             }
         }, () => setIsLocating(false));
     }
 
-    // Distance Calculation (Google Directions)
-    // Distance Calculation (OSRM)
-    useEffect(() => {
-        if (pickup.lat && pickup.lon && dropoff.lat && dropoff.lon) {
-            const calculateRoute = async () => {
-                try {
-                    // OSRM Format: {lon},{lat};{lon},{lat}
-                    let coordsString = `${pickup.lon},${pickup.lat};${dropoff.lon},${dropoff.lat}`;
-
-                    // Add waypoints if any
-                    if (waypoints.length > 0) {
-                        const wpString = waypoints.map(w => `${w.lon},${w.lat}`).join(';');
-                        coordsString = `${pickup.lon},${pickup.lat};${wpString};${dropoff.lon},${dropoff.lat}`;
-                    }
-
-                    const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${coordsString}?overview=false`);
-                    const data = await res.json();
-
-                    if (data.routes && data.routes.length > 0) {
-                        setDistance(data.routes[0].distance / 1000); // meters to km
-                    }
-                } catch (err) {
-                    console.error("OSRM Routing Error:", err);
-                }
-            }
-            calculateRoute()
-        }
-    }, [pickup, dropoff, waypoints])
+    // Distance updated via TripMap callback now
+    const handleRouteCalculated = (data) => {
+        setDistance(data.distanceKm);
+        // We could also set duration if needed
+    }
 
     // Fetch Marketing Offers
     useEffect(() => {
@@ -418,13 +413,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 <div className="flex items-center gap-2 w-full sm:w-auto">
                                     {/* Currency Selector */}
-                                    <div className="relative group z-[60]">
+                                    <div className="relative group z-[110]">
                                         <button className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-emerald-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-black text-slate-700 dark:text-slate-300 hover:border-emerald-500 transition-all shadow-sm">
                                             <span className="text-sm">{SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag}</span>
                                             <span className="opacity-80 uppercase">{currency}</span>
                                             <ChevronDown size={14} className="opacity-50" />
                                         </button>
-                                        <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200 z-[120]">
+                                        <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
                                             <div className="py-2">
                                                 {SUPPORTED_CURRENCIES.map(c => (
                                                     <button
@@ -487,7 +482,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     newWps[idx].waitingTime = parseInt(e.target.value);
                                                     setWaypoints(newWps);
                                                 }}
-                                                className="bg-transparent text-xs font-bold text-emerald-900 dark:text-white outline-none cursor-pointer w-16 appearance-none"
+                                                className="bg-transparent text-xs font-bold text-emerald-900 dark:text-white outline-none cursor-pointer w-20 appearance-none"
                                             >
                                                 {[0, 1, 2, 3, 4, 5, 6].map(h => (
                                                     <option key={h} value={h}>{h} hr{h !== 1 ? 's' : ''}</option>
@@ -839,7 +834,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                 </div>
 
-                                <TripMap pickup={pickup} dropoff={dropoff} waypoints={waypoints} />
+                                <TripMap pickup={pickup} dropoff={dropoff} waypoints={waypoints} onRouteCalculated={handleRouteCalculated} />
 
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center text-sm">

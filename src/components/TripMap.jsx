@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
 
-export default function TripMap({ pickup, dropoff, waypoints = [] }) {
+export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalculated }) {
     const mapRef = useRef(null);
     const [directionsRenderer, setDirectionsRenderer] = useState(null);
     const [directionsService, setDirectionsService] = useState(null);
@@ -66,6 +66,28 @@ export default function TripMap({ pickup, dropoff, waypoints = [] }) {
                 (result, status) => {
                     if (status === window.google.maps.DirectionsStatus.OK) {
                         directionsRenderer.setDirections(result);
+
+                        // Extract distance and duration from the first route's first leg
+                        const route = result.routes[0];
+                        if (route && route.legs && route.legs[0]) {
+                            const leg = route.legs[0];
+                            // Careful: Google returns value in meters/seconds, text in human readable
+                            // We need sum of all legs if waypoints exist
+                            let totalDistanceMeters = 0;
+                            let totalDurationSeconds = 0;
+
+                            route.legs.forEach(leg => {
+                                totalDistanceMeters += leg.distance.value;
+                                totalDurationSeconds += leg.duration.value;
+                            });
+
+                            if (onRouteCalculated) {
+                                onRouteCalculated({
+                                    distanceKm: totalDistanceMeters / 1000,
+                                    durationMin: Math.round(totalDurationSeconds / 60)
+                                });
+                            }
+                        }
                     } else {
                         console.error(`Directions request failed due to ${status}`);
                     }
