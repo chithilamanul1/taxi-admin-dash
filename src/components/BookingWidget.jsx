@@ -377,7 +377,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         aria-controls={`panel-${tab.id}`}
                         id={`tab-${tab.id}`}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all min-w-[120px] ${activeTab === tab.id ? 'bg-emerald-900 text-white shadow-lg' : 'text-emerald-900/80 dark:text-emerald-400/80 hover:bg-emerald-900/5'}`}
+                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all min-w-[120px] ${activeTab === tab.id ? 'bg-[#00A99D] text-white shadow-lg shadow-teal-500/20' : 'text-slate-600 dark:text-teal-400/80 hover:bg-teal-50 dark:hover:bg-teal-900/10'}`}
                     >
                         <tab.icon size={16} />
                         {tab.label}
@@ -386,7 +386,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             </div>
 
             {/* Widget Main Content */}
-            <div className="bg-gradient-to-br from-emerald-50 via-white to-amber-50/30 dark:from-slate-900 dark:via-slate-900 dark:to-emerald-950/30 rounded-[2rem] p-5 lg:p-8 shadow-xl border-2 border-emerald-200/50 dark:border-emerald-800/30 animate-slide-up transition-colors duration-300">
+            <div className="bg-gradient-to-br from-[#E0F7FA] via-white to-[#E0F2F1] dark:from-slate-900 dark:via-slate-900 dark:to-teal-950/30 rounded-[2rem] p-5 lg:p-8 shadow-xl border-2 border-teal-100/50 dark:border-teal-800/30 animate-slide-up transition-colors duration-300">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">

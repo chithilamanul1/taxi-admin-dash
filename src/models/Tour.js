@@ -1,30 +1,57 @@
 import mongoose from 'mongoose';
 
-const TourSchema = new mongoose.Schema({
+const itinerarySchema = new mongoose.Schema({
+    day: { type: Number, required: true },
     title: { type: String, required: true },
-    slug: { type: String, unique: true, required: true },
-    description: { type: String, required: true },
+    description: { type: String },
+    activities: { type: [String], default: [] }, // Array of strings for bullets
+    overnightStay: { type: String }
+}, { _id: false });
+
+const tourSchema = new mongoose.Schema({
+    title: { type: String, required: true, trim: true },
+    slug: { type: String, required: true, unique: true, lowercase: true },
     category: {
         type: String,
-        enum: ['Day Tours', 'City Tours', 'Safari', 'Multi-Day'],
-        default: 'Day Tours'
+        enum: ['tour-package', 'day-trip', 'safari'],
+        required: true,
+        default: 'tour-package'
     },
-    duration: { type: Number, required: true, default: 1 }, // Days
-    price: { type: Number, required: true }, // Base price in USD usually
-    image: { type: String, required: true }, // Main thumbnail
-    images: { type: [String], default: [] }, // Gallery
-    rating: { type: Number, default: 4.8 },
-    highlights: { type: [String], default: [] },
-    itinerary: [{
-        day: Number,
-        title: String,
-        description: String,
-        activity: String
-    }],
+    duration: {
+        days: { type: Number, required: true },
+        nights: { type: Number, required: true }
+    },
+    description: { type: String, required: true },
+    shortDescription: { type: String }, // For card view (excerpt)
+    images: { type: [String], default: [] },
+    heroImage: { type: String },
+
+    // Pricing
+    price: {
+        amount: { type: Number, required: true },
+        currency: { type: String, default: 'USD' },
+        type: { type: String, enum: ['fixed', 'from', 'per-person'], default: 'from' }
+    },
+
+    // Details
+    destinations: { type: [String], default: [] }, // Tags: Kandy, Yala...
     inclusions: { type: [String], default: [] },
     exclusions: { type: [String], default: [] },
-    isActive: { type: Boolean, default: true },
-    order: { type: Number, default: 0 } // For sorting
-}, { timestamps: true });
+    itinerary: [itinerarySchema],
 
-export default mongoose.models.Tour || mongoose.model('Tour', TourSchema);
+    // Meta
+    isFeatured: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: true },
+    sortOrder: { type: Number, default: 0 }
+}, {
+    timestamps: true
+});
+
+// Force model recompilation in Dev to pick up Enum changes
+if (process.env.NODE_ENV !== 'production') {
+    delete mongoose.models.Tour;
+}
+
+const Tour = mongoose.models.Tour || mongoose.model('Tour', tourSchema);
+
+export default Tour;

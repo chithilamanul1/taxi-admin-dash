@@ -6,11 +6,6 @@ export async function POST() {
     try {
         await dbConnect();
 
-        // FORCE RELOAD MODEL (Dev only fix for cached schema)
-        if (process.env.NODE_ENV !== 'production') {
-            delete mongoose.models.Pricing;
-        }
-
         // 1. Clear existing pricing data
         await Pricing.deleteMany({});
 
