@@ -85,6 +85,11 @@ pricingSchema.methods.calculatePrice = function (distanceKm, tripType = 'one-way
     return Math.round(totalPrice);
 };
 
+// Force model recompilation in Dev to pick up Enum changes
+if (process.env.NODE_ENV !== 'production') {
+    delete mongoose.models.Pricing;
+}
+
 const Pricing = mongoose.models.Pricing || mongoose.model('Pricing', pricingSchema);
 
 export default Pricing;

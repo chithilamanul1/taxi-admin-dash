@@ -534,7 +534,17 @@ export default function AdminDashboard() {
                                                 <tr><td colSpan="5" className="p-8 text-center text-gray-400">No bookings found</td></tr>
                                             ) : (
                                                 filteredBookings.map((booking) => (
-                                                    <tr key={booking._id} className="hover:bg-slate-50 transition-colors">
+                                                    <tr key={booking._id}
+                                                        className={`hover:bg-slate-50 transition-colors cursor-pointer ${selectedBooking?._id === booking._id ? 'bg-emerald-50' : ''}`}
+                                                        onClick={() => {
+                                                            setSelectedBooking(booking);
+                                                            // Find and mark related notification as read
+                                                            const relatedNotif = notifications.find(n => !n.isRead && n.bookingId === booking._id);
+                                                            if (relatedNotif) {
+                                                                markNotificationRead(relatedNotif._id);
+                                                            }
+                                                        }}
+                                                    >
                                                         <td className="px-6 py-4 font-mono text-xs text-slate-400">#{booking._id.slice(-6)}</td>
                                                         <td className="px-6 py-4">
                                                             <div className="font-bold text-emerald-900">{booking.customerName}</div>
@@ -599,10 +609,14 @@ export default function AdminDashboard() {
                                                     fetch('/api/debug/seed-data', { method: 'POST' })
                                                         .then(res => res.json())
                                                         .then(data => {
-                                                            alert(data.message);
-                                                            window.location.reload();
+                                                            if (data.success) {
+                                                                alert(data.message);
+                                                                window.location.reload();
+                                                            } else {
+                                                                alert('Error: ' + (data.error || 'Unknown error'));
+                                                            }
                                                         })
-                                                        .catch(err => alert('Failed to reset'));
+                                                        .catch(err => alert('Failed to reset: ' + err.message));
                                                 }
                                             }}
                                             className="text-xs bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200"
@@ -729,14 +743,13 @@ export default function AdminDashboard() {
                                             >
                                                 <div className="flex items-center justify-between mb-4">
                                                     <div className="flex items-center gap-4">
-                                                        <div className="w-20 h-14 bg-slate-100 rounded-lg overflow-hidden">
-                                                            {vehicle.image ? (
-                                                                <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-contain" />
-                                                            ) : (
-                                                                <div className="w-full h-full flex items-center justify-center">
-                                                                    <Car className="text-emerald-900" size={24} />
-                                                                </div>
-                                                            )}
+                                                        <div className="w-20 h-14 bg-slate-100 rounded-lg overflow-hidden flex items-center justify-center">
+                                                            <img
+                                                                src={vehicle.image || '/vehicles/placeholder.png'}
+                                                                alt={vehicle.name}
+                                                                className="w-full h-full object-contain"
+                                                                onError={(e) => { e.target.src = '/vehicles/placeholder.png' }}
+                                                            />
                                                         </div>
                                                         <div>
                                                             <h3 className="font-bold text-emerald-900 text-lg">{vehicle.name}</h3>
