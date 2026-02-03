@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
 
-export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalculated }) {
+export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated }) {
     const mapRef = useRef(null);
     const [directionsRenderer, setDirectionsRenderer] = useState(null);
     const [directionsService, setDirectionsService] = useState(null);
@@ -51,7 +51,7 @@ export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalcul
             const destination = { lat: dropoff.lat, lng: dropoff.lon };
 
             // Convert waypoints if they exist
-            const waypointsList = waypoints.map(wp => ({
+            const waypointsList = (waypoints || []).map(wp => ({
                 location: { lat: wp.lat, lng: wp.lon },
                 stopover: true
             }));
