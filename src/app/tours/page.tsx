@@ -5,8 +5,26 @@ import { Clock, MapPin, CheckCircle, ArrowRight, Star, Filter, Loader2 } from 'l
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/Card';
 import Link from 'next/link';
 
+interface Tour {
+    _id: string;
+    title: string;
+    slug: string;
+    category: string;
+    type?: string;
+    duration: { days: number; nights: number };
+    description: string;
+    shortDescription?: string;
+    price: { amount: number; currency: string; type: string };
+    images: string[];
+    heroImage?: string;
+    inclusions?: string[];
+    destinations?: string[];
+    isFeatured?: boolean;
+    isActive?: boolean;
+}
+
 export default function ToursPage() {
-    const [tours, setTours] = useState([]);
+    const [tours, setTours] = useState<Tour[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [filter, setFilter] = useState('all'); // all, safari, tour-package, day-trip
 
@@ -59,8 +77,8 @@ export default function ToursPage() {
                             key={cat.id}
                             onClick={() => setFilter(cat.id)}
                             className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all ${filter === cat.id
-                                    ? 'bg-[#006064] text-white shadow-lg shadow-cyan-900/20'
-                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                ? 'bg-[#006064] text-white shadow-lg shadow-cyan-900/20'
+                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                 }`}
                         >
                             {cat.label}
