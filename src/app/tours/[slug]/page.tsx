@@ -158,7 +158,7 @@ export default function TourDetailsPage() {
                         </div>
 
                         {/* Itinerary Timeline */}
-                        {tour.itinerary?.length > 0 && (
+                        {(tour.itinerary?.length || 0) > 0 && (
                             <div className="bg-white rounded-3xl p-8 shadow-xl border-none">
                                 <h2 className="text-2xl font-black text-[#006064] mb-8">Tour Itinerary</h2>
                                 <div className="space-y-8 relative before:absolute before:inset-0 before:ml-3.5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
