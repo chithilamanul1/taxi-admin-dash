@@ -377,7 +377,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         aria-controls={`panel-${tab.id}`}
                         id={`tab-${tab.id}`}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all min-w-[120px] ${activeTab === tab.id ? 'bg-[#00A99D] text-white shadow-lg shadow-teal-500/20' : 'text-slate-600 dark:text-teal-400/80 hover:bg-teal-50 dark:hover:bg-teal-900/10'}`}
+                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all min-w-[120px] ${activeTab === tab.id ? 'bg-amber-400 text-black shadow-lg shadow-amber-500/20' : 'text-slate-600 dark:text-amber-100/80 hover:bg-amber-50 dark:hover:bg-amber-900/10'}`}
                     >
                         <tab.icon size={16} />
                         {tab.label}
