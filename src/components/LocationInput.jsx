@@ -3,16 +3,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MapPin, Loader2, X } from 'lucide-react';
 
 const LocationInput = ({
-    label,
-    placeholder,
-    value,
-    onChange, // (address) => void
-    onSelect, // ({ address, lat, lon }) => void
-    onFocus,
-    disabled,
+    label = '',
+    placeholder = 'Enter location',
+    value = '',
+    onChange = () => { }, // (address) => void
+    onSelect = () => { }, // ({ address, lat, lon }) => void
+    onFocus = () => { },
+    disabled = false,
     icon: Icon = MapPin,
-    isLoaded, // IGNORED: No longer depends on Google Script
-    zIndex
+    isLoaded = true, // IGNORED: No longer depends on Google Script
+    zIndex = 20
 }) => {
     const [query, setQuery] = useState(value || '');
     const [suggestions, setSuggestions] = useState([]);
