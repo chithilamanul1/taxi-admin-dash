@@ -6,11 +6,30 @@ import { Clock, MapPin, CheckCircle, X, Calendar, User, Info, ArrowLeft, ShieldC
 import Link from 'next/link';
 import TourBookingModal from '@/components/TourBookingModal';
 
+interface Tour {
+    _id: string;
+    title: string;
+    slug: string;
+    category: string;
+    type?: string;
+    duration: { days: number; nights: number };
+    description: string;
+    price: { amount: number; currency: string; type: string };
+    images: string[];
+    heroImage?: string;
+    itinerary?: { day: number; title: string; description: string; activities: string[] }[];
+    inclusions?: string[];
+    exclusions?: string[];
+    destinations?: string[];
+    isFeatured?: boolean;
+    isActive?: boolean;
+}
+
 export default function TourDetailsPage() {
     const params = useParams();
     const { slug } = params;
 
-    const [tour, setTour] = useState(null);
+    const [tour, setTour] = useState<Tour | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isBookingOpen, setIsBookingOpen] = useState(false);
 
