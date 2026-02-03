@@ -121,7 +121,7 @@ export default function TourDetailsPage() {
                                 </span>
                                 <span className="flex items-center gap-2">
                                     <MapPin size={18} className="text-[#00A99D]" />
-                                    {tour.destinations?.length ? `${tour.destinations?.length} Destinations` : 'Sri Lanka'}
+                                    {tour.destinations?.length ? `${tour.destinations?.length || 0} Destinations` : 'Sri Lanka'}
                                 </span>
                             </div>
                         </div>
