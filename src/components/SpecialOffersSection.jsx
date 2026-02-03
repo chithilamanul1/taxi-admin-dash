@@ -10,7 +10,7 @@ export default function SpecialOffersSection() {
     const [copiedCode, setCopiedCode] = useState(null);
 
     useEffect(() => {
-        fetch('/api/coupons')
+        fetch('/api/coupons?public=true')
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) {

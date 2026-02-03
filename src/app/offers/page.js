@@ -11,7 +11,7 @@ export default function OffersPage() {
     const [copiedCode, setCopiedCode] = useState(null);
 
     useEffect(() => {
-        fetch('/api/coupons')
+        fetch('/api/coupons?public=true')
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) {
@@ -138,8 +138,8 @@ export default function OffersPage() {
                                             <button
                                                 onClick={() => copyToClipboard(coupon.code)}
                                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-all ${copiedCode === coupon.code
-                                                        ? 'bg-emerald-500 text-white'
-                                                        : 'bg-emerald-600 text-white hover:bg-emerald-700 hover:scale-105'
+                                                    ? 'bg-emerald-500 text-white'
+                                                    : 'bg-emerald-600 text-white hover:bg-emerald-700 hover:scale-105'
                                                     }`}
                                             >
                                                 {copiedCode === coupon.code ? (
