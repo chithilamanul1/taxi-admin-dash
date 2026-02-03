@@ -6,8 +6,8 @@ const LocationInput = ({
     label = '',
     placeholder = 'Enter location',
     value = '',
-    onChange = () => { }, // (address) => void
-    onSelect = () => { }, // ({ address, lat, lon }) => void
+    onChange = (_) => { }, // (address) => void
+    onSelect = (_) => { }, // ({ address, lat, lon }) => void
     onFocus = () => { },
     disabled = false,
     icon: Icon = MapPin,
