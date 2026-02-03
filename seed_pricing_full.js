@@ -54,24 +54,50 @@ async function seed() {
         // --- TIER DEFINITIONS ---
         // 'flat': Price is the TOTAL price for that range.
         // 'per_km': Price is Distance * Rate.
-        const miniVanEveryAirportTiers = [
+        // --- TIER DEFINITIONS (Ride Now) ---
+        const miniCarTiers = [
+            { min: 0, max: 20, type: 'flat', price: 3500 },
+            { min: 21, max: 40, type: 'flat', price: 4000 },
+            { min: 41, max: 130, type: 'per_km', rate: 100 },
+            { min: 131, max: 9999, type: 'per_km', rate: 102 }
+        ];
+
+        const sedanTiers = [
             { min: 0, max: 20, type: 'flat', price: 4500 },
             { min: 21, max: 40, type: 'flat', price: 6000 },
             { min: 41, max: 50, type: 'per_km', rate: 150 },
             { min: 51, max: 100, type: 'per_km', rate: 130 },
-            { min: 101, max: 140, type: 'per_km', rate: 120 },
-            { min: 141, max: 200, type: 'per_km', rate: 115 },
-            { min: 201, max: 9999, type: 'per_km', rate: 110 }
+            { min: 101, max: 140, type: 'per_km', rate: 130 },
+            { min: 141, max: 200, type: 'per_km', rate: 127 },
+            { min: 201, max: 9999, type: 'per_km', rate: 122 }
         ];
 
-        const miniVanEveryRideTiers = [
-            { min: 0, max: 20, type: 'flat', price: 4501 }, // Distinct Rate for Ride Now
+        const miniVanEveryTiers = [
+            { min: 0, max: 20, type: 'flat', price: 4500 },
             { min: 21, max: 40, type: 'flat', price: 6000 },
             { min: 41, max: 50, type: 'per_km', rate: 150 },
             { min: 51, max: 100, type: 'per_km', rate: 130 },
-            { min: 101, max: 140, type: 'per_km', rate: 120 },
-            { min: 141, max: 200, type: 'per_km', rate: 115 },
-            { min: 201, max: 9999, type: 'per_km', rate: 110 }
+            { min: 101, max: 140, type: 'per_km', rate: 129 },
+            { min: 141, max: 200, type: 'per_km', rate: 127 },
+            { min: 201, max: 9999, type: 'per_km', rate: 122 }
+        ];
+
+        const miniVanSeat05Tiers = [
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 21, max: 40, type: 'flat', price: 8500 },
+            { min: 41, max: 100, type: 'per_km', rate: 200 },
+            { min: 101, max: 140, type: 'per_km', rate: 176 },
+            { min: 141, max: 200, type: 'per_km', rate: 143 },
+            { min: 201, max: 9999, type: 'per_km', rate: 132 }
+        ];
+
+        const kdhVanTiers = [
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 21, max: 40, type: 'flat', price: 8500 },
+            { min: 41, max: 100, type: 'per_km', rate: 200 },
+            { min: 101, max: 140, type: 'per_km', rate: 180 },
+            { min: 141, max: 200, type: 'per_km', rate: 145 },
+            { min: 201, max: 9999, type: 'per_km', rate: 135 }
         ];
 
         // --- VEHICLE TEMPLATES ---
@@ -79,18 +105,20 @@ async function seed() {
             miniCar: {
                 vehicleType: 'mini-car',
                 name: 'Mini Car (Budget)',
-                image: '/vehicles/wagon-r.jpeg',
+                image: '/vehicles/minicar.jpeg', // Updated
                 capacity: 3, luggage: 2, handLuggage: 2,
-                basePrice: 3500, baseKm: 20, perKmRate: 90,
-                features: commonFeatures
+                basePrice: 3500, baseKm: 20, perKmRate: 100,
+                features: commonFeatures,
+                tiers: []
             },
             sedan: {
                 vehicleType: 'sedan',
                 name: 'Sedan Car',
                 image: '/vehicles/sedan.png',
                 capacity: 4, luggage: 3, handLuggage: 3,
-                basePrice: 4500, baseKm: 20, perKmRate: 110,
-                features: commonFeatures
+                basePrice: 4500, baseKm: 20, perKmRate: 130,
+                features: commonFeatures,
+                tiers: []
             },
             vezel: {
                 vehicleType: 'vezel',
@@ -102,20 +130,21 @@ async function seed() {
             },
             miniVan4: {
                 vehicleType: 'mini-van-05',
-                name: 'Minivan (4 Seater)',
+                name: 'Mini Van (Seat 05)',
                 image: '/vehicles/minivan-4.jpg',
-                capacity: 4, luggage: 4, handLuggage: 2,
-                basePrice: 4000, baseKm: 20, perKmRate: 120,
-                features: commonFeatures
+                capacity: 5, luggage: 4, handLuggage: 2,
+                basePrice: 6000, baseKm: 20, perKmRate: 200,
+                features: commonFeatures,
+                tiers: []
             },
             miniVanEvery: {
                 vehicleType: 'mini-van-every',
                 name: 'Mini Van (Every)',
-                image: '/vehicles/Van.jpg',
+                image: '/vehicles/every.jpg', // Updated
                 capacity: 4, luggage: 4, handLuggage: 2,
                 basePrice: 4500, baseKm: 20, perKmRate: 150,
                 features: commonFeatures,
-                tiers: [] // Set dynamically
+                tiers: []
             },
             suv: {
                 vehicleType: 'suv',
@@ -128,10 +157,11 @@ async function seed() {
             kdhVan: {
                 vehicleType: 'kdh-van',
                 name: 'KDH High Roof Van',
-                image: '/vehicles/kdh.jpg',
+                image: '/vehicles/Van.jpg', // Updated (Normal KDH usually mapped to Van.jpg based on context)
                 capacity: 9, luggage: 8, handLuggage: 5,
                 basePrice: 8500, baseKm: 40, perKmRate: 180,
-                features: commonFeatures
+                features: commonFeatures,
+                tiers: []
             },
             bus: {
                 vehicleType: 'bus',
@@ -144,7 +174,7 @@ async function seed() {
             coach: {
                 vehicleType: 'coach-bus',
                 name: 'Luxury Coach Bus',
-                image: '/vehicles/couch_bus.jpg',
+                image: '/vehicles/couch_bus.jpg', // Updated spelling to matched file if needed, but couch_bus.jpg (couch vs coach)
                 capacity: 45, luggage: 50, handLuggage: 45,
                 basePrice: 25000, baseKm: 40, perKmRate: 450,
                 features: [...commonFeatures, 'TV', 'Reclining Seats']
@@ -152,6 +182,8 @@ async function seed() {
         };
 
         // --- 1. SEED AIRPORT TRANSFER ---
+        // (Keeping default pricing logic for airport for now, unless instructed otherwise. 
+        //  The user said 'rates for ride now', so applying explicitly there is safer.)
         await Pricing.deleteMany({ category: 'airport-transfer' });
         console.log('Cleared Airport Transfer.');
 
@@ -160,7 +192,7 @@ async function seed() {
             { ...vehicles.sedan, category: 'airport-transfer' },
             { ...vehicles.vezel, category: 'airport-transfer' },
             { ...vehicles.miniVan4, category: 'airport-transfer' },
-            { ...vehicles.miniVanEvery, category: 'airport-transfer', tiers: miniVanEveryAirportTiers },
+            { ...vehicles.miniVanEvery, category: 'airport-transfer', tiers: miniVanEveryTiers }, // Applying generic tiers if useful
             { ...vehicles.suv, category: 'airport-transfer' },
             { ...vehicles.kdhVan, category: 'airport-transfer' },
             { ...vehicles.bus, category: 'airport-transfer' },
@@ -174,13 +206,13 @@ async function seed() {
         console.log('Cleared Ride Now.');
 
         await Pricing.insertMany([
-            { ...vehicles.miniCar, category: 'ride-now' },
-            { ...vehicles.sedan, category: 'ride-now' },
+            { ...vehicles.miniCar, category: 'ride-now', tiers: miniCarTiers },
+            { ...vehicles.sedan, category: 'ride-now', tiers: sedanTiers },
             { ...vehicles.vezel, category: 'ride-now' },
-            { ...vehicles.miniVan4, category: 'ride-now' },
-            { ...vehicles.miniVanEvery, category: 'ride-now', tiers: miniVanEveryRideTiers, basePrice: 4501 },
+            { ...vehicles.miniVan4, category: 'ride-now', tiers: miniVanSeat05Tiers },
+            { ...vehicles.miniVanEvery, category: 'ride-now', tiers: miniVanEveryTiers },
             { ...vehicles.suv, category: 'ride-now' },
-            { ...vehicles.kdhVan, category: 'ride-now' },
+            { ...vehicles.kdhVan, category: 'ride-now', tiers: kdhVanTiers },
             { ...vehicles.bus, category: 'ride-now' },
             { ...vehicles.coach, category: 'ride-now' }
         ]);

@@ -507,6 +507,22 @@ const AdminDashboard = () => {
                                             className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
                                         />
                                     </div>
+                                    <div className="md:col-span-2">
+                                        <label className="block text-sm font-bold text-gray-700 dark:text-slate-400">Vehicle Image Path</label>
+                                        <div className="flex items-center gap-4 mt-1">
+                                            {editForm.image && (
+                                                <img src={editForm.image} alt="Preview" className="w-16 h-10 object-contain bg-slate-100 dark:bg-slate-800 rounded border dark:border-white/10" />
+                                            )}
+                                            <input
+                                                type="text"
+                                                value={editForm.image || ''}
+                                                onChange={(e) => handleFormChange(e, 'image')}
+                                                className="flex-1 p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                                placeholder="/vehicles/example.png"
+                                            />
+                                        </div>
+                                        <p className="text-xs text-gray-400 mt-1">Enter the path to the image file (e.g. /vehicles/sedan.png). Ensure the file exists in the public/vehicles folder.</p>
+                                    </div>
                                 </div>
 
                                 <div className="space-y-4 border-t dark:border-white/10 pt-4">
