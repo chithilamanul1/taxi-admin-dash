@@ -822,11 +822,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         </div>
 
                         {/* Section 2: Summary & Checkout */}
-                        <div className="bg-white dark:bg-slate-800 border-2 border-black dark:border-slate-600 rounded-3xl p-6 shadow-xl flex flex-col justify-between h-full">
+                        <div className="bg-amber-50/50 dark:bg-slate-900/50 border-2 border-slate-900 dark:border-slate-700 rounded-3xl p-6 shadow-xl flex flex-col justify-between h-full">
 
                             <div className="space-y-6">
                                 <div className="flex justify-between items-center">
-                                    <h2 className="text-xl font-bold text-emerald-900 dark:text-white tracking-tight">Trip Summary</h2>
+                                    <h2 className="text-xl font-bold text-amber-900 dark:text-amber-400 tracking-tight">Trip Summary</h2>
 
                                     {/* Currency Dropdown */}
                                     <div className="relative group">
