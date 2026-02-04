@@ -844,16 +844,16 @@ export default function AdminDashboard() {
                                                                     if (file) {
                                                                         const formData = new FormData()
                                                                         formData.append('file', file)
-                                                                        formData.append('vehicleType', vehicle.vehicleType)
-                                                                        const res = await fetch('/api/upload/vehicle', { method: 'POST', body: formData })
+                                                                        formData.append('folder', 'vehicles')
+                                                                        const res = await fetch('/api/upload', { method: 'POST', body: formData })
                                                                         const data = await res.json()
-                                                                        if (data.path) {
+                                                                        if (data.url) {
                                                                             await fetch(`/api/pricing/${vehicle.vehicleType}`, {
                                                                                 method: 'PUT',
                                                                                 headers: { 'Content-Type': 'application/json' },
-                                                                                body: JSON.stringify({ image: data.path })
+                                                                                body: JSON.stringify({ image: data.url })
                                                                             })
-                                                                            setVehiclePricing(prev => prev.map(v => v.vehicleType === vehicle.vehicleType ? { ...v, image: data.path } : v))
+                                                                            setVehiclePricing(prev => prev.map(v => v.vehicleType === vehicle.vehicleType ? { ...v, image: data.url } : v))
                                                                         }
                                                                     }
                                                                 }}
@@ -1289,10 +1289,10 @@ export default function AdminDashboard() {
                                                                     if (file) {
                                                                         const formData = new FormData()
                                                                         formData.append('file', file)
-                                                                        formData.append('vehicleType', 'tour-cover')
-                                                                        const res = await fetch('/api/upload/vehicle', { method: 'POST', body: formData })
+                                                                        formData.append('folder', 'tours')
+                                                                        const res = await fetch('/api/upload', { method: 'POST', body: formData })
                                                                         const data = await res.json()
-                                                                        if (data.path) setTourForm({ ...tourForm, image: data.path })
+                                                                        if (data.url) setTourForm({ ...tourForm, image: data.url })
                                                                     }
                                                                 }}
                                                                 className="text-xs w-full"
@@ -1499,11 +1499,11 @@ export default function AdminDashboard() {
                                                                         if (file) {
                                                                             const formData = new FormData()
                                                                             formData.append('file', file)
-                                                                            formData.append('vehicleType', 'blog-cover') // Reuse existing endpoint logic
-                                                                            const res = await fetch('/api/upload/vehicle', { method: 'POST', body: formData })
+                                                                            formData.append('folder', 'blog')
+                                                                            const res = await fetch('/api/upload', { method: 'POST', body: formData })
                                                                             const data = await res.json()
-                                                                            if (data.path) {
-                                                                                setPostForm({ ...postForm, coverImage: data.path })
+                                                                            if (data.url) {
+                                                                                setPostForm({ ...postForm, coverImage: data.url })
                                                                             }
                                                                         }
                                                                     }}
