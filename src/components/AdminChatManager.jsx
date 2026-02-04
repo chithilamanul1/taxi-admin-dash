@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Pusher from 'pusher-js'
-import { MessageCircle, User, Send, Loader2, Clock, CheckCircle, Search, Lock } from 'lucide-react'
+import { MessageCircle, User, Send, Loader2, Clock, CheckCircle, Search, Lock, ArrowLeft } from 'lucide-react'
 
 export default function AdminChatManager() {
     const [chats, setChats] = useState([])
@@ -56,8 +56,6 @@ export default function AdminChatManager() {
                     return [updatedSession, ...prev];
                 }
             });
-
-            // If this is the currently selected chat, the other effect will handle the new message
         });
 
         return () => {
@@ -145,9 +143,9 @@ export default function AdminChatManager() {
     )
 
     return (
-        <div className="flex h-[730px] bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div className="flex flex-col md:flex-row h-[85vh] md:h-[730px] bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 overflow-hidden">
             {/* Sidebar: Chat List */}
-            <div className="w-80 border-r border-slate-200 dark:border-slate-800 flex flex-col bg-slate-50/50 dark:bg-slate-950/20">
+            <div className={`w-full md:w-80 border-r-0 md:border-r border-slate-200 dark:border-slate-800 flex flex-col bg-slate-50/50 dark:bg-slate-950/20 ${selectedChatId ? 'hidden md:flex' : 'flex'}`}>
                 <div className="p-6 border-b border-slate-200 dark:border-slate-800">
                     <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight mb-4 flex items-center gap-2">
                         <MessageCircle className="text-emerald-500" size={24} /> Live <span className="text-emerald-600">Support</span>
@@ -210,25 +208,33 @@ export default function AdminChatManager() {
             )}
 
             {/* Main: Chat View */}
-            <div className="flex-1 flex flex-col bg-white dark:bg-slate-900">
+            <div className={`flex-1 flex flex-col bg-white dark:bg-slate-900 ${!selectedChatId ? 'hidden md:flex' : 'flex'}`}>
                 {selectedChatId ? (
                     <>
                         {/* Chat Header */}
-                        <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-950/20">
-                            <div>
-                                <h3 className="font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">
-                                    {chats.find(c => c.id === selectedChatId)?.customerName || 'Guest User'}
-                                </h3>
-                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">ID: {selectedChatId}</p>
+                        <div className="p-4 md:p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-950/20">
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={() => setSelectedChatId(null)}
+                                    className="md:hidden w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400"
+                                >
+                                    <ArrowLeft size={18} />
+                                </button>
+                                <div>
+                                    <h3 className="font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight text-sm md:text-base">
+                                        {chats.find(c => c.id === selectedChatId)?.customerName || 'Guest User'}
+                                    </h3>
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">ID: {selectedChatId}</p>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg text-[10px] font-black uppercase tracking-wider">
+                            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg text-[10px] font-black uppercase tracking-wider">
                                 <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
                                 Connected
                             </div>
                         </div>
 
                         {/* Messages Area */}
-                        <div className="flex-1 overflow-y-auto p-8 space-y-4 custom-scrollbar bg-slate-50/50 dark:bg-slate-950/20">
+                        <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-4 custom-scrollbar bg-slate-50/50 dark:bg-slate-950/20">
                             {messages.map((msg) => (
                                 <div
                                     key={msg.id}
@@ -240,7 +246,7 @@ export default function AdminChatManager() {
                                         }`}>
                                         <p className="font-medium">{msg.text}</p>
                                         <span className={`text-[9px] block mt-2 font-bold opacity-60 uppercase tracking-widest ${msg.sender === 'admin' ? 'text-white text-right' : 'text-slate-400'}`}>
-                                            {msg.timestamp?.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </span>
                                     </div>
                                 </div>
@@ -249,21 +255,21 @@ export default function AdminChatManager() {
                         </div>
 
                         {/* Input Area */}
-                        <form onSubmit={sendMessage} className="p-6 border-t border-slate-200 dark:border-slate-800">
-                            <div className="relative flex items-center gap-4">
+                        <form onSubmit={sendMessage} className="p-4 md:p-6 border-t border-slate-200 dark:border-slate-800">
+                            <div className="relative flex items-center gap-3 md:gap-4">
                                 <input
                                     type="text"
                                     value={inputText}
                                     onChange={(e) => setInputText(e.target.value)}
                                     placeholder="Type message to relay back..."
-                                    className="flex-1 h-14 bg-slate-100 dark:bg-slate-800 border-none px-6 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500/20 text-sm font-medium pr-16 shadow-inner transition-all"
+                                    className="flex-1 h-12 md:h-14 bg-slate-100 dark:bg-slate-800 border-none px-4 md:px-6 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500/20 text-xs md:text-sm font-medium pr-14 md:pr-16 shadow-inner transition-all"
                                 />
                                 <button
                                     type="submit"
                                     disabled={loading || !inputText.trim()}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center hover:bg-emerald-700 transition-colors disabled:opacity-50 shadow-lg shadow-emerald-500/20"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center hover:bg-emerald-700 transition-colors disabled:opacity-50 shadow-lg shadow-emerald-500/20"
                                 >
-                                    {loading ? <Loader2 className="animate-spin" size={20} /> : <Send size={20} />}
+                                    {loading ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
                                 </button>
                             </div>
                         </form>
