@@ -848,12 +848,12 @@ export default function AdminDashboard() {
                                                                         const res = await fetch('/api/upload', { method: 'POST', body: formData })
                                                                         const data = await res.json()
                                                                         if (data.url) {
-                                                                            await fetch(`/api/pricing/${vehicle.vehicleType}`, {
+                                                                            await fetch(`/api/pricing`, {
                                                                                 method: 'PUT',
                                                                                 headers: { 'Content-Type': 'application/json' },
-                                                                                body: JSON.stringify({ image: data.url })
+                                                                                body: JSON.stringify({ _id: vehicle._id, image: data.url })
                                                                             })
-                                                                            setVehiclePricing(prev => prev.map(v => v.vehicleType === vehicle.vehicleType ? { ...v, image: data.url } : v))
+                                                                            setVehiclePricing(prev => prev.map(v => v._id === vehicle._id ? { ...v, image: data.url } : v))
                                                                         }
                                                                     }
                                                                 }}

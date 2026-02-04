@@ -589,90 +589,91 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Discount Coupon</label>
-                                    <div className="flex gap-2 relative">
-                                        <input
-                                            value={couponInput}
-                                            onChange={e => setCouponInput(e.target.value.toUpperCase())}
-                                            placeholder="ENTER CODE"
-                                            className="flex-1 h-14 bg-white border-2 border-amber-300 px-4 rounded-xl outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-200 transition-all font-black text-lg text-emerald-900 uppercase placeholder:normal-case shadow-sm"
-                                        />
-                                        <button
-                                            onClick={handleApplyCoupon}
-                                            disabled={couponLoading || !couponInput}
-                                            className={`px-6 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center min-w-[100px] shadow-lg ${couponInput ? 'bg-emerald-900 text-white hover:scale-105' : 'bg-slate-200 text-slate-400'}`}
-                                        >
-                                            {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'APPLY'}
-                                        </button>
-                                    </div>
-                                    {verifiedCoupon && (
-                                        <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-200 text-xs font-bold pl-2 animate-fade-in">
-                                            <Check size={14} className="bg-emerald-500 text-white rounded-full p-0.5" />
-                                            <span>Coupon applied: <span className="uppercase">{verifiedCoupon.code}</span></span>
-                                            <span className="text-emerald-900/60 font-medium ml-auto">
-                                                (-{verifiedCoupon.discountType === 'percentage' ? `${verifiedCoupon.value}%` : `Rs ${verifiedCoupon.value}`})
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                                <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Payment Method</label>
-                                <div className="grid grid-cols-1 gap-4">
-                                    {[
-                                        { id: 'cash', label: 'Cash Payment', icon: '💵', desc: 'Pay directly to chauffeur' },
-                                        { id: 'card', label: 'Online Payment', icon: '💳', desc: 'Secure digital transaction' },
-                                    ].map(m => (
-                                        <div key={m.id}>
-                                            <button onClick={() => setFormData({ ...formData, paymentMethod: m.id })} className={`w-full p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left ${formData.paymentMethod === m.id ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}>
-                                                <span className="text-3xl md:text-4xl">{m.icon}</span>
-                                                <div>
-                                                    <p className="font-bold text-emerald-900 text-sm tracking-tight">{m.label}</p>
-                                                    <p className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">{m.desc}</p>
-                                                </div>
+                                <div className="space-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Discount Coupon</label>
+                                        <div className="flex gap-2 relative">
+                                            <input
+                                                value={couponInput}
+                                                onChange={e => setCouponInput(e.target.value.toUpperCase())}
+                                                placeholder="ENTER CODE"
+                                                className="flex-1 h-14 bg-white border-2 border-amber-300 px-4 rounded-xl outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-200 transition-all font-black text-lg text-emerald-900 uppercase placeholder:normal-case shadow-sm"
+                                            />
+                                            <button
+                                                onClick={handleApplyCoupon}
+                                                disabled={couponLoading || !couponInput}
+                                                className={`px-6 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center min-w-[100px] shadow-lg ${couponInput ? 'bg-emerald-900 text-white hover:scale-105' : 'bg-slate-200 text-slate-400'}`}
+                                            >
+                                                {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'APPLY'}
                                             </button>
-
-                                            {/* Payment Options (Full vs 50%) for Card */}
-                                            {formData.paymentMethod === 'card' && m.id === 'card' && (
-                                                <div className="mt-3 ml-4 pl-4 border-l-2 border-emerald-900/10 space-y-3 animate-slide-up">
-                                                    <button
-                                                        onClick={() => setFormData({ ...formData, paymentType: 'full' })}
-                                                        className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'full' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
-                                                    >
-                                                        <div className="flex items-center gap-3">
-                                                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'full' ? 'border-white' : 'border-slate-400'}`}>
-                                                                {formData.paymentType === 'full' && <div className="w-2 h-2 rounded-full bg-white"></div>}
-                                                            </div>
-                                                            <span className="text-xs font-bold uppercase tracking-wide">Pay Full Amount</span>
-                                                        </div>
-                                                        <span className="text-xs font-bold text-emerald-400">100%</span>
-                                                    </button>
-
-                                                    <button
-                                                        onClick={() => setFormData({ ...formData, paymentType: 'partial' })}
-                                                        className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'partial' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
-                                                    >
-                                                        <div className="flex items-center gap-3">
-                                                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'partial' ? 'border-white' : 'border-slate-400'}`}>
-                                                                {formData.paymentType === 'partial' && <div className="w-2 h-2 rounded-full bg-white"></div>}
-                                                            </div>
-                                                            <div className="text-left">
-                                                                <span className="text-xs font-bold uppercase tracking-wide block">Pay Advance Only</span>
-                                                                <span className="text-[10px] opacity-60">Pay balance to driver</span>
-                                                            </div>
-                                                        </div>
-                                                        <span className="text-xs font-bold text-amber-400">50%</span>
-                                                    </button>
-                                                </div>
-                                            )}
                                         </div>
-                                    ))}
+                                        {verifiedCoupon && (
+                                            <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-200 text-xs font-bold pl-2 animate-fade-in">
+                                                <Check size={14} className="bg-emerald-500 text-white rounded-full p-0.5" />
+                                                <span>Coupon applied: <span className="uppercase">{verifiedCoupon.code}</span></span>
+                                                <span className="text-emerald-900/60 font-medium ml-auto">
+                                                    (-{verifiedCoupon.discountType === 'percentage' ? `${verifiedCoupon.value}%` : `Rs ${verifiedCoupon.value}`})
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Payment Method</label>
+                                    <div className="grid grid-cols-1 gap-4">
+                                        {[
+                                            { id: 'cash', label: 'Cash Payment', icon: '💵', desc: 'Pay directly to chauffeur' },
+                                            { id: 'card', label: 'Online Payment', icon: '💳', desc: 'Secure digital transaction' },
+                                        ].map(m => (
+                                            <div key={m.id}>
+                                                <button onClick={() => setFormData({ ...formData, paymentMethod: m.id })} className={`w-full p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left ${formData.paymentMethod === m.id ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}>
+                                                    <span className="text-3xl md:text-4xl">{m.icon}</span>
+                                                    <div>
+                                                        <p className="font-bold text-emerald-900 text-sm tracking-tight">{m.label}</p>
+                                                        <p className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">{m.desc}</p>
+                                                    </div>
+                                                </button>
+
+                                                {/* Payment Options (Full vs 50%) for Card */}
+                                                {formData.paymentMethod === 'card' && m.id === 'card' && (
+                                                    <div className="mt-3 ml-4 pl-4 border-l-2 border-emerald-900/10 space-y-3 animate-slide-up">
+                                                        <button
+                                                            onClick={() => setFormData({ ...formData, paymentType: 'full' })}
+                                                            className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'full' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
+                                                        >
+                                                            <div className="flex items-center gap-3">
+                                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'full' ? 'border-white' : 'border-slate-400'}`}>
+                                                                    {formData.paymentType === 'full' && <div className="w-2 h-2 rounded-full bg-white"></div>}
+                                                                </div>
+                                                                <span className="text-xs font-bold uppercase tracking-wide">Pay Full Amount</span>
+                                                            </div>
+                                                            <span className="text-xs font-bold text-emerald-400">100%</span>
+                                                        </button>
+
+                                                        <button
+                                                            onClick={() => setFormData({ ...formData, paymentType: 'partial' })}
+                                                            className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'partial' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
+                                                        >
+                                                            <div className="flex items-center gap-3">
+                                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'partial' ? 'border-white' : 'border-slate-400'}`}>
+                                                                    {formData.paymentType === 'partial' && <div className="w-2 h-2 rounded-full bg-white"></div>}
+                                                                </div>
+                                                                <div className="text-left">
+                                                                    <span className="text-xs font-bold uppercase tracking-wide block">Pay Advance Only</span>
+                                                                    <span className="text-[10px] opacity-60">Pay balance to driver</span>
+                                                                </div>
+                                                            </div>
+                                                            <span className="text-xs font-bold text-amber-400">50%</span>
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
+
+                </div>
 
                 {/* Footer Controls */}
                 <div className="p-4 md:p-8 pt-3 md:pt-4 border-t border-emerald-900/10 bg-emerald-50/50 shrink-0">
