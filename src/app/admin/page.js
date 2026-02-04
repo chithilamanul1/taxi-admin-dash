@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import { Users, Car, MapPin, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy } from 'lucide-react'
+import { Users, Car, MapPin, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import ReviewsManagement from '@/components/ReviewsManagement'
@@ -18,6 +18,13 @@ export default function AdminDashboard() {
     const [pricingCategory, setPricingCategory] = useState('airport-transfer')
     const [editingVehicle, setEditingVehicle] = useState(null)
     const [editForm, setEditForm] = useState({})
+
+    // Tours State
+    const [tours, setTours] = useState([])
+    const [editingTour, setEditingTour] = useState(null)
+    const [tourForm, setTourForm] = useState({})
+    const [tourCategoryFilter, setTourCategoryFilter] = useState('All')
+
     const [editingPost, setEditingPost] = useState(null)
     const [postForm, setPostForm] = useState({})
     const [blogPosts, setBlogPosts] = useState([])
@@ -155,6 +162,22 @@ export default function AdminDashboard() {
                     })
             }
 
+            if (currentView === 'tours') {
+                setIsLoading(true)
+                fetch('/api/tours')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && Array.isArray(data.data)) {
+                            setTours(data.data)
+                        }
+                        setIsLoading(false)
+                    })
+                    .catch(err => {
+                        console.error('Error fetching tours:', err)
+                        setIsLoading(false)
+                    })
+            }
+
             // Always fetch drivers for assignment
             fetch('/api/drivers')
                 .then(res => res.json())
@@ -278,6 +301,10 @@ export default function AdminDashboard() {
                     <button onClick={() => { setCurrentView('pricing'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'pricing' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <DollarSign size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Pricing</span>
+                    </button>
+                    <button onClick={() => { setCurrentView('tours'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <Compass size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Tour Packages</span>
                     </button>
                     <button onClick={() => { setCurrentView('bookings'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 relative ${currentView === 'bookings' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Users size={20} />
@@ -1077,6 +1104,257 @@ export default function AdminDashboard() {
                                     </div>
                                 )}
                             </div>
+                        </div>
+                    )}
+
+                    {currentView === 'tours' && (
+                        <div className="space-y-6">
+                            <div className="bg-white rounded-xl shadow-sm p-6">
+                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                                    <h2 className="text-2xl font-bold text-emerald-900">Manage Tour Packages</h2>
+                                    <div className="flex items-center gap-2">
+                                        <select
+                                            value={tourCategoryFilter}
+                                            onChange={(e) => setTourCategoryFilter(e.target.value)}
+                                            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                        >
+                                            <option value="All">All Categories</option>
+                                            <option value="Day Tours">Day Tours</option>
+                                            <option value="City Tours">City Tours</option>
+                                            <option value="Safari">Safari</option>
+                                            <option value="Tour Packages">Tour Packages</option>
+                                        </select>
+                                        <button
+                                            onClick={() => {
+                                                setTourForm({
+                                                    title: '',
+                                                    category: 'Day Tours',
+                                                    price: '',
+                                                    priceType: 'per person',
+                                                    duration: '',
+                                                    image: '',
+                                                    description: '',
+                                                    destinations: [],
+                                                    highlights: [],
+                                                    includes: []
+                                                })
+                                                setEditingTour('NEW')
+                                            }}
+                                            className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
+                                        >
+                                            <Compass size={16} /> Add New Tour
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {isLoading ? (
+                                    <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div></div>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {tours
+                                            .filter(t => tourCategoryFilter === 'All' || t.category === tourCategoryFilter)
+                                            .map(tour => (
+                                                <div key={tour._id} className="group relative bg-white border rounded-xl overflow-hidden hover:shadow-xl transition-all">
+                                                    <div className="h-48 overflow-hidden relative">
+                                                        <img
+                                                            src={tour.image || '/tours/placeholder.jpg'}
+                                                            alt={tour.title}
+                                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                            onError={(e) => e.target.src = 'https://placehold.co/600x400?text=No+Image'}
+                                                        />
+                                                        <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded text-xs font-bold text-emerald-900 shadow">
+                                                            {tour.category}
+                                                        </div>
+                                                    </div>
+                                                    <div className="p-4">
+                                                        <h3 className="font-bold text-emerald-900 text-lg mb-1">{tour.title}</h3>
+                                                        <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
+                                                            <span className="flex items-center gap-1"><Clock size={12} /> {tour.duration}</span>
+                                                            <span className="flex items-center gap-1"><DollarSign size={12} /> {tour.price ? `From $${tour.price}` : 'Contact for price'}</span>
+                                                        </div>
+                                                        <div className="flex justify-end gap-2">
+                                                            <button
+                                                                onClick={() => {
+                                                                    setTourForm(tour)
+                                                                    setEditingTour(tour._id)
+                                                                }}
+                                                                className="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-bold hover:bg-emerald-100"
+                                                            >
+                                                                Edit
+                                                            </button>
+                                                            <button
+                                                                onClick={async () => {
+                                                                    if (confirm('Delete this tour?')) {
+                                                                        await fetch(`/api/tours?id=${tour._id}`, { method: 'DELETE' })
+                                                                        setTours(tours.filter(t => t._id !== tour._id))
+                                                                    }
+                                                                }}
+                                                                className="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-xs font-bold hover:bg-red-100"
+                                                            >
+                                                                Delete
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Edit/Create Tour Modal */}
+                            {editingTour && (
+                                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 animate-fade-in-up">
+                                        <div className="flex justify-between items-center mb-6 border-b pb-4">
+                                            <h3 className="text-xl font-bold text-emerald-900">{editingTour === 'NEW' ? 'Create New Tour' : 'Edit Tour'}</h3>
+                                            <button onClick={() => setEditingTour(null)} className="text-gray-400 hover:text-gray-600"><X size={24} /></button>
+                                        </div>
+
+                                        <div className="grid md:grid-cols-2 gap-6">
+                                            <div className="space-y-4">
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                                                    <input
+                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
+                                                        value={tourForm.title || ''}
+                                                        onChange={e => setTourForm({ ...tourForm, title: e.target.value })}
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                                                        <select
+                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none bg-white"
+                                                            value={tourForm.category || 'Day Tours'}
+                                                            onChange={e => setTourForm({ ...tourForm, category: e.target.value })}
+                                                        >
+                                                            {['Day Tours', 'City Tours', 'Safari', 'Tour Packages'].map(c => <option key={c} value={c}>{c}</option>)}
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+                                                        <input
+                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
+                                                            placeholder="e.g. 3 Days"
+                                                            value={tourForm.duration || ''}
+                                                            onChange={e => setTourForm({ ...tourForm, duration: e.target.value })}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Price (USD)</label>
+                                                        <input
+                                                            type="number"
+                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
+                                                            value={tourForm.price || ''}
+                                                            onChange={e => setTourForm({ ...tourForm, price: e.target.value })}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Price Type</label>
+                                                        <input
+                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
+                                                            placeholder="per person / group"
+                                                            value={tourForm.priceType || ''}
+                                                            onChange={e => setTourForm({ ...tourForm, priceType: e.target.value })}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                                    <textarea
+                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none h-32"
+                                                        value={tourForm.description || ''}
+                                                        onChange={e => setTourForm({ ...tourForm, description: e.target.value })}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-4">
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Cover Image</label>
+                                                    <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center hover:bg-slate-50 transition-colors">
+                                                        {tourForm.image ? (
+                                                            <div className="relative">
+                                                                <img src={tourForm.image} alt="Preview" className="w-full h-40 object-cover rounded mb-2" />
+                                                                <button onClick={() => setTourForm({ ...tourForm, image: '' })} className="text-red-500 text-xs hover:underline">Remove</button>
+                                                            </div>
+                                                        ) : (
+                                                            <input
+                                                                type="file"
+                                                                accept="image/*"
+                                                                onChange={async (e) => {
+                                                                    const file = e.target.files[0]
+                                                                    if (file) {
+                                                                        const formData = new FormData()
+                                                                        formData.append('file', file)
+                                                                        formData.append('vehicleType', 'tour-cover')
+                                                                        const res = await fetch('/api/upload/vehicle', { method: 'POST', body: formData })
+                                                                        const data = await res.json()
+                                                                        if (data.path) setTourForm({ ...tourForm, image: data.path })
+                                                                    }
+                                                                }}
+                                                                className="text-xs w-full"
+                                                            />
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Destinations (comma separated)</label>
+                                                    <textarea
+                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none h-20"
+                                                        value={Array.isArray(tourForm.destinations) ? tourForm.destinations.join(', ') : tourForm.destinations || ''}
+                                                        onChange={e => setTourForm({ ...tourForm, destinations: e.target.value.split(',').map(s => s.trim()) })}
+                                                        placeholder="Kandy, Nuwara Eliya, Ella"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Highlights (comma separated)</label>
+                                                    <textarea
+                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none h-20"
+                                                        value={Array.isArray(tourForm.highlights) ? tourForm.highlights.join(', ') : tourForm.highlights || ''}
+                                                        onChange={e => setTourForm({ ...tourForm, highlights: e.target.value.split(',').map(s => s.trim()) })}
+                                                        placeholder="Temple of Tooth, Tea Factory, Nine Arch Bridge"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex justify-end gap-3 pt-6 border-t mt-6">
+                                            <button
+                                                onClick={() => setEditingTour(null)}
+                                                className="px-6 py-2 text-gray-600 hover:bg-slate-100 rounded-lg font-medium transition-colors"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                onClick={async () => {
+                                                    const method = editingTour === 'NEW' ? 'POST' : 'PUT'
+                                                    const res = await fetch('/api/tours', {
+                                                        method,
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify(tourForm)
+                                                    })
+                                                    if (res.ok) {
+                                                        const data = await res.json()
+                                                        if (editingTour === 'NEW') setTours([data.data, ...tours])
+                                                        else setTours(tours.map(t => t._id === data.data._id ? data.data : t))
+                                                        setEditingTour(null)
+                                                        alert('Saved successfully!')
+                                                    } else {
+                                                        alert('Failed to save')
+                                                    }
+                                                }}
+                                                className="px-6 py-2 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-900/90 shadow-lg"
+                                            >
+                                                Save Tour
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
 
