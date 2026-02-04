@@ -9,16 +9,17 @@ const tierSchema = new mongoose.Schema({
 }, { _id: false });
 
 const pricingSchema = new mongoose.Schema({
-    type: String,
-    required: true,
-    enum: ['mini-car', 'sedan', 'mini-van-every', 'mini-van-05', 'suv', 'kdh-van', 'mini-bus', 'normal-kdh', 'tuk-tuk', 'mini', 'tour-sedan', 'tour-van', 'vezel', 'bus', 'coach-bus']
-},
+    vehicleType: {
+        type: String,
+        required: true,
+        enum: ['mini-car', 'sedan', 'mini-van-every', 'mini-van-05', 'suv', 'kdh-van', 'mini-bus', 'normal-kdh', 'tuk-tuk', 'mini', 'tour-sedan', 'tour-van', 'vezel', 'bus', 'coach-bus']
+    },
     category: {
-    type: String,
-    required: true,
-    enum: ['airport-transfer', 'ride-now', 'tours', 'rentals'],
-    default: 'airport-transfer'
-},
+        type: String,
+        required: true,
+        enum: ['airport-transfer', 'ride-now', 'tours', 'rentals'],
+        default: 'airport-transfer'
+    },
     name: { type: String, required: true },
     image: { type: String, default: '' },
     capacity: { type: Number, default: 4 },
