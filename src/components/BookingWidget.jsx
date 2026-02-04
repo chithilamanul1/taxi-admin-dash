@@ -386,7 +386,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             </div>
 
             {/* Widget Main Content */}
-            <div className="bg-gradient-to-br from-[#E0F7FA] via-white to-[#E0F2F1] dark:from-slate-900 dark:via-slate-900 dark:to-teal-950/30 rounded-[2rem] p-5 lg:p-8 shadow-xl border-2 border-teal-100/50 dark:border-teal-800/30 animate-slide-up transition-colors duration-300">
+            <div className="bg-gradient-to-br from-[#FFF8E1] via-white to-[#FFF3E0] dark:from-slate-900 dark:via-slate-900 dark:to-amber-950/30 rounded-[2rem] p-5 lg:p-8 shadow-xl border-2 border-amber-100/50 dark:border-amber-800/30 animate-slide-up transition-colors duration-300">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
@@ -711,7 +711,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             value={date}
                                             min={new Date().toISOString().split('T')[0]}
                                             onChange={(e) => setDate(e.target.value)}
-                                            className="w-full h-16 pl-4 pr-4 bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 rounded-2xl text-emerald-900 dark:text-white font-bold outline-none focus:border-emerald-600 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 transition-all w-full appearance-none"
+                                            className="w-full h-16 pl-4 pr-4 bg-white dark:bg-white/5 border border-amber-900/10 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white font-bold outline-none focus:border-amber-500 dark:focus:border-amber-500 focus:ring-4 focus:ring-amber-500/5 transition-all w-full appearance-none"
                                             aria-label="Pickup Date"
                                         />
                                     </div>
@@ -738,20 +738,20 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     { id: 'infants', label: 'Infants' },
                                     { id: 'bags', label: 'Bags' }
                                 ].map(c => (
-                                    <div key={c.id} className="bg-emerald-50 dark:bg-white/[0.03] border border-emerald-900/5 dark:border-white/10 p-2 rounded-xl flex flex-col items-center justify-center transition-colors">
-                                        <span className="text-[9px] font-bold text-emerald-900 dark:text-white uppercase tracking-widest mb-2">{c.label}</span>
+                                    <div key={c.id} className="bg-amber-50 dark:bg-white/[0.03] border border-amber-900/5 dark:border-white/10 p-2 rounded-xl flex flex-col items-center justify-center transition-colors">
+                                        <span className="text-[9px] font-bold text-amber-900 dark:text-white uppercase tracking-widest mb-2">{c.label}</span>
                                         <div className="flex items-center gap-3">
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, p[c.id] - 1) }))}
-                                                className="w-6 h-6 rounded-lg bg-white dark:bg-white/10 border border-emerald-900/10 dark:border-white/10 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-white/20 transition-colors text-emerald-900 dark:text-white"
+                                                className="w-6 h-6 rounded-lg bg-white dark:bg-white/10 border border-amber-900/10 dark:border-white/10 flex items-center justify-center hover:bg-amber-100 dark:hover:bg-white/20 transition-colors text-amber-900 dark:text-white"
                                                 aria-label={`Decrease ${c.label}`}
                                             >
                                                 <Minus size={10} />
                                             </button>
-                                            <span className="font-extrabold text-sm text-emerald-900 dark:text-white min-w-[12px] text-center" aria-live="polite">{passengerCount[c.id]}</span>
+                                            <span className="font-extrabold text-sm text-amber-900 dark:text-white min-w-[12px] text-center" aria-live="polite">{passengerCount[c.id]}</span>
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: p[c.id] + 1 }))}
-                                                className="w-6 h-6 rounded-lg bg-white dark:bg-white/10 border border-emerald-900/10 dark:border-white/10 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-white/20 transition-colors text-emerald-900 dark:text-white"
+                                                className="w-6 h-6 rounded-lg bg-white dark:bg-white/10 border border-amber-900/10 dark:border-white/10 flex items-center justify-center hover:bg-amber-100 dark:hover:bg-white/20 transition-colors text-amber-900 dark:text-white"
                                                 aria-label={`Increase ${c.label}`}
                                             >
                                                 <Plus size={10} />
@@ -838,27 +838,27 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center text-sm">
-                                        <span className="text-emerald-900/40 dark:text-white/40">Est. Distance</span>
-                                        <span className="text-emerald-900 dark:text-white font-bold">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
+                                        <span className="text-slate-900/40 dark:text-white/40">Est. Distance</span>
+                                        <span className="text-slate-900 dark:text-white font-bold">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
                                     </div>
                                     <div className="flex justify-between items-center text-sm">
-                                        <span className="text-emerald-900/40 dark:text-white/40">Vehicle Type</span>
-                                        <span className="font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/50 px-3 py-1 rounded-lg">
+                                        <span className="text-slate-900/40 dark:text-white/40">Vehicle Type</span>
+                                        <span className="font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/50 px-3 py-1 rounded-lg">
                                             {vehiclePricing[vehicle]?.name || 'Select Vehicle'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-center text-sm">
-                                        <span className="text-emerald-900/40 dark:text-white/40">Waiting Hours</span>
+                                        <span className="text-slate-900/40 dark:text-white/40">Waiting Hours</span>
                                         <div className="flex items-center gap-3">
-                                            <button onClick={() => setWaitingHours(Math.max(0, waitingHours - 1))} className="text-emerald-600 dark:text-emerald-400 font-bold"><Minus size={12} /></button>
-                                            <span className="font-bold text-emerald-900 dark:text-white">{waitingHours}</span>
-                                            <button onClick={() => setWaitingHours(waitingHours + 1)} className="text-emerald-600 dark:text-emerald-400 font-bold"><Plus size={12} /></button>
+                                            <button onClick={() => setWaitingHours(Math.max(0, waitingHours - 1))} className="text-amber-600 dark:text-amber-400 font-bold"><Minus size={12} /></button>
+                                            <span className="font-bold text-slate-900 dark:text-white">{waitingHours}</span>
+                                            <button onClick={() => setWaitingHours(waitingHours + 1)} className="text-amber-600 dark:text-amber-400 font-bold"><Plus size={12} /></button>
                                         </div>
                                     </div>
                                     {hasNameBoard && (
                                         <div className="flex justify-between items-center text-sm">
-                                            <span className="text-emerald-900/40 dark:text-white/40">Meet & Greet</span>
-                                            <span className="text-emerald-600 dark:text-emerald-400 font-bold">Included</span>
+                                            <span className="text-slate-900/40 dark:text-white/40">Meet & Greet</span>
+                                            <span className="text-amber-600 dark:text-amber-400 font-bold">Included</span>
                                         </div>
                                     )}
                                 </div>
@@ -894,7 +894,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <button
                                     onClick={handleBook}
                                     disabled={!distance}
-                                    className="w-full py-5 bg-emerald-900 dark:bg-emerald-600 text-white rounded-[1.5rem] font-bold text-lg hover:bg-emerald-800 dark:hover:bg-emerald-500 active:scale-[0.98] transition-all shadow-xl disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3 group"
+                                    className="w-full py-5 bg-black dark:bg-emerald-600 text-white rounded-[1.5rem] font-bold text-lg hover:bg-slate-900 dark:hover:bg-emerald-500 active:scale-[0.98] transition-all shadow-xl disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3 group"
                                 >
                                     <ShieldCheck size={18} className="opacity-60" />
                                     Secure Booking
