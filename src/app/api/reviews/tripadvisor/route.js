@@ -1,0 +1,89 @@
+import { NextResponse } from 'next/server';
+import dbConnect from '@/lib/db';
+import Review from '@/models/Review';
+
+export async function GET(req) {
+    try {
+        await dbConnect();
+        const apiKey = process.env.TRIPADVISOR_API_KEY;
+        const locationId = process.env.TRIPADVISOR_LOCATION_ID;
+
+        // Fallback Stats
+        let tripAdvisorStats = { rating: 5.0, totalReviews: 0 };
+
+        // 1. Fetch from TripAdvisor API if Key Exists
+        if (apiKey && locationId) {
+            try {
+                // Fetch Location Details (Rating & Count)
+                const locationUrl = `https://api.content.tripadvisor.com/api/v1/location/${locationId}/details?key=${apiKey}&language=en`;
+                const locationRes = await fetch(locationUrl, { headers: { accept: 'application/json' } });
+                const locationData = await locationRes.json();
+
+                if (locationData && locationData.rating) {
+                    tripAdvisorStats.rating = Number(locationData.rating);
+                    tripAdvisorStats.totalReviews = Number(locationData.num_reviews);
+                }
+
+                // Fetch Recent Reviews
+                const reviewsUrl = `https://api.content.tripadvisor.com/api/v1/location/${locationId}/reviews?key=${apiKey}&language=en&limit=5`;
+                const reviewsRes = await fetch(reviewsUrl, { headers: { accept: 'application/json' } });
+                const reviewsData = await reviewsRes.json();
+
+                if (reviewsData && reviewsData.data) {
+                    // 2. Sync to MongoDB (Upsert)
+                    for (const review of reviewsData.data) {
+                        // TripAdvisor API provides: id, published_date, rating, text, title, url, user { username }
+                        await Review.findOneAndUpdate(
+                            {
+                                externalUrl: review.url, // Unique identifier
+                                source: 'tripadvisor'
+                            },
+                            {
+                                userName: review.user?.username || 'TripAdvisor User',
+                                userEmail: `tripadvisor-${review.id}@placeholder.com`, // Dummy email
+                                userImage: review.user?.avatar?.small?.url || null, // Avatar might differ based on API version
+                                rating: Number(review.rating),
+                                comment: review.text,
+                                source: 'tripadvisor',
+                                externalUrl: review.url,
+                                isApproved: true, // Auto-approve fetched reviews
+                                showOnHomepage: true,
+                                createdAt: new Date(review.published_date) // Preserve original date
+                            },
+                            { upsert: true, new: true, setDefaultsOnInsert: true }
+                        );
+                    }
+                }
+
+            } catch (err) {
+                console.error('TripAdvisor Fetch Warning:', err);
+                // Continue to serve cached/DB reviews if API fails
+            }
+        }
+
+        // 3. Fetch Synced Reviews from DB
+        const syncedReviews = await Review.find({
+            source: 'tripadvisor',
+            isApproved: true
+        }).sort({ createdAt: -1 }).limit(10);
+
+        // If no reviews found (and API failed/missing), return empty structure but success
+        // This allows the widget to fallback gracefully
+
+        return NextResponse.json({
+            success: true,
+            data: {
+                rating: tripAdvisorStats.rating,
+                num_reviews: tripAdvisorStats.totalReviews,
+                reviews: syncedReviews
+            }
+        });
+
+    } catch (error) {
+        console.error('TripAdvisor API Error:', error);
+        return NextResponse.json({
+            success: false,
+            error: error.message
+        }, { status: 500 });
+    }
+}

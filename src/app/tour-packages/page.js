@@ -102,7 +102,7 @@ export default function TourPackagesPage() {
 
                 {/* Tour Packages List */}
                 <div className="max-w-6xl mx-auto space-y-8">
-                    {tours
+                    {Array.isArray(tours) && tours
                         .filter(tour => activeCategory === 'All' || tour.category === activeCategory)
                         .map((tour, index) => (
                             <div key={tour._id || index} className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all">

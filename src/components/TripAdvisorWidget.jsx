@@ -9,12 +9,12 @@ const TripAdvisorWidget = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await fetch('/api/tripadvisor');
-                const data = await res.json();
-                if (data.success && data.rating) {
+                const res = await fetch('/api/reviews/tripadvisor');
+                const response = await res.json();
+                if (response.success && response.data) {
                     setStats({
-                        rating: data.rating,
-                        count: `${data.num_reviews} Reviews`
+                        rating: response.data.rating || '5.0',
+                        count: response.data.num_reviews ? `${response.data.num_reviews} Reviews` : 'See all reviews'
                     });
                 }
             } catch (err) {
