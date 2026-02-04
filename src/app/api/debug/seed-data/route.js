@@ -109,6 +109,34 @@ export async function POST() {
                 tiers: [
                     { min: 0, max: 100, type: 'flat', price: 35000 }
                 ]
+            },
+            {
+                name: 'Honda Vezel (SUV)',
+                vehicleType: 'vezel',
+                category: 'airport-transfer',
+                capacity: 4,
+                luggage: 3,
+                basePrice: 4500,
+                baseKm: 0,
+                perKmRate: 180,
+                image: '/vehicles/vezel.png',
+                tiers: [
+                    { min: 0, max: 9999, type: 'per_km', rate: 180 }
+                ]
+            },
+            {
+                name: 'Luxury SUV (Prado)',
+                vehicleType: 'suv',
+                category: 'airport-transfer',
+                capacity: 4,
+                luggage: 4,
+                basePrice: 6500,
+                baseKm: 0,
+                perKmRate: 250,
+                image: '/vehicles/suv.jpg',
+                tiers: [
+                    { min: 0, max: 9999, type: 'per_km', rate: 250 }
+                ]
             }
         ];
 

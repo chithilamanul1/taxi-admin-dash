@@ -22,6 +22,11 @@ export default function LiveChatWidget() {
             localStorage.setItem('chatSessionId', savedChatId)
         }
         setChatId(savedChatId)
+
+        // Listen for open event from unified FloatingContact
+        const handleOpen = () => setIsOpen(true);
+        window.addEventListener('open-live-chat', handleOpen);
+        return () => window.removeEventListener('open-live-chat', handleOpen);
     }, [])
 
     // Scroll to bottom
@@ -92,23 +97,7 @@ export default function LiveChatWidget() {
         }
     }
 
-    if (!isOpen) {
-        return (
-            <button
-                onClick={() => setIsOpen(true)}
-                className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-16 h-16 bg-emerald-600 text-white rounded-[1.5rem] flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all z-[70] group"
-            >
-                <div className="relative">
-                    <MessageCircle size={32} />
-                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-emerald-600 animate-pulse"></span>
-                </div>
-                {/* Tooltip */}
-                <div className="absolute right-20 bg-slate-900 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                    Chat with Support
-                </div>
-            </button>
-        )
-    }
+    if (!isOpen) return null;
 
     return (
         <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-[90vw] md:w-[380px] h-[70vh] md:h-[500px] bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-800 z-[70] flex flex-col overflow-hidden animate-fade-in-up">
@@ -150,8 +139,8 @@ export default function LiveChatWidget() {
                             className={`flex ${msg.sender === 'customer' ? 'justify-end' : 'justify-start'}`}
                         >
                             <div className={`max-w-[80%] p-3 rounded-2xl text-sm shadow-sm ${msg.sender === 'customer'
-                                    ? 'bg-emerald-600 text-white rounded-tr-none'
-                                    : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-none border border-slate-100 dark:border-slate-700'
+                                ? 'bg-emerald-600 text-white rounded-tr-none'
+                                : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-none border border-slate-100 dark:border-slate-700'
                                 }`}>
                                 {msg.text}
                             </div>
