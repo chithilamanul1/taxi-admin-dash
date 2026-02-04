@@ -4,6 +4,7 @@ import FloatingContact from '../components/FloatingContact'
 import Footer from '../components/Footer'
 import AuthProvider from '../components/AuthProvider'
 import { ThemeProvider } from '../components/ThemeProvider'
+import LiveChatWidget from '../components/LiveChatWidget'
 
 export const metadata = {
     title: 'Airport Taxis (Pvt) Ltd - Premium Airport Transfer Service in Sri Lanka',

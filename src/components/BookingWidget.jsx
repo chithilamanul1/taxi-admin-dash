@@ -481,8 +481,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         />
 
                                         {/* Per-Waypoint Waiting Time Dropdown */}
-                                        <div className="flex items-center gap-1 border-l border-slate-900/10 dark:border-white/10 px-2">
-                                            <Clock size={14} className="text-slate-900/40 dark:text-white/40" />
+                                        <div className="flex items-center gap-2 border-l border-slate-900/10 dark:border-white/10 px-3 min-w-[100px] justify-center">
+                                            <Clock size={14} className="text-slate-900/40 dark:text-white/40 shrink-0" />
                                             <select
                                                 value={wp.waitingTime || 0}
                                                 onChange={(e) => {
@@ -490,7 +490,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     newWps[idx].waitingTime = parseInt(e.target.value);
                                                     setWaypoints(newWps);
                                                 }}
-                                                className="bg-transparent text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer w-20 appearance-none"
+                                                className="bg-transparent text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer w-auto min-w-[40px] appearance-none text-center"
                                             >
                                                 {[0, 1, 2, 3, 4, 5, 6].map(h => (
                                                     <option key={h} value={h}>{h} hr{h !== 1 ? 's' : ''}</option>
