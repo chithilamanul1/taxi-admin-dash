@@ -119,7 +119,7 @@ export default function LiveChatWidget() {
 
     if (!isOpen) return null;
 
-    if (!db) {
+    if (!process.env.NEXT_PUBLIC_PUSHER_KEY) {
         return (
             <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-[90vw] md:w-[380px] bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-800 z-[70] p-8 text-center animate-fade-in-up">
                 <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4">

@@ -180,7 +180,7 @@ export default function AdminChatManager() {
                                         {chat.customerName || 'Guest User'}
                                     </h4>
                                     <span className="text-[10px] text-slate-400 font-bold whitespace-nowrap">
-                                        {chat.updatedAt?.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        {new Date(chat.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </span>
                                 </div>
                                 <p className="text-xs text-slate-500 dark:text-slate-400 truncate font-medium">
@@ -192,7 +192,7 @@ export default function AdminChatManager() {
                 </div>
             </div>
 
-            {!db && (
+            {!process.env.NEXT_PUBLIC_PUSHER_KEY && (
                 <div className="absolute inset-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm z-[110] flex items-center justify-center p-8">
                     <div className="max-w-md bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-700 text-center">
                         <div className="w-20 h-20 bg-amber-100 dark:bg-amber-900/30 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
@@ -200,7 +200,7 @@ export default function AdminChatManager() {
                         </div>
                         <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight mb-4">Chat Disconnected</h3>
                         <p className="text-sm text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest leading-loose mb-8">
-                            Please configure <span className="text-emerald-600">Firebase API Keys</span> in your <code className="bg-slate-100 dark:bg-slate-950 px-2 py-1 rounded-lg">.env</code> file to enable real-time support.
+                            Please configure <span className="text-emerald-600">Pusher API Keys</span> in your <code className="bg-slate-100 dark:bg-slate-950 px-2 py-1 rounded-lg">.env</code> file.
                         </p>
                         <div className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] border-t border-slate-100 dark:border-slate-800 pt-6">
                             Configuration Required
