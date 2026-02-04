@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { db } from '@/firebase'
-import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, setDoc, doc } from 'firebase/firestore'
-import { MessageCircle, X, Send, User, Loader2, Minus } from 'lucide-react'
+import Pusher from 'pusher-js'
+import { MessageCircle, X, Send, User, Loader2 } from 'lucide-react'
 import { nanoid } from 'nanoid'
 
 export default function LiveChatWidget() {
@@ -38,24 +37,47 @@ export default function LiveChatWidget() {
         if (isOpen) scrollToBottom()
     }, [messages, isOpen])
 
-    // Firestore Listener
+    // Load History & Listen for Pusher Events
     useEffect(() => {
-        if (!chatId || !db) return
+        if (!chatId) return
 
-        const q = query(
-            collection(db, 'chats', chatId, 'messages'),
-            orderBy('timestamp', 'asc')
-        )
+        // 1. Fetch History
+        const fetchHistory = async () => {
+            try {
+                const res = await fetch(`/api/chat/history?chatId=${chatId}`);
+                const data = await res.json();
+                if (data.success) {
+                    setMessages(data.messages);
+                }
+            } catch (err) {
+                console.error('History fetch error:', err);
+            }
+        };
+        fetchHistory();
 
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const msgs = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }))
-            setMessages(msgs)
-        })
+        // 2. Subscribe to Pusher
+        if (!process.env.NEXT_PUBLIC_PUSHER_KEY) {
+            console.warn('Pusher key missing');
+            return;
+        }
 
-        return () => unsubscribe()
+        const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
+            cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER
+        });
+
+        const channel = pusher.subscribe(`chat-${chatId}`);
+        channel.bind('new-message', (data) => {
+            setMessages(prev => {
+                // Prevent duplicate messages if the sender already added them locally
+                if (prev.find(m => m.id === data.id || m._id === data.id)) return prev;
+                return [...prev, data];
+            });
+        });
+
+        return () => {
+            pusher.unsubscribe(`chat-${chatId}`);
+            pusher.disconnect();
+        };
     }, [chatId])
 
     const sendMessage = async (e) => {
@@ -66,32 +88,30 @@ export default function LiveChatWidget() {
         setInputText('')
         setLoading(true)
 
+        // Optimistic UI update
+        const tempId = `temp_${Date.now()}`;
+        const tempMsg = { id: tempId, text, sender: 'customer', timestamp: new Date() };
+        setMessages(prev => [...prev, tempMsg]);
+
         try {
-            // Ensure chat session document exists with metadata
-            await setDoc(doc(db, 'chats', chatId), {
-                lastMessage: text,
-                updatedAt: serverTimestamp(),
-                status: 'active',
-                customerName: 'Guest User', // Could be expanded to use Auth
-                id: chatId
-            }, { merge: true })
-
-            // Add message to sub-collection
-            await addDoc(collection(db, 'chats', chatId, 'messages'), {
-                text,
-                sender: 'customer',
-                timestamp: serverTimestamp()
-            })
-
-            // Trigger internal relay API (Optional: for instant Discord notification)
-            fetch('/api/chat/relay', {
+            const res = await fetch('/api/chat/send', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chatId, text })
-            }).catch(e => console.error('Relay error:', e))
+                body: JSON.stringify({
+                    chatId,
+                    text,
+                    sender: 'customer',
+                    customerName: 'Guest User'
+                })
+            });
 
+            if (!res.ok) throw new Error('Failed to send');
+
+            // Replace temp message with server message if needed, 
+            // though Pusher event will handle the official one.
         } catch (error) {
             console.error('Error sending message:', error)
+            alert('Failed to send message. Please check your connection.');
         } finally {
             setLoading(false)
         }

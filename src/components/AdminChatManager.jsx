@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { db } from '@/firebase'
-import { collection, onSnapshot, query, orderBy, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore'
-import { MessageCircle, User, Send, Loader2, Clock, CheckCircle, Search, Lock } from 'lucide-react'
+import Pusher from 'pusher-js'
+import { MessageCircle, User, Send, Loader2, Clock, CheckCircle, Search } from 'lucide-react'
 
 export default function AdminChatManager() {
     const [chats, setChats] = useState([])
@@ -14,38 +13,94 @@ export default function AdminChatManager() {
     const [searchQuery, setSearchQuery] = useState('')
     const messagesEndRef = useRef(null)
 
-    // Listen for all chat sessions
+    // Initial Load: All Sessions
     useEffect(() => {
-        if (!db) return
-        const q = query(collection(db, 'chats'), orderBy('updatedAt', 'desc'))
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const chatList = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }))
-            setChats(chatList)
-        })
-        return () => unsubscribe()
+        const fetchSessions = async () => {
+            try {
+                const res = await fetch('/api/chat/sessions');
+                const data = await res.json();
+                if (data.success) {
+                    setChats(data.sessions);
+                }
+            } catch (err) {
+                console.error('Sessions fetch error:', err);
+            }
+        };
+        fetchSessions();
+
+        // Subscribe to global admin channel for new sessions/updates
+        if (!process.env.NEXT_PUBLIC_PUSHER_KEY) return;
+
+        const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
+            cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER
+        });
+
+        const channel = pusher.subscribe('admin-chats');
+        channel.bind('session-update', (data) => {
+            setChats(prev => {
+                const index = prev.findIndex(c => c.chatId === data.chatId);
+                const updatedSession = {
+                    chatId: data.chatId,
+                    customerName: data.customerName,
+                    lastMessage: data.text,
+                    lastSender: data.sender,
+                    updatedAt: new Date(),
+                    status: 'active'
+                };
+
+                if (index !== -1) {
+                    const newChats = [...prev];
+                    newChats[index] = updatedSession;
+                    return newChats.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+                } else {
+                    return [updatedSession, ...prev];
+                }
+            });
+
+            // If this is the currently selected chat, the other effect will handle the new message
+        });
+
+        return () => {
+            pusher.unsubscribe('admin-chats');
+            pusher.disconnect();
+        };
     }, [])
 
     // Listen for messages in selected chat
     useEffect(() => {
-        if (!selectedChatId || !db) return
+        if (!selectedChatId) return
 
-        const q = query(
-            collection(db, 'chats', selectedChatId, 'messages'),
-            orderBy('timestamp', 'asc')
-        )
+        // 1. Fetch History
+        const fetchHistory = async () => {
+            try {
+                const res = await fetch(`/api/chat/history?chatId=${selectedChatId}`);
+                const data = await res.json();
+                if (data.success) {
+                    setMessages(data.messages);
+                }
+            } catch (err) {
+                console.error('History fetch error:', err);
+            }
+        };
+        fetchHistory();
 
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const msgs = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }))
-            setMessages(msgs)
-        })
+        // 2. Subscribe to specific chat channel
+        const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
+            cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER
+        });
 
-        return () => unsubscribe()
+        const channel = pusher.subscribe(`chat-${selectedChatId}`);
+        channel.bind('new-message', (data) => {
+            setMessages(prev => {
+                if (prev.find(m => m.id === data.id || m._id === data.id)) return prev;
+                return [...prev, data];
+            });
+        });
+
+        return () => {
+            pusher.unsubscribe(`chat-${selectedChatId}`);
+            pusher.disconnect();
+        };
     }, [selectedChatId])
 
     useEffect(() => {
@@ -60,21 +115,25 @@ export default function AdminChatManager() {
         setInputText('')
         setLoading(true)
 
-        try {
-            await addDoc(collection(db, 'chats', selectedChatId, 'messages'), {
-                text,
-                sender: 'admin',
-                timestamp: serverTimestamp()
-            })
+        // Optimistic update
+        const tempMsg = { _id: `temp_${Date.now()}`, text, sender: 'admin', timestamp: new Date() };
+        setMessages(prev => [...prev, tempMsg]);
 
-            await updateDoc(doc(db, 'chats', selectedChatId), {
-                lastMessage: text,
-                lastSender: 'admin',
-                updatedAt: serverTimestamp(),
-                status: 'active'
-            })
+        try {
+            const res = await fetch('/api/chat/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chatId: selectedChatId,
+                    text,
+                    sender: 'admin'
+                })
+            });
+
+            if (!res.ok) throw new Error('Failed to send');
         } catch (error) {
             console.error('Error sending message:', error)
+            alert('Failed to send reply.');
         } finally {
             setLoading(false)
         }
