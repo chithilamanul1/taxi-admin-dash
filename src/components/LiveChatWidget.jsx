@@ -40,7 +40,7 @@ export default function LiveChatWidget() {
 
     // Firestore Listener
     useEffect(() => {
-        if (!chatId) return
+        if (!chatId || !db) return
 
         const q = query(
             collection(db, 'chats', chatId, 'messages'),
@@ -98,6 +98,26 @@ export default function LiveChatWidget() {
     }
 
     if (!isOpen) return null;
+
+    if (!db) {
+        return (
+            <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-[90vw] md:w-[380px] bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-800 z-[70] p-8 text-center animate-fade-in-up">
+                <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <X className="text-slate-400" size={32} />
+                </div>
+                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2">Chat Unavailable</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
+                    Live support is currently offline due to technical configuration. Please contact us via WhatsApp or Email.
+                </p>
+                <button
+                    onClick={() => setIsOpen(false)}
+                    className="mt-6 w-full py-3 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors"
+                >
+                    Dismiss
+                </button>
+            </div>
+        )
+    }
 
     return (
         <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-[90vw] md:w-[380px] h-[70vh] md:h-[500px] bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-800 z-[70] flex flex-col overflow-hidden animate-fade-in-up">

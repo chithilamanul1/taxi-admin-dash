@@ -16,6 +16,7 @@ export default function AdminChatManager() {
 
     // Listen for all chat sessions
     useEffect(() => {
+        if (!db) return
         const q = query(collection(db, 'chats'), orderBy('updatedAt', 'desc'))
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const chatList = snapshot.docs.map(doc => ({
@@ -29,7 +30,7 @@ export default function AdminChatManager() {
 
     // Listen for messages in selected chat
     useEffect(() => {
-        if (!selectedChatId) return
+        if (!selectedChatId || !db) return
 
         const q = query(
             collection(db, 'chats', selectedChatId, 'messages'),
@@ -132,6 +133,23 @@ export default function AdminChatManager() {
                 </div>
             </div>
 
+            {!db && (
+                <div className="absolute inset-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm z-[110] flex items-center justify-center p-8">
+                    <div className="max-w-md bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-700 text-center">
+                        <div className="w-20 h-20 bg-amber-100 dark:bg-amber-900/30 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
+                            <Lock className="text-amber-600 dark:text-amber-400" size={32} />
+                        </div>
+                        <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight mb-4">Chat Disconnected</h3>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest leading-loose mb-8">
+                            Please configure <span className="text-emerald-600">Firebase API Keys</span> in your <code className="bg-slate-100 dark:bg-slate-950 px-2 py-1 rounded-lg">.env</code> file to enable real-time support.
+                        </p>
+                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] border-t border-slate-100 dark:border-slate-800 pt-6">
+                            Configuration Required
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Main: Chat View */}
             <div className="flex-1 flex flex-col bg-white dark:bg-slate-900">
                 {selectedChatId ? (
@@ -158,8 +176,8 @@ export default function AdminChatManager() {
                                     className={`flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}`}
                                 >
                                     <div className={`max-w-[70%] p-4 rounded-2xl text-sm shadow-sm ${msg.sender === 'admin'
-                                            ? 'bg-emerald-600 text-white rounded-tr-none'
-                                            : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-none border border-slate-100 dark:border-slate-700'
+                                        ? 'bg-emerald-600 text-white rounded-tr-none'
+                                        : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-none border border-slate-100 dark:border-slate-700'
                                         }`}>
                                         <p className="font-medium">{msg.text}</p>
                                         <span className={`text-[9px] block mt-2 font-bold opacity-60 uppercase tracking-widest ${msg.sender === 'admin' ? 'text-white text-right' : 'text-slate-400'}`}>
