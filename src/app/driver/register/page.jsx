@@ -49,14 +49,15 @@ export default function DriverRegister() {
         if (!file) return null;
         const data = new FormData();
         data.append('file', file);
-        data.append('vehicleType', `driver-${formData.nic}-${type}`); // Use NIC to prefix files
+        data.append('folder', 'drivers'); // Correct field for folder
+        data.append('filename', `driver-${formData.nic}-${type}`); // Optional metadata
 
-        const res = await fetch('/api/upload/vehicle', {
+        const res = await fetch('/api/upload', { // Correct generic upload endpoint
             method: 'POST',
             body: data
         });
         const result = await res.json();
-        return result.success ? result.path : null;
+        return result.success ? result.url : null; // Use result.url as returned by API
     };
 
     const handleSubmit = async () => {

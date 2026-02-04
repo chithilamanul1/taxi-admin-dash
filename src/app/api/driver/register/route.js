@@ -54,9 +54,7 @@ export async function POST(req) {
                 licenseBack: data.documents?.licenseBack || data.licenseBack || '',
                 nicFront: data.documents?.nicFront || data.nicFront || '',
                 nicBack: data.documents?.nicBack || data.nicBack || '',
-                vehicleFront: data.documents?.vehicleFront || data.vehicleFront || '',
-                vehicleBack: data.documents?.vehicleBack || data.vehicleBack || '',
-                depositReceipt: data.documents?.depositReceipt || data.depositReceipt || '',
+                depositReceipt: data.initialDeposit?.receipt || data.documents?.depositReceipt || '',
             },
 
             verificationStatus: 'pending',
