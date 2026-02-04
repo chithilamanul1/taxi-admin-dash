@@ -34,8 +34,14 @@ const ToursWidget = () => {
 
     // Filter Logic
     const filteredTours = tours.filter(t => {
-        if (activeCategory === 'All') return true;
-        return t.category === activeCategory;
+        const categoryMap = {
+            'Day Tours': 'day-trip',
+            'City Tours': 'city-tour',
+            'Safari': 'safari',
+            'Tour Packages': 'tour-package'
+        };
+        const dbCategory = categoryMap[activeCategory];
+        return t.category === dbCategory;
     });
 
     return (

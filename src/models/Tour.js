@@ -13,7 +13,7 @@ const tourSchema = new mongoose.Schema({
     slug: { type: String, required: true, unique: true, lowercase: true },
     category: {
         type: String,
-        enum: ['tour-package', 'day-trip', 'safari'],
+        enum: ['tour-package', 'day-trip', 'safari', 'city-tour'],
         required: true,
         default: 'tour-package'
     },

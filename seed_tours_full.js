@@ -54,11 +54,11 @@ const dayTrips = [
     {
         title: 'Galle and Bentota Day-Tour From Colombo',
         slug: 'galle-bentota-day-tour',
-        category: 'Day Tours',
+        category: 'day-trip',
         duration: 1,
         price: 59,
         originalPrice: null,
-        image: 'https://images.unsplash.com/photo-1578586883464-500b5220fa26?q=80&w=800&auto=format&fit=crop', // Galle
+        image: '/tours/maduriver.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Dehiwala', 'Mount Lavinia', 'Wadduwa', 'Kalutara'],
         highlights: [
             'Bentota Beach photo stop',
@@ -75,11 +75,11 @@ const dayTrips = [
     {
         title: 'From Colombo: Day Trip to Kandy | Pinnawala | Royal Gardens',
         slug: 'kandy-pinnawala-day-trip',
-        category: 'Day Tours',
+        category: 'day-trip',
         duration: 1,
         price: 50.63,
         originalPrice: 102.26,
-        image: 'https://images.unsplash.com/photo-1590766940554-634a7ed01ce8?q=80&w=800&auto=format&fit=crop', // Kandy
+        image: '/tours/kandy.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Wadduwa', 'Mount Lavinia'],
         highlights: [
             'Pinnawala Elephant Orphanage',
@@ -96,10 +96,10 @@ const dayTrips = [
     {
         title: 'From Colombo: Sigiriya and Dambulla Day Trip and Safari',
         slug: 'sigiriya-dambulla-safari',
-        category: 'Safari',
+        category: 'safari',
         duration: 1,
         price: 69,
-        image: 'https://images.unsplash.com/photo-1566296314736-6eaac1ca0cb9?q=80&w=800&auto=format&fit=crop', // Sigiriya
+        image: '/tours/sigiriya.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Kalutara', 'Bentota', 'Hikkaduwa', 'Galle'],
         highlights: [
             'Sigiriya Lion Rock climb',
@@ -116,10 +116,10 @@ const dayTrips = [
     {
         title: 'Colombo Full day city tour',
         slug: 'colombo-city-tour',
-        category: 'City Tours',
+        category: 'city-tour',
         duration: 1,
         price: 39.00,
-        image: 'https://images.unsplash.com/photo-1580894080106-963d76b4a20e?q=80&w=800&auto=format&fit=crop', // Colombo
+        image: '/tours/colombo.jpg',
         pickupLocations: ['Colombo City Limits'],
         highlights: [
             'Independence Square',
@@ -136,11 +136,11 @@ const dayTrips = [
     {
         title: 'From Negombo: Sigiriya Dambulla and Village Safari Day Tour',
         slug: 'negombo-sigiriya-safari',
-        category: 'Safari',
+        category: 'safari',
         duration: 1,
         price: 80.00,
         originalPrice: 89.00,
-        image: 'https://images.unsplash.com/photo-1534177616072-ef7dc12044f9?q=80&w=800&auto=format&fit=crop', // Elephant Safari
+        image: '/tours/safari_minneriya.png',
         pickupLocations: ['Negombo'],
         highlights: [
             'Sigiriya Lion Rock sunrise/visit',
@@ -151,6 +151,26 @@ const dayTrips = [
         description: 'An action-packed day from Negombo features ancient fortress climbing, a village safari experience, and wildlife watching.',
         itinerary: [
             { day: 1, title: 'Adventure Trio', description: 'Climb Sigiriya, enjoy a traditional village lunch and safari, and visit the Dambulla Cave Temple.' }
+        ]
+    },
+    {
+        title: '7 Days Classical Sri Lanka Tour',
+        slug: '7-days-classical-tour',
+        category: 'tour-package',
+        duration: 7,
+        price: 850.00,
+        image: '/tours/map-6-days.png',
+        pickupLocations: ['Airport', 'Colombo'],
+        highlights: [
+            'Cultural Triangle (Sigiriya/Dambulla)',
+            'Hill Country (Kandy/Nuwara Eliya)',
+            'Scenic Train Ride',
+            'Wildlife Safari',
+            'Southern Coast Beaches'
+        ],
+        description: 'A comprehensive 7-day tour exploring the best of Sri Lanka\'s history, culture, and nature. From ancient ruins to misty tea gardens and gold sandy beaches.',
+        itinerary: [
+            { day: 1, title: 'Arrival & Sigiriya', description: 'Pickup and transfer to Sigiriya.' }
         ]
     }
 ];
