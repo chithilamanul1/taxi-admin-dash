@@ -819,7 +819,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         </div>
 
                         {/* Section 2: Summary & Checkout */}
-                        <div className="lg:border-l lg:border-emerald-900/10 dark:lg:border-white/10 lg:pl-8 flex flex-col justify-between h-full">
+                        <div className="bg-amber-100 dark:bg-amber-900/20 border-2 border-amber-500 dark:border-amber-600 rounded-3xl p-6 shadow-xl shadow-amber-500/10 flex flex-col justify-between h-full">
 
                             <div className="space-y-6">
                                 <div className="flex justify-between items-center">
