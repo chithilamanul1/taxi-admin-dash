@@ -414,7 +414,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex items-center gap-2 w-full sm:w-auto">
                                     {/* Currency Selector */}
                                     <div className="relative group z-[110]">
-                                        <button className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-emerald-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-black text-slate-700 dark:text-slate-300 hover:border-emerald-500 transition-all shadow-sm">
+                                        <button className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-900 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-black text-slate-700 dark:text-slate-300 hover:border-black transition-all shadow-sm">
                                             <span className="text-sm">{SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag}</span>
                                             <span className="opacity-80 uppercase">{currency}</span>
                                             <ChevronDown size={14} className="opacity-50" />
@@ -425,7 +425,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     <button
                                                         key={c.code}
                                                         onClick={() => changeCurrency(c.code)}
-                                                        className={`w-full text-left px-5 py-3 text-xs font-bold flex items-center gap-3 hover:bg-emerald-50 dark:hover:bg-slate-700 transition-colors ${currency === c.code ? 'text-emerald-600 bg-emerald-50 dark:bg-slate-700 border-l-2 border-emerald-600' : 'text-slate-600 dark:text-slate-400'}`}
+                                                        className={`w-full text-left px-5 py-3 text-xs font-bold flex items-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors ${currency === c.code ? 'text-amber-600 bg-amber-50 dark:bg-slate-700 border-l-2 border-amber-600' : 'text-slate-600 dark:text-slate-400'}`}
                                                     >
                                                         <span className="text-base">{c.flag}</span>
                                                         <span>{c.code}</span>
@@ -435,7 +435,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                     </div>
 
-                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-amber-900 dark:text-amber-100 text-xs font-black hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 px-6 py-3 rounded-xl border border-amber-200 dark:border-amber-700/50 justify-center whitespace-nowrap shadow-sm hover:shadow-md hover:bg-amber-200 dark:hover:bg-amber-900/50">
+                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-slate-900 dark:text-amber-100 text-xs font-black hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-amber-300/20 dark:bg-amber-900/30 px-6 py-3 rounded-xl border border-slate-900 dark:border-amber-700/50 justify-center whitespace-nowrap shadow-sm hover:shadow-md hover:bg-amber-300/40 dark:hover:bg-amber-900/50">
                                         {isLocating ? <Loader2 size={16} className="animate-spin text-amber-600" /> : <Zap size={16} className="fill-amber-500 text-amber-600" />}
                                         <span className="hidden sm:inline">Auto Detect</span>
                                         <span className="sm:hidden">GPS</span>
@@ -461,20 +461,20 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 {/* Waypoints List */}
                                 {waypoints.map((wp, idx) => (
-                                    <div key={idx} className="relative group animate-slide-up bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border-2 border-emerald-200 dark:border-emerald-800/50 p-1 flex items-center">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-900/40 dark:text-emerald-400/40 pointer-events-none z-10">
+                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-emerald-900/20 rounded-2xl border border-slate-900 dark:border-emerald-800/50 p-1 flex items-center">
+                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-900/40 dark:text-emerald-400/40 pointer-events-none z-10">
                                             <Navigation size={18} />
                                         </div>
                                         <input
                                             type="text"
                                             readOnly
                                             value={wp.name}
-                                            className="flex-1 pl-12 pr-4 h-12 bg-transparent border-none text-sm font-bold text-emerald-900 dark:text-white outline-none"
+                                            className="flex-1 pl-12 pr-4 h-12 bg-transparent border-none text-sm font-bold text-slate-900 dark:text-white outline-none"
                                         />
 
                                         {/* Per-Waypoint Waiting Time Dropdown */}
-                                        <div className="flex items-center gap-1 border-l border-emerald-900/10 dark:border-white/10 px-2">
-                                            <Clock size={14} className="text-emerald-900/40 dark:text-white/40" />
+                                        <div className="flex items-center gap-1 border-l border-slate-900/10 dark:border-white/10 px-2">
+                                            <Clock size={14} className="text-slate-900/40 dark:text-white/40" />
                                             <select
                                                 value={wp.waitingTime || 0}
                                                 onChange={(e) => {
@@ -482,7 +482,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     newWps[idx].waitingTime = parseInt(e.target.value);
                                                     setWaypoints(newWps);
                                                 }}
-                                                className="bg-transparent text-xs font-bold text-emerald-900 dark:text-white outline-none cursor-pointer w-20 appearance-none"
+                                                className="bg-transparent text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer w-20 appearance-none"
                                             >
                                                 {[0, 1, 2, 3, 4, 5, 6].map(h => (
                                                     <option key={h} value={h}>{h} hr{h !== 1 ? 's' : ''}</option>
@@ -573,16 +573,16 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <button
                                         onClick={() => setHasNameBoard(!hasNameBoard)}
                                         aria-pressed={hasNameBoard}
-                                        className={`h-16 px-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-emerald-900 dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-emerald-900/10 dark:border-white/10 text-emerald-900/60 dark:text-white/60 hover:border-emerald-600/30'}`}
+                                        className={`h-16 px-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-amber-600 bg-amber-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-amber-900 dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-slate-900 dark:border-white/10 text-slate-900/60 dark:text-white/60 hover:border-black'}`}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <Signpost size={18} className={hasNameBoard ? 'text-emerald-600 dark:text-emerald-400' : ''} />
+                                            <Signpost size={18} className={hasNameBoard ? 'text-amber-600 dark:text-emerald-400' : ''} />
                                             <div className="text-left">
                                                 <span className="text-xs font-bold block">Name Board</span>
                                                 <span className="text-[10px] font-medium opacity-60">Meet & Greet</span>
                                             </div>
                                         </div>
-                                        <div className="w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${hasNameBoard ? 'border-emerald-600 bg-emerald-600 dark:border-emerald-500 dark:bg-emerald-500' : 'border-emerald-900/20 dark:border-white/20'}">
+                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${hasNameBoard ? 'border-amber-600 bg-amber-600 dark:border-emerald-500 dark:bg-emerald-500' : 'border-slate-900/20 dark:border-white/20'}`}>
                                             {hasNameBoard && <Check size={12} className="text-white" />}
                                         </div>
                                     </button>
@@ -595,7 +595,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         placeholder="Coupon Code"
                                         value={couponCode}
                                         onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                        className="w-full h-full pl-14 pr-20 rounded-2xl bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 text-sm font-bold outline-none focus:border-emerald-600 dark:focus:border-emerald-500 transition-all uppercase text-emerald-900 dark:text-white placeholder:text-emerald-900/30 dark:placeholder:text-white/30"
+                                        className="w-full h-full pl-14 pr-20 rounded-2xl bg-white dark:bg-white/5 border border-slate-900 dark:border-white/10 text-sm font-bold outline-none focus:border-black dark:focus:border-emerald-500 transition-all uppercase text-slate-900 dark:text-white placeholder:text-slate-900/30 dark:placeholder:text-white/30"
                                         aria-label="Coupon code"
                                     />
                                     <button
