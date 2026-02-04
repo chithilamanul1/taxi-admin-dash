@@ -13,6 +13,22 @@ connectDB();
 
 const app = express();
 
+// Initialize Firebase Admin
+const admin = require('firebase-admin');
+if (!admin.apps.length) {
+    admin.initializeApp({
+        credential: admin.credential.cert({
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        })
+    });
+}
+
+// Start Discord Bot
+const supportBot = require('./services/discordBot');
+supportBot.start().catch(err => console.error('Bot Start Error:', err));
+
 // Middleware
 app.use(cors());
 app.use(express.json());

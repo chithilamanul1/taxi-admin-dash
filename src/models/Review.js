@@ -28,7 +28,8 @@ const reviewSchema = new mongoose.Schema({
         enum: ['website', 'google', 'tripadvisor', 'manual'],
         default: 'website'
     },
-    externalUrl: { type: String }
+    externalUrl: { type: String },
+    reviewDate: { type: Date } // Original date from source
 }, {
     timestamps: true
 });

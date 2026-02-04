@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import ReviewsManagement from '@/components/ReviewsManagement'
 import DriversFleetView from '@/components/DriversFleetView'
 import LiveDriverMap from '@/components/LiveDriverMap'
+import AdminChatManager from '@/components/AdminChatManager'
 
 export default function AdminDashboard() {
     const [sidebarOpen, setSidebarOpen] = useState(true)
@@ -301,6 +302,11 @@ export default function AdminDashboard() {
                     <button onClick={() => { setCurrentView('pricing'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'pricing' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <DollarSign size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Pricing</span>
+                    </button>
+                    <button onClick={() => { setCurrentView('chat'); setSidebarOpen(false); }} className={`relative flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'chat' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <MessageCircle size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Live Chat</span>
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
                     </button>
                     <button onClick={() => { setCurrentView('tours'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Compass size={20} />
@@ -612,6 +618,12 @@ export default function AdminDashboard() {
                                     </table>
                                 </div>
                             </div>
+                        </div>
+                    )}
+
+                    {currentView === 'chat' && (
+                        <div className="animate-fade-in-up">
+                            <AdminChatManager />
                         </div>
                     )}
 

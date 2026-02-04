@@ -1,0 +1,208 @@
+'use client'
+
+import { useState, useEffect, useRef } from 'react'
+import { db } from '@/firebase'
+import { collection, onSnapshot, query, orderBy, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore'
+import { MessageCircle, User, Send, Loader2, Clock, CheckCircle, Search } from 'lucide-react'
+
+export default function AdminChatManager() {
+    const [chats, setChats] = useState([])
+    const [selectedChatId, setSelectedChatId] = useState(null)
+    const [messages, setMessages] = useState([])
+    const [inputText, setInputText] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+    const messagesEndRef = useRef(null)
+
+    // Listen for all chat sessions
+    useEffect(() => {
+        const q = query(collection(db, 'chats'), orderBy('updatedAt', 'desc'))
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const chatList = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }))
+            setChats(chatList)
+        })
+        return () => unsubscribe()
+    }, [])
+
+    // Listen for messages in selected chat
+    useEffect(() => {
+        if (!selectedChatId) return
+
+        const q = query(
+            collection(db, 'chats', selectedChatId, 'messages'),
+            orderBy('timestamp', 'asc')
+        )
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const msgs = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }))
+            setMessages(msgs)
+        })
+
+        return () => unsubscribe()
+    }, [selectedChatId])
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [messages])
+
+    const sendMessage = async (e) => {
+        e.preventDefault()
+        if (!inputText.trim() || !selectedChatId) return
+
+        const text = inputText
+        setInputText('')
+        setLoading(true)
+
+        try {
+            await addDoc(collection(db, 'chats', selectedChatId, 'messages'), {
+                text,
+                sender: 'admin',
+                timestamp: serverTimestamp()
+            })
+
+            await updateDoc(doc(db, 'chats', selectedChatId), {
+                lastMessage: text,
+                lastSender: 'admin',
+                updatedAt: serverTimestamp(),
+                status: 'active'
+            })
+        } catch (error) {
+            console.error('Error sending message:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const filteredChats = chats.filter(chat =>
+        chat.customerName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        chat.id.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+
+    return (
+        <div className="flex h-[730px] bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 overflow-hidden">
+            {/* Sidebar: Chat List */}
+            <div className="w-80 border-r border-slate-200 dark:border-slate-800 flex flex-col bg-slate-50/50 dark:bg-slate-950/20">
+                <div className="p-6 border-b border-slate-200 dark:border-slate-800">
+                    <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight mb-4 flex items-center gap-2">
+                        <MessageCircle className="text-emerald-500" size={24} /> Live <span className="text-emerald-600">Support</span>
+                    </h2>
+                    <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                        <input
+                            type="text"
+                            placeholder="Search chats..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full h-10 bg-white dark:bg-slate-800 pl-10 pr-4 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 border border-slate-200 dark:border-slate-700"
+                        />
+                    </div>
+                </div>
+
+                <div className="flex-1 overflow-y-auto custom-scrollbar">
+                    {filteredChats.map((chat) => (
+                        <button
+                            key={chat.id}
+                            onClick={() => setSelectedChatId(chat.id)}
+                            className={`w-full p-4 flex gap-4 transition-all border-b border-slate-100 dark:border-slate-800/50 hover:bg-white dark:hover:bg-slate-800 ${selectedChatId === chat.id ? 'bg-white dark:bg-slate-800 shadow-sm' : ''}`}
+                        >
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${selectedChatId === chat.id ? 'bg-emerald-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
+                                <User size={20} />
+                            </div>
+                            <div className="flex-1 text-left min-w-0">
+                                <div className="flex justify-between items-start mb-1">
+                                    <h4 className="text-sm font-black text-slate-800 dark:text-slate-100 truncate uppercase">
+                                        {chat.customerName || 'Guest User'}
+                                    </h4>
+                                    <span className="text-[10px] text-slate-400 font-bold whitespace-nowrap">
+                                        {chat.updatedAt?.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </span>
+                                </div>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 truncate font-medium">
+                                    {chat.lastSender === 'admin' ? 'You: ' : ''}{chat.lastMessage}
+                                </p>
+                            </div>
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Main: Chat View */}
+            <div className="flex-1 flex flex-col bg-white dark:bg-slate-900">
+                {selectedChatId ? (
+                    <>
+                        {/* Chat Header */}
+                        <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-950/20">
+                            <div>
+                                <h3 className="font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">
+                                    {chats.find(c => c.id === selectedChatId)?.customerName || 'Guest User'}
+                                </h3>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">ID: {selectedChatId}</p>
+                            </div>
+                            <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg text-[10px] font-black uppercase tracking-wider">
+                                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                                Connected
+                            </div>
+                        </div>
+
+                        {/* Messages Area */}
+                        <div className="flex-1 overflow-y-auto p-8 space-y-4 custom-scrollbar bg-slate-50/50 dark:bg-slate-950/20">
+                            {messages.map((msg) => (
+                                <div
+                                    key={msg.id}
+                                    className={`flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}`}
+                                >
+                                    <div className={`max-w-[70%] p-4 rounded-2xl text-sm shadow-sm ${msg.sender === 'admin'
+                                            ? 'bg-emerald-600 text-white rounded-tr-none'
+                                            : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-none border border-slate-100 dark:border-slate-700'
+                                        }`}>
+                                        <p className="font-medium">{msg.text}</p>
+                                        <span className={`text-[9px] block mt-2 font-bold opacity-60 uppercase tracking-widest ${msg.sender === 'admin' ? 'text-white text-right' : 'text-slate-400'}`}>
+                                            {msg.timestamp?.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                            <div ref={messagesEndRef} />
+                        </div>
+
+                        {/* Input Area */}
+                        <form onSubmit={sendMessage} className="p-6 border-t border-slate-200 dark:border-slate-800">
+                            <div className="relative flex items-center gap-4">
+                                <input
+                                    type="text"
+                                    value={inputText}
+                                    onChange={(e) => setInputText(e.target.value)}
+                                    placeholder="Type message to relay back..."
+                                    className="flex-1 h-14 bg-slate-100 dark:bg-slate-800 border-none px-6 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500/20 text-sm font-medium pr-16 shadow-inner transition-all"
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={loading || !inputText.trim()}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center hover:bg-emerald-700 transition-colors disabled:opacity-50 shadow-lg shadow-emerald-500/20"
+                                >
+                                    {loading ? <Loader2 className="animate-spin" size={20} /> : <Send size={20} />}
+                                </button>
+                            </div>
+                        </form>
+                    </>
+                ) : (
+                    <div className="flex-1 flex flex-col items-center justify-center text-center p-8 opacity-40">
+                        <div className="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-[2.5rem] flex items-center justify-center mb-6">
+                            <MessageCircle size={48} className="text-slate-300 dark:text-slate-600" />
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 uppercase tracking-tight mb-2">Select a Conversation</h3>
+                        <p className="max-w-xs text-xs font-bold text-slate-400 uppercase tracking-widest leading-loose">
+                            Choose a chat from the sidebar to begin real-time customer support.
+                        </p>
+                    </div>
+                )}
+            </div>
+        </div>
+    )
+}

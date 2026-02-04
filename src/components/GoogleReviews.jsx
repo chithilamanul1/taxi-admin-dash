@@ -80,21 +80,13 @@ const GoogleReviews = () => {
                 // Process TripAdvisor Reviews
                 if (tripRes.status === 'fulfilled') {
                     const tripData = await tripRes.value.json();
-                    if (tripData.success && tripData.reviews?.length > 0) {
-                        const formattedTrips = tripData.reviews.map(r => ({
-                            author_name: r.user.username,
-                            rating: Number(r.rating),
-                            text: r.text,
-                            relative_time_description: new Date(r.published_date).toLocaleDateString(),
-                            profile_photo_url: r.user.avatar,
-                            source: 'tripadvisor'
-                        }));
-                        setTripReviews(formattedTrips);
+                    if (tripData.success && tripData.data?.reviews?.length > 0) {
+                        setTripReviews(tripData.data.reviews.map(r => ({ ...r, source: 'tripadvisor' })));
                         setStats(prev => ({
                             ...prev,
                             tripadvisor: {
-                                rating: parseFloat(tripData.rating) || 5.0,
-                                total: parseInt(tripData.num_reviews) || 100
+                                rating: parseFloat(tripData.data.rating) || 5.0,
+                                total: parseInt(tripData.data.num_reviews) || 100
                             }
                         }));
                     }

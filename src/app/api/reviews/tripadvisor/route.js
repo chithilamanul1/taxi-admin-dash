@@ -48,7 +48,8 @@ export async function GET(req) {
                                 externalUrl: review.url,
                                 isApproved: true, // Auto-approve fetched reviews
                                 showOnHomepage: true,
-                                createdAt: new Date(review.published_date) // Preserve original date
+                                reviewDate: new Date(review.published_date), // Original TripAdvisor Date
+                                createdAt: new Date(review.published_date) // Match sorting
                             },
                             { upsert: true, new: true, setDefaultsOnInsert: true }
                         );
@@ -70,12 +71,23 @@ export async function GET(req) {
         // If no reviews found (and API failed/missing), return empty structure but success
         // This allows the widget to fallback gracefully
 
+        // Format to match Google Reviews structure
+        const formattedReviews = syncedReviews.map(r => ({
+            _id: r._id,
+            author_name: r.userName,
+            rating: r.rating,
+            text: r.comment,
+            profile_photo_url: r.userImage,
+            relative_time_description: new Date(r.reviewDate || r.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }),
+            source: r.source,
+            externalUrl: r.externalUrl
+        }));
         return NextResponse.json({
             success: true,
             data: {
                 rating: tripAdvisorStats.rating,
                 num_reviews: tripAdvisorStats.totalReviews,
-                reviews: syncedReviews
+                reviews: formattedReviews
             }
         });
 

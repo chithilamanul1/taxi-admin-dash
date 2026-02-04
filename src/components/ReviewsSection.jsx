@@ -168,7 +168,7 @@ export default function ReviewsSection() {
                                     )}
                                 </div>
                                 <p className="text-sm text-slate-500 dark:text-slate-400">
-                                    {new Date(currentReview.createdAt).toLocaleDateString('en-US', {
+                                    {new Date(currentReview.reviewDate || currentReview.createdAt).toLocaleDateString('en-US', {
                                         month: 'long',
                                         year: 'numeric'
                                     })}

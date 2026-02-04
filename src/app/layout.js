@@ -136,6 +136,7 @@ export default function RootLayout({ children }) {
                             <Navbar />
                             <main>{children}</main>
                             <FloatingContact />
+                            <LiveChatWidget />
                             <Footer />
                         </CurrencyProvider>
                     </AuthProvider>

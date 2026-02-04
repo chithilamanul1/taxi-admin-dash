@@ -42,7 +42,8 @@ export async function GET(req) {
                                 source: 'google',
                                 isApproved: true, // Auto-approve Google reviews
                                 showOnHomepage: true,
-                                createdAt: new Date(review.time * 1000) // Preserve original time
+                                reviewDate: new Date(review.time * 1000), // Original Google Time
+                                createdAt: new Date(review.time * 1000)
                             },
                             { upsert: true, new: true, setDefaultsOnInsert: true }
                         );
@@ -68,7 +69,7 @@ export async function GET(req) {
             rating: r.rating,
             text: r.comment,
             profile_photo_url: r.userImage,
-            relative_time_description: new Date(r.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }),
+            relative_time_description: new Date(r.reviewDate || r.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }),
             source: r.source,
             isVerified: r.isVerified
         }));
