@@ -131,6 +131,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [bookingInitialData, setBookingInitialData] = useState({})
     const [availableCoupons, setAvailableCoupons] = useState([])
     const [isLoadingCoupons, setIsLoadingCoupons] = useState(false)
+    const [isCouponOpen, setIsCouponOpen] = useState(false)
 
 
     // Fetch Pricing based on Tab
@@ -147,8 +148,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                 setIsLoadingPricing(true);
                 const res = await fetch(`/api/pricing?category=${category}`);
-                if (!res.ok) return;
+                if (!res.ok) {
+                    console.error('Pricing Fetch Failed', res.status);
+                    return;
+                }
                 const data = await res.json();
+                console.log(`Fetched Pricing for ${category}:`, data); // Debug Log
                 if (!Array.isArray(data)) return;
                 const pricingMap = {};
                 data.forEach(v => { pricingMap[v.vehicleType] = v; });
@@ -425,7 +430,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     <button
                                                         key={c.code}
                                                         onClick={() => changeCurrency(c.code)}
-                                                        className={`w-full text-left px-5 py-3 text-xs font-bold flex items-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors ${currency === c.code ? 'text-amber-600 bg-amber-50 dark:bg-slate-700 border-l-2 border-amber-600' : 'text-slate-600 dark:text-slate-400'}`}
+                                                        className={`w-full text-left px-5 py-3 text-xs font-bold flex items-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors ${currency === c.code ? 'text-amber-700 bg-amber-50 dark:bg-slate-700 border-l-2 border-amber-700' : 'text-slate-600 dark:text-slate-400'}`}
                                                     >
                                                         <span className="text-base">{c.flag}</span>
                                                         <span>{c.code}</span>
@@ -436,7 +441,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
 
                                     <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-slate-900 dark:text-amber-100 text-xs font-black hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-amber-300/20 dark:bg-amber-900/30 px-6 py-3 rounded-xl border border-slate-900 dark:border-amber-700/50 justify-center whitespace-nowrap shadow-sm hover:shadow-md hover:bg-amber-300/40 dark:hover:bg-amber-900/50">
-                                        {isLocating ? <Loader2 size={16} className="animate-spin text-amber-600" /> : <Zap size={16} className="fill-amber-500 text-amber-600" />}
+                                        {isLocating ? <Loader2 size={16} className="animate-spin text-amber-700" /> : <Zap size={16} className="fill-amber-600 text-amber-700" />}
                                         <span className="hidden sm:inline">Auto Detect</span>
                                         <span className="sm:hidden">GPS</span>
                                     </button>
@@ -573,73 +578,85 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <button
                                         onClick={() => setHasNameBoard(!hasNameBoard)}
                                         aria-pressed={hasNameBoard}
-                                        className={`h-16 px-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-amber-600 bg-amber-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-amber-900 dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-slate-900 dark:border-white/10 text-slate-900/60 dark:text-white/60 hover:border-black'}`}
+                                        className={`h-16 px-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-amber-700 bg-amber-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-amber-900 dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-slate-900 dark:border-white/10 text-slate-900/60 dark:text-white/60 hover:border-black'}`}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <Signpost size={18} className={hasNameBoard ? 'text-amber-600 dark:text-emerald-400' : ''} />
+                                            <Signpost size={18} className={hasNameBoard ? 'text-amber-700 dark:text-emerald-400' : ''} />
                                             <div className="text-left">
                                                 <span className="text-xs font-bold block">Name Board</span>
                                                 <span className="text-[10px] font-medium opacity-60">Meet & Greet</span>
                                             </div>
                                         </div>
-                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${hasNameBoard ? 'border-amber-600 bg-amber-600 dark:border-emerald-500 dark:bg-emerald-500' : 'border-slate-900/20 dark:border-white/20'}`}>
+                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${hasNameBoard ? 'border-amber-700 bg-amber-700 dark:border-emerald-500 dark:bg-emerald-500' : 'border-slate-900/20 dark:border-white/20'}`}>
                                             {hasNameBoard && <Check size={12} className="text-white" />}
                                         </div>
                                     </button>
                                 )}
 
-                                <div className="relative h-16">
-                                    <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-900/70 dark:text-white/70" size={18} />
-                                    <input
-                                        type="text"
-                                        placeholder="Coupon Code"
-                                        value={couponCode}
-                                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                        className="w-full h-full pl-14 pr-20 rounded-2xl bg-white dark:bg-white/5 border border-slate-900 dark:border-white/10 text-sm font-bold outline-none focus:border-black dark:focus:border-emerald-500 transition-all uppercase text-slate-900 dark:text-white placeholder:text-slate-900/30 dark:placeholder:text-white/30"
-                                        aria-label="Coupon code"
-                                    />
+                                <div className="space-y-3">
                                     <button
-                                        onClick={async () => {
-                                            if (!couponCode.trim()) return;
-                                            try {
-                                                const res = await fetch('/api/coupons/validate', {
-                                                    method: 'POST',
-                                                    headers: { 'Content-Type': 'application/json' },
-                                                    body: JSON.stringify({
-                                                        code: couponCode,
-                                                        pickup: pickup.name || pickupSearch,
-                                                        dropoff: dropoff.name || dropoffSearch
-                                                    })
-                                                });
-                                                const data = await res.json();
-                                                if (data.valid) {
-                                                    const couponOffer = {
-                                                        _id: 'coupon-' + data.coupon.code,
-                                                        name: data.coupon.code,
-                                                        discountPercentage: data.coupon.discountType === 'percentage' ? data.coupon.value : 0,
-                                                        discountAmount: data.coupon.discountType === 'flat' ? data.coupon.value : 0,
-                                                        type: 'coupon'
-                                                    };
-                                                    setAppliedOffer(couponOffer);
-                                                    alert('Coupon Applied: ' + data.coupon.code);
-                                                } else {
-                                                    alert(data.message || 'Invalid Coupon');
-                                                    setAppliedOffer(null);
-                                                }
-                                            } catch (e) {
-                                                console.error(e);
-                                                alert('Validation failed');
-                                            }
-                                        }}
-                                        aria-label="Apply Coupon"
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-emerald-900 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-800 transition-all"
+                                        onClick={() => setIsCouponOpen(!isCouponOpen)}
+                                        className="flex items-center gap-2 text-xs font-bold text-amber-700 dark:text-amber-400 hover:underline"
                                     >
-                                        Apply
+                                        <Tag size={14} />
+                                        {isCouponOpen ? 'Hide Coupon Code' : 'Have a Coupon Code?'}
                                     </button>
+
+                                    {isCouponOpen && (
+                                        <div className="relative h-16 animate-slide-up">
+                                            <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-900/70 dark:text-white/70" size={18} />
+                                            <input
+                                                type="text"
+                                                placeholder="Coupon Code"
+                                                value={couponCode}
+                                                onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                                                className="w-full h-full pl-14 pr-20 rounded-2xl bg-white dark:bg-white/5 border border-slate-900 dark:border-white/10 text-sm font-bold outline-none focus:border-black dark:focus:border-emerald-500 transition-all uppercase text-slate-900 dark:text-white placeholder:text-slate-900/30 dark:placeholder:text-white/30"
+                                                aria-label="Coupon code"
+                                            />
+                                            <button
+                                                onClick={async () => {
+                                                    if (!couponCode.trim()) return;
+                                                    try {
+                                                        const res = await fetch('/api/coupons/validate', {
+                                                            method: 'POST',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({
+                                                                code: couponCode,
+                                                                pickup: pickup.name || pickupSearch,
+                                                                dropoff: dropoff.name || dropoffSearch
+                                                            })
+                                                        });
+                                                        const data = await res.json();
+                                                        if (data.valid) {
+                                                            const couponOffer = {
+                                                                _id: 'coupon-' + data.coupon.code,
+                                                                name: data.coupon.code,
+                                                                discountPercentage: data.coupon.discountType === 'percentage' ? data.coupon.value : 0,
+                                                                discountAmount: data.coupon.discountType === 'flat' ? data.coupon.value : 0,
+                                                                type: 'coupon'
+                                                            };
+                                                            setAppliedOffer(couponOffer);
+                                                            alert('Coupon Applied: ' + data.coupon.code);
+                                                        } else {
+                                                            alert(data.message || 'Invalid Coupon');
+                                                            setAppliedOffer(null);
+                                                        }
+                                                    } catch (e) {
+                                                        console.error(e);
+                                                        alert('Validation failed');
+                                                    }
+                                                }}
+                                                aria-label="Apply Coupon"
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-slate-800 transition-all"
+                                            >
+                                                Apply
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Visual Coupon Selector */}
-                                {availableCoupons.length > 0 && (
+                                {availableCoupons.length > 0 && isCouponOpen && (
                                     <div className="lg:col-span-2 space-y-3 animate-fade-in">
                                         <div className="flex items-center gap-2 px-1">
                                             <Tag size={12} className="text-emerald-600" />
