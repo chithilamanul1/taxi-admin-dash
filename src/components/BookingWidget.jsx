@@ -152,11 +152,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                     console.error('Pricing Fetch Failed', res.status);
                     return;
                 }
-                const data = await res.json();
-                console.log(`Fetched Pricing for ${category}:`, data); // Debug Log
-                if (!Array.isArray(data)) return;
+                const response = await res.json();
+                console.log(`Fetched Pricing for ${category}:`, response); // Debug Log
+
+                const vehicles = response.data || [];
+                if (!Array.isArray(vehicles)) return;
+
                 const pricingMap = {};
-                data.forEach(v => { pricingMap[v.vehicleType] = v; });
+                vehicles.forEach(v => { pricingMap[v.vehicleType] = v; });
                 setVehiclePricing(pricingMap);
             } catch (error) { console.error(error); } finally { setIsLoadingPricing(false); }
         };

@@ -182,9 +182,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             // Fetch pricing based on category
             fetch(`/api/pricing?category=${pricingCategory}`)
                 .then(res => res.json())
-                .then(data => {
-                    if (Array.isArray(data)) {
-                        setPricing(data);
+                .then(response => {
+                    if (response.success && Array.isArray(response.data)) {
+                        setPricing(response.data);
                     } else {
                         setPricing([]);
                     }
