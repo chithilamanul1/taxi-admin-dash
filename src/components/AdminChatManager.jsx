@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Pusher from 'pusher-js'
-import { MessageCircle, User, Send, Loader2, Clock, CheckCircle, Search } from 'lucide-react'
+import { MessageCircle, User, Send, Loader2, Clock, CheckCircle, Search, Lock } from 'lucide-react'
 
 export default function AdminChatManager() {
     const [chats, setChats] = useState([])
