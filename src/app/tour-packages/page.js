@@ -1,11 +1,39 @@
 'use client'
 
-import React from 'react'
-import { Clock, MapPin, Check, ArrowRight, Calendar, Users, Plane, Hotel, Car, Utensils } from 'lucide-react'
-import { tourPackages } from '@/data/tours-data'
+import React, { useState, useEffect } from 'react'
+import { Clock, MapPin, Check, ArrowRight, Calendar, Users, Plane, Hotel, Car, Utensils, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 
 export default function TourPackagesPage() {
+    const [tours, setTours] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [activeCategory, setActiveCategory] = useState('All')
+
+    useEffect(() => {
+        const fetchTours = async () => {
+            try {
+                const res = await fetch('/api/tours?activeOnly=true');
+                const data = await res.json();
+                if (data.success) {
+                    setTours(data.data);
+                }
+            } catch (error) {
+                console.error('Failed to fetch tours:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchTours()
+    }, [])
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+                <Loader2 className="text-emerald-500 animate-spin" size={48} />
+            </div>
+        )
+    }
+
     return (
         <main className="min-h-screen bg-gradient-to-b from-emerald-900 to-slate-950 pt-32 pb-20">
             <div className="container mx-auto px-6">
@@ -56,83 +84,106 @@ export default function TourPackagesPage() {
                     </div>
                 </div>
 
+                {/* Filters */}
+                <div className="flex flex-wrap justify-center gap-4 mb-12">
+                    {['All', 'Day Tours', 'City Tours', 'Safari', 'Multi-Day'].map((cat) => (
+                        <button
+                            key={cat}
+                            onClick={() => setActiveCategory(cat)}
+                            className={`px-6 py-2.5 rounded-full text-sm font-bold uppercase tracking-widest transition-all ${activeCategory === cat
+                                ? 'bg-emerald-900 text-white shadow-lg scale-105'
+                                : 'bg-white text-emerald-900/70 hover:bg-emerald-50 border border-emerald-900/10'
+                                }`}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
+
                 {/* Tour Packages List */}
                 <div className="max-w-6xl mx-auto space-y-8">
-                    {tourPackages.map((tour, index) => (
-                        <div key={tour.id || index} className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all">
-                            <div className="grid md:grid-cols-[300px,1fr] lg:grid-cols-[350px,1fr]">
-                                {/* Image Col */}
-                                <div className="relative h-64 md:h-full bg-gradient-to-br from-emerald-400 to-emerald-700">
-                                    <div className="absolute inset-0 bg-black/20" />
-                                    <div className="absolute top-4 left-4">
-                                        <span className="px-4 py-2 bg-white/90 text-emerald-900 text-sm font-bold rounded-full flex items-center gap-2">
-                                            <Calendar size={14} />
-                                            {tour.duration}
-                                        </span>
-                                    </div>
-                                    <div className="absolute bottom-4 left-4 right-4">
-                                        <div className="bg-emerald-900/90 backdrop-blur-sm rounded-2xl p-4 text-white">
-                                            <div className="text-sm opacity-80 mb-1">Starting from</div>
-                                            <div className="flex items-baseline gap-2">
-                                                <span className="text-3xl font-black">${tour.price}</span>
-                                                <span className="text-sm opacity-80">/{tour.priceType || 'Person'}</span>
+                    {tours
+                        .filter(tour => activeCategory === 'All' || tour.category === activeCategory)
+                        .map((tour, index) => (
+                            <div key={tour._id || index} className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all">
+                                <div className="grid md:grid-cols-[300px,1fr] lg:grid-cols-[350px,1fr]">
+                                    {/* Image Col */}
+                                    <div className="relative h-64 md:h-full bg-gradient-to-br from-emerald-400 to-emerald-700">
+                                        {tour.image ? (
+                                            <img src={tour.image} alt={tour.title} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="absolute inset-0 bg-slate-200 flex items-center justify-center text-slate-400">No Image</div>
+                                        )}
+                                        <div className="absolute inset-0 bg-black/20" />
+                                        <div className="absolute top-4 left-4">
+                                            <span className="px-4 py-2 bg-white/90 text-emerald-900 text-sm font-bold rounded-full flex items-center gap-2">
+                                                <Calendar size={14} />
+                                                {tour.duration} Days
+                                            </span>
+                                        </div>
+                                        <div className="absolute bottom-4 left-4 right-4">
+                                            <div className="bg-emerald-900/90 backdrop-blur-sm rounded-2xl p-4 text-white">
+                                                <div className="text-sm opacity-80 mb-1">Starting from</div>
+                                                <div className="flex items-baseline gap-2">
+                                                    <span className="text-3xl font-black">${tour.price}</span>
+                                                    <span className="text-sm opacity-80">/{tour.priceType || 'Person'}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                {/* Content Col */}
-                                <div className="p-6 md:p-8">
-                                    <h3 className="text-2xl font-bold text-emerald-900 mb-3">
-                                        {tour.title}
-                                    </h3>
-                                    <p className="text-slate-600 mb-4">
-                                        {tour.description}
-                                    </p>
-                                    <div className="flex items-center gap-2 mb-4 flex-wrap">
-                                        <MapPin size={16} className="text-emerald-600" />
-                                        {tour.destinations?.map((dest, i) => (
-                                            <span key={i} className="text-sm text-slate-500">
-                                                {dest}{i < (tour.destinations?.length - 1 || 0) ? ' →' : ''}
-                                            </span>
-                                        ))}
-                                    </div>
-                                    <div className="grid md:grid-cols-2 gap-2 mb-6">
-                                        {tour.highlights?.map((highlight, i) => (
-                                            <div key={i} className="flex items-center gap-2 text-sm text-slate-600">
-                                                <Check size={14} className="text-emerald-500 shrink-0" />
-                                                <span>{highlight}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="bg-emerald-50 rounded-xl p-4 mb-6">
-                                        <h4 className="text-sm font-bold text-emerald-900 mb-2">Package Includes:</h4>
-                                        <div className="flex flex-wrap gap-2">
-                                            {tour.includes?.map((item, i) => (
-                                                <span key={i} className="px-3 py-1 bg-white text-emerald-700 text-xs font-medium rounded-full border border-emerald-200">
-                                                    {item}
+                                    {/* Content Col */}
+                                    <div className="p-6 md:p-8">
+                                        <h3 className="text-2xl font-bold text-emerald-900 mb-3">
+                                            {tour.title}
+                                        </h3>
+                                        <p className="text-slate-600 mb-4 line-clamp-2">
+                                            {tour.description}
+                                        </p>
+                                        <div className="flex items-center gap-2 mb-4 flex-wrap">
+                                            <MapPin size={16} className="text-emerald-600" />
+                                            {Array.isArray(tour.destinations) ? tour.destinations.map((dest, i) => (
+                                                <span key={i} className="text-sm text-slate-500">
+                                                    {dest}{i < (tour.destinations.length - 1) ? ' →' : ''}
                                                 </span>
+                                            )) : <span className="text-sm text-slate-500">Multiple Locations</span>}
+                                        </div>
+                                        <div className="grid md:grid-cols-2 gap-2 mb-6">
+                                            {tour.highlights?.slice(0, 4).map((highlight, i) => (
+                                                <div key={i} className="flex items-center gap-2 text-sm text-slate-600">
+                                                    <Check size={14} className="text-emerald-500 shrink-0" />
+                                                    <span>{highlight}</span>
+                                                </div>
                                             ))}
                                         </div>
-                                    </div>
-                                    <div className="flex flex-col sm:flex-row gap-3">
-                                        <Link
-                                            href={`/tour-packages/${tour.id}`}
-                                            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-emerald-900 text-white rounded-xl font-bold hover:bg-emerald-800 transition-colors"
-                                        >
-                                            View Full Itinerary <ArrowRight size={16} />
-                                        </Link>
-                                        <Link
-                                            href={`https://wa.me/+94722885885?text=I'm interested in: ${tour.title}`}
-                                            className="flex items-center justify-center gap-2 px-6 py-3 border-2 border-emerald-900 text-emerald-900 rounded-xl font-bold hover:bg-emerald-50 transition-colors"
-                                        >
-                                            Inquire on WhatsApp
-                                        </Link>
+                                        <div className="bg-emerald-50 rounded-xl p-4 mb-6">
+                                            <h4 className="text-sm font-bold text-emerald-900 mb-2">Package Includes:</h4>
+                                            <div className="flex flex-wrap gap-2">
+                                                {tour.includes?.slice(0, 5).map((item, i) => (
+                                                    <span key={i} className="px-3 py-1 bg-white text-emerald-700 text-xs font-medium rounded-full border border-emerald-200">
+                                                        {item}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col sm:flex-row gap-3">
+                                            <Link
+                                                href={`/tour-packages/${tour._id}`}
+                                                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-emerald-900 text-white rounded-xl font-bold hover:bg-emerald-800 transition-colors"
+                                            >
+                                                View Full Itinerary <ArrowRight size={16} />
+                                            </Link>
+                                            <Link
+                                                href={`https://wa.me/+94722885885?text=I'm interested in: ${tour.title}`}
+                                                className="flex items-center justify-center gap-2 px-6 py-3 border-2 border-emerald-900 text-emerald-900 rounded-xl font-bold hover:bg-emerald-50 transition-colors"
+                                            >
+                                                Inquire on WhatsApp
+                                            </Link>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
                 </div>
 
                 {/* Custom Tour CTA */}

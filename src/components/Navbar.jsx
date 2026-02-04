@@ -82,7 +82,7 @@ export default function Navbar() {
                                 { label: 'Day Tours', href: '/day-tours' },
                                 { label: 'City Tours', href: '/city-tours' },
                                 { label: 'Safari', href: '/safari' },
-                                { label: 'All Packages', href: '/tour-packages' }
+                                { label: 'Tour Packages', href: '/tour-packages' }
                             ].map(sub => (
                                 <Link
                                     key={sub.href}
@@ -96,6 +96,8 @@ export default function Navbar() {
                     </div>
 
                     {[
+                        { label: 'Airport Drop & Pickup', href: '/airport-pickup' },
+                        { label: 'Custom Trip', href: '/custom-trip' },
                         { label: 'Rates', href: '/prices' },
                         { label: 'Offers', href: '/offers' },
                         { label: 'Reviews', href: '/reviews' },
@@ -232,10 +234,12 @@ export default function Navbar() {
                         <div className="grid grid-cols-2 gap-3">
                             {[
                                 { label: 'Home', href: '/', icon: '🏠' },
+                                { label: 'Airport Drop & Pickup', href: '/airport-pickup', icon: '✈️' },
+                                { label: 'Custom Trip', href: '/custom-trip', icon: '✨' },
                                 { label: 'Day Tours', href: '/day-tours', icon: '🌴' },
                                 { label: 'City Tours', href: '/city-tours', icon: '🏙️' },
                                 { label: 'Safari', href: '/safari', icon: '🐘' },
-                                { label: 'All Packages', href: '/tour-packages', icon: '🗺️' },
+                                { label: 'Tour Packages', href: '/tour-packages', icon: '🗺️' },
                                 { label: 'Rates', href: '/prices', icon: '💰' },
                                 { label: 'Offers', href: '/offers', icon: '🎁' },
                                 { label: 'Reviews', href: '/reviews', icon: '⭐' },

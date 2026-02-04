@@ -4,7 +4,7 @@ import { useCurrency } from '../context/CurrencyContext';
 import Link from 'next/link';
 // import { tourPackages } from '../data/tours-data'; // Legacy
 
-const TOUR_CATEGORIES = ['Day Tours', 'City Tours', 'Safari', 'Multi-Day'];
+const TOUR_CATEGORIES = ['Day Tours', 'City Tours', 'Safari', 'Tour Packages'];
 
 const ToursWidget = () => {
     const [activeCategory, setActiveCategory] = useState('Day Tours');
