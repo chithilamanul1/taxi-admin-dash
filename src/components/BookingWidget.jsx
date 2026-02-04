@@ -382,7 +382,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         aria-controls={`panel-${tab.id}`}
                         id={`tab-${tab.id}`}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all min-w-[120px] ${activeTab === tab.id ? 'bg-black text-white shadow-lg' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all min-w-[120px] ${activeTab === tab.id ? 'bg-[#FFC107] text-black shadow-lg scale-105' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
                     >
                         <tab.icon size={16} />
                         {tab.label}
@@ -596,21 +596,21 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="space-y-3">
                                     <button
                                         onClick={() => setIsCouponOpen(!isCouponOpen)}
-                                        className="flex items-center gap-2 text-xs font-bold text-amber-700 dark:text-amber-400 hover:underline"
+                                        className="flex items-center gap-2 text-xs font-bold text-amber-700 dark:text-amber-400 hover:text-amber-900 transition-colors bg-amber-50 dark:bg-amber-900/20 px-3 py-2 rounded-lg w-fit"
                                     >
-                                        <Tag size={14} />
-                                        {isCouponOpen ? 'Hide Coupon Code' : 'Have a Coupon Code?'}
+                                        <Tag size={16} className="fill-amber-500/20" />
+                                        {isCouponOpen ? 'Hide Coupon Field' : 'Do you have a Coupon Code?'}
                                     </button>
 
                                     {isCouponOpen && (
                                         <div className="relative h-16 animate-slide-up">
-                                            <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-900/70 dark:text-white/70" size={18} />
+                                            <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-amber-600 dark:text-amber-400" size={20} />
                                             <input
                                                 type="text"
-                                                placeholder="Coupon Code"
+                                                placeholder="ENTER COUPON CODE"
                                                 value={couponCode}
                                                 onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                                className="w-full h-full pl-14 pr-20 rounded-2xl bg-white dark:bg-white/5 border border-slate-900 dark:border-white/10 text-sm font-bold outline-none focus:border-black dark:focus:border-emerald-500 transition-all uppercase text-slate-900 dark:text-white placeholder:text-slate-900/30 dark:placeholder:text-white/30"
+                                                className="w-full h-full pl-14 pr-24 rounded-2xl bg-white dark:bg-white/5 border-2 border-amber-200 dark:border-amber-900/50 text-base font-black outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/20 transition-all uppercase text-slate-900 dark:text-white placeholder:text-slate-900/30 dark:placeholder:text-white/30 tracking-widest"
                                                 aria-label="Coupon code"
                                             />
                                             <button
