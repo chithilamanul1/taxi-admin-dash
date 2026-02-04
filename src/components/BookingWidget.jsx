@@ -822,11 +822,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         </div>
 
                         {/* Section 2: Summary & Checkout */}
-                        <div className="bg-amber-50/50 dark:bg-slate-900/50 border-2 border-slate-900 dark:border-slate-700 rounded-3xl p-6 shadow-xl flex flex-col justify-between h-full">
+                        <div className="bg-[#FFC107] border-2 border-amber-600/30 rounded-3xl p-6 shadow-xl flex flex-col justify-between h-full">
 
                             <div className="space-y-6">
                                 <div className="flex justify-between items-center">
-                                    <h2 className="text-xl font-bold text-amber-900 dark:text-amber-400 tracking-tight">Trip Summary</h2>
+                                    <h2 className="text-xl font-bold text-emerald-900 tracking-tight">Trip Summary</h2>
 
                                     {/* Currency Dropdown */}
                                     <div className="relative group">
@@ -858,27 +858,27 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center text-sm">
-                                        <span className="text-slate-900/40 dark:text-white/40">Est. Distance</span>
-                                        <span className="text-slate-900 dark:text-white font-bold">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
+                                        <span className="text-emerald-900/40">Est. Distance</span>
+                                        <span className="text-emerald-900 font-bold">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
                                     </div>
                                     <div className="flex justify-between items-center text-sm">
-                                        <span className="text-slate-900/40 dark:text-white/40">Vehicle Type</span>
-                                        <span className="font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/50 px-3 py-1 rounded-lg">
+                                        <span className="text-emerald-900/40">Vehicle Type</span>
+                                        <span className="font-bold text-emerald-900 bg-white/40 px-3 py-1 rounded-lg">
                                             {vehiclePricing[vehicle]?.name || 'Select Vehicle'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-center text-sm">
-                                        <span className="text-slate-900/40 dark:text-white/40">Waiting Hours</span>
+                                        <span className="text-emerald-900/40">Waiting Hours</span>
                                         <div className="flex items-center gap-3">
-                                            <button onClick={() => setWaitingHours(Math.max(0, waitingHours - 1))} className="text-amber-600 dark:text-amber-400 font-bold"><Minus size={12} /></button>
-                                            <span className="font-bold text-slate-900 dark:text-white">{waitingHours}</span>
-                                            <button onClick={() => setWaitingHours(waitingHours + 1)} className="text-amber-600 dark:text-amber-400 font-bold"><Plus size={12} /></button>
+                                            <button onClick={() => setWaitingHours(Math.max(0, waitingHours - 1))} className="text-emerald-600 font-bold"><Minus size={12} /></button>
+                                            <span className="font-bold text-emerald-900">{waitingHours}</span>
+                                            <button onClick={() => setWaitingHours(waitingHours + 1)} className="text-emerald-600 font-bold"><Plus size={12} /></button>
                                         </div>
                                     </div>
                                     {hasNameBoard && (
                                         <div className="flex justify-between items-center text-sm">
-                                            <span className="text-slate-900/40 dark:text-white/40">Meet & Greet</span>
-                                            <span className="text-amber-600 dark:text-amber-400 font-bold">Included</span>
+                                            <span className="text-emerald-900/40">Meet & Greet</span>
+                                            <span className="text-emerald-600 font-bold">Included</span>
                                         </div>
                                     )}
                                 </div>
@@ -888,18 +888,18 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             <div className="pt-6 border-t border-emerald-900/10 dark:border-white/10">
                                 <div className="flex justify-between items-end mb-8">
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] font-bold text-emerald-900/40 dark:text-white/40 uppercase tracking-widest">Grand Total</span>
-                                        <span className="text-4xl font-black text-emerald-900 dark:text-white">
+                                        <span className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">Grand Total</span>
+                                        <span className="text-4xl font-black text-emerald-900">
                                             {finalTotal > 0 ? (
                                                 <>
                                                     {convertPrice(finalTotal).symbol} {convertPrice(finalTotal).value.toLocaleString()}
                                                 </>
                                             ) : (
-                                                <span className="text-slate-300 dark:text-slate-700">---</span>
+                                                <span className="text-emerald-900/20">---</span>
                                             )}
                                         </span>
                                         {/* Secondary Currency Display */}
-                                        <div className="text-sm font-bold text-emerald-900/50 dark:text-white/50 mt-1">
+                                        <div className="text-sm font-bold text-emerald-900/40 mt-1">
                                             {(() => {
                                                 const secCode = currency === 'LKR' ? 'USD' : 'LKR';
                                                 const secRate = rates ? (rates[secCode] || 1) : 1;

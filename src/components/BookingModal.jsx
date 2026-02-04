@@ -559,7 +559,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <p className="text-sm font-bold leading-relaxed text-emerald-900">{formData.dropoff}</p>
                                             </div>
                                         </div>
-                                        <div className="p-4 md:p-6 bg-[#FFC107] rounded-3xl border border-amber-500/20 space-y-4 shadow-lg">
+                                        <div className="p-4 md:p-6 bg-[#FFC107] rounded-3xl border border-amber-600/20 space-y-4 shadow-lg">
                                             <div className="flex justify-between text-xs font-bold text-emerald-900/60 uppercase tracking-widest">
                                                 <span>Subtotal</span>
                                                 <span className="text-emerald-900 font-bold">Rs {subtotal.toLocaleString()}</span>
@@ -573,7 +573,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     <span className="font-bold text-emerald-900/60 uppercase text-xs">Total Amount</span>
                                                     <span className="text-xl font-bold text-emerald-900/60">Rs {totalPrice.toLocaleString()}</span>
                                                 </div>
-
                                                 <div className="flex justify-between items-end">
                                                     <span className="font-black text-emerald-900 uppercase tracking-[0.2em]">{formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Payable'}</span>
                                                     <span className="text-2xl md:text-3xl font-black text-emerald-900">Rs {payNow.toLocaleString()}</span>

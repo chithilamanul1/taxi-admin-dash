@@ -6,7 +6,17 @@ export async function POST(req) {
     try {
         const { chatId, text, customerName = 'Guest User' } = await req.json();
 
+        console.log('--- Discord Relay Attempt ---');
+        console.log('Chat ID:', chatId);
+        console.log('Text length:', text?.length);
+        console.log('Webhook configured:', !!DISCORD_WEBHOOK_URL);
+
+        if (!chatId || !text) {
+            return NextResponse.json({ success: false, error: 'Missing chatId or text' }, { status: 400 });
+        }
+
         if (!DISCORD_WEBHOOK_URL) {
+            console.warn('Discord Relay: DISCORD_WEBHOOK_URL not configured in environment.');
             return NextResponse.json({ success: true, message: 'Webhook not configured' });
         }
 
@@ -27,15 +37,18 @@ export async function POST(req) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                content: `**Chat Session:** \`${chatId}\``, // Useful for the bot to track
+                content: `**Chat Session:** \`${chatId}\``,
                 embeds: [embed]
             })
         });
 
         if (!response.ok) {
-            console.error('Discord Webhook Failed:', await response.text());
+            const errorText = await response.text();
+            console.error('Discord Webhook Failed:', response.status, errorText);
+            return NextResponse.json({ success: false, error: 'Discord webhook failed' }, { status: response.status });
         }
 
+        console.log('Discord Relay Success');
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Relay Error:', error);
