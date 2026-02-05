@@ -196,7 +196,7 @@ export default function LiveChatWidget() {
                     </div>
 
                     {/* Input Area */}
-                    <form onSubmit={sendMessage} className="p-4 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 shrink-0">
+                    <form onSubmit={sendMessage} className="p-4 pb-8 md:pb-6 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 shrink-0">
                         <div className="relative flex items-center gap-2">
                             <input
                                 type="text"

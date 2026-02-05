@@ -108,7 +108,7 @@ export async function GET(req) {
             vezel: {
                 vehicleType: 'vezel',
                 name: 'Honda Vezel',
-                image: '/vehicles/vezel.jpg',
+                image: '/vehicles/vezel.png',
                 capacity: 4, luggage: 3, handLuggage: 2,
                 basePrice: 5500, baseKm: 20, perKmRate: 130,
                 features: [...commonFeatures, 'Hybrid']

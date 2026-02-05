@@ -443,8 +443,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                     </div>
 
-                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-slate-900 dark:text-amber-100 text-xs font-black hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-amber-300/20 dark:bg-amber-900/30 px-6 py-3 rounded-xl border border-slate-900 dark:border-amber-700/50 justify-center whitespace-nowrap shadow-sm hover:shadow-md hover:bg-amber-300/40 dark:hover:bg-amber-900/50">
-                                        {isLocating ? <Loader2 size={16} className="animate-spin text-amber-700" /> : <Zap size={16} className="fill-amber-600 text-amber-700" />}
+                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-black text-xs font-black hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-[#FFC107] px-6 py-3 rounded-xl border border-black justify-center whitespace-nowrap shadow-sm hover:shadow-md hover:bg-[#FFC107]/90">
+                                        {isLocating ? <Loader2 size={16} className="animate-spin text-black" /> : <Zap size={16} className="fill-black text-black" />}
                                         <span className="hidden sm:inline">Auto Detect</span>
                                         <span className="sm:hidden">GPS</span>
                                     </button>
@@ -731,7 +731,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             value={date}
                                             min={new Date().toISOString().split('T')[0]}
                                             onChange={(e) => setDate(e.target.value)}
-                                            className="w-full h-16 pl-4 pr-4 bg-white dark:bg-white/5 border border-amber-900/10 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white font-bold outline-none focus:border-amber-500 dark:focus:border-amber-500 focus:ring-4 focus:ring-amber-500/5 transition-all w-full appearance-none"
+                                            className="w-full h-16 pl-4 pr-4 bg-white dark:bg-white/5 border border-black dark:border-white/10 rounded-2xl text-slate-900 dark:text-white font-bold outline-none focus:border-amber-500 dark:focus:border-amber-500 focus:ring-4 focus:ring-amber-500/5 transition-all w-full appearance-none"
                                             aria-label="Pickup Date"
                                         />
                                     </div>
@@ -743,7 +743,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             type="time"
                                             value={time}
                                             onChange={(e) => setTime(e.target.value)}
-                                            className="w-full h-16 pl-4 pr-4 bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 rounded-2xl text-emerald-900 dark:text-white font-bold outline-none focus:border-emerald-600 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 transition-all w-full appearance-none"
+                                            className="w-full h-16 pl-4 pr-4 bg-white dark:bg-white/5 border border-black dark:border-white/10 rounded-2xl text-emerald-900 dark:text-white font-bold outline-none focus:border-emerald-600 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 transition-all w-full appearance-none"
                                             aria-label="Pickup Time"
                                         />
                                     </div>
@@ -814,7 +814,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-white/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                                    <div className="w-8 h-8 rounded-full bg-[#FFC107] text-black hover:bg-[#FFC107]/90 transition-colors flex items-center justify-center">
                                         <ChevronDown size={16} />
                                     </div>
                                 </button>
