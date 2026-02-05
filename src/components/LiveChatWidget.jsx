@@ -74,7 +74,20 @@ export default function LiveChatWidget() {
         const channel = pusher.subscribe(`chat-${chatId}`);
         channel.bind('new-message', (data) => {
             setMessages(prev => {
+                // Check if message already exists by ID
                 if (prev.find(m => m.id === data.id || m._id === data.id)) return prev;
+
+                // Check for optimistic duplicate
+                const tempMatch = prev.find(m =>
+                    (m.id?.toString().startsWith('temp_') || m._id?.toString().startsWith('temp_')) &&
+                    m.text === data.text &&
+                    m.sender === data.sender
+                );
+
+                if (tempMatch) {
+                    return prev.map(m => (m.id === tempMatch.id || m._id === tempMatch._id) ? data : m);
+                }
+
                 return [...prev, data];
             });
         });

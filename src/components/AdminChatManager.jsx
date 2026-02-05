@@ -90,7 +90,20 @@ export default function AdminChatManager() {
         const channel = pusher.subscribe(`chat-${selectedChatId}`);
         channel.bind('new-message', (data) => {
             setMessages(prev => {
+                // Check if message already exists by ID
                 if (prev.find(m => m.id === data.id || m._id === data.id)) return prev;
+
+                // Check for optimistic duplicate (same text/sender)
+                const tempMatch = prev.find(m =>
+                    (m.id?.startsWith('temp_') || m._id?.startsWith('temp_')) &&
+                    m.text === data.text &&
+                    m.sender === data.sender
+                );
+
+                if (tempMatch) {
+                    return prev.map(m => (m.id === tempMatch.id || m._id === tempMatch._id) ? data : m);
+                }
+
                 return [...prev, data];
             });
         });
