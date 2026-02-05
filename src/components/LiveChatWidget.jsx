@@ -208,7 +208,7 @@ export default function LiveChatWidget() {
                             </button>
                         </div>
                         <div className="mt-3 text-[9px] text-center text-slate-400 font-bold uppercase tracking-widest">
-                            Replying via Discord Support
+                            Powered by Live Support
                         </div>
                     </form>
                 </>
