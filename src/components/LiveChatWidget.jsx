@@ -38,7 +38,12 @@ export default function LiveChatWidget() {
     }
 
     useEffect(() => {
-        if (isOpen) scrollToBottom()
+        if (isOpen) {
+            scrollToBottom();
+            window.dispatchEvent(new CustomEvent('live-chat-opened'));
+        } else {
+            window.dispatchEvent(new CustomEvent('live-chat-closed'));
+        }
     }, [messages, isOpen])
 
     // Load History & Listen for Pusher Events
