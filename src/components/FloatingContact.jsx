@@ -56,9 +56,9 @@ export default function FloatingContact() {
 
             {/* Animated Prompt */}
             {!isOpen && (
-                <div className="absolute bottom-20 right-0 md:right-0 bg-white dark:bg-slate-800 text-emerald-900 dark:text-emerald-400 text-xs font-bold px-4 py-2 rounded-xl shadow-xl border border-emerald-900/10 dark:border-emerald-500/20 whitespace-nowrap animate-bounce origin-bottom-right z-[90]">
-                    Live Chat 👋
-                    <div className="absolute -bottom-1 right-6 w-3 h-3 bg-white dark:bg-slate-800 border-b border-r border-emerald-900/10 dark:border-emerald-500/20 rotate-45"></div>
+                <div className="absolute bottom-5 right-20 bg-[#0F172A] text-white text-[10px] font-black tracking-widest px-3 py-2 rounded-lg shadow-xl whitespace-nowrap animate-bounce-horizontal z-[90] flex items-center">
+                    LIVE CHAT
+                    <div className="absolute top-1/2 -translate-y-1/2 -right-1 w-2 h-2 bg-[#0F172A] rotate-45"></div>
                 </div>
             )}
 
