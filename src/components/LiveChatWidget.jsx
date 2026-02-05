@@ -125,6 +125,12 @@ export default function LiveChatWidget() {
 
             if (!res.ok) throw new Error('Failed to send');
 
+            const data = await res.json();
+            if (data.success && data.message) {
+                // Swap temp message with real message
+                setMessages(prev => prev.map(m => m.id === tempId ? { ...data.message, id: data.message._id, _id: data.message._id } : m));
+            }
+
         } catch (error) {
             console.error('Error sending message:', error)
             alert('Failed to send message. Please check your connection.');

@@ -142,9 +142,16 @@ export default function AdminChatManager() {
             });
 
             if (!res.ok) throw new Error('Failed to send');
+
+            const data = await res.json();
+            if (data.success && data.message) {
+                // Swap temp message with real message to prevent duplicates from Pusher
+                setMessages(prev => prev.map(m => m._id === tempMsg._id ? { ...data.message, _id: data.message._id, id: data.message._id } : m));
+            }
         } catch (error) {
             console.error('Error sending message:', error)
             alert('Failed to send reply.');
+            // Optional: Remove temp message on failure
         } finally {
             setLoading(false)
         }
