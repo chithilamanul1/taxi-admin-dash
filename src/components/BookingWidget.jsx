@@ -599,9 +599,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="space-y-3">
                                     <button
                                         onClick={() => setIsCouponOpen(!isCouponOpen)}
-                                        className="flex items-center gap-2 text-xs font-bold text-amber-700 dark:text-amber-400 hover:text-amber-900 transition-colors bg-amber-50 dark:bg-amber-900/20 px-3 py-2 rounded-lg w-fit"
+                                        className="flex items-center gap-2 text-xs font-bold text-black hover:text-slate-900 transition-colors bg-[#FFC107] box-shadow-md px-4 py-3 rounded-xl w-full justify-center"
                                     >
-                                        <Tag size={16} className="fill-amber-500/20" />
+                                        <Tag size={16} className="fill-black/20" />
                                         {isCouponOpen ? 'Hide Coupon Field' : 'Do you have a Coupon Code?'}
                                     </button>
 
@@ -758,23 +758,23 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     { id: 'infants', label: 'Infants' },
                                     { id: 'bags', label: 'Bags' }
                                 ].map(c => (
-                                    <div key={c.id} className="bg-amber-50 dark:bg-white/[0.03] border border-amber-900/5 dark:border-white/10 p-2 rounded-xl flex flex-col items-center justify-center transition-colors">
-                                        <span className="text-[9px] font-bold text-amber-900 dark:text-white uppercase tracking-widest mb-2">{c.label}</span>
+                                    <div key={c.id} className="bg-[#FFC107] border border-black/10 p-3 rounded-2xl flex flex-col items-center justify-center transition-colors shadow-sm">
+                                        <span className="text-[9px] font-black text-black uppercase tracking-widest mb-2 opacity-80">{c.label}</span>
                                         <div className="flex items-center gap-3">
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, p[c.id] - 1) }))}
-                                                className="w-6 h-6 rounded-lg bg-white dark:bg-white/10 border border-amber-900/10 dark:border-white/10 flex items-center justify-center hover:bg-amber-100 dark:hover:bg-white/20 transition-colors text-amber-900 dark:text-white"
+                                                className="w-8 h-8 rounded-xl bg-white border border-black/10 flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-black shadow-sm"
                                                 aria-label={`Decrease ${c.label}`}
                                             >
-                                                <Minus size={10} />
+                                                <Minus size={12} strokeWidth={3} />
                                             </button>
-                                            <span className="font-extrabold text-sm text-amber-900 dark:text-white min-w-[12px] text-center" aria-live="polite">{passengerCount[c.id]}</span>
+                                            <span className="font-black text-lg text-black min-w-[12px] text-center" aria-live="polite">{passengerCount[c.id]}</span>
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: p[c.id] + 1 }))}
-                                                className="w-6 h-6 rounded-lg bg-white dark:bg-white/10 border border-amber-900/10 dark:border-white/10 flex items-center justify-center hover:bg-amber-100 dark:hover:bg-white/20 transition-colors text-amber-900 dark:text-white"
+                                                className="w-8 h-8 rounded-xl bg-black border border-black/10 flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-white shadow-sm"
                                                 aria-label={`Increase ${c.label}`}
                                             >
-                                                <Plus size={10} />
+                                                <Plus size={12} strokeWidth={3} />
                                             </button>
                                         </div>
                                     </div>
@@ -858,27 +858,27 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center text-sm">
-                                        <span className="text-emerald-900/40">Est. Distance</span>
-                                        <span className="text-emerald-900 font-bold">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
+                                        <span className="text-black font-bold">Est. Distance</span>
+                                        <span className="text-black font-black">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
                                     </div>
                                     <div className="flex justify-between items-center text-sm">
-                                        <span className="text-emerald-900/40">Vehicle Type</span>
-                                        <span className="font-bold text-emerald-900 bg-white/40 px-3 py-1 rounded-lg">
+                                        <span className="text-black font-bold">Vehicle Type</span>
+                                        <span className="font-bold text-black bg-white/40 px-3 py-1 rounded-lg">
                                             {vehiclePricing[vehicle]?.name || 'Select Vehicle'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between items-center text-sm">
-                                        <span className="text-emerald-900/40">Waiting Hours</span>
+                                        <span className="text-black font-bold">Waiting Hours</span>
                                         <div className="flex items-center gap-3">
-                                            <button onClick={() => setWaitingHours(Math.max(0, waitingHours - 1))} className="text-emerald-600 font-bold"><Minus size={12} /></button>
-                                            <span className="font-bold text-emerald-900">{waitingHours}</span>
-                                            <button onClick={() => setWaitingHours(waitingHours + 1)} className="text-emerald-600 font-bold"><Plus size={12} /></button>
+                                            <button onClick={() => setWaitingHours(Math.max(0, waitingHours - 1))} className="text-black font-bold"><Minus size={12} /></button>
+                                            <span className="font-bold text-black">{waitingHours}</span>
+                                            <button onClick={() => setWaitingHours(waitingHours + 1)} className="text-black font-bold"><Plus size={12} /></button>
                                         </div>
                                     </div>
                                     {hasNameBoard && (
                                         <div className="flex justify-between items-center text-sm">
-                                            <span className="text-emerald-900/40">Meet & Greet</span>
-                                            <span className="text-emerald-600 font-bold">Included</span>
+                                            <span className="text-black font-bold">Meet & Greet</span>
+                                            <span className="text-black font-black">Included</span>
                                         </div>
                                     )}
                                 </div>

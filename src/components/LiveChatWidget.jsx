@@ -2,16 +2,21 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Pusher from 'pusher-js'
-import { MessageCircle, X, Send, User, Loader2 } from 'lucide-react'
+import { MessageCircle, X, Send, User, Loader2, Lock } from 'lucide-react'
 import { nanoid } from 'nanoid'
 
+import { useSession, signIn } from 'next-auth/react'
+
 export default function LiveChatWidget() {
+    const { data: session, status } = useSession()
     const [isOpen, setIsOpen] = useState(false)
     const [messages, setMessages] = useState([])
     const [inputText, setInputText] = useState('')
     const [chatId, setChatId] = useState(null)
     const [loading, setLoading] = useState(false)
     const messagesEndRef = useRef(null)
+
+    // ... (keep useEffects for chat history/pusher, but maybe gate them on session?)
 
     // Initialize/Load Chat Session
     useEffect(() => {
@@ -22,13 +27,12 @@ export default function LiveChatWidget() {
         }
         setChatId(savedChatId)
 
-        // Listen for open event from unified FloatingContact
+        // Listen for open event
         const handleOpen = () => setIsOpen(true);
         window.addEventListener('open-live-chat', handleOpen);
         return () => window.removeEventListener('open-live-chat', handleOpen);
     }, [])
 
-    // Scroll to bottom
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }
@@ -39,7 +43,7 @@ export default function LiveChatWidget() {
 
     // Load History & Listen for Pusher Events
     useEffect(() => {
-        if (!chatId) return
+        if (!chatId || status !== 'authenticated') return
 
         // 1. Fetch History
         const fetchHistory = async () => {
@@ -56,10 +60,7 @@ export default function LiveChatWidget() {
         fetchHistory();
 
         // 2. Subscribe to Pusher
-        if (!process.env.NEXT_PUBLIC_PUSHER_KEY) {
-            console.warn('Pusher key missing');
-            return;
-        }
+        if (!process.env.NEXT_PUBLIC_PUSHER_KEY) return;
 
         const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
             cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER
@@ -68,7 +69,6 @@ export default function LiveChatWidget() {
         const channel = pusher.subscribe(`chat-${chatId}`);
         channel.bind('new-message', (data) => {
             setMessages(prev => {
-                // Prevent duplicate messages if the sender already added them locally
                 if (prev.find(m => m.id === data.id || m._id === data.id)) return prev;
                 return [...prev, data];
             });
@@ -78,7 +78,7 @@ export default function LiveChatWidget() {
             pusher.unsubscribe(`chat-${chatId}`);
             pusher.disconnect();
         };
-    }, [chatId])
+    }, [chatId, status])
 
     const sendMessage = async (e) => {
         e.preventDefault()
@@ -88,7 +88,7 @@ export default function LiveChatWidget() {
         setInputText('')
         setLoading(true)
 
-        // Optimistic UI update
+        // Optimistic UI
         const tempId = `temp_${Date.now()}`;
         const tempMsg = { id: tempId, text, sender: 'customer', timestamp: new Date() };
         setMessages(prev => [...prev, tempMsg]);
@@ -101,14 +101,12 @@ export default function LiveChatWidget() {
                     chatId,
                     text,
                     sender: 'customer',
-                    customerName: 'Guest User'
+                    customerName: session?.user?.name || 'Guest User'
                 })
             });
 
             if (!res.ok) throw new Error('Failed to send');
 
-            // Replace temp message with server message if needed, 
-            // though Pusher event will handle the official one.
         } catch (error) {
             console.error('Error sending message:', error)
             alert('Failed to send message. Please check your connection.');
@@ -119,32 +117,12 @@ export default function LiveChatWidget() {
 
     if (!isOpen) return null;
 
-    if (!process.env.NEXT_PUBLIC_PUSHER_KEY) {
-        return (
-            <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-[90vw] md:w-[380px] bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-800 z-[70] p-8 text-center animate-fade-in-up">
-                <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <X className="text-slate-400" size={32} />
-                </div>
-                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2">Chat Unavailable</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
-                    Live support is currently offline due to technical configuration. Please contact us via WhatsApp or Email.
-                </p>
-                <button
-                    onClick={() => setIsOpen(false)}
-                    className="mt-6 w-full py-3 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors"
-                >
-                    Dismiss
-                </button>
-            </div>
-        )
-    }
-
     return (
         <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-[90vw] md:w-[380px] h-[70vh] md:h-[500px] bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-800 z-[70] flex flex-col overflow-hidden animate-fade-in-up">
             {/* Header */}
             <div className="bg-emerald-900 p-5 flex justify-between items-center shrink-0">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
+                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center animate-bounce">
                         <User className="text-emerald-400" size={20} />
                     </div>
                     <div>
@@ -165,53 +143,75 @@ export default function LiveChatWidget() {
                 </div>
             </div>
 
-            {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-slate-50 dark:bg-slate-950/50">
-                {messages.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-center opacity-50">
-                        <MessageCircle size={40} className="text-emerald-900/20 mb-3" />
-                        <p className="text-xs font-bold text-emerald-900/40 uppercase tracking-widest">How can we help you today?</p>
-                    </div>
-                ) : (
-                    messages.map((msg) => (
-                        <div
-                            key={msg.id}
-                            className={`flex ${msg.sender === 'customer' ? 'justify-end' : 'justify-start'}`}
-                        >
-                            <div className={`max-w-[80%] p-3 rounded-2xl text-sm shadow-sm ${msg.sender === 'customer'
-                                ? 'bg-emerald-600 text-white rounded-tr-none'
-                                : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-none border border-slate-100 dark:border-slate-700'
-                                }`}>
-                                {msg.text}
+            {/* Content Area - Gated by Session */}
+            {status === 'authenticated' ? (
+                <>
+                    {/* Messages Area */}
+                    <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-slate-50 dark:bg-slate-950/50">
+                        {messages.length === 0 ? (
+                            <div className="h-full flex flex-col items-center justify-center text-center opacity-50">
+                                <MessageCircle size={40} className="text-emerald-900/20 mb-3" />
+                                <p className="text-xs font-bold text-emerald-900/40 uppercase tracking-widest">How can we help you today?</p>
                             </div>
-                        </div>
-                    ))
-                )}
-                <div ref={messagesEndRef} />
-            </div>
+                        ) : (
+                            messages.map((msg) => (
+                                <div
+                                    key={msg.id}
+                                    className={`flex ${msg.sender === 'customer' ? 'justify-end' : 'justify-start'}`}
+                                >
+                                    <div className={`max-w-[80%] p-3 rounded-2xl text-sm shadow-sm ${msg.sender === 'customer'
+                                        ? 'bg-emerald-600 text-white rounded-tr-none'
+                                        : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-none border border-slate-100 dark:border-slate-700'
+                                        }`}>
+                                        {msg.text}
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                        <div ref={messagesEndRef} />
+                    </div>
 
-            {/* Input Area */}
-            <form onSubmit={sendMessage} className="p-4 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 shrink-0">
-                <div className="relative flex items-center gap-2">
-                    <input
-                        type="text"
-                        value={inputText}
-                        onChange={(e) => setInputText(e.target.value)}
-                        placeholder="Type your message..."
-                        className="flex-1 h-12 bg-slate-100 dark:bg-slate-800 border-none px-5 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500/20 text-sm font-medium pr-12 transition-all"
-                    />
+                    {/* Input Area */}
+                    <form onSubmit={sendMessage} className="p-4 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 shrink-0">
+                        <div className="relative flex items-center gap-2">
+                            <input
+                                type="text"
+                                value={inputText}
+                                onChange={(e) => setInputText(e.target.value)}
+                                placeholder="Type your message..."
+                                className="flex-1 h-12 bg-slate-100 dark:bg-slate-800 border-none px-5 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500/20 text-sm font-medium pr-12 transition-all"
+                            />
+                            <button
+                                type="submit"
+                                disabled={loading || !inputText.trim()}
+                                className="absolute right-1 w-10 h-10 bg-emerald-600 text-white rounded-lg flex items-center justify-center hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                            >
+                                {loading ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
+                            </button>
+                        </div>
+                        <div className="mt-3 text-[9px] text-center text-slate-400 font-bold uppercase tracking-widest">
+                            Replying via Discord Support
+                        </div>
+                    </form>
+                </>
+            ) : (
+                <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50 dark:bg-slate-900">
+                    <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/20 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                        <Lock className="text-emerald-600 dark:text-emerald-400" size={32} />
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Login Required</h3>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mb-8 max-w-[240px]">
+                        Please sign in to start a live chat with our support team.
+                    </p>
                     <button
-                        type="submit"
-                        disabled={loading || !inputText.trim()}
-                        className="absolute right-1 w-10 h-10 bg-emerald-600 text-white rounded-lg flex items-center justify-center hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                        onClick={() => signIn()}
+                        className="w-full py-3 bg-emerald-600 text-white rounded-xl font-bold shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                     >
-                        {loading ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
+                        <User size={18} />
+                        Sign In / Register
                     </button>
                 </div>
-                <div className="mt-3 text-[9px] text-center text-slate-400 font-bold uppercase tracking-widest">
-                    Replying via Discord Support
-                </div>
-            </form>
+            )}
         </div>
     )
 }
