@@ -165,8 +165,11 @@ export default function AdminChatManager() {
 
                 <div className="flex-1 overflow-y-auto custom-scrollbar">
                     {filteredChats.map((chat, idx) => {
-                        const activeId = chat.chatId || chat.id;
+                        const activeId = chat.chatId || chat.id || chat._id;
                         const isSelected = selectedChatId === activeId;
+
+                        // Debugging: Warn if no ID
+                        if (!activeId) console.warn('Chat missing ID:', chat);
 
                         return (
                             <button
@@ -232,7 +235,7 @@ export default function AdminChatManager() {
                                 </button>
                                 <div>
                                     <h3 className="font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight text-sm md:text-base">
-                                        {chats.find(c => (c.chatId || c.id) === selectedChatId)?.customerName || 'Guest User'}
+                                        {chats.find(c => (c.chatId || c.id || c._id) === selectedChatId)?.customerName || 'Guest User'}
                                     </h3>
                                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">ID: {selectedChatId}</p>
                                 </div>
