@@ -1,14 +1,6 @@
-const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
-const admin = require('firebase-admin');
-const mongoose = require('mongoose');
-
-// Initialize Firebase Admin (Only if not already initialized)
-if (!admin.apps.length) {
-    // Assuming service account JSON path or environment variable
-    // For local dev, we might use a service account key file.
-    // However, if we're on a server, we can use application default credentials.
-    // For this implementation, we'll try to load from environment or expect it to be handled in server/index.js
-}
+const { Client, GatewayIntentBits, EmbedBuilder, ChannelType, PermissionsBitField } = require('discord.js');
+const Pusher = require('pusher');
+const { ChatSession, ChatMessage } = require('../models/Chat');
 
 class SupportBot {
     constructor() {
@@ -21,8 +13,19 @@ class SupportBot {
         });
 
         this.token = process.env.DISCORD_BOT_TOKEN;
-        this.channelId = process.env.DISCORD_CHAT_CHANNEL_ID;
-        this.db = admin.firestore();
+        // We use the "Main" channel ID as a Category ID or a fallback, 
+        // but ideally we want a Category ID for tickets.
+        // Let's assume DISCORD_CATEGORY_ID is set, or we create one.
+        this.categoryId = process.env.DISCORD_CATEGORY_ID;
+
+        // Pusher for relaying back to frontend
+        this.pusher = new Pusher({
+            appId: process.env.PUSHER_APP_ID,
+            key: process.env.NEXT_PUBLIC_PUSHER_KEY,
+            secret: process.env.PUSHER_SECRET,
+            cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+            useTLS: true
+        });
     }
 
     async start() {
@@ -33,126 +36,150 @@ class SupportBot {
 
         this.client.on('ready', () => {
             console.log(`[Bot] Logged in as ${this.client.user.tag}`);
-            this.setupFirestoreListener();
+            // We don't need a Firestore listener anymore. 
+            // The API will trigger specific methods on this instance (if running in same process)
+            // OR we rely on the API to update DB and we use a Change Stream (Mongo).
+
+            // Optimization: Use Mongo Change Stream to detect new customer messages
+            this.setupMongoListener();
         });
 
         this.client.on('messageCreate', async (message) => {
             if (message.author.bot) return;
-            if (message.channelId !== this.channelId) {
-                // Handle commands like /status here if not using slash commands
-                if (message.content === '!status' || message.content === '/status') {
-                    this.handleStatus(message);
-                }
-                return;
-            }
 
-            // Relay message to Firestore
+            // Check if this channel corresponds to a Chat Session
             await this.handleDiscordReply(message);
         });
 
         await this.client.login(this.token);
     }
 
-    setupFirestoreListener() {
-        console.log('[Bot] Setting up Firestore listener...');
+    async setupMongoListener() {
+        console.log('[Bot] Setting up MongoDB Change Stream...');
+        // Watch for changes in ChatSessions (specifically lastMessage updates)
+        const changeStream = ChatSession.watch();
 
-        // Listen for new messages in ALL chat sessions
-        // This is complex - we'd ideally listen to a 'messages' root or use a relay API.
-        // For simplicity, let's listen to the 'chats' collection updates.
-        this.db.collection('chats').onSnapshot(async (snapshot) => {
-            snapshot.docChanges().forEach(async (change) => {
-                const chatData = change.doc.data();
-
-                // If it's a new message from a customer
-                if (change.type === 'modified' && chatData.lastMessage && chatData.updatedAt) {
-                    // Check if it's actually a customer message (we'd need a flag or timestamp check)
-                    // For now, assume every update that isn't from the bot is a trigger
-                    // To prevent loops, we could check chatData.lastSender
-                    if (chatData.lastSender === 'admin') return;
-
-                    this.notifyChannel(chatData);
+        changeStream.on('change', async (change) => {
+            if (change.operationType === 'update') {
+                const updatedFields = change.updateDescription.updatedFields;
+                // If lastMessage changed and lastSender is NOT admin
+                if (updatedFields.lastMessage && updatedFields.lastSender !== 'admin') {
+                    // Fetch full doc to get details
+                    const docId = change.documentKey._id;
+                    const session = await ChatSession.findById(docId);
+                    if (session && session.lastSender === 'customer') {
+                        this.notifyChannel(session);
+                    }
                 }
-            });
+            } else if (change.operationType === 'insert') {
+                // New chat session
+                const session = change.fullDocument;
+                if (session.lastSender === 'customer') {
+                    this.notifyChannel(session);
+                }
+            }
         });
     }
 
-    async notifyChannel(chatData) {
-        const channel = await this.client.channels.fetch(this.channelId);
-        if (!channel) return;
+    async notifyChannel(session) {
+        try {
+            // Find the guild (server) - assuming first guild or specific ENV
+            const guild = this.client.guilds.cache.first();
+            if (!guild) {
+                console.error('[Bot] No guild found');
+                return;
+            }
 
-        const embed = new EmbedBuilder()
-            .setTitle(`💬 Message from ${chatData.customerName || 'Guest'}`)
-            .setDescription(chatData.lastMessage)
-            .setColor(0x10b981)
-            .addFields(
-                { name: 'Chat Session', value: `\`${chatData.id}\``, inline: true },
-                { name: 'Status', value: chatData.status, inline: true }
-            )
-            .setTimestamp();
+            let channel;
 
-        // Check if we already have a thread for this chat
-        // In a real app, we'd use threads to keep conversations organized.
-        await channel.send({
-            content: `**Incoming Support Chat** (Internal ID: \`${chatData.id}\`)`,
-            embeds: [embed]
-        });
+            // 1. Check if we already have a channel ID
+            if (session.discordChannelId) {
+                channel = await guild.channels.fetch(session.discordChannelId).catch(() => null);
+            }
+
+            // 2. If no channel, create one
+            if (!channel) {
+                // Create channel name derived from customer name or ID
+                const cleanName = (session.customerName || 'user').replace(/[^a-z0-9]/gi, '-').toLowerCase() + '-' + session.chatId.slice(-4);
+
+                channel = await guild.channels.create({
+                    name: `ticket-${cleanName}`,
+                    type: ChannelType.GuildText,
+                    topic: `Chat ID: ${session.chatId} | Customer: ${session.customerName}`,
+                    parent: this.categoryId || null, // Optional Category
+                    permissionOverwrites: [
+                        {
+                            id: guild.id,
+                            deny: [PermissionsBitField.Flags.ViewChannel], // Private logic if needed
+                        },
+                        {
+                            id: this.client.user.id,
+                            allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
+                        }
+                        // Add Admin Role permissions here if needed
+                    ]
+                });
+
+                // Update session with new channel ID
+                await ChatSession.updateOne({ _id: session._id }, { discordChannelId: channel.id });
+                console.log(`[Bot] Created channel ${channel.name} for chat ${session.chatId}`);
+            }
+
+            // 3. Send the message embed
+            const embed = new EmbedBuilder()
+                .setDescription(session.lastMessage)
+                .setColor(0x10b981) // Emerald
+                .setAuthor({ name: session.customerName || 'Guest User', iconURL: 'https://cdn-icons-png.flaticon.com/512/149/149071.png' })
+                .setFooter({ text: `Via Web Chat • ${session.chatId}` })
+                .setTimestamp();
+
+            await channel.send({ embeds: [embed] });
+
+        } catch (error) {
+            console.error('[Bot] Error in notifyChannel:', error);
+        }
     }
 
     async handleDiscordReply(message) {
-        // Find which chat session this belongs to.
-        // Option A: Message contains the ID.
-        // Option B: We check message history for the pattern (Relay).
+        // Find session by channel ID
+        const session = await ChatSession.findOne({ discordChannelId: message.channel.id });
 
-        const match = message.content.match(/chat_[a-zA-Z0-9]+/);
-        const chatId = match ? match[0] : null;
+        if (!session) return; // Not a chat channel
 
-        if (!chatId) {
-            // Check reference/reply to get the ID from the bot's previous message
-            if (message.reference) {
-                const referencedMsg = await message.channel.messages.fetch(message.reference.messageId);
-                const refMatch = referencedMsg.content.match(/chat_[a-zA-Z0-9]+/);
-                if (refMatch) return this.writeToFirestore(refMatch[0], message.content);
-            }
-            return;
-        }
+        const text = message.content;
 
-        const replyText = message.content.replace(chatId, '').trim();
-        await this.writeToFirestore(chatId, replyText);
-    }
+        // 1. Save to MongoDB
+        const newMsg = await ChatMessage.create({
+            chatId: session.chatId,
+            text: text,
+            sender: 'admin',
+            timestamp: new Date()
+        });
 
-    async writeToFirestore(chatId, text) {
+        // 2. Update Session
+        await ChatSession.updateOne({ chatId: session.chatId }, {
+            lastMessage: text,
+            lastSender: 'admin',
+            updatedAt: new Date()
+        });
+
+        // 3. Trigger Pusher
         try {
-            await this.db.collection('chats').doc(chatId).collection('messages').add({
+            await this.pusher.trigger(`chat-${session.chatId}`, 'new-message', {
+                id: newMsg._id,
                 text: text,
                 sender: 'admin',
-                timestamp: admin.firestore.FieldValue.serverTimestamp()
+                timestamp: newMsg.timestamp,
+                _id: newMsg._id // For compatibility
             });
+            console.log(`[Bot] Forwarded admin reply to ${session.chatId}`);
 
-            await this.db.collection('chats').doc(chatId).update({
-                lastMessage: text,
-                lastSender: 'admin',
-                updatedAt: admin.firestore.FieldValue.serverTimestamp()
-            });
-
-            console.log(`[Bot] Relayed reply to ${chatId}`);
-        } catch (e) {
-            console.error('[Bot] Failed to write to Firestore:', e);
+            // React to discord message to confirm sent
+            await message.react('✅');
+        } catch (err) {
+            console.error('[Bot] Pusher Error:', err);
+            await message.react('❌');
         }
-    }
-
-    async handleStatus(message) {
-        const statusEmbed = new EmbedBuilder()
-            .setTitle('🚀 System Health Report')
-            .setColor(mongoose.connection.readyState === 1 ? 0x22c55e : 0xef4444)
-            .addFields(
-                { name: 'MongoDB', value: mongoose.connection.readyState === 1 ? '✅ Connected' : '❌ Disconnected', inline: true },
-                { name: 'Next.js App', value: '✅ Operational', inline: true },
-                { name: 'Email (Resend)', value: '✅ Connected', inline: true },
-                { name: 'Uptime', value: `${Math.floor(process.uptime() / 60)} minutes`, inline: true }
-            )
-            .setTimestamp();
-
-        await message.reply({ embeds: [statusEmbed] });
     }
 }
 

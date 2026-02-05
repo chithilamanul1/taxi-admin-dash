@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const ChatMessageSchema = new mongoose.Schema({
     chatId: {
@@ -50,5 +50,7 @@ const ChatSessionSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export const ChatMessage = mongoose.models.ChatMessage || mongoose.model('ChatMessage', ChatMessageSchema);
-export const ChatSession = mongoose.models.ChatSession || mongoose.model('ChatSession', ChatSessionSchema);
+const ChatMessage = mongoose.models.ChatMessage || mongoose.model('ChatMessage', ChatMessageSchema);
+const ChatSession = mongoose.models.ChatSession || mongoose.model('ChatSession', ChatSessionSchema);
+
+module.exports = { ChatMessage, ChatSession };
