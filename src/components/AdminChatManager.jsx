@@ -137,10 +137,11 @@ export default function AdminChatManager() {
         }
     }
 
-    const filteredChats = chats.filter(chat =>
-        chat.customerName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        chat.chatId.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+    const filteredChats = chats.filter(chat => {
+        const nameMatch = chat.customerName?.toLowerCase().includes(searchQuery.toLowerCase());
+        const idMatch = (chat.chatId || chat.id || '').toLowerCase().includes(searchQuery.toLowerCase());
+        return nameMatch || idMatch;
+    })
 
     return (
         <div className="flex flex-col md:flex-row h-[85vh] md:h-[730px] bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 overflow-hidden">
@@ -163,30 +164,39 @@ export default function AdminChatManager() {
                 </div>
 
                 <div className="flex-1 overflow-y-auto custom-scrollbar">
-                    {filteredChats.map((chat) => (
-                        <button
-                            key={chat.chatId}
-                            onClick={() => setSelectedChatId(chat.chatId)}
-                            className={`w-full p-4 flex gap-4 transition-all border-b border-slate-100 dark:border-slate-800/50 hover:bg-white dark:hover:bg-slate-800 ${selectedChatId === chat.chatId ? 'bg-white dark:bg-slate-800 shadow-sm' : ''}`}
-                        >
-                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${selectedChatId === chat.chatId ? 'bg-emerald-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
-                                <User size={20} />
-                            </div>
-                            <div className="flex-1 text-left min-w-0">
-                                <div className="flex justify-between items-start mb-1">
-                                    <h4 className="text-sm font-black text-slate-800 dark:text-slate-100 truncate uppercase">
-                                        {chat.customerName || 'Guest User'}
-                                    </h4>
-                                    <span className="text-[10px] text-slate-400 font-bold whitespace-nowrap">
-                                        {new Date(chat.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    </span>
+                    {filteredChats.map((chat, idx) => {
+                        const activeId = chat.chatId || chat.id;
+                        const isSelected = selectedChatId === activeId;
+
+                        return (
+                            <button
+                                key={activeId || idx}
+                                onClick={() => {
+                                    console.log('Selecting chat:', activeId);
+                                    if (activeId) setSelectedChatId(activeId);
+                                }}
+                                className={`w-full p-4 flex gap-4 transition-all border-b border-slate-100 dark:border-slate-800/50 hover:bg-white dark:hover:bg-slate-800 ${isSelected ? 'bg-white dark:bg-slate-800 shadow-sm border-l-4 border-l-emerald-500' : ''}`}
+                            >
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${isSelected ? 'bg-emerald-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
+                                    <User size={20} />
                                 </div>
-                                <p className="text-xs text-slate-500 dark:text-slate-400 truncate font-medium">
-                                    {chat.lastSender === 'admin' ? 'You: ' : ''}{chat.lastMessage}
-                                </p>
-                            </div>
-                        </button>
-                    ))}
+                                <div className="flex-1 text-left min-w-0">
+                                    <div className="flex justify-between items-start mb-1">
+                                        <h4 className="text-sm font-black text-slate-800 dark:text-slate-100 truncate uppercase">
+                                            {chat.customerName || 'Guest User'}
+                                        </h4>
+                                        <span className="text-[10px] text-slate-400 font-bold whitespace-nowrap">
+                                            {new Date(chat.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                    </div>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 truncate font-medium">
+                                        {chat.lastSender === 'admin' ? 'You: ' : ''}{chat.lastMessage}
+                                    </p>
+                                    <p className="text-[9px] text-slate-300 mt-1 font-mono">{activeId}</p>
+                                </div>
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
 
@@ -222,7 +232,7 @@ export default function AdminChatManager() {
                                 </button>
                                 <div>
                                     <h3 className="font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight text-sm md:text-base">
-                                        {chats.find(c => c.chatId === selectedChatId)?.customerName || 'Guest User'}
+                                        {chats.find(c => (c.chatId || c.id) === selectedChatId)?.customerName || 'Guest User'}
                                     </h3>
                                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">ID: {selectedChatId}</p>
                                 </div>
