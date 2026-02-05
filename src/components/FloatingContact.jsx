@@ -54,10 +54,18 @@ export default function FloatingContact() {
                 </div>
             )}
 
+            {/* Animated Prompt */}
+            {!isOpen && (
+                <div className="absolute bottom-20 right-0 md:right-0 bg-white dark:bg-slate-800 text-emerald-900 dark:text-emerald-400 text-xs font-bold px-4 py-2 rounded-xl shadow-xl border border-emerald-900/10 dark:border-emerald-500/20 whitespace-nowrap animate-bounce origin-bottom-right z-[90]">
+                    Chat with us! 👋
+                    <div className="absolute -bottom-1 right-6 w-3 h-3 bg-white dark:bg-slate-800 border-b border-r border-emerald-900/10 dark:border-emerald-500/20 rotate-45"></div>
+                </div>
+            )}
+
             {/* Main Toggle */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center shadow-2xl transition-all duration-500 hover:scale-105 active:scale-95 ${isOpen ? 'bg-white text-emerald-900 rotate-90 border border-emerald-900/10' : 'bg-emerald-900 text-white shadow-[0_15px_40px_-10px_rgba(6,78,59,0.4)]'}`}
+                className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center shadow-2xl transition-all duration-500 hover:scale-105 active:scale-95 z-[100] ${isOpen ? 'bg-white text-emerald-900 rotate-90 border border-emerald-900/10' : 'bg-emerald-900 text-white shadow-[0_15px_40px_-10px_rgba(6,78,59,0.4)]'}`}
                 aria-label={isOpen ? "Close contact menu" : "Open contact menu"}
             >
                 {isOpen ? <X size={28} /> : (
