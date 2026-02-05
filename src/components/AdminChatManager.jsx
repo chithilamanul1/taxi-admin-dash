@@ -139,7 +139,7 @@ export default function AdminChatManager() {
 
     const filteredChats = chats.filter(chat =>
         chat.customerName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        chat.id.toLowerCase().includes(searchQuery.toLowerCase())
+        chat.chatId.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
     return (
@@ -165,11 +165,11 @@ export default function AdminChatManager() {
                 <div className="flex-1 overflow-y-auto custom-scrollbar">
                     {filteredChats.map((chat) => (
                         <button
-                            key={chat.id}
-                            onClick={() => setSelectedChatId(chat.id)}
-                            className={`w-full p-4 flex gap-4 transition-all border-b border-slate-100 dark:border-slate-800/50 hover:bg-white dark:hover:bg-slate-800 ${selectedChatId === chat.id ? 'bg-white dark:bg-slate-800 shadow-sm' : ''}`}
+                            key={chat.chatId}
+                            onClick={() => setSelectedChatId(chat.chatId)}
+                            className={`w-full p-4 flex gap-4 transition-all border-b border-slate-100 dark:border-slate-800/50 hover:bg-white dark:hover:bg-slate-800 ${selectedChatId === chat.chatId ? 'bg-white dark:bg-slate-800 shadow-sm' : ''}`}
                         >
-                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${selectedChatId === chat.id ? 'bg-emerald-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${selectedChatId === chat.chatId ? 'bg-emerald-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
                                 <User size={20} />
                             </div>
                             <div className="flex-1 text-left min-w-0">
@@ -222,7 +222,7 @@ export default function AdminChatManager() {
                                 </button>
                                 <div>
                                     <h3 className="font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight text-sm md:text-base">
-                                        {chats.find(c => c.id === selectedChatId)?.customerName || 'Guest User'}
+                                        {chats.find(c => c.chatId === selectedChatId)?.customerName || 'Guest User'}
                                     </h3>
                                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">ID: {selectedChatId}</p>
                                 </div>
