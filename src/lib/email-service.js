@@ -241,7 +241,7 @@ export async function sendBookingConfirmation(booking) {
             ${components.infoCard('🏁', 'Drop-off Location', dropoffShort)}
             ${components.infoCard('📅', 'Date & Time', `${booking.scheduledDate || 'Immediate'} ${booking.scheduledTime ? `at ${booking.scheduledTime}` : ''}`)}
             ${components.infoCard('🚗', 'Vehicle', booking.vehicleType || 'Standard')}
-            ${components.infoCard('📏', 'Distance', `${booking.distance || 0} km`)}
+            ${components.infoCard('📏', 'Distance', `${booking.distanceKm || 0} km`)}
             <tr>
                 <td style="padding: 20px; background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05));">
                     <table width="100%" cellpadding="0" cellspacing="0">
@@ -613,7 +613,7 @@ export async function sendTripCompletedNotification(booking) {
         <!-- Trip Summary -->
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
             ${components.infoCard('📍', 'Route', `${pickupShort} → ${dropoffShort}`)}
-            ${components.infoCard('📏', 'Distance Covered', `${booking.distance || 0} km`)}
+            ${components.infoCard('📏', 'Distance Covered', `${booking.distanceKm || 0} km`)}
             ${components.infoCard('💰', 'Total Paid', `LKR ${booking.totalPrice?.toLocaleString() || 0}`, true)}
         </table>
 
