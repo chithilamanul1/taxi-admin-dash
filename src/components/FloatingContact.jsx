@@ -38,9 +38,9 @@ export default function FloatingContact() {
                             window.dispatchEvent(new CustomEvent('open-live-chat'));
                             setIsOpen(false);
                         }}
-                        className="group flex items-center gap-4"
+                        className="group flex items-center gap-3"
                     >
-                        <span className="bg-emerald-900 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap uppercase tracking-wider">Live Chat</span>
+                        <span className="bg-emerald-600 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg whitespace-nowrap uppercase tracking-wider">Live Chat</span>
                         <div className="w-14 h-14 bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-xl hover:scale-110 transition-transform">
                             <MessageCircle size={24} />
                         </div>
@@ -50,9 +50,9 @@ export default function FloatingContact() {
                         href="https://wa.me/94716885880"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center gap-4"
+                        className="group flex items-center gap-3"
                     >
-                        <span className="bg-emerald-900 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap uppercase tracking-wider">WhatsApp Chat</span>
+                        <span className="bg-[#25D366] px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg whitespace-nowrap uppercase tracking-wider">WhatsApp</span>
                         <div className="w-14 h-14 bg-[#25D366] text-white rounded-2xl flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.3)] hover:scale-110 transition-transform">
                             <MessageCircle size={24} />
                         </div>
@@ -60,9 +60,9 @@ export default function FloatingContact() {
 
                     <a
                         href="mailto:info@airporttaxi.lk"
-                        className="group flex items-center gap-4"
+                        className="group flex items-center gap-3"
                     >
-                        <span className="bg-emerald-900 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap uppercase tracking-wider">Email Us</span>
+                        <span className="bg-slate-700 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg whitespace-nowrap uppercase tracking-wider">Email Us</span>
                         <div className="w-14 h-14 bg-white text-emerald-900 rounded-2xl flex items-center justify-center shadow-xl hover:scale-110 transition-transform border border-emerald-900/10">
                             <Mail size={24} />
                         </div>
