@@ -8,55 +8,71 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
     const [directionsRenderer, setDirectionsRenderer] = useState(null);
     const [directionsService, setDirectionsService] = useState(null);
     const [mapInitialized, setMapInitialized] = useState(false);
+    const [googleLoaded, setGoogleLoaded] = useState(false);
 
-    // Initialize map when coordinates are available and ref exists
+    // 1. Load Google Maps Script
     useEffect(() => {
-        if (!pickup?.lat || !dropoff?.lat || mapInitialized) return;
-
         loadGoogleMapsScript().then(() => {
-            if (window.google && mapRef.current && !directionsRenderer) {
-                const map = new window.google.maps.Map(mapRef.current, {
-                    zoom: 7,
-                    center: { lat: 7.8731, lng: 80.7718 }, // Sri Lanka Center
-                    disableDefaultUI: true,
-                    zoomControl: true,
-                    styles: [
-                        {
-                            "featureType": "poi",
-                            "elementType": "labels",
-                            "stylers": [{ "visibility": "off" }]
-                        }
-                    ]
-                });
+            setGoogleLoaded(true);
+        }).catch(err => console.error("TripMap: Failed to load Google Maps script", err));
+    }, []);
 
-                const dr = new window.google.maps.DirectionsRenderer({
-                    map,
-                    suppressMarkers: false,
-                    polylineOptions: {
-                        strokeColor: '#059669', // Emerald 600
-                        strokeWeight: 5
-                    }
-                });
-
-                setDirectionsRenderer(dr);
-                setDirectionsService(new window.google.maps.DirectionsService());
-                setMapInitialized(true);
-            }
-        });
-    }, [pickup?.lat, dropoff?.lat, mapInitialized, directionsRenderer]);
-
+    // 2. Initialize Map once script is loaded and ref is ready
     useEffect(() => {
-        if (directionsService && directionsRenderer && pickup?.lat && dropoff?.lat) {
-            const origin = { lat: pickup.lat, lng: pickup.lon };
-            const destination = { lat: dropoff.lat, lng: dropoff.lon };
+        if (!googleLoaded || !mapRef.current || mapInitialized) return;
+
+        console.log("TripMap: Initializing Map...");
+        try {
+            const map = new window.google.maps.Map(mapRef.current, {
+                zoom: 7,
+                center: { lat: 7.8731, lng: 80.7718 }, // Sri Lanka Center
+                disableDefaultUI: true,
+                zoomControl: true,
+                styles: [
+                    {
+                        "featureType": "poi",
+                        "elementType": "labels",
+                        "stylers": [{ "visibility": "off" }]
+                    }
+                ]
+            });
+
+            const dr = new window.google.maps.DirectionsRenderer({
+                map,
+                suppressMarkers: false,
+                polylineOptions: {
+                    strokeColor: '#059669', // Emerald 600
+                    strokeWeight: 5
+                }
+            });
+
+            setDirectionsRenderer(dr);
+            setDirectionsService(new window.google.maps.DirectionsService());
+            setMapInitialized(true);
+            console.log("TripMap: Map Initialized successfully.");
+        } catch (error) {
+            console.error("TripMap: Error initializing map:", error);
+        }
+    }, [googleLoaded, mapInitialized]);
+
+    // 3. Calculate Route when dependencies change
+    useEffect(() => {
+        if (!directionsService || !directionsRenderer) return;
+
+        // Only calculate if we have both points
+        if (pickup?.lat && pickup?.lon && dropoff?.lat && dropoff?.lon) {
+            const origin = { lat: parseFloat(pickup.lat), lng: parseFloat(pickup.lon) };
+            const destination = { lat: parseFloat(dropoff.lat), lng: parseFloat(dropoff.lon) };
 
             // Convert waypoints
-            const waypointsList = (waypoints || []).filter(w => w.lat && w.lon).map(wp => ({
-                location: { lat: wp.lat, lng: wp.lon },
-                stopover: true
-            }));
+            const waypointsList = (waypoints || [])
+                .filter(w => w.lat && w.lon)
+                .map(wp => ({
+                    location: { lat: parseFloat(wp.lat), lng: parseFloat(wp.lon) },
+                    stopover: true
+                }));
 
-            console.log('TripMap: Requesting route', { origin, destination, waypoints: waypointsList });
+            console.log('TripMap: Requesting route', { origin, destination, waypointsCount: waypointsList.length });
 
             directionsService.route(
                 {
@@ -82,6 +98,8 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
                             });
 
                             const distKm = totalDistanceMeters / 1000;
+                            console.log(`TripMap: Route calculated: ${distKm.toFixed(1)} km`);
+
                             if (onRouteCalculated) {
                                 onRouteCalculated({
                                     distanceKm: distKm,
@@ -91,19 +109,29 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
                         }
                     } else {
                         console.warn(`TripMap: Directions request failed: ${status}`);
-                        if (onRouteCalculated) onRouteCalculated({ distanceKm: 0, durationMin: 0 });
+                        // Don't reset result here to avoid flickering if temporary failure
                     }
                 }
             );
+        } else {
+            console.log("TripMap: Waiting for full coordinates...", {
+                hasPickup: !!(pickup?.lat && pickup?.lon),
+                hasDropoff: !!(dropoff?.lat && dropoff?.lon)
+            });
         }
-    }, [pickup, dropoff, waypoints, directionsService, directionsRenderer]);
-
-    if (!pickup?.lat || !dropoff?.lat) return null;
+    }, [pickup?.lat, pickup?.lon, dropoff?.lat, dropoff?.lon, waypoints, directionsService, directionsRenderer, onRouteCalculated]);
 
     return (
-        <div className="w-full h-40 rounded-xl overflow-hidden shadow-sm border border-emerald-900/10 mt-4 relative">
+        <div className="w-full h-full min-h-[300px] relative rounded-2xl overflow-hidden bg-slate-100">
             <div ref={mapRef} className="w-full h-full" />
-            {/* Overlay to prevent interaction if desired, or keep interactive */}
+            {!mapInitialized && (
+                <div className="absolute inset-0 flex items-center justify-center bg-slate-50/50 backdrop-blur-[2px] z-10">
+                    <div className="flex flex-col items-center gap-3">
+                        <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+                        <p className="text-xs font-bold text-emerald-900/40 uppercase tracking-widest">Loading Map...</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
