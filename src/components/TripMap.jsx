@@ -56,6 +56,8 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
                 stopover: true
             }));
 
+            console.log('TripMap: Requesting route', { origin, destination, waypoints: waypointsList });
+
             directionsService.route(
                 {
                     origin,
@@ -64,6 +66,7 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
                     travelMode: window.google.maps.TravelMode.DRIVING,
                 },
                 (result, status) => {
+                    console.log('TripMap: Route response status:', status);
                     if (status === window.google.maps.DirectionsStatus.OK) {
                         directionsRenderer.setDirections(result);
 

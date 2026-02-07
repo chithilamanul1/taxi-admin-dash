@@ -31,8 +31,8 @@ const vehicles = [
         capacity: 2,
         luggage: 2,
         handLuggage: 0,
-        basePrice: 30,
-        perKmRate: 0.30,
+        basePrice: 9000, // Scaled from $30
+        perKmRate: 60,   // Scaled from 0.30
         baseKm: 0
     },
     {
@@ -44,8 +44,8 @@ const vehicles = [
         capacity: 3,
         luggage: 2,
         handLuggage: 2,
-        basePrice: 40,
-        perKmRate: 0.40,
+        basePrice: 12000, // Scaled from $40
+        perKmRate: 75,    // Scaled from 0.40
         baseKm: 0
     },
     {
@@ -57,8 +57,8 @@ const vehicles = [
         capacity: 3,
         luggage: 3,
         handLuggage: 4,
-        basePrice: 40,
-        perKmRate: 0.40,
+        basePrice: 12000,
+        perKmRate: 85,
         baseKm: 0
     },
     {
@@ -70,8 +70,8 @@ const vehicles = [
         capacity: 5,
         luggage: 3,
         handLuggage: 4,
-        basePrice: 50,
-        perKmRate: 0.50,
+        basePrice: 15000,
+        perKmRate: 90,
         baseKm: 0
     },
     {
@@ -83,8 +83,8 @@ const vehicles = [
         capacity: 3,
         luggage: 2,
         handLuggage: 2,
-        basePrice: 45,
-        perKmRate: 0.45,
+        basePrice: 13500,
+        perKmRate: 100,
         baseKm: 0
     },
     {
@@ -96,12 +96,12 @@ const vehicles = [
         capacity: 3,
         luggage: 2,
         handLuggage: 2,
-        basePrice: 60,
-        perKmRate: 0.60,
+        basePrice: 18000,
+        perKmRate: 110,
         baseKm: 0
     },
     {
-        type: 'normal-kdh', // Mapped 'Overhauled' type to enum-compatible
+        type: 'normal-kdh',
         name: 'Van (9 Pax)',
         image: '/vehicles/van.png',
         tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 120 }],
@@ -109,8 +109,8 @@ const vehicles = [
         capacity: 9,
         luggage: 7,
         handLuggage: 5,
-        basePrice: 70,
-        perKmRate: 0.70,
+        basePrice: 21000,
+        perKmRate: 120,
         baseKm: 0
     },
     {
@@ -122,8 +122,8 @@ const vehicles = [
         capacity: 9,
         luggage: 7,
         handLuggage: 5,
-        basePrice: 80,
-        perKmRate: 0.80,
+        basePrice: 24000,
+        perKmRate: 130,
         baseKm: 0
     },
     {
@@ -135,8 +135,8 @@ const vehicles = [
         capacity: 12,
         luggage: 10,
         handLuggage: 12,
-        basePrice: 120,
-        perKmRate: 1.20,
+        basePrice: 36000,
+        perKmRate: 180,
         baseKm: 0
     },
     {
@@ -148,8 +148,8 @@ const vehicles = [
         capacity: 45,
         luggage: 30,
         handLuggage: 45,
-        basePrice: 200,
-        perKmRate: 2.00,
+        basePrice: 60000,
+        perKmRate: 250,
         baseKm: 0
     }
 ];
