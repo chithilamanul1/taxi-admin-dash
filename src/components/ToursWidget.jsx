@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, Star, ArrowRight, ChevronRight, Zap, Loader2 } from 'lucide-react';
+import { Clock, Star, ArrowRight, ChevronRight, Zap, Loader2, Signpost } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
 import Link from 'next/link';
 // import { tourPackages } from '../data/tours-data'; // Legacy
 
-const TOUR_CATEGORIES = ['Day Tours', 'City Tours', 'Safari', 'Tour Packages'];
+const TOUR_CATEGORIES = ['Day Tours', 'City Tours', 'Safari', 'Tour Packages', 'Custom Trip'];
 
 const ToursWidget = () => {
     const [activeCategory, setActiveCategory] = useState('Day Tours');
@@ -88,22 +88,32 @@ const ToursWidget = () => {
             </div>
 
             {/* Tours Grid */}
-            {loading ? (
+            {loading && activeCategory !== 'Custom Trip' ? (
                 <div className="flex justify-center py-20"><Loader2 className="animate-spin text-emerald-600" size={32} /></div>
+            ) : activeCategory === 'Custom Trip' ? (
+                <div className="grid grid-cols-1 animate-slide-up">
+                    <Link href="/custom-trip" className="group relative rounded-[2.5rem] overflow-hidden h-[400px] flex items-center justify-center bg-emerald-900 border border-emerald-800 shadow-2xl hover:scale-[1.02] transition-all duration-500">
+                        <div className="absolute inset-0 bg-[url('/images/custom-trip-bg.jpg')] bg-cover bg-center opacity-40 group-hover:opacity-50 transition-opacity"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-900/60 to-transparent"></div>
+                        <div className="relative z-10 text-center space-y-6 px-6 max-w-2xl">
+                            <div className="w-20 h-20 bg-emerald-500/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-400/30 group-hover:scale-110 transition-transform duration-500">
+                                <Signpost size={40} className="text-emerald-300" />
+                            </div>
+                            <h3 className="text-4xl md:text-5xl font-black text-white leading-tight">Design Your Own Adventure</h3>
+                            <p className="text-emerald-100 text-lg md:text-xl font-medium leading-relaxed">
+                                Create a fully customized itinerary tailored to your interests. Choose your stops, vehicle, and pace.
+                            </p>
+                            <span className="inline-flex items-center gap-3 bg-white text-emerald-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-emerald-50 transition-colors mt-4">
+                                Start Planning <ArrowRight size={20} />
+                            </span>
+                        </div>
+                    </Link>
+                </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {filteredTours.length > 0 ? filteredTours.map((tour, idx) => {
                         const priceVal = parseFloat(tour.price || 0);
-                        // If it's a day tour, usually price is fixed per person, but widget logic multiplied by duration.
-                        // We'll calculate based on if it's 'Multi-Day' or not? 
-                        // For now keep simple multiplication as widget filter implies custom duration.
-                        // But actually a Tour Package usually has fixed duration. 
-                        // The user can change "Duration" filter at top? 
-                        // Actually the widget has a "Duration" picker (lines 67-77).
-                        // If the tour is fixed duration, this multiplier might be confusing. 
-                        // I will multiply ONLY if category allows or simplistically for now.
                         const finalPrice = priceVal * tourDuration;
-                        // Convert USD to LKR first (assuming DB is USD)
                         const usdRate = (rates && rates['USD']) ? rates['USD'] : 0.0033;
                         const priceInLkr = finalPrice / usdRate;
                         const converted = convertPrice(priceInLkr);

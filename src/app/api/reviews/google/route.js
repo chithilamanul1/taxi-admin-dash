@@ -6,7 +6,10 @@ export async function GET(req) {
     try {
         await dbConnect();
         const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-        const placeId = process.env.GOOGLE_PLACE_ID || 'ChIJN1t_tDeuEmsRUsoyG83frY4';
+        const placeId = process.env.GOOGLE_PLACE_ID;
+        if (!placeId) {
+            console.error('GOOGLE_PLACE_ID is not defined in .env');
+        }
 
         let googleStats = { rating: 4.9, totalReviews: 128 }; // Fallbacks
         let latestGoogleReviews = [];

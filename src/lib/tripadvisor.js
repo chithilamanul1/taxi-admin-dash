@@ -66,7 +66,7 @@ export async function getTripAdvisorReviews() {
             id: 'ta1',
             text: 'We booked a round trip airport transfer. The driver was waiting for us with a name board. The van was clean and AC was good. Very professional service.',
             rating: 5,
-            published_date: '2024-01-20T10:00:00Z',
+            published_date: '2025-01-20T10:00:00Z',
             user: { username: 'LondonTraveler88', avatar: null },
             source: 'tripadvisor'
         },
@@ -74,7 +74,7 @@ export async function getTripAdvisorReviews() {
             id: 'ta2',
             text: 'Excellent experience with Airport Taxi Tours. Punctual, safe driving, and reasonable prices. Highly recommended for anyone visiting Sri Lanka.',
             rating: 5,
-            published_date: '2024-01-15T14:30:00Z',
+            published_date: '2025-01-15T14:30:00Z',
             user: { username: 'Sarah J', avatar: null },
             source: 'tripadvisor'
         },
@@ -82,7 +82,7 @@ export async function getTripAdvisorReviews() {
             id: 'ta3',
             text: 'Great communication via WhatsApp before arrival. Our driver was distinctively polite and knowledgeable. A smooth ride to Kandy.',
             rating: 4,
-            published_date: '2024-01-05T09:15:00Z',
+            published_date: '2025-01-05T09:15:00Z',
             user: { username: 'GlobalNomad', avatar: null },
             source: 'tripadvisor'
         }

@@ -47,12 +47,11 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
 
     useEffect(() => {
         if (directionsService && directionsRenderer && pickup?.lat && dropoff?.lat) {
-            console.log('TripMap: Calculating route...', { pickup, dropoff });
             const origin = { lat: pickup.lat, lng: pickup.lon };
             const destination = { lat: dropoff.lat, lng: dropoff.lon };
 
-            // Convert waypoints if they exist
-            const waypointsList = (waypoints || []).map(wp => ({
+            // Convert waypoints
+            const waypointsList = (waypoints || []).filter(w => w.lat && w.lon).map(wp => ({
                 location: { lat: wp.lat, lng: wp.lon },
                 stopover: true
             }));
@@ -66,10 +65,9 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
                 },
                 (result, status) => {
                     if (status === window.google.maps.DirectionsStatus.OK) {
-                        console.log('TripMap: Route found', result);
                         directionsRenderer.setDirections(result);
 
-                        // Extract distance and duration from the first route's first leg
+                        // Extract distance/duration
                         const route = result.routes[0];
                         if (route && route.legs) {
                             let totalDistanceMeters = 0;
@@ -81,8 +79,6 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
                             });
 
                             const distKm = totalDistanceMeters / 1000;
-                            console.log('TripMap: Total Distance', distKm);
-
                             if (onRouteCalculated) {
                                 onRouteCalculated({
                                     distanceKm: distKm,
@@ -91,19 +87,11 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
                             }
                         }
                     } else {
-                        console.error(`TripMap: Directions request failed due to ${status}`);
-                        // Notify parent of failure/reset
+                        console.warn(`TripMap: Directions request failed: ${status}`);
                         if (onRouteCalculated) onRouteCalculated({ distanceKm: 0, durationMin: 0 });
                     }
                 }
             );
-        } else {
-            console.log('TripMap: Missing dependencies or coords', {
-                hasService: !!directionsService,
-                hasRenderer: !!directionsRenderer,
-                pickupLat: pickup?.lat,
-                dropoffLat: dropoff?.lat
-            });
         }
     }, [pickup, dropoff, waypoints, directionsService, directionsRenderer]);
 

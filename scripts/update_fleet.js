@@ -2,20 +2,21 @@
 require('dotenv').config({ path: '.env' });
 const mongoose = require('mongoose');
 
-// Define Schema EXACTLY as in your application
+// Define Schema roughly matching app schema to ensure compatibility
 const pricingSchema = new mongoose.Schema({
-    type: String, // helper field
     vehicleType: String,
+    category: String,
     name: String,
     image: String,
     tiers: Array,
     features: Array,
     capacity: Number,
     luggage: Number,
-    handLuggage: Number, // Added hand luggage field
+    handLuggage: Number,
     basePrice: Number,
     perKmRate: Number,
-    baseKm: Number
+    baseKm: Number,
+    isActive: { type: Boolean, default: true }
 }, { strict: false });
 
 const Pricing = mongoose.models.Pricing || mongoose.model('Pricing', pricingSchema);
@@ -29,7 +30,7 @@ const vehicles = [
         features: ['Air Conditioned', 'Economic'],
         capacity: 2,
         luggage: 2,
-        handLuggage: 0, // Not verified
+        handLuggage: 0,
         basePrice: 30,
         perKmRate: 0.30,
         baseKm: 0
@@ -89,7 +90,7 @@ const vehicles = [
     {
         type: 'suv',
         name: 'SUV',
-        image: '/vehicles/Hondavezel.png', // Placeholder as SUV image missing in provided list
+        image: '/vehicles/Hondavezel.png', // Placeholder
         tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 110 }],
         features: ['Air Conditioned', 'Luxury Interior'],
         capacity: 3,
@@ -100,7 +101,7 @@ const vehicles = [
         baseKm: 0
     },
     {
-        type: 'van',
+        type: 'normal-kdh', // Mapped 'Overhauled' type to enum-compatible
         name: 'Van (9 Pax)',
         image: '/vehicles/van.png',
         tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 120 }],
@@ -113,7 +114,7 @@ const vehicles = [
         baseKm: 0
     },
     {
-        type: 'kdh-van', // Mapping highroof to kdh-van type for consistency
+        type: 'kdh-van',
         name: 'Minibus (Highroof)',
         image: '/vehicles/toyota highroof.png',
         tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 130 }],
@@ -131,7 +132,7 @@ const vehicles = [
         image: '/vehicles/costerbus.png',
         tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 180 }],
         features: ['Air Conditioned', 'Mic', 'TV/DVD'],
-        capacity: 12, // User specified 12
+        capacity: 12,
         luggage: 10,
         handLuggage: 12,
         basePrice: 120,
@@ -153,38 +154,41 @@ const vehicles = [
     }
 ];
 
+// Categories to populate
+const CATEGORIES = ['airport-transfer', 'ride-now', 'rentals', 'tours'];
+
 async function updateFleet() {
     try {
         await mongoose.connect(process.env.MONGODB_URI);
         console.log('Connected to MongoDB');
 
-        // First clean up old entries to avoid duplicates with different types
-        // await Pricing.deleteMany({}); // Optional: decided to upsert instead to be safe? 
-        // User wants SPECIFIC list. Let's upsert by vehicleType.
-
-        for (const v of vehicles) {
-            console.log(`Updating ${v.name}...`);
-            await Pricing.findOneAndUpdate(
-                { vehicleType: v.type },
-                {
-                    $set: {
-                        name: v.name,
-                        image: v.image,
-                        tiers: v.tiers,
-                        features: v.features,
-                        capacity: v.capacity,
-                        luggage: v.luggage,
-                        handLuggage: v.handLuggage,
-                        basePrice: v.basePrice,
-                        perKmRate: v.perKmRate,
-                        baseKm: v.baseKm
-                    }
-                },
-                { upsert: true, new: true }
-            );
+        for (const cat of CATEGORIES) {
+            console.log(`Processing category: ${cat}`);
+            for (const v of vehicles) {
+                // Determine update vs insert
+                await Pricing.findOneAndUpdate(
+                    { vehicleType: v.type, category: cat },
+                    {
+                        $set: {
+                            name: v.name,
+                            image: v.image,
+                            tiers: v.tiers,
+                            features: v.features,
+                            capacity: v.capacity,
+                            luggage: v.luggage,
+                            handLuggage: v.handLuggage,
+                            basePrice: v.basePrice,
+                            perKmRate: v.perKmRate,
+                            baseKm: v.baseKm,
+                            isActive: true
+                        }
+                    },
+                    { upsert: true, new: true }
+                );
+            }
         }
 
-        console.log('Fleet updated successfully');
+        console.log('Fleet updated successfully for all categories');
         process.exit(0);
     } catch (error) {
         console.error('Error:', error);
