@@ -130,26 +130,42 @@ const vehicles = [
         type: 'mini-bus',
         name: 'Bus (Coaster)',
         image: '/vehicles/costerbus.png',
-        tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 180 }],
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 20000 },
+            { min: 21, max: 40, type: 'flat', price: 30000 },
+            { min: 41, max: 100, type: 'flat', price: 50000 },
+            { min: 101, max: 150, type: 'flat', price: 70000 },
+            { min: 151, max: 200, type: 'flat', price: 85000 },
+            { min: 201, max: 300, type: 'flat', price: 120000 },
+            { min: 301, max: 9999, type: 'per_km', rate: 400 }
+        ],
         features: ['Air Conditioned', 'Mic', 'TV/DVD'],
         capacity: 12,
         luggage: 10,
         handLuggage: 12,
-        basePrice: 36000,
-        perKmRate: 180,
+        basePrice: 20000,
+        perKmRate: 400,
         baseKm: 0
     },
     {
         type: 'coach-bus',
         name: 'Coach Bus (Big One)',
         image: '/vehicles/couch bus.png',
-        tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 250 }],
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 25000 },
+            { min: 21, max: 40, type: 'flat', price: 45000 },
+            { min: 41, max: 100, type: 'flat', price: 60000 },
+            { min: 101, max: 150, type: 'flat', price: 85000 },
+            { min: 151, max: 200, type: 'flat', price: 95000 },
+            { min: 201, max: 300, type: 'flat', price: 135000 },
+            { min: 301, max: 9999, type: 'per_km', rate: 450 }
+        ],
         features: ['Air Conditioned', 'Mic', 'TV/DVD', 'Reclining Seats'],
         capacity: 45,
         luggage: 30,
         handLuggage: 45,
-        basePrice: 60000,
-        perKmRate: 250,
+        basePrice: 25000,
+        perKmRate: 450,
         baseKm: 0
     }
 ];
