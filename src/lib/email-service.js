@@ -131,6 +131,68 @@ const getPremiumTemplate = (content, title = 'Airport Taxis Sri Lanka') => `
 </html>
 `;
 
+// ============================================
+// PRINT-FRIENDLY TEMPLATE (Light Theme for Owner)
+// A4 Optimized, Ink-Efficient Design
+// ============================================
+
+const getPrintFriendlyTemplate = (content, title = 'Booking Details') => `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <style>
+        @media print {
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 20px; font-family: 'Arial', 'Helvetica', sans-serif; background-color: #ffffff; color: #1f2937; font-size: 14px; line-height: 1.5;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 595px; margin: 0 auto; background-color: #ffffff;">
+        <!-- Header -->
+        <tr>
+            <td style="padding: 20px 0; border-bottom: 3px solid #064e3b;">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td width="60%">
+                            <img src="${BASE_URL}/logo.png" alt="Airport Taxis" style="width: 150px; height: auto;">
+                        </td>
+                        <td width="40%" style="text-align: right; vertical-align: top;">
+                            <p style="margin: 0; font-size: 11px; color: #6b7280;">BOOKING RECEIPT</p>
+                            <p style="margin: 4px 0 0; font-size: 10px; color: #9ca3af;">${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+        <!-- Content -->
+        <tr>
+            <td style="padding: 25px 0;">
+                ${content}
+            </td>
+        </tr>
+        
+        <!-- Footer -->
+        <tr>
+            <td style="padding: 15px 0; border-top: 1px solid #e5e7eb; text-align: center;">
+                <p style="margin: 0; font-size: 10px; color: #9ca3af;">
+                    Airport Taxis (Pvt) Ltd · 118/5 St. Joseph Street, Grandpass, Colombo 14
+                </p>
+                <p style="margin: 4px 0 0; font-size: 10px; color: #9ca3af;">
+                    📞 +94 722 885 885 · ✉️ info@airporttaxi.lk · 🌐 airporttaxi.lk
+                </p>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+`;
+
+
 // Reusable Components
 const components = {
     // Status Badge
@@ -309,23 +371,111 @@ export async function sendBookingConfirmation(booking) {
         }
     }
 
-    // Send copy to owner (simplified)
+    // Send PRINT-FRIENDLY copy to owner (Light Theme, A4 Optimized)
+    const pickupFull = booking.pickupLocation?.address || 'N/A';
+    const dropoffFull = booking.dropoffLocation?.address || 'N/A';
+
     const ownerContent = `
-        <h2 style="color: ${COLORS.text}; margin: 0 0 20px;">📢 New Booking Received!</h2>
-        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: rgba(245,158,11,0.1); border-radius: 12px; border: 1px solid ${COLORS.warning};">
-            <tr><td style="padding: 20px;">
-                <p style="margin: 0 0 10px;"><strong>ID:</strong> #${bookingId}</p>
-                <p style="margin: 0 0 10px;"><strong>Customer:</strong> ${booking.customerName || 'Guest'}</p>
-                <p style="margin: 0 0 10px;"><strong>Phone:</strong> ${booking.guestPhone || 'N/A'}</p>
-                <p style="margin: 0 0 10px;"><strong>Email:</strong> ${booking.customerEmail || 'N/A'}</p>
-                <hr style="border: none; border-top: 1px solid ${COLORS.warning}; margin: 15px 0;">
-                <p style="margin: 0 0 10px;"><strong>Route:</strong> ${pickupShort} → ${dropoffShort}</p>
-                <p style="margin: 0 0 10px;"><strong>Date:</strong> ${booking.scheduledDate || 'Immediate'} ${booking.scheduledTime || ''}</p>
-                <p style="margin: 0 0 10px;"><strong>Vehicle:</strong> ${booking.vehicleType || 'Standard'}</p>
-                <p style="margin: 0;"><strong>Total:</strong> LKR ${booking.totalPrice?.toLocaleString() || 0}</p>
-            </td></tr>
+        <!-- Booking ID Header -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
+            <tr>
+                <td style="background-color: #064e3b; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
+                    NEW BOOKING #${bookingId}
+                </td>
+            </tr>
         </table>
-        ${components.button('Go to Admin Panel', `${BASE_URL}/admin`)}
+
+        <!-- Customer Details -->
+        <table width="100%" cellpadding="8" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
+            <tr style="background-color: #f9fafb;">
+                <td colspan="2" style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
+                    CUSTOMER DETAILS
+                </td>
+            </tr>
+            <tr>
+                <td width="35%" style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Name</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.customerName || 'Guest'}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Phone</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.guestPhone || 'N/A'}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Email</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.customerEmail || 'N/A'}</td>
+            </tr>
+        </table>
+
+        <!-- Trip Details -->
+        <table width="100%" cellpadding="8" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
+            <tr style="background-color: #f9fafb;">
+                <td colspan="2" style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
+                    TRIP DETAILS
+                </td>
+            </tr>
+            <tr>
+                <td width="35%" style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Pickup</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-size: 12px;">${pickupFull}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Dropoff</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-size: 12px;">${dropoffFull}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Date & Time</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.scheduledDate || 'Immediate'} ${booking.scheduledTime ? `at ${booking.scheduledTime}` : ''}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Vehicle</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.vehicleType || 'Standard'}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Distance</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.distanceKm || 0} km</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Trip Type</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-size: 13px;">${booking.tripType === 'round-trip' ? 'Round Trip' : 'One Way'}</td>
+            </tr>
+            ${booking.nameBoard?.enabled ? `
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Name Board</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-size: 13px; color: #059669;">✓ ${booking.nameBoard.text || 'Requested'}</td>
+            </tr>
+            ` : ''}
+        </table>
+
+        <!-- Payment Summary -->
+        <table width="100%" cellpadding="8" cellspacing="0" style="border: 2px solid #064e3b; margin-bottom: 20px;">
+            <tr style="background-color: #064e3b;">
+                <td colspan="2" style="font-weight: bold; font-size: 12px; color: #ffffff; padding: 10px;">
+                    PAYMENT SUMMARY
+                </td>
+            </tr>
+            <tr>
+                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Total Amount</td>
+                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 16px; color: #064e3b;">LKR ${booking.totalPrice?.toLocaleString() || 0}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Payment Method</td>
+                <td style="border-bottom: 1px solid #e5e7eb; font-size: 13px;">${booking.paymentMethod === 'card' ? '💳 Online Payment' : '💵 Cash on Arrival'}</td>
+            </tr>
+            <tr>
+                <td style="color: #6b7280; font-size: 12px;">Payment Status</td>
+                <td style="font-weight: 600; font-size: 13px; color: ${booking.paymentStatus === 'paid' ? '#059669' : '#f59e0b'};">${booking.paymentStatus?.toUpperCase() || 'PENDING'}</td>
+            </tr>
+        </table>
+
+        <!-- Admin Link (hidden in print) -->
+        <table width="100%" cellpadding="0" cellspacing="0" class="no-print" style="text-align: center;">
+            <tr>
+                <td style="padding-top: 10px;">
+                    <a href="${BASE_URL}/admin/bookings" style="display: inline-block; background-color: #064e3b; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 13px;">
+                        View in Admin Panel →
+                    </a>
+                </td>
+            </tr>
+        </table>
     `;
 
     try {
@@ -334,10 +484,10 @@ export async function sendBookingConfirmation(booking) {
             await resend.emails.send({
                 from: FROM_EMAIL,
                 to: OWNER_EMAIL,
-                subject: `🚨 NEW BOOKING #${bookingId} - ${booking.customerName || 'Guest'}`,
-                html: getPremiumTemplate(ownerContent, 'New Booking Alert')
+                subject: `🆕 BOOKING #${bookingId} | ${booking.customerName || 'Guest'} | ${booking.scheduledDate || 'Today'}`,
+                html: getPrintFriendlyTemplate(ownerContent, `Booking #${bookingId}`)
             });
-            console.log('[Email] Booking notification sent to owner');
+            console.log('[Email] Print-friendly booking notification sent to owner');
         }
     } catch (error) {
         console.error('[Email] Failed to send owner booking notification:', error);
