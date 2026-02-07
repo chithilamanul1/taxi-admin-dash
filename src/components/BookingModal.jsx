@@ -134,7 +134,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 surcharges += (formData.waitingHours * (vehicleData.hourlyRate || 200));
             }
         }
-        if (formData.hasNameBoard) surcharges += 500;
+        if (formData.hasNameBoard) surcharges += 1000;
 
         // Payment Method Surcharges per User Request
         let paymentSurcharge = 0;
@@ -169,12 +169,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         const payNow = formData.paymentType === 'partial' ? total * 0.5 : total;
         const balance = total - payNow;
 
+        // Convert values to the selected currency
+        const rate = rates?.[currency] || 1;
+        const convertedTotal = Math.ceil(total * rate);
+        const convertedPayNow = Math.ceil(payNow * rate);
+        const convertedBalance = Math.ceil(balance * rate);
+        const convertedSubtotal = Math.ceil(baseTotal * rate);
+        const convertedSurcharges = Math.ceil((surcharges + paymentSurcharge) * rate);
+
         return {
-            total: Math.round(total),
-            subtotal: Math.round(baseTotal),
-            surcharges: Math.round(surcharges + paymentSurcharge),
-            payNow: Math.round(payNow),
-            balance: Math.round(balance)
+            total: convertedTotal,
+            subtotal: convertedSubtotal,
+            surcharges: convertedSurcharges,
+            payNow: convertedPayNow,
+            balance: convertedBalance,
+            originalLKR: Math.round(total) // Keep for reference
         };
     };
 
@@ -240,8 +249,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
             // Verify breakdown before sending
             console.log("Getting Price Breakdown...");
-            const { total, payNow, balance, surcharges } = getPriceBreakdown();
-            console.log("Price Breakdown:", { total, payNow });
+            const breakdown = getPriceBreakdown();
+            const { total, payNow, balance, surcharges } = breakdown;
+            console.log("Price Breakdown:", { total, payNow, currency });
 
             if (total === 0) {
                 alert("Error: Total price is 0. Please re-select vehicle.");
@@ -270,17 +280,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 vehicleType: formData.vehicle,
                 tripType: formData.tripType,
                 passengerCount: formData.passengerCount,
-                passengerCount: formData.passengerCount,
                 distanceKm: distance,
                 duration: formData.duration,
                 waitingHours: formData.waitingHours,
 
-                // Detailed Payment Breakdown
+                // Detailed Payment Breakdown (Now in Selected Currency)
                 totalPrice: total,
                 paidAmount: payNow,
                 balanceAmount: balance,
                 surchargeAmount: surcharges,
-                paymentType: formData.paymentType || 'full', // Default to full if undefined
+                paymentType: formData.paymentType || 'full',
                 currency: currency || 'LKR',
 
                 scheduledDate: formData.date,
@@ -335,6 +344,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     };
 
     if (!isOpen) return null;
+
+    const currentSymbol = SUPPORTED_CURRENCIES.find(c => c.code === currency)?.symbol || 'Rs';
 
     return (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-emerald-900/80 p-1 md:p-4 overflow-hidden">
@@ -476,24 +487,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <Zap size={14} fill="currentColor" />
                                             <span className="text-[10px] font-extrabold uppercase tracking-widest">{formData.paymentType === 'partial' ? 'Pay Now' : 'Total Price'}</span>
                                         </div>
-                                        <div className="text-2xl md:text-4xl font-black leading-tight">Rs {payNow.toLocaleString()}</div>
+                                        <div className="text-2xl md:text-4xl font-black leading-tight">{currentSymbol} {payNow.toLocaleString()}</div>
                                         {verifiedCoupons.length > 0 && <div className="text-[10px] text-emerald-300 font-bold uppercase mt-1">{verifiedCoupons.length} Coupon(s) Applied</div>}
                                     </div>
                                     <div className="text-left md:text-right w-full md:w-auto border-t md:border-t-0 border-white/10 pt-3 md:pt-0">
                                         <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Route Distance</div>
                                         <div className="text-lg md:text-xl font-bold text-white">{distance.toFixed(1)} KM</div>
-                                    </div>
-                                </div>
-                                {/* Multi-Currency Display */}
-                                <div className="border-t border-white/10 pt-4">
-                                    <div className="text-[9px] font-bold text-white/50 uppercase tracking-widest mb-2">Price in All Currencies</div>
-                                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                                        {convertToAllCurrencies(payNow).map(c => (
-                                            <div key={c.code} className={`px-3 py-2 rounded-xl text-center ${c.code === 'LKR' ? 'bg-emerald-700/50 ring-1 ring-emerald-400/50' : 'bg-white/5'}`}>
-                                                <div className="text-[10px] text-white/60">{c.flag} {c.code}</div>
-                                                <div className="text-sm font-bold text-white">{c.symbol} {c.value.toLocaleString()}</div>
-                                            </div>
-                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -577,29 +576,29 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <p className="text-sm font-bold leading-relaxed text-emerald-900">{formData.dropoff}</p>
                                             </div>
                                         </div>
-                                        <div className="p-4 md:p-6 bg-[#FFC107] rounded-3xl border border-amber-600/20 space-y-4 shadow-lg">
-                                            <div className="flex justify-between text-xs font-bold text-emerald-900/60 uppercase tracking-widest">
+                                        <div className="p-4 md:p-6 bg-[#FFC107] rounded-3xl border border-amber-600/20 space-y-4 shadow-lg overflow-hidden">
+                                            <div className="flex flex-wrap justify-between text-xs font-bold text-emerald-900/60 uppercase tracking-widest gap-2">
                                                 <span>Subtotal</span>
-                                                <span className="text-emerald-900 font-bold">Rs {subtotal.toLocaleString()}</span>
+                                                <span className="text-emerald-900 font-bold ml-auto">{currentSymbol} {subtotal.toLocaleString()}</span>
                                             </div>
-                                            <div className="flex justify-between text-xs font-bold text-emerald-900/60 uppercase tracking-widest">
+                                            <div className="flex flex-wrap justify-between text-xs font-bold text-emerald-900/60 uppercase tracking-widest gap-2">
                                                 <span>Surcharges</span>
-                                                <span className="text-emerald-900 font-bold">Rs {surcharges.toLocaleString()}</span>
+                                                <span className="text-emerald-900 font-bold ml-auto">{currentSymbol} {surcharges.toLocaleString()}</span>
                                             </div>
                                             <div className="pt-4 border-t border-emerald-900/10 space-y-2">
-                                                <div className="flex justify-between items-end">
+                                                <div className="flex flex-wrap justify-between items-end gap-2">
                                                     <span className="font-bold text-emerald-900/60 uppercase text-xs">Total Amount</span>
-                                                    <span className="text-xl font-bold text-emerald-900/60">Rs {totalPrice.toLocaleString()}</span>
+                                                    <span className="text-xl font-bold text-emerald-900/60 ml-auto">{currentSymbol} {totalPrice.toLocaleString()}</span>
                                                 </div>
-                                                <div className="flex justify-between items-end">
+                                                <div className="flex flex-wrap justify-between items-end gap-2">
                                                     <span className="font-black text-emerald-900 uppercase tracking-[0.2em]">{formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Payable'}</span>
-                                                    <span className="text-2xl md:text-3xl font-black text-emerald-900">Rs {payNow.toLocaleString()}</span>
+                                                    <span className="text-2xl md:text-3xl font-black text-emerald-900 ml-auto">{currentSymbol} {payNow.toLocaleString()}</span>
                                                 </div>
 
                                                 {formData.paymentType === 'partial' && (
-                                                    <div className="flex justify-between items-end pt-2 border-t border-dashed border-emerald-900/20">
+                                                    <div className="flex flex-wrap justify-between items-end pt-2 border-t border-dashed border-emerald-900/20 gap-2">
                                                         <span className="font-bold text-red-600 uppercase text-xs tracking-wider">Balance Due</span>
-                                                        <span className="text-lg font-bold text-red-600">Rs {balanceAmount.toLocaleString()}</span>
+                                                        <span className="text-lg font-bold text-red-600 ml-auto">{currentSymbol} {balanceAmount.toLocaleString()}</span>
                                                     </div>
                                                 )}
                                             </div>

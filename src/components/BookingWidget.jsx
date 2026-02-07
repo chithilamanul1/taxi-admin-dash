@@ -950,7 +950,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             )}
                                         </span>
                                         {/* Secondary Currency Display */}
-                                        <div className="text-sm font-bold text-emerald-900/40 mt-1">
+                                        <div className="text-sm font-bold text-black mt-1">
                                             {(() => {
                                                 const secCode = currency === 'LKR' ? 'USD' : 'LKR';
                                                 const secRate = rates ? (rates[secCode] || 1) : 1;
