@@ -118,15 +118,21 @@ export default function CustomTripPage() {
                                 <div key={stop.id} className="relative group" style={{ zIndex: stops.length - index }}>
                                     <div className="flex items-start gap-4">
                                         <div className={`w-16 h-16 shrink-0 rounded-2xl flex items-center justify-center font-black text-lg shadow-sm border-2 
-                                            ${index === 0 ? 'bg-white border-none p-0' :
-                                                index === stops.length - 1 ? 'bg-white border-none p-0' :
+                                            ${index === 0 ? 'bg-emerald-50 border-emerald-100 text-emerald-600' :
+                                                index === stops.length - 1 ? 'bg-rose-50 border-rose-100 text-rose-600' :
                                                     'bg-white border-slate-100 text-slate-400'}`}>
                                             {index === 0 ? (
-                                                <img src="/images/ui/map-start.png" alt="Start" className="w-full h-full object-contain" />
+                                                <div className="flex flex-col items-center gap-1">
+                                                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
+                                                    <span className="text-[10px] font-black uppercase tracking-tighter">Start</span>
+                                                </div>
                                             ) : index === stops.length - 1 ? (
-                                                <img src="/images/ui/map-end.png" alt="End" className="w-full h-full object-contain" />
+                                                <div className="flex flex-col items-center gap-0.5">
+                                                    <Navigation size={20} className="fill-rose-600" />
+                                                    <span className="text-[10px] font-black uppercase tracking-tighter">End</span>
+                                                </div>
                                             ) : (
-                                                index
+                                                <span className="text-xl font-black">{index}</span>
                                             )}
                                         </div>
 
