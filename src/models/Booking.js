@@ -34,6 +34,7 @@ const bookingSchema = new mongoose.Schema({
         bags: { type: Number, default: 0 }
     },
     distanceKm: { type: Number },
+    duration: { type: String },
     waitingHours: { type: Number, default: 0 },
     totalPrice: { type: Number }, // Can be 0 for inquiries
     status: {
@@ -59,6 +60,7 @@ const bookingSchema = new mongoose.Schema({
         enabled: { type: Boolean, default: false },
         text: { type: String }
     },
+    flightNumber: { type: String },
     couponCode: { type: String },
 }, {
     timestamps: true

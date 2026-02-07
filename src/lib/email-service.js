@@ -11,9 +11,9 @@ const getResend = () => {
     return new Resend(process.env.RESEND_API_KEY);
 };
 
-const OWNER_EMAIL = process.env.OWNER_EMAIL || 'info@airporttaxi.lk';
-const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxis <noreply@airporttaxi.lk>';
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://airporttaxi.lk';
+const OWNER_EMAIL = process.env.OWNER_EMAIL || 'info@airporttaxis.lk';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxis <noreply@airporttaxis.lk>';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://airporttaxis.lk';
 
 // ============================================
 // PREMIUM EMAIL TEMPLATE SYSTEM
@@ -392,56 +392,84 @@ export async function sendBookingConfirmation(booking) {
         </table>
 
         <!-- Customer Details -->
-        <table width="100%" cellpadding="8" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
+        <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
             <tr style="background-color: #f9fafb;">
                 <td colspan="2" style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
                     CUSTOMER DETAILS
                 </td>
             </tr>
             <tr>
-                <td width="35%" style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Name</td>
+                <td width="35%" style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Customer Name</td>
                 <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.customerName || 'Guest'}</td>
             </tr>
             <tr>
-                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Phone</td>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Customer Email</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.customerEmail || 'N/A'}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Mobile No</td>
                 <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.guestPhone || 'N/A'}</td>
             </tr>
             <tr>
-                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Email</td>
-                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.customerEmail || 'N/A'}</td>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Whatsapp No</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.whatsapp || booking.guestPhone || 'N/A'}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">NIC / Passport No</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.passport || '-'}</td>
             </tr>
         </table>
 
         <!-- Trip Details -->
-        <table width="100%" cellpadding="8" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
+        <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
             <tr style="background-color: #f9fafb;">
                 <td colspan="2" style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
                     TRIP DETAILS
                 </td>
             </tr>
             <tr>
-                <td width="35%" style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Pickup</td>
+                <td width="35%" style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Origin</td>
                 <td style="border-bottom: 1px solid #f3f4f6; font-size: 12px;">${pickupFull}</td>
             </tr>
             <tr>
-                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Dropoff</td>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Destination</td>
                 <td style="border-bottom: 1px solid #f3f4f6; font-size: 12px;">${dropoffFull}</td>
             </tr>
             <tr>
-                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Date & Time</td>
-                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.scheduledDate || 'Immediate'} ${booking.scheduledTime ? `at ${booking.scheduledTime}` : ''}</td>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Start Date</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.scheduledDate || 'Immediate'}</td>
             </tr>
             <tr>
-                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Vehicle</td>
-                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.vehicleType || 'Standard'}</td>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Start Time</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.scheduledTime || ''}</td>
+            </tr>
+             <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Flight Number</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.flightNumber || '-'}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Return Date</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-size: 13px;">${booking.returnDate || 'No any Return'}</td>
             </tr>
             <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Distance</td>
                 <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.distanceKm || 0} km</td>
             </tr>
             <tr>
-                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Trip Type</td>
-                <td style="border-bottom: 1px solid #f3f4f6; font-size: 13px;">${booking.tripType === 'round-trip' ? 'Round Trip' : 'One Way'}</td>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Duration</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.duration || '-'}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Selected Vehical</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.vehicleType || 'Standard'}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">No.of Passengers</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${(booking.passengerCount?.adults || 0) + (booking.passengerCount?.children || 0)}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Luggage Count</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.passengerCount?.bags || 0}</td>
             </tr>
             ${booking.nameBoard?.enabled ? `
             <tr>
@@ -452,32 +480,46 @@ export async function sendBookingConfirmation(booking) {
         </table>
 
         <!-- Payment Summary -->
-        <table width="100%" cellpadding="8" cellspacing="0" style="border: 2px solid #064e3b; margin-bottom: 20px;">
+        <table width="100%" cellpadding="4" cellspacing="0" style="border: 2px solid #064e3b; margin-bottom: 20px;">
             <tr style="background-color: #064e3b;">
                 <td colspan="2" style="font-weight: bold; font-size: 12px; color: #ffffff; padding: 10px;">
                     PAYMENT SUMMARY
                 </td>
             </tr>
             <tr>
-                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Total Amount</td>
-                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 16px; color: #064e3b;">LKR ${booking.totalPrice?.toLocaleString() || 0}</td>
+                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Vehical Price</td>
+                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 14px;">$ ${((booking.totalPrice || 0) / 300).toFixed(2)}</td>
+            </tr>
+            <tr>
+                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Total Price in USD</td>
+                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 14px;">$ ${((booking.totalPrice || 0) / 300).toFixed(2)}</td>
+            </tr>
+            <tr>
+                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Total Price in LKR</td>
+                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 16px; color: #064e3b;">Rs. ${booking.totalPrice?.toLocaleString() || 0}.00</td>
             </tr>
             <tr>
                 <td style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Payment Method</td>
                 <td style="border-bottom: 1px solid #e5e7eb; font-size: 13px;">${booking.paymentMethod === 'card' ? '💳 Online Payment' : '💵 Cash on Arrival'}</td>
             </tr>
-            <tr>
-                <td style="color: #6b7280; font-size: 12px;">Payment Status</td>
-                <td style="font-weight: 600; font-size: 13px; color: ${booking.paymentStatus === 'paid' ? '#059669' : '#f59e0b'};">${booking.paymentStatus?.toUpperCase() || 'PENDING'}</td>
+        </table>
+        
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
+             <tr>
+                <td style="text-align: center;">
+                    <a href="tel:${booking.guestPhone}" style="display: inline-block; background-color: #064e3b; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">
+                        Connect The Customer
+                    </a>
+                </td>
             </tr>
         </table>
 
         <!-- Admin Link (hidden in print) -->
-        <table width="100%" cellpadding="0" cellspacing="0" class="no-print" style="text-align: center;">
+        <table width="100%" cellpadding="0" cellspacing="0" class="no-print" style="text-align: center; margin-top: 10px;">
             <tr>
                 <td style="padding-top: 10px;">
-                    <a href="${BASE_URL}/admin/bookings" style="display: inline-block; background-color: #064e3b; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 13px;">
-                        View in Admin Panel →
+                    <a href="${BASE_URL}/admin/bookings" style="color: #064e3b; text-decoration: underline; font-size: 12px;">
+                        View in Admin Panel
                     </a>
                 </td>
             </tr>

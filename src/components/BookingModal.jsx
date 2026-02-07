@@ -44,6 +44,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         email: initialData.email || '',
         flightNumber: initialData.flightNumber || '',
         notes: initialData.notes || '',
+        duration: initialData.duration || '',
         paymentMethod: 'cash',
         paymentType: 'full', // 'full' or 'partial'
     });
@@ -205,7 +206,17 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             ].join(';');
             fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=false`)
                 .then(res => res.json())
-                .then(data => { if (data.routes?.[0]) setDistance(data.routes[0].distance / 1000); })
+                .then(data => {
+                    if (data.routes?.[0]) {
+                        setDistance(data.routes[0].distance / 1000);
+                        // Calculate duration
+                        const seconds = data.routes[0].duration;
+                        const hours = Math.floor(seconds / 3600);
+                        const minutes = Math.floor((seconds % 3600) / 60);
+                        const durationStr = hours > 0 ? `${hours} hr ${minutes} min` : `${minutes} min`;
+                        setFormData(prev => ({ ...prev, duration: durationStr }));
+                    }
+                })
                 .catch(err => console.error("OSRM Error:", err));
         }
     }, [formData.pickupCoords, formData.dropoffCoords, formData.waypoints]);
@@ -254,7 +265,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 vehicleType: formData.vehicle,
                 tripType: formData.tripType,
                 passengerCount: formData.passengerCount,
+                passengerCount: formData.passengerCount,
                 distanceKm: distance,
+                duration: formData.duration,
                 waitingHours: formData.waitingHours,
 
                 // Detailed Payment Breakdown
