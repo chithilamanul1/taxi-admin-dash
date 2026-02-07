@@ -10,6 +10,16 @@ import LiveDriverMap from '@/components/LiveDriverMap'
 import AdminChatManager from '@/components/AdminChatManager'
 
 export default function AdminDashboard() {
+    const { data: session, status } = useSession()
+    const router = useRouter()
+
+    useEffect(() => {
+        if (status === 'loading') return
+        if (!session || session.user.role !== 'admin') {
+            router.push('/admin/login')
+        }
+    }, [session, status, router])
+
     const [sidebarOpen, setSidebarOpen] = useState(true)
     const [currentView, setCurrentView] = useState('dashboard')
     const [bookings, setBookings] = useState([])

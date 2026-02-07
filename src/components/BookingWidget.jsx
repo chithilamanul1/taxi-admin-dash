@@ -997,9 +997,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             />
 
             {/* Smart Offer Nudge */}
+            {/* Smart Offer Nudge - Show latest applied offer */}
             <SmartOfferNudge
-                offer={appliedOffer}
-                onClose={() => setAppliedOffer(null)}
+                offer={appliedOffers.length > 0 ? appliedOffers[appliedOffers.length - 1] : null}
+                onClose={() => {
+                    const last = appliedOffers[appliedOffers.length - 1];
+                    if (last) {
+                        setAppliedOffers(prev => prev.filter(o => o._id !== last._id));
+                    }
+                }}
             />
 
             {/* Vehicle Selection Drawer */}
