@@ -115,7 +115,7 @@ export default function CustomTripPage() {
                             <div className="absolute left-8 top-8 bottom-8 w-0.5 bg-slate-100 -z-0"></div>
 
                             {stops.map((stop, index) => (
-                                <div key={stop.id} className="relative z-10 group">
+                                <div key={stop.id} className="relative group" style={{ zIndex: stops.length - index }}>
                                     <div className="flex items-start gap-4">
                                         <div className={`w-16 h-16 shrink-0 rounded-2xl flex items-center justify-center font-black text-lg shadow-sm border-2 
                                             ${index === 0 ? 'bg-emerald-100 border-emerald-200 text-emerald-700' :

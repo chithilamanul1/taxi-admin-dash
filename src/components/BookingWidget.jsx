@@ -93,7 +93,7 @@ const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours,
 
 const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [activeOffers, setActiveOffers] = useState([]);
-    const [appliedOffer, setAppliedOffer] = useState(null);
+    const [appliedOffers, setAppliedOffers] = useState([]); // Support multiple coupons
     const [vehiclePricing, setVehiclePricing] = useState({});
     const [isLoadingPricing, setIsLoadingPricing] = useState(true);
     const [activeTab, setActiveTab] = useState(defaultTab);
@@ -300,26 +300,41 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         const lowerLoc = (dropoff?.name || '').toLowerCase();
 
         // Priority: Explicit Galle/Mirissa Check for Visuals
+        const locationOffer = {
+            _id: 'special-galle',
+            name: 'MIRISSA10',
+            locationKeyword: 'Galle',
+            discountPercentage: 20,
+            description: 'Special 20% OFF for Southern Expressway Trips!',
+            imageUrl: 'https://images.unsplash.com/photo-1578586883464-500b5220fa26?q=80&w=600&auto=format&fit=crop', // Nice Galle Fort Image
+            isActive: true
+        };
+
         if (lowerLoc.includes('galle') || lowerLoc.includes('mirissa')) {
-            setAppliedOffer({
-                _id: 'special-galle',
-                name: 'MIRISSA10',
-                locationKeyword: 'Galle',
-                discountPercentage: 20,
-                description: 'Special 20% OFF for Southern Expressway Trips!',
-                imageUrl: 'https://images.unsplash.com/photo-1578586883464-500b5220fa26?q=80&w=600&auto=format&fit=crop', // Nice Galle Fort Image
-                isActive: true
+            // Add if not already present
+            setAppliedOffers(prev => {
+                if (prev.some(o => o.name === locationOffer.name)) return prev;
+                return [...prev, locationOffer];
             });
             return;
         }
 
         if (!activeOffers.length || !dropoff.name) {
-            setAppliedOffer(null);
+            // Remove location-based offers if no match, keeping manual coupons?
+            // For now, let's keep it simple: clear location offers only? 
+            // Or just clear all applied offers if no match?
+            // The user wants to stack coupons. 
+            // I'll leave manual coupons alone and only manage location offers here if distinct.
             return;
         }
 
         const match = activeOffers.find(o => o.isActive && lowerLoc.includes(o.locationKeyword.toLowerCase()));
-        setAppliedOffer(match || null);
+        if (match) {
+            setAppliedOffers(prev => {
+                if (prev.some(o => o._id === match._id)) return prev;
+                return [...prev, match];
+            });
+        }
     }, [dropoff, activeOffers]);
 
 
@@ -327,17 +342,19 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const totalWaitingHours = waitingHours + waypoints.reduce((sum, wp) => sum + (wp.waitingTime || 0), 0);
     const { total } = calculatePrice(distance, vehicle, tripType, vehiclePricing, totalWaitingHours, hasNameBoard, couponCode);
 
-    const discountAmount = appliedOffer
-        ? (appliedOffer.discountAmount || (total * (appliedOffer.discountPercentage / 100)))
-        : 0;
+    // Calculate total discount from all applied offers
+    const discountAmount = appliedOffers.reduce((sum, offer) => {
+        return sum + (offer.discountAmount || (total * (offer.discountPercentage / 100)));
+    }, 0);
+
     const finalTotal = Math.max(0, total - discountAmount);
 
     const handleBook = () => {
-        const verifiedCoupon = appliedOffer ? {
-            code: appliedOffer.name,
-            discountType: appliedOffer.discountPercentage > 0 ? 'percentage' : 'flat',
-            value: appliedOffer.discountPercentage > 0 ? appliedOffer.discountPercentage : appliedOffer.discountAmount
-        } : null;
+        const verifiedCoupons = appliedOffers.map(offer => ({
+            code: offer.name,
+            discountType: offer.discountPercentage > 0 ? 'percentage' : 'flat',
+            value: offer.discountPercentage > 0 ? offer.discountPercentage : offer.discountAmount
+        }));
 
         setBookingInitialData({
             pickup: pickup.name,
@@ -351,8 +368,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             vehicle,
             date,
             time,
-            couponCode: verifiedCoupon ? verifiedCoupon.code : '',
-            verifiedCoupon
+            couponCode: verifiedCoupons.length > 0 ? verifiedCoupons[0].code : '', // Fallback for legacy
+            verifiedCoupons // New Array Support
         })
         setShowModal(true)
     };
@@ -480,22 +497,27 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             className="flex-1 pl-12 pr-4 h-12 bg-transparent border-none text-sm font-bold text-slate-900 dark:text-white outline-none"
                                         />
 
-                                        {/* Per-Waypoint Waiting Time Dropdown */}
-                                        <div className="flex items-center gap-2 border-l border-slate-900/10 dark:border-white/10 px-3 min-w-[100px] justify-center">
-                                            <Clock size={14} className="text-slate-900/40 dark:text-white/40 shrink-0" />
-                                            <select
-                                                value={wp.waitingTime || 0}
-                                                onChange={(e) => {
-                                                    const newWps = [...waypoints];
-                                                    newWps[idx].waitingTime = parseInt(e.target.value);
-                                                    setWaypoints(newWps);
-                                                }}
-                                                className="bg-transparent text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer w-auto min-w-[40px] appearance-none text-center"
-                                            >
-                                                {[0, 1, 2, 3, 4, 5, 6].map(h => (
-                                                    <option key={h} value={h}>{h} hr{h !== 1 ? 's' : ''}</option>
-                                                ))}
-                                            </select>
+                                        <div className="flex flex-col items-center border-l border-slate-900/10 dark:border-white/10 px-3 min-w-[100px] justify-center">
+                                            <div className="flex items-center gap-1">
+                                                <div className="relative">
+                                                    <Clock size={14} className="text-slate-900/40 dark:text-white/40 shrink-0 absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+                                                    <select
+                                                        value={wp.waitingTime || 0}
+                                                        onChange={(e) => {
+                                                            const newWps = [...waypoints];
+                                                            newWps[idx].waitingTime = parseInt(e.target.value);
+                                                            setWaypoints(newWps);
+                                                        }}
+                                                        className="bg-slate-100 dark:bg-white/10 pl-7 pr-8 py-1.5 rounded-lg text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer appearance-none text-center hover:bg-slate-200 transition-colors border border-transparent focus:border-amber-500"
+                                                    >
+                                                        {[0, 1, 2, 3, 4, 5, 6].map(h => (
+                                                            <option key={h} value={h} className="bg-white text-slate-900">{h} hr{h !== 1 ? 's' : ''}</option>
+                                                        ))}
+                                                    </select>
+                                                    <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-900/40 pointer-events-none" />
+                                                </div>
+                                            </div>
+                                            <span className="text-[9px] font-bold text-slate-400 mt-1">(Rs 500/hr)</span>
                                         </div>
 
                                         <button
@@ -605,6 +627,27 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         {isCouponOpen ? 'Hide Coupon Field' : 'Do you have a Coupon Code?'}
                                     </button>
 
+                                    {/* Applied Coupons List */}
+                                    {appliedOffers.length > 0 && (
+                                        <div className="flex flex-wrap gap-2 animate-fade-in">
+                                            {appliedOffers.map((offer, i) => (
+                                                <div key={i} className="flex items-center gap-1.5 bg-emerald-100 text-emerald-900 px-3 py-1.5 rounded-lg border border-emerald-200 shadow-sm">
+                                                    <Tag size={12} className="fill-emerald-500/20" />
+                                                    <span className="text-[10px] font-bold uppercase">{offer.name}</span>
+                                                    <span className="text-[10px] font-bold opacity-60">
+                                                        (-{offer.discountPercentage > 0 ? `${offer.discountPercentage}%` : `Rs ${offer.discountAmount}`})
+                                                    </span>
+                                                    <button
+                                                        onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))}
+                                                        className="ml-1 p-0.5 hover:bg-emerald-200 rounded-md transition-colors"
+                                                    >
+                                                        <X size={12} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
                                     {isCouponOpen && (
                                         <div className="relative h-16 animate-slide-up">
                                             <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-amber-600 dark:text-amber-400" size={20} />
@@ -638,11 +681,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                                 discountAmount: data.coupon.discountType === 'flat' ? data.coupon.value : 0,
                                                                 type: 'coupon'
                                                             };
-                                                            setAppliedOffer(couponOffer);
+                                                            setAppliedOffers(prev => {
+                                                                if (prev.some(o => o.name === couponOffer.name)) return prev;
+                                                                return [...prev, couponOffer];
+                                                            });
                                                             alert('Coupon Applied: ' + data.coupon.code);
                                                         } else {
                                                             alert(data.message || 'Invalid Coupon');
-                                                            setAppliedOffer(null);
+                                                            // data.valid is false, do nothing
                                                         }
                                                     } catch (e) {
                                                         console.error(e);
@@ -670,17 +716,22 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 <button
                                                     key={c._id}
                                                     onClick={() => {
-                                                        setCouponCode(c.code);
-                                                        const couponOffer = {
-                                                            _id: 'coupon-' + c.code,
-                                                            name: c.code,
-                                                            discountPercentage: c.discountType === 'percentage' ? c.value : 0,
-                                                            discountAmount: c.discountType === 'flat' ? c.value : 0,
-                                                            type: 'coupon'
-                                                        };
-                                                        setAppliedOffer(couponOffer);
+                                                        const isApplied = appliedOffers.some(o => o.name === c.code);
+                                                        if (isApplied) {
+                                                            setAppliedOffers(prev => prev.filter(o => o.name !== c.code));
+                                                        } else {
+                                                            setCouponCode(c.code);
+                                                            const couponOffer = {
+                                                                _id: 'coupon-' + c.code,
+                                                                name: c.code,
+                                                                discountPercentage: c.discountType === 'percentage' ? c.value : 0,
+                                                                discountAmount: c.discountType === 'flat' ? c.value : 0,
+                                                                type: 'coupon'
+                                                            };
+                                                            setAppliedOffers(prev => [...prev, couponOffer]);
+                                                        }
                                                     }}
-                                                    className={`group relative flex items-center justify-between gap-4 p-5 rounded-[2rem] border-2 border-dashed transition-all hover:shadow-2xl hover:-translate-y-1 text-left ${appliedOffer?.name === c.code ? 'border-emerald-500 bg-emerald-50/80 shadow-emerald-500/10' : 'border-emerald-900/10 bg-white hover:border-emerald-500/40 shadow-xl shadow-slate-200/50 dark:shadow-none dark:bg-slate-900/50'}`}
+                                                    className={`group relative flex items-center justify-between gap-4 p-5 rounded-[2rem] border-2 border-dashed transition-all hover:shadow-2xl hover:-translate-y-1 text-left ${appliedOffers.some(o => o.name === c.code) ? 'border-emerald-500 bg-emerald-50/80 shadow-emerald-500/10' : 'border-emerald-900/10 bg-white hover:border-emerald-500/40 shadow-xl shadow-slate-200/50 dark:shadow-none dark:bg-slate-900/50'}`}
                                                 >
                                                     <div className="flex items-center gap-4 min-w-0">
                                                         <div className="w-14 h-14 rounded-2xl bg-amber-100 dark:bg-amber-900/30 flex-shrink-0 flex items-center justify-center overflow-hidden border border-amber-200/50">
@@ -701,7 +752,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                                         <span className="text-xs font-black text-amber-700 dark:text-amber-500 uppercase tracking-wider">{c.code}</span>
                                                                         <div className="h-3 w-px bg-slate-300 dark:bg-white/10"></div>
                                                                         <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1 group-hover:text-emerald-500 transition-colors">
-                                                                            {appliedOffer?.name === c.code ? 'Applied' : 'Apply'}
+                                                                            {appliedOffers.some(o => o.name === c.code) ? 'Applied' : 'Apply'}
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -709,7 +760,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         </div>
                                                     </div>
 
-                                                    {appliedOffer?.name === c.code && (
+                                                    {appliedOffers.some(o => o.name === c.code) && (
                                                         <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-emerald-500/30 animate-pulse">
                                                             <Check size={18} strokeWidth={3} />
                                                         </div>

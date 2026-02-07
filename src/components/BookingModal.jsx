@@ -19,7 +19,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const [loading, setLoading] = useState(false);
     const [pricing, setPricing] = useState([]);
     const [distance, setDistance] = useState(0);
-    const [verifiedCoupon, setVerifiedCoupon] = useState(initialData.verifiedCoupon || null);
+    const [verifiedCoupons, setVerifiedCoupons] = useState(initialData.verifiedCoupons || (initialData.verifiedCoupon ? [initialData.verifiedCoupon] : []));
     const [couponInput, setCouponInput] = useState('');
     const [couponLoading, setCouponLoading] = useState(false);
 
@@ -62,11 +62,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             });
             const data = await res.json();
             if (data.valid) {
-                setVerifiedCoupon(data.coupon);
-                setFormData(prev => ({ ...prev, couponCode: data.coupon.code }));
+                setVerifiedCoupons(prev => {
+                    if (prev.some(c => c.code === data.coupon.code)) return prev;
+                    return [...prev, data.coupon];
+                });
+                setFormData(prev => ({ ...prev, couponCode: data.coupon.code })); // Keep last applied as 'primary' for legacy or display
             } else {
                 alert(data.message);
-                setVerifiedCoupon(null);
+                // setVerifiedCoupon(null); // Don't clear others on failure
                 setFormData(prev => ({ ...prev, couponCode: '' }));
             }
         } catch (e) {
@@ -150,13 +153,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
         let total = baseTotal + surcharges + paymentSurcharge;
 
-        // Coupon Logic
-        if (verifiedCoupon) {
-            if (verifiedCoupon.discountType === 'percentage') {
-                total = total * (1 - (verifiedCoupon.value / 100));
-            } else {
-                total = Math.max(0, total - verifiedCoupon.value);
-            }
+        // Coupon Logic (Stacking)
+        if (verifiedCoupons && verifiedCoupons.length > 0) {
+            verifiedCoupons.forEach(coupon => {
+                if (coupon.discountType === 'percentage') {
+                    total = total * (1 - (coupon.value / 100));
+                } else {
+                    total = Math.max(0, total - coupon.value);
+                }
+            });
         } else if (formData.couponCode === 'SAVE10') {
             total *= 0.9;
         }
@@ -472,7 +477,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <span className="text-[10px] font-extrabold uppercase tracking-widest">{formData.paymentType === 'partial' ? 'Pay Now' : 'Total Price'}</span>
                                         </div>
                                         <div className="text-2xl md:text-4xl font-black leading-tight">Rs {payNow.toLocaleString()}</div>
-                                        {formData.couponCode && <div className="text-[10px] text-emerald-300 font-bold uppercase mt-1">Coupon {formData.couponCode} Applied</div>}
+                                        {verifiedCoupons.length > 0 && <div className="text-[10px] text-emerald-300 font-bold uppercase mt-1">{verifiedCoupons.length} Coupon(s) Applied</div>}
                                     </div>
                                     <div className="text-left md:text-right w-full md:w-auto border-t md:border-t-0 border-white/10 pt-3 md:pt-0">
                                         <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Route Distance</div>
@@ -619,13 +624,23 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'APPLY'}
                                             </button>
                                         </div>
-                                        {verifiedCoupon && (
-                                            <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-200 text-xs font-bold pl-2 animate-fade-in">
-                                                <Check size={14} className="bg-emerald-500 text-white rounded-full p-0.5" />
-                                                <span>Coupon applied: <span className="uppercase">{verifiedCoupon.code}</span></span>
-                                                <span className="text-emerald-900/60 font-medium ml-auto">
-                                                    (-{verifiedCoupon.discountType === 'percentage' ? `${verifiedCoupon.value}%` : `Rs ${verifiedCoupon.value}`})
-                                                </span>
+                                        {verifiedCoupons.length > 0 && (
+                                            <div className="flex flex-col gap-2 animate-fade-in mt-2">
+                                                {verifiedCoupons.map((c, i) => (
+                                                    <div key={i} className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-200 text-xs font-bold pl-2">
+                                                        <Check size={14} className="bg-emerald-500 text-white rounded-full p-0.5" />
+                                                        <span>Coupon: <span className="uppercase">{c.code}</span></span>
+                                                        <span className="text-emerald-900/60 font-medium ml-auto">
+                                                            (-{c.discountType === 'percentage' ? `${c.value}%` : `Rs ${c.value}`})
+                                                        </span>
+                                                        <button
+                                                            onClick={() => setVerifiedCoupons(prev => prev.filter(vc => vc.code !== c.code))}
+                                                            className="ml-2 text-red-500 hover:bg-red-50 rounded-full p-1"
+                                                        >
+                                                            <X size={12} />
+                                                        </button>
+                                                    </div>
+                                                ))}
                                             </div>
                                         )}
                                     </div>
