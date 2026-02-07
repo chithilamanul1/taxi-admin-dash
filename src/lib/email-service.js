@@ -150,24 +150,25 @@ const getPrintFriendlyTemplate = (content, title = 'Booking Details') => `
     <title>${title}</title>
     <style>
         @media print {
-            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; padding: 0; }
             .no-print { display: none !important; }
+            table { page-break-inside: avoid; }
         }
     </style>
 </head>
-<body style="margin: 0; padding: 20px; font-family: 'Arial', 'Helvetica', sans-serif; background-color: #ffffff; color: #1f2937; font-size: 14px; line-height: 1.5;">
+<body style="margin: 0; padding: 20px; font-family: 'Arial', 'Helvetica', sans-serif; background-color: #ffffff; color: #1f2937; font-size: 12px; line-height: 1.3;">
     <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 595px; margin: 0 auto; background-color: #ffffff;">
         <!-- Header -->
         <tr>
-            <td style="padding: 20px 0; border-bottom: 3px solid #064e3b;">
+            <td style="padding: 10px 0; border-bottom: 2px solid #064e3b;">
                 <table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
                         <td width="60%">
-                            <img src="${BASE_URL}/logo.png" alt="Airport Taxis" style="width: 150px; height: auto;">
+                            <img src="${BASE_URL}/logo.png" alt="Airport Taxis" style="width: 120px; height: auto;">
                         </td>
-                        <td width="40%" style="text-align: right; vertical-align: top;">
-                            <p style="margin: 0; font-size: 11px; color: #6b7280;">BOOKING RECEIPT</p>
-                            <p style="margin: 4px 0 0; font-size: 10px; color: #9ca3af;">${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                        <td width="40%" style="text-align: right; vertical-align: bottom;">
+                            <p style="margin: 0; font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;">Booking Receipt</p>
+                            <p style="margin: 2px 0 0; font-size: 9px; color: #9ca3af;">${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
                         </td>
                     </tr>
                 </table>
@@ -176,18 +177,18 @@ const getPrintFriendlyTemplate = (content, title = 'Booking Details') => `
         
         <!-- Content -->
         <tr>
-            <td style="padding: 25px 0;">
+            <td style="padding: 15px 0;">
                 ${content}
             </td>
         </tr>
         
         <!-- Footer -->
         <tr>
-            <td style="padding: 15px 0; border-top: 1px solid #e5e7eb; text-align: center;">
-                <p style="margin: 0; font-size: 10px; color: #9ca3af;">
+            <td style="padding: 10px 0; border-top: 1px solid #e5e7eb; text-align: center;">
+                <p style="margin: 0; font-size: 9px; color: #9ca3af;">
                     Airport Taxis (Pvt) Ltd · 118/5 St. Joseph Street, Grandpass, Colombo 14
                 </p>
-                <p style="margin: 4px 0 0; font-size: 10px; color: #9ca3af;">
+                <p style="margin: 2px 0 0; font-size: 9px; color: #9ca3af;">
                     📞 +94 722 885 885 · ✉️ info@airporttaxi.lk · 🌐 airporttaxi.lk
                 </p>
             </td>
