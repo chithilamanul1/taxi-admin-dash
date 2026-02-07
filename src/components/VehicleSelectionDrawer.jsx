@@ -85,9 +85,14 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                         </div>
                                     )}
 
-                                    <div className="w-20 h-16 bg-slate-50 dark:bg-white/10 rounded-xl flex items-center justify-center shrink-0 p-1">
+                                    <div className="w-24 h-20 bg-slate-50 dark:bg-white/10 rounded-xl flex items-center justify-center shrink-0 p-1 overflow-hidden">
                                         {vehicle.image ? (
-                                            <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal" />
+                                            <img
+                                                src={vehicle.image}
+                                                alt={vehicle.name}
+                                                className={`w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform ${['mini-car', 'sedan'].includes(vehicle.vehicleType) ? 'scale-125' : ''
+                                                    }`}
+                                            />
                                         ) : (
                                             <Car className="text-emerald-900/20 dark:text-white/20" />
                                         )}

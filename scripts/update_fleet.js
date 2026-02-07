@@ -4,31 +4,153 @@ const mongoose = require('mongoose');
 
 // Define Schema EXACTLY as in your application
 const pricingSchema = new mongoose.Schema({
-    type: String, // helper field (optional in main app, but useful here)
-    vehicleType: String, // e.g., 'mini-car'
+    type: String, // helper field
+    vehicleType: String,
     name: String,
     image: String,
     tiers: Array,
     features: Array,
     capacity: Number,
     luggage: Number,
-    basePrice: Number, // Fallback base price
-    perKmRate: Number, // Fallback rate
+    handLuggage: Number, // Added hand luggage field
+    basePrice: Number,
+    perKmRate: Number,
     baseKm: Number
 }, { strict: false });
 
 const Pricing = mongoose.models.Pricing || mongoose.model('Pricing', pricingSchema);
 
 const vehicles = [
-    { type: 'mini-car', name: 'Mini Car (Alto/WagonR)', image: '/vehicles/minicar.png', tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 60 }], features: ['Air Conditioned', 'Economic'], capacity: 3, luggage: 2, basePrice: 30, perKmRate: 0.30, baseKm: 0 },
-    { type: 'sedan', name: 'Sedan (Prius/Axio)', image: '/vehicles/sedancar.png', tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 75 }], features: ['Air Conditioned', 'Comfortable'], capacity: 4, luggage: 3, basePrice: 40, perKmRate: 0.40, baseKm: 0 },
-    { type: 'vezel', name: 'Honda Vezel / Crossover', image: '/images/fleet/honda-vezel.jpg', tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 100 }], features: ['Air Conditioned', 'Bluetooth Sound-System', 'USB Charging Port'], capacity: 4, luggage: 2, basePrice: 45, perKmRate: 0.45, baseKm: 0 },
-    { type: 'mini-van-05', name: 'Mini Van (5 Seater)', image: '/vehicles/minivan5seat.png', tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 90 }], features: ['Air Conditioned', 'Bluetooth Sound-System', 'USB Charging Port'], capacity: 5, luggage: 4, basePrice: 50, perKmRate: 0.50, baseKm: 0 },
-    { type: 'mini-van-every', name: 'Mini Van (Suzuki Every)', image: '/images/fleet/nissan-van.jpg', tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 85 }], features: ['Air Conditioned', 'Economic'], capacity: 4, luggage: 2, basePrice: 40, perKmRate: 0.40, baseKm: 0 },
-    { type: 'suv', name: 'SUV (7 Seater)', image: '/vehicles/suv.jpg', tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 110 }], features: ['Air Conditioned', 'Bluetooth Sound-System', 'USB Charging Port', 'Luxury Interior'], capacity: 7, luggage: 4, basePrice: 60, perKmRate: 0.60, baseKm: 0 },
-    { type: 'kdh-van', name: 'KDH High Roof Van', image: '/vehicles/toyota highroof.png', tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 120 }], features: ['Air Conditioned', 'Dual AC', 'Adjustable Seats', 'TV/DVD', 'Bluetooth Sound-System'], capacity: 9, luggage: 7, basePrice: 70, perKmRate: 0.70, baseKm: 0 },
-    { type: 'mini-bus', name: 'Mini Bus (26-Seater)', image: '/images/fleet/coaster-bus.jpg', tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 180 }], features: ['Air Conditioned', 'Mic', 'TV/DVD', 'Adjustable Seats'], capacity: 26, luggage: 15, basePrice: 120, perKmRate: 1.20, baseKm: 0 },
-    { type: 'coach-bus', name: 'Luxury Coach Bus', image: '/images/fleet/coach-bus.jpg', tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 250 }], features: ['Air Conditioned', 'Mic', 'TV/DVD', 'Reclining Seats', 'Under-seat Luggage'], capacity: 45, luggage: 30, basePrice: 200, perKmRate: 2.00, baseKm: 0 }
+    {
+        type: 'mini-car',
+        name: 'Mini Car (Alto/WagonR)',
+        image: '/vehicles/minicar.png',
+        tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 60 }],
+        features: ['Air Conditioned', 'Economic'],
+        capacity: 2,
+        luggage: 2,
+        handLuggage: 0, // Not verified
+        basePrice: 30,
+        perKmRate: 0.30,
+        baseKm: 0
+    },
+    {
+        type: 'sedan',
+        name: 'Sedan Car (Prius/Axio)',
+        image: '/vehicles/sedancar.png',
+        tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 75 }],
+        features: ['Air Conditioned', 'Comfortable'],
+        capacity: 3,
+        luggage: 2,
+        handLuggage: 2,
+        basePrice: 40,
+        perKmRate: 0.40,
+        baseKm: 0
+    },
+    {
+        type: 'mini-van-every',
+        name: 'Suzuki Every',
+        image: '/vehicles/susukievery.png',
+        tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 85 }],
+        features: ['Air Conditioned', 'Economic'],
+        capacity: 3,
+        luggage: 3,
+        handLuggage: 4,
+        basePrice: 40,
+        perKmRate: 0.40,
+        baseKm: 0
+    },
+    {
+        type: 'mini-van-05',
+        name: 'Minivan (5 Seat)',
+        image: '/vehicles/minivan5seat.png',
+        tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 90 }],
+        features: ['Air Conditioned', 'Bluetooth Sound-System'],
+        capacity: 5,
+        luggage: 3,
+        handLuggage: 4,
+        basePrice: 50,
+        perKmRate: 0.50,
+        baseKm: 0
+    },
+    {
+        type: 'vezel',
+        name: 'Honda Vezel',
+        image: '/vehicles/Hondavezel.png',
+        tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 100 }],
+        features: ['Air Conditioned', 'Bluetooth Sound-System'],
+        capacity: 3,
+        luggage: 2,
+        handLuggage: 2,
+        basePrice: 45,
+        perKmRate: 0.45,
+        baseKm: 0
+    },
+    {
+        type: 'suv',
+        name: 'SUV',
+        image: '/vehicles/Hondavezel.png', // Placeholder as SUV image missing in provided list
+        tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 110 }],
+        features: ['Air Conditioned', 'Luxury Interior'],
+        capacity: 3,
+        luggage: 2,
+        handLuggage: 2,
+        basePrice: 60,
+        perKmRate: 0.60,
+        baseKm: 0
+    },
+    {
+        type: 'van',
+        name: 'Van (9 Pax)',
+        image: '/vehicles/van.png',
+        tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 120 }],
+        features: ['Air Conditioned', 'Dual AC'],
+        capacity: 9,
+        luggage: 7,
+        handLuggage: 5,
+        basePrice: 70,
+        perKmRate: 0.70,
+        baseKm: 0
+    },
+    {
+        type: 'kdh-van', // Mapping highroof to kdh-van type for consistency
+        name: 'Minibus (Highroof)',
+        image: '/vehicles/toyota highroof.png',
+        tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 130 }],
+        features: ['Air Conditioned', 'Dual AC', 'High Roof'],
+        capacity: 9,
+        luggage: 7,
+        handLuggage: 5,
+        basePrice: 80,
+        perKmRate: 0.80,
+        baseKm: 0
+    },
+    {
+        type: 'mini-bus',
+        name: 'Bus (Coaster)',
+        image: '/vehicles/costerbus.png',
+        tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 180 }],
+        features: ['Air Conditioned', 'Mic', 'TV/DVD'],
+        capacity: 12, // User specified 12
+        luggage: 10,
+        handLuggage: 12,
+        basePrice: 120,
+        perKmRate: 1.20,
+        baseKm: 0
+    },
+    {
+        type: 'coach-bus',
+        name: 'Coach Bus (Big One)',
+        image: '/vehicles/couch bus.png',
+        tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 250 }],
+        features: ['Air Conditioned', 'Mic', 'TV/DVD', 'Reclining Seats'],
+        capacity: 45,
+        luggage: 30,
+        handLuggage: 45,
+        basePrice: 200,
+        perKmRate: 2.00,
+        baseKm: 0
+    }
 ];
 
 async function updateFleet() {
@@ -36,10 +158,14 @@ async function updateFleet() {
         await mongoose.connect(process.env.MONGODB_URI);
         console.log('Connected to MongoDB');
 
+        // First clean up old entries to avoid duplicates with different types
+        // await Pricing.deleteMany({}); // Optional: decided to upsert instead to be safe? 
+        // User wants SPECIFIC list. Let's upsert by vehicleType.
+
         for (const v of vehicles) {
             console.log(`Updating ${v.name}...`);
             await Pricing.findOneAndUpdate(
-                { vehicleType: v.type }, // filter by vehicleType (unique)
+                { vehicleType: v.type },
                 {
                     $set: {
                         name: v.name,
@@ -48,6 +174,7 @@ async function updateFleet() {
                         features: v.features,
                         capacity: v.capacity,
                         luggage: v.luggage,
+                        handLuggage: v.handLuggage,
                         basePrice: v.basePrice,
                         perKmRate: v.perKmRate,
                         baseKm: v.baseKm
