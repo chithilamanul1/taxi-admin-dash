@@ -10,7 +10,7 @@ const ToursWidget = () => {
     const [activeCategory, setActiveCategory] = useState('Day Tours');
     const [selectedDate, setSelectedDate] = useState('');
     const [tourDuration, setTourDuration] = useState(1);
-    const { convertPrice } = useCurrency();
+    const { convertPrice, rates } = useCurrency();
     const [tours, setTours] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -103,7 +103,10 @@ const ToursWidget = () => {
                         // If the tour is fixed duration, this multiplier might be confusing. 
                         // I will multiply ONLY if category allows or simplistically for now.
                         const finalPrice = priceVal * tourDuration;
-                        const converted = convertPrice(finalPrice);
+                        // Convert USD to LKR first (assuming DB is USD)
+                        const usdRate = (rates && rates['USD']) ? rates['USD'] : 0.0033;
+                        const priceInLkr = finalPrice / usdRate;
+                        const converted = convertPrice(priceInLkr);
 
                         return (
                             <div
