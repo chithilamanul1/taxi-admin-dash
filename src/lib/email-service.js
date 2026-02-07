@@ -62,7 +62,12 @@ const getPremiumTemplate = (content, title = 'Airport Taxis Sri Lanka') => `
                             <!-- Gold Accent Line -->
                             <div style="width: 60px; height: 3px; background: linear-gradient(90deg, transparent, ${COLORS.gold}, transparent); margin: 0 auto 20px;"></div>
                             
-                            <img src="${BASE_URL}/logo.png" alt="Airport Taxis" style="width: 180px; height: auto; display: block; margin: 0 auto;">
+                            <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 800; letter-spacing: 2px;">
+                                🚕 AIRPORT TAXIS
+                            </h1>
+                            <p style="color: #f4d47c; margin: 10px 0 0; font-size: 12px; letter-spacing: 4px; text-transform: uppercase;">
+                                Sri Lanka's Premium Transfer Service
+                            </p>
                             
                             <!-- Gold Accent Line -->
                             <div style="width: 60px; height: 3px; background: linear-gradient(90deg, transparent, ${COLORS.gold}, transparent); margin: 20px auto 0;"></div>
