@@ -425,7 +425,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 {/* Waypoints List */}
                                 {waypoints.map((wp, idx) => (
-                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-emerald-900/20 rounded-2xl border border-slate-900 dark:border-emerald-800/50 p-1 flex items-center">
+                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-emerald-900/20 rounded-2xl border border-slate-900 dark:border-emerald-800/50 p-1 flex items-center overflow-hidden">
                                         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-900/40 dark:text-emerald-400/40 pointer-events-none z-10">
                                             <Navigation size={18} />
                                         </div>
@@ -433,7 +433,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             type="text"
                                             readOnly
                                             value={wp.name}
-                                            className="flex-1 pl-12 pr-4 h-12 bg-transparent border-none text-sm font-bold text-slate-900 dark:text-white outline-none"
+                                            className="flex-1 min-w-0 pl-12 pr-4 h-12 bg-transparent border-none text-sm font-bold text-slate-900 dark:text-white outline-none truncate"
                                         />
 
                                         <div className="flex flex-col items-center border-l border-slate-900/10 dark:border-white/10 px-2 min-w-[70px] sm:min-w-[100px] justify-center">
