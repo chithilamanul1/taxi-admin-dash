@@ -36,41 +36,41 @@ const NEW_COMPLEX_RATES = {
         { min: 0, max: 20, type: 'flat', price: 3500 },
         { min: 20, max: 40, type: 'flat', price: 4000 },
         { min: 40, max: 130, type: 'per_km', rate: 100 },
-        { min: 130, max: 9999, type: 'per_km', rate: 92.5 }
+        { min: 130, max: 9999, type: 'per_km', rate: 102 }
     ],
     'sedan': [
         { min: 0, max: 20, type: 'flat', price: 4500 },
         { min: 20, max: 40, type: 'flat', price: 6000 },
         { min: 40, max: 50, type: 'per_km', rate: 150 },
         { min: 50, max: 100, type: 'per_km', rate: 130 },
-        { min: 100, max: 140, type: 'per_km', rate: 120 },
-        { min: 140, max: 200, type: 'per_km', rate: 115 },
-        { min: 200, max: 9999, type: 'per_km', rate: 110 }
+        { min: 100, max: 140, type: 'per_km', rate: 130 },
+        { min: 140, max: 200, type: 'per_km', rate: 127 },
+        { min: 200, max: 9999, type: 'per_km', rate: 122 }
     ],
     'mini-van-every': [
         { min: 0, max: 20, type: 'flat', price: 4500 },
         { min: 20, max: 40, type: 'flat', price: 6000 },
         { min: 40, max: 50, type: 'per_km', rate: 150 },
         { min: 50, max: 100, type: 'per_km', rate: 130 },
-        { min: 100, max: 140, type: 'per_km', rate: 120 },
-        { min: 140, max: 200, type: 'per_km', rate: 115 },
-        { min: 200, max: 9999, type: 'per_km', rate: 110 }
+        { min: 100, max: 140, type: 'per_km', rate: 129 },
+        { min: 140, max: 200, type: 'per_km', rate: 127 },
+        { min: 200, max: 9999, type: 'per_km', rate: 122 }
     ],
     'mini-van-05': [
         { min: 0, max: 20, type: 'flat', price: 6000 },
         { min: 20, max: 40, type: 'flat', price: 8500 },
         { min: 40, max: 100, type: 'per_km', rate: 200 },
-        { min: 100, max: 140, type: 'per_km', rate: 160 },
-        { min: 140, max: 200, type: 'per_km', rate: 130 },
-        { min: 200, max: 9999, type: 'per_km', rate: 120 }
+        { min: 100, max: 140, type: 'per_km', rate: 176 },
+        { min: 140, max: 200, type: 'per_km', rate: 143 },
+        { min: 200, max: 9999, type: 'per_km', rate: 132 }
     ],
     'kdh-van': [
         { min: 0, max: 20, type: 'flat', price: 6000 },
         { min: 20, max: 40, type: 'flat', price: 8500 },
         { min: 40, max: 100, type: 'per_km', rate: 200 },
-        { min: 100, max: 140, type: 'per_km', rate: 160 },
-        { min: 140, max: 200, type: 'per_km', rate: 130 },
-        { min: 200, max: 9999, type: 'per_km', rate: 120 }
+        { min: 100, max: 140, type: 'per_km', rate: 180 },
+        { min: 140, max: 200, type: 'per_km', rate: 145 },
+        { min: 200, max: 9999, type: 'per_km', rate: 135 }
     ],
     'mini-bus': [
         { min: 0, max: 20, type: 'flat', price: 7500 },
