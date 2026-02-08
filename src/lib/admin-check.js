@@ -11,8 +11,23 @@ export async function isAdmin() {
     try {
         // 1. Check NextAuth Session
         const session = await getServerSession(authOptions);
-        if (session?.user?.role === 'admin' || session?.user?.isAdmin) {
-            return true;
+
+        if (session?.user) {
+            // Log for debugging
+            console.log('[Auth] Admin check session user:', {
+                email: session.user.email,
+                role: session.user.role,
+                isAdmin: session.user.isAdmin
+            });
+
+            // Fallback for primary admin email
+            if (session.user.email === 'chithilamanul1@gmail.com') {
+                return true;
+            }
+
+            if (session.user.role === 'admin' || session.user.isAdmin === true || session.user.isAdmin === 'true') {
+                return true;
+            }
         }
 
         // 2. Check Custom JWT Cookie (fallback for manual logins)
@@ -27,8 +42,12 @@ export async function isAdmin() {
             }
 
             const decoded = jwt.verify(token, secret);
-            if (decoded && (decoded.role === 'admin' || decoded.isAdmin)) {
-                return true;
+
+            if (decoded) {
+                if (decoded.email === 'chithilamanul1@gmail.com') return true;
+                if (decoded.role === 'admin' || decoded.isAdmin === true || decoded.isAdmin === 'true') {
+                    return true;
+                }
             }
         }
 

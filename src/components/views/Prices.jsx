@@ -18,10 +18,10 @@ const VEHICLE_PRICING = {
             ac: true
         },
         tiers: [
-            { max: 20, type: 'flat', price: 3500 },
-            { max: 40, type: 'flat', price: 4000 },
-            { max: 130, type: 'per_km', rate: 100 },
-            { max: Infinity, type: 'per_km', rate: 92.50 }
+            { min: 0, max: 20, type: 'flat', price: 3500 },
+            { min: 20, max: 40, type: 'flat', price: 4000 },
+            { min: 40, max: 130, type: 'per_km', rate: 100 },
+            { min: 130, max: Infinity, type: 'per_km', rate: 92.5 }
         ]
     },
     'sedan': {
@@ -36,13 +36,13 @@ const VEHICLE_PRICING = {
             ac: true
         },
         tiers: [
-            { max: 20, type: 'flat', price: 4500 },
-            { max: 40, type: 'flat', price: 6000 },
-            { max: 50, type: 'per_km', rate: 150 },
-            { max: 100, type: 'per_km', rate: 130 },
-            { max: 140, type: 'per_km', rate: 120 },
-            { max: 200, type: 'per_km', rate: 115 },
-            { max: Infinity, type: 'per_km', rate: 110 }
+            { min: 0, max: 20, type: 'flat', price: 4500 },
+            { min: 20, max: 40, type: 'flat', price: 6000 },
+            { min: 40, max: 50, type: 'per_km', rate: 150 },
+            { min: 50, max: 100, type: 'per_km', rate: 130 },
+            { min: 100, max: 140, type: 'per_km', rate: 120 },
+            { min: 140, max: 200, type: 'per_km', rate: 115 },
+            { min: 200, max: Infinity, type: 'per_km', rate: 110 }
         ]
     },
     'mini-van-every': {
@@ -57,13 +57,13 @@ const VEHICLE_PRICING = {
             ac: true
         },
         tiers: [
-            { max: 20, type: 'flat', price: 4500 },
-            { max: 40, type: 'flat', price: 6000 },
-            { max: 50, type: 'per_km', rate: 150 },
-            { max: 100, type: 'per_km', rate: 130 },
-            { max: 140, type: 'per_km', rate: 120 },
-            { max: 200, type: 'per_km', rate: 115 },
-            { max: Infinity, type: 'per_km', rate: 110 }
+            { min: 0, max: 20, type: 'flat', price: 4500 },
+            { min: 20, max: 40, type: 'flat', price: 6000 },
+            { min: 40, max: 50, type: 'per_km', rate: 150 },
+            { min: 50, max: 100, type: 'per_km', rate: 130 },
+            { min: 100, max: 140, type: 'per_km', rate: 120 },
+            { min: 140, max: 200, type: 'per_km', rate: 115 },
+            { min: 200, max: Infinity, type: 'per_km', rate: 110 }
         ]
     },
     'mini-van-05': {
@@ -78,16 +78,16 @@ const VEHICLE_PRICING = {
             ac: true
         },
         tiers: [
-            { max: 20, type: 'flat', price: 6000 },
-            { max: 40, type: 'flat', price: 8500 },
-            { max: 100, type: 'per_km', rate: 200 },
-            { max: 140, type: 'per_km', rate: 160 },
-            { max: 200, type: 'per_km', rate: 130 },
-            { max: Infinity, type: 'per_km', rate: 120 }
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 20, max: 40, type: 'flat', price: 8500 },
+            { min: 40, max: 100, type: 'per_km', rate: 200 },
+            { min: 100, max: 140, type: 'per_km', rate: 160 },
+            { min: 140, max: 200, type: 'per_km', rate: 130 },
+            { min: 200, max: Infinity, type: 'per_km', rate: 120 }
         ]
     },
     'suv': {
-        name: 'SUV',
+        name: 'SUV / VEZEL',
         model: '',
         image: '/vehicles/vezel.jpg',
         maxPassengers: 3,
@@ -98,14 +98,16 @@ const VEHICLE_PRICING = {
             ac: true
         },
         tiers: [
-            { max: 20, type: 'flat', price: 7000 },
-            { max: 40, type: 'flat', price: 12000 },
-            { max: 100, type: 'per_km', rate: 250 },
-            { max: Infinity, type: 'per_km', rate: 180 }
+            { min: 0, max: 20, type: 'flat', price: 6500 },
+            { min: 20, max: 40, type: 'flat', price: 9500 },
+            { min: 40, max: 100, type: 'per_km', rate: 150 },
+            { min: 100, max: 140, type: 'per_km', rate: 145 },
+            { min: 140, max: 200, type: 'per_km', rate: 140 },
+            { min: 200, max: Infinity, type: 'per_km', rate: 135 }
         ]
     },
     'kdh-van': {
-        name: 'VAN',
+        name: 'VAN (KDH)',
         model: '',
         image: '/vehicles/Van.jpg',
         maxPassengers: 6,
@@ -116,12 +118,12 @@ const VEHICLE_PRICING = {
             ac: true
         },
         tiers: [
-            { max: 20, type: 'flat', price: 6000 },
-            { max: 40, type: 'flat', price: 8500 },
-            { max: 100, type: 'per_km', rate: 200 },
-            { max: 140, type: 'per_km', rate: 160 },
-            { max: 200, type: 'per_km', rate: 130 },
-            { max: Infinity, type: 'per_km', rate: 120 }
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 20, max: 40, type: 'flat', price: 8500 },
+            { min: 40, max: 100, type: 'per_km', rate: 200 },
+            { min: 100, max: 140, type: 'per_km', rate: 160 },
+            { min: 140, max: 200, type: 'per_km', rate: 130 },
+            { min: 200, max: Infinity, type: 'per_km', rate: 120 }
         ]
     },
     'mini-bus': {
@@ -136,12 +138,46 @@ const VEHICLE_PRICING = {
             ac: true
         },
         tiers: [
-            { max: 20, type: 'flat', price: 7500 },
-            { max: 40, type: 'flat', price: 12000 },
-            { max: 100, type: 'per_km', rate: 220 },
-            { max: 140, type: 'per_km', rate: 200 },
-            { max: 200, type: 'per_km', rate: 140 },
-            { max: Infinity, type: 'per_km', rate: 130 }
+            { min: 0, max: 20, type: 'flat', price: 7500 },
+            { min: 20, max: 40, type: 'flat', price: 12000 },
+            { min: 40, max: 100, type: 'per_km', rate: 220 },
+            { min: 100, max: 140, type: 'per_km', rate: 220 },
+            { min: 140, max: 200, type: 'per_km', rate: 175 },
+            { min: 200, max: Infinity, type: 'per_km', rate: 155 }
+        ]
+    },
+    'bus': {
+        name: 'BUS (20+ SEATER)',
+        model: '',
+        image: '/vehicles/bus.png',
+        maxPassengers: 25,
+        imageScale: 1.0,
+        specs: { luggage: 20, handLuggage: 20, ac: true },
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 20000 },
+            { min: 20, max: 40, type: 'flat', price: 30000 },
+            { min: 40, max: 100, type: 'flat', price: 50000 },
+            { min: 100, max: 150, type: 'flat', price: 70000 },
+            { min: 150, max: 200, type: 'flat', price: 85000 },
+            { min: 200, max: 300, type: 'flat', price: 120000 },
+            { min: 300, max: Infinity, type: 'per_km', rate: 400 }
+        ]
+    },
+    'coach-bus': {
+        name: 'COACH BUS (40+ SEATER)',
+        model: '',
+        image: '/vehicles/coach.png',
+        maxPassengers: 45,
+        imageScale: 1.0,
+        specs: { luggage: 40, handLuggage: 40, ac: true },
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 25000 },
+            { min: 20, max: 40, type: 'flat', price: 45000 },
+            { min: 40, max: 100, type: 'flat', price: 60000 },
+            { min: 100, max: 150, type: 'flat', price: 85000 },
+            { min: 150, max: 200, type: 'flat', price: 95000 },
+            { min: 200, max: 300, type: 'flat', price: 135000 },
+            { min: 300, max: Infinity, type: 'per_km', rate: 450 }
         ]
     }
 }
@@ -151,41 +187,40 @@ const calculatePrice = (distance, vehicleType, tripType) => {
     if (!distance || !vehicleType) return { total: 0, breakdown: [] }
 
     const vehicle = VEHICLE_PRICING[vehicleType]
+    const matchingTier = vehicle.tiers.find(t => distance >= (t.min || 0) && distance <= (t.max || Infinity))
+
     let oneWayPrice = 0
-    let breakdown = []
-    let previousMax = 0
+    let description = ''
 
-    for (let tier of vehicle.tiers) {
-        const tierStart = previousMax
-        const tierEnd = (tier.max === Infinity) ? distance : Math.min(tier.max, distance)
-        const tierKm = tierEnd - tierStart
-
-        if (tierKm <= 0) break
-
-        if (tier.type === 'flat') {
-            oneWayPrice = tier.price
-            // Flat rate overrides previous base, so we reset breakdown
-            breakdown = [{
-                range: "0 - " + tierEnd.toFixed(0) + " km",
-                description: 'Flat rate',
-                amount: tier.price
-            }]
+    if (matchingTier) {
+        if (matchingTier.type === 'flat') {
+            oneWayPrice = matchingTier.price
+            description = `Flat rate`
         } else {
-            const tierCost = tierKm * tier.rate
-            oneWayPrice += tierCost
-            breakdown.push({
-                range: `${tierStart.toFixed(0)} - ${tierEnd.toFixed(1)} km`,
-                description: `${tierKm.toFixed(1)} km × Rs ${tier.rate} `,
-                amount: tierCost
-            })
+            oneWayPrice = distance * matchingTier.rate
+            description = `${distance.toFixed(1)} km × Rs ${matchingTier.rate}/km`
         }
-
-        previousMax = tier.max
-        if (distance <= tier.max) break
+    } else {
+        // Fallback: use last tier
+        const lastTier = vehicle.tiers[vehicle.tiers.length - 1]
+        if (lastTier.type === 'flat') {
+            oneWayPrice = lastTier.price
+        } else {
+            oneWayPrice = distance * lastTier.rate
+        }
+        description = 'Fallback rate'
     }
 
     const total = tripType === 'round-trip' ? oneWayPrice * 2 : oneWayPrice
-    return { total, breakdown, oneWayPrice }
+    return {
+        total,
+        breakdown: [{
+            range: `${distance.toFixed(1)} km`,
+            description,
+            amount: oneWayPrice
+        }],
+        oneWayPrice
+    }
 }
 
 const Prices = ({ initialDestination }) => {
