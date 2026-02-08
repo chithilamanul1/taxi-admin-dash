@@ -44,7 +44,7 @@ export default function BookingActions({ booking }) {
                 ['Scheduled Time', booking.scheduledTime],
                 ['Distance', `${booking.distance} km`],
                 ['Payment Method', booking.paymentMethod?.toUpperCase()],
-                ['Total Amount', `LKR ${booking.totalPrice?.toLocaleString()}`]
+                ['Total Amount', `${booking.currency || 'LKR'} ${booking.totalPrice?.toLocaleString()}`]
             ],
             theme: 'grid',
             headStyles: { fillColor: [6, 78, 59] },

@@ -175,7 +175,9 @@ export default async function BookingStatusPage({ params }) {
                             <p className="text-emerald-400 font-bold text-xs uppercase tracking-widest mb-1">Total Amount</p>
                             <p className="text-xs text-white/40">{booking.paymentMethod === 'card' ? 'Paid Online' : 'Pay to Driver'}</p>
                         </div>
-                        <p className="text-3xl font-black">Rs {booking.totalPrice?.toLocaleString()}</p>
+                        <p className="text-3xl font-black">
+                            {booking.currency || 'LKR'} {booking.totalPrice?.toLocaleString()}
+                        </p>
                     </div>
 
                     {/* Action Buttons (PDF, Email, Ticket) */}
