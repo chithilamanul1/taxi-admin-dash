@@ -325,6 +325,7 @@ export async function sendBookingConfirmation(booking) {
                             <td>
                                 <p style="margin: 0 0 4px; color: ${COLORS.textMuted}; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Total Amount</p>
                                 <p style="margin: 0; color: ${COLORS.goldLight}; font-size: 28px; font-weight: 800;">${booking.currency || 'LKR'} ${booking.totalPrice?.toLocaleString() || 0}</p>
+                                ${booking.currency !== 'LKR' ? `<p style="margin: 2px 0 0; color: ${COLORS.textMuted}; font-size: 14px; font-weight: 600;">(LKR ${(booking.totalPriceLkr || booking.totalPrice || 0).toLocaleString()})</p>` : ''}
                                 <p style="margin: 4px 0 0; color: ${COLORS.textMuted}; font-size: 12px;">${booking.paymentMethod === 'card' ? '💳 Paid Online' : '💵 Cash on Arrival'}</p>
                             </td>
                         </tr>
@@ -509,12 +510,12 @@ export async function sendBookingConfirmation(booking) {
                 <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 14px;">$ ${((booking.totalPrice || 0) / 300).toFixed(2)}</td>
             </tr>
             <tr>
-                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Total Price in USD</td>
-                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 14px;">$ ${((booking.totalPrice || 0) / 300).toFixed(2)}</td>
+                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Total Price (${booking.currency || 'LKR'})</td>
+                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 14px;">${booking.currency || 'LKR'} ${booking.totalPrice?.toLocaleString() || 0}</td>
             </tr>
             <tr>
-                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Total Price in LKR</td>
-                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 16px; color: #064e3b;">LKR ${booking.totalPrice?.toLocaleString() || 0}.00</td>
+                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Total Price (LKR)</td>
+                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 16px; color: #064e3b;">LKR ${(booking.totalPriceLkr || booking.totalPrice || 0).toLocaleString()}</td>
             </tr>
             <tr>
                 <td style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Payment Method</td>
@@ -586,6 +587,7 @@ export async function sendPaymentConfirmation(booking) {
                 <td style="padding: 30px; text-align: center;">
                     <p style="margin: 0 0 8px; color: ${COLORS.goldLight}; font-size: 12px; text-transform: uppercase; letter-spacing: 2px;">Amount Paid</p>
                     <p style="margin: 0; color: #ffffff; font-size: 42px; font-weight: 800;">${booking.currency || 'LKR'} ${booking.totalPrice?.toLocaleString() || 0}</p>
+                    ${booking.currency !== 'LKR' ? `<p style="margin: 5px 0 0; color: rgba(255,255,255,0.6); font-size: 16px; font-weight: 600;">(LKR ${(booking.totalPriceLkr || booking.totalPrice || 0).toLocaleString()})</p>` : ''}
                 </td>
             </tr>
         </table>
