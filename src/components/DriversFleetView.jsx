@@ -20,7 +20,9 @@ const DriversFleetView = ({ bookings = [] }) => {
         name: '',
         phone: '',
         vehicleType: 'sedan',
-        vehicleNumber: ''
+        vehicleModel: '',
+        vehicleNumber: '',
+        vehicleYear: ''
     });
 
     // Fetch drivers
@@ -187,7 +189,7 @@ const DriversFleetView = ({ bookings = [] }) => {
             });
             if (res.ok) {
                 setShowAddModal(false);
-                setNewDriver({ name: '', phone: '', vehicleType: 'sedan', vehicleNumber: '' });
+                setNewDriver({ name: '', phone: '', vehicleType: 'sedan', vehicleModel: '', vehicleNumber: '', vehicleYear: '' });
                 fetchDrivers();
                 alert('Driver added successfully!');
             } else {
@@ -419,9 +421,9 @@ const DriversFleetView = ({ bookings = [] }) => {
                                         >
                                             <p className="text-xs font-bold text-gray-500 capitalize mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</p>
                                             <div className="aspect-video bg-white rounded-lg flex items-center justify-center overflow-hidden border border-gray-100 shadow-inner">
-                                                {url ? (
+                                                {url && url !== 'placeholder' ? (
                                                     <img
-                                                        src={url}
+                                                        src={url.startsWith('/') ? url : `/uploads/drivers/${url}`}
                                                         alt={key}
                                                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                                         onError={(e) => {
@@ -598,12 +600,31 @@ const DriversFleetView = ({ bookings = [] }) => {
                     <div className="bg-white p-6 rounded-xl w-96">
                         <h3 className="font-bold mb-4">Quick Add Driver</h3>
                         <form onSubmit={createDriver} className="space-y-3">
-                            <input className="w-full border p-2 rounded" placeholder="Name" value={newDriver.name} onChange={e => setNewDriver({ ...newDriver, name: e.target.value })} required />
-                            <input className="w-full border p-2 rounded" placeholder="Phone" value={newDriver.phone} onChange={e => setNewDriver({ ...newDriver, phone: e.target.value })} required />
-                            <input className="w-full border p-2 rounded" placeholder="Vehicle No" value={newDriver.vehicleNumber} onChange={e => setNewDriver({ ...newDriver, vehicleNumber: e.target.value })} required />
-                            <div className="flex gap-2">
-                                <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 p-2 bg-gray-100 rounded">Cancel</button>
-                                <button type="submit" className="flex-1 p-2 bg-emerald-600 text-white rounded">Add</button>
+                            <input className="w-full border p-2 rounded text-sm" placeholder="Driver Name" value={newDriver.name} onChange={e => setNewDriver({ ...newDriver, name: e.target.value })} required />
+                            <input className="w-full border p-2 rounded text-sm" placeholder="Phone (e.g. 9477...)" value={newDriver.phone} onChange={e => setNewDriver({ ...newDriver, phone: e.target.value })} required />
+                            <div className="grid grid-cols-2 gap-2">
+                                <select
+                                    className="w-full border p-2 rounded text-sm bg-white"
+                                    value={newDriver.vehicleType}
+                                    onChange={e => setNewDriver({ ...newDriver, vehicleType: e.target.value })}
+                                >
+                                    <option value="sedan">Sedan</option>
+                                    <option value="van-6">Van (6 Seater)</option>
+                                    <option value="minibus">Mini Bus</option>
+                                    <option value="bus">Large Bus</option>
+                                </select>
+                                <input className="w-full border p-2 rounded text-sm" placeholder="Model (e.g. Toyota KDH)" value={newDriver.vehicleModel} onChange={e => setNewDriver({ ...newDriver, vehicleModel: e.target.value })} required />
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                                <input className="w-full border p-2 rounded text-sm" placeholder="Number Plate" value={newDriver.vehicleNumber} onChange={e => setNewDriver({ ...newDriver, vehicleNumber: e.target.value })} required />
+                                <input className="w-full border p-2 rounded text-sm" placeholder="Year" value={newDriver.vehicleYear} onChange={e => setNewDriver({ ...newDriver, vehicleYear: e.target.value })} />
+                            </div>
+                            <div className="flex gap-2 pt-2">
+                                <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 p-2 bg-gray-100 rounded font-bold text-sm">Cancel</button>
+                                <button type="submit" disabled={isSubmitting} className="flex-1 p-2 bg-emerald-900 text-white rounded font-bold text-sm flex items-center justify-center gap-2">
+                                    {isSubmitting && <Loader2 size={14} className="animate-spin" />}
+                                    Add Driver
+                                </button>
                             </div>
                         </form>
                     </div>

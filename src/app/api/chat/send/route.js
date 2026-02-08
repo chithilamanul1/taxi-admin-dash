@@ -36,8 +36,6 @@ export async function POST(req) {
         );
 
         // 3. Trigger Pusher Event
-        // We trigger on a channel specific to the chatId for the user, 
-        // and a general 'admin-chats' channel for the admin dashboard.
         const messageData = {
             id: newMessage._id,
             chatId,
@@ -52,13 +50,20 @@ export async function POST(req) {
             await pusher.trigger('admin-chats', 'session-update', messageData);
         } catch (pusherError) {
             console.error('Pusher Trigger Error:', pusherError);
-            // We don't fail the request if pusher fails, as DB is primary
         }
 
-        // 4. (Optional) Relay to Discord if it's the first message or specific criteria
-        // This keeps the existing Discord integration functional
+        // 4. Relay to Discord and Create Internal Notification
         if (sender === 'customer') {
             try {
+                // Internal Notification
+                const Notification = (await import('@/models/Notification')).default;
+                await Notification.create({
+                    type: 'chat',
+                    title: 'New Chat Message',
+                    message: `Message from ${customerName || 'Guest'}: ${text.substring(0, 50)}${text.length > 50 ? '...' : ''}`,
+                    link: '/admin?view=chat'
+                });
+
                 // Internal fetch to our relay route
                 const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
                 const host = req.headers.get('host');
@@ -68,7 +73,7 @@ export async function POST(req) {
                     body: JSON.stringify({ chatId, text, customerName })
                 }).catch(e => console.error('Discord Relay Fetch Error:', e));
             } catch (relayError) {
-                console.error('Discord Relay Trigger Error:', relayError);
+                console.error('Discord Relay/Notification Error:', relayError);
             }
         }
 

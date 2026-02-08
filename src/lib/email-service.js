@@ -305,6 +305,16 @@ export async function sendBookingConfirmation(booking) {
             ${components.infoCard('📅', 'Date & Time', `${booking.scheduledDate || 'Immediate'} ${booking.scheduledTime ? `at ${booking.scheduledTime}` : ''}`)}
             ${components.infoCard('🚗', 'Vehicle', booking.vehicleType || 'Standard')}
             ${components.infoCard('📏', 'Distance', `${booking.distanceKm || 0} km`)}
+            ${booking.waypoints && booking.waypoints.length > 0 ? `
+            <tr>
+                <td style="padding: 16px 20px; border-bottom: 1px solid ${COLORS.border};">
+                    <p style="margin: 0 0 4px; color: ${COLORS.textMuted}; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Additional Stops</p>
+                    <div style="color: ${COLORS.text}; font-size: 13px; font-weight: 500;">
+                        ${booking.waypoints.map(wp => `<div style="margin-top: 4px;">• ${wp.address || wp.name} ${wp.hours ? `(${wp.hours} hr)` : ''}</div>`).join('')}
+                    </div>
+                </td>
+            </tr>
+            ` : ''}
             <tr>
                 <td style="padding: 20px; background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05));">
                     <table width="100%" cellpadding="0" cellspacing="0">
@@ -475,6 +485,14 @@ export async function sendBookingConfirmation(booking) {
             <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Name Board</td>
                 <td style="border-bottom: 1px solid #f3f4f6; font-size: 13px; color: #059669;">✓ ${booking.nameBoard.text || 'Requested'}</td>
+            </tr>
+            ` : ''}
+            ${booking.waypoints && booking.waypoints.length > 0 ? `
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Additional Stops</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-size: 11px; font-weight: 500;">
+                    ${booking.waypoints.map((wp, idx) => `<div style="margin-bottom: 4px;">• ${wp.address || wp.name} ${wp.hours ? `(${wp.hours} hrs wait)` : ''}</div>`).join('')}
+                </td>
             </tr>
             ` : ''}
         </table>

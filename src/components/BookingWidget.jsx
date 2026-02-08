@@ -15,78 +15,17 @@ import SmartOfferNudge from './SmartOfferNudge'
 import TripMap from './TripMap'
 
 
-// ... (calculatePrice helper remains same)
+import { calculateBasePrice, calculateSurcharges } from '@/lib/pricing-util';
 
-// Helper to calculate price
-const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, couponCode) => {
+// (Helper to calculate price)
+const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard) => {
     if (!distance || !pricingMap[vehicleId]) return { total: 0 };
-
     const vehicleData = pricingMap[vehicleId];
-    let total = 0;
-    const distKm = Math.ceil(distance);
 
-    // Sort tiers by min km to ensure correct order
-    const tiers = (vehicleData.tiers || []).sort((a, b) => a.min - b.min);
+    const basePrice = calculateBasePrice(distance, vehicleData, tripType);
+    const surcharges = calculateSurcharges({ waitingHours, hasNameBoard }, vehicleData);
 
-    // 1. Try to find a matching tier
-    let tierMatched = false;
-    for (const tier of tiers) {
-        // Check if distance falls within this tier's range
-        if (distKm >= tier.min && distKm <= (tier.max || Infinity)) {
-            if (tier.type === 'flat') {
-                total = tier.price;
-            } else {
-                // Per KM calculation for this tier
-                // If there's a previous flat tier, start per-km after that
-                const baseFlat = tiers.filter(t => t.type === 'flat' && t.max < tier.min).sort((a, b) => b.max - a.max)[0];
-                const basePrice = baseFlat ? baseFlat.price : 0;
-                const baseKm = baseFlat ? baseFlat.max : 0;
-                total = basePrice + ((distKm - baseKm) * tier.rate);
-            }
-            tierMatched = true;
-            break;
-        }
-    }
-
-    // 2. Fallback if no tier matched OR if total is 0 (safety net)
-    if (!tierMatched || total === 0) {
-        // Fallback: Base Price + (Extra KM * Rate)
-        // Ensure we have at least basePrice
-        const basePrice = vehicleData.basePrice || 0;
-        const perKm = vehicleData.perKmRate || 0;
-        const baseKm = vehicleData.baseKm || 0;
-
-        let calculatedBase = basePrice;
-        if (distKm > baseKm) {
-            calculatedBase += (distKm - baseKm) * perKm;
-        }
-
-        // Use the fallback if tier failed or produced 0
-        if (calculatedBase > 0) {
-            total = calculatedBase;
-        }
-    }
-
-    // 3. Safety Check: If still 0, try to find ANY flat rate or base price
-    if (total === 0) {
-        // Absolute fallback: Minimum 500 or just Base Price
-        total = vehicleData.basePrice || 500;
-    }
-
-    if (tripType === 'round-trip') total = total * 2;
-
-    // Dynamic Waiting charges
-    if (waitingHours > 0) {
-        if (vehicleData.waitingCharges && vehicleData.waitingCharges.length >= waitingHours) {
-            total += vehicleData.waitingCharges[waitingHours - 1];
-        } else {
-            total += (waitingHours * (vehicleData.hourlyRate || 500));
-        }
-    }
-
-    if (hasNameBoard) total += 1000;
-
-    return { total: Math.round(total) };
+    return { total: basePrice + surcharges };
 };
 
 // Internal Loader Component to avoid hook conflicts
@@ -497,10 +436,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             className="flex-1 pl-12 pr-4 h-12 bg-transparent border-none text-sm font-bold text-slate-900 dark:text-white outline-none"
                                         />
 
-                                        <div className="flex flex-col items-center border-l border-slate-900/10 dark:border-white/10 px-3 min-w-[100px] justify-center">
+                                        <div className="flex flex-col items-center border-l border-slate-900/10 dark:border-white/10 px-2 min-w-[70px] sm:min-w-[100px] justify-center">
                                             <div className="flex items-center gap-1">
                                                 <div className="relative">
-                                                    <Clock size={14} className="text-slate-900/40 dark:text-white/40 shrink-0 absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+                                                    <Clock size={12} className="text-slate-900/40 dark:text-white/40 shrink-0 absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
                                                     <select
                                                         value={wp.waitingTime || 0}
                                                         onChange={(e) => {
@@ -508,16 +447,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                             newWps[idx].waitingTime = parseInt(e.target.value);
                                                             setWaypoints(newWps);
                                                         }}
-                                                        className="bg-slate-100 dark:bg-white/10 pl-7 pr-8 py-1.5 rounded-lg text-xs font-bold text-slate-900 dark:text-white outline-none cursor-pointer appearance-none text-center hover:bg-slate-200 transition-colors border border-transparent focus:border-amber-500"
+                                                        className="bg-slate-100 dark:bg-white/10 pl-5 pr-5 py-1.5 rounded-lg text-[10px] font-black text-slate-900 dark:text-white outline-none cursor-pointer appearance-none text-center hover:bg-slate-200 transition-colors border border-transparent focus:border-amber-500"
                                                     >
                                                         {[0, 1, 2, 3, 4, 5, 6].map(h => (
-                                                            <option key={h} value={h} className="bg-white text-slate-900">{h} hr{h !== 1 ? 's' : ''}</option>
+                                                            <option key={h} value={h} className="bg-white text-slate-900 text-xs">{h}h</option>
                                                         ))}
                                                     </select>
-                                                    <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-900/40 pointer-events-none" />
                                                 </div>
                                             </div>
-                                            <span className="text-[9px] font-bold text-slate-400 mt-1">(Rs 500/hr)</span>
+                                            <span className="text-[8px] font-black text-slate-400 mt-0.5 leading-none">(Rs 500/hr)</span>
                                         </div>
 
                                         <button
@@ -711,7 +649,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             <Tag size={12} className="text-emerald-600" />
                                             <span className="text-[10px] font-bold text-emerald-900/50 uppercase tracking-widest">Available Offers</span>
                                         </div>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div className="flex overflow-x-auto pb-4 gap-4 no-scrollbar snap-x touch-pan-x">
                                             {availableCoupons.map((c) => (
                                                 <button
                                                     key={c._id}
@@ -731,7 +669,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                             setAppliedOffers(prev => [...prev, couponOffer]);
                                                         }
                                                     }}
-                                                    className={`group relative flex items-center justify-between gap-4 p-5 rounded-[2rem] border-2 border-dashed transition-all hover:shadow-2xl hover:-translate-y-1 text-left ${appliedOffers.some(o => o.name === c.code) ? 'border-emerald-500 bg-emerald-50/80 shadow-emerald-500/10' : 'border-emerald-900/10 bg-white hover:border-emerald-500/40 shadow-xl shadow-slate-200/50 dark:shadow-none dark:bg-slate-900/50'}`}
+                                                    className={`snap-start min-w-[280px] sm:min-w-[320px] group relative flex items-center justify-between gap-4 p-5 rounded-[2.5rem] border-2 border-dashed transition-all hover:shadow-2xl text-left flex-shrink-0 ${appliedOffers.some(o => o.name === c.code) ? 'border-emerald-500 bg-emerald-50/80' : 'border-emerald-900/10 bg-white shadow-xl shadow-slate-200/40 dark:shadow-none dark:bg-slate-900/50'}`}
                                                 >
                                                     <div className="flex items-center gap-4 min-w-0">
                                                         <div className="w-14 h-14 rounded-2xl bg-amber-100 dark:bg-amber-900/30 flex-shrink-0 flex items-center justify-center overflow-hidden border border-amber-200/50">
@@ -761,7 +699,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     </div>
 
                                                     {appliedOffers.some(o => o.name === c.code) && (
-                                                        <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-emerald-500/30 animate-pulse">
+                                                        <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
                                                             <Check size={18} strokeWidth={3} />
                                                         </div>
                                                     )}

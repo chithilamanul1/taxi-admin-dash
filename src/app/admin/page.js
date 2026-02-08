@@ -14,14 +14,25 @@ export default function AdminDashboard() {
     const router = useRouter()
 
     useEffect(() => {
-        if (status === 'loading') return
-        if (!session || session.user.role !== 'admin') {
-            router.push('/admin/login')
+        if (status === 'loading') return;
+
+        // Robust check: if no NextAuth session, check if auth_token cookie might exist
+        // (We can't verify JWT on client but we can avoid immediate redirect if cookie present)
+        const hasAuthCookie = document.cookie.includes('auth_token');
+
+        if (!session && !hasAuthCookie) {
+            router.push('/admin/login');
+        }
+
+        if (session && session.user.role !== 'admin' && !hasAuthCookie) {
+            router.push('/admin/login');
         }
     }, [session, status, router])
 
     const [sidebarOpen, setSidebarOpen] = useState(true)
     const [currentView, setCurrentView] = useState('dashboard')
+    const [notificationsEnabled, setNotificationsEnabled] = useState(false)
+    const prevUnreadCount = useRef(0)
     const [bookings, setBookings] = useState([])
     const [bookingSearch, setBookingSearch] = useState('')
     const [isLoading, setIsLoading] = useState(false)
@@ -222,7 +233,21 @@ export default function AdminDashboard() {
                 .then(data => {
                     if (data.success) {
                         setNotifications(data.data)
+                        // Sound alert logic
+                        if (notificationsEnabled && data.unreadCount > prevUnreadCount.current) {
+                            const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+                            audio.play().catch(e => console.log("Audio play blocked", e));
+
+                            // Also try browser notification if permitted
+                            if ("Notification" in window && Notification.permission === "granted") {
+                                new Notification("New Admin Activity!", {
+                                    body: `You have ${data.unreadCount} unread notifications.`,
+                                    icon: '/logo.png'
+                                });
+                            }
+                        }
                         setUnreadCount(data.unreadCount)
+                        prevUnreadCount.current = data.unreadCount;
                     }
                 })
                 .catch(console.error)
@@ -231,11 +256,17 @@ export default function AdminDashboard() {
         // Initial fetch
         fetchData()
 
-        // Auto-refresh every 10 seconds
-        const interval = setInterval(fetchData, 10000)
+        // Auto-refresh every 45 seconds to keep it fresh but not annoying
+        // Only refresh if NO MODALS/EDITING IS ACTIVE
+        const interval = setInterval(() => {
+            const isEditing = !!editingVehicle || !!editingTour || !!editingPost || !!editingTeam || !!selectedTicket || !!selectedBooking;
+            if (!isEditing) {
+                fetchData();
+            }
+        }, 45000)
 
         return () => clearInterval(interval)
-    }, [currentView, pricingCategory])
+    }, [currentView, pricingCategory, editingVehicle, editingTour, editingPost, editingTeam, selectedTicket, selectedBooking])
 
     const markNotificationRead = async (id) => {
         try {
@@ -408,6 +439,25 @@ export default function AdminDashboard() {
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => {
+                                if ("Notification" in window) {
+                                    Notification.requestPermission().then(permission => {
+                                        if (permission === "granted") {
+                                            setNotificationsEnabled(!notificationsEnabled);
+                                        } else {
+                                            alert("Please allow notifications in your browser settings.");
+                                        }
+                                    });
+                                } else {
+                                    setNotificationsEnabled(!notificationsEnabled);
+                                }
+                            }}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${notificationsEnabled ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}
+                        >
+                            <div className={`w-1.5 h-1.5 rounded-full ${notificationsEnabled ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`}></div>
+                            Alerts: {notificationsEnabled ? 'ON' : 'OFF'}
+                        </button>
                         <div className="relative">
                             <button
                                 onClick={() => setShowNotifications(!showNotifications)}
@@ -1275,12 +1325,23 @@ export default function AdminDashboard() {
                                                         </select>
                                                     </div>
                                                     <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Duration (Nights)</label>
                                                         <input
+                                                            type="number"
                                                             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
-                                                            placeholder="e.g. 3 Days"
-                                                            value={tourForm.duration || ''}
-                                                            onChange={e => setTourForm({ ...tourForm, duration: e.target.value })}
+                                                            placeholder="0"
+                                                            value={tourForm.nights || ''}
+                                                            onChange={e => setTourForm({ ...tourForm, nights: e.target.value })}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Duration (Days)</label>
+                                                        <input
+                                                            type="number"
+                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
+                                                            placeholder="1"
+                                                            value={tourForm.days || ''}
+                                                            onChange={e => setTourForm({ ...tourForm, days: e.target.value })}
                                                         />
                                                     </div>
                                                 </div>
@@ -1290,8 +1351,8 @@ export default function AdminDashboard() {
                                                         <input
                                                             type="number"
                                                             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
-                                                            value={tourForm.price || ''}
-                                                            onChange={e => setTourForm({ ...tourForm, price: e.target.value })}
+                                                            value={tourForm.priceAmount || tourForm.price?.amount || ''}
+                                                            onChange={e => setTourForm({ ...tourForm, priceAmount: e.target.value })}
                                                         />
                                                     </div>
                                                     <div>
@@ -1374,20 +1435,46 @@ export default function AdminDashboard() {
                                             </button>
                                             <button
                                                 onClick={async () => {
-                                                    const method = editingTour === 'NEW' ? 'POST' : 'PUT'
-                                                    const res = await fetch('/api/tours', {
-                                                        method,
-                                                        headers: { 'Content-Type': 'application/json' },
-                                                        body: JSON.stringify(tourForm)
-                                                    })
-                                                    if (res.ok) {
-                                                        const data = await res.json()
-                                                        if (editingTour === 'NEW') setTours([data.data, ...tours])
-                                                        else setTours(tours.map(t => t._id === data.data._id ? data.data : t))
-                                                        setEditingTour(null)
-                                                        alert('Saved successfully!')
-                                                    } else {
-                                                        alert('Failed to save')
+                                                    try {
+                                                        const method = editingTour === 'NEW' ? 'POST' : 'PUT';
+
+                                                        // Ensure we have a slug
+                                                        const tourSlug = tourForm.slug || tourForm.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+                                                        // Format data according to the Tour schema
+                                                        const payload = {
+                                                            ...tourForm,
+                                                            slug: tourSlug,
+                                                            duration: {
+                                                                days: Number(tourForm.days || 1),
+                                                                nights: Number(tourForm.nights || 0)
+                                                            },
+                                                            price: {
+                                                                amount: Number(tourForm.priceAmount || tourForm.price || 0),
+                                                                currency: tourForm.currency || 'USD',
+                                                                type: tourForm.priceType || 'from'
+                                                            }
+                                                        };
+
+                                                        const res = await fetch('/api/tours', {
+                                                            method,
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify(payload)
+                                                        });
+
+                                                        const data = await res.json();
+
+                                                        if (res.ok && data.success) {
+                                                            if (editingTour === 'NEW') setTours([data.data, ...tours]);
+                                                            else setTours(tours.map(t => t._id === data.data._id ? data.data : t));
+                                                            setEditingTour(null);
+                                                            alert('Tour saved successfully!');
+                                                        } else {
+                                                            alert('Failed to save: ' + (data.error || 'Unknown error'));
+                                                        }
+                                                    } catch (err) {
+                                                        console.error("Tour save error:", err);
+                                                        alert('An error occurred while saving the tour.');
                                                     }
                                                 }}
                                                 className="px-6 py-2 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-900/90 shadow-lg"

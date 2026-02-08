@@ -60,7 +60,7 @@ export default function AdminChatManager() {
 
         return () => {
             pusher.unsubscribe('admin-chats');
-            pusher.disconnect();
+            // Don't disconnect here as other components/effects might be using it
         };
     }, [])
 
@@ -110,7 +110,7 @@ export default function AdminChatManager() {
 
         return () => {
             pusher.unsubscribe(`chat-${selectedChatId}`);
-            pusher.disconnect();
+            // Don't disconnect here
         };
     }, [selectedChatId])
 

@@ -100,8 +100,17 @@ export async function POST(request) {
         // Log to Discord
         try {
             await logBookingCreated(booking);
+
+            // Internal Notification
+            const Notification = (await import('../../../models/Notification')).default;
+            await Notification.create({
+                type: 'booking',
+                title: 'New Booking',
+                message: `New booking from ${booking.customerName || 'Guest'}: ${booking.pickupLocation?.address?.split(',')[0]} to ${booking.dropoffLocation?.address?.split(',')[0]}`,
+                link: '/admin?view=bookings'
+            });
         } catch (discordError) {
-            console.error('Discord logging failed:', discordError);
+            console.error('Logging/Notification failed:', discordError);
         }
 
         // Send Email to Customer AND Owner

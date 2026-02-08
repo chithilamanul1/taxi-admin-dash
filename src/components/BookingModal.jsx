@@ -6,6 +6,7 @@ import { X, MapPin, User, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight
 import LocationSearchInput from './LocationSearchInput';
 
 import { useCurrency } from '../context/CurrencyContext';
+import { calculateBasePrice, calculateSurcharges, calculatePaymentFees } from '../lib/pricing-util';
 
 const STEPS = [
     { id: 1, title: 'Route', icon: MapPin },
@@ -102,54 +103,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         const vehicleData = pricing.find(p => p.vehicleType === formData.vehicle);
         if (!vehicleData || distance === 0) return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0 };
 
-        const tiers = (vehicleData.tiers || []).sort((a, b) => a.min - b.min);
-        let baseTotal = 0;
         const distKm = Math.ceil(distance);
-
-        for (const tier of tiers) {
-            if (distKm >= tier.min && distKm <= tier.max) {
-                if (tier.type === 'flat') {
-                    baseTotal = tier.price;
-                } else {
-                    const baseFlat = tiers.filter(t => t.type === 'flat' && t.max < tier.min).sort((a, b) => b.max - a.max)[0];
-                    const basePrice = baseFlat ? baseFlat.price : 0;
-                    const baseKm = baseFlat ? baseFlat.max : 0;
-                    baseTotal = basePrice + ((distKm - baseKm) * tier.rate);
-                }
-                break;
-            }
-        }
-
-        if (baseTotal === 0) {
-            baseTotal = (vehicleData.basePrice || 0) + (Math.max(0, distKm - (vehicleData.baseKm || 0)) * (vehicleData.perKmRate || 0));
-        }
-
-        if (formData.tripType === 'round-trip') baseTotal *= 2;
-
-        let surcharges = 0;
-        if (formData.waitingHours > 0) {
-            if (vehicleData.waitingCharges && vehicleData.waitingCharges.length >= formData.waitingHours) {
-                surcharges += vehicleData.waitingCharges[formData.waitingHours - 1];
-            } else {
-                surcharges += (formData.waitingHours * (vehicleData.hourlyRate || 200));
-            }
-        }
-        if (formData.hasNameBoard) surcharges += 1000;
+        const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType);
+        const surcharges = calculateSurcharges({
+            waitingHours: formData.waitingHours,
+            hasNameBoard: formData.hasNameBoard
+        }, vehicleData);
 
         // Payment Method Surcharges per User Request
-        let paymentSurcharge = 0;
-        if (formData.paymentMethod === 'cash') {
-            // +5% for Cash
-            paymentSurcharge = (baseTotal + surcharges) * 0.05;
-        } else if (formData.paymentMethod === 'card') {
-            if (currency === 'USD') {
-                // +3.5% for USD Card
-                paymentSurcharge = (baseTotal + surcharges) * 0.035;
-            } else {
-                // +2.5% for LKR Card (default)
-                paymentSurcharge = (baseTotal + surcharges) * 0.025;
-            }
-        }
+        const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, currency);
 
         let total = baseTotal + surcharges + paymentSurcharge;
 

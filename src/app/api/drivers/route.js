@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { isAdmin } from '@/lib/admin-check';
 import dbConnect from '@/lib/db';
 import Driver from '@/models/Driver';
 
@@ -17,6 +18,9 @@ export async function GET() {
 // POST - Create new driver
 export async function POST(req) {
     try {
+        if (!(await isAdmin())) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
         await dbConnect();
         const data = await req.json();
 
@@ -57,10 +61,12 @@ export async function POST(req) {
             user: user._id, // Link to User
             name: data.name,
             phone: data.phone,
-            email: data.email || undefined, // Use undefined so sparse index works
-            nic: data.nic || undefined, // Use undefined so sparse index works
+            email: data.email || undefined,
+            nic: data.nic || undefined,
             vehicleType: data.vehicleType,
+            vehicleModel: data.vehicleModel,
             vehicleNumber: data.vehicleNumber,
+            vehicleYear: data.vehicleYear,
             isOnline: false,
             status: 'free',
             verificationStatus: 'verified'

@@ -23,37 +23,7 @@ export async function GET(req) {
     }
 }
 
-// Helper to verify admin
-import { cookies } from 'next/headers';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../lib/auth';
-
-async function isAdmin() {
-    try {
-        const session = await getServerSession(authOptions);
-
-        // Debugging: Log the full user object to understand missing roles
-        console.log("Pricing API - Session User:", session?.user);
-
-        if (!session || !session.user) {
-            console.log("Pricing API - Blocked: No Session");
-            return false;
-        }
-
-        // Allow Admin Role
-        if (session.user.role === 'admin') {
-            return true;
-        }
-
-        // TEMP ALLOW: authenticated users (during debugging)
-        // This is still secure (requires login) but bypasses "role=admin" if DB is wrong
-        console.log("Pricing API - Allowing Authenticated User (Temp):", session.user.email);
-        return true;
-    } catch (error) {
-        console.error("Pricing API - Auth Error:", error);
-        return false;
-    }
-}
+import { isAdmin } from '@/lib/admin-check';
 
 export async function POST(req) {
     try {

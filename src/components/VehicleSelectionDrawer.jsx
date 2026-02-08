@@ -1,10 +1,12 @@
 import React from 'react';
-import { X, Users, Briefcase, CheckCircle2, Lock, Car, Loader2 } from 'lucide-react';
+import { X, Users, Briefcase, CheckCircle2, Lock, Car, Loader2, Info, Snowflake } from 'lucide-react';
 
 const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelect, passengerCount, isLoading }) => {
+    const [detailVehicle, setDetailVehicle] = React.useState(null);
+
     if (!isOpen) return null;
 
-    // Smart Capacity Logic (Duplicated for standalone use, or could be shared util)
+    // Smart Capacity Logic
     const isSuitable = (vehicle) => {
         const totalPax = (passengerCount.adults || 0) + (passengerCount.children || 0);
         const totalBags = passengerCount.bags || 0;
@@ -78,6 +80,11 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                         ${!suitable ? 'opacity-60 grayscale-[0.8]' : 'active:scale-95 cursor-pointer hover:border-emerald-600/50'}
                                     `}
                                 >
+                                    {/* AC Badge */}
+                                    <div className="absolute top-2 left-2 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 px-2 py-1 rounded-lg text-[8px] font-black z-10 uppercase tracking-tighter">
+                                        <Snowflake size={8} className="animate-pulse" /> 100% A/C
+                                    </div>
+
                                     {/* Warning Overlay for Unsuitable */}
                                     {!suitable && (
                                         <div className="absolute top-2 right-2 flex items-center gap-1 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-2 py-1 rounded-lg text-[10px] font-bold z-10">
@@ -110,18 +117,86 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                             <div className="flex items-center gap-1">
                                                 <Briefcase size={12} className="text-emerald-600" /> {vehicle.luggage}
                                             </div>
-                                            <div className="flex items-center gap-1">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-600"><path d="M6 20h12a2 2 0 0 0 2-2V8H4v10a2 2 0 0 0 2 2Z" /><path d="M8 8V6a4 4 0 0 1 8 0v2" /></svg> {vehicle.handLuggage || 0}
-                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Per Km Rate Removed as per request */}
+                                    <div className="flex flex-col gap-2 items-end">
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setDetailVehicle(vehicle);
+                                            }}
+                                            className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-white/5 rounded-full transition-all"
+                                            title="View Details"
+                                        >
+                                            <Info size={18} />
+                                        </button>
+                                        <div className="text-[10px] font-black text-emerald-600/40 uppercase tracking-widest hidden sm:block">Details</div>
+                                    </div>
                                 </div>
                             );
                         })
                     )}
                 </div>
+
+                {/* More Details Modal */}
+                {detailVehicle && (
+                    <div className="absolute inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in">
+                        <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl overflow-hidden border border-emerald-900/10 dark:border-white/10 flex flex-col animate-scale-in">
+                            <div className="p-6 pb-2 flex justify-between items-center">
+                                <h4 className="text-lg font-black text-emerald-900 dark:text-white uppercase tracking-tight">{detailVehicle.name}</h4>
+                                <button onClick={() => setDetailVehicle(null)} className="p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full text-slate-400">
+                                    <X size={20} />
+                                </button>
+                            </div>
+                            <div className="p-6 space-y-6">
+                                <div className="aspect-video bg-slate-50 dark:bg-white/5 rounded-3xl flex items-center justify-center p-4">
+                                    <img src={detailVehicle.image} alt={detailVehicle.name} className="w-full h-full object-contain" />
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-4">
+                                    <div className="flex flex-col items-center gap-1 p-3 bg-emerald-50 dark:bg-white/5 rounded-2xl">
+                                        <Users size={16} className="text-emerald-600" />
+                                        <span className="text-sm font-black text-emerald-900 dark:text-white">{detailVehicle.capacity}</span>
+                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Seats</span>
+                                    </div>
+                                    <div className="flex flex-col items-center gap-1 p-3 bg-emerald-50 dark:bg-white/5 rounded-2xl">
+                                        <Briefcase size={16} className="text-emerald-600" />
+                                        <span className="text-sm font-black text-emerald-900 dark:text-white">{detailVehicle.luggage}</span>
+                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Large Bags</span>
+                                    </div>
+                                    <div className="flex flex-col items-center gap-1 p-3 bg-emerald-50 dark:bg-white/5 rounded-2xl">
+                                        <Snowflake size={16} className="text-emerald-600" />
+                                        <span className="text-sm font-black text-emerald-900 dark:text-white">Yes</span>
+                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Air Con</span>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Key Features</span>
+                                    <div className="flex flex-wrap gap-2">
+                                        {['100% Air Conditioned', 'Professional Chauffeur', 'GPS Tracked', '24/7 Support', ...(detailVehicle.features || [])].map((f, i) => (
+                                            <span key={i} className="px-3 py-1.5 bg-slate-50 dark:bg-white/5 rounded-full text-[10px] font-bold text-slate-600 dark:text-slate-300 border border-slate-100 dark:border-white/5 line-clamp-1">
+                                                {f}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <button
+                                    onClick={() => {
+                                        onSelect(detailVehicle.vehicleType);
+                                        setDetailVehicle(null);
+                                        onClose();
+                                    }}
+                                    className="w-full h-14 bg-emerald-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-emerald-800 transition-all shadow-xl shadow-emerald-900/20"
+                                >
+                                    Select This Ride
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

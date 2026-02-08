@@ -2,44 +2,7 @@ import dbConnect from '@/lib/db';
 import Coupon from '@/models/Coupon';
 import { NextResponse } from 'next/server';
 
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
-
-import { cookies } from 'next/headers';
-import jwt from 'jsonwebtoken';
-
-async function isAdmin() {
-    try {
-        // 1. Check for NextAuth session
-        const session = await getServerSession(authOptions);
-        if (session?.user?.role === 'admin') return true;
-
-        // 2. Check for custom auth_token cookie (used in some admin login implementations)
-        const cookieStore = await cookies();
-        const token = cookieStore.get('auth_token')?.value;
-
-        if (token) {
-            const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET;
-            if (secret) {
-                try {
-                    const decoded = jwt.verify(token, secret);
-                    if (decoded && decoded.role === 'admin') return true;
-                } catch (jwtErr) {
-                    console.error("Coupons API: JWT Verify Fail:", jwtErr.message);
-                }
-            }
-        }
-
-        console.log("Coupons API: Unauthorized access attempt", {
-            hasSession: !!session,
-            sessionRole: session?.user?.role,
-            hasAuthToken: !!token
-        });
-    } catch (err) {
-        console.error("Coupons API: Auth check error:", err);
-    }
-    return false;
-}
+import { isAdmin } from '@/lib/admin-check';
 
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
