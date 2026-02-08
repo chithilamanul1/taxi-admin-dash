@@ -175,7 +175,7 @@ export default function AdminDashboard() {
 
             if (currentView === 'pricing') {
                 setIsLoading(true)
-                fetch(`/api/pricing?category=${pricingCategory}`)
+                fetch(`/api/pricing?category=${pricingCategory}`, { cache: 'no-store' })
                     .then(res => res.json())
                     .then(data => {
                         if (data.success && Array.isArray(data.data)) {
@@ -309,6 +309,14 @@ export default function AdminDashboard() {
             { title: 'Pending Bookings', value: pendingBookings.toString(), icon: Bell, color: 'text-red-500' },
         ]
     }, [bookings, drivers])
+
+    const formatPrice = (booking) => {
+        if (!booking) return 'N/A';
+        const amount = booking.displayPrice || booking.totalPrice || 0;
+        const curr = booking.currency || 'LKR';
+        const symbol = curr === 'LKR' ? 'Rs' : curr;
+        return `${symbol} ${amount.toLocaleString()}`;
+    };
 
     const updateBookingStatus = async (id, status) => {
         try {
@@ -590,7 +598,7 @@ export default function AdminDashboard() {
                                                             <div>{booking.scheduledDate || new Date(booking.createdAt).toLocaleDateString()}</div>
                                                             <div className="text-gray-400">{booking.scheduledTime || ''}</div>
                                                         </td>
-                                                        <td className="py-4 font-bold text-sm">Rs {booking.totalPrice?.toLocaleString()}</td>
+                                                        <td className="py-4 font-bold text-sm">{formatPrice(booking)}</td>
                                                         <td className="py-4">
                                                             <span className={`px-2 py-1 rounded text-xs font-bold capitalize
                                                                 ${booking.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' :
@@ -724,20 +732,18 @@ export default function AdminDashboard() {
                                             <Car size={16} /> Add New Vehicle
                                         </button>
                                         <button
-                                            onClick={() => {
-                                                if (confirm('WARNING: This will delete ALL pricing data (Airport, P2P, Tours) and reset to defaults. Continue?')) {
-                                                    fetch('/api/debug/seed-data', { method: 'POST' })
-                                                        .then(res => res.json())
-                                                        .then(data => {
-                                                            if (data.success) {
-                                                                alert(data.message);
-                                                                window.location.reload();
-                                                            } else {
-                                                                alert('Error: ' + (data.error || 'Unknown error'));
-                                                            }
-                                                        })
-                                                        .catch(err => alert('Failed to reset: ' + err.message));
+                                            onClick={async () => {
+                                                if (!confirm('This will RESET ALL pricing for ALL vehicles to the system DEFAULTS. Are you sure?')) return;
+                                                setIsLoading(true);
+                                                const res = await fetch('/api/admin/sync-pricing', { method: 'POST' });
+                                                const data = await res.json();
+                                                if (data.success) {
+                                                    alert(data.message);
+                                                    fetchData(); // Refresh current view
+                                                } else {
+                                                    alert(data.error || 'Sync failed');
                                                 }
+                                                setIsLoading(false);
                                             }}
                                             className="text-xs bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200"
                                         >
@@ -1940,7 +1946,7 @@ export default function AdminDashboard() {
                                                         {booking.vehicleType?.replace(/-/g, ' ') || 'N/A'}
                                                     </td>
                                                     <td className="px-4 py-4 text-right font-bold text-emerald-900">
-                                                        Rs {booking.totalPrice?.toLocaleString() || 0}
+                                                        {formatPrice(booking)}
                                                     </td>
                                                     <td className="px-4 py-4">
                                                         <span className={`px-2 py-1 rounded text-xs font-bold capitalize ${booking.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' :
@@ -2083,9 +2089,27 @@ export default function AdminDashboard() {
                                                     <CreditCard size={18} /> Payment & Status
                                                 </h4>
                                                 <div className="space-y-3">
-                                                    <div className="flex justify-between items-center">
-                                                        <span className="text-xs text-gray-500 uppercase tracking-wider">Total Amount</span>
-                                                        <span className="text-xl font-bold text-emerald-600">Rs {selectedBooking.totalPrice?.toLocaleString()}</span>
+                                                    <div className="space-y-1">
+                                                        <div className="flex justify-between items-center">
+                                                            <span className="text-xs text-gray-500 uppercase tracking-wider">Total Amount ({selectedBooking.currency || 'LKR'})</span>
+                                                            <span className="text-xl font-bold text-emerald-600">{formatPrice(selectedBooking)}</span>
+                                                        </div>
+                                                        {selectedBooking.paymentType === 'partial' && (
+                                                            <div className="space-y-1 pt-1 border-t border-slate-200/50">
+                                                                <div className="flex justify-between items-center text-xs">
+                                                                    <span className="text-gray-500">Paid (Online)</span>
+                                                                    <span className="font-bold text-emerald-600">
+                                                                        {selectedBooking.currency || 'LKR'} {(selectedBooking.displayPaidAmount || selectedBooking.paidAmount || 0).toLocaleString()}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="flex justify-between items-center text-xs">
+                                                                    <span className="text-gray-500">Balance (to Driver)</span>
+                                                                    <span className="font-bold text-orange-600">
+                                                                        {selectedBooking.currency || 'LKR'} {(selectedBooking.displayBalanceAmount || selectedBooking.balanceAmount || 0).toLocaleString()}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                     <div className="grid grid-cols-2 gap-4 pt-2">
                                                         <div>

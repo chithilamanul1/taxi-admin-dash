@@ -141,13 +141,18 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
 
                 {/* More Details Modal */}
                 {detailVehicle && (
-                    <div className="absolute inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in">
-                        <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl overflow-hidden border border-emerald-900/10 dark:border-white/10 flex flex-col animate-scale-in">
-                            <div className="p-6 pb-2 flex justify-between items-center">
-                                <h4 className="text-lg font-black text-emerald-900 dark:text-white uppercase tracking-tight">{detailVehicle.name}</h4>
-                                <button onClick={() => setDetailVehicle(null)} className="p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full text-slate-400">
-                                    <X size={20} />
-                                </button>
+                    <div className="absolute inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in" onClick={() => setDetailVehicle(null)}>
+                        <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl border border-emerald-900/10 dark:border-white/10 flex flex-col animate-scale-in relative" onClick={(e) => e.stopPropagation()}>
+                            {/* Prominent Close Button */}
+                            <button
+                                onClick={() => setDetailVehicle(null)}
+                                className="absolute top-4 right-4 z-20 p-2.5 bg-slate-100 dark:bg-white/10 rounded-full text-slate-500 dark:text-white/60 hover:bg-red-50 hover:text-red-600 transition-all shadow-sm"
+                            >
+                                <X size={20} />
+                            </button>
+
+                            <div className="p-6 pb-2">
+                                <h4 className="text-lg font-black text-emerald-900 dark:text-white uppercase tracking-tight pr-8">{detailVehicle.name}</h4>
                             </div>
                             <div className="p-6 space-y-6">
                                 <div className="aspect-video bg-slate-50 dark:bg-white/5 rounded-3xl flex items-center justify-center p-4">

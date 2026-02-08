@@ -1,7 +1,7 @@
 import dbConnect from '@/lib/db';
 import Booking from '@/models/Booking';
 import { NextResponse } from 'next/server';
-import { getActiveGateway, verifySampathSignature, completePayCorpTransaction } from '@/lib/payment';
+import { getActiveGateway, verifySampathSignature, completePayCorpTransaction, GATEWAY_CONFIG } from '@/lib/payment';
 import { sendPaymentConfirmation } from '@/lib/email-service';
 
 /**
@@ -52,14 +52,18 @@ export async function GET(request) {
         }
 
         // 4. Verify Payment (Server-to-Server)
-        // We use the same verification function for both
-        const verification = await completePayCorpTransaction(reqid, process.env.SAMPATH_CLIENT_ID);
+        // Ensure we use the correct Client ID based on the booking's currency
+        const currency = (booking || transaction)?.currency || 'LKR';
+        const clientId = GATEWAY_CONFIG.sampath.clientIds[currency] || GATEWAY_CONFIG.sampath.clientId;
+
+        console.log(`Verifying PayCorp for ${currency} using ClientID: ${clientId}`);
+        const verification = await completePayCorpTransaction(reqid, clientId);
 
         if (verification.success) {
-
             if (booking) {
-                // ... Booking Logic ...
-                booking.paymentStatus = 'paid';
+                // Update Payment Status
+                // If partial payment, set status to 'partial', otherwise 'paid'
+                booking.paymentStatus = booking.paymentType === 'partial' ? 'partial' : 'paid';
                 booking.paymentReference = verification.data.txnId || reqid;
                 booking.gatewayResponse = JSON.stringify(verification.data);
                 booking.paymentTimestamp = new Date();
@@ -92,7 +96,6 @@ export async function GET(request) {
 
                 return NextResponse.redirect(`${baseUrl}/driver?topup=success`);
             }
-
         } else {
             // Payment Failed
             console.error("Payment Verification Failed:", verification.message);
@@ -112,8 +115,8 @@ export async function GET(request) {
         }
 
     } catch (error) {
-        console.error("Callback GET Error:", error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
+        return NextResponse.redirect(`${baseUrl}/payment/failed?reason=callback_system_error`);
     }
 }
 
@@ -139,15 +142,21 @@ export async function POST(request) {
         let bookingId, status, transactionId, isValid = true;
 
         if (gateway === 'sampath') {
-            // Sampath fields: order_id, status_code (2=Success), transaction_id, hash
-            bookingId = data.order_id;
-            // status_code: 2 is typically SUCCESS in many gateways, but need to check Sampath specific
-            // Let's assume 200 or 2 is success based on common practices, usually docs say "2"
-            status = (data.status_code === '2' || data.status_code === '200') ? 'success' : 'failed';
-            transactionId = data.transaction_id || `SAMPATH-${Date.now()}`;
-
-            // Verify Signature
+            // Sampath background notification (if any)
+            bookingId = data.order_id || data.clientRef;
+            status = (data.status_code === '2' || data.status_code === '200' || data.response_code === '00') ? 'success' : 'failed';
+            transactionId = data.transaction_id || data.txnId || `SAMPATH-${Date.now()}`;
             isValid = verifySampathSignature(data);
+        } else if (gateway === 'payhere') {
+            // PayHere background notification (POST)
+            bookingId = data.order_id;
+            status = data.status_code === '2' ? 'success' : 'failed';
+            transactionId = data.payment_id;
+
+            const { verifyPayHereSignature } = require('@/lib/payment');
+            isValid = verifyPayHereSignature(data);
+
+            console.log(`PayHere Callback: status_code=${data.status_code}, bookingId=${bookingId}, isValid=${isValid}`);
         } else {
             // Mock fields
             bookingId = data.bookingId;
@@ -167,7 +176,11 @@ export async function POST(request) {
         }
 
         // Update booking status
-        booking.paymentStatus = status === 'success' ? 'paid' : 'failed';
+        if (status === 'success') {
+            booking.paymentStatus = booking.paymentType === 'partial' ? 'partial' : 'paid';
+        } else {
+            booking.paymentStatus = 'failed';
+        }
         booking.paymentReference = transactionId;
         booking.paymentTimestamp = new Date();
         booking.gatewayResponse = JSON.stringify(data); // Save raw response for audit

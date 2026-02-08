@@ -14,7 +14,9 @@ export async function GET(req) {
         const pricing = await Pricing.find(filter);
         return NextResponse.json({ success: true, data: pricing }, {
             headers: {
-                'Cache-Control': 's-maxage=3600, stale-while-revalidate=59'
+                'Cache-Control': 'no-store, max-age=0, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
             }
         });
     } catch (error) {
@@ -63,6 +65,23 @@ export async function PUT(req) {
 
         if (!_id) {
             return NextResponse.json({ success: false, error: 'Record ID is required' }, { status: 400 });
+        }
+
+        // Auto-sync legacy basePrice/perKmRate if tiers are updated
+        if (updateData.tiers && Array.isArray(updateData.tiers) && updateData.tiers.length > 0) {
+            const firstTier = updateData.tiers.sort((a, b) => a.min - b.min)[0];
+            if (firstTier.type === 'flat') {
+                updateData.basePrice = firstTier.price || 0;
+                updateData.baseKm = firstTier.max || 0;
+            } else {
+                updateData.basePrice = 0;
+                updateData.baseKm = 0;
+                updateData.perKmRate = firstTier.rate || 0;
+            }
+
+            // Also update perKmRate to the last tier's rate for general reference
+            const lastTier = updateData.tiers[updateData.tiers.length - 1];
+            updateData.perKmRate = lastTier.type === 'per_km' ? lastTier.rate : (lastTier.price / (lastTier.max || 1));
         }
 
         const updated = await Pricing.findByIdAndUpdate(_id, updateData, { new: true });

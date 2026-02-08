@@ -86,7 +86,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 const category = categoryMap[activeTab] || 'airport-transfer';
 
                 setIsLoadingPricing(true);
-                const res = await fetch(`/api/pricing?category=${category}`);
+                const res = await fetch(`/api/pricing?category=${category}`, { cache: 'no-store' });
                 if (!res.ok) {
                     console.error('Pricing Fetch Failed', res.status);
                     return;
@@ -222,7 +222,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         const fetchCoupons = async () => {
             setIsLoadingCoupons(true);
             try {
-                const res = await fetch('/api/coupons?public=true');
+                const res = await fetch('/api/coupons?public=true', { cache: 'no-store' });
                 const data = await res.json();
                 if (Array.isArray(data)) setAvailableCoupons(data);
             } catch (e) {

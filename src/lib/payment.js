@@ -61,6 +61,21 @@ export function generatePayHereHash(merchantId, orderId, amount, currency, merch
     return crypto.createHash('md5').update(stringToHash).digest('hex').toUpperCase();
 }
 
+/**
+ * Verify PayHere MD5 Hash (For Webhooks/Notifications)
+ * Format: merchant_id + order_id + payhere_amount + payhere_currency + status_code + md5(secret)
+ */
+export function verifyPayHereSignature(data) {
+    const config = GATEWAY_CONFIG.payhere;
+    const { merchant_id, order_id, payhere_amount, payhere_currency, status_code, md5sig } = data;
+
+    const hashedSecret = crypto.createHash('md5').update(config.merchantSecret).digest('hex').toUpperCase();
+    const stringToHash = merchant_id + order_id + payhere_amount + payhere_currency + status_code + hashedSecret;
+    const expectedHash = crypto.createHash('md5').update(stringToHash).digest('hex').toUpperCase();
+
+    return expectedHash === md5sig;
+}
+
 
 /**
  * Initiate PayHere Payment
@@ -68,8 +83,11 @@ export function generatePayHereHash(merchantId, orderId, amount, currency, merch
  */
 export function initiatePayHereTransaction(booking, returnUrl, cancelUrl, notifyUrl) {
     const config = GATEWAY_CONFIG.payhere;
-    const amount = booking.paidAmount || booking.totalPrice;
-    const currency = 'LKR'; // PayHere usually LKR, update if needed
+    const currency = booking.currency || 'LKR';
+    // Use display amounts (already converted in frontend) if currency is not LKR
+    const amount = (currency === 'LKR')
+        ? (booking.paidAmount || booking.totalPrice)
+        : (booking.displayPaidAmount || booking.displayPrice || 0);
 
     // Hash generation
     const hash = generatePayHereHash(

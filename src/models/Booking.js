@@ -47,9 +47,12 @@ const bookingSchema = new mongoose.Schema({
     paymentMethod: { type: String, enum: ['cash', 'card'], default: 'cash' },
     paymentType: { type: String, enum: ['full', 'partial'], default: 'full' },
     currency: { type: String, default: 'LKR' },
-    paidAmount: { type: Number, default: 0 }, // Amount to be paid online
-    balanceAmount: { type: Number, default: 0 }, // Amount filtered to be paid to driver
-    surchargeAmount: { type: Number, default: 0 }, // Added surcharges (convenience/cash fee)
+    paidAmount: { type: Number, default: 0 }, // Amount to be paid online (LKR)
+    balanceAmount: { type: Number, default: 0 }, // Amount filtered to be paid to driver (LKR)
+    surchargeAmount: { type: Number, default: 0 }, // Added surcharges (convenience/cash fee) (LKR)
+    displayPrice: { type: Number }, // Price in customer's selected currency
+    displayPaidAmount: { type: Number }, // Paid amount in customer's selected currency
+    displayBalanceAmount: { type: Number }, // Balance amount in customer's selected currency
     paymentReference: { type: String },
     paymentTimestamp: { type: Date },
     scheduledDate: { type: String },

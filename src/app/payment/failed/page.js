@@ -17,28 +17,38 @@ function PaymentFailedContent() {
                 </div>
 
                 <h1 className="text-2xl font-bold text-gray-800 mb-2">Payment Failed</h1>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 mb-6 font-medium">
                     We couldn't process your payment. Don't worry - no charges were made to your card.
                 </p>
 
-                <div className="bg-red-50 rounded-lg p-4 mb-6 text-left">
-                    <div className="text-sm font-medium text-red-800 mb-1">Common reasons:</div>
-                    <ul className="text-sm text-red-700 list-disc list-inside space-y-1">
-                        <li>Insufficient funds</li>
-                        <li>Card declined by bank</li>
-                        <li>Incorrect card details</li>
-                        <li>Network timeout</li>
+                {searchParams.get('reason') && (
+                    <div className="mb-6 p-4 bg-red-50 rounded-xl border border-red-100 text-left">
+                        <p className="text-[10px] font-black uppercase text-red-500 tracking-widest mb-1">Error Details</p>
+                        <p className="text-sm font-bold text-red-900 capitalize">{searchParams.get('reason').replace(/_/g, ' ')}</p>
+                    </div>
+                )}
+
+                <div className="bg-slate-50 rounded-2xl p-6 mb-8 text-left border border-slate-100">
+                    <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Common reasons:</div>
+                    <ul className="space-y-2">
+                        {['Insufficient funds', 'Card declined by bank', 'Network timeout', 'Security verification failed'].map((item, i) => (
+                            <li key={i} className="flex items-center gap-2 text-sm text-slate-600 font-medium">
+                                <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                                {item}
+                            </li>
+                        ))}
                     </ul>
                 </div>
 
-                <div className="space-y-3">
-                    <Link
-                        href={`/payment/mock?bookingId=${bookingId}&amount=0`}
-                        className="flex items-center justify-center gap-2 w-full bg-emerald-600 text-emerald-900 py-3 rounded-lg font-bold hover:bg-yellow-400 transition-colors"
+                <div className="grid gap-3">
+                    <a
+                        href="https://wa.me/94722885885"
+                        target="_blank"
+                        className="flex items-center justify-center gap-2 w-full bg-emerald-900 text-white py-4 rounded-xl font-bold hover:bg-emerald-800 transition-all shadow-lg active:scale-[0.98]"
                     >
-                        <RefreshCw size={20} />
-                        Try Again
-                    </Link>
+                        <Phone size={20} />
+                        Talk to Support
+                    </a>
 
                     <Link
                         href="/"

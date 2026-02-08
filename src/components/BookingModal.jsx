@@ -167,7 +167,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         if (isOpen) {
             setFormData(prev => ({ ...prev, ...initialData }));
             // Fetch pricing based on category
-            fetch(`/api/pricing?category=${pricingCategory}`)
+            fetch(`/api/pricing?category=${pricingCategory}`, { cache: 'no-store' })
                 .then(res => res.json())
                 .then(response => {
                     if (response.success && Array.isArray(response.data)) {
@@ -261,6 +261,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 paidAmount: lkr.payNow,
                 balanceAmount: lkr.balance,
                 surchargeAmount: lkr.surcharges,
+
+                // Converted values for display/admin
+                displayPrice: breakdown.total,
+                displayPaidAmount: breakdown.payNow,
+                displayBalanceAmount: breakdown.balance,
+
                 paymentType: formData.paymentType || 'full',
                 currency: currency || 'LKR',
 
