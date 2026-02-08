@@ -576,29 +576,31 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <p className="text-sm font-bold leading-relaxed text-emerald-900">{formData.dropoff}</p>
                                             </div>
                                         </div>
-                                        <div className="p-4 md:p-6 bg-[#FFC107] rounded-3xl border border-amber-600/20 space-y-4 shadow-lg overflow-hidden">
-                                            <div className="flex flex-wrap justify-between text-xs font-bold text-emerald-900/60 uppercase tracking-widest gap-2">
+                                        <div className="p-4 sm:p-6 bg-[#FFC107] rounded-3xl border border-amber-600/20 space-y-3 md:space-y-4 shadow-lg overflow-hidden">
+                                            <div className="flex justify-between items-center text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-wider md:tracking-[0.2em] gap-2">
                                                 <span>Subtotal</span>
-                                                <span className="text-emerald-900 font-bold ml-auto">{currentSymbol} {subtotal.toLocaleString()}</span>
+                                                <span className="text-emerald-900 font-bold ml-auto text-right">{currentSymbol} {subtotal.toLocaleString()}</span>
                                             </div>
-                                            <div className="flex flex-wrap justify-between text-xs font-bold text-emerald-900/60 uppercase tracking-widest gap-2">
+                                            <div className="flex justify-between items-center text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-wider md:tracking-[0.2em] gap-2">
                                                 <span>Surcharges</span>
-                                                <span className="text-emerald-900 font-bold ml-auto">{currentSymbol} {surcharges.toLocaleString()}</span>
+                                                <span className="text-emerald-900 font-bold ml-auto text-right">{currentSymbol} {surcharges.toLocaleString()}</span>
                                             </div>
-                                            <div className="pt-4 border-t border-emerald-900/10 space-y-2">
-                                                <div className="flex flex-wrap justify-between items-end gap-2">
-                                                    <span className="font-bold text-emerald-900/60 uppercase text-xs">Total Amount</span>
-                                                    <span className="text-xl font-bold text-emerald-900/60 ml-auto">{currentSymbol} {totalPrice.toLocaleString()}</span>
+                                            <div className="pt-3 md:pt-4 border-t border-emerald-900/10 space-y-2">
+                                                <div className="flex justify-between items-end gap-2">
+                                                    <span className="font-bold text-emerald-900/60 uppercase text-[10px] md:text-xs tracking-wider md:tracking-[0.2em]">Total Amount</span>
+                                                    <span className="text-lg md:text-xl font-bold text-emerald-900/60 ml-auto text-right">{currentSymbol} {totalPrice.toLocaleString()}</span>
                                                 </div>
-                                                <div className="flex flex-wrap justify-between items-end gap-2">
-                                                    <span className="font-black text-emerald-900 uppercase tracking-[0.2em]">{formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Payable'}</span>
-                                                    <span className="text-2xl md:text-3xl font-black text-emerald-900 ml-auto">{currentSymbol} {payNow.toLocaleString()}</span>
+                                                <div className="flex justify-between items-end gap-2">
+                                                    <span className="font-black text-emerald-900 uppercase tracking-wider md:tracking-[0.2em] text-[10px] md:text-xs leading-tight">
+                                                        {formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Payable'}
+                                                    </span>
+                                                    <span className="text-xl sm:text-2xl md:text-3xl font-black text-emerald-900 ml-auto text-right break-keep">{currentSymbol} {payNow.toLocaleString()}</span>
                                                 </div>
 
                                                 {formData.paymentType === 'partial' && (
-                                                    <div className="flex flex-wrap justify-between items-end pt-2 border-t border-dashed border-emerald-900/20 gap-2">
-                                                        <span className="font-bold text-red-600 uppercase text-xs tracking-wider">Balance Due</span>
-                                                        <span className="text-lg font-bold text-red-600 ml-auto">{currentSymbol} {balanceAmount.toLocaleString()}</span>
+                                                    <div className="flex justify-between items-end pt-2 border-t border-dashed border-emerald-900/20 gap-2">
+                                                        <span className="font-bold text-red-600 uppercase text-[10px] md:text-xs tracking-wider md:tracking-[0.2em]">Balance Due</span>
+                                                        <span className="text-base md:text-lg font-bold text-red-600 ml-auto text-right">{currentSymbol} {balanceAmount.toLocaleString()}</span>
                                                     </div>
                                                 )}
                                             </div>
