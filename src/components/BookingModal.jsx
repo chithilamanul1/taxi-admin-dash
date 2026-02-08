@@ -140,11 +140,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         const convertedSurcharges = Math.ceil((surcharges + paymentSurcharge) * rate);
 
         return {
+            // Converted for UI
             total: convertedTotal,
             subtotal: convertedSubtotal,
             surcharges: convertedSurcharges,
             payNow: convertedPayNow,
             balance: convertedBalance,
+
+            // Original LKR for DB/Payment (Always send LKR to API, let backend convert)
+            lkr: {
+                total: Math.round(total),
+                payNow: Math.round(payNow),
+                balance: Math.round(balance),
+                surcharges: Math.round(surcharges + paymentSurcharge),
+                subtotal: Math.round(baseTotal)
+            },
             originalLKR: Math.round(total) // Keep for reference
         };
     };
@@ -212,10 +222,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             // Verify breakdown before sending
             console.log("Getting Price Breakdown...");
             const breakdown = getPriceBreakdown();
-            const { total, payNow, balance, surcharges } = breakdown;
-            console.log("Price Breakdown:", { total, payNow, currency });
+            const { lkr } = breakdown;
+            console.log("Price Breakdown (LKR):", lkr);
 
-            if (total === 0) {
+            if (lkr.total === 0) {
                 alert("Error: Total price is 0. Please re-select vehicle.");
                 setLoading(false);
                 return;
@@ -246,11 +256,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 duration: formData.duration,
                 waitingHours: formData.waitingHours,
 
-                // Detailed Payment Breakdown (Now in Selected Currency)
-                totalPrice: total,
-                paidAmount: payNow,
-                balanceAmount: balance,
-                surchargeAmount: surcharges,
+                // Detailed Payment Breakdown (Always send LKR to API, backend will convert)
+                totalPrice: lkr.total,
+                paidAmount: lkr.payNow,
+                balanceAmount: lkr.balance,
+                surchargeAmount: lkr.surcharges,
                 paymentType: formData.paymentType || 'full',
                 currency: currency || 'LKR',
 

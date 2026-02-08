@@ -21,7 +21,7 @@ export async function GET(request) {
         // 1. Validate Input
         if (!reqid) {
             console.error("Missing reqid in callback");
-            return NextResponse.redirect(`${baseUrl}/payment/error?reason=missing_reqid`);
+            return NextResponse.redirect(`${baseUrl}/payment/failed?reason=missing_reqid`);
         }
 
         await dbConnect();
@@ -48,7 +48,7 @@ export async function GET(request) {
 
         if (!booking && !transaction) {
             console.error(`Booking/Transaction not found for reqid: ${reqid}`);
-            return NextResponse.redirect(`${baseUrl}/payment/error?reason=record_not_found`);
+            return NextResponse.redirect(`${baseUrl}/payment/failed?reason=record_not_found`);
         }
 
         // 4. Verify Payment (Server-to-Server)
@@ -101,7 +101,7 @@ export async function GET(request) {
                 booking.paymentStatus = 'failed';
                 booking.gatewayResponse = JSON.stringify(verification.data);
                 await booking.save();
-                return NextResponse.redirect(`${baseUrl}/payment/error?bookingId=${booking._id}&reason=payment_failed`);
+                return NextResponse.redirect(`${baseUrl}/payment/failed?bookingId=${booking._id}&reason=payment_failed`);
             }
 
             if (transaction) {
