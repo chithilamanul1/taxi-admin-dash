@@ -597,7 +597,7 @@ const Prices = ({ initialDestination }) => {
                                         {VEHICLE_PRICING[vehicle].specs && (
                                             <div className="flex flex-col gap-1 mb-2 opacity-90">
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Users size={12} className="text-emerald-600" /> 1-{VEHICLE_PRICING[vehicle].maxPassengers} PASSENGER
+                                                    <Users size={12} className="text-emerald-600" /> 1-{VEHICLE_PRICING[vehicle].maxPassengers} PASSENGERS
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
                                                     <Briefcase size={12} className="text-emerald-600" /> {VEHICLE_PRICING[vehicle].specs.luggage} LUGGAGE

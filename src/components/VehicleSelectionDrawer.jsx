@@ -112,7 +112,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                         </div>
                                         <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-white/40 mt-1">
                                             <div className="flex items-center gap-1">
-                                                <Users size={12} className="text-emerald-600" /> {vehicle.capacity}
+                                                <Users size={12} className="text-emerald-600" /> 1-{vehicle.capacity} Passengers
                                             </div>
                                             <div className="flex items-center gap-1">
                                                 <Briefcase size={12} className="text-emerald-600" /> {vehicle.luggage}
@@ -157,8 +157,8 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                 <div className="grid grid-cols-3 gap-4">
                                     <div className="flex flex-col items-center gap-1 p-3 bg-emerald-50 dark:bg-white/5 rounded-2xl">
                                         <Users size={16} className="text-emerald-600" />
-                                        <span className="text-sm font-black text-emerald-900 dark:text-white">{detailVehicle.capacity}</span>
-                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Seats</span>
+                                        <span className="text-sm font-black text-emerald-900 dark:text-white">1-{detailVehicle.capacity}</span>
+                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Passengers</span>
                                     </div>
                                     <div className="flex flex-col items-center gap-1 p-3 bg-emerald-50 dark:bg-white/5 rounded-2xl">
                                         <Briefcase size={16} className="text-emerald-600" />

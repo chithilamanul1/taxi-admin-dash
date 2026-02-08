@@ -43,7 +43,7 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle }) => {
                         <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2">
                             <Users size={20} className="text-emerald-600" />
                             <div className="text-center">
-                                <p className="text-lg font-bold text-emerald-900">{vehicle.capacity}</p>
+                                <p className="text-lg font-bold text-emerald-900">1-{vehicle.capacity}</p>
                                 <p className="text-[10px] text-emerald-900/40 uppercase font-bold">Passengers</p>
                             </div>
                         </div>

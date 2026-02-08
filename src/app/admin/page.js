@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { Users, Car, MapPin, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -876,7 +876,7 @@ export default function AdminDashboard() {
                                                             {pricingCategory === 'tours' ? (
                                                                 <p className="text-xs text-gray-400">Tour Package Rate</p>
                                                             ) : (
-                                                                <p className="text-xs text-gray-400">{vehicle.capacity} pax • {vehicle.luggage} bags • {vehicle.vehicleType}</p>
+                                                                <p className="text-xs text-gray-400">1-{vehicle.capacity} pax • {vehicle.luggage} bags • {vehicle.vehicleType}</p>
                                                             )}
                                                         </div>
                                                     </div>

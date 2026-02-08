@@ -72,9 +72,9 @@ Don't get overcharged. Here is what you need to know about taxi fares in Sri Lan
 
 ## Vehicle Categories
 - **Mini Car (Alto/WagonR):** Best for solo or couples with light luggage. Cheapest option.
-- **Sedan (Prius/Axio):** Comfortable for 3 passengers + luggage.
-- **Micro Van:** Good for small groups (4-5 pax).
-- **KDH Van:** The gold standard for larger groups (6-9 pax) with ample luggage space.
+- **Sedan (Prius/Axio):** Comfortable for 1-3 passengers + luggage.
+- **Micro Van:** Good for groups (1-5 pax).
+- **KDH Van:** The gold standard for larger groups (1-9 pax) with ample luggage space.
 
 ## Standard Rates (Average)
 - **Mini Car:** Rs. 90 - 110 per km
