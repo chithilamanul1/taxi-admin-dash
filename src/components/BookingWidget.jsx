@@ -873,7 +873,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         </div>
 
                         {/* Section 2: Summary & Checkout */}
-                        <div className="bg-[#FFC107] border-2 border-amber-600/30 rounded-3xl p-6 shadow-xl flex flex-col justify-between h-auto lg:h-full min-h-[600px] lg:min-h-0">
+                        <div className="bg-[#FFC107] border-2 border-amber-600/30 rounded-3xl p-6 shadow-xl flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-8 lg:gap-0">
 
                             <div className="space-y-6 flex-1 flex flex-col">
                                 <div className="flex justify-between items-center">
@@ -906,7 +906,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 </div>
 
                                 {/* Map Container - Fixed Height Mobile, Flex Desktop */}
-                                <div className="h-64 lg:flex-1 w-full rounded-2xl overflow-hidden shadow-inner relative isolate min-h-[250px] lg:min-h-[300px] border border-black/10">
+                                <div className="h-64 lg:flex-1 w-full rounded-2xl overflow-hidden shadow-inner relative isolate min-h-[300px] lg:min-h-[300px] border border-black/10 flex-shrink-0 lg:flex-shrink">
                                     <TripMap pickup={pickup} dropoff={dropoff} waypoints={waypoints} onRouteCalculated={handleRouteCalculated} />
                                 </div>
 
@@ -924,9 +924,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <div className="flex justify-between items-center text-sm">
                                         <span className="text-black font-bold">Waiting Hours</span>
                                         <div className="flex items-center gap-3">
-                                            <button onClick={() => setWaitingHours(Math.max(0, waitingHours - 1))} className="text-black font-bold"><Minus size={12} /></button>
+                                            <button onClick={() => setWaitingHours(Math.max(0, waitingHours - 1))} className="text-black font-bold" aria-label="Decrease waiting hours"><Minus size={12} /></button>
                                             <span className="font-bold text-black">{waitingHours}</span>
-                                            <button onClick={() => setWaitingHours(waitingHours + 1)} className="text-black font-bold"><Plus size={12} /></button>
+                                            <button onClick={() => setWaitingHours(waitingHours + 1)} className="text-black font-bold" aria-label="Increase waiting hours"><Plus size={12} /></button>
                                         </div>
                                     </div>
                                     {hasNameBoard && (
@@ -939,12 +939,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                             </div>
 
-                            <div className="pt-6 border-t border-emerald-900/10 dark:border-white/10 mt-6 lg:mt-0">
+                            <div className="pt-6 border-t border-emerald-900/10 dark:border-white/10 flex-shrink-0">
                                 <div className="flex justify-between items-end mb-8">
                                     <div className="flex flex-col">
                                         <span className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">Grand Total</span>
                                         <span className="text-4xl font-black text-emerald-900">
-                                            {finalTotal > 0 ? (
+                                            {distance && finalTotal > 0 ? (
                                                 <>
                                                     {convertPrice(finalTotal).symbol} {convertPrice(finalTotal).value.toLocaleString()}
                                                 </>
@@ -953,7 +953,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             )}
                                         </span>
                                         {/* Secondary Currency Display */}
-                                        {finalTotal > 0 && (
+                                        {distance && finalTotal > 0 && (
                                             <div className="text-sm font-bold text-black mt-1">
                                                 {(() => {
                                                     const secCode = currency === 'LKR' ? 'USD' : 'LKR';
@@ -970,7 +970,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <button
                                     onClick={handleBook}
                                     disabled={!distance}
-                                    className="w-full py-5 bg-black dark:bg-emerald-600 text-white rounded-[1.5rem] font-bold text-lg hover:bg-slate-900 dark:hover:bg-emerald-500 active:scale-[0.98] transition-all shadow-xl disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3 group"
+                                    className="w-full py-5 bg-black dark:bg-emerald-600 text-white rounded-[2rem] font-bold text-lg hover:bg-slate-900 dark:hover:bg-emerald-500 active:scale-[0.98] transition-all shadow-xl disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3 group"
                                 >
                                     <ShieldCheck size={18} className="opacity-60" />
                                     Secure Booking
