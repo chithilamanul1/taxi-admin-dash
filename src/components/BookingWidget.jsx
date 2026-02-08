@@ -873,9 +873,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         </div>
 
                         {/* Section 2: Summary & Checkout */}
-                        <div className="bg-[#FFC107] border-2 border-amber-600/30 rounded-3xl p-6 shadow-xl flex flex-col justify-between h-full">
+                        <div className="bg-[#FFC107] border-2 border-amber-600/30 rounded-3xl p-6 shadow-xl flex flex-col justify-between h-auto lg:h-full min-h-[600px] lg:min-h-0">
 
-                            <div className="space-y-6">
+                            <div className="space-y-6 flex-1 flex flex-col">
                                 <div className="flex justify-between items-center">
                                     <h2 className="text-xl font-bold text-emerald-900 tracking-tight">Trip Summary</h2>
 
@@ -905,7 +905,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                 </div>
 
-                                <TripMap pickup={pickup} dropoff={dropoff} waypoints={waypoints} onRouteCalculated={handleRouteCalculated} />
+                                {/* Map Container - Fixed Height Mobile, Flex Desktop */}
+                                <div className="h-64 lg:flex-1 w-full rounded-2xl overflow-hidden shadow-inner relative isolate min-h-[250px] lg:min-h-[300px] border border-black/10">
+                                    <TripMap pickup={pickup} dropoff={dropoff} waypoints={waypoints} onRouteCalculated={handleRouteCalculated} />
+                                </div>
 
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center text-sm">
@@ -936,7 +939,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                             </div>
 
-                            <div className="pt-6 border-t border-emerald-900/10 dark:border-white/10">
+                            <div className="pt-6 border-t border-emerald-900/10 dark:border-white/10 mt-6 lg:mt-0">
                                 <div className="flex justify-between items-end mb-8">
                                     <div className="flex flex-col">
                                         <span className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">Grand Total</span>
@@ -950,15 +953,17 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             )}
                                         </span>
                                         {/* Secondary Currency Display */}
-                                        <div className="text-sm font-bold text-black mt-1">
-                                            {(() => {
-                                                const secCode = currency === 'LKR' ? 'USD' : 'LKR';
-                                                const secRate = rates ? (rates[secCode] || 1) : 1;
-                                                const secValue = Math.ceil(finalTotal * secRate);
-                                                const secSymbol = SUPPORTED_CURRENCIES.find(c => c.code === secCode)?.symbol || secCode;
-                                                return `approx. ${secSymbol} ${secValue.toLocaleString()}`;
-                                            })()}
-                                        </div>
+                                        {finalTotal > 0 && (
+                                            <div className="text-sm font-bold text-black mt-1">
+                                                {(() => {
+                                                    const secCode = currency === 'LKR' ? 'USD' : 'LKR';
+                                                    const secRate = rates ? (rates[secCode] || 1) : 1;
+                                                    const secValue = Math.ceil(finalTotal * secRate);
+                                                    const secSymbol = SUPPORTED_CURRENCIES.find(c => c.code === secCode)?.symbol || secCode;
+                                                    return `approx. ${secSymbol} ${secValue.toLocaleString()}`;
+                                                })()}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 

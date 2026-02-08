@@ -53,7 +53,7 @@ export default function AdminDashboard() {
         locationsText: '',
         description: '',
         imageUrl: '',
-        displayInWidget: false
+        displayInWidget: true
     })
     const [ordering, setOrdering] = useState('newest'); // or whatever
     const [emailForm, setEmailForm] = useState({ recipientType: 'specific', customEmail: '', subject: '', message: '' })
@@ -107,8 +107,15 @@ export default function AdminDashboard() {
                     imageUrl: '',
                     displayInWidget: false
                 });
-            } else { alert('Failed to create coupon'); }
-        } catch (e) { console.error(e); }
+                alert('Coupon created successfully!');
+            } else {
+                const errorData = await res.json();
+                alert('Failed to create coupon: ' + (errorData.error || res.statusText));
+            }
+        } catch (e) {
+            console.error(e);
+            alert('An error occurred while creating the coupon.');
+        }
     }
 
     const handleDeleteCoupon = async (id) => {
@@ -185,6 +192,20 @@ export default function AdminDashboard() {
                     })
                     .catch(err => {
                         console.error('Error fetching tours:', err)
+                        setIsLoading(false)
+                    })
+            }
+
+            if (currentView === 'coupons') {
+                setIsLoading(true)
+                fetch('/api/coupons')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (Array.isArray(data)) setCoupons(data)
+                        setIsLoading(false)
+                    })
+                    .catch(err => {
+                        console.error("Error fetching coupons:", err)
                         setIsLoading(false)
                     })
             }
