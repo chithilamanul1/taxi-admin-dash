@@ -65,6 +65,7 @@ const bookingSchema = new mongoose.Schema({
     },
     flightNumber: { type: String },
     couponCode: { type: String },
+    appliedCoupons: [String],
 }, {
     timestamps: true
 });

@@ -52,30 +52,38 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
     // Coupon handlers
 
-    const handleApplyCoupon = async () => {
-        if (!couponInput.trim()) return;
+    const handleApplyCoupon = async (codeToApply = couponInput, contextPickup = formData.pickup, contextDropoff = formData.dropoff) => {
+        const input = (codeToApply || '').trim();
+        if (!input) return;
         setCouponLoading(true);
         try {
             const res = await fetch('/api/coupons/validate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code: couponInput, location: formData.dropoff }) // Use Dropoff for location check
+                body: JSON.stringify({
+                    code: input,
+                    pickup: contextPickup,
+                    dropoff: contextDropoff
+                })
             });
             const data = await res.json();
             if (data.valid) {
                 setVerifiedCoupons(prev => {
-                    if (prev.some(c => c.code === data.coupon.code)) return prev;
+                    if (prev.some(c => c.code.toUpperCase() === data.coupon.code.toUpperCase())) return prev;
                     return [...prev, data.coupon];
                 });
-                setFormData(prev => ({ ...prev, couponCode: data.coupon.code })); // Keep last applied as 'primary' for legacy or display
+                setFormData(prev => ({ ...prev, couponCode: data.coupon.code }));
+                if (!codeToApply) setCouponInput(''); // Only clear if it was from manual input
+                return true;
             } else {
-                alert(data.message);
-                // setVerifiedCoupon(null); // Don't clear others on failure
+                if (!codeToApply) alert(data.message); // Only alert if manually applied
                 setFormData(prev => ({ ...prev, couponCode: '' }));
+                return false;
             }
         } catch (e) {
             console.error(e);
-            alert('Validation failed');
+            if (!codeToApply) alert('Validation failed');
+            return false;
         } finally {
             setCouponLoading(false);
         }
@@ -119,13 +127,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         if (verifiedCoupons && verifiedCoupons.length > 0) {
             verifiedCoupons.forEach(coupon => {
                 if (coupon.discountType === 'percentage') {
-                    total = total * (1 - (coupon.value / 100));
+                    total = total * (1 - (Number(coupon.value) / 100));
                 } else {
-                    total = Math.max(0, total - coupon.value);
+                    total = Math.max(0, total - Number(coupon.value));
                 }
             });
-        } else if (formData.couponCode === 'SAVE10') {
-            total *= 0.9;
         }
 
         const payNow = formData.paymentType === 'partial' ? total * 0.5 : total;
@@ -166,6 +172,22 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     useEffect(() => {
         if (isOpen) {
             setFormData(prev => ({ ...prev, ...initialData }));
+
+            // Reset distance if coords changed to avoid showing old prices from previous trip
+            if (initialData.distance) {
+                setDistance(initialData.distance);
+            } else {
+                setDistance(0);
+            }
+
+            // Handle verifiedCoupons from initialData
+            if (initialData.verifiedCoupons && Array.isArray(initialData.verifiedCoupons)) {
+                setVerifiedCoupons(initialData.verifiedCoupons);
+            } else if (initialData.couponCode && verifiedCoupons.length === 0) {
+                // FALLBACK: Auto-validate initial coupon code if present but no verified ones yet
+                handleApplyCoupon(initialData.couponCode, initialData.pickup, initialData.dropoff);
+            }
+
             // Fetch pricing based on category
             fetch(`/api/pricing?category=${pricingCategory}`, { cache: 'no-store' })
                 .then(res => res.json())
@@ -280,6 +302,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     text: formData.nameBoardText
                 },
                 couponCode: formData.couponCode,
+                appliedCoupons: verifiedCoupons.map(c => c.code),
                 paymentMethod: formData.paymentMethod,
                 flightNumber: formData.flightNumber,
                 notes: formData.notes

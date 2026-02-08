@@ -12,6 +12,10 @@ export async function POST(req) {
             return NextResponse.json({ valid: false, message: 'Invalid coupon code' });
         }
 
+        if (coupon.usageLimit && coupon.usageCount >= coupon.usageLimit) {
+            return NextResponse.json({ valid: false, message: 'Coupon usage limit reached' });
+        }
+
         if (coupon.expiryDate && new Date(coupon.expiryDate) < new Date()) {
             return NextResponse.json({ valid: false, message: 'Coupon expired' });
         }

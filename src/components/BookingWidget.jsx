@@ -71,6 +71,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [availableCoupons, setAvailableCoupons] = useState([])
     const [isLoadingCoupons, setIsLoadingCoupons] = useState(false)
     const [isCouponOpen, setIsCouponOpen] = useState(false)
+    const [dismissedOfferIds, setDismissedOfferIds] = useState([]);
 
 
     // Fetch Pricing based on Tab
@@ -238,42 +239,42 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     useEffect(() => {
         const lowerLoc = (dropoff?.name || '').toLowerCase();
 
-        // Priority: Explicit Galle/Mirissa Check for Visuals
-        const locationOffer = {
-            _id: 'special-galle',
-            name: 'MIRISSA10',
-            locationKeyword: 'Galle',
-            discountPercentage: 20,
-            description: 'Special 20% OFF for Southern Expressway Trips!',
-            imageUrl: 'https://images.unsplash.com/photo-1578586883464-500b5220fa26?q=80&w=600&auto=format&fit=crop', // Nice Galle Fort Image
-            isActive: true
-        };
+        setAppliedOffers(prev => {
+            // Keep only manual coupons (marked with type: 'coupon')
+            const existingCoupons = prev.filter(o => o.type === 'coupon');
+            const newOffers = [];
 
-        if (lowerLoc.includes('galle') || lowerLoc.includes('mirissa')) {
-            // Add if not already present
-            setAppliedOffers(prev => {
-                if (prev.some(o => o.name === locationOffer.name)) return prev;
-                return [...prev, locationOffer];
+            // PRIORITY: GALLE/MIRISSA SPECIAL
+            if (lowerLoc.includes('galle') || lowerLoc.includes('mirissa')) {
+                newOffers.push({
+                    _id: 'special-galle',
+                    name: 'MIRISSA10',
+                    locationKeyword: 'Galle',
+                    discountPercentage: 20,
+                    description: 'Special 20% OFF for Southern Expressway Trips!',
+                    imageUrl: 'https://images.unsplash.com/photo-1578586883464-500b5220fa26?q=80&w=600&auto=format&fit=crop',
+                    isActive: true,
+                    type: 'location'
+                });
+            } else if (activeOffers && activeOffers.length > 0) {
+                // OTHER MARKETING OFFERS
+                const match = activeOffers.find(o => o.isActive && lowerLoc.includes(o.locationKeyword.toLowerCase()));
+                if (match) {
+                    newOffers.push({ ...match, type: 'location' });
+                }
+            }
+
+            // Combine manual coupons + current location offer
+            // Filter duplicates by name
+            const final = [...existingCoupons];
+            newOffers.forEach(no => {
+                if (!final.some(fo => fo.name === no.name)) {
+                    final.push(no);
+                }
             });
-            return;
-        }
 
-        if (!activeOffers.length || !dropoff.name) {
-            // Remove location-based offers if no match, keeping manual coupons?
-            // For now, let's keep it simple: clear location offers only? 
-            // Or just clear all applied offers if no match?
-            // The user wants to stack coupons. 
-            // I'll leave manual coupons alone and only manage location offers here if distinct.
-            return;
-        }
-
-        const match = activeOffers.find(o => o.isActive && lowerLoc.includes(o.locationKeyword.toLowerCase()));
-        if (match) {
-            setAppliedOffers(prev => {
-                if (prev.some(o => o._id === match._id)) return prev;
-                return [...prev, match];
-            });
-        }
+            return final;
+        });
     }, [dropoff, activeOffers]);
 
 
@@ -307,6 +308,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             vehicle,
             date,
             time,
+            distance, // Pass current calculated distance to avoid recalculation flicker
             couponCode: verifiedCoupons.length > 0 ? verifiedCoupons[0].code : '', // Fallback for legacy
             verifiedCoupons // New Array Support
         })
@@ -924,29 +926,17 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             <BookingModal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
-                initialData={{
-                    pickup: pickup.name,
-                    pickupCoords: { lat: pickup.lat, lon: pickup.lon },
-                    dropoff: dropoff.name,
-                    dropoffCoords: { lat: dropoff.lat, lon: dropoff.lon },
-                    waypoints: waypoints,
-                    tripType,
-                    passengerCount,
-                    date: date,
-                    time: time,
-                    couponCode: couponCode // Pass coupon code to modal
-                }}
+                initialData={bookingInitialData}
                 pricingCategory={pricingCategory}
             />
 
-            {/* Smart Offer Nudge */}
-            {/* Smart Offer Nudge - Show latest applied offer */}
+            {/* Smart Offer Nudge - Show first non-dismissed offer */}
             <SmartOfferNudge
-                offer={appliedOffers.length > 0 ? appliedOffers[appliedOffers.length - 1] : null}
+                offer={appliedOffers.find(o => !dismissedOfferIds.includes(o._id)) || null}
                 onClose={() => {
-                    const last = appliedOffers[appliedOffers.length - 1];
-                    if (last) {
-                        setAppliedOffers(prev => prev.filter(o => o._id !== last._id));
+                    const visibleOffer = appliedOffers.find(o => !dismissedOfferIds.includes(o._id));
+                    if (visibleOffer) {
+                        setDismissedOfferIds(prev => [...prev, visibleOffer._id]);
                     }
                 }}
             />

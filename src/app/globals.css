@@ -68,6 +68,36 @@ body {
     }
 }
 
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes timerProgress {
+    from {
+        transform: scaleX(1);
+    }
+
+    to {
+        transform: scaleX(0);
+    }
+}
+
+.animate-slide-up-fade {
+    animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-timer-progress {
+    animation: timerProgress 15s linear forwards;
+}
+
 .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
 }

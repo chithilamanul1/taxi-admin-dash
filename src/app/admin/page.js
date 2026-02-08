@@ -64,7 +64,8 @@ export default function AdminDashboard() {
         locationsText: '',
         description: '',
         imageUrl: '',
-        displayInWidget: true
+        displayInWidget: true,
+        usageLimit: ''
     })
     const [ordering, setOrdering] = useState('newest'); // or whatever
     const [emailForm, setEmailForm] = useState({ recipientType: 'specific', customEmail: '', subject: '', message: '' })
@@ -116,7 +117,8 @@ export default function AdminDashboard() {
                     locationsText: '',
                     description: '',
                     imageUrl: '',
-                    displayInWidget: false
+                    displayInWidget: false,
+                    usageLimit: ''
                 });
                 alert('Coupon created successfully!');
             } else {
@@ -2539,6 +2541,16 @@ export default function AdminDashboard() {
                                             className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
                                         />
                                     </div>
+                                    <div className="lg:col-span-1">
+                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Usage Limit</label>
+                                        <input
+                                            type="number"
+                                            placeholder="Unlimited"
+                                            value={newCoupon.usageLimit}
+                                            onChange={e => setNewCoupon({ ...newCoupon, usageLimit: e.target.value })}
+                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
+                                        />
+                                    </div>
                                     <div className="lg:col-span-1 flex items-center gap-3 pt-4">
                                         <button
                                             onClick={() => setNewCoupon({ ...newCoupon, displayInWidget: !newCoupon.displayInWidget })}
@@ -2629,6 +2641,10 @@ export default function AdminDashboard() {
                                                 <div className="flex items-center gap-2 text-slate-500">
                                                     <Calendar size={14} />
                                                     <span>{c.expiryDate ? `Expires ${new Date(c.expiryDate).toLocaleDateString()}` : 'No expiry'}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-slate-500">
+                                                    <Percent size={14} className="text-emerald-500" />
+                                                    <span>Used: <span className="font-bold text-slate-800">{c.usedCount || 0}</span> {c.usageLimit ? `/ ${c.usageLimit}` : '(Unlimited)'}</span>
                                                 </div>
                                             </div>
                                         </div>

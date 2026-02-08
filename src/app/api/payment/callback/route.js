@@ -1,5 +1,6 @@
 import dbConnect from '@/lib/db';
 import Booking from '@/models/Booking';
+import Coupon from '@/models/Coupon';
 import { NextResponse } from 'next/server';
 import { getActiveGateway, verifySampathSignature, completePayCorpTransaction, GATEWAY_CONFIG } from '@/lib/payment';
 import { sendPaymentConfirmation } from '@/lib/email-service';
@@ -61,13 +62,23 @@ export async function GET(request) {
 
         if (verification.success) {
             if (booking) {
-                // Update Payment Status
-                // If partial payment, set status to 'partial', otherwise 'paid'
+                const prevStatus = booking.paymentStatus;
                 booking.paymentStatus = booking.paymentType === 'partial' ? 'partial' : 'paid';
                 booking.paymentReference = verification.data.txnId || reqid;
                 booking.gatewayResponse = JSON.stringify(verification.data);
                 booking.paymentTimestamp = new Date();
                 await booking.save();
+
+                // Increment Coupon Usage if status changed to paid/partial for the first time
+                if ((booking.paymentStatus === 'paid' || booking.paymentStatus === 'partial') && (prevStatus === 'pending' || prevStatus === 'failed')) {
+                    if (booking.appliedCoupons && booking.appliedCoupons.length > 0) {
+                        await Coupon.updateMany(
+                            { code: { $in: booking.appliedCoupons } },
+                            { $inc: { usedCount: 1 } }
+                        ).catch(err => console.error("Error updating coupon usage:", err));
+                    }
+                }
+
                 await sendPaymentConfirmation(booking).catch(err => console.error("Error sending receipt:", err));
                 return NextResponse.redirect(`${baseUrl}/payment/success?bookingId=${booking._id}&provider=sampath`);
             }
@@ -176,6 +187,7 @@ export async function POST(request) {
         }
 
         // Update booking status
+        const prevStatus = booking.paymentStatus;
         if (status === 'success') {
             booking.paymentStatus = booking.paymentType === 'partial' ? 'partial' : 'paid';
         } else {
@@ -185,6 +197,16 @@ export async function POST(request) {
         booking.paymentTimestamp = new Date();
         booking.gatewayResponse = JSON.stringify(data); // Save raw response for audit
         await booking.save();
+
+        // Increment Coupon Usage if status changed to paid/partial for the first time
+        if ((booking.paymentStatus === 'paid' || booking.paymentStatus === 'partial') && (prevStatus === 'pending' || prevStatus === 'failed')) {
+            if (booking.appliedCoupons && booking.appliedCoupons.length > 0) {
+                await Coupon.updateMany(
+                    { code: { $in: booking.appliedCoupons } },
+                    { $inc: { usedCount: 1 } }
+                ).catch(err => console.error("Error updating coupon usage:", err));
+            }
+        }
 
         // Send Receipt if successful
         if (status === 'success') {
