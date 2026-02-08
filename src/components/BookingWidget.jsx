@@ -235,7 +235,28 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         fetchCoupons();
     }, []);
 
-    // Check for Location Offers
+    // Dynamic Coupon Filtering based on Location
+    const filteredCoupons = React.useMemo(() => {
+        if (!availableCoupons.length) return [];
+
+        const pickupText = (pickup?.name || '').toLowerCase();
+        const dropoffText = (dropoff?.name || '').toLowerCase();
+        const fullRoute = `${pickupText} ${dropoffText}`;
+
+        return availableCoupons.filter(coupon => {
+            // If coupon has no location restrictions, consider it global
+            if (!coupon.applicableLocations || coupon.applicableLocations.length === 0) {
+                return true;
+            }
+
+            // Check if any applicable location matches the current route
+            return coupon.applicableLocations.some(loc =>
+                fullRoute.includes(loc.toLowerCase())
+            );
+        });
+    }, [availableCoupons, pickup, dropoff]);
+
+    // Check for Location Offers (Smart Offers)
     useEffect(() => {
         const lowerLoc = (dropoff?.name || '').toLowerCase();
 
@@ -645,14 +666,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 </div>
 
                                 {/* Visual Coupon Selector */}
-                                {availableCoupons.length > 0 && isCouponOpen && (
+                                {filteredCoupons.length > 0 && isCouponOpen && (
                                     <div className="lg:col-span-2 space-y-3 animate-fade-in">
                                         <div className="flex items-center gap-2 px-1">
                                             <Tag size={12} className="text-emerald-600" />
                                             <span className="text-[10px] font-bold text-emerald-900/50 uppercase tracking-widest">Available Offers</span>
                                         </div>
                                         <div className="flex overflow-x-auto pb-4 gap-4 no-scrollbar snap-x touch-pan-x">
-                                            {availableCoupons.map((c) => (
+                                            {filteredCoupons.map((c) => (
                                                 <button
                                                     key={c._id}
                                                     onClick={() => {
