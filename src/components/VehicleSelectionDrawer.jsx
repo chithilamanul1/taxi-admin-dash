@@ -1,10 +1,11 @@
 import React from 'react';
-import { X, Users, Briefcase, CheckCircle2, Lock, Car, Loader2, Info, Snowflake } from 'lucide-react';
+import { X, Users, Briefcase, CheckCircle2, Lock, Car, Loader2, Info, Wind } from 'lucide-react';
 
 const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelect, passengerCount, isLoading }) => {
     const [detailVehicle, setDetailVehicle] = React.useState(null);
 
     if (!isOpen) return null;
+    if (!vehicles) return null;
 
     // Smart Capacity Logic
     const isSuitable = (vehicle) => {
@@ -82,7 +83,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                 >
                                     {/* AC Badge */}
                                     <div className="absolute top-2 left-2 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 px-2 py-1 rounded-lg text-[8px] font-black z-10 uppercase tracking-tighter">
-                                        <Snowflake size={8} className="animate-pulse" /> 100% A/C
+                                        <Wind size={8} className="animate-pulse" /> 100% A/C
                                     </div>
 
                                     {/* Warning Overlay for Unsuitable */}
@@ -173,7 +174,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                         <span className="text-[8px] font-bold text-slate-400 uppercase">Large Bags</span>
                                     </div>
                                     <div className="flex flex-col items-center gap-1 p-3 bg-emerald-50 dark:bg-white/5 rounded-2xl">
-                                        <Snowflake size={16} className="text-emerald-600" />
+                                        <Wind size={16} className="text-emerald-600" />
                                         <span className="text-sm font-black text-emerald-900 dark:text-white">Yes</span>
                                         <span className="text-[8px] font-bold text-slate-400 uppercase">Air Con</span>
                                     </div>
