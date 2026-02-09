@@ -18,8 +18,8 @@ const tourSchema = new mongoose.Schema({
         default: 'tour-package'
     },
     duration: {
-        days: { type: Number, required: true },
-        nights: { type: Number, required: true }
+        days: { type: Number, required: true, default: 1 },
+        nights: { type: Number, required: true, default: 0 }
     },
     description: { type: String, required: true },
     shortDescription: { type: String }, // For card view (excerpt)
@@ -28,8 +28,8 @@ const tourSchema = new mongoose.Schema({
 
     // Pricing
     price: {
-        amount: { type: Number, required: true },
-        currency: { type: String, default: 'USD' },
+        amount: { type: Number, required: true, default: 0 },
+        currency: { type: String, default: 'LKR' },
         type: { type: String, enum: ['fixed', 'from', 'per-person'], default: 'from' }
     },
 

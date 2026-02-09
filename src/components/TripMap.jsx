@@ -60,13 +60,16 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
         if (!directionsService || !directionsRenderer) return;
 
         // Only calculate if we have both points
-        if (pickup?.lat && pickup?.lon && dropoff?.lat && dropoff?.lon) {
+        const hasStart = pickup?.lat != null && pickup?.lon != null;
+        const hasEnd = dropoff?.lat != null && dropoff?.lon != null;
+
+        if (hasStart && hasEnd) {
             const origin = { lat: parseFloat(pickup.lat), lng: parseFloat(pickup.lon) };
             const destination = { lat: parseFloat(dropoff.lat), lng: parseFloat(dropoff.lon) };
 
             // Convert waypoints
             const waypointsList = (waypoints || [])
-                .filter(w => w.lat && w.lon)
+                .filter(w => w.lat != null && w.lon != null)
                 .map(wp => ({
                     location: { lat: parseFloat(wp.lat), lng: parseFloat(wp.lon) },
                     stopover: true
@@ -82,7 +85,6 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
                     travelMode: window.google.maps.TravelMode.DRIVING,
                 },
                 (result, status) => {
-                    console.log('TripMap: Route response status:', status);
                     if (status === window.google.maps.DirectionsStatus.OK) {
                         directionsRenderer.setDirections(result);
 
@@ -98,28 +100,31 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
                             });
 
                             const distKm = totalDistanceMeters / 1000;
-                            console.log(`TripMap: Route calculated: ${distKm.toFixed(1)} km`);
+                            const durMin = Math.round(totalDurationSeconds / 60);
+
+                            console.log(`TripMap: Route calculated: ${distKm.toFixed(1)} km, ${durMin} min`);
 
                             if (onRouteCalculated) {
                                 onRouteCalculated({
                                     distanceKm: distKm,
-                                    durationMin: Math.round(totalDurationSeconds / 60)
+                                    durationMin: durMin
                                 });
                             }
                         }
                     } else {
                         console.warn(`TripMap: Directions request failed: ${status}`);
-                        // Don't reset result here to avoid flickering if temporary failure
                     }
                 }
             );
         } else {
-            console.log("TripMap: Waiting for full coordinates...", {
-                hasPickup: !!(pickup?.lat && pickup?.lon),
-                hasDropoff: !!(dropoff?.lat && dropoff?.lon)
-            });
+            console.log("TripMap: Waiting for coordinates...", { hasStart, hasEnd });
         }
-    }, [pickup?.lat, pickup?.lon, dropoff?.lat, dropoff?.lon, waypoints, directionsService, directionsRenderer, onRouteCalculated]);
+    }, [
+        pickup?.lat, pickup?.lon,
+        dropoff?.lat, dropoff?.lon,
+        JSON.stringify(waypoints),
+        directionsService, directionsRenderer, onRouteCalculated
+    ]);
 
     return (
         <div className="w-full h-full min-h-[300px] relative rounded-2xl overflow-hidden bg-slate-100">

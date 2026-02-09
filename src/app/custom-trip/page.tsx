@@ -97,14 +97,14 @@ export default function CustomTripPage() {
                 {/* Left Column: Map & Itinerary Builder */}
                 <div className="space-y-6">
                     <div className="bg-white rounded-[2rem] p-8 shadow-xl border-none">
-                        <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center justify-between mb-6 md:mb-8">
                             <div>
-                                <h1 className="text-3xl md:text-4xl font-black text-[#006064]">Plan Your Trip</h1>
-                                <p className="text-slate-500 font-medium mt-2">Build your own multi-stop adventure across Sri Lanka.</p>
+                                <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-[#006064] leading-tight">Plan Your Trip</h1>
+                                <p className="text-slate-500 text-sm font-medium mt-1 md:mt-2">Build your own multi-stop adventure across Sri Lanka.</p>
                             </div>
-                            <div className="hidden md:block">
-                                <div className="w-16 h-16 bg-cyan-50 rounded-2xl flex items-center justify-center text-[#00A99D]">
-                                    <MapPin size={32} />
+                            <div className="hidden sm:block">
+                                <div className="w-12 h-12 md:w-16 md:h-16 bg-cyan-50 rounded-2xl flex items-center justify-center text-[#00A99D]">
+                                    <MapPin size={24} className="md:size-8" />
                                 </div>
                             </div>
                         </div>
@@ -112,27 +112,27 @@ export default function CustomTripPage() {
                         {/* Stops List */}
                         <div className="space-y-4 relative">
                             {/* Vertical Line */}
-                            <div className="absolute left-8 top-8 bottom-8 w-0.5 bg-slate-100 -z-0"></div>
+                            <div className="absolute left-6 md:left-8 top-8 bottom-8 w-0.5 bg-slate-100 -z-0"></div>
 
                             {stops.map((stop, index) => (
                                 <div key={stop.id} className="relative group" style={{ zIndex: stops.length - index }}>
                                     <div className="flex items-start gap-4">
-                                        <div className={`w-16 h-16 shrink-0 rounded-2xl flex items-center justify-center font-black text-lg shadow-sm border-2 
+                                        <div className={`w-12 h-12 md:w-16 md:h-16 shrink-0 rounded-2xl flex items-center justify-center font-black text-base md:text-lg shadow-sm border-2 
                                             ${index === 0 ? 'bg-emerald-50 border-emerald-100 text-emerald-600' :
                                                 index === stops.length - 1 ? 'bg-rose-50 border-rose-100 text-rose-600' :
                                                     'bg-white border-slate-100 text-slate-400'}`}>
                                             {index === 0 ? (
-                                                <div className="flex flex-col items-center gap-1">
-                                                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-                                                    <span className="text-[10px] font-black uppercase tracking-tighter">Start</span>
+                                                <div className="flex flex-col items-center gap-0.5 md:gap-1">
+                                                    <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-emerald-600 animate-pulse" />
+                                                    <span className="text-[8px] md:text-[10px] font-black uppercase tracking-tighter">Start</span>
                                                 </div>
                                             ) : index === stops.length - 1 ? (
                                                 <div className="flex flex-col items-center gap-0.5">
-                                                    <Navigation size={20} className="fill-rose-600" />
-                                                    <span className="text-[10px] font-black uppercase tracking-tighter">End</span>
+                                                    <Navigation size={18} className="fill-rose-600 md:size-5" />
+                                                    <span className="text-[8px] md:text-[10px] font-black uppercase tracking-tighter">End</span>
                                                 </div>
                                             ) : (
-                                                <span className="text-xl font-black">{index}</span>
+                                                <span className="text-lg md:text-xl font-black">{index}</span>
                                             )}
                                         </div>
 
@@ -160,10 +160,10 @@ export default function CustomTripPage() {
 
                                     {/* Add Button Logic */}
                                     {index < stops.length - 1 && (
-                                        <div className="pl-20 py-2">
+                                        <div className="pl-16 md:pl-20 py-2">
                                             <button
                                                 onClick={handleAddStop}
-                                                className="flex items-center gap-2 text-xs font-bold text-[#00A99D] hover:text-[#006064] transition-colors bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-full w-fit"
+                                                className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-[#00A99D] hover:text-[#006064] transition-colors bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-full w-fit"
                                             >
                                                 <Plus size={14} /> Add Stopover
                                             </button>
@@ -188,19 +188,19 @@ export default function CustomTripPage() {
                 {/* Right Column: Quote Form */}
                 <div className="relative">
                     <div className="sticky top-24 bg-white rounded-[2rem] p-8 shadow-2xl border border-[#00A99D]/10">
-                        <div className="flex items-center justify-between mb-8 pb-8 border-b border-slate-100">
+                        <div className="flex items-center justify-between mb-6 pb-6 md:mb-8 md:pb-8 border-b border-slate-100">
                             <div>
-                                <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Estimated Journey</p>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Estimated Journey</p>
                                 <div className="flex items-baseline gap-1 text-[#006064]">
-                                    <span className="text-4xl font-black">{Math.round(routeStats.distanceKm)}</span>
-                                    <span className="text-sm font-bold opacity-60">km</span>
+                                    <span className="text-3xl md:text-4xl font-black">{Math.round(routeStats.distanceKm)}</span>
+                                    <span className="text-xs md:text-sm font-bold opacity-60">km</span>
                                 </div>
                             </div>
                             <div className="text-right">
-                                <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Approx. Time</p>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Approx. Time</p>
                                 <div className="flex items-baseline gap-1 text-[#006064] justify-end">
-                                    <span className="text-4xl font-black">
-                                        {Math.floor(routeStats.durationMin / 60)}<span className="text-lg">h</span> {routeStats.durationMin % 60}<span className="text-lg">m</span>
+                                    <span className="text-3xl md:text-4xl font-black">
+                                        {Math.floor(routeStats.durationMin / 60)}<span className="text-base md:text-lg">h</span> {routeStats.durationMin % 60}<span className="text-base md:text-lg">m</span>
                                     </span>
                                 </div>
                             </div>
@@ -209,22 +209,22 @@ export default function CustomTripPage() {
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <h3 className="text-xl font-bold text-[#006064] mb-4">Get a Quote</h3>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-500">Your Name</label>
+                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Your Name</label>
                                     <input
                                         required
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border focus:border-[#00A99D]"
+                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border border-slate-100 focus:border-[#00A99D] transition-colors"
                                         placeholder="John Doe"
                                         value={formData.name}
                                         onChange={e => setFormData({ ...formData, name: e.target.value })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-500">Mobile</label>
+                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Mobile</label>
                                     <input
                                         required
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border focus:border-[#00A99D]"
+                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border border-slate-100 focus:border-[#00A99D] transition-colors"
                                         placeholder="+94..."
                                         value={formData.phone}
                                         onChange={e => setFormData({ ...formData, phone: e.target.value })}
@@ -244,21 +244,21 @@ export default function CustomTripPage() {
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-500">Date</label>
+                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Date</label>
                                     <input
                                         required
                                         type="date"
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border focus:border-[#00A99D]"
+                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border border-slate-100 focus:border-[#00A99D]"
                                         value={formData.date}
                                         onChange={e => setFormData({ ...formData, date: e.target.value })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-500">Passengers</label>
+                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Passengers</label>
                                     <select
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border focus:border-[#00A99D]"
+                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border border-slate-100 focus:border-[#00A99D]"
                                         value={formData.passengers}
                                         onChange={e => setFormData({ ...formData, passengers: parseInt(e.target.value) })}
                                     >

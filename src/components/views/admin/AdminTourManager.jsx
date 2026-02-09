@@ -282,18 +282,55 @@ export default function AdminTourManager() {
 
                         <div className="bg-slate-50 dark:bg-white/5 p-4 rounded-xl border border-slate-100 dark:border-white/10">
                             <h3 className="font-bold text-sm uppercase text-slate-500 mb-4">Images</h3>
-                            <div className="space-y-3">
+                            <div className="space-y-4">
                                 <div>
-                                    <label className="block text-xs font-bold mb-1">Hero Image URL</label>
+                                    <label className="block text-xs font-bold mb-1">Hero Image (Cover)</label>
                                     <input
                                         value={formData.heroImage}
                                         onChange={e => updateField('heroImage', e.target.value)}
                                         className="w-full p-2 rounded bg-white dark:bg-slate-800 border dark:border-white/10 text-xs"
-                                        placeholder="/tours/image.jpg"
+                                        placeholder="https://..."
                                     />
                                     {formData.heroImage && (
-                                        <img src={formData.heroImage} className="mt-2 w-full h-32 object-cover rounded-lg" alt="Preview" />
+                                        <img src={formData.heroImage} className="mt-2 w-full h-32 object-cover rounded-lg border dark:border-white/10" alt="Preview" />
                                     )}
+                                </div>
+
+                                <div className="pt-4 border-t border-slate-200 dark:border-white/10">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <label className="block text-xs font-bold uppercase">Gallery Images</label>
+                                        <button
+                                            onClick={() => {
+                                                const newImages = [...(formData.images || [])];
+                                                newImages.push('');
+                                                updateField('images', newImages);
+                                            }}
+                                            className="text-[10px] bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full font-bold"
+                                        >+ Add Image</button>
+                                    </div>
+                                    <div className="space-y-2">
+                                        {(formData.images || []).map((img, idx) => (
+                                            <div key={idx} className="flex gap-2 items-start">
+                                                <input
+                                                    value={img}
+                                                    onChange={e => {
+                                                        const newImages = [...formData.images];
+                                                        newImages[idx] = e.target.value;
+                                                        updateField('images', newImages);
+                                                    }}
+                                                    className="flex-1 p-2 rounded bg-white dark:bg-slate-800 border dark:border-white/10 text-[10px]"
+                                                    placeholder="Gallery image URL"
+                                                />
+                                                <button
+                                                    onClick={() => {
+                                                        const newImages = formData.images.filter((_, i) => i !== idx);
+                                                        updateField('images', newImages);
+                                                    }}
+                                                    className="p-2 text-red-400 hover:text-red-500"
+                                                ><Trash2 size={14} /></button>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -337,8 +374,8 @@ export default function AdminTourManager() {
                             <div className="flex-1">
                                 <div className="flex items-center gap-2 mb-1">
                                     <span className={`text-[10px] px-2 py-0.5 rounded-full uppercase font-black tracking-widest ${tour.category === 'safari' ? 'bg-orange-100 text-orange-700' :
-                                            tour.category === 'day-trip' ? 'bg-blue-100 text-blue-700' :
-                                                'bg-purple-100 text-purple-700'
+                                        tour.category === 'day-trip' ? 'bg-blue-100 text-blue-700' :
+                                            'bg-purple-100 text-purple-700'
                                         }`}>
                                         {tour.category}
                                     </span>

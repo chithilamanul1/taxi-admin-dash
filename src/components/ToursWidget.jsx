@@ -41,18 +41,20 @@ const ToursWidget = () => {
             'Tour Packages': 'tour-package'
         };
         const dbCategory = categoryMap[activeCategory];
+        // If "Custom Trip" is selected, we don't filter tours
+        if (activeCategory === 'Custom Trip') return false;
         return t.category === dbCategory;
     });
 
     return (
         <div className="space-y-10 animate-fade-in py-4">
             {/* Category Selector */}
-            <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+            <div className="flex flex-wrap gap-2 justify-center md:justify-start px-2">
                 {TOUR_CATEGORIES.map(cat => (
                     <button
                         key={cat}
                         onClick={() => setActiveCategory(cat)}
-                        className={`px-8 py-3 rounded-2xl text-xs font-bold uppercase tracking-[0.2em] transition-all
+                        className={`px-4 md:px-8 py-2.5 md:py-3 rounded-2xl text-[10px] md:text-xs font-bold uppercase tracking-[0.1em] md:tracking-[0.2em] transition-all
                         ${activeCategory === cat
                                 ? 'bg-emerald-900 text-white shadow-xl scale-105'
                                 : 'bg-white border border-emerald-900/10 text-emerald-900/60 hover:text-emerald-900 hover:border-emerald-900/30'}`}
@@ -91,31 +93,33 @@ const ToursWidget = () => {
             {loading && activeCategory !== 'Custom Trip' ? (
                 <div className="flex justify-center py-20"><Loader2 className="animate-spin text-emerald-600" size={32} /></div>
             ) : activeCategory === 'Custom Trip' ? (
-                <div className="grid grid-cols-1 animate-slide-up">
-                    <Link href="/custom-trip" className="group relative rounded-[2.5rem] overflow-hidden h-[400px] flex items-center justify-center bg-emerald-900 border border-emerald-800 shadow-2xl hover:scale-[1.02] transition-all duration-500">
-                        <div className="absolute inset-0 bg-[url('/images/custom-trip-bg.jpg')] bg-cover bg-center opacity-40 group-hover:opacity-50 transition-opacity"></div>
+                <div className="grid grid-cols-1 animate-slide-up px-2">
+                    <Link href="/custom-trip" className="group relative rounded-[2.5rem] overflow-hidden min-h-[380px] md:h-[450px] flex items-center justify-center bg-emerald-900 border border-emerald-800 shadow-2xl hover:scale-[1.01] transition-all duration-500">
+                        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1546708973-4903328e19ba?q=80&w=1600')] bg-cover bg-center opacity-40 group-hover:opacity-50 transition-opacity"></div>
                         <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-900/60 to-transparent"></div>
-                        <div className="relative z-10 text-center space-y-6 px-6 max-w-2xl">
-                            <div className="w-20 h-20 bg-emerald-500/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-400/30 group-hover:scale-110 transition-transform duration-500">
-                                <Signpost size={40} className="text-emerald-300" />
+                        <div className="relative z-10 text-center space-y-4 md:space-y-6 px-6 max-w-2xl py-8">
+                            <div className="w-16 h-16 md:w-20 md:h-20 bg-emerald-500/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-2 border border-emerald-400/30 group-hover:scale-110 transition-transform duration-500">
+                                <Signpost size={32} className="text-emerald-300 md:size-10" />
                             </div>
-                            <h3 className="text-4xl md:text-5xl font-black text-white leading-tight">Design Your Own Adventure</h3>
-                            <p className="text-emerald-100 text-lg md:text-xl font-medium leading-relaxed">
+                            <h3 className="text-3xl md:text-5xl font-black text-white leading-tight">Design Your Own Adventure</h3>
+                            <p className="text-emerald-100 text-base md:text-xl font-medium leading-relaxed">
                                 Create a fully customized itinerary tailored to your interests. Choose your stops, vehicle, and pace.
                             </p>
-                            <span className="inline-flex items-center gap-3 bg-white text-emerald-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-emerald-50 transition-colors mt-4">
-                                Start Planning <ArrowRight size={20} />
-                            </span>
+                            <div className="pt-2">
+                                <span className="inline-flex items-center gap-3 bg-white text-emerald-900 px-6 md:px-8 py-3 md:py-4 rounded-xl font-bold text-base md:text-lg hover:bg-emerald-50 transition-colors">
+                                    Start Planning <ArrowRight size={20} />
+                                </span>
+                            </div>
                         </div>
                     </Link>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {filteredTours.length > 0 ? filteredTours.map((tour, idx) => {
-                        const priceVal = parseFloat(tour.price || 0);
+                        const priceVal = parseFloat(tour.price?.amount || tour.price || 0);
                         const finalPrice = priceVal * tourDuration;
                         const usdRate = (rates && rates['USD']) ? rates['USD'] : 0.0033;
-                        const priceInLkr = finalPrice / usdRate;
+                        const priceInLkr = (tour.price?.currency === 'LKR') ? finalPrice : finalPrice / usdRate;
                         const converted = convertPrice(priceInLkr);
 
                         return (
@@ -126,7 +130,7 @@ const ToursWidget = () => {
                             >
                                 <div className="relative h-60 overflow-hidden">
                                     <img
-                                        src={tour.image}
+                                        src={tour.heroImage || tour.image}
                                         alt={tour.title}
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
@@ -149,7 +153,7 @@ const ToursWidget = () => {
 
                                 <div className="p-8 flex flex-col flex-1">
                                     <div className="flex items-center gap-3 text-emerald-600 text-[10px] font-bold uppercase tracking-widest mb-3">
-                                        <Clock size={12} /> {tour.duration} Days
+                                        <Clock size={12} /> {tour.duration?.days || 1} Days
                                     </div>
                                     <h3 className="text-xl font-bold mb-3 leading-tight text-emerald-900 group-hover:text-emerald-600 transition-colors line-clamp-2">{tour.title}</h3>
                                     <p className="text-emerald-900/60 text-sm leading-relaxed line-clamp-2 mb-6 flex-1">{tour.description}</p>
