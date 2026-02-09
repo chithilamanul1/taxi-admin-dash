@@ -12,7 +12,12 @@ export async function GET(req) {
         if (category) filter.category = category;
 
         const pricing = await Pricing.find(filter);
-        return NextResponse.json({ success: true, data: pricing }, {
+
+        // Fetch global settings (e.g. nameBoardPrice)
+        const nameBoardSetting = await import('../../../models/Settings').then(mod => mod.default.findOne({ key: 'nameBoardPrice' }));
+        const nameBoardPrice = nameBoardSetting ? nameBoardSetting.value : 2000;
+
+        return NextResponse.json({ success: true, data: pricing, meta: { nameBoardPrice } }, {
             headers: {
                 'Cache-Control': 'no-store, max-age=0, must-revalidate',
                 'Pragma': 'no-cache',

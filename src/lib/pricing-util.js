@@ -57,7 +57,7 @@ export const calculateSurcharges = (params, vehicleData) => {
     }
 
     if (hasNameBoard) {
-        surcharges += 1000;
+        surcharges += (params.nameBoardPrice || 2000);
     }
 
     return surcharges;

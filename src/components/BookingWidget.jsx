@@ -18,12 +18,12 @@ import TripMap from './TripMap'
 import { calculateBasePrice, calculateSurcharges } from '@/lib/pricing-util';
 
 // (Helper to calculate price)
-const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard) => {
+const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000) => {
     if (!distance || !pricingMap[vehicleId]) return { total: 0 };
     const vehicleData = pricingMap[vehicleId];
 
     const basePrice = calculateBasePrice(distance, vehicleData, tripType);
-    const surcharges = calculateSurcharges({ waitingHours, hasNameBoard }, vehicleData);
+    const surcharges = calculateSurcharges({ waitingHours, hasNameBoard, nameBoardPrice }, vehicleData);
 
     return { total: basePrice + surcharges };
 };
@@ -71,7 +71,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [availableCoupons, setAvailableCoupons] = useState([])
     const [isLoadingCoupons, setIsLoadingCoupons] = useState(false)
     const [isCouponOpen, setIsCouponOpen] = useState(false)
+
     const [dismissedOfferIds, setDismissedOfferIds] = useState([]);
+    const [nameBoardPrice, setNameBoardPrice] = useState(2000); // Default, updated via API
 
 
     // Fetch Pricing based on Tab
@@ -101,6 +103,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 const pricingMap = {};
                 vehicles.forEach(v => { pricingMap[v.vehicleType] = v; });
                 setVehiclePricing(pricingMap);
+
+                // Set Nameboard Price if available
+                if (response.meta?.nameBoardPrice) {
+                    setNameBoardPrice(response.meta.nameBoardPrice);
+                }
             } catch (error) { console.error(error); } finally { setIsLoadingPricing(false); }
         };
         if (activeTab !== 'tours') fetchPricing();
@@ -239,8 +246,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const filteredCoupons = React.useMemo(() => {
         if (!availableCoupons.length) return [];
 
-        const pickupText = (pickup?.name || '').toLowerCase();
-        const dropoffText = (dropoff?.name || '').toLowerCase();
+        const pickupText = (pickup?.name || pickupSearch || '').toLowerCase();
+        const dropoffText = (dropoff?.name || dropoffSearch || '').toLowerCase();
         const fullRoute = `${pickupText} ${dropoffText}`;
 
         return availableCoupons.filter(coupon => {
@@ -254,54 +261,85 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 fullRoute.includes(loc.toLowerCase())
             );
         });
-    }, [availableCoupons, pickup, dropoff]);
+    }, [availableCoupons, pickup, pickupSearch, dropoff, dropoffSearch]);
 
     // Check for Location Offers (Smart Offers)
     useEffect(() => {
-        const lowerLoc = (dropoff?.name || '').toLowerCase();
+        const dest = (dropoff?.name || dropoffSearch || '').toLowerCase().trim();
+        const start = (pickup?.name || pickupSearch || '').toLowerCase().trim();
+
+        // Prevent matching on very short/generic strings to avoid false positives
+        if (dest.length < 3 && start.length < 3) {
+            setAppliedOffers(prev => prev.filter(o => o.type !== 'location'));
+            return;
+        }
 
         setAppliedOffers(prev => {
-            // Keep only manual coupons (marked with type: 'coupon')
-            const existingCoupons = prev.filter(o => o.type === 'coupon');
-            const newOffers = [];
+            // Keep manual coupons
+            const existingManual = prev.filter(o => o.type === 'coupon');
+            const dynamicOffers = [];
 
-            // PRIORITY: GALLE/MIRISSA SPECIAL
-            if (lowerLoc.includes('galle') || lowerLoc.includes('mirissa')) {
-                newOffers.push({
-                    _id: 'special-galle',
-                    name: 'MIRISSA10',
-                    locationKeyword: 'Galle',
-                    discountPercentage: 20,
-                    description: 'Special 20% OFF for Southern Expressway Trips!',
-                    imageUrl: 'https://images.unsplash.com/photo-1578586883464-500b5220fa26?q=80&w=600&auto=format&fit=crop',
-                    isActive: true,
-                    type: 'location'
-                });
-            } else if (activeOffers && activeOffers.length > 0) {
-                // OTHER MARKETING OFFERS
-                const match = activeOffers.find(o => o.isActive && lowerLoc.includes(o.locationKeyword.toLowerCase()));
-                if (match) {
-                    newOffers.push({ ...match, type: 'location' });
-                }
-            }
+            // PRIORITY 1: Precise Database Coupons
+            availableCoupons.forEach(coupon => {
+                if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
+                    const isMatch = coupon.applicableLocations.some(loc => {
+                        const l = loc.toLowerCase().trim();
+                        if (l.length < 3) return false;
 
-            // Combine manual coupons + current location offer
-            // Filter duplicates by name
-            const final = [...existingCoupons];
-            newOffers.forEach(no => {
-                if (!final.some(fo => fo.name === no.name)) {
-                    final.push(no);
+                        // Exact word match or prominent presence in route
+                        const regex = new RegExp(`\\b${l}\\b`, 'i');
+                        return regex.test(dest) || regex.test(start);
+                    });
+
+                    if (isMatch) {
+                        dynamicOffers.push({
+                            _id: 'auto-' + coupon.code,
+                            name: coupon.code,
+                            discountPercentage: coupon.discountType === 'percentage' ? coupon.value : 0,
+                            discountAmount: coupon.discountType === 'flat' ? coupon.value : 0,
+                            description: coupon.description || `Special offer for ${coupon.applicableLocations[0]}!`,
+                            isActive: true,
+                            type: 'location',
+                            imageUrl: coupon.imageUrl
+                        });
+                    }
                 }
             });
 
-            return final;
+            // PRIORITY 2: Marketing offers (Backwards compatibility)
+            if (activeOffers && activeOffers.length > 0) {
+                activeOffers.forEach(o => {
+                    const kw = o.locationKeyword?.toLowerCase().trim();
+                    if (kw && kw.length >= 3) {
+                        const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                        if (regex.test(dest) || regex.test(start)) {
+                            dynamicOffers.push({ ...o, type: 'location' });
+                        }
+                    }
+                });
+            }
+
+            // Combine and Deduplicate
+            const finalDynamic = [];
+            dynamicOffers.forEach(offer => {
+                // Don't nudge if ALREADY applied manually
+                const alreadyApplied = existingManual.some(m => m.name === offer.name);
+                const alreadyInDynamic = finalDynamic.some(d => d.name === offer.name);
+
+                if (!alreadyApplied && !alreadyInDynamic) {
+                    finalDynamic.push(offer);
+                }
+            });
+
+            return [...existingManual, ...finalDynamic];
         });
-    }, [dropoff, activeOffers]);
+    }, [dropoff, dropoffSearch, pickup, pickupSearch, availableCoupons, activeOffers]);
 
 
     // Calculate total waiting hours including waypoints
     const totalWaitingHours = waitingHours + waypoints.reduce((sum, wp) => sum + (wp.waitingTime || 0), 0);
-    const { total } = calculatePrice(distance, vehicle, tripType, vehiclePricing, totalWaitingHours, hasNameBoard, couponCode);
+    // Updated calculatePrice call with nameBoardPrice
+    const { total } = calculatePrice(distance, vehicle, tripType, vehiclePricing, totalWaitingHours, hasNameBoard, nameBoardPrice);
 
     // Calculate total discount from all applied offers
     const discountAmount = appliedOffers.reduce((sum, offer) => {
@@ -326,14 +364,16 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             passengerCount,
             tripType,
             waitingHours: totalWaitingHours,
-            vehicle,
+            hasNameBoard,
             date,
             time,
-            distance, // Pass current calculated distance to avoid recalculation flicker
-            couponCode: verifiedCoupons.length > 0 ? verifiedCoupons[0].code : '', // Fallback for legacy
-            verifiedCoupons // New Array Support
-        })
-        setShowModal(true)
+            distance,
+            vehicle,
+            couponCode: verifiedCoupons.length > 0 ? verifiedCoupons[0].code : '',
+            verifiedCoupons,
+            nameBoardPrice
+        });
+        setShowModal(true);
     };
 
     const swapLocations = () => {
