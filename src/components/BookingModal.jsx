@@ -168,6 +168,17 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     // Extract calculated values for render
     const { total: totalPrice, subtotal, surcharges, payNow, balance: balanceAmount } = getPriceBreakdown();
 
+    // Body Scroll Lock
+    useEffect(() => {
+        if (isOpen) {
+            const originalStyle = window.getComputedStyle(document.body).overflow;
+            document.body.style.overflow = 'hidden';
+            return () => {
+                document.body.style.overflow = originalStyle;
+            };
+        }
+    }, [isOpen]);
+
     // useEffects for data fetching
     useEffect(() => {
         if (isOpen) {
@@ -353,12 +364,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             <div className="bg-white rounded-[2rem] border border-emerald-900/10 shadow-2xl w-full max-w-4xl max-h-[90vh] md:max-h-[90vh] overflow-hidden flex flex-col animate-slide-up mx-auto mt-16 md:mt-0">
                 {/* Header */}
                 <div className="p-4 md:p-8 pb-3 md:pb-4 flex items-center justify-between shrink-0">
-                    <div className="flex items-center gap-2 md:gap-3">
-                        <div className="w-8 h-8 md:w-10 md:h-10 bg-emerald-50 rounded-lg md:rounded-xl flex items-center justify-center border border-emerald-900/10">
-                            <Zap size={18} className="text-emerald-600 md:hidden" />
-                            <Zap size={20} className="text-emerald-600 hidden md:block" />
+                    <div className="flex items-center gap-3 md:gap-4">
+                        <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-500/10 rounded-xl flex items-center justify-center border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+                            <Zap size={22} className="text-amber-500 fill-amber-500" />
                         </div>
-                        <h2 className="text-lg md:text-2xl font-black tracking-tight text-emerald-900 uppercase">SECURE <span className="text-emerald-600">BOOKING</span></h2>
+                        <div>
+                            <h2 className="text-xl md:text-2xl font-black tracking-tight text-slate-900 leading-none">SECURE <span className="text-emerald-600">BOOKING</span></h2>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Encrypted Payment</p>
+                        </div>
                     </div>
                     <button onClick={onClose} className="w-8 h-8 md:w-10 md:h-10 bg-emerald-50 rounded-lg md:rounded-xl flex items-center justify-center border border-emerald-900/10 hover:bg-red-50 hover:text-red-600 transition-colors">
                         <X size={18} />
@@ -481,19 +494,58 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
                             </div>
 
-                            <div className="p-5 md:p-8 bg-emerald-900 rounded-[2rem] text-white flex flex-col shadow-xl gap-4">
-                                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0">
-                                    <div className="w-full md:w-auto">
-                                        <div className="flex items-center gap-2 text-emerald-400 mb-1">
-                                            <Zap size={14} fill="currentColor" />
-                                            <span className="text-[10px] font-extrabold uppercase tracking-widest">{formData.paymentType === 'partial' ? 'Pay Now' : 'Total Price'}</span>
+                            <div className="p-6 md:p-8 bg-slate-900 rounded-[2.5rem] text-white flex flex-col shadow-2xl gap-8 relative overflow-hidden group">
+                                {/* Decorative Background Glow */}
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/10 rounded-full blur-[100px] -mr-32 -mt-32"></div>
+
+                                <div className="relative z-10 space-y-8">
+                                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                                        <div>
+                                            <div className="flex items-center gap-2 text-emerald-400 mb-2">
+                                                <Zap size={14} fill="currentColor" className="animate-pulse" />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{formData.paymentType === 'partial' ? 'Pay Now' : 'Total Price'}</span>
+                                            </div>
+                                            <div className="text-4xl md:text-5xl font-black leading-tight tracking-tight">
+                                                <span className="text-xl md:text-2xl font-bold mr-2 text-emerald-400/60">{currentSymbol}</span>
+                                                {payNow.toLocaleString()}
+                                            </div>
                                         </div>
-                                        <div className="text-2xl md:text-4xl font-black leading-tight">{currentSymbol} {payNow.toLocaleString()}</div>
-                                        {verifiedCoupons.length > 0 && <div className="text-[10px] text-emerald-300 font-bold uppercase mt-1">{verifiedCoupons.length} Coupon(s) Applied</div>}
+                                        <div className="text-left md:text-right bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
+                                            <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Route Distance</div>
+                                            <div className="text-xl font-black text-white">{distance.toFixed(1)} <span className="text-sm font-bold text-emerald-400">KM</span></div>
+                                        </div>
                                     </div>
-                                    <div className="text-left md:text-right w-full md:w-auto border-t md:border-t-0 border-white/10 pt-3 md:pt-0">
-                                        <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Route Distance</div>
-                                        <div className="text-lg md:text-xl font-bold text-white">{distance.toFixed(1)} KM</div>
+
+                                    {/* Multi-Currency Grid */}
+                                    <div className="space-y-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="h-px flex-1 bg-white/10"></div>
+                                            <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em] whitespace-nowrap">Price in all currencies</span>
+                                            <div className="h-px flex-1 bg-white/10"></div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-3">
+                                            {convertToAllCurrencies(totalPrice / (rates?.[currency] || 1)).map((c) => (
+                                                <div
+                                                    key={c.code}
+                                                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col gap-1 ${currency === c.code
+                                                        ? 'bg-amber-500/10 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
+                                                        : 'bg-white/5 border-white/5 hover:border-white/20'
+                                                        }`}
+                                                >
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="text-[10px] font-black text-white/40 uppercase tracking-widest flex items-center gap-1.5">
+                                                            <span className="text-xs">{c.flag}</span> {c.code}
+                                                        </span>
+                                                        {currency === c.code && <div className="w-1.5 h-1.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgb(245,158,11)]"></div>}
+                                                    </div>
+                                                    <div className={`text-sm md:text-base font-black ${currency === c.code ? 'text-amber-500' : 'text-white'}`}>
+                                                        <span className="text-[10px] font-bold mr-1 opacity-60">{c.symbol}</span>
+                                                        {c.value.toLocaleString()}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -602,11 +654,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     <span className="text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-widest">Total Amount</span>
                                                     <span className="text-base md:text-xl font-bold text-emerald-900/60 text-right">{currentSymbol} {totalPrice.toLocaleString()}</span>
                                                 </div>
-                                                <div className="flex flex-row justify-between items-end w-full gap-2">
-                                                    <span className="text-[10px] sm:text-xs md:text-sm font-black text-emerald-900 uppercase tracking-widest leading-tight whitespace-nowrap">
+                                                <div className="flex flex-row justify-between items-end w-full gap-4">
+                                                    <span className="text-[10px] sm:text-xs md:text-sm font-black text-emerald-900 uppercase tracking-widest leading-tight">
                                                         {formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Payable'}
                                                     </span>
-                                                    <span className="text-xl sm:text-2xl md:text-3xl font-black text-emerald-900 text-right whitespace-nowrap">{currentSymbol} {payNow.toLocaleString()}</span>
+                                                    <span className="text-xl sm:text-2xl md:text-3xl font-black text-emerald-900 text-right leading-none">{currentSymbol} {payNow.toLocaleString()}</span>
                                                 </div>
 
                                                 {formData.paymentType === 'partial' && (

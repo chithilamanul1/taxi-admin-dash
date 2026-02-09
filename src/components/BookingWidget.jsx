@@ -282,13 +282,16 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             // PRIORITY 1: Precise Database Coupons
             availableCoupons.forEach(coupon => {
                 if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
+                    let matchedLoc = null;
                     const isMatch = coupon.applicableLocations.some(loc => {
                         const l = loc.toLowerCase().trim();
                         if (l.length < 3) return false;
 
                         // Exact word match or prominent presence in route
                         const regex = new RegExp(`\\b${l}\\b`, 'i');
-                        return regex.test(dest) || regex.test(start);
+                        const match = regex.test(dest) || regex.test(start);
+                        if (match) matchedLoc = loc; // Store the actual matched location name
+                        return match;
                     });
 
                     if (isMatch) {
@@ -297,7 +300,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             name: coupon.code,
                             discountPercentage: coupon.discountType === 'percentage' ? coupon.value : 0,
                             discountAmount: coupon.discountType === 'flat' ? coupon.value : 0,
-                            description: coupon.description || `Special offer for ${coupon.applicableLocations[0]}!`,
+                            description: coupon.description || `Special offer for ${matchedLoc}!`,
                             isActive: true,
                             type: 'location',
                             imageUrl: coupon.imageUrl
