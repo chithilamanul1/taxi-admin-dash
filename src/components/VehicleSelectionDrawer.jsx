@@ -141,20 +141,22 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
 
                 {/* More Details Modal */}
                 {detailVehicle && (
-                    <div className="absolute inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in" onClick={() => setDetailVehicle(null)}>
-                        <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl border border-emerald-900/10 dark:border-white/10 flex flex-col animate-scale-in relative" onClick={(e) => e.stopPropagation()}>
-                            {/* Prominent Close Button */}
-                            <button
-                                onClick={() => setDetailVehicle(null)}
-                                className="absolute top-4 right-4 z-20 p-2.5 bg-slate-100 dark:bg-white/10 rounded-full text-slate-500 dark:text-white/60 hover:bg-red-50 hover:text-red-600 transition-all shadow-sm"
-                            >
-                                <X size={20} />
-                            </button>
+                    <div className="absolute inset-0 z-[110] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in" onClick={() => setDetailVehicle(null)}>
+                        <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-2xl border-t sm:border border-emerald-900/10 dark:border-white/10 flex flex-col animate-scale-in relative max-h-[85vh] sm:max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
 
-                            <div className="p-6 pb-2">
+                            {/* Header - Fixed */}
+                            <div className="p-6 pb-2 shrink-0 flex justify-between items-start relative">
                                 <h4 className="text-lg font-black text-emerald-900 dark:text-white uppercase tracking-tight pr-8">{detailVehicle.name}</h4>
+                                <button
+                                    onClick={() => setDetailVehicle(null)}
+                                    className="p-2.5 bg-slate-100 dark:bg-white/10 rounded-full text-slate-500 dark:text-white/60 hover:bg-red-50 hover:text-red-600 transition-all shadow-sm"
+                                >
+                                    <X size={20} />
+                                </button>
                             </div>
-                            <div className="p-6 space-y-6">
+
+                            {/* Scrollable Content */}
+                            <div className="p-6 pt-2 space-y-6 overflow-y-auto custom-scrollbar flex-1">
                                 <div className="aspect-video bg-slate-50 dark:bg-white/5 rounded-3xl flex items-center justify-center p-4">
                                     <img src={detailVehicle.image} alt={detailVehicle.name} className="w-full h-full object-contain" />
                                 </div>
@@ -187,7 +189,10 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                         ))}
                                     </div>
                                 </div>
+                            </div>
 
+                            {/* Footer - Fixed */}
+                            <div className="p-6 pt-4 shrink-0 border-t border-slate-100 dark:border-white/5 bg-white dark:bg-slate-800 rounded-b-[2.5rem]">
                                 <button
                                     onClick={() => {
                                         onSelect(detailVehicle.vehicleType);
