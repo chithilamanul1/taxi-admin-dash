@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Percent, ArrowRight, Sparkles, Tag, Copy, Check } from 'lucide-react';
+import { Percent, ArrowRight, Sparkles, Tag, Copy, Check, MapPin, Calendar } from 'lucide-react';
 
 export default function SpecialOffersSection() {
     const [coupons, setCoupons] = useState([]);
