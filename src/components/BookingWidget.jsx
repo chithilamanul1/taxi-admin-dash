@@ -322,17 +322,24 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 });
             }
 
-            // Combine and Deduplicate
+            // Combine, Sort by Value, and Limit to Best Offer
             const finalDynamic = [];
-            dynamicOffers.forEach(offer => {
-                // Don't nudge if ALREADY applied manually
-                const alreadyApplied = existingManual.some(m => m.name === offer.name);
-                const alreadyInDynamic = finalDynamic.some(d => d.name === offer.name);
 
-                if (!alreadyApplied && !alreadyInDynamic) {
-                    finalDynamic.push(offer);
-                }
+            // 1. Sort all found offers by discount value (higher first)
+            const sortedDynamic = [...dynamicOffers].sort((a, b) => {
+                const valA = a.discountPercentage || (a.discountAmount / 100) || 0; // Normalize flat values roughly
+                const valB = b.discountPercentage || (b.discountAmount / 100) || 0;
+                return valB - valA;
             });
+
+            // 2. Only take the TOP 1 best offer that isn't already applied manually
+            if (sortedDynamic.length > 0) {
+                const bestOffer = sortedDynamic[0];
+                const alreadyApplied = existingManual.some(m => m.name === bestOffer.name);
+                if (!alreadyApplied) {
+                    finalDynamic.push(bestOffer);
+                }
+            }
 
             return [...existingManual, ...finalDynamic];
         });
