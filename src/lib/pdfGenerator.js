@@ -1,95 +1,158 @@
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
+const COLORS = {
+    emerald: [6, 78, 59], // #064e3b
+    amber: [245, 158, 11], // #f59e0b
+    slate: [71, 85, 105], // #475569
+    black: [15, 23, 42]   // #0f172a
+};
+
 export const generateBookingPDF = (booking) => {
     const doc = new jsPDF();
+    const isCash = booking.paymentMethod === 'cash';
+    const accentColor = COLORS.emerald;
 
-    // -- Header --
-    // Logo (Simulated with text for now, ideally use doc.addImage)
-    doc.setFontSize(22);
-    doc.setTextColor(44, 62, 80); // Navy Blue
-    doc.text("Airport Taxi Tours", 105, 20, { align: "center" });
-
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    doc.text("118/5 St. Joseph Street, Grandpass, Colombo 14", 105, 26, { align: "center" });
-    doc.text("Hotline: 0722 885 885 | Email: info@airporttaxi.lk", 105, 31, { align: "center" });
-
-    // -- Title --
-    doc.setDrawColor(200);
-    doc.line(10, 38, 200, 38); // Horizontal Line
-
-    doc.setFontSize(16);
-    doc.setTextColor(0);
-    doc.text("BOOKING RECEIPT", 14, 50);
-
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    doc.text(`Booking Ref: #${booking._id.slice(-6).toUpperCase()}`, 14, 56);
-    doc.text(`Date: ${new Date(booking.createdAt).toLocaleDateString()}`, 14, 61);
-
-    // -- Customer Info --
-    const customerData = [
-        ['Customer Name', booking.customerName || 'Guest'],
-        ['Email', booking.customerEmail || 'N/A'],
-        ['Phone', booking.guestPhone || 'N/A'],
-        ['Trip Type', booking.tripType === 'oneway' ? 'One Way' : 'Return'],
-    ];
-
-    doc.autoTable({
-        startY: 68,
-        head: [],
-        body: customerData,
-        theme: 'plain',
-        styles: { fontSize: 10, cellPadding: 2 },
-        columnStyles: { 0: { fontStyle: 'bold', cellWidth: 40 } },
-    });
-
-    // -- Journey Details --
-    doc.text("Journey Details", 14, doc.lastAutoTable.finalY + 10);
-    doc.setDrawColor(200);
-    doc.line(14, doc.lastAutoTable.finalY + 12, 100, doc.lastAutoTable.finalY + 12);
-
-    const journeyData = [
-        ['Pickup Location', booking.pickupLocation.address],
-        ['Dropoff Location', booking.dropoffLocation.address],
-        ['Date & Time', `${booking.scheduledDate} at ${booking.scheduledTime}`],
-        ['Vehicle Type', booking.vehicleType],
-        ['Passengers', booking.passengers],
-        ['Distance', `${booking.distance} km`],
-    ];
-
-    doc.autoTable({
-        startY: doc.lastAutoTable.finalY + 15,
-        head: [],
-        body: journeyData,
-        theme: 'striped',
-        styles: { fontSize: 10, cellPadding: 3 },
-        columnStyles: { 0: { fontStyle: 'bold', cellWidth: 40 } },
-    });
-
-    // -- Pricing --
-    const finalY = doc.lastAutoTable.finalY + 10;
-
-    doc.setFontSize(12);
-    doc.setFont(undefined, 'bold');
-    doc.text(`Total Amount: Rs ${booking.totalPrice?.toLocaleString()}`, 14, finalY + 10);
-
-    if (booking.paymentStatus === 'paid') {
-        doc.setTextColor(0, 150, 0);
-        doc.text("PAID IN FULL", 150, finalY + 10);
-    } else {
-        doc.setTextColor(200, 100, 0);
-        doc.text("PAYMENT PENDING", 150, finalY + 10);
+    // -- Helper: Add Logo --
+    // We try to add the logo. If it fails (e.g. path issues in some environments), we fallback to text.
+    try {
+        doc.addImage('/invoice_logo.png', 'PNG', 15, 12, 35, 35);
+    } catch (e) {
+        doc.setFontSize(22);
+        doc.setTextColor(...COLORS.emerald);
+        doc.setFont(undefined, 'bold');
+        doc.text("AIRPORT TAXIS", 15, 25);
+        doc.setFontSize(8);
+        doc.text("SRI LANKA (PVT) LTD", 15, 30);
     }
 
-    // -- Footer --
+    // -- Header Details (Top Right) --
+    doc.setFontSize(24);
+    doc.setTextColor(...COLORS.black);
+    doc.setFont(undefined, 'bold');
+    doc.text(isCash ? "CASH RECEIPT" : "TAX INVOICE", 195, 25, { align: "right" });
+
+    doc.setFontSize(10);
+    doc.setTextColor(...COLORS.slate);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Ref: #${booking._id.slice(-8).toUpperCase()}`, 195, 32, { align: "right" });
+    doc.text(`Date: ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}`, 195, 37, { align: "right" });
+
+    // -- Letterhead / Business Info --
+    doc.setFontSize(10);
+    doc.setTextColor(...COLORS.black);
+    doc.setFont(undefined, 'bold');
+    doc.text("Airport Taxi Tours Sri Lanka", 60, 20);
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(...COLORS.slate);
+    doc.text("118/5 St. Joseph Street, Grandpass, Colombo 14", 60, 25);
+    doc.text("Hotline: +94 722 885 885 | +94 777 123 456", 60, 30);
+    doc.text("Email: info@airporttaxi.lk | Web: www.airporttaxi.lk", 60, 35);
+
+    // -- Accent Line --
+    doc.setDrawColor(...COLORS.amber);
+    doc.setLineWidth(1);
+    doc.line(15, 52, 195, 52);
+
+    // -- Recipient Section --
+    doc.setFontSize(11);
+    doc.setTextColor(...COLORS.emerald);
+    doc.setFont(undefined, 'bold');
+    doc.text("BILL TO:", 15, 62);
+
+    doc.setTextColor(...COLORS.black);
+    doc.setFontSize(13);
+    doc.text(booking.customerName || 'Valued Guest', 15, 69);
+
+    doc.setFontSize(10);
+    doc.setTextColor(...COLORS.slate);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Phone: ${booking.guestPhone || 'N/A'}`, 15, 75);
+    doc.text(`Email: ${booking.customerEmail || 'N/A'}`, 15, 80);
+
+    // -- Trip Status Badge --
+    const badgeX = 140;
+    const badgeY = 62;
+    doc.setFillColor(...(booking.paymentStatus === 'paid' ? COLORS.emerald : [220, 38, 38]));
+    doc.roundedRect(badgeX, badgeY, 55, 18, 3, 3, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(8);
+    doc.setFont(undefined, 'bold');
+    doc.text("PAYMENT STATUS", badgeX + 27.5, badgeY + 6, { align: 'center' });
+    doc.setFontSize(10);
+    doc.text(booking.paymentStatus?.toUpperCase() || 'PENDING', badgeX + 27.5, badgeY + 12, { align: 'center' });
+
+    // -- Journey Table --
+    doc.autoTable({
+        startY: 90,
+        head: [['Description', 'Trip Information']],
+        body: [
+            ['Transfer Type', booking.tripType?.toUpperCase().replace('-', ' ') || 'Airport Transfer'],
+            ['Pick-up', booking.pickupLocation?.address || 'N/A'],
+            ['Drop-off', booking.dropoffLocation?.address || 'N/A'],
+            ['Vehicle', booking.vehicleType?.toUpperCase() || 'Standard'],
+            ['Passengers', `${booking.passengerCount?.adults || 1} ADL, ${booking.passengerCount?.children || 0} CHL`],
+            ['Date / Time', `${booking.scheduledDate} at ${booking.scheduledTime}`],
+        ],
+        theme: 'grid',
+        styles: { fontSize: 9, cellPadding: 4, font: 'helvetica' },
+        headStyles: { fillColor: COLORS.emerald, textColor: 255, fontStyle: 'bold' },
+        columnStyles: { 0: { fontStyle: 'bold', cellWidth: 40, fillColor: [248, 250, 252] } },
+    });
+
+    // -- Totals Section --
+    const finalY = doc.lastAutoTable.finalY + 10;
+
+    doc.setFontSize(10);
+    doc.setTextColor(...COLORS.slate);
+    doc.setFont(undefined, 'normal');
+
+    const labelX = 140;
+    const valueX = 195;
+
+    doc.text("Subtotal:", labelX, finalY);
+    doc.text(`${booking.currency || 'LKR'} ${booking.totalPrice?.toLocaleString()}`, valueX, finalY, { align: 'right' });
+
+    doc.text("Taxes & Fees:", labelX, finalY + 7);
+    doc.text(`${booking.currency || 'LKR'} 0.00`, valueX, finalY + 7, { align: 'right' });
+
+    doc.setDrawColor(230);
+    doc.line(labelX, finalY + 10, valueX, finalY + 10);
+
+    doc.setFontSize(14);
+    doc.setTextColor(...COLORS.black);
+    doc.setFont(undefined, 'bold');
+    doc.text("Total Amount:", labelX, finalY + 18);
+    doc.setTextColor(...COLORS.emerald);
+    doc.text(`${booking.currency || 'LKR'} ${booking.totalPrice?.toLocaleString()}`, valueX, finalY + 18, { align: 'right' });
+
+    // -- Terms and Branding --
+    doc.setFontSize(9);
+    doc.setTextColor(...COLORS.slate);
+    doc.setFont(undefined, 'bold');
+    doc.text("Important Information:", 15, finalY + 40);
     doc.setFont(undefined, 'normal');
     doc.setFontSize(8);
-    doc.setTextColor(150);
-    doc.text("Thank you for choosing Airport Taxi Tours!", 105, 280, { align: "center" });
-    doc.text("This is a computer generated receipt.", 105, 285, { align: "center" });
+    const terms = [
+        "1. This is a legally valid computer-generated " + (isCash ? "receipt" : "invoice") + ".",
+        "2. Rates are inclusive of toll fees and fuel unless stated otherwise.",
+        "3. Free waiting time of 60 mins for Airport Pickups and 15 mins for all others.",
+        "4. Contact us immediately for any changes to your travel schedule."
+    ];
+    terms.forEach((line, i) => doc.text(line, 15, finalY + 46 + (i * 5)));
+
+    // -- Footer --
+    doc.setFillColor(...COLORS.emerald);
+    doc.rect(0, 280, 210, 17, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(9);
+    doc.setFont(undefined, 'bold');
+    doc.text("Thank you for traveling with Airport Taxis!", 105, 288, { align: 'center' });
+    doc.setFontSize(7);
+    doc.setFont(undefined, 'normal');
+    doc.text("24/7 Hotline: +94 722 885 885 | info@airporttaxi.lk | www.airporttaxi.lk", 105, 292, { align: 'center' });
 
     // Save
-    doc.save(`Receipt_${booking._id.slice(-6)}.pdf`);
+    const fileName = `${isCash ? 'Receipt' : 'Invoice'}_${booking._id.slice(-8).toUpperCase()}.pdf`;
+    doc.save(fileName);
 };

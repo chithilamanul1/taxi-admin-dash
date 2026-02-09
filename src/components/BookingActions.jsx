@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { Download, Mail, MessageSquare, Loader2, X, AlertTriangle } from 'lucide-react';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { generateBookingPDF } from '@/lib/pdfGenerator';
 
 export default function BookingActions({ booking }) {
     const [emailLoading, setEmailLoading] = useState(false);
@@ -13,51 +12,7 @@ export default function BookingActions({ booking }) {
 
     // 1. Download PDF
     const handleDownloadPDF = () => {
-        const doc = new jsPDF();
-
-        // Header
-        doc.setFillColor(6, 78, 59); // Emerald 900
-        doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(22);
-        doc.text('AIRPORT TAXIS', 20, 20);
-        doc.setFontSize(10);
-        doc.text('SRI LANKA (PVT) LTD', 20, 28);
-        doc.text('RECEIPT', 170, 25);
-
-        // Booking Info
-        doc.setTextColor(0, 0, 0);
-        doc.setFontSize(10);
-        doc.text(`Booking ID: #${booking._id.toString().slice(-6).toUpperCase()}`, 20, 50);
-        doc.text(`Date: ${new Date().toLocaleDateString()}`, 150, 50);
-
-        // Table
-        autoTable(doc, {
-            startY: 60,
-            head: [['Description', 'Details']],
-            body: [
-                ['Customer Name', booking.customerName || 'Guest'],
-                ['Pickup Location', booking.pickupLocation?.address],
-                ['Dropoff Location', booking.dropoffLocation?.address],
-                ['Vehicle Type', booking.vehicleType],
-                ['Scheduled Date', booking.scheduledDate],
-                ['Scheduled Time', booking.scheduledTime],
-                ['Distance', `${booking.distance} km`],
-                ['Payment Method', booking.paymentMethod?.toUpperCase()],
-                ['Total Amount', `${booking.currency || 'LKR'} ${booking.totalPrice?.toLocaleString()}`]
-            ],
-            theme: 'grid',
-            headStyles: { fillColor: [6, 78, 59] },
-        });
-
-        // Footer
-        const finalY = doc.lastAutoTable.finalY || 150;
-        doc.setFontSize(10);
-        doc.setTextColor(100, 100, 100);
-        doc.text('Thank you for choosing Airport Taxis Sri Lanka.', 20, finalY + 20);
-        doc.text('Contact: +94 722 885 885 | info@airporttaxi.lk', 20, finalY + 26);
-
-        doc.save(`receipt_${booking._id.slice(-6)}.pdf`);
+        generateBookingPDF(booking);
     };
 
     // 2. Email Receipt
