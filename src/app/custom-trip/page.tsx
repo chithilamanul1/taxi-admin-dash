@@ -152,8 +152,15 @@ export default function CustomTripPage() {
                                                     placeholder={index === 0 ? "Enter pickup location" : "Enter destination"}
                                                     value={stop.address}
                                                     onSelect={(loc) => handleUpdateStop(stop.id, { address: loc.address, lat: loc.lat, lon: loc.lon })}
-                                                    onChange={(val) => handleUpdateStop(stop.id, { address: val })}
+                                                    onChange={(val) => handleUpdateStop(stop.id, { address: val, lat: null, lon: null })} // Reset coords on manual type
                                                 />
+                                                {/* Validation Warning */}
+                                                {stop.address && (stop.lat === null || stop.lon === null) && (
+                                                    <div className="absolute top-full left-0 mt-1 text-[10px] sm:text-xs font-bold text-amber-600 flex items-center gap-1 z-10 bg-amber-50 px-2 py-1 rounded-lg">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                                        Please select a location from the list to calculate distance.
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
