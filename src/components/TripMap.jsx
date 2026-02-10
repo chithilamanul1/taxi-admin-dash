@@ -4,17 +4,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
 
 export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated }) {
-    const mapRef = useRef(null);
-    const [directionsRenderer, setDirectionsRenderer] = useState(null);
-    const [directionsService, setDirectionsService] = useState(null);
-    const [mapInitialized, setMapInitialized] = useState(false);
-    const [googleLoaded, setGoogleLoaded] = useState(false);
+    const [error, setError] = useState(null);
 
     // 1. Load Google Maps Script
     useEffect(() => {
         loadGoogleMapsScript().then(() => {
             setGoogleLoaded(true);
-        }).catch(err => console.error("TripMap: Failed to load Google Maps script", err));
+        }).catch(err => {
+            console.error("TripMap: Failed to load Google Maps script", err);
+            setError("Failed to load Maps");
+        });
     }, []);
 
     // 2. Initialize Map once script is loaded and ref is ready
@@ -52,6 +51,7 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
             console.log("TripMap: Map Initialized successfully.");
         } catch (error) {
             console.error("TripMap: Error initializing map:", error);
+            setError("Map Init Error");
         }
     }, [googleLoaded, mapInitialized]);
 
@@ -62,6 +62,8 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
         // Only calculate if we have both points
         const hasStart = pickup?.lat != null && pickup?.lon != null;
         const hasEnd = dropoff?.lat != null && dropoff?.lon != null;
+
+        setError(null); // Clear previous errors
 
         if (hasStart && hasEnd) {
             const origin = { lat: parseFloat(pickup.lat), lng: parseFloat(pickup.lon) };
@@ -113,6 +115,9 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
                         }
                     } else {
                         console.warn(`TripMap: Directions request failed: ${status}`);
+                        setError(`Route Error: ${status}`);
+                        // Reset distance in parent potentially? 
+                        if (onRouteCalculated) onRouteCalculated({ distanceKm: 0, durationMin: 0 });
                     }
                 }
             );
@@ -129,6 +134,15 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
     return (
         <div className="w-full h-full min-h-[300px] relative rounded-2xl overflow-hidden bg-slate-100">
             <div ref={mapRef} className="w-full h-full" />
+
+            {/* Error Overlay */}
+            {error && (
+                <div className="absolute top-2 left-2 right-2 bg-red-100 border border-red-500 text-red-700 px-3 py-2 rounded-lg text-xs font-bold z-20 text-center">
+                    {error} <br />
+                    <span className="font-normal opacity-80">(Check Console/API Key)</span>
+                </div>
+            )}
+
             {!mapInitialized && (
                 <div className="absolute inset-0 flex items-center justify-center bg-slate-50/50 backdrop-blur-[2px] z-10">
                     <div className="flex flex-col items-center gap-3">
