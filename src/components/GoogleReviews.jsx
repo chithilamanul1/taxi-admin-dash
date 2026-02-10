@@ -36,7 +36,7 @@ const GoogleReviews = () => {
                 // Fetch both reviews in parallel
                 const [googleRes, tripRes] = await Promise.allSettled([
                     fetch('/api/reviews/google'),
-                    fetch('/api/tripadvisor')
+                    fetch('/api/reviews/tripadvisor')
                 ]);
 
                 // Process Google Reviews
@@ -68,11 +68,15 @@ const GoogleReviews = () => {
                                 total: parseInt(tripData.data.num_reviews) || 100
                             }
                         }));
+                    } else {
+                        // Fallback if no TA reviews found or API fails
+                        setTripReviews(FALLBACK_REVIEWS.map(r => ({ ...r, source: 'tripadvisor' })));
                     }
                 }
             } catch (err) {
                 console.error('Failed to fetch reviews:', err);
                 setGoogleReviews(FALLBACK_REVIEWS.map(r => ({ ...r, source: 'google' })));
+                setTripReviews(FALLBACK_REVIEWS.map(r => ({ ...r, source: 'tripadvisor' })));
             }
         };
 
