@@ -333,6 +333,19 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 });
             }
 
+            // PRIORITY 3: Automated Rules (e.g. 175km Discount)
+            if (distance > 175) {
+                dynamicOffers.push({
+                    _id: 'auto-long-distance',
+                    name: 'Long Distance Discount',
+                    discountPercentage: 10,
+                    discountAmount: 0,
+                    description: 'Special 10% discount automatically applied for trips over 175km!',
+                    isActive: true,
+                    type: 'location'
+                });
+            }
+
             // Combine, Sort by Value, and Limit to Best Offer
             const finalDynamic = [];
 
@@ -354,7 +367,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
             return [...existingManual, ...finalDynamic];
         });
-    }, [dropoff, dropoffSearch, pickup, pickupSearch, availableCoupons, activeOffers]);
+    }, [dropoff, dropoffSearch, pickup, pickupSearch, availableCoupons, activeOffers, distance]);
 
 
     // Calculate total waiting hours including waypoints
@@ -362,9 +375,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     // Updated calculatePrice call with nameBoardPrice
     const { total } = calculatePrice(distance, vehicle, tripType, vehiclePricing, totalWaitingHours, hasNameBoard, nameBoardPrice);
 
-    // Calculate total discount from all applied offers
-    const discountAmount = appliedOffers.reduce((sum, offer) => {
-        return sum + (offer.discountAmount || (total * (offer.discountPercentage / 100)));
+    // Calculate total discount from all applied offers (MAX RULE: No Stacking)
+    const discountAmount = appliedOffers.reduce((max, offer) => {
+        const val = (offer.discountAmount || (total * (offer.discountPercentage / 100)));
+        return Math.max(max, val);
     }, 0);
 
     const finalTotal = Math.max(0, total - discountAmount);
