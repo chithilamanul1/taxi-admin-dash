@@ -8,8 +8,13 @@ const TripAdvisorWidget = () => {
 
     useEffect(() => {
         const fetchStats = async () => {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+
             try {
-                const res = await fetch('/api/reviews/tripadvisor');
+                const res = await fetch('/api/reviews/tripadvisor', { signal: controller.signal });
+                if (!res.ok) throw new Error('Failed to fetch');
+
                 const response = await res.json();
                 if (response.success && response.data) {
                     setStats({
@@ -18,7 +23,10 @@ const TripAdvisorWidget = () => {
                     });
                 }
             } catch (err) {
-                console.error('Failed to load TripAdvisor stats', err);
+                // Silent fail or default stats
+                console.warn('TripAdvisor widget failed to load (timeout or error):', err.name);
+            } finally {
+                clearTimeout(timeoutId);
             }
         };
         fetchStats();

@@ -20,6 +20,7 @@ export async function POST(req) {
         // 1. Create the booking record
         const booking = await Booking.create({
             ...data,
+            whatsappNumber: data.whatsappNumber, // Store explicitly if schema supports, or it might be in ...data
             paymentStatus: 'pending',
             paymentMethod: data.paymentMethod || 'card',
         });

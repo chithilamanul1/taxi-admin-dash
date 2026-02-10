@@ -108,61 +108,67 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     };
 
     const getPriceBreakdown = () => {
-        const vehicleData = pricing.find(p => p.vehicleType === formData.vehicle);
-        if (!vehicleData || distance === 0) return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0 };
+        try {
+            const vehicleData = pricing.find(p => p.vehicleType === formData.vehicle);
+            if (!vehicleData || distance === 0) return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0, lkr: { total: 0, payNow: 0, balance: 0, surcharges: 0, subtotal: 0 }, originalLKR: 0 };
 
-        const distKm = Math.ceil(distance);
-        const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType);
-        const surcharges = calculateSurcharges({
-            waitingHours: formData.waitingHours,
-            hasNameBoard: formData.hasNameBoard
-        }, vehicleData);
+            const distKm = Math.ceil(distance);
+            const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType);
+            const surcharges = calculateSurcharges({
+                waitingHours: formData.waitingHours,
+                hasNameBoard: formData.hasNameBoard
+            }, vehicleData);
 
-        // Payment Method Surcharges per User Request
-        const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, currency);
+            // Payment Method Surcharges per User Request
+            const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, currency);
 
-        let total = baseTotal + surcharges + paymentSurcharge;
+            let total = baseTotal + surcharges + paymentSurcharge;
 
-        // Coupon Logic (Stacking)
-        if (verifiedCoupons && verifiedCoupons.length > 0) {
-            verifiedCoupons.forEach(coupon => {
-                if (coupon.discountType === 'percentage') {
-                    total = total * (1 - (Number(coupon.value) / 100));
-                } else {
-                    total = Math.max(0, total - Number(coupon.value));
-                }
-            });
+            // Coupon Logic (Stacking)
+            if (verifiedCoupons && verifiedCoupons.length > 0) {
+                verifiedCoupons.forEach(coupon => {
+                    const couponVal = Number(coupon.value) || 0;
+                    if (coupon.discountType === 'percentage') {
+                        total = total * (1 - (couponVal / 100));
+                    } else {
+                        total = Math.max(0, total - couponVal);
+                    }
+                });
+            }
+
+            const payNow = formData.paymentType === 'partial' ? total * 0.5 : total;
+            const balance = total - payNow;
+
+            // Convert values to the selected currency
+            const rate = rates?.[currency] || 1;
+            const convertedTotal = Math.ceil(total * rate);
+            const convertedPayNow = Math.ceil(payNow * rate);
+            const convertedBalance = Math.ceil(balance * rate);
+            const convertedSubtotal = Math.ceil(baseTotal * rate);
+            const convertedSurcharges = Math.ceil((surcharges + paymentSurcharge) * rate);
+
+            return {
+                // Converted for UI
+                total: convertedTotal,
+                subtotal: convertedSubtotal,
+                surcharges: convertedSurcharges,
+                payNow: convertedPayNow,
+                balance: convertedBalance,
+
+                // Original LKR for DB/Payment (Always send LKR to API, let backend convert)
+                lkr: {
+                    total: Math.round(total),
+                    payNow: Math.round(payNow),
+                    balance: Math.round(balance),
+                    surcharges: Math.round(surcharges + paymentSurcharge),
+                    subtotal: Math.round(baseTotal)
+                },
+                originalLKR: Math.round(total) // Keep for reference
+            };
+        } catch (err) {
+            console.error("Price logic error:", err);
+            return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0, lkr: { total: 0, payNow: 0, balance: 0, surcharges: 0, subtotal: 0 }, originalLKR: 0 };
         }
-
-        const payNow = formData.paymentType === 'partial' ? total * 0.5 : total;
-        const balance = total - payNow;
-
-        // Convert values to the selected currency
-        const rate = rates?.[currency] || 1;
-        const convertedTotal = Math.ceil(total * rate);
-        const convertedPayNow = Math.ceil(payNow * rate);
-        const convertedBalance = Math.ceil(balance * rate);
-        const convertedSubtotal = Math.ceil(baseTotal * rate);
-        const convertedSurcharges = Math.ceil((surcharges + paymentSurcharge) * rate);
-
-        return {
-            // Converted for UI
-            total: convertedTotal,
-            subtotal: convertedSubtotal,
-            surcharges: convertedSurcharges,
-            payNow: convertedPayNow,
-            balance: convertedBalance,
-
-            // Original LKR for DB/Payment (Always send LKR to API, let backend convert)
-            lkr: {
-                total: Math.round(total),
-                payNow: Math.round(payNow),
-                balance: Math.round(balance),
-                surcharges: Math.round(surcharges + paymentSurcharge),
-                subtotal: Math.round(baseTotal)
-            },
-            originalLKR: Math.round(total) // Keep for reference
-        };
     };
 
     // Extract calculated values for render
@@ -308,6 +314,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 customerName: formData.name,
                 customerEmail: formData.email,
                 guestPhone: formData.phone,
+                // Add WhatsApp if present, or fallback to phone, or store in notes
+                whatsappNumber: formData.whatsapp,
                 nameBoard: {
                     enabled: formData.hasNameBoard,
                     text: formData.nameBoardText
@@ -475,7 +483,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <div className="flex items-center gap-3">
                                                 <Signpost size={18} className={formData.hasNameBoard ? 'text-emerald-600' : ''} />
                                                 <div className="text-left">
-                                                    <span className="text-[10px] md:text-xs font-bold block uppercase tracking-tight">Airport Name Board</span>
+                                                    <span className="text-[10px] md:text-xs font-bold block uppercase tracking-tight">Display Name Board</span>
                                                     <span className="text-[8px] font-medium opacity-60">Driver waits with name sign</span>
                                                 </div>
                                             </div>
@@ -569,23 +577,29 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                             <h3 className="text-xl font-bold text-emerald-600 tracking-tight text-center md:text-left">Client Verification</h3>
                             <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                                {[
-                                    { label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name' },
-                                    { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX' },
-                                    { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation' },
-                                    { label: 'Flight Identifier', key: 'flightNumber', type: 'text', placeholder: 'e.g. EK 654' },
+                                {label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name' },
+                                {label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX' },
+                                {label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver communication' }, // New Field
+                                {label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation' },
+                                {label: 'Flight Identifier', key: 'flightNumber', type: 'text', placeholder: 'e.g. EK 654' },
                                 ].map(f => (
-                                    <div key={f.key} className="space-y-2">
-                                        <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{f.label}</label>
-                                        <input type={f.type} value={formData[f.key]} onChange={e => setFormData({ ...formData, [f.key]: e.target.value })} className="w-full h-12 md:h-14 bg-white border border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none focus:border-emerald-900 focus:ring-4 focus:ring-emerald-900/5 transition-all font-bold text-sm text-emerald-900" placeholder={f.placeholder} />
-                                    </div>
+                                <div key={f.key} className="space-y-2">
+                                    <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{f.label}</label>
+                                    <input
+                                        type={f.type}
+                                        value={formData[f.key] || ''}
+                                        onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
+                                        className={`w-full ${f.key === 'flightNumber' ? 'h-14 md:h-16 text-base' : 'h-12 md:h-14 text-sm'} bg-white border border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none focus:border-emerald-900 focus:ring-4 focus:ring-emerald-900/5 transition-all font-bold text-emerald-900`}
+                                        placeholder={f.placeholder}
+                                    />
+                                </div>
                                 ))}
                             </div>
                             <div className="space-y-2">
                                 <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Pick-up Date & Time</label>
                                 <div className="flex flex-col sm:flex-row gap-4">
-                                    <input type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} className="flex-1 h-12 md:h-14 bg-white border border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none text-sm font-bold text-emerald-900" />
-                                    <input type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value })} className="flex-1 h-12 md:h-14 bg-white border border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none text-sm font-bold text-emerald-900" />
+                                    <input type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} className="flex-1 h-14 md:h-16 bg-white border border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none text-base font-bold text-emerald-900" />
+                                    <input type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value })} className="flex-1 h-14 md:h-16 bg-white border border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none text-base font-bold text-emerald-900" />
                                 </div>
                             </div>
                         </div>
