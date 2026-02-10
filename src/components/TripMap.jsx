@@ -10,6 +10,12 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
     const [mapInitialized, setMapInitialized] = useState(false);
     const [googleLoaded, setGoogleLoaded] = useState(false);
     const [error, setError] = useState(null);
+    const markersRef = useRef([]);
+
+    const clearMarkers = () => {
+        markersRef.current.forEach(m => m.setMap(null));
+        markersRef.current = [];
+    };
 
     // 1. Load Google Maps Script
     useEffect(() => {
@@ -43,7 +49,7 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
 
             const dr = new window.google.maps.DirectionsRenderer({
                 map,
-                suppressMarkers: false,
+                suppressMarkers: true, // We handle markers manually for better control
                 polylineOptions: {
                     strokeColor: '#059669', // Emerald 600
                     strokeWeight: 5
@@ -60,29 +66,78 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
         }
     }, [googleLoaded, mapInitialized]);
 
-    // 3. Calculate Route when dependencies change
+    // 3. Markers & Route Calculation
     useEffect(() => {
-        if (!directionsService || !directionsRenderer) return;
+        if (!mapInitialized || !directionsService || !directionsRenderer) return;
 
-        // Only calculate if we have both points
         const hasStart = pickup?.lat != null && pickup?.lon != null;
         const hasEnd = dropoff?.lat != null && dropoff?.lon != null;
 
-        setError(null); // Clear previous errors
+        setError(null);
+        clearMarkers();
 
+        // Add Standalone Markers
+        const map = directionsRenderer.getMap();
+        const bounds = new window.google.maps.LatLngBounds();
+        let markersAdded = 0;
+
+        if (hasStart) {
+            const m = new window.google.maps.Marker({
+                position: { lat: parseFloat(pickup.lat), lng: parseFloat(pickup.lon) },
+                map,
+                label: 'A',
+                title: 'Pickup'
+            });
+            markersRef.current.push(m);
+            bounds.extend(m.getPosition());
+            markersAdded++;
+        }
+
+        (waypoints || []).forEach((wp, i) => {
+            if (wp.lat != null && wp.lon != null) {
+                const m = new window.google.maps.Marker({
+                    position: { lat: parseFloat(wp.lat), lng: parseFloat(wp.lon) },
+                    map,
+                    label: (i + 1).toString(),
+                    title: `Stop ${i + 1}`,
+                    icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                });
+                markersRef.current.push(m);
+                bounds.extend(m.getPosition());
+                markersAdded++;
+            }
+        });
+
+        if (hasEnd) {
+            const m = new window.google.maps.Marker({
+                position: { lat: parseFloat(dropoff.lat), lng: parseFloat(dropoff.lon) },
+                map,
+                label: 'B',
+                title: 'Dropoff',
+                icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+            });
+            markersRef.current.push(m);
+            bounds.extend(m.getPosition());
+            markersAdded++;
+        }
+
+        // Adjust Viewport if markers exist but no route yet
+        if (markersAdded > 0 && !(hasStart && hasEnd)) {
+            map.fitBounds(bounds);
+            if (markersAdded === 1) map.setZoom(13);
+        }
+
+        // Calculate Route if both points exist
         if (hasStart && hasEnd) {
             const origin = { lat: parseFloat(pickup.lat), lng: parseFloat(pickup.lon) };
             const destination = { lat: parseFloat(dropoff.lat), lng: parseFloat(dropoff.lon) };
 
-            // Convert waypoints
             const waypointsList = (waypoints || [])
                 .filter(w => w.lat != null && w.lon != null)
                 .map(wp => ({
                     location: { lat: parseFloat(wp.lat), lng: parseFloat(wp.lon) },
                     stopover: true
                 }));
-
-            console.log('TripMap: Requesting route', { origin, destination, waypointsCount: waypointsList.length });
 
             directionsService.route(
                 {
@@ -94,46 +149,31 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
                 (result, status) => {
                     if (status === window.google.maps.DirectionsStatus.OK) {
                         directionsRenderer.setDirections(result);
-
-                        // Extract distance/duration
                         const route = result.routes[0];
                         if (route && route.legs) {
                             let totalDistanceMeters = 0;
                             let totalDurationSeconds = 0;
-
                             route.legs.forEach(leg => {
                                 totalDistanceMeters += leg.distance.value;
                                 totalDurationSeconds += leg.duration.value;
                             });
-
                             const distKm = totalDistanceMeters / 1000;
                             const durMin = Math.round(totalDurationSeconds / 60);
-
-                            console.log(`TripMap: Route calculated: ${distKm.toFixed(1)} km, ${durMin} min`);
-
-                            if (onRouteCalculated) {
-                                onRouteCalculated({
-                                    distanceKm: distKm,
-                                    durationMin: durMin
-                                });
-                            }
+                            if (onRouteCalculated) onRouteCalculated({ distanceKm: distKm, durationMin: durMin });
                         }
                     } else {
                         console.warn(`TripMap: Directions request failed: ${status}`);
                         setError(`Route Error: ${status}`);
-                        // Reset distance in parent potentially? 
                         if (onRouteCalculated) onRouteCalculated({ distanceKm: 0, durationMin: 0 });
                     }
                 }
             );
-        } else {
-            console.log("TripMap: Waiting for coordinates...", { hasStart, hasEnd });
         }
     }, [
         pickup?.lat, pickup?.lon,
         dropoff?.lat, dropoff?.lon,
         JSON.stringify(waypoints),
-        directionsService, directionsRenderer, onRouteCalculated
+        directionsService, directionsRenderer, mapInitialized, onRouteCalculated
     ]);
 
     return (

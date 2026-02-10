@@ -1,13 +1,14 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
-import { MapPin, Plus, Trash2, Calendar, User, Clock, Navigation, CheckCircle, ArrowRight, Loader2, Star } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { MapPin, Plus, Trash2, Calendar, User, Clock, Navigation, CheckCircle, ArrowRight, Loader2, Star, CreditCard, Tag } from 'lucide-react';
 import LocationInput from '@/components/LocationInput';
 import TripMap from '@/components/TripMap';
 import { useRouter } from 'next/navigation';
+import { calculateBasePrice } from '@/lib/pricing-util';
+import { useCurrency } from '@/context/CurrencyContext';
 
 export default function CustomTripPage() {
     const router = useRouter();
+    const { convertPrice, currency } = useCurrency();
     const [stops, setStops] = useState([
         { id: 1, type: 'pickup', address: '', lat: null, lon: null },
         { id: 2, type: 'dropoff', address: '', lat: null, lon: null }
@@ -15,16 +16,45 @@ export default function CustomTripPage() {
     const [routeStats, setRouteStats] = useState({ distanceKm: 0, durationMin: 0 });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [vehiclePricing, setVehiclePricing] = useState([]);
+    const [isLoadingPricing, setIsLoadingPricing] = useState(true);
 
     // User Details
     const [formData, setFormData] = useState({
         name: '', email: '', phone: '',
-        date: '', passengers: 2, vehicleType: 'Any', message: ''
+        date: '', passengers: 2, vehicleType: 'mini-car', message: ''
     });
+
+    // Fetch Pricing
+    useEffect(() => {
+        const fetchPricing = async () => {
+            try {
+                const res = await fetch('/api/pricing?category=ride-now');
+                const response = await res.json();
+                if (response.success) {
+                    setVehiclePricing(response.data);
+                }
+            } catch (error) {
+                console.error('Failed to fetch pricing:', error);
+            } finally {
+                setIsLoadingPricing(false);
+            }
+        };
+        fetchPricing();
+    }, []);
+
+    // Calculate Estimate
+    const estimate = useMemo(() => {
+        const vehicleData = vehiclePricing.find(v => v.vehicleType === formData.vehicleType) || vehiclePricing[0];
+        if (!vehicleData || routeStats.distanceKm === 0) return 0;
+
+        return calculateBasePrice(routeStats.distanceKm, vehicleData, 'one-way');
+    }, [routeStats.distanceKm, formData.vehicleType, vehiclePricing]);
+
+    const convertedEstimate = convertPrice(estimate);
 
     const handleAddStop = () => {
         const newStop = { id: Date.now(), type: 'waypoint', address: '', lat: null, lon: null };
-        // Insert before the last stop (dropoff)
         const newStops = [...stops];
         newStops.splice(newStops.length - 1, 0, newStop);
         setStops(newStops);
@@ -49,7 +79,9 @@ export default function CustomTripPage() {
                 dropoff: stops[stops.length - 1],
                 waypoints: stops.slice(1, stops.length - 1),
                 distance: routeStats.distanceKm,
-                duration: routeStats.durationMin
+                duration: routeStats.durationMin,
+                estimatedPrice: estimate,
+                currency: 'LKR'
             };
 
             const res = await fetch('/api/bookings/custom', {
@@ -80,7 +112,7 @@ export default function CustomTripPage() {
                     </div>
                     <h2 className="text-3xl font-black text-[#006064] mb-4">Request Sent!</h2>
                     <p className="text-slate-600 mb-8">
-                        We've received your custom itinerary. Our team will calculate the best route and price, then email you a quote shortly.
+                        We've received your custom itinerary. Our team will review the details and contact you via WhatsApp/Email to finalize the booking.
                     </p>
                     <button onClick={() => router.push('/')} className="w-full py-4 bg-[#006064] text-white rounded-xl font-bold">
                         Back to Home
@@ -99,13 +131,10 @@ export default function CustomTripPage() {
                     <div className="bg-white rounded-[2rem] p-8 shadow-xl border-none">
                         <div className="flex items-center justify-between mb-6 md:mb-8">
                             <div>
-                                <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-[#006064] leading-tight">Plan Your Trip</h1>
+                                <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-[#006064] leading-tight flex items-center gap-3">
+                                    <MapPin className="text-[#00A99D]" /> Plan Your Trip
+                                </h1>
                                 <p className="text-slate-500 text-sm font-medium mt-1 md:mt-2">Build your own multi-stop adventure across Sri Lanka.</p>
-                            </div>
-                            <div className="hidden sm:block">
-                                <div className="w-12 h-12 md:w-16 md:h-16 bg-cyan-50 rounded-2xl flex items-center justify-center text-[#00A99D]">
-                                    <MapPin size={24} className="md:size-8" />
-                                </div>
                             </div>
                         </div>
 
@@ -195,9 +224,9 @@ export default function CustomTripPage() {
                 {/* Right Column: Quote Form */}
                 <div className="relative">
                     <div className="sticky top-24 bg-white rounded-[2rem] p-8 shadow-2xl border border-[#00A99D]/10">
-                        <div className="flex items-center justify-between mb-6 pb-6 md:mb-8 md:pb-8 border-b border-slate-100">
+                        <div className="flex items-center justify-between mb-6 pb-6 border-b border-slate-100">
                             <div>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Estimated Journey</p>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Route Distance</p>
                                 <div className="flex items-baseline gap-1 text-[#006064]">
                                     <span className="text-3xl md:text-4xl font-black">{Math.round(routeStats.distanceKm)}</span>
                                     <span className="text-xs md:text-sm font-bold opacity-60">km</span>
@@ -207,31 +236,51 @@ export default function CustomTripPage() {
                                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Approx. Time</p>
                                 <div className="flex items-baseline gap-1 text-[#006064] justify-end">
                                     <span className="text-3xl md:text-4xl font-black">
-                                        {Math.floor(routeStats.durationMin / 60)}<span className="text-base md:text-lg">h</span> {routeStats.durationMin % 60}<span className="text-base md:text-lg">m</span>
+                                        {Math.floor(routeStats.durationMin / 60)}<span className="text-base md:text-lg text-slate-400">h</span> {routeStats.durationMin % 60}<span className="text-base md:text-lg text-slate-400">m</span>
                                     </span>
                                 </div>
                             </div>
                         </div>
 
+                        {/* Estimated Price Section */}
+                        {routeStats.distanceKm > 0 && (
+                            <div className="mb-8 p-6 bg-emerald-900 rounded-3xl text-white shadow-xl shadow-emerald-900/20 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                                <div className="relative z-10">
+                                    <div className="flex items-center gap-2 text-emerald-400 mb-2">
+                                        <Tag size={14} className="fill-emerald-400/20" />
+                                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Estimated Rate</span>
+                                    </div>
+                                    <div className="flex items-baseline gap-2">
+                                        <span className="text-4xl font-black">{convertedEstimate.symbol} {convertedEstimate.value.toLocaleString()}</span>
+                                        <span className="text-xs font-bold text-emerald-400/60 uppercase">{currency}</span>
+                                    </div>
+                                    <p className="text-[10px] text-white/40 mt-3 font-medium flex items-center gap-1.5 leading-relaxed italic">
+                                        <Star size={10} fill="currentColor" /> Final price may vary based on vehicle availability and exact stops.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
                         <form onSubmit={handleSubmit} className="space-y-4">
-                            <h3 className="text-xl font-bold text-[#006064] mb-4">Get a Quote</h3>
+                            <h3 className="text-xl font-bold text-[#006064] mb-4">Request Your Quote</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Your Name</label>
                                     <input
                                         required
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border border-slate-100 focus:border-[#00A99D] transition-colors"
+                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-slate-900"
                                         placeholder="John Doe"
                                         value={formData.name}
                                         onChange={e => setFormData({ ...formData, name: e.target.value })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Mobile</label>
+                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Mobile / WhatsApp</label>
                                     <input
                                         required
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border border-slate-100 focus:border-[#00A99D] transition-colors"
+                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-slate-900"
                                         placeholder="+94..."
                                         value={formData.phone}
                                         onChange={e => setFormData({ ...formData, phone: e.target.value })}
@@ -240,11 +289,11 @@ export default function CustomTripPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500">Email</label>
+                                <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Email Address</label>
                                 <input
                                     required
                                     type="email"
-                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border focus:border-[#00A99D]"
+                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-slate-900"
                                     placeholder="john@example.com"
                                     value={formData.email}
                                     onChange={e => setFormData({ ...formData, email: e.target.value })}
@@ -253,19 +302,19 @@ export default function CustomTripPage() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Date</label>
+                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Travel Date</label>
                                     <input
                                         required
                                         type="date"
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border border-slate-100 focus:border-[#00A99D]"
+                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-slate-900"
                                         value={formData.date}
                                         onChange={e => setFormData({ ...formData, date: e.target.value })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Passengers</label>
+                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Group Size</label>
                                     <select
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border border-slate-100 focus:border-[#00A99D]"
+                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-slate-900"
                                         value={formData.passengers}
                                         onChange={e => setFormData({ ...formData, passengers: parseInt(e.target.value) })}
                                     >
@@ -277,23 +326,26 @@ export default function CustomTripPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500">Preferred Vehicle</label>
+                                <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Preferred Vehicle</label>
                                 <select
-                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border focus:border-[#00A99D]"
+                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-slate-900"
                                     value={formData.vehicleType}
                                     onChange={e => setFormData({ ...formData, vehicleType: e.target.value })}
                                 >
-                                    <option value="Any">Best available for group size</option>
-                                    <option value="Sedan">Sedan (Max 3)</option>
-                                    <option value="KDH Van">KDH Van (Max 9)</option>
-                                    <option value="Minibus">Minibus (Max 20)</option>
+                                    {isLoadingPricing ? (
+                                        <option>Loading vehicles...</option>
+                                    ) : (
+                                        vehiclePricing.map(v => (
+                                            <option key={v.vehicleType} value={v.vehicleType}>{v.name}</option>
+                                        ))
+                                    )}
                                 </select>
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500">Special Notes</label>
+                                <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Special Requirements</label>
                                 <textarea
-                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-medium outline-none border focus:border-[#00A99D] min-h-[100px]"
+                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors min-h-[80px] text-slate-900"
                                     placeholder="Extra luggage, child seats, etc..."
                                     value={formData.message}
                                     onChange={e => setFormData({ ...formData, message: e.target.value })}
@@ -303,11 +355,11 @@ export default function CustomTripPage() {
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full py-5 bg-[#006064] text-white rounded-xl font-black text-lg shadow-xl shadow-cyan-900/30 hover:bg-[#004D40] hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                                className="w-full py-5 bg-[#006064] text-white rounded-2xl font-black text-lg shadow-xl shadow-cyan-900/20 hover:bg-[#004D40] hover:scale-[1.02] transition-all flex items-center justify-center gap-3"
                             >
-                                {isSubmitting ? <Loader2 className="animate-spin" /> : 'Request Quote'}
+                                {isSubmitting ? <Loader2 className="animate-spin" /> : <>Contact for Best Quote <ArrowRight size={20} /></>}
                             </button>
-                            <p className="text-center text-xs text-slate-400 font-medium">No obligation. We'll reply within 1 hour.</p>
+                            <p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-4">24/7 dedicated travel support</p>
                         </form>
                     </div>
                 </div>
