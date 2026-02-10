@@ -7,17 +7,27 @@ import { useRouter } from 'next/navigation';
 import { calculateBasePrice } from '@/lib/pricing-util';
 import { useCurrency } from '@/context/CurrencyContext';
 
+interface VehiclePricing {
+    _id?: string;
+    vehicleType: string;
+    name: string;
+    basePrice: number;
+    baseKm: number;
+    perKmRate: number;
+    tiers?: any[];
+}
+
 export default function CustomTripPage() {
     const router = useRouter();
     const { convertPrice, currency } = useCurrency();
-    const [stops, setStops] = useState([
+    const [stops, setStops] = useState<any[]>([
         { id: 1, type: 'pickup', address: '', lat: null, lon: null },
         { id: 2, type: 'dropoff', address: '', lat: null, lon: null }
     ]);
     const [routeStats, setRouteStats] = useState({ distanceKm: 0, durationMin: 0 });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
-    const [vehiclePricing, setVehiclePricing] = useState([]);
+    const [vehiclePricing, setVehiclePricing] = useState<VehiclePricing[]>([]);
     const [isLoadingPricing, setIsLoadingPricing] = useState(true);
 
     // User Details
