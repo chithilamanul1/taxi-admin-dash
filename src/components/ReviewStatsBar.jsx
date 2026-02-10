@@ -12,7 +12,7 @@ const ReviewStatsBar = () => {
             try {
                 // Fetch both stats in parallel
                 const [tripRes, googleRes] = await Promise.allSettled([
-                    fetch('/api/tripadvisor'),
+                    fetch('/api/reviews/tripadvisor'),
                     fetch('/api/reviews/google')
                 ]);
 

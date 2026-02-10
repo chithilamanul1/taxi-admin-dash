@@ -286,6 +286,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             // PRIORITY 1: Precise Database Coupons
             availableCoupons.forEach(coupon => {
                 if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
+                    let matchedLoc = '';
                     const isMatch = coupon.applicableLocations.some(loc => {
                         const l = loc.toLowerCase().trim();
                         if (l.length < 3) return false;
