@@ -577,22 +577,23 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                             <h3 className="text-xl font-bold text-emerald-600 tracking-tight text-center md:text-left">Client Verification</h3>
                             <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                                {label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name' },
-                                {label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX' },
-                                {label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver communication' }, // New Field
-                                {label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation' },
-                                {label: 'Flight Identifier', key: 'flightNumber', type: 'text', placeholder: 'e.g. EK 654' },
+                                {[
+                                    { label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name' },
+                                    { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX' },
+                                    { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver communication' }, // New Field
+                                    { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation' },
+                                    { label: 'Flight Identifier', key: 'flightNumber', type: 'text', placeholder: 'e.g. EK 654' },
                                 ].map(f => (
-                                <div key={f.key} className="space-y-2">
-                                    <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{f.label}</label>
-                                    <input
-                                        type={f.type}
-                                        value={formData[f.key] || ''}
-                                        onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
-                                        className={`w-full ${f.key === 'flightNumber' ? 'h-14 md:h-16 text-base' : 'h-12 md:h-14 text-sm'} bg-white border border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none focus:border-emerald-900 focus:ring-4 focus:ring-emerald-900/5 transition-all font-bold text-emerald-900`}
-                                        placeholder={f.placeholder}
-                                    />
-                                </div>
+                                    <div key={f.key} className="space-y-2">
+                                        <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{f.label}</label>
+                                        <input
+                                            type={f.type}
+                                            value={formData[f.key] || ''}
+                                            onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
+                                            className={`w-full ${f.key === 'flightNumber' ? 'h-14 md:h-16 text-base' : 'h-12 md:h-14 text-sm'} bg-white border border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none focus:border-emerald-900 focus:ring-4 focus:ring-emerald-900/5 transition-all font-bold text-emerald-900`}
+                                            placeholder={f.placeholder}
+                                        />
+                                    </div>
                                 ))}
                             </div>
                             <div className="space-y-2">
