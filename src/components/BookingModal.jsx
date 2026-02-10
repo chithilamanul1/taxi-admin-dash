@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { X, MapPin, User, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost } from 'lucide-react';
-import LocationSearchInput from './LocationSearchInput';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { useCurrency } from '../context/CurrencyContext';
 import { calculateBasePrice, calculateSurcharges, calculatePaymentFees } from '../lib/pricing-util';
@@ -55,6 +55,17 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const handleApplyCoupon = async (codeToApply = couponInput, contextPickup = formData.pickup, contextDropoff = formData.dropoff) => {
         const input = (codeToApply || '').trim();
         if (!input) return;
+
+        // Validation: Must be from Airport
+        // Note: We allow adding it, but it wont apply in price calc if not from airport. 
+        // Better UX: Warn here if not from airport.
+        if (!contextPickup.toLowerCase().includes('airport')) {
+            if (!codeToApply) alert('Coupons are only valid for trips starting from the Airport.');
+            // We still proceed to validate code exists, but user knows it won't apply yet.
+            // Or we strict block? Let's strict block for clarity.
+            return false;
+        }
+
         setCouponLoading(true);
         try {
             const res = await fetch('/api/coupons/validate', {
@@ -124,17 +135,35 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
             let total = baseTotal + surcharges + paymentSurcharge;
 
-            // Coupon Logic (Stacking)
+            // Coupon Logic (Stacking Rules & Auto-Discounts)
+
+            // 1. Calculate Coupon Discount (if eligible)
+            let couponDiscountAmount = 0;
             if (verifiedCoupons && verifiedCoupons.length > 0) {
-                verifiedCoupons.forEach(coupon => {
-                    const couponVal = Number(coupon.value) || 0;
-                    if (coupon.discountType === 'percentage') {
-                        total = total * (1 - (couponVal / 100));
-                    } else {
-                        total = Math.max(0, total - couponVal);
-                    }
-                });
+                // Check if pickup is from Airport (Case Insensitive)
+                const isFromAirport = formData.pickup?.toLowerCase().includes('airport');
+
+                if (isFromAirport) {
+                    verifiedCoupons.forEach(coupon => {
+                        const couponVal = Number(coupon.value) || 0;
+                        if (coupon.discountType === 'percentage') {
+                            couponDiscountAmount += total * (couponVal / 100);
+                        } else {
+                            couponDiscountAmount += couponVal;
+                        }
+                    });
+                }
             }
+
+            // 2. Calculate Long Distance Discount (>175km = 10% off)
+            let longDistanceDiscountAmount = 0;
+            if (distKm > 175) {
+                longDistanceDiscountAmount = total * 0.10;
+            }
+
+            // 3. Apply MAX Rule (User gets the higher discount, no stacking)
+            const finalDiscount = Math.max(couponDiscountAmount, longDistanceDiscountAmount);
+            total = Math.max(0, total - finalDiscount);
 
             const payNow = formData.paymentType === 'partial' ? total * 0.5 : total;
             const balance = total - payNow;
@@ -369,6 +398,20 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
     return (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-emerald-900/80 p-1 md:p-4 overflow-hidden">
+            {/* Coupon Verification Notification - Moved to Bottom */}
+            <AnimatePresence>
+                {couponLoading && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        className="absolute bottom-20 left-1/2 -translate-x-1/2 z-[10010] bg-emerald-900 text-white px-6 py-3 rounded-full shadow-xl flex items-center gap-3"
+                    >
+                        <Loader2 className="animate-spin" size={18} />
+                        <span className="text-sm font-bold">Verifying code...</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
             <div className="bg-white rounded-[2rem] border border-emerald-900/10 shadow-2xl w-full max-w-4xl max-h-[90vh] md:max-h-[90vh] overflow-hidden flex flex-col animate-slide-up mx-auto mt-16 md:mt-0">
                 {/* Header */}
                 <div className="p-4 md:p-8 pb-3 md:pb-4 flex items-center justify-between shrink-0">
