@@ -180,8 +180,13 @@ ${boardInfo}
                     <div className="flex items-center gap-4">
                         <img src="https://cdn-icons-png.flaticon.com/512/3284/3284646.png" alt="Board" className="h-10 w-10 opacity-70" />
                         <div>
-                            <h4 className="font-bold text-emerald-900 text-lg">Airport Greeting (Board Show)</h4>
-                            <p className="text-xs text-gray-500">Our driver will wait for you with a name board.</p>
+                            <div className="flex items-center gap-3">
+                                <Signpost size={20} className={formData.boardShow ? 'text-emerald-600' : 'text-slate-400'} />
+                                <div className="text-left">
+                                    <span className="text-xs font-bold block uppercase tracking-tight text-slate-700">Display Name Board</span>
+                                    <span className="text-[10px] font-medium text-slate-400">Driver waits with name sign</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="text-right">
