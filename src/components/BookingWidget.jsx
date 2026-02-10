@@ -617,7 +617,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         className={`h-16 px-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-amber-700 bg-amber-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-amber-900 dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-slate-900 dark:border-white/10 text-slate-900/60 dark:text-white/60 hover:border-black'}`}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <Signpost size={20} className={formData.hasNameBoard ? 'text-emerald-600' : 'text-slate-400'} />
+                                            <Signpost size={20} className={hasNameBoard ? 'text-emerald-600' : 'text-slate-400'} />
                                             <div className="text-left">
                                                 <span className="text-xs font-bold block uppercase tracking-tight text-slate-700">Display Name Board</span>
                                                 <span className="text-[10px] font-medium text-slate-400">Driver waits with name sign</span>
