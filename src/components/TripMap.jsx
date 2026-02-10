@@ -4,6 +4,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
 
 export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated }) {
+    const mapRef = useRef(null);
+    const [directionsRenderer, setDirectionsRenderer] = useState(null);
+    const [directionsService, setDirectionsService] = useState(null);
+    const [mapInitialized, setMapInitialized] = useState(false);
+    const [googleLoaded, setGoogleLoaded] = useState(false);
     const [error, setError] = useState(null);
 
     // 1. Load Google Maps Script
