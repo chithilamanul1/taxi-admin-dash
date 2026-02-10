@@ -89,42 +89,41 @@ export async function GET(req) {
                 // Continue to serve cached/DB reviews if API fails
             }
         }
-    }
 
         // 3. Fetch Synced Reviews from DB
         const syncedReviews = await Review.find({
-        source: 'tripadvisor',
-        isApproved: true
-    }).sort({ createdAt: -1 }).limit(10);
+            source: 'tripadvisor',
+            isApproved: true
+        }).sort({ createdAt: -1 }).limit(10);
 
-    // If no reviews found (and API failed/missing), return empty structure but success
-    // This allows the widget to fallback gracefully
+        // If no reviews found (and API failed/missing), return empty structure but success
+        // This allows the widget to fallback gracefully
 
-    // Format to match Google Reviews structure
-    const formattedReviews = syncedReviews.map(r => ({
-        _id: r._id,
-        author_name: r.userName,
-        rating: r.rating,
-        text: r.comment,
-        profile_photo_url: r.userImage,
-        relative_time_description: new Date(r.reviewDate || r.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }),
-        source: r.source,
-        externalUrl: r.externalUrl
-    }));
-    return NextResponse.json({
-        success: true,
-        data: {
-            rating: tripAdvisorStats.rating,
-            num_reviews: tripAdvisorStats.totalReviews,
-            reviews: formattedReviews
-        }
-    });
+        // Format to match Google Reviews structure
+        const formattedReviews = syncedReviews.map(r => ({
+            _id: r._id,
+            author_name: r.userName,
+            rating: r.rating,
+            text: r.comment,
+            profile_photo_url: r.userImage,
+            relative_time_description: new Date(r.reviewDate || r.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }),
+            source: r.source,
+            externalUrl: r.externalUrl
+        }));
+        return NextResponse.json({
+            success: true,
+            data: {
+                rating: tripAdvisorStats.rating,
+                num_reviews: tripAdvisorStats.totalReviews,
+                reviews: formattedReviews
+            }
+        });
 
-} catch (error) {
-    console.error('TripAdvisor API Error:', error);
-    return NextResponse.json({
-        success: false,
-        error: error.message
-    }, { status: 500 });
-}
+    } catch (error) {
+        console.error('TripAdvisor API Error:', error);
+        return NextResponse.json({
+            success: false,
+            error: error.message
+        }, { status: 500 });
+    }
 }
