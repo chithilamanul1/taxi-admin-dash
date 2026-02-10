@@ -118,7 +118,7 @@ export default function TourPackagesPage() {
                                         <div className="absolute top-4 left-4">
                                             <span className="px-4 py-2 bg-white/90 text-emerald-900 text-sm font-bold rounded-full flex items-center gap-2">
                                                 <Calendar size={14} />
-                                                {tour.duration} Days
+                                                {typeof tour.duration === 'object' ? `${tour.duration.days}D / ${tour.duration.nights}N` : tour.duration}
                                             </span>
                                         </div>
                                         <div className="absolute bottom-4 left-4 right-4">

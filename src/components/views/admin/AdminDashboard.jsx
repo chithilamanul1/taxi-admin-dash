@@ -85,7 +85,6 @@ const AdminDashboard = () => {
     };
 
 
-    const [bookings, setBookings] = useState([]);
 
     // Fetch Bookings Data
     React.useEffect(() => {

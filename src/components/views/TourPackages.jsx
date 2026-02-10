@@ -27,7 +27,7 @@ const TourPackages = () => {
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
                                 <div className="absolute top-3 right-3 bg-emerald-900/90 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm shadow flex items-center gap-1">
-                                    <Clock size={10} /> {pkg.duration}
+                                    <Clock size={10} /> {typeof pkg.duration === 'object' ? `${pkg.duration.days}D / ${pkg.duration.nights}N` : pkg.duration}
                                 </div>
                                 {pkg.tags && pkg.tags[0] && (
                                     <div className="absolute top-3 left-3 bg-yellow-400 text-emerald-900 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow">

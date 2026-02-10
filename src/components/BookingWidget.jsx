@@ -248,7 +248,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
         const pickupText = (pickup?.name || pickupSearch || '').toLowerCase();
         const dropoffText = (dropoff?.name || dropoffSearch || '').toLowerCase();
-        const fullRoute = `${pickupText} ${dropoffText}`;
 
         return availableCoupons.filter(coupon => {
             // If coupon has no location restrictions, consider it global
@@ -257,9 +256,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             }
 
             // Check if any applicable location matches the current route
-            return coupon.applicableLocations.some(loc =>
-                fullRoute.includes(loc.toLowerCase())
-            );
+            return coupon.applicableLocations.some(loc => {
+                const l = loc.toLowerCase().trim();
+                if (l.includes('->')) {
+                    const [fromPart, toPart] = l.split('->').map(s => s.trim());
+                    return pickupText.includes(fromPart) && dropoffText.includes(toPart);
+                }
+                return pickupText.includes(l) || dropoffText.includes(l);
+            });
         });
     }, [availableCoupons, pickup, pickupSearch, dropoff, dropoffSearch]);
 
@@ -282,10 +286,16 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             // PRIORITY 1: Precise Database Coupons
             availableCoupons.forEach(coupon => {
                 if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
-                    let matchedLoc = null;
                     const isMatch = coupon.applicableLocations.some(loc => {
                         const l = loc.toLowerCase().trim();
                         if (l.length < 3) return false;
+
+                        if (l.includes('->')) {
+                            const [fromPart, toPart] = l.split('->').map(s => s.trim());
+                            const match = start.includes(fromPart) && dest.includes(toPart);
+                            if (match) matchedLoc = loc;
+                            return match;
+                        }
 
                         // Exact word match or prominent presence in route
                         const regex = new RegExp(`\\b${l}\\b`, 'i');

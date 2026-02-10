@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import { useCurrency } from '../context/CurrencyContext';
 import { calculateBasePrice, calculateSurcharges, calculatePaymentFees } from '../lib/pricing-util';
+import LocationInput from './LocationInput';
 
 const STEPS = [
     { id: 1, title: 'Route', icon: MapPin },
@@ -140,19 +141,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             // 1. Calculate Coupon Discount (if eligible)
             let couponDiscountAmount = 0;
             if (verifiedCoupons && verifiedCoupons.length > 0) {
-                // Check if pickup is from Airport (Case Insensitive)
-                const isFromAirport = formData.pickup?.toLowerCase().includes('airport');
-
-                if (isFromAirport) {
-                    verifiedCoupons.forEach(coupon => {
-                        const couponVal = Number(coupon.value) || 0;
-                        if (coupon.discountType === 'percentage') {
-                            couponDiscountAmount += total * (couponVal / 100);
-                        } else {
-                            couponDiscountAmount += couponVal;
-                        }
-                    });
-                }
+                verifiedCoupons.forEach(coupon => {
+                    const couponVal = Number(coupon.value) || 0;
+                    if (coupon.discountType === 'percentage') {
+                        couponDiscountAmount += total * (couponVal / 100);
+                    } else {
+                        couponDiscountAmount += couponVal;
+                    }
+                });
             }
 
             // 2. Calculate Long Distance Discount (>175km = 10% off)
@@ -451,11 +447,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <div className="space-y-4 bg-white p-4 rounded-2xl border border-emerald-900/10 shadow-sm">
                                 <h3 className="text-xs font-bold text-emerald-900 uppercase tracking-widest pl-1 mb-2">My Journey</h3>
                                 <div className="space-y-4">
-                                    <LocationSearchInput
+                                    <LocationInput
                                         label="Pick-Up Location"
                                         icon={MapPin}
                                         placeholder="Enter pickup (e.g. Airport)"
-                                        initialValue={formData.pickup}
+                                        value={formData.pickup}
                                         onSelect={(loc) => setFormData(prev => ({ ...prev, pickup: loc.address, pickupCoords: loc.lat ? { lat: loc.lat, lon: loc.lon } : null }))}
                                     />
 
@@ -475,11 +471,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <div className="relative">
                                         {/* Connecting Line if waypoints exist */}
                                         {formData.waypoints.length > 0 && <div className="absolute left-6 -top-4 w-0.5 h-8 bg-emerald-900/10 -z-10"></div>}
-                                        <LocationSearchInput
+                                        <LocationInput
                                             label="Drop-Off Location"
                                             icon={Navigation}
                                             placeholder="Enter destination (e.g. Hotel)"
-                                            initialValue={formData.dropoff}
+                                            value={formData.dropoff}
                                             onSelect={(loc) => setFormData(prev => ({ ...prev, dropoff: loc.address, dropoffCoords: loc.lat ? { lat: loc.lat, lon: loc.lon } : null }))}
                                         />
                                     </div>

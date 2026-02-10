@@ -53,7 +53,7 @@ export default function TourPackageDetails() {
                                 Tour Package
                             </span>
                             <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider rounded-full flex items-center gap-2">
-                                <Clock size={14} /> {tour.duration}
+                                <Clock size={14} /> {typeof tour.duration === 'object' ? `${tour.duration.days}D / ${tour.duration.nights}N` : tour.duration}
                             </span>
                         </div>
                         <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight max-w-4xl">

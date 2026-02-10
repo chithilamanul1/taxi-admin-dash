@@ -35,7 +35,7 @@ const Tours = () => {
                                     From Rs {Math.round(pkg.price * 300).toLocaleString()}
                                 </div>
                                 <div className="absolute bottom-4 left-4 bg-emerald-900/90 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm shadow flex items-center gap-1">
-                                    <Clock size={12} /> {pkg.duration}
+                                    <Clock size={12} /> {typeof pkg.duration === 'object' ? `${pkg.duration.days}D / ${pkg.duration.nights}N` : pkg.duration}
                                 </div>
                             </div>
                             <div className="p-8 flex-grow flex flex-col">

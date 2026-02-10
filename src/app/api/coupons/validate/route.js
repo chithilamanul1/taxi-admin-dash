@@ -22,20 +22,25 @@ export async function POST(req) {
 
         // Location Check
         if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
-            // Combine pickup and dropoff for checking
-            // Handle if they are objects (BookingWidget sends {name: ...}?) 
-            // Plan said we'd check Frontend logic. Let's assume strings for now, or handle objects.
+            const pickupText = (typeof pickup === 'object' ? pickup?.name : pickup || '').toLowerCase();
+            const dropoffText = (typeof dropoff === 'object' ? dropoff?.name : dropoff || '').toLowerCase();
 
-            const pickupText = (typeof pickup === 'object' ? pickup?.name : pickup) || '';
-            const dropoffText = (typeof dropoff === 'object' ? dropoff?.name : dropoff) || '';
-            const fullRoute = `${pickupText} ${dropoffText}`.toLowerCase();
+            if (!pickupText && !dropoffText) {
+                return NextResponse.json({ valid: false, message: 'Location required for this coupon' });
+            }
 
-            if (!fullRoute.trim()) return NextResponse.json({ valid: false, message: 'Location required for this coupon' });
-
-            const matches = coupon.applicableLocations.some(loc => fullRoute.includes(loc.toLowerCase()));
+            const matches = coupon.applicableLocations.some(loc => {
+                const l = loc.toLowerCase().trim();
+                if (l.includes('->')) {
+                    const [fromPart, toPart] = l.split('->').map(s => s.trim());
+                    return pickupText.includes(fromPart) && dropoffText.includes(toPart);
+                }
+                // Fallback: simple match if no '->'
+                return pickupText.includes(l) || dropoffText.includes(l);
+            });
 
             if (!matches) {
-                return NextResponse.json({ valid: false, message: 'Coupon not applicable for this location' });
+                return NextResponse.json({ valid: false, message: 'Coupon not applicable for this route' });
             }
         }
 
