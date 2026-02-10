@@ -18,8 +18,8 @@ const features = [
         icon: <UserCheck className="w-8 h-8" />
     },
     {
-        title: 'VIP Meet & Greet',
-        description: 'Personalized arrival hall reception with name boards for a seamless start.',
+        title: 'Driver with Name Sign',
+        description: 'Personalized arrival hall reception with display name boards for a seamless start.',
         icon: <Sparkles className="w-8 h-8" />
     }
 ]

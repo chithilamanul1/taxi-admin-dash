@@ -12,7 +12,7 @@ export default function AirportPickupPage() {
                         Airport <span className="text-emerald-600">Pickup</span>
                     </h1>
                     <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                        Professional meet & greet service. Our driver will be waiting for you at the arrival terminal with your name board.
+                        Professional arrival service. Our driver will be waiting for you at the arrival terminal with your display name board.
                     </p>
                 </div>
                 <BookingWidget defaultTab="pickup" />
