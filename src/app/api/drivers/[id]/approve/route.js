@@ -26,8 +26,6 @@ export async function POST(req, { params }) {
         }
 
         if (action === 'approve') {
-            // 1. Create User Account
-            const tempPassword = 'Driver@2025';
 
             // 1. Create User Account
             const tempPassword = 'Driver@2025';
