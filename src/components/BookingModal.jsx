@@ -992,4 +992,3 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     );
 }
 
-export default BookingModal;
