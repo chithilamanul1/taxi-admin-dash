@@ -970,14 +970,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             <span className="text-black font-extrabold">{convertPrice(total - (calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard }, vehiclePricing[vehicle]) || 0)).symbol} {convertPrice(total - (calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard }, vehiclePricing[vehicle]) || 0)).value.toLocaleString()}</span>
                                         </div>
 
-                                        {totalWaitingHours > 0 && (
+                                        {totalWaitingHours > 0 && calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle]) > 0 && (
                                             <div className="flex justify-between items-center text-xs">
                                                 <span className="text-black/60 font-bold uppercase tracking-tight">Waiting ({totalWaitingHours}h)</span>
                                                 <span className="text-black font-extrabold">+{convertPrice(calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle])).symbol} {convertPrice(calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle])).value.toLocaleString()}</span>
                                             </div>
                                         )}
 
-                                        {hasNameBoard && (
+                                        {hasNameBoard && nameBoardPrice > 0 && (
                                             <div className="flex justify-between items-center text-xs">
                                                 <span className="text-black/60 font-bold uppercase tracking-tight">Meet & Greet</span>
                                                 <span className="text-black font-extrabold">+{convertPrice(nameBoardPrice).symbol} {convertPrice(nameBoardPrice).value.toLocaleString()}</span>

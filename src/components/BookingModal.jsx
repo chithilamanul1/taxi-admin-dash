@@ -320,16 +320,18 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const convertedDiscounts = Math.ceil(finalDiscount * rate);
 
             // Detailed Surcharges for UI
-            const detailedSurcharges = [
+            const detailedExtras = [
                 { label: 'Waiting Time', value: Math.ceil(calculateSurcharges({ waitingHours: formData.waitingHours, hasNameBoard: false }, vehicleData) * rate) },
-                { label: 'Name Board', value: Math.ceil(calculateSurcharges({ waitingHours: 0, hasNameBoard: formData.hasNameBoard }, vehicleData) * rate) }
+                { label: 'Name Board', value: Math.ceil(calculateSurcharges({ waitingHours: 0, hasNameBoard: formData.hasNameBoard }, vehicleData) * rate) },
+                { label: 'Card Processing Fee', value: Math.ceil(paymentSurcharge * rate), isFee: true }
             ].filter(s => s.value > 0);
 
             return {
                 total: convertedTotal,
                 subtotal: convertedSubtotal,
-                surcharges: convertedSurcharges,
-                detailedSurcharges,
+                surcharges: convertedSurcharges, // Keep this for legacy or total extra sum
+                paymentFee: Math.ceil(paymentSurcharge * rate),
+                detailedExtras,
                 discounts: convertedDiscounts,
                 appliedCoupons: verifiedCoupons,
                 payNow: convertedPayNow,
@@ -338,7 +340,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     total: Math.ceil(total),
                     payNow: Math.ceil(payNow),
                     balance: Math.ceil(balance),
-                    surcharges: Math.ceil(surcharges + paymentSurcharge),
+                    surcharges: Math.ceil(surcharges),
+                    paymentFee: Math.ceil(paymentSurcharge),
                     subtotal: Math.ceil(baseTotal),
                     discounts: Math.ceil(finalDiscount)
                 },
@@ -906,8 +909,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <span className="text-sm md:text-base font-bold text-emerald-900 text-right">{currentSymbol} {subtotal.toLocaleString()}</span>
                                             </div>
                                             <div className="flex justify-between items-center w-full">
-                                                <span className="text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-widest">Surcharges</span>
-                                                <span className="text-sm md:text-base font-bold text-emerald-900 text-right">{currentSymbol} {surcharges.toLocaleString()}</span>
+                                                <span className="text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-widest">Extra Services</span>
+                                                <span className="text-sm md:text-base font-bold text-emerald-900 text-right">{currentSymbol} {(subtotal + surcharges - subtotal).toLocaleString()}</span>
                                             </div>
 
                                             {/* Applied Coupons Summary */}
@@ -930,8 +933,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 </div>
 
                                                 {/* Break down Extras */}
-                                                {detailedBreakdown.detailedSurcharges?.map((s, idx) => (
-                                                    <div key={idx} className="flex justify-between items-center w-full gap-2 text-emerald-900/40">
+                                                {detailedBreakdown.detailedExtras?.map((s, idx) => (
+                                                    <div key={idx} className={`flex justify-between items-center w-full gap-2 ${s.isFee ? 'text-amber-700 font-black' : 'text-emerald-900/40'}`}>
                                                         <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-tight shrink-0">{s.label}</span>
                                                         <span className="text-[11px] md:text-sm font-bold text-right truncate">+{currentSymbol} {s.value.toLocaleString()}</span>
                                                     </div>
