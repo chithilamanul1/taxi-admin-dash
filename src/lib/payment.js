@@ -145,26 +145,26 @@ export async function initiatePayCorpTransaction(booking, returnUrl) {
     // Amount in LKR (this is the base amount stored in booking)
     const amountLKR = booking.paidAmount || booking.totalPrice;
 
-    // Convert LKR to target currency if not LKR
-    let convertedAmount = amountLKR;
-    if (currency !== 'LKR') {
+    // CRITICAL: Use the amount shown to the user (displayPaidAmount) if it exists 
+    // and matches the currency. This prevents discrepancies like 78 USD vs 77.47 USD.
+    let convertedAmount = (currency === 'LKR')
+        ? amountLKR
+        : (booking.displayPaidAmount || booking.displayPrice || 0);
+
+    // Only fetch rates and re-convert if the display amount is missing (fallback)
+    if (currency !== 'LKR' && !convertedAmount) {
         try {
             // Fetch live exchange rates
             const ratesRes = await fetch('https://api.exchangerate-api.com/v4/latest/LKR');
             const ratesData = await ratesRes.json();
 
             if (ratesData && ratesData.rates && ratesData.rates[currency]) {
-                // Convert LKR to target currency
-                // Rate is LKR -> Currency (e.g., LKR 1 = USD 0.003)
                 convertedAmount = amountLKR * ratesData.rates[currency];
-                console.log(`Currency Conversion: ${amountLKR} LKR -> ${convertedAmount.toFixed(2)} ${currency} (Rate: ${ratesData.rates[currency]})`);
-            } else {
-                console.warn(`Exchange rate not found for ${currency}, using LKR amount`);
-                // Fall back to LKR if conversion fails
+                console.log(`Currency Conversion (Backend Fallback): ${amountLKR} LKR -> ${convertedAmount.toFixed(2)} ${currency}`);
             }
         } catch (error) {
-            console.error('Failed to fetch exchange rates for payment:', error);
-            // Fall back to LKR amount
+            console.error('Failed to fetch exchange rates for fallback:', error);
+            convertedAmount = amountLKR; // Last resort fallback
         }
     }
 

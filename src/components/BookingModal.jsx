@@ -101,7 +101,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         }
     };
 
-    const { currency, rates } = useCurrency(); // Import Currency Context
+    const { currency, rates, changeCurrency } = useCurrency(); // Import Currency Context
 
     // Currency conversion helper
     const SUPPORTED_CURRENCIES = [
@@ -394,22 +394,34 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const currentSymbol = SUPPORTED_CURRENCIES.find(c => c.code === currency)?.symbol || 'Rs';
 
     return (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-emerald-900/80 p-1 md:p-4 overflow-hidden">
-            {/* Coupon Verification Notification - Moved to Bottom */}
-            <AnimatePresence>
-                {couponLoading && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 20 }}
-                        className="absolute bottom-20 left-1/2 -translate-x-1/2 z-[10010] bg-emerald-900 text-white px-6 py-3 rounded-full shadow-xl flex items-center gap-3"
-                    >
-                        <Loader2 className="animate-spin" size={18} />
-                        <span className="text-sm font-bold">Verifying code...</span>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-            <div className="bg-white rounded-[2rem] border border-emerald-900/10 shadow-2xl w-full max-w-4xl max-h-[90vh] md:max-h-[90vh] overflow-hidden flex flex-col animate-slide-up mx-auto mt-16 md:mt-0">
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-emerald-900/95 p-0 sm:p-4 overflow-hidden touch-none overscroll-none select-none">
+            {/* Prevent Body Scroll Shadow Overlay */}
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
+
+            <style jsx global>{`
+                body {
+                    overflow: hidden !important;
+                    touch-action: none;
+                    -webkit-overflow-scrolling: none;
+                }
+            `}</style>
+
+            {/* Modal Container */}
+            <div className="bg-white w-full h-[100dvh] sm:h-auto sm:max-h-[90vh] sm:rounded-[2rem] sm:border sm:border-emerald-900/10 shadow-2xl sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative">
+                {/* Coupon Verification Notification - Moved to Bottom */}
+                <AnimatePresence>
+                    {couponLoading && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            className="absolute bottom-24 left-1/2 -translate-x-1/2 z-[10010] bg-emerald-900 border border-emerald-700/50 text-white px-6 py-3 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.3)] flex items-center gap-3 backdrop-blur-xl"
+                        >
+                            <Loader2 className="animate-spin text-amber-400" size={18} />
+                            <span className="text-xs font-black uppercase tracking-widest">Verifying code...</span>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
                 {/* Header */}
                 <div className="p-4 md:p-8 pb-3 md:pb-4 flex items-center justify-between shrink-0">
                     <div className="flex items-center gap-3 md:gap-4">
@@ -574,11 +586,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                         <div className="grid grid-cols-2 gap-3">
                                             {convertToAllCurrencies(totalPrice / (rates?.[currency] || 1)).map((c) => (
-                                                <div
+                                                <button
                                                     key={c.code}
-                                                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col gap-1 ${currency === c.code
+                                                    type="button"
+                                                    onClick={() => changeCurrency(c.code)}
+                                                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col gap-1 text-left cursor-pointer group/card ${currency === c.code
                                                         ? 'bg-amber-500/10 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
-                                                        : 'bg-white/5 border-white/5 hover:border-white/20'
+                                                        : 'bg-white/5 border-white/5 hover:border-white/20 hover:bg-white/10'
                                                         }`}
                                                 >
                                                     <div className="flex items-center justify-between">
@@ -591,7 +605,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         <span className="text-[10px] font-bold mr-1 opacity-60">{c.symbol}</span>
                                                         {c.value.toLocaleString()}
                                                     </div>
-                                                </div>
+                                                </button>
                                             ))}
                                         </div>
                                     </div>
