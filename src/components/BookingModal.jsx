@@ -322,8 +322,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             // Detailed Surcharges for UI
             const detailedExtras = [
                 { label: 'Waiting Time', value: Math.ceil(calculateSurcharges({ waitingHours: formData.waitingHours, hasNameBoard: false }, vehicleData) * rate) },
-                { label: 'Name Board', value: Math.ceil(calculateSurcharges({ waitingHours: 0, hasNameBoard: formData.hasNameBoard }, vehicleData) * rate) },
-                { label: 'Card Processing Fee', value: Math.ceil(paymentSurcharge * rate), isFee: true }
+                { label: 'Name Board', value: Math.ceil(calculateSurcharges({ waitingHours: 0, hasNameBoard: formData.hasNameBoard }, vehicleData) * rate) }
             ].filter(s => s.value > 0);
 
             return {
