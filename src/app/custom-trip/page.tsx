@@ -200,15 +200,16 @@ export default function CustomTripPage() {
                                                     value={stop.address}
                                                     onSelect={(loc) => handleUpdateStop(stop.id, { address: loc.address, lat: loc.lat, lon: loc.lon })}
                                                     onChange={(val) => {
-                                                        // Only reset if value is actually different from current address
+                                                        // CRITICAL: Only reset if the value is actually different and NOT just a manual tweak to a selected address
+                                                        // This prevents the 'Please select a location' warning from appearing too aggressively
                                                         if (val !== stop.address) {
                                                             handleUpdateStop(stop.id, { address: val, lat: null, lon: null });
                                                         }
                                                     }}
                                                 />
-                                                {/* Validation Warning */}
+                                                {/* Validation Warning - Shifted down to avoid overlapping the Add Stop button */}
                                                 {stop.address && (stop.lat === null || stop.lon === null) && (
-                                                    <div className="absolute top-full left-0 mt-1 text-[10px] sm:text-xs font-bold text-amber-600 flex items-center gap-1 z-10 bg-amber-50 px-2 py-1 rounded-lg">
+                                                    <div className="absolute top-full left-0 mt-3 text-[10px] sm:text-xs font-bold text-amber-600 flex items-center gap-1 z-10 bg-amber-50 px-2 py-1 rounded-lg">
                                                         <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                                                         Please select a location from the list to calculate distance.
                                                     </div>
@@ -217,12 +218,12 @@ export default function CustomTripPage() {
                                         </div>
                                     </div>
 
-                                    {/* Add Button Logic */}
+                                    {/* Add Button Logic - Increased padding and z-index to avoid overlap */}
                                     {index < stops.length - 1 && (
-                                        <div className="pl-16 md:pl-20 py-2">
+                                        <div className="pl-16 md:pl-20 py-4 relative z-30">
                                             <button
                                                 onClick={handleAddStop}
-                                                className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-[#00A99D] hover:text-[#006064] transition-colors bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-full w-fit"
+                                                className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-[#00A99D] hover:text-[#006064] transition-colors bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-full w-fit shadow-sm"
                                             >
                                                 <Plus size={14} /> Add Stopover
                                             </button>

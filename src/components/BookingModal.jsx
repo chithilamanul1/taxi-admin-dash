@@ -137,10 +137,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             let total = baseTotal + surcharges + paymentSurcharge;
 
             // Coupon Logic (Stacking Rules & Auto-Discounts)
+            const isAirportPickup = formData.pickup?.toLowerCase().includes('airport');
 
-            // 1. Calculate Coupon Discount (if eligible)
+            // 1. Calculate Coupon Discount (if eligible) - ONLY FOR AIRPORT PICKUPS
             let couponDiscountAmount = 0;
-            if (verifiedCoupons && verifiedCoupons.length > 0) {
+            if (verifiedCoupons && verifiedCoupons.length > 0 && isAirportPickup) {
                 verifiedCoupons.forEach(coupon => {
                     const couponVal = Number(coupon.value) || 0;
                     if (coupon.discountType === 'percentage') {
@@ -153,7 +154,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
             // 2. Calculate Long Distance Discount (>175km = 10% off) - ONLY FOR AIRPORT PICKUPS
             let longDistanceDiscountAmount = 0;
-            const isAirportPickup = formData.pickup?.toLowerCase().includes('airport');
             if (distKm > 175 && isAirportPickup) {
                 longDistanceDiscountAmount = total * 0.10;
             }

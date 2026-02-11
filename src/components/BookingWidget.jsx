@@ -283,68 +283,72 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             const existingManual = prev.filter(o => o.type === 'coupon');
             const dynamicOffers = [];
 
-            // PRIORITY 1: Precise Database Coupons
-            availableCoupons.forEach(coupon => {
-                if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
-                    let matchedLoc = '';
-                    const isMatch = coupon.applicableLocations.some(loc => {
-                        const l = loc.toLowerCase().trim();
-                        if (l.length < 3) return false;
+            // ONLY ALLOW AUTOMATED OFFERS FOR AIRPORT PICKUPS
+            const isAirportPickup = start.includes('airport');
 
-                        if (l.includes('->')) {
-                            const [fromPart, toPart] = l.split('->').map(s => s.trim());
-                            const match = start.includes(fromPart) && dest.includes(toPart);
-                            if (match) matchedLoc = loc;
+            if (isAirportPickup) {
+                // PRIORITY 1: Precise Database Coupons
+                availableCoupons.forEach(coupon => {
+                    if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
+                        let matchedLoc = '';
+                        const isMatch = coupon.applicableLocations.some(loc => {
+                            const l = loc.toLowerCase().trim();
+                            if (l.length < 3) return false;
+
+                            if (l.includes('->')) {
+                                const [fromPart, toPart] = l.split('->').map(s => s.trim());
+                                const match = start.includes(fromPart) && dest.includes(toPart);
+                                if (match) matchedLoc = loc;
+                                return match;
+                            }
+
+                            // Exact word match or prominent presence in route
+                            const regex = new RegExp(`\\b${l}\\b`, 'i');
+                            const match = regex.test(dest) || regex.test(start);
+                            if (match) matchedLoc = loc; // Store the actual matched location name
                             return match;
-                        }
-
-                        // Exact word match or prominent presence in route
-                        const regex = new RegExp(`\\b${l}\\b`, 'i');
-                        const match = regex.test(dest) || regex.test(start);
-                        if (match) matchedLoc = loc; // Store the actual matched location name
-                        return match;
-                    });
-
-                    if (isMatch) {
-                        dynamicOffers.push({
-                            _id: 'auto-' + coupon.code,
-                            name: coupon.code,
-                            discountPercentage: coupon.discountType === 'percentage' ? coupon.value : 0,
-                            discountAmount: coupon.discountType === 'flat' ? coupon.value : 0,
-                            description: coupon.description || `Special offer for ${matchedLoc}!`,
-                            isActive: true,
-                            type: 'location',
-                            imageUrl: coupon.imageUrl
                         });
-                    }
-                }
-            });
 
-            // PRIORITY 2: Marketing offers (Backwards compatibility)
-            if (activeOffers && activeOffers.length > 0) {
-                activeOffers.forEach(o => {
-                    const kw = o.locationKeyword?.toLowerCase().trim();
-                    if (kw && kw.length >= 3) {
-                        const regex = new RegExp(`\\b${kw}\\b`, 'i');
-                        if (regex.test(dest) || regex.test(start)) {
-                            dynamicOffers.push({ ...o, type: 'location' });
+                        if (isMatch) {
+                            dynamicOffers.push({
+                                _id: 'auto-' + coupon.code,
+                                name: coupon.code,
+                                discountPercentage: coupon.discountType === 'percentage' ? coupon.value : 0,
+                                discountAmount: coupon.discountType === 'flat' ? coupon.value : 0,
+                                description: coupon.description || `Special offer for ${matchedLoc}!`,
+                                isActive: true,
+                                type: 'location',
+                                imageUrl: coupon.imageUrl
+                            });
                         }
                     }
                 });
-            }
 
-            // PRIORITY 3: Automated Rules (e.g. 175km Discount) - ONLY FOR AIRPORT PICKUPS
-            const isAirportPickup = pickup?.name?.toLowerCase().includes('airport') || pickupSearch?.toLowerCase().includes('airport');
-            if (distance > 175 && isAirportPickup) {
-                dynamicOffers.push({
-                    _id: 'auto-long-distance',
-                    name: 'Long Distance Discount',
-                    discountPercentage: 10,
-                    discountAmount: 0,
-                    description: 'Special 10% discount automatically applied for long distance airport transfers!',
-                    isActive: true,
-                    type: 'location'
-                });
+                // PRIORITY 2: Marketing offers (Backwards compatibility)
+                if (activeOffers && activeOffers.length > 0) {
+                    activeOffers.forEach(o => {
+                        const kw = o.locationKeyword?.toLowerCase().trim();
+                        if (kw && kw.length >= 3) {
+                            const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                            if (regex.test(dest) || regex.test(start)) {
+                                dynamicOffers.push({ ...o, type: 'location' });
+                            }
+                        }
+                    });
+                }
+
+                // PRIORITY 3: Automated Rules (e.g. 175km Discount)
+                if (distance > 175) {
+                    dynamicOffers.push({
+                        _id: 'auto-long-distance',
+                        name: 'Long Distance Discount',
+                        discountPercentage: 10,
+                        discountAmount: 0,
+                        description: 'Special 10% discount automatically applied for long distance airport transfers!',
+                        isActive: true,
+                        type: 'location'
+                    });
+                }
             }
 
             // Combine, Sort by Value, and Limit to Best Offer
