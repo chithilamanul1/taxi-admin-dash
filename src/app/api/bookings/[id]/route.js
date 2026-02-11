@@ -17,13 +17,18 @@ async function checkAuth(bookingId) {
 
     // 1. Admin (Session or Token)
     let isAdmin = session?.user?.role === 'admin';
+    console.log(`[AuthDebug] Session: ${session ? 'Found' : 'Missing'}, Role: ${session?.user?.role}, Token: ${token ? 'Found' : 'Missing'}`);
+
     if (!isAdmin && token) {
         try {
             const { verify } = await import('jsonwebtoken');
             const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET;
             const decoded = verify(token, secret);
             if (decoded.role === 'admin') isAdmin = true;
-        } catch (e) { }
+            console.log(`[AuthDebug] Token decoded role: ${decoded.role}`);
+        } catch (e) {
+            console.log(`[AuthDebug] Token verification failed:`, e.message);
+        }
     }
     if (isAdmin) return { role: 'admin' };
 
