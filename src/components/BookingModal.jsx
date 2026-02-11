@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession, signIn } from 'next-auth/react';
-import { X, MapPin, User, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost } from 'lucide-react';
+import { X, MapPin, User, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { useCurrency } from '../context/CurrencyContext';
@@ -151,9 +151,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 });
             }
 
-            // 2. Calculate Long Distance Discount (>175km = 10% off)
+            // 2. Calculate Long Distance Discount (>175km = 10% off) - ONLY FOR AIRPORT PICKUPS
             let longDistanceDiscountAmount = 0;
-            if (distKm > 175) {
+            const isAirportPickup = formData.pickup?.toLowerCase().includes('airport');
+            if (distKm > 175 && isAirportPickup) {
                 longDistanceDiscountAmount = total * 0.10;
             }
 
@@ -548,13 +549,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 <div className="relative z-10 space-y-8">
                                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                                         <div>
-                                            <div className="flex items-center gap-2 text-emerald-400 mb-2">
+                                            <div className="flex items-center gap-2 text-amber-500 mb-2">
                                                 <Zap size={14} fill="currentColor" className="animate-pulse" />
-                                                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{formData.paymentType === 'partial' ? 'Pay Now' : 'Total Price'}</span>
+                                                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{formData.paymentType === 'partial' ? 'Deposit Amount' : 'Total Price'}</span>
                                             </div>
-                                            <div className="text-4xl md:text-5xl font-black leading-tight tracking-tight">
-                                                <span className="text-xl md:text-2xl font-bold mr-2 text-emerald-400/60">{currentSymbol}</span>
-                                                {payNow.toLocaleString()}
+                                            <div className="text-4xl md:text-6xl font-black leading-tight tracking-tighter flex items-center gap-2">
+                                                <span className="text-xl md:text-3xl font-bold text-amber-500">{currentSymbol}</span>
+                                                <span className="text-white">{payNow.toLocaleString()}</span>
                                             </div>
                                         </div>
                                         <div className="text-left md:text-right bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
@@ -629,7 +630,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             type={f.type}
                                             value={formData[f.key] || ''}
                                             onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
-                                            className={`w-full ${f.key === 'flightNumber' ? 'h-14 md:h-16 text-base' : 'h-12 md:h-14 text-sm'} bg-white border border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none focus:border-emerald-900 focus:ring-4 focus:ring-emerald-900/5 transition-all font-bold text-emerald-900`}
+                                            className={`w-full ${f.key === 'flightNumber' || f.key === 'whatsapp' ? 'h-16 md:h-18 text-lg md:text-xl' : 'h-14 md:h-16 text-base'} bg-white border-2 border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-900/5 transition-all font-black text-emerald-900 placeholder:font-medium placeholder:text-slate-300 shadow-sm`}
                                             placeholder={f.placeholder}
                                         />
                                     </div>
@@ -638,8 +639,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <div className="space-y-2">
                                 <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Pick-up Date & Time</label>
                                 <div className="flex flex-col sm:flex-row gap-4">
-                                    <input type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} className="flex-1 h-14 md:h-16 bg-white border border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none text-base font-bold text-emerald-900" />
-                                    <input type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value })} className="flex-1 h-14 md:h-16 bg-white border border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none text-base font-bold text-emerald-900" />
+                                    <input type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} className="flex-1 h-16 md:h-20 bg-white border-2 border-emerald-900/10 px-4 md:px-8 rounded-2xl outline-none text-lg md:text-2xl font-black text-emerald-900 shadow-sm focus:border-emerald-600 transition-all" />
+                                    <input type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value })} className="flex-1 h-16 md:h-20 bg-white border-2 border-emerald-900/10 px-4 md:px-8 rounded-2xl outline-none text-lg md:text-2xl font-black text-emerald-900 shadow-sm focus:border-emerald-600 transition-all" />
                                 </div>
                             </div>
                         </div>

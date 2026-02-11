@@ -40,10 +40,10 @@ const BookingForm = () => {
         const formattedDate = formData.arrivalDate.toLocaleDateString()
         const formattedTime = formData.arrivalDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 
-        // Board Show Details
+        // Board Details
         const boardInfo = formData.boardShow
-            ? `\nBoard Show (Meet & Greet): YES (+Rs 2000)\nName on Board: ${formData.boardName}`
-            : `\nBoard Show: NO`
+            ? `\nDisplay Name Board: YES (+Rs 2000)\nName on Board: ${formData.boardName}`
+            : `\nDisplay Name Board: NO`
 
         const subject = `New Booking Request - ${formData.name}`
         const messageBody = `
@@ -175,7 +175,7 @@ ${boardInfo}
                 </div>
             </div>
 
-            {/* Board Show Toggle */}
+            {/* Display Name Board Toggle */}
             <div className="mt-8 p-6 bg-slate-50 rounded-2xl border border-slate-100">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">

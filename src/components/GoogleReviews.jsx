@@ -69,9 +69,11 @@ const GoogleReviews = () => {
                             }
                         }));
                     } else {
-                        // Fallback if no TA reviews found or API fails
                         setTripReviews(FALLBACK_REVIEWS.map(r => ({ ...r, source: 'tripadvisor' })));
                     }
+                } else {
+                    // Handle Rejection
+                    setTripReviews(FALLBACK_REVIEWS.map(r => ({ ...r, source: 'tripadvisor' })));
                 }
             } catch (err) {
                 console.error('Failed to fetch reviews:', err);

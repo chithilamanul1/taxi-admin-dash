@@ -333,14 +333,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 });
             }
 
-            // PRIORITY 3: Automated Rules (e.g. 175km Discount)
-            if (distance > 175) {
+            // PRIORITY 3: Automated Rules (e.g. 175km Discount) - ONLY FOR AIRPORT PICKUPS
+            const isAirportPickup = pickup?.name?.toLowerCase().includes('airport') || pickupSearch?.toLowerCase().includes('airport');
+            if (distance > 175 && isAirportPickup) {
                 dynamicOffers.push({
                     _id: 'auto-long-distance',
                     name: 'Long Distance Discount',
                     discountPercentage: 10,
                     discountAmount: 0,
-                    description: 'Special 10% discount automatically applied for trips over 175km!',
+                    description: 'Special 10% discount automatically applied for long distance airport transfers!',
                     isActive: true,
                     type: 'location'
                 });

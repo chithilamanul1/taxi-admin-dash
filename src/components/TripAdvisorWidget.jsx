@@ -42,7 +42,7 @@ const TripAdvisorWidget = () => {
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-900/10 inline-block pointer-events-auto">
                         {/* Dynamic Custom Widget */}
                         <a
-                            href="https://www.tripadvisor.com/Attraction_Review-g297896-d33986804-Reviews-Airport_Taxi_Tours_Sri_Lanka-Galle_Galle_District_Southern_Province.html"
+                            href="https://www.tripadvisor.com/Attraction_Review-g293962-d33986804-Reviews-Airport_Taxis_Pvt_Ltd_Sri_Lanka-Colombo_Western_Province.html"
                             target="_blank"
                             className="flex flex-col items-center gap-3 hover:opacity-80 transition-opacity"
                         >

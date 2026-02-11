@@ -39,8 +39,8 @@ export async function GET(req) {
                     clearTimeout(timeout);
                 }
 
-                // Fetch Recent Reviews
-                const reviewsUrl = `https://api.content.tripadvisor.com/api/v1/location/${locationId}/reviews?key=${apiKey}&language=en&limit=5`;
+                // Fetch Recent Reviews (Limit increased to 20 to sync all)
+                const reviewsUrl = `https://api.content.tripadvisor.com/api/v1/location/${locationId}/reviews?key=${apiKey}&language=en&limit=20`;
                 const controller2 = new AbortController();
                 const timeout2 = setTimeout(() => controller2.abort(), 8000);
 

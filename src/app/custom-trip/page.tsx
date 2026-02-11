@@ -65,6 +65,13 @@ export default function CustomTripPage() {
     const convertedEstimate = convertPrice(estimate);
 
     const handleAddStop = () => {
+        // Limit to 5 Stopovers (Waypoints)
+        const waypointsCount = stops.filter(s => s.type === 'waypoint').length;
+        if (waypointsCount >= 5) {
+            alert("Maximum of 5 stopovers allowed.");
+            return;
+        }
+
         const newStop = { id: Date.now(), type: 'waypoint', address: '', lat: null, lon: null };
         const newStops = [...stops];
         newStops.splice(newStops.length - 1, 0, newStop);
@@ -192,7 +199,12 @@ export default function CustomTripPage() {
                                                     placeholder={index === 0 ? "Enter pickup location" : "Enter destination"}
                                                     value={stop.address}
                                                     onSelect={(loc) => handleUpdateStop(stop.id, { address: loc.address, lat: loc.lat, lon: loc.lon })}
-                                                    onChange={(val) => handleUpdateStop(stop.id, { address: val, lat: null, lon: null })} // Reset coords on manual type
+                                                    onChange={(val) => {
+                                                        // Only reset if value is actually different from current address
+                                                        if (val !== stop.address) {
+                                                            handleUpdateStop(stop.id, { address: val, lat: null, lon: null });
+                                                        }
+                                                    }}
                                                 />
                                                 {/* Validation Warning */}
                                                 {stop.address && (stop.lat === null || stop.lon === null) && (
