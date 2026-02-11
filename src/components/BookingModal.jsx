@@ -961,7 +961,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 <div className="p-4 md:p-8 pt-3 md:pt-4 border-t border-emerald-900/10 bg-emerald-50/50 shrink-0">
                     <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-3 md:gap-4">
                         <button
-                            onClick={() => step > 1 ? setStep(step - 1) : onClose()}
+                            onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
                             className="flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-emerald-50 transition-all text-emerald-900 border border-emerald-900/10 shadow-sm w-full md:w-auto min-w-[120px]"
                         >
                             <ChevronLeft size={16} className="md:block hidden" /> {step === 1 ? 'Cancel' : 'Back'}
@@ -988,5 +988,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     </div>
                 </div>
             </div>
-            );
+        </div>
+    );
 }
+
+export default BookingModal;
