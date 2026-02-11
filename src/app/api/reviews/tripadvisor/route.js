@@ -11,10 +11,17 @@ export async function GET(req) {
         // Fallback Stats
         let tripAdvisorStats = { rating: 5.0, totalReviews: 0 };
 
-        // 1. Fetch from TripAdvisor API if Key Exists
-        if (apiKey && locationId) {
+        // 1. Check Cache (Smart Sync)
+        const lastSyncReview = await Review.findOne({ source: 'tripadvisor' }).sort({ updatedAt: -1 });
+        const lastSyncTime = lastSyncReview ? new Date(lastSyncReview.updatedAt).getTime() : 0;
+        const twelveHours = 12 * 60 * 60 * 1000;
+        // Force refresh if cache is old OR if the latest review is missing the real 'reviewDate'
+        const isStale = (Date.now() - lastSyncTime) > twelveHours || (lastSyncReview && !lastSyncReview.reviewDate);
+
+        // 2. Fetch from TripAdvisor API if Key Exists AND Cache is Stale
+        if (apiKey && locationId && (isStale || !lastSyncReview)) {
+            console.log('TripAdvisor: Cache stale or legacy data. Fetching from API...');
             try {
-                // Fetch Location Details (Rating & Count)
                 // Fetch Location Details (Rating & Count)
                 const locationUrl = `https://api.content.tripadvisor.com/api/v1/location/${locationId}/details?key=${apiKey}&language=en`;
 
@@ -54,7 +61,7 @@ export async function GET(req) {
                         const reviewsData = await reviewsRes.json();
 
                         if (reviewsData && reviewsData.data) {
-                            // 2. Sync to MongoDB (Upsert)
+                            // Sync to MongoDB (Upsert)
                             for (const review of reviewsData.data) {
                                 // TripAdvisor API provides: id, published_date, rating, text, title, url, user { username }
                                 await Review.findOneAndUpdate(
@@ -74,6 +81,7 @@ export async function GET(req) {
                                         showOnHomepage: true,
                                         reviewDate: new Date(review.published_date), // Original TripAdvisor Date
                                         createdAt: new Date(review.published_date) // Match sorting
+                                        // updatedAt updated automatically
                                     },
                                     { upsert: true, new: true, setDefaultsOnInsert: true }
                                 );
@@ -88,6 +96,8 @@ export async function GET(req) {
                 console.error('TripAdvisor Fetch Warning:', err);
                 // Continue to serve cached/DB reviews if API fails
             }
+        } else {
+            console.log('TripAdvisor: Serving from Cache (DB)');
         }
 
         // 3. Fetch Synced Reviews from DB

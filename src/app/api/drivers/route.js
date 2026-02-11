@@ -62,7 +62,7 @@ export async function POST(req) {
             name: data.name,
             phone: data.phone,
             email: data.email || undefined,
-            nic: data.nic || undefined,
+            nic: data.nic ? data.nic : undefined,
             vehicleType: data.vehicleType,
             vehicleModel: data.vehicleModel,
             vehicleNumber: data.vehicleNumber,

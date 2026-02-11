@@ -13,8 +13,17 @@ export async function GET(req) {
 
         // Basic Check: Only admins can see other admins
         // In a real scenario, check if session.user.permissions includes 'manage_admins'
+        console.log('Team API Check:', {
+            email: session?.user?.email,
+            role: session?.user?.role,
+            isAdmin: session?.user?.role === 'admin'
+        });
+
         if (!session || session.user.role !== 'admin') {
-            return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+            return NextResponse.json({
+                success: false,
+                error: `Unauthorized: User role is '${session?.user?.role || 'unknown'}'`
+            }, { status: 401 });
         }
 
         const admins = await User.find({ role: 'admin' }).select('-password');
@@ -58,7 +67,11 @@ export async function POST(req) {
         }
 
         if (!isAdmin) {
-            return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+            console.log('Team API POST Unauthorized:', {
+                sessionRole: session?.user?.role,
+                headers: req.headers
+            });
+            return NextResponse.json({ success: false, error: 'Unauthorized: Admin access required' }, { status: 401 });
         }
 
         // Ideally, check for 'manage_admins' permission strictly

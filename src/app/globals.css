@@ -13,7 +13,12 @@
     box-sizing: border-box;
 }
 
+html,
 body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+    min-height: 100vh;
     font-family: var(--font-inter), var(--font-montserrat), sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -95,7 +100,7 @@ body {
 }
 
 .animate-timer-progress {
-    animation: timerProgress 15s linear forwards;
+    animation: timerProgress 6s linear forwards;
 }
 
 .custom-scrollbar::-webkit-scrollbar {

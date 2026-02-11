@@ -11,11 +11,19 @@ export async function GET(req) {
             console.error('GOOGLE_PLACE_ID is not defined in .env');
         }
 
-        let googleStats = { rating: 4.9, totalReviews: 128 }; // Fallbacks
+        let googleStats = { rating: 4.9, totalReviews: 128 }; // Fallback defaults
         let latestGoogleReviews = [];
 
-        // 1. Fetch from Google if Key exists
-        if (apiKey) {
+        // 1. Check Cache Status (Smart Sync)
+        const lastSyncReview = await Review.findOne({ source: 'google' }).sort({ updatedAt: -1 });
+        const lastSyncTime = lastSyncReview ? new Date(lastSyncReview.updatedAt).getTime() : 0;
+        const twelveHours = 12 * 60 * 60 * 1000;
+        // Force refresh if cache is old OR if the latest review is missing the real 'reviewDate' (legacy data fix)
+        const isStale = (Date.now() - lastSyncTime) > twelveHours || (lastSyncReview && !lastSyncReview.reviewDate);
+
+        // 2. Fetch from Google if Key exists AND Cache is Stale
+        if (apiKey && (isStale || !lastSyncReview)) {
+            console.log('Google Reviews: Cache stale or legacy data. Fetching from API...');
             const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,rating,user_ratings_total,reviews&key=${apiKey}`;
             try {
                 const response = await fetch(url);
@@ -27,8 +35,7 @@ export async function GET(req) {
                     googleStats.totalReviews = place.user_ratings_total;
                     latestGoogleReviews = place.reviews || [];
 
-                    // 2. Sync to MongoDB (Upsert)
-                    // We generate a unique ID based on author + time to avoid duplicates
+                    // Sync to MongoDB (Upsert)
                     for (const review of latestGoogleReviews) {
                         await Review.findOneAndUpdate(
                             {
@@ -38,15 +45,16 @@ export async function GET(req) {
                             },
                             {
                                 userName: review.author_name,
-                                userEmail: `google-${review.time}@placeholder.com`, // Dummy email for schema requirement
+                                userEmail: `google-${review.time}@placeholder.com`,
                                 userImage: review.profile_photo_url,
                                 rating: review.rating,
                                 comment: review.text,
                                 source: 'google',
-                                isApproved: true, // Auto-approve Google reviews
+                                isApproved: true,
                                 showOnHomepage: true,
-                                reviewDate: new Date(review.time * 1000), // Original Google Time
+                                reviewDate: new Date(review.time * 1000),
                                 createdAt: new Date(review.time * 1000)
+                                // updatedAt will be auto-updated, serving as our sync timestamp
                             },
                             { upsert: true, new: true, setDefaultsOnInsert: true }
                         );
@@ -54,8 +62,9 @@ export async function GET(req) {
                 }
             } catch (err) {
                 console.error('Google Fetch Warning:', err);
-                // Continue to serve DB reviews if Google fails
             }
+        } else {
+            console.log('Google Reviews: Serving from Cache (DB)');
         }
 
         // 3. Fetch ALL reviews from DB (Google + Website + Manual)

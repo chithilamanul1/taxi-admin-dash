@@ -118,14 +118,14 @@ export default function TourPackagesPage() {
                                         <div className="absolute top-4 left-4">
                                             <span className="px-4 py-2 bg-white/90 text-emerald-900 text-sm font-bold rounded-full flex items-center gap-2">
                                                 <Calendar size={14} />
-                                                {typeof tour.duration === 'object' ? `${tour.duration.days}D / ${tour.duration.nights}N` : tour.duration}
+                                                {typeof tour.duration === 'object' && tour.duration ? `${tour.duration.days || '?'}D / ${tour.duration.nights || '?'}N` : (tour.duration || 'N/A')}
                                             </span>
                                         </div>
                                         <div className="absolute bottom-4 left-4 right-4">
                                             <div className="bg-emerald-900/90 backdrop-blur-sm rounded-2xl p-4 text-white">
                                                 <div className="text-sm opacity-80 mb-1">Starting from</div>
                                                 <div className="flex items-baseline gap-2">
-                                                    <span className="text-3xl font-black">${tour.price}</span>
+                                                    <span className="text-3xl font-black">${tour.price?.toLocaleString() || '0'}</span>
                                                     <span className="text-sm opacity-80">/{tour.priceType || 'Person'}</span>
                                                 </div>
                                             </div>

@@ -17,18 +17,23 @@ const STEPS = [
 
 function CustomDateTimePicker({ date, time, onChange }) {
     const [view, setView] = useState('date'); // 'date' or 'time'
+    const [ampm, setAmpm] = useState(time ? (parseInt(time.split(':')[0]) >= 12 ? 'PM' : 'AM') : 'AM');
 
-    // Generate dates for the next 14 days
-    const dates = Array.from({ length: 14 }, (_, i) => {
+    // Generate dates for the next 60 days (approx 2 months)
+    const dates = Array.from({ length: 60 }, (_, i) => {
         const d = new Date();
         d.setDate(d.getDate() + i);
         return d;
     });
 
-    const times = [
-        '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
-        '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'
-    ];
+    // Generate times with 30-minute intervals for AM or PM
+    const hours = ampm === 'AM' ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] : [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+    const times = [];
+    hours.forEach(h => {
+        const hh = h.toString().padStart(2, '0');
+        times.push(`${hh}:00`);
+        times.push(`${hh}:30`);
+    });
 
     const formatShortDate = (d) => {
         return d.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' });
@@ -62,7 +67,7 @@ function CustomDateTimePicker({ date, time, onChange }) {
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 10 }}
-                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2"
+                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar"
                     >
                         {dates.map((d, i) => {
                             const val = formatDateValue(d);
@@ -91,25 +96,42 @@ function CustomDateTimePicker({ date, time, onChange }) {
                         initial={{ opacity: 0, x: 10 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -10 }}
-                        className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 max-h-[240px] overflow-y-auto pr-2 custom-scrollbar"
+                        className="space-y-4"
                     >
-                        {times.map((t, i) => {
-                            const active = time === t;
-                            const [hour] = t.split(':');
-                            const displayHour = parseInt(hour) % 12 || 12;
-                            const ampm = parseInt(hour) >= 12 ? 'PM' : 'AM';
-
-                            return (
+                        {/* AM/PM Switcher */}
+                        <div className="flex bg-white/50 p-1 rounded-xl gap-1">
+                            {['AM', 'PM'].map(period => (
                                 <button
-                                    key={i}
-                                    onClick={() => onChange(date, t)}
-                                    className={`p-3 rounded-2xl border-2 transition-all text-center ${active ? 'border-emerald-600 bg-emerald-600 text-white shadow-md' : 'border-white bg-white text-emerald-900 hover:border-emerald-600/20 shadow-sm'}`}
+                                    key={period}
+                                    onClick={() => setAmpm(period)}
+                                    className={`flex-1 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${ampm === period ? 'bg-emerald-600 text-white shadow-sm' : 'text-emerald-900/40 hover:bg-white'}`}
                                 >
-                                    <p className="text-sm font-black">{displayHour}</p>
-                                    <p className="text-[10px] font-bold opacity-60">{ampm}</p>
+                                    {period}
                                 </button>
-                            );
-                        })}
+                            ))}
+                        </div>
+
+                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 gap-2 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar">
+                            {times.map((t, i) => {
+                                const active = time === t;
+                                const [hour, min] = t.split(':');
+                                const displayHour = parseInt(hour) % 12 || 12;
+
+                                return (
+                                    <button
+                                        key={i}
+                                        onClick={() => onChange(date, t)}
+                                        className={`p-3 rounded-2xl border-2 transition-all text-center flex flex-col items-center justify-center gap-0.5 ${active ? 'border-emerald-600 bg-emerald-600 text-white shadow-md' : 'border-white bg-white text-emerald-900 hover:border-emerald-600/20 shadow-sm'}`}
+                                    >
+                                        <div className="flex items-baseline gap-0.5">
+                                            <span className="text-base font-black leading-none">{displayHour}</span>
+                                            <span className="text-[10px] font-bold opacity-60">:{min}</span>
+                                        </div>
+                                        <p className="text-[8px] font-black uppercase tracking-tighter opacity-40">{ampm}</p>
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -253,17 +275,19 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             let total = baseTotal + surcharges + paymentSurcharge;
 
             // Coupon Logic (Stacking Rules & Auto-Discounts)
-            const isAirportPickup = formData.pickup?.toLowerCase().includes('airport');
+            const isAirportPickup = initialData.isAirportPickup || formData.pickup?.toLowerCase().includes('airport');
 
-            // 1. Calculate Coupon Discount (if eligible) - ONLY FOR AIRPORT PICKUPS
             let couponDiscountAmount = 0;
-            if (verifiedCoupons && verifiedCoupons.length > 0 && isAirportPickup) {
+            if (verifiedCoupons && verifiedCoupons.length > 0) {
+                // If it's an airport transfer OR the coupon isn't restricted to airport, apply it
                 verifiedCoupons.forEach(coupon => {
-                    const couponVal = Number(coupon.value) || 0;
-                    if (coupon.discountType === 'percentage') {
-                        couponDiscountAmount += total * (couponVal / 100);
-                    } else {
-                        couponDiscountAmount += couponVal;
+                    if (!coupon.airportOnly || isAirportPickup) { // Apply if not airportOnly OR if it is airport pickup
+                        const couponVal = Number(coupon.value) || 0;
+                        if (coupon.discountType === 'percentage') {
+                            couponDiscountAmount += total * (couponVal / 100);
+                        } else {
+                            couponDiscountAmount += couponVal;
+                        }
                     }
                 });
             }
@@ -282,30 +306,43 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const balance = total - payNow;
 
             // Convert values to the selected currency
-            const rate = rates?.[currency] || 1;
+            const rate = rates?.[currency];
+
+            // If the rate for the selected currency is missing (e.g. API failed), fallback to LKR display
+            // This prevents "USD 4200" (LKR value with USD label)
+            const effectiveRate = rate || 1;
+            const usingFallback = !rate && currency !== 'LKR';
             const convertedTotal = Math.ceil(total * rate);
             const convertedPayNow = Math.ceil(payNow * rate);
             const convertedBalance = Math.ceil(balance * rate);
             const convertedSubtotal = Math.ceil(baseTotal * rate);
             const convertedSurcharges = Math.ceil((surcharges + paymentSurcharge) * rate);
+            const convertedDiscounts = Math.ceil(finalDiscount * rate);
+
+            // Detailed Surcharges for UI
+            const detailedSurcharges = [
+                { label: 'Waiting Time', value: Math.ceil(calculateSurcharges({ waitingHours: formData.waitingHours, hasNameBoard: false }, vehicleData) * rate) },
+                { label: 'Name Board', value: Math.ceil(calculateSurcharges({ waitingHours: 0, hasNameBoard: formData.hasNameBoard }, vehicleData) * rate) }
+            ].filter(s => s.value > 0);
 
             return {
-                // Converted for UI
                 total: convertedTotal,
                 subtotal: convertedSubtotal,
                 surcharges: convertedSurcharges,
+                detailedSurcharges,
+                discounts: convertedDiscounts,
+                appliedCoupons: verifiedCoupons,
                 payNow: convertedPayNow,
                 balance: convertedBalance,
-
-                // Original LKR for DB/Payment (Always send LKR to API, let backend convert)
                 lkr: {
-                    total: Math.round(total),
-                    payNow: Math.round(payNow),
-                    balance: Math.round(balance),
-                    surcharges: Math.round(surcharges + paymentSurcharge),
-                    subtotal: Math.round(baseTotal)
+                    total: Math.ceil(total),
+                    payNow: Math.ceil(payNow),
+                    balance: Math.ceil(balance),
+                    surcharges: Math.ceil(surcharges + paymentSurcharge),
+                    subtotal: Math.ceil(baseTotal),
+                    discounts: Math.ceil(finalDiscount)
                 },
-                originalLKR: Math.round(total) // Keep for reference
+                originalLKR: total
             };
         } catch (err) {
             console.error("Price logic error:", err);
@@ -314,7 +351,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     };
 
     // Extract calculated values for render
-    const { total: totalPrice, subtotal, surcharges, payNow, balance: balanceAmount } = getPriceBreakdown();
+    const { total: totalPrice, subtotal, surcharges, payNow, balance: balanceAmount, ...detailedBreakdown } = getPriceBreakdown();
 
     // Body Scroll Lock
     useEffect(() => {
@@ -683,7 +720,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">{formData.paymentType === 'partial' ? 'Deposit Amount' : 'Total Price'}</span>
                                             </div>
                                             <div className="text-4xl md:text-6xl font-black leading-tight tracking-tighter flex items-center gap-2">
-                                                <span className="text-xl md:text-3xl font-bold text-amber-500">{currentSymbol}</span>
+                                                <span className="text-xl md:text-3xl font-bold text-amber-500">
+                                                    {(rates?.[currency]) ? currentSymbol : 'Rs'}
+                                                </span>
                                                 <span className="text-white">{payNow.toLocaleString()}</span>
                                             </div>
                                         </div>
@@ -725,6 +764,51 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 </button>
                                             ))}
                                         </div>
+                                    </div>
+
+                                    {/* Detailed Breakdown & Coupons */}
+                                    <div className="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
+                                        <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-white/40">
+                                            <span>Subtotal</span>
+                                            <span className="text-white">{currentSymbol} {subtotal.toLocaleString()}</span>
+                                        </div>
+
+                                        {detailedBreakdown.detailedSurcharges?.map((s, idx) => (
+                                            <div key={idx} className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-white/40">
+                                                <span>{s.label}</span>
+                                                <span className="text-white">+{currentSymbol} {s.value.toLocaleString()}</span>
+                                            </div>
+                                        ))}
+
+                                        {detailedBreakdown.discounts > 0 && (
+                                            <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-emerald-400">
+                                                <div className="flex items-center gap-2">
+                                                    <Tag size={12} />
+                                                    <span>Discount Applied</span>
+                                                </div>
+                                                <span className="font-black">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
+                                            </div>
+                                        )}
+
+                                        {verifiedCoupons.length > 0 && (
+                                            <div className="pt-2 border-t border-white/5">
+                                                <div className="flex flex-wrap gap-2">
+                                                    {verifiedCoupons.map((c, idx) => (
+                                                        <span key={idx} className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-tighter rounded-md flex items-center gap-1">
+                                                            <Check size={8} strokeWidth={4} /> {c.code}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Highway Charge Notice */}
+                                    <div className="bg-white/10 p-3 rounded-xl border border-white/10 flex items-start gap-3">
+                                        <div className="min-w-[20px] pt-0.5"><ShieldCheck size={16} className="text-amber-400" /></div>
+                                        <p className="text-[10px] md:text-xs text-white/80 leading-relaxed font-medium">
+                                            <strong className="text-white">Note:</strong> Highway charges are <span className="text-amber-400 font-bold underline decoration-amber-400/50">exclude</span> from the total price and must be paid directly by the passenger at the toll gate.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -827,29 +911,54 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             </div>
 
                                             {/* Applied Coupons Summary */}
-                                            {verifiedCoupons.length > 0 && verifiedCoupons.map((c, i) => (
+                                            {/* This section is removed as the discount is now consolidated in detailedBreakdown.discounts */}
+                                            {/* {verifiedCoupons.length > 0 && verifiedCoupons.map((c, i) => (
                                                 <div key={i} className="flex justify-between items-center w-full text-emerald-800">
                                                     <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest flex items-center gap-1">
                                                         <Tag size={10} /> {c.code}
                                                     </span>
                                                     <span className="text-sm md:text-base font-bold text-right">- {currentSymbol} {c.discountType === 'percentage' ? ((totalPrice * c.value) / 100).toLocaleString() : c.value}</span>
                                                 </div>
-                                            ))}
+                                            ))} */}
 
                                             <div className="pt-3 md:pt-4 border-t border-emerald-900/10 space-y-2 w-full">
                                                 <div className="flex justify-between items-center w-full gap-2">
-                                                    <span className="text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-widest shrink-0">Total Amount</span>
-                                                    <span className="text-sm md:text-xl font-bold text-emerald-900/60 text-right truncate">
-                                                        {currentSymbol} {totalPrice.toLocaleString()}
+                                                    <span className="text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-widest shrink-0">Subtotal</span>
+                                                    <span className="text-sm md:text-base font-bold text-emerald-900/60 text-right truncate">
+                                                        {currentSymbol} {subtotal.toLocaleString()}
                                                     </span>
                                                 </div>
-                                                <div className="flex flex-row flex-wrap justify-between items-center w-full gap-2">
-                                                    <span className="text-[10px] sm:text-xs md:text-sm font-black text-emerald-900 uppercase tracking-widest leading-tight">
-                                                        {formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Payable'}
-                                                    </span>
-                                                    <span className="text-lg sm:text-2xl md:text-3xl font-black text-emerald-900 text-right leading-none shrink-0">
-                                                        {currentSymbol} {payNow.toLocaleString()}
-                                                    </span>
+
+                                                {/* Break down Extras */}
+                                                {detailedBreakdown.detailedSurcharges?.map((s, idx) => (
+                                                    <div key={idx} className="flex justify-between items-center w-full gap-2 text-emerald-900/40">
+                                                        <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-tight shrink-0">{s.label}</span>
+                                                        <span className="text-[11px] md:text-sm font-bold text-right truncate">+{currentSymbol} {s.value.toLocaleString()}</span>
+                                                    </div>
+                                                ))}
+
+                                                {/* Applied Coupons Summary (In Step 3) */}
+                                                {detailedBreakdown.discounts > 0 && (
+                                                    <div className="flex justify-between items-center w-full gap-2 text-emerald-700">
+                                                        <div className="flex items-center gap-1.5 min-w-0">
+                                                            <Tag size={12} className="shrink-0" />
+                                                            <span className="text-[10px] md:text-[11px] font-black uppercase tracking-tight truncate">
+                                                                {verifiedCoupons.length > 0 ? verifiedCoupons.map(c => c.code).join(', ') : 'Applied Offer'}
+                                                            </span>
+                                                        </div>
+                                                        <span className="text-[11px] md:text-sm font-black text-right shrink-0">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
+                                                    </div>
+                                                )}
+
+                                                <div className="pt-2 mt-2 border-t border-emerald-900/5">
+                                                    <div className="flex flex-row flex-wrap justify-between items-center w-full gap-2">
+                                                        <span className="text-[10px] sm:text-xs md:text-sm font-black text-emerald-900 uppercase tracking-widest leading-tight">
+                                                            {formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Payable'}
+                                                        </span>
+                                                        <span className="text-lg sm:text-2xl md:text-3xl font-black text-emerald-900 text-right leading-none shrink-0">
+                                                            {currentSymbol} {payNow.toLocaleString()}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
 

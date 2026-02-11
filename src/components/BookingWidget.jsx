@@ -962,20 +962,40 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             {vehiclePricing[vehicle]?.name || 'Select Vehicle'}
                                         </span>
                                     </div>
-                                    <div className="flex justify-between items-center text-sm">
-                                        <span className="text-black font-bold">Waiting Hours</span>
-                                        <div className="flex items-center gap-3">
-                                            <button onClick={() => setWaitingHours(Math.max(0, waitingHours - 1))} className="text-black font-bold" aria-label="Decrease waiting hours"><Minus size={12} /></button>
-                                            <span className="font-bold text-black">{waitingHours}</span>
-                                            <button onClick={() => setWaitingHours(waitingHours + 1)} className="text-black font-bold" aria-label="Increase waiting hours"><Plus size={12} /></button>
+
+                                    {/* Detailed Price Breakdown */}
+                                    <div className="pt-4 border-t border-black/5 space-y-3">
+                                        <div className="flex justify-between items-center text-xs">
+                                            <span className="text-black/60 font-bold uppercase tracking-tight">Trip Subtotal</span>
+                                            <span className="text-black font-extrabold">{convertPrice(total - (calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard }, vehiclePricing[vehicle]) || 0)).symbol} {convertPrice(total - (calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard }, vehiclePricing[vehicle]) || 0)).value.toLocaleString()}</span>
                                         </div>
+
+                                        {totalWaitingHours > 0 && (
+                                            <div className="flex justify-between items-center text-xs">
+                                                <span className="text-black/60 font-bold uppercase tracking-tight">Waiting ({totalWaitingHours}h)</span>
+                                                <span className="text-black font-extrabold">+{convertPrice(calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle])).symbol} {convertPrice(calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle])).value.toLocaleString()}</span>
+                                            </div>
+                                        )}
+
+                                        {hasNameBoard && (
+                                            <div className="flex justify-between items-center text-xs">
+                                                <span className="text-black/60 font-bold uppercase tracking-tight">Meet & Greet</span>
+                                                <span className="text-black font-extrabold">+{convertPrice(nameBoardPrice).symbol} {convertPrice(nameBoardPrice).value.toLocaleString()}</span>
+                                            </div>
+                                        )}
+
+                                        {discountAmount > 0 && (
+                                            <div className="flex justify-between items-center text-xs text-emerald-700 bg-emerald-50/50 p-2 rounded-lg border border-emerald-200/50">
+                                                <div className="flex items-center gap-1.5">
+                                                    <Tag size={12} className="shrink-0" />
+                                                    <span className="font-black uppercase tracking-tighter truncate max-w-[120px]">
+                                                        {appliedOffers.length > 0 ? appliedOffers.map(o => o.name).join(', ') : 'Offer Applied'}
+                                                    </span>
+                                                </div>
+                                                <span className="font-black">-{convertPrice(discountAmount).symbol} {convertPrice(discountAmount).value.toLocaleString()}</span>
+                                            </div>
+                                        )}
                                     </div>
-                                    {hasNameBoard && (
-                                        <div className="flex justify-between items-center text-sm">
-                                            <span className="text-black font-bold">Meet & Greet</span>
-                                            <span className="text-black font-black">Included</span>
-                                        </div>
-                                    )}
                                 </div>
 
                             </div>
@@ -983,7 +1003,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             <div className="pt-6 border-t border-emerald-900/10 dark:border-white/10 flex-shrink-0">
                                 <div className="flex justify-between items-end mb-8">
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">Grand Total</span>
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <Zap size={14} className="text-amber-600 fill-amber-500" />
+                                            <span className="text-[10px] font-black text-emerald-900/50 uppercase tracking-[0.2em]">Final Payable</span>
+                                        </div>
                                         <span className="text-4xl font-black text-emerald-900">
                                             {distance && finalTotal > 0 ? (
                                                 <>
@@ -995,7 +1018,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </span>
                                         {/* Secondary Currency Display */}
                                         {distance && finalTotal > 0 && (
-                                            <div className="text-sm font-bold text-black mt-1">
+                                            <div className="text-sm font-bold text-black/60 mt-1">
                                                 {(() => {
                                                     const secCode = currency === 'LKR' ? 'USD' : 'LKR';
                                                     const secRate = rates ? (rates[secCode] || 1) : 1;

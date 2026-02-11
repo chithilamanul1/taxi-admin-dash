@@ -29,13 +29,9 @@ export async function POST(req, { params }) {
             // 1. Create User Account
             const tempPassword = 'Driver@2025';
 
-            // Safety check for bcrypt
-            const hasher = bcrypt.hash || (bcrypt.default && bcrypt.default.hash);
-            if (typeof hasher !== 'function') {
-                throw new Error('bcrypt hashing function not found');
-            }
-
-            const hashedPassword = await hasher(tempPassword, 10);
+            // 1. Create User Account
+            const tempPassword = 'Driver@2025';
+            const hashedPassword = await bcrypt.hash(tempPassword, 10);
 
             // Check if user exists
             let user = await User.findOne({ email: driver.email });
