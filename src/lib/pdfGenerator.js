@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 const COLORS = {
     emerald: [6, 78, 59], // #064e3b
@@ -83,7 +83,7 @@ export const generateBookingPDF = (booking) => {
     doc.text(booking.paymentStatus?.toUpperCase() || 'PENDING', badgeX + 27.5, badgeY + 12, { align: 'center' });
 
     // -- Journey Table --
-    doc.autoTable({
+    autoTable(doc, {
         startY: 90,
         head: [['Description', 'Trip Information']],
         body: [

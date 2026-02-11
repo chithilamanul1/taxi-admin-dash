@@ -25,6 +25,20 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const [couponInput, setCouponInput] = useState('');
     const [couponLoading, setCouponLoading] = useState(false);
 
+    // Body Scroll Lock
+    useEffect(() => {
+        if (isOpen) {
+            const originalOverflow = document.body.style.overflow;
+            const originalTouchAction = document.body.style.touchAction;
+            document.body.style.overflow = 'hidden';
+            document.body.style.touchAction = 'none';
+            return () => {
+                document.body.style.overflow = originalOverflow;
+                document.body.style.touchAction = originalTouchAction;
+            };
+        }
+    }, [isOpen]);
+
     // Form State - declared early so functions below can access it
     const [formData, setFormData] = useState({
         vehicle: initialData.vehicle || 'mini-car',
@@ -407,7 +421,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             `}</style>
 
             {/* Modal Container */}
-            <div className="bg-white w-full h-[100dvh] sm:h-auto sm:max-h-[90vh] sm:rounded-[2rem] sm:border sm:border-emerald-900/10 shadow-2xl sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative">
+            <div className="bg-white w-full h-[100dvh] sm:h-auto sm:max-h-[90vh] sm:rounded-[2rem] sm:border sm:border-emerald-900/10 shadow-2xl sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative max-w-full">
                 {/* Coupon Verification Notification - Moved to Bottom */}
                 <AnimatePresence>
                     {couponLoading && (
@@ -424,12 +438,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 </AnimatePresence>
                 {/* Header */}
                 <div className="p-4 md:p-8 pb-3 md:pb-4 flex items-center justify-between shrink-0">
-                    <div className="flex items-center gap-3 md:gap-4">
-                        <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-500/10 rounded-xl flex items-center justify-center border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+                    <div className="flex items-center gap-3 md:gap-4 min-w-0">
+                        <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-500/10 rounded-xl flex items-center justify-center border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.1)] shrink-0">
                             <Zap size={22} className="text-amber-500 fill-amber-500" />
                         </div>
-                        <div>
-                            <h2 className="text-xl md:text-2xl font-black tracking-tight text-slate-900 leading-none">SECURE <span className="text-emerald-600">BOOKING</span></h2>
+                        <div className="min-w-0">
+                            <h2 className="text-xl md:text-2xl font-black tracking-tight text-slate-900 leading-none truncate">SECURE <span className="text-emerald-600 uppercase">BOOKING</span></h2>
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Encrypted Payment</p>
                         </div>
                     </div>
@@ -478,6 +492,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             </div>
                                             {/* Connecting Line */}
                                             <div className="absolute left-6 -top-4 w-0.5 h-8 bg-emerald-900/10 -z-10"></div>
+                                            {/* Red countdown bar removed as requested */}
                                         </div>
                                     ))}
 
@@ -719,154 +734,157 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             ))}
 
                                             <div className="pt-3 md:pt-4 border-t border-emerald-900/10 space-y-2 w-full">
-                                                <div className="flex justify-between items-end w-full">
-                                                    <span className="text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-widest">Total Amount</span>
-                                                    <span className="text-base md:text-xl font-bold text-emerald-900/60 text-right">{currentSymbol} {totalPrice.toLocaleString()}</span>
+                                                <div className="flex justify-between items-center w-full gap-2">
+                                                    <span className="text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-widest shrink-0">Total Amount</span>
+                                                    <span className="text-sm md:text-xl font-bold text-emerald-900/60 text-right truncate">
+                                                        {currentSymbol} {totalPrice.toLocaleString()}
+                                                    </span>
                                                 </div>
-                                                <div className="flex flex-row justify-between items-end w-full gap-4">
+                                                <div className="flex flex-row flex-wrap justify-between items-center w-full gap-2">
                                                     <span className="text-[10px] sm:text-xs md:text-sm font-black text-emerald-900 uppercase tracking-widest leading-tight">
                                                         {formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Payable'}
                                                     </span>
-                                                    <span className="text-xl sm:text-2xl md:text-3xl font-black text-emerald-900 text-right leading-none">{currentSymbol} {payNow.toLocaleString()}</span>
+                                                    <span className="text-lg sm:text-2xl md:text-3xl font-black text-emerald-900 text-right leading-none shrink-0">
+                                                        {currentSymbol} {payNow.toLocaleString()}
+                                                    </span>
                                                 </div>
-
-                                                {formData.paymentType === 'partial' && (
-                                                    <div className="flex justify-between items-end pt-2 border-t border-dashed border-emerald-900/20 gap-2">
-                                                        <span className="font-bold text-red-600 uppercase text-[10px] md:text-xs tracking-wider md:tracking-[0.2em]">Balance Due</span>
-                                                        <span className="text-base md:text-lg font-bold text-red-600 ml-auto text-right">{currentSymbol} {balanceAmount.toLocaleString()}</span>
-                                                    </div>
-                                                )}
                                             </div>
+
+                                            {formData.paymentType === 'partial' && (
+                                                <div className="flex justify-between items-end pt-2 border-t border-dashed border-emerald-900/20 gap-2">
+                                                    <span className="font-bold text-red-600 uppercase text-[10px] md:text-xs tracking-wider md:tracking-[0.2em]">Balance Due</span>
+                                                    <span className="text-base md:text-lg font-bold text-red-600 ml-auto text-right">{currentSymbol} {balanceAmount.toLocaleString()}</span>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
-                                <div className="space-y-6">
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Discount Coupon</label>
-                                        <div className="flex gap-2 relative">
-                                            <input
-                                                value={couponInput}
-                                                onChange={e => setCouponInput(e.target.value.toUpperCase())}
-                                                placeholder="ENTER CODE"
-                                                className="flex-1 h-14 bg-white border-2 border-amber-300 px-4 rounded-xl outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-200 transition-all font-black text-lg text-emerald-900 uppercase placeholder:normal-case shadow-sm"
-                                            />
-                                            <button
-                                                onClick={handleApplyCoupon}
-                                                disabled={couponLoading || !couponInput}
-                                                className={`px-6 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center min-w-[100px] shadow-lg ${couponInput ? 'bg-emerald-900 text-white hover:scale-105' : 'bg-slate-200 text-slate-400'}`}
-                                            >
-                                                {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'APPLY'}
-                                            </button>
+                            </div>
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Discount Coupon</label>
+                                    <div className="flex gap-2 relative">
+                                        <input
+                                            value={couponInput}
+                                            onChange={e => setCouponInput(e.target.value.toUpperCase())}
+                                            placeholder="ENTER CODE"
+                                            className="flex-1 h-14 bg-white border-2 border-amber-300 px-4 rounded-xl outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-200 transition-all font-black text-lg text-emerald-900 uppercase placeholder:normal-case shadow-sm"
+                                        />
+                                        <button
+                                            onClick={handleApplyCoupon}
+                                            disabled={couponLoading || !couponInput}
+                                            className={`px-6 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center min-w-[100px] shadow-lg ${couponInput ? 'bg-emerald-900 text-white hover:scale-105' : 'bg-slate-200 text-slate-400'}`}
+                                        >
+                                            {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'APPLY'}
+                                        </button>
+                                    </div>
+                                    {verifiedCoupons.length > 0 && (
+                                        <div className="flex flex-col gap-2 animate-fade-in mt-2">
+                                            {verifiedCoupons.map((c, i) => (
+                                                <div key={i} className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-200 text-xs font-bold pl-2">
+                                                    <Check size={14} className="bg-emerald-500 text-white rounded-full p-0.5" />
+                                                    <span>Coupon: <span className="uppercase">{c.code}</span></span>
+                                                    <span className="text-emerald-900/60 font-medium ml-auto">
+                                                        (-{c.discountType === 'percentage' ? `${c.value}%` : `Rs ${c.value}`})
+                                                    </span>
+                                                    <button
+                                                        onClick={() => setVerifiedCoupons(prev => prev.filter(vc => vc.code !== c.code))}
+                                                        className="ml-2 text-red-500 hover:bg-red-50 rounded-full p-1"
+                                                    >
+                                                        <X size={12} />
+                                                    </button>
+                                                </div>
+                                            ))}
                                         </div>
-                                        {verifiedCoupons.length > 0 && (
-                                            <div className="flex flex-col gap-2 animate-fade-in mt-2">
-                                                {verifiedCoupons.map((c, i) => (
-                                                    <div key={i} className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-200 text-xs font-bold pl-2">
-                                                        <Check size={14} className="bg-emerald-500 text-white rounded-full p-0.5" />
-                                                        <span>Coupon: <span className="uppercase">{c.code}</span></span>
-                                                        <span className="text-emerald-900/60 font-medium ml-auto">
-                                                            (-{c.discountType === 'percentage' ? `${c.value}%` : `Rs ${c.value}`})
-                                                        </span>
-                                                        <button
-                                                            onClick={() => setVerifiedCoupons(prev => prev.filter(vc => vc.code !== c.code))}
-                                                            className="ml-2 text-red-500 hover:bg-red-50 rounded-full p-1"
-                                                        >
-                                                            <X size={12} />
-                                                        </button>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Payment Method</label>
-                                    <div className="grid grid-cols-1 gap-4">
-                                        {[
-                                            { id: 'cash', label: 'Cash Payment', icon: '💵', desc: 'Pay directly to chauffeur' },
-                                            { id: 'card', label: 'Online Payment', icon: '💳', desc: 'Secure digital transaction' },
-                                        ].map(m => (
-                                            <div key={m.id}>
-                                                <button onClick={() => setFormData({ ...formData, paymentMethod: m.id })} className={`w-full p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left ${formData.paymentMethod === m.id ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}>
-                                                    <span className="text-3xl md:text-4xl">{m.icon}</span>
-                                                    <div>
-                                                        <p className="font-bold text-emerald-900 text-sm tracking-tight">{m.label}</p>
-                                                        <p className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">{m.desc}</p>
-                                                    </div>
-                                                </button>
+                                    )}
+                                </div>
+                                <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Payment Method</label>
+                                <div className="grid grid-cols-1 gap-4">
+                                    {[
+                                        { id: 'cash', label: 'Cash Payment', icon: '💵', desc: 'Pay directly to chauffeur' },
+                                        { id: 'card', label: 'Online Payment', icon: '💳', desc: 'Secure digital transaction' },
+                                    ].map(m => (
+                                        <div key={m.id}>
+                                            <button onClick={() => setFormData({ ...formData, paymentMethod: m.id })} className={`w-full p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left ${formData.paymentMethod === m.id ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}>
+                                                <span className="text-3xl md:text-4xl">{m.icon}</span>
+                                                <div>
+                                                    <p className="font-bold text-emerald-900 text-sm tracking-tight">{m.label}</p>
+                                                    <p className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">{m.desc}</p>
+                                                </div>
+                                            </button>
 
-                                                {/* Payment Options (Full vs 50%) for Card */}
-                                                {formData.paymentMethod === 'card' && m.id === 'card' && (
-                                                    <div className="mt-3 ml-4 pl-4 border-l-2 border-emerald-900/10 space-y-3 animate-slide-up">
-                                                        <button
-                                                            onClick={() => setFormData({ ...formData, paymentType: 'full' })}
-                                                            className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'full' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
-                                                        >
-                                                            <div className="flex items-center gap-3">
-                                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'full' ? 'border-white' : 'border-slate-400'}`}>
-                                                                    {formData.paymentType === 'full' && <div className="w-2 h-2 rounded-full bg-white"></div>}
-                                                                </div>
-                                                                <span className="text-xs font-bold uppercase tracking-wide">Pay Full Amount</span>
+                                            {/* Payment Options (Full vs 50%) for Card */}
+                                            {formData.paymentMethod === 'card' && m.id === 'card' && (
+                                                <div className="mt-3 ml-4 pl-4 border-l-2 border-emerald-900/10 space-y-3 animate-slide-up">
+                                                    <button
+                                                        onClick={() => setFormData({ ...formData, paymentType: 'full' })}
+                                                        className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'full' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
+                                                    >
+                                                        <div className="flex items-center gap-3">
+                                                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'full' ? 'border-white' : 'border-slate-400'}`}>
+                                                                {formData.paymentType === 'full' && <div className="w-2 h-2 rounded-full bg-white"></div>}
                                                             </div>
-                                                            <span className="text-xs font-bold text-emerald-400">100%</span>
-                                                        </button>
+                                                            <span className="text-xs font-bold uppercase tracking-wide">Pay Full Amount</span>
+                                                        </div>
+                                                        <span className="text-xs font-bold text-emerald-400">100%</span>
+                                                    </button>
 
-                                                        <button
-                                                            onClick={() => setFormData({ ...formData, paymentType: 'partial' })}
-                                                            className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'partial' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
-                                                        >
-                                                            <div className="flex items-center gap-3">
-                                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'partial' ? 'border-white' : 'border-slate-400'}`}>
-                                                                    {formData.paymentType === 'partial' && <div className="w-2 h-2 rounded-full bg-white"></div>}
-                                                                </div>
-                                                                <div className="text-left">
-                                                                    <span className="text-xs font-bold uppercase tracking-wide block">Pay Advance Only</span>
-                                                                    <span className="text-[10px] opacity-60">Pay balance to driver</span>
-                                                                </div>
+                                                    <button
+                                                        onClick={() => setFormData({ ...formData, paymentType: 'partial' })}
+                                                        className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'partial' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
+                                                    >
+                                                        <div className="flex items-center gap-3">
+                                                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'partial' ? 'border-white' : 'border-slate-400'}`}>
+                                                                {formData.paymentType === 'partial' && <div className="w-2 h-2 rounded-full bg-white"></div>}
                                                             </div>
-                                                            <span className="text-xs font-bold text-amber-400">50%</span>
-                                                        </button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
+                                                            <div className="text-left">
+                                                                <span className="text-xs font-bold uppercase tracking-wide block">Pay Advance Only</span>
+                                                                <span className="text-[10px] opacity-60">Pay balance to driver</span>
+                                                            </div>
+                                                        </div>
+                                                        <span className="text-xs font-bold text-amber-400">50%</span>
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
                     )}
-
-                </div>
-
-                {/* Footer Controls */}
-                <div className="p-4 md:p-8 pt-3 md:pt-4 border-t border-emerald-900/10 bg-emerald-50/50 shrink-0">
-                    <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-3 md:gap-4">
-                        <button
-                            onClick={() => step > 1 ? setStep(step - 1) : onClose()}
-                            className="flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-emerald-50 transition-all text-emerald-900 border border-emerald-900/10 shadow-sm w-full md:w-auto min-w-[120px]"
-                        >
-                            <ChevronLeft size={16} className="md:block hidden" /> {step === 1 ? 'Cancel' : 'Back'}
-                        </button>
-
-                        {step < 3 ? (
-                            <button
-                                onClick={() => setStep(step + 1)}
-                                disabled={(step === 1 && (!formData.pickup || !formData.dropoff)) || (step === 2 && (!formData.name || !formData.phone))}
-                                className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[140px]"
-                            >
-                                Continue <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform md:block hidden" />
-                            </button>
-                        ) : (
-                            <button
-                                onClick={handleSubmit}
-                                disabled={loading}
-                                className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[160px]"
-                            >
-                                {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} className="md:block hidden" />}
-                                {loading ? 'Processing...' : 'Complete Booking'}
-                            </button>
-                        )}
-                    </div>
                 </div>
             </div>
-        </div >
+
+            {/* Footer Controls */}
+            <div className="p-4 md:p-8 pt-3 md:pt-4 border-t border-emerald-900/10 bg-emerald-50/50 shrink-0">
+                <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-3 md:gap-4">
+                    <button
+                        onClick={() => step > 1 ? setStep(step - 1) : onClose()}
+                        className="flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-emerald-50 transition-all text-emerald-900 border border-emerald-900/10 shadow-sm w-full md:w-auto min-w-[120px]"
+                    >
+                        <ChevronLeft size={16} className="md:block hidden" /> {step === 1 ? 'Cancel' : 'Back'}
+                    </button>
+
+                    {step < 3 ? (
+                        <button
+                            onClick={() => setStep(step + 1)}
+                            disabled={(step === 1 && (!formData.pickup || !formData.dropoff)) || (step === 2 && (!formData.name || !formData.phone))}
+                            className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[140px]"
+                        >
+                            Continue <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform md:block hidden" />
+                        </button>
+                    ) : (
+                        <button
+                            onClick={handleSubmit}
+                            disabled={loading}
+                            className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[160px]"
+                        >
+                            {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} className="md:block hidden" />}
+                            {loading ? 'Processing...' : 'Complete Booking'}
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
     );
 }
