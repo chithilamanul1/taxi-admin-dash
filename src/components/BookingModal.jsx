@@ -15,6 +15,108 @@ const STEPS = [
     { id: 3, title: 'Confirm', icon: CreditCard },
 ];
 
+function CustomDateTimePicker({ date, time, onChange }) {
+    const [view, setView] = useState('date'); // 'date' or 'time'
+
+    // Generate dates for the next 14 days
+    const dates = Array.from({ length: 14 }, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() + i);
+        return d;
+    });
+
+    const times = [
+        '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+        '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'
+    ];
+
+    const formatShortDate = (d) => {
+        return d.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' });
+    };
+
+    const formatDateValue = (d) => {
+        return d.toISOString().split('T')[0];
+    };
+
+    return (
+        <div className="bg-emerald-50/50 rounded-3xl p-4 border border-emerald-900/5">
+            <div className="flex bg-white p-1.5 rounded-2xl mb-4 border border-emerald-900/10">
+                <button
+                    onClick={() => setView('date')}
+                    className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${view === 'date' ? 'bg-emerald-900 text-white shadow-lg' : 'text-emerald-900/40'}`}
+                >
+                    <Calendar size={14} /> {date ? formatShortDate(new Date(date)) : 'Select Date'}
+                </button>
+                <button
+                    onClick={() => setView('time')}
+                    className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${view === 'time' ? 'bg-emerald-900 text-white shadow-lg' : 'text-emerald-900/40'}`}
+                >
+                    <Clock size={14} /> {time || 'Select Time'}
+                </button>
+            </div>
+
+            <AnimatePresence mode="wait">
+                {view === 'date' ? (
+                    <motion.div
+                        key="date-grid"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 10 }}
+                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2"
+                    >
+                        {dates.map((d, i) => {
+                            const val = formatDateValue(d);
+                            const active = date === val;
+                            return (
+                                <button
+                                    key={i}
+                                    onClick={() => {
+                                        onChange(val, time);
+                                        setView('time');
+                                    }}
+                                    className={`p-3 rounded-2xl border-2 transition-all text-center group ${active ? 'border-emerald-900 bg-emerald-900 text-white shadow-md' : 'border-white bg-white text-emerald-900 hover:border-emerald-900/20 shadow-sm'}`}
+                                >
+                                    <p className={`text-[10px] font-bold uppercase tracking-tighter ${active ? 'text-emerald-400' : 'text-emerald-900/40'}`}>
+                                        {d.toLocaleDateString('en-US', { weekday: 'short' })}
+                                    </p>
+                                    <p className="text-lg font-black leading-none my-1">{d.getDate()}</p>
+                                    <p className="text-[10px] font-bold uppercase">{d.toLocaleDateString('en-US', { month: 'short' })}</p>
+                                </button>
+                            );
+                        })}
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        key="time-grid"
+                        initial={{ opacity: 0, x: 10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 max-h-[240px] overflow-y-auto pr-2 custom-scrollbar"
+                    >
+                        {times.map((t, i) => {
+                            const active = time === t;
+                            const [hour] = t.split(':');
+                            const displayHour = parseInt(hour) % 12 || 12;
+                            const ampm = parseInt(hour) >= 12 ? 'PM' : 'AM';
+
+                            return (
+                                <button
+                                    key={i}
+                                    onClick={() => onChange(date, t)}
+                                    className={`p-3 rounded-2xl border-2 transition-all text-center ${active ? 'border-emerald-600 bg-emerald-600 text-white shadow-md' : 'border-white bg-white text-emerald-900 hover:border-emerald-600/20 shadow-sm'}`}
+                                >
+                                    <p className="text-sm font-black">{displayHour}</p>
+                                    <p className="text-[10px] font-bold opacity-60">{ampm}</p>
+                                </button>
+                            );
+                        })}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
+
 export default function BookingModal({ isOpen, onClose, initialData = {}, pricingCategory = 'airport-transfer' }) {
     const { data: session } = useSession();
     const [step, setStep] = useState(1);
@@ -665,12 +767,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     </div>
                                 ))}
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Pick-up Date & Time</label>
-                                <div className="flex flex-col sm:flex-row gap-4">
-                                    <input type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} className="flex-1 h-16 md:h-20 bg-white border-2 border-emerald-900/10 px-4 md:px-8 rounded-2xl outline-none text-lg md:text-2xl font-black text-emerald-900 shadow-sm focus:border-emerald-600 transition-all" />
-                                    <input type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value })} className="flex-1 h-16 md:h-20 bg-white border-2 border-emerald-900/10 px-4 md:px-8 rounded-2xl outline-none text-lg md:text-2xl font-black text-emerald-900 shadow-sm focus:border-emerald-600 transition-all" />
-                                </div>
+                            <div className="space-y-4">
+                                <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Pick-up Logistics</label>
+                                <CustomDateTimePicker
+                                    date={formData.date}
+                                    time={formData.time}
+                                    onChange={(d, t) => setFormData({ ...formData, date: d, time: t })}
+                                />
                             </div>
                         </div>
                     )}
@@ -853,38 +956,37 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                         </div>
                     )}
                 </div>
-            </div>
 
-            {/* Footer Controls */}
-            <div className="p-4 md:p-8 pt-3 md:pt-4 border-t border-emerald-900/10 bg-emerald-50/50 shrink-0">
-                <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-3 md:gap-4">
-                    <button
-                        onClick={() => step > 1 ? setStep(step - 1) : onClose()}
-                        className="flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-emerald-50 transition-all text-emerald-900 border border-emerald-900/10 shadow-sm w-full md:w-auto min-w-[120px]"
-                    >
-                        <ChevronLeft size={16} className="md:block hidden" /> {step === 1 ? 'Cancel' : 'Back'}
-                    </button>
+                {/* Footer Controls */}
+                <div className="p-4 md:p-8 pt-3 md:pt-4 border-t border-emerald-900/10 bg-emerald-50/50 shrink-0">
+                    <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-3 md:gap-4">
+                        <button
+                            onClick={() => step > 1 ? setStep(step - 1) : onClose()}
+                            className="flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-emerald-50 transition-all text-emerald-900 border border-emerald-900/10 shadow-sm w-full md:w-auto min-w-[120px]"
+                        >
+                            <ChevronLeft size={16} className="md:block hidden" /> {step === 1 ? 'Cancel' : 'Back'}
+                        </button>
 
-                    {step < 3 ? (
-                        <button
-                            onClick={() => setStep(step + 1)}
-                            disabled={(step === 1 && (!formData.pickup || !formData.dropoff)) || (step === 2 && (!formData.name || !formData.phone))}
-                            className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[140px]"
-                        >
-                            Continue <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform md:block hidden" />
-                        </button>
-                    ) : (
-                        <button
-                            onClick={handleSubmit}
-                            disabled={loading}
-                            className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[160px]"
-                        >
-                            {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} className="md:block hidden" />}
-                            {loading ? 'Processing...' : 'Complete Booking'}
-                        </button>
-                    )}
+                        {step < 3 ? (
+                            <button
+                                onClick={() => setStep(step + 1)}
+                                disabled={(step === 1 && (!formData.pickup || !formData.dropoff)) || (step === 2 && (!formData.name || !formData.phone))}
+                                className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[140px]"
+                            >
+                                Continue <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform md:block hidden" />
+                            </button>
+                        ) : (
+                            <button
+                                onClick={handleSubmit}
+                                disabled={loading}
+                                className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[160px]"
+                            >
+                                {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} className="md:block hidden" />}
+                                {loading ? 'Processing...' : 'Complete Booking'}
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
-    );
+            );
 }

@@ -21,6 +21,7 @@ const AdminDashboard = () => {
     const [bookingToAssign, setBookingToAssign] = useState(null);
 
     const [bookings, setBookings] = useState([]);
+    const [lastViewedBookings, setLastViewedBookings] = useState(new Date());
 
     // Fetch Pricing Data
     React.useEffect(() => {
@@ -100,7 +101,7 @@ const AdminDashboard = () => {
     const stats = React.useMemo(() => {
         const totalRevenue = bookings.reduce((sum, b) => sum + (b.totalPrice || 0), 0);
         const activeRides = bookings.filter(b => b.status === 'ongoing' || b.status === 'assigned').length;
-        const pendingBookings = bookings.filter(b => b.status === 'pending').length;
+        const pendingBookings = bookings.filter(b => b.status === 'pending' && new Date(b.createdAt || b.date) > lastViewedBookings).length;
         // Mock online drivers for now as we don't have driver socket yet
         const onlineDrivers = 8;
 
@@ -108,7 +109,7 @@ const AdminDashboard = () => {
             { title: 'Total Revenue', value: `LKR ${totalRevenue.toLocaleString()}`, icon: DollarSign, color: 'text-green-500' },
             { title: 'Active Rides', value: activeRides.toString(), icon: Car, color: 'text-blue-500' },
             { title: 'Online Drivers', value: onlineDrivers.toString(), icon: Users, color: 'text-emerald-600' },
-            { title: 'Pending Bookings', value: pendingBookings.toString(), icon: Bell, color: 'text-red-500' },
+            { title: 'New Bookings', value: pendingBookings.toString(), icon: Bell, color: 'text-red-500' },
         ];
     }, [bookings]);
 
@@ -152,9 +153,22 @@ const AdminDashboard = () => {
                         <DollarSign size={20} />
                         <span className={`${!sidebarOpen && 'hidden'}`}>Pricing</span>
                     </button>
-                    <button onClick={() => setCurrentView('bookings')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'bookings' ? 'bg-emerald-600 text-emerald-900' : 'hover:bg-white/10'}`}>
-                        <Users size={20} />
-                        <span className={`${!sidebarOpen && 'hidden'}`}>Bookings</span>
+                    <button
+                        onClick={() => {
+                            setCurrentView('bookings');
+                            setLastViewedBookings(new Date());
+                        }}
+                        className={`flex items-center justify-between p-3 w-full rounded transition-colors ${currentView === 'bookings' ? 'bg-emerald-600 text-emerald-900' : 'hover:bg-white/10'}`}
+                    >
+                        <div className="flex items-center gap-3">
+                            <Users size={20} />
+                            <span className={`${!sidebarOpen && 'hidden'}`}>Bookings</span>
+                        </div>
+                        {bookings.filter(b => b.status === 'pending' && new Date(b.createdAt || b.date) > lastViewedBookings).length > 0 && (
+                            <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full animate-pulse shadow-lg">
+                                {bookings.filter(b => b.status === 'pending' && new Date(b.createdAt || b.date) > lastViewedBookings).length}
+                            </span>
+                        )}
                     </button>
                     <button onClick={() => setCurrentView('tours')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'tours' ? 'bg-emerald-600 text-emerald-900' : 'hover:bg-white/10'}`}>
                         <MapPin size={20} />
