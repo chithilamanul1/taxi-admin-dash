@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X } from 'lucide-react'
+import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X } from 'lucide-react'
 
 import Image from 'next/image'
 import ToursWidget from './ToursWidget'
@@ -50,8 +50,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [passengerCount, setPassengerCount] = useState({
         adults: 1,
         children: 0,
-        infants: 0,
-        bags: 0
+        luggage: 0,
+        handLuggage: 0
     })
 
     const [distance, setDistance] = useState(null)
@@ -847,8 +847,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 {[
                                     { id: 'adults', label: 'Adults' },
                                     { id: 'children', label: 'Children' },
-                                    { id: 'infants', label: 'Infants' },
-                                    { id: 'bags', label: 'Bags' }
+                                    { id: 'luggage', label: 'Luggage' },
+                                    { id: 'handLuggage', label: 'Hand Luggage' }
                                 ].map(c => (
                                     <div key={c.id} className="bg-[#FFC107] border border-black/10 p-3 rounded-2xl flex flex-col items-center justify-center transition-colors shadow-sm">
                                         <span className="text-[9px] font-black text-black uppercase tracking-widest mb-2 opacity-80">{c.label}</span>
@@ -902,7 +902,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             <div className="flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300 font-medium">
                                                 <span>{vehiclePricing[vehicle]?.capacity || 4} Passengers</span>
                                                 <span className="w-1 h-1 bg-emerald-600/30 rounded-full"></span>
-                                                <span>{vehiclePricing[vehicle]?.luggage || 2} Luggage</span>
+                                                <span>{vehiclePricing[vehicle]?.luggage || 2} Lugg</span>
+                                                <span className="w-1 h-1 bg-emerald-600/30 rounded-full"></span>
+                                                <span>{vehiclePricing[vehicle]?.handLuggage || 2} Hand</span>
                                             </div>
                                         </div>
                                     </div>
