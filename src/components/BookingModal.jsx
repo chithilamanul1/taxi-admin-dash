@@ -157,7 +157,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             let total = baseTotal + surcharges + paymentSurcharge; // Total in current currency context (mixed if rates missing, resolved below)
 
             // Coupon Logic (Stacking Rules & Auto-Discounts)
-            const isAirportPickup = initialData.isAirportPickup || formData.pickup?.toLowerCase().includes('airport');
+            const isAirportPickup = initialData.isAirportPickup || formData.pickup?.toLowerCase().includes('airport') || formData.dropoff?.toLowerCase().includes('airport');
 
             let couponDiscountAmount = 0;
             if (verifiedCoupons && verifiedCoupons.length > 0) {
@@ -312,6 +312,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     }, [step]);
 
     useEffect(() => {
+        // If we already have a valid distance passed from parent (Google Maps), DO NOT overwrite it with OSRM (less accurate)
+        // Only fetch if distance is missing
+        if (initialData.distance && initialData.distance > 0) return;
+
         if (
             formData.pickupCoords?.lat && formData.pickupCoords?.lon &&
             formData.dropoffCoords?.lat && formData.dropoffCoords?.lon
