@@ -21,6 +21,7 @@ export async function POST(req) {
         const { data, error } = await resend.emails.send({
             from: 'Airport Taxi Tours <bookings@airporttaxitours.lk>',
             to: [to],
+            bcc: ['bookings@airporttaxitours.lk'], // Owner Notification
             subject: `Booking Confirmed - #${bookingDetails.bookingId?.slice(-8).toUpperCase()}`,
             html: `
                 <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f8fafc;">
@@ -65,7 +66,11 @@ export async function POST(req) {
                         
                         <div style="background: #064e3b; border-radius: 16px; padding: 25px; text-align: center; color: white;">
                             <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7;">Total Amount</span>
-                            <p style="font-size: 36px; font-weight: 800; margin: 10px 0 0 0;">Rs ${bookingDetails.totalPrice?.toLocaleString() || '0'}</p>
+                            <p style="font-size: 36px; font-weight: 800; margin: 10px 0 0 0;">
+                                ${bookingDetails.currency === 'USD' ? '$' : bookingDetails.currency === 'EUR' ? '€' : bookingDetails.currency === 'GBP' ? '£' : 'Rs'} 
+                                ${(bookingDetails.displayPrice || bookingDetails.totalPrice || 0).toLocaleString()}
+                            </p>
+                            ${bookingDetails.currency !== 'LKR' ? `<p style="font-size: 12px; margin-top: 5px; opacity: 0.8;">(Approx. LKR ${(bookingDetails.totalPrice || 0).toLocaleString()})</p>` : ''}
                         </div>
                     </div>
                     

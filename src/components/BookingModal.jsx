@@ -50,7 +50,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         dropoff: initialData.dropoff || '',
         dropoffCoords: initialData.dropoffCoords || null,
         tripType: initialData.tripType || 'one-way',
-        passengerCount: initialData.passengerCount || { adults: 1, children: 0, infants: 0, bags: 0 },
+        passengerCount: initialData.passengerCount || { adults: 1, children: 0, bags: 0, handLuggage: 0 },
         waitingHours: initialData.waitingHours || 0,
         hasNameBoard: initialData.hasNameBoard || false,
         nameBoardText: initialData.nameBoardText || '',
@@ -121,11 +121,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
     // Currency conversion helper
     const SUPPORTED_CURRENCIES = [
-        { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: 'ðŸ‡±ðŸ‡°' },
-        { code: 'USD', symbol: '$', name: 'US Dollar', flag: 'ðŸ‡ºðŸ‡¸' },
-        { code: 'EUR', symbol: 'â‚¬', name: 'Euro', flag: 'ðŸ‡ªðŸ‡º' },
-        { code: 'GBP', symbol: 'Â£', name: 'British Pound', flag: 'ðŸ‡¬ðŸ‡§' },
-        { code: 'INR', symbol: 'â‚¹', name: 'Indian Rupee', flag: 'ðŸ‡®ðŸ‡³' },
+        { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: '🇱🇰' },
+        { code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸' },
+        { code: 'EUR', symbol: '€', name: 'Euro', flag: '🇪🇺' },
+        { code: 'GBP', symbol: '£', name: 'British Pound', flag: '🇬🇧' },
+        { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳' },
     ];
 
     const convertToAllCurrencies = (amountLKR) => {
@@ -141,16 +141,20 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             if (!vehicleData || distance === 0) return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0, lkr: { total: 0, payNow: 0, balance: 0, surcharges: 0, subtotal: 0 }, originalLKR: 0 };
 
             const distKm = Math.ceil(distance);
-            const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType);
+            const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType, formData.pickup, formData.dropoff);
             const surcharges = calculateSurcharges({
                 waitingHours: formData.waitingHours,
                 hasNameBoard: formData.hasNameBoard
             }, vehicleData);
 
             // Payment Method Surcharges per User Request
+            // 1. Calculate for the current display currency (for UI)
             const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, currency);
 
-            let total = baseTotal + surcharges + paymentSurcharge;
+            // 2. Calculate for LKR (for backend storage/consistency)
+            const paymentSurchargeLKR = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, 'LKR');
+
+            let total = baseTotal + surcharges + paymentSurcharge; // Total in current currency context (mixed if rates missing, resolved below)
 
             // Coupon Logic (Stacking Rules & Auto-Discounts)
             const isAirportPickup = initialData.isAirportPickup || formData.pickup?.toLowerCase().includes('airport');
@@ -214,15 +218,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 payNow: convertedPayNow,
                 balance: convertedBalance,
                 lkr: {
-                    total: Math.ceil(total),
-                    payNow: Math.ceil(payNow),
-                    balance: Math.ceil(balance),
+                    total: Math.ceil(baseTotal + surcharges + paymentSurchargeLKR - finalDiscount), // Re-calculate total strictly in LKR
+                    payNow: Math.ceil((formData.paymentType === 'partial' ? (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) * 0.5 : (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount))),
+                    balance: Math.ceil((baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) - (formData.paymentType === 'partial' ? (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) * 0.5 : (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount))),
                     surcharges: Math.ceil(surcharges),
-                    paymentFee: Math.ceil(paymentSurcharge),
+                    paymentFee: Math.ceil(paymentSurchargeLKR),
                     subtotal: Math.ceil(baseTotal),
                     discounts: Math.ceil(finalDiscount)
                 },
-                originalLKR: total
+                originalLKR: baseTotal + surcharges + paymentSurchargeLKR - finalDiscount
             };
         } catch (err) {
             console.error("Price logic error:", err);
@@ -232,6 +236,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
     // Extract calculated values for render
     const { total: totalPrice, subtotal, surcharges, payNow, balance: balanceAmount, ...detailedBreakdown } = getPriceBreakdown();
+
+    const selectedVehicle = pricing.find(p => p.vehicleType === formData.vehicle);
+    const totalPassengers = (formData.passengerCount.adults || 0) + (formData.passengerCount.children || 0);
+    const isOverCapacity = selectedVehicle && totalPassengers > (selectedVehicle.capacity || 4);
 
     // Body Scroll Lock
     useEffect(() => {
@@ -276,7 +284,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 })
                 .catch(err => console.error("Error fetching pricing:", err));
         }
+
     }, [isOpen, initialData, pricingCategory]);
+
+    // Scroll to top on step change
+    useEffect(() => {
+        const container = document.getElementById('modal-container');
+        if (container) container.scrollTop = 0;
+    }, [step]);
 
     useEffect(() => {
         if (
@@ -440,7 +455,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             `}</style>
 
             {/* Modal Container */}
-            <div className="bg-white w-full h-[100dvh] sm:h-auto sm:max-h-[90vh] sm:rounded-[2rem] sm:border sm:border-emerald-900/10 shadow-2xl sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative max-w-full">
+            <div id="modal-container" className="bg-white w-full h-[100dvh] sm:h-auto sm:max-h-[90vh] sm:rounded-[2rem] sm:border sm:border-emerald-900/10 shadow-2xl sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative max-w-full overflow-y-auto">
                 {/* Coupon Verification Notification - Moved to Bottom */}
                 <AnimatePresence>
                     {couponLoading && (
@@ -551,7 +566,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                         {Object.entries(formData.passengerCount).map(([type, count]) => (
                                             <div key={type} className="bg-white border border-emerald-900/10 p-3 md:p-4 rounded-xl flex items-center justify-between">
-                                                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-900/40">{type}</span>
+                                                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-900/40">
+                                                    {type === 'handLuggage' ? 'Hand Luggage' : type}
+                                                </span>
                                                 <div className="flex items-center gap-3">
                                                     <button onClick={() => setFormData({ ...formData, passengerCount: { ...formData.passengerCount, [type]: Math.max(0, count - 1) } })} className="text-emerald-600 font-bold text-lg w-8 h-8 flex items-center justify-center bg-emerald-50 rounded-lg">-</button>
                                                     <span className="font-bold text-sm w-4 text-center text-emerald-900">{count}</span>
@@ -560,6 +577,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             </div>
                                         ))}
                                     </div>
+
+                                    {isOverCapacity && (
+                                        <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 animate-pulse">
+                                            <div className="pt-0.5 text-red-600"><Lock size={14} /></div>
+                                            <p className="text-[10px] font-bold text-red-900 leading-tight uppercase tracking-widest">
+                                                Capacity Exceeded: {totalPassengers} Passengers for {selectedVehicle.name} (Max {selectedVehicle.capacity})
+                                            </p>
+                                        </div>
+                                    )}
 
                                     <div className="pt-2">
                                         <button
@@ -593,104 +619,103 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/10 rounded-full blur-[100px] -mr-32 -mt-32"></div>
 
                                 <div className="relative z-10 space-y-8">
-                                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                                        <div>
-                                            <div className="flex items-center gap-2 text-amber-500 mb-2">
-                                                <Zap size={14} fill="currentColor" className="animate-pulse" />
-                                                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{formData.paymentType === 'partial' ? 'Deposit Amount' : 'Total Price'}</span>
-                                            </div>
-                                            <div className="text-4xl md:text-6xl font-black leading-tight tracking-tighter flex items-center gap-2">
-                                                <span className="text-xl md:text-3xl font-bold text-amber-500">
-                                                    {(rates?.[currency]) ? currentSymbol : 'Rs'}
-                                                </span>
-                                                <span className="text-white">{payNow.toLocaleString()}</span>
-                                            </div>
-                                        </div>
-                                        <div className="text-left md:text-right bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
-                                            <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Route Distance</div>
-                                            <div className="text-xl font-black text-white">{distance.toFixed(1)} <span className="text-sm font-bold text-emerald-400">KM</span></div>
-                                        </div>
+                                    <div className="flex items-center gap-2 text-amber-500 mb-2">
+                                        <Zap size={14} fill="currentColor" className="animate-pulse" />
+                                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">{formData.paymentType === 'partial' ? 'Deposit Amount' : 'Total Price'}</span>
                                     </div>
+                                    <div className="text-4xl md:text-6xl font-black leading-tight tracking-tighter flex items-center gap-2">
+                                        <span className="text-xl md:text-3xl font-bold text-amber-500">
+                                            {(rates?.[currency]) ? currentSymbol : 'Rs'}
+                                        </span>
+                                        <span className="text-white">
+                                            {/* Show Final PayNow Amount (Includes payment fees if applicable) */}
+                                            {payNow.toLocaleString()}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="text-left md:text-right bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
+                                    <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Route Distance</div>
+                                    <div className="text-xl font-black text-white">{distance.toFixed(1)} <span className="text-sm font-bold text-emerald-400">KM</span></div>
+                                </div>
+                            </div>
 
-                                    {/* Multi-Currency Grid */}
-                                    <div className="space-y-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="h-px flex-1 bg-white/10"></div>
-                                            <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em] whitespace-nowrap">Price in all currencies</span>
-                                            <div className="h-px flex-1 bg-white/10"></div>
+                            {/* Multi-Currency Grid */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="h-px flex-1 bg-white/10"></div>
+                                    <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em] whitespace-nowrap">Price in all currencies</span>
+                                    <div className="h-px flex-1 bg-white/10"></div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-3">
+                                    {convertToAllCurrencies(totalPrice / (rates?.[currency] || 1)).map((c) => (
+                                        <button
+                                            key={c.code}
+                                            type="button"
+                                            onClick={() => changeCurrency(c.code)}
+                                            className={`p-3 rounded-2xl border-2 transition-all flex flex-col gap-1 text-left cursor-pointer group/card ${currency === c.code
+                                                ? 'bg-amber-500/10 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
+                                                : 'bg-white/5 border-white/5 hover:border-white/20 hover:bg-white/10'
+                                                }`}
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-[10px] font-black text-white/40 uppercase tracking-widest flex items-center gap-1.5">
+                                                    <span className="text-xs">{c.flag}</span> {c.code}
+                                                </span>
+                                                {currency === c.code && <div className="w-1.5 h-1.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgb(245,158,11)]"></div>}
+                                            </div>
+                                            <div className={`text-sm md:text-base font-black ${currency === c.code ? 'text-amber-500' : 'text-white'}`}>
+                                                <span className="text-[10px] font-bold mr-1 opacity-60">{c.symbol}</span>
+                                                {c.value.toLocaleString()}
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Detailed Breakdown & Coupons */}
+                            <div className="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
+                                <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-white/40">
+                                    <span>Subtotal</span>
+                                    <span className="text-white">{currentSymbol} {subtotal.toLocaleString()}</span>
+                                </div>
+
+                                {detailedBreakdown.detailedSurcharges?.map((s, idx) => (
+                                    <div key={idx} className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-white/40">
+                                        <span>{s.label}</span>
+                                        <span className="text-white">+{currentSymbol} {s.value.toLocaleString()}</span>
+                                    </div>
+                                ))}
+
+                                {detailedBreakdown.discounts > 0 && (
+                                    <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-emerald-400">
+                                        <div className="flex items-center gap-2">
+                                            <Tag size={12} />
+                                            <span>Discount Applied</span>
                                         </div>
+                                        <span className="font-black">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
+                                    </div>
+                                )}
 
-                                        <div className="grid grid-cols-2 gap-3">
-                                            {convertToAllCurrencies(totalPrice / (rates?.[currency] || 1)).map((c) => (
-                                                <button
-                                                    key={c.code}
-                                                    type="button"
-                                                    onClick={() => changeCurrency(c.code)}
-                                                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col gap-1 text-left cursor-pointer group/card ${currency === c.code
-                                                        ? 'bg-amber-500/10 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
-                                                        : 'bg-white/5 border-white/5 hover:border-white/20 hover:bg-white/10'
-                                                        }`}
-                                                >
-                                                    <div className="flex items-center justify-between">
-                                                        <span className="text-[10px] font-black text-white/40 uppercase tracking-widest flex items-center gap-1.5">
-                                                            <span className="text-xs">{c.flag}</span> {c.code}
-                                                        </span>
-                                                        {currency === c.code && <div className="w-1.5 h-1.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgb(245,158,11)]"></div>}
-                                                    </div>
-                                                    <div className={`text-sm md:text-base font-black ${currency === c.code ? 'text-amber-500' : 'text-white'}`}>
-                                                        <span className="text-[10px] font-bold mr-1 opacity-60">{c.symbol}</span>
-                                                        {c.value.toLocaleString()}
-                                                    </div>
-                                                </button>
+                                {verifiedCoupons.length > 0 && (
+                                    <div className="pt-2 border-t border-white/5">
+                                        <div className="flex flex-wrap gap-2">
+                                            {verifiedCoupons.map((c, idx) => (
+                                                <span key={idx} className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-tighter rounded-md flex items-center gap-1">
+                                                    <Check size={8} strokeWidth={4} /> {c.code}
+                                                </span>
                                             ))}
                                         </div>
                                     </div>
+                                )}
+                            </div>
 
-                                    {/* Detailed Breakdown & Coupons */}
-                                    <div className="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/10">
-                                        <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-white/40">
-                                            <span>Subtotal</span>
-                                            <span className="text-white">{currentSymbol} {subtotal.toLocaleString()}</span>
-                                        </div>
-
-                                        {detailedBreakdown.detailedSurcharges?.map((s, idx) => (
-                                            <div key={idx} className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-white/40">
-                                                <span>{s.label}</span>
-                                                <span className="text-white">+{currentSymbol} {s.value.toLocaleString()}</span>
-                                            </div>
-                                        ))}
-
-                                        {detailedBreakdown.discounts > 0 && (
-                                            <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-emerald-400">
-                                                <div className="flex items-center gap-2">
-                                                    <Tag size={12} />
-                                                    <span>Discount Applied</span>
-                                                </div>
-                                                <span className="font-black">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
-                                            </div>
-                                        )}
-
-                                        {verifiedCoupons.length > 0 && (
-                                            <div className="pt-2 border-t border-white/5">
-                                                <div className="flex flex-wrap gap-2">
-                                                    {verifiedCoupons.map((c, idx) => (
-                                                        <span key={idx} className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-tighter rounded-md flex items-center gap-1">
-                                                            <Check size={8} strokeWidth={4} /> {c.code}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Highway Charge Notice */}
-                                    <div className="bg-white/10 p-3 rounded-xl border border-white/10 flex items-start gap-3">
-                                        <div className="min-w-[20px] pt-0.5"><ShieldCheck size={16} className="text-amber-400" /></div>
-                                        <p className="text-[10px] md:text-xs text-white/80 leading-relaxed font-medium">
-                                            <strong className="text-white">Note:</strong> Highway charges are <span className="text-amber-400 font-bold underline decoration-amber-400/50">exclude</span> from the total price and must be paid directly by the passenger at the toll gate.
-                                        </p>
-                                    </div>
-                                </div>
+                            {/* Highway Charge Notice */}
+                            <div className="bg-white/10 p-3 rounded-xl border border-white/10 flex items-start gap-3">
+                                <div className="min-w-[20px] pt-0.5"><ShieldCheck size={16} className="text-amber-400" /></div>
+                                <p className="text-[10px] md:text-xs text-white/80 leading-relaxed font-medium">
+                                    <strong className="text-white">Note:</strong> Highway charges are <span className="text-amber-400 font-bold underline decoration-amber-400/50">exclude</span> from the total price and must be paid directly by the passenger at the toll gate.
+                                </p>
                             </div>
                         </div>
                     )}
@@ -906,8 +931,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Payment Method</label>
                                 <div className="grid grid-cols-1 gap-4">
                                     {[
-                                        { id: 'cash', label: 'Cash Payment', icon: 'ðŸ’µ', desc: 'Pay directly to chauffeur' },
-                                        { id: 'card', label: 'Online Payment', icon: 'ðŸ’³', desc: 'Secure digital transaction' },
+                                        { id: 'cash', label: 'Cash Payment', icon: '💵', desc: 'Pay directly to chauffeur' },
+                                        { id: 'card', label: 'Online Payment', icon: '💳', desc: 'Secure digital transaction' },
                                     ].map(m => (
                                         <div key={m.id}>
                                             <button onClick={() => setFormData({ ...formData, paymentMethod: m.id })} className={`w-full p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left ${formData.paymentMethod === m.id ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}>
@@ -957,36 +982,36 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             </div>
                         </div>
                     )}
-                </div>
 
-                {/* Footer Controls */}
-                <div className="p-4 md:p-8 pt-3 md:pt-4 border-t border-emerald-900/10 bg-emerald-50/50 shrink-0">
-                    <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-3 md:gap-4">
-                        <button
-                            onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                            className="flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-emerald-50 transition-all text-emerald-900 border border-emerald-900/10 shadow-sm w-full md:w-auto min-w-[120px]"
-                        >
-                            <ChevronLeft size={16} className="md:block hidden" /> {step === 1 ? 'Cancel' : 'Back'}
-                        </button>
+                    {/* Footer Controls */}
+                    <div className="p-4 md:p-8 pt-3 md:pt-4 border-t border-emerald-900/10 bg-emerald-50/50 shrink-0">
+                        <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-3 md:gap-4">
+                            <button
+                                onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
+                                className="flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-emerald-50 transition-all text-emerald-900 border border-emerald-900/10 shadow-sm w-full md:w-auto min-w-[120px]"
+                            >
+                                <ChevronLeft size={16} className="md:block hidden" /> {step === 1 ? 'Cancel' : 'Back'}
+                            </button>
 
-                        {step < 3 ? (
-                            <button
-                                onClick={() => setStep(step + 1)}
-                                disabled={(step === 1 && (!formData.pickup || !formData.dropoff)) || (step === 2 && (!formData.name || !formData.phone))}
-                                className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[140px]"
-                            >
-                                Continue <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform md:block hidden" />
-                            </button>
-                        ) : (
-                            <button
-                                onClick={handleSubmit}
-                                disabled={loading}
-                                className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[160px]"
-                            >
-                                {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} className="md:block hidden" />}
-                                {loading ? 'Processing...' : 'Complete Booking'}
-                            </button>
-                        )}
+                            {step < 3 ? (
+                                <button
+                                    onClick={() => setStep(step + 1)}
+                                    disabled={(step === 1 && (!formData.pickup || !formData.dropoff || isOverCapacity)) || (step === 2 && (!formData.name || !formData.phone))}
+                                    className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[140px]"
+                                >
+                                    Continue <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform md:block hidden" />
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={handleSubmit}
+                                    disabled={loading}
+                                    className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[160px]"
+                                >
+                                    {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} className="md:block hidden" />}
+                                    {loading ? 'Processing...' : 'Complete Booking'}
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

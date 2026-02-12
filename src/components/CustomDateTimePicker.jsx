@@ -7,7 +7,6 @@ import { Calendar, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 export default function CustomDateTimePicker({ date, time, onChange }) {
     const [view, setView] = useState('date'); // 'date' or 'time'
     const [viewDate, setViewDate] = useState(date ? new Date(date) : new Date());
-    const [ampm, setAmpm] = useState(time ? (parseInt(time.split(':')[0]) >= 12 ? 'PM' : 'AM') : 'AM');
     const [clockMode, setClockMode] = useState('hours'); // 'hours' or 'minutes'
 
     // --- Calendar Logic ---
@@ -43,7 +42,10 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
     };
 
     const handleDateClick = (d) => {
-        onChange(d.toISOString().split('T')[0], time);
+        // Adjust for timezone offset to ensure the correct date string is generated
+        const offset = d.getTimezoneOffset();
+        const adjustedDate = new Date(d.getTime() - (offset * 60 * 1000));
+        onChange(adjustedDate.toISOString().split('T')[0], time);
         setView('time');
     };
 
@@ -56,36 +58,31 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
             date1.getFullYear() === date2.getFullYear();
     };
 
-    // --- Clock Logic ---
-    const hours = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    // --- Clock Logic (24 Hour) ---
+    // Outer circle: 00, 13, 14... 23 (or 1-12) - Let's do standard 0-23 mixed or single ring?
+    // Material simplified: 00-23 outer ring usually for 24h is crowded. 
+    // Let's stick to a clean 0-23 in one or two rings if needed, or just 0-23 steps.
+    // For simplicity and mobile size: 0, 1, 2... 23.
+    const hours = Array.from({ length: 24 }, (_, i) => i);
     const minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
     const handleTimeSelect = (val) => {
         if (clockMode === 'hours') {
-            // Set hour, preserve minute if exists, default to 00
             const currentMin = time ? time.split(':')[1] : '00';
-            // Convert to 24h for storage
-            let hour24 = val;
-            if (ampm === 'PM' && val !== 12) hour24 += 12;
-            if (ampm === 'AM' && val === 12) hour24 = 0;
-
-            onChange(date, `${hour24.toString().padStart(2, '0')}:${currentMin}`);
+            onChange(date, `${val.toString().padStart(2, '0')}:${currentMin}`);
             setClockMode('minutes');
         } else {
-            // Set minute, preserve hour
             const currentHour = time ? time.split(':')[0] : '12';
             onChange(date, `${currentHour}:${val.toString().padStart(2, '0')}`);
-            // Don't close, user might want to adjust
         }
     };
 
-    // Calculate rotation for clock hand
+    // Calculate rotation
     const getHandRotation = () => {
         if (!time) return 0;
         const [h, m] = time.split(':').map(Number);
         if (clockMode === 'hours') {
-            const h12 = h % 12 || 12;
-            return (h12 / 12) * 360;
+            return (h / 24) * 360;
         } else {
             return (m / 60) * 360;
         }
@@ -94,9 +91,7 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
     const formatTimeDisplay = () => {
         if (!time) return { h: '--', m: '--' };
         let [h, m] = time.split(':');
-        let hInt = parseInt(h);
-        let displayH = hInt % 12 || 12;
-        return { h: displayH.toString().padStart(2, '0'), m };
+        return { h: h.toString().padStart(2, '0'), m };
     };
 
     const timeDisplay = formatTimeDisplay();
@@ -130,10 +125,6 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                                     >
                                         {timeDisplay.m}
                                     </button>
-                                </div>
-                                <div className="flex flex-col gap-1 mb-1.5 ml-1">
-                                    <button onClick={() => setAmpm('AM')} className={`text-xs font-bold ${ampm === 'AM' ? 'text-white' : 'text-white/40'}`}>AM</button>
-                                    <button onClick={() => setAmpm('PM')} className={`text-xs font-bold ${ampm === 'PM' ? 'text-white' : 'text-white/40'}`}>PM</button>
                                 </div>
                             </div>
                         )}
@@ -173,7 +164,7 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                                 <span key={i} className="text-[10px] font-bold text-white/40 py-1">{d}</span>
                             ))}
                         </div>
-                        <div className="grid grid-cols-7 gap-1 place-items-center">
+                        <div className="grid grid-cols-7 gap-1 place-items-center max-h-[250px] overflow-y-auto">
                             {generateCalendarGrid().map((d, i) => {
                                 if (!d) return <div key={i} className="" />;
                                 const isSelected = isSameDate(d, date);
@@ -215,21 +206,38 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                                 </div>
                             </div>
 
-                            {/* Numbers */}
-                            {(clockMode === 'hours' ? hours : minutes).map((val, i) => {
-                                const angle = (i * 30) - 90; // -90 to start at 12
-                                const radius = 40; // Approx % from center
+                            {/* Numbers - 24H Layout */}
+                            {/* We'll just show even numbers or major 4 points if too crowded, but let's try showing all 0-23 in a smart way. 
+                                Actually, Material Design 24h clock uses two rings. 00-11 inner, 12-23 outer.
+                                For simplicity on this UI, let's just use 0,3,6... logic or show reduced set if needed.
+                                Let's try 0-23 mapped roughly.
+                            */}
+                            {(clockMode === 'hours' ? hours : minutes).filter(v => clockMode === 'minutes' ? true : v % 2 === 0).map((val, i) => {
+                                // If showing subset, we need mapping logic. 
+                                // Let's just show 0, 2, 4... 22 for hours to reduce clutter
+                                const h = val;
+                                // 24 hours map to 360 deg. 0 = top (or -90deg). each hour is 360/24 = 15deg.
+                                // NOTE: Standard analog is 12h. A 24h dial is non-standard for "analog" usually, but let's do 0-23 on a single 360 ring? 
+                                // NO, standard 24h analog clock is 24 on top. 
+                                // WAIT - User probably wants digital 24h selection style logic? 
+                                // Let's just stick to 0-12 positions but toggle? NO, specifically asked 24h.
+                                // Let's map 0-23 to 360 degrees for a "24 Hour Dial". 0 at top. 12 at bottom.
+
+                                // Angle: val * 15 (since 360/24=15). -90 to start top.
+                                const angle = (val * (clockMode === 'hours' ? 15 : 6)) - 90;
+                                const radius = 40;
                                 const x = 50 + radius * Math.cos(angle * Math.PI / 180);
                                 const y = 50 + radius * Math.sin(angle * Math.PI / 180);
+
                                 const isSelected = clockMode === 'hours'
-                                    ? parseInt(timeDisplay.h) === (val % 12 || 12)
+                                    ? parseInt(timeDisplay.h) === val
                                     : parseInt(timeDisplay.m) === val;
 
                                 return (
                                     <button
                                         key={val}
                                         onClick={() => handleTimeSelect(val)}
-                                        className={`absolute w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium transition-all z-20
+                                        className={`absolute w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold transition-all z-20
                                             ${isSelected ? 'text-black' : 'text-white hover:text-[#90CAF9]'}
                                         `}
                                         style={{
@@ -238,7 +246,7 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                                             transform: 'translate(-50%, -50%)'
                                         }}
                                     >
-                                        {clockMode === 'minutes' ? val.toString().padStart(2, '0') : val}
+                                        {val.toString().padStart(2, '0')}
                                     </button>
                                 );
                             })}

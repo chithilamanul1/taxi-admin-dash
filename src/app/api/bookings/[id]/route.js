@@ -2,48 +2,34 @@ import dbConnect from '@/lib/db';
 import Booking from '@/models/Booking';
 import { NextResponse } from 'next/server';
 import { logBookingStatusChanged } from '@/lib/discord';
-import { sendTripCompletedNotification } from '@/lib/email-service';
+import { sendBookingStatusUpdate } from '@/lib/email-service';
+import { isAdmin as checkAdmin } from '@/lib/admin-check';
 
 import { cookies } from 'next/headers';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 
 // Helper to verify auth
 async function checkAuth(bookingId) {
-    const session = await getServerSession(authOptions);
+    // 1. Robust Admin Check
+    const isAdminUser = await checkAdmin();
+    if (isAdminUser) {
+        return { role: 'admin' };
+    }
+
+    // 2. Driver Check (Token)
     const cookieStore = await cookies();
-    const token = cookieStore.get('auth_token')?.value;
     const driverToken = cookieStore.get('driver_token')?.value;
 
-    // 1. Admin (Session or Token)
-    let isAdmin = session?.user?.role === 'admin';
-    console.log(`[AuthDebug] Session: ${session ? 'Found' : 'Missing'}, Role: ${session?.user?.role}, Token: ${token ? 'Found' : 'Missing'}`);
-
-    if (!isAdmin && token) {
-        try {
-            const { verify } = await import('jsonwebtoken');
-            const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET;
-            const decoded = verify(token, secret);
-            if (decoded.role === 'admin') isAdmin = true;
-            console.log(`[AuthDebug] Token decoded role: ${decoded.role}`);
-        } catch (e) {
-            console.log(`[AuthDebug] Token verification failed:`, e.message);
-        }
-    }
-    if (isAdmin) return { role: 'admin' };
-
-    // 2. Driver (Token)
     if (driverToken) {
         try {
             const { verify } = await import('jsonwebtoken');
             const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || 'seranex_secret_key_12345';
             const decoded = verify(driverToken, secret);
             if (decoded.role === 'driver') {
-                // Check if driver is assigned? (Ideally yes, but for now allow status update if role is driver)
-                // We can refine this later if needed.
                 return { role: 'driver', id: decoded.id };
             }
-        } catch (e) { }
+        } catch (e) {
+            console.log('[Auth] Driver token verification failed:', e.message);
+        }
     }
 
     return null;
@@ -56,6 +42,7 @@ export async function PATCH(request, { params }) {
         // Check Auth
         const auth = await checkAuth();
         if (!auth) {
+            console.log('[Auth] Unauthorized access attempt to update booking');
             return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
 
@@ -103,61 +90,60 @@ export async function PATCH(request, { params }) {
             update.completedAt = completedAt || new Date();
         }
 
-        // Update the booking
+        // Update the booking and populate driver for email
         const booking = await Booking.findByIdAndUpdate(
             id,
             update,
             { new: true }
-        );
+        ).populate('driver');
 
         // Log to Discord
         await logBookingStatusChanged(booking, status, changedBy);
 
-        // If completed, deduct commission and notify
+        // If completed, deduct commission
         if (status === 'completed') {
-            update.completedAt = completedAt || new Date();
-
             // --- COMMISSION LOGIC ---
-            // 1. Get the driver assigned to this booking
-            // Note: 'booking' variable currently holds the OLD doc before update if we use findByIdAndUpdate above immediately.
-            // But we can use 'existingBooking' if driver didn't change, or 'assignedDriver' if passed.
-            // Safest is to get the final state or use existing if not changing.
-
-            const driverId = assignedDriver || existingBooking.driver;
+            const driverId = booking.driver?._id || existingBooking.driver;
 
             if (driverId) {
-                const { default: Driver } = await import('@/models/Driver');
-                const { default: Transaction } = await import('@/models/Transaction');
+                try {
+                    const { default: Driver } = await import('@/models/Driver');
+                    const { default: Transaction } = await import('@/models/Transaction');
 
-                const driverDoc = await Driver.findById(driverId);
-                if (driverDoc) {
-                    const commissionRate = 0.10; // 10%
-                    const commissionAmount = Math.round(existingBooking.totalPrice * commissionRate);
+                    const driverDoc = await Driver.findById(driverId);
+                    if (driverDoc) {
+                        const commissionRate = 0.10; // 10%
+                        const commissionAmount = Math.round(existingBooking.totalPrice * commissionRate);
 
-                    // Deduct
-                    driverDoc.walletBalance -= commissionAmount;
-                    await driverDoc.save();
+                        // Deduct
+                        driverDoc.walletBalance -= commissionAmount;
+                        await driverDoc.save();
 
-                    // Log Transaction
-                    await Transaction.create({
-                        driver: driverId,
-                        type: 'debit',
-                        amount: commissionAmount,
-                        balanceAfter: driverDoc.walletBalance,
-                        description: `Commission for Trip #${existingBooking._id.toString().slice(-6)}`,
-                        referenceId: existingBooking._id,
-                        status: 'completed',
-                        performedBy: 'System'
-                    });
+                        // Log Transaction
+                        await Transaction.create({
+                            driver: driverId,
+                            type: 'debit',
+                            amount: commissionAmount,
+                            balanceAfter: driverDoc.walletBalance,
+                            description: `Commission for Trip #${existingBooking._id.toString().slice(-6)}`,
+                            referenceId: existingBooking._id,
+                            status: 'completed',
+                            performedBy: 'System'
+                        });
 
-                    console.log(`Commission deducted: ${commissionAmount} from Driver ${driverId}`);
+                        console.log(`Commission deducted: ${commissionAmount} from Driver ${driverId}`);
+                    }
+                } catch (err) {
+                    console.error('Error in commission logic:', err);
                 }
             }
             // ------------------------
+        }
 
-            if (booking.customerEmail) {
-                await sendTripCompletedNotification(booking);
-            }
+        // Send Email Notification (Generic for all status changes)
+        // If status changed and email exists
+        if (status && status !== existingBooking.status && booking.customerEmail) {
+            await sendBookingStatusUpdate(booking, status);
         }
 
         return NextResponse.json({

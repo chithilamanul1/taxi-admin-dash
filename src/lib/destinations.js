@@ -14,18 +14,18 @@ export const destinations = [
         pricing: { "Mini Car": 59, "Sedan": 65, "Mini Van": 75, "KDH Van": 85 }
     },
     {
-        id: 'ella',
-        title: "Airport to Ella",
-        name: "Ella",
-        price: 110,
-        badge: "Scenic Route",
-        img: "/ella.jpg",
-        meta: "Highlands Escape",
-        description: "Ella is a small town in the Badulla District of Uva Province, governed by an Urban Council. It is approximately 200 kilometres east of Colombo and is situated at an elevation of 1,041 metres above sea level.",
-        distance: "210 km",
-        time: "4.5 hours",
-        highlights: ["Nine Arch Bridge", "Little Adam's Peak", "Ella Rock", "Ravana Falls"],
-        pricing: { "Mini Car": 110, "Sedan": 120, "Mini Van": 135, "KDH Van": 150 }
+        id: 'ahangama',
+        title: "Airport to Ahangama",
+        name: "Ahangama",
+        price: 58,
+        badge: "Deep South",
+        img: "/ahangama.jpg",
+        meta: "Surfing & Yoga Hub",
+        description: "Ahangama is a charming coastal village known for its world-class surf breaks, stilt fishermen, and laid-back atmosphere. It's the perfect spot for those seeking a more authentic Sri Lankan beach experience.",
+        distance: "160 km",
+        time: "2.5 hours",
+        highlights: ["Surfing", "Stilt Fishermen", "Yoga Retreats", "Koggala Lake"],
+        pricing: { "Mini Car": 58, "Sedan": 64, "Mini Van": 75, "KDH Van": 85 }
     },
     {
         id: 'sigiriya',

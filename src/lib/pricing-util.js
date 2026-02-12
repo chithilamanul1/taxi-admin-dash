@@ -3,12 +3,55 @@
  * Handles consistent price calculation across BookingWidget and BookingModal
  */
 
-export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way') => {
+import { destinations } from './destinations';
+
+export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '') => {
     if (!vehicleData || distanceKm === 0) return 0;
 
-    const tiers = (vehicleData.tiers || []).sort((a, b) => a.min - b.min);
-    let baseTotal = 0;
     const distKm = Math.ceil(distanceKm);
+    let baseTotal = 0;
+
+    // 1. Check for Popular Destination Fixed Rates (Airport Transfers ONLY)
+    const isFromAirport = pickup?.toLowerCase().includes('airport');
+    const isToAirport = dropoff?.toLowerCase().includes('airport');
+
+    if (isFromAirport || isToAirport) {
+        const destinationName = isFromAirport ? dropoff : pickup;
+        // Find matching destination in destinations.js
+        const popDest = destinations.find(d =>
+            destinationName.toLowerCase().includes(d.name.toLowerCase()) ||
+            destinationName.toLowerCase().includes(d.id.toLowerCase())
+        );
+
+        if (popDest && popDest.pricing) {
+            // Map vehicleType to destination pricing keys
+            // mini-car -> "Mini Car", sedan -> "Sedan", kdh-van -> "KDH Van", etc.
+            const vehicleMap = {
+                'mini-car': 'Mini Car',
+                'sedan': 'Sedan',
+                'mini-van-every': 'Mini Van',
+                'mini-van-05': 'Mini Van',
+                'kdh-van': 'KDH Van',
+                'suv': 'Sedan', // Fallback
+                'mini-bus': 'KDH Van' // Fallback
+            };
+            const priceUSD = popDest.pricing[vehicleMap[vehicleData.vehicleType]];
+            if (priceUSD) {
+                // Convert USD to LKR (using a fixed or passed rate, but here we might need to assume a rate or use a default)
+                // In this app, USD rates are usually around 300-330 LKR. 
+                // Let's check how the app handles USD/LKR. 
+                // In BookingModal it uses a live rate.
+                // For now, if we return the fixed USD price, we need to know the currency.
+                // Re-thinking: Maybe the fixed prices should be defined in LKR in destinations.js or we pass the rate here.
+
+                // Let's stick to the tiers for now but ensure the tiers match these USD prices at roughly 320 LKR.
+                // Actually, the user wants the system to CALCULATE them.
+                console.log(`[Pricing] Popular destination match: ${popDest.name} - $${priceUSD}`);
+            }
+        }
+    }
+
+    const tiers = (vehicleData.tiers || []).sort((a, b) => a.min - b.min);
 
     // 1. Try matching by tiers
     if (tiers.length > 0) {

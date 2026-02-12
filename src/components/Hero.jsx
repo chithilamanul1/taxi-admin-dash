@@ -6,7 +6,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const heroImages = [
     { src: '/Hero/elephants.jpg', alt: 'Sri Lanka Elephants' },
-    { src: '/Hero/ella.jpg', alt: 'Ella Nine Arch Bridge' },
+    { src: '/ahangama.jpg', alt: 'Ahangama Coastline' },
     { src: '/Hero/izanuradapura.jpg', alt: 'Anuradhapura' },
     { src: '/Hero/monkey.jpg', alt: 'Wildlife' },
     { src: '/Hero/sigiriya.jpg', alt: 'Sigiriya Lion Rock' },

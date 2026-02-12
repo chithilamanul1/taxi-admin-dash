@@ -926,53 +926,100 @@ export async function sendReviewThankYou(review) {
     }
 }
 
-// 7. LOGIN NOTIFICATION
-export async function sendLoginNotification(user) {
+// 8. BOOKING CANCELLED
+export async function sendBookingCancelled(booking) {
+    const bookingId = booking._id?.toString().slice(-8).toUpperCase();
+
     const content = `
         <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
             <tr>
                 <td>
-                    ${components.badge('🔐 Login Detected', 'info')}
+                    ${components.badge('❌ Booking Cancelled', 'warning')}
                     <h2 style="color: ${COLORS.text}; margin: 20px 0 10px; font-size: 24px; font-weight: 700;">
-                        Welcome Back!
+                        Booking Cancelled
                     </h2>
                     <p style="color: ${COLORS.textMuted}; margin: 0; font-size: 14px;">
-                        Hi ${user.name || 'Valued Customer'}, you've logged into your account.
+                        Your booking #${bookingId} has been cancelled.
                     </p>
                 </td>
             </tr>
         </table>
 
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
-            ${components.infoCard('📧', 'Email', user.email)}
-            ${components.infoCard('🕐', 'Time', new Date().toLocaleString('en-LK', { timeZone: 'Asia/Colombo' }))}
-            ${components.infoCard('🌐', 'Location', 'Sri Lanka')}
+            ${components.infoCard('📋', 'Booking ID', `#${bookingId}`)}
+            ${components.infoCard('📅', 'Date', booking.scheduledDate)}
+            ${components.infoCard('🚗', 'Vehicle', booking.vehicleType)}
         </table>
 
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: rgba(239,68,68,0.1); border: 1px solid #ef4444; border-radius: 12px; margin-bottom: 20px;">
             <tr>
-                <td style="padding: 16px 20px; text-align: center;">
-                    <span style="color: #f87171; font-size: 13px;">⚠️ If this wasn't you, please <a href="${BASE_URL}/support" style="color: #f87171; font-weight: 600;">contact us immediately</a></span>
+                <td style="padding: 20px; text-align: center;">
+                    <p style="color: #f87171; font-size: 14px; margin: 0;">
+                        If you have paid online, the refund process will be initiated shortly (5-7 business days).
+                    </p>
+                    <p style="color: #f87171; font-size: 14px; margin: 10px 0 0 0;">
+                        For any questions, please contact our support.
+                    </p>
                 </td>
             </tr>
         </table>
 
-        ${components.button('Book a Ride', `${BASE_URL}`)}
+         <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
+            <tr>
+                <td style="text-align: center;">
+                    <p style="margin: 0; color: ${COLORS.textMuted}; font-size: 13px;">
+                        Contact us at <a href="https://wa.me/94722885885" style="color: ${COLORS.primaryLight}; text-decoration: none; font-weight: 600;">+94 722 885 885</a>
+                    </p>
+                </td>
+            </tr>
+        </table>
     `;
 
-    try {
-        const resend = getResend();
-        if (!resend) return;
+    if (booking.customerEmail) {
+        try {
+            const resend = getResend();
+            if (resend) {
+                await resend.emails.send({
+                    from: FROM_EMAIL,
+                    to: booking.customerEmail,
+                    subject: `❌ Booking Cancelled #${bookingId} - Airport Taxis`,
+                    html: getPremiumTemplate(content, 'Booking Cancelled')
+                });
+                console.log('[Email] Booking cancellation notification sent to:', booking.customerEmail);
+            }
+        } catch (error) {
+            console.error('[Email] Failed to send cancellation notification:', error);
+        }
+    }
+}
 
-        await resend.emails.send({
-            from: FROM_EMAIL,
-            to: user.email,
-            subject: '🔐 Login Notification - Airport Taxis Sri Lanka',
-            html: getPremiumTemplate(content, 'Login Notification')
-        });
-        console.log('[Email] Login notification sent to:', user.email);
-    } catch (error) {
-        console.error('[Email] Failed to send login notification:', error);
+// 9. GENERIC STATUS UPDATE (Route to specific functions)
+export async function sendBookingStatusUpdate(booking, status) {
+    console.log(`[EmailService] Processing status update: ${status} for ${booking._id}`);
+
+    switch (status) {
+        case 'confirmed':
+            await sendBookingConfirmation(booking);
+            break;
+        case 'assigned':
+            if (booking.driver) {
+                // Determine if driver is fully populated or just ID
+                if (booking.driver.name) { // Populated
+                    await sendDriverAssigned(booking, booking.driver);
+                } else {
+                    // If only ID, we should ideally fetch driver, but caller should handle population
+                    console.warn('[Email] Driver assigned but driver details missing in booking object');
+                }
+            }
+            break;
+        case 'completed':
+            await sendTripCompletedNotification(booking);
+            break;
+        case 'cancelled':
+            await sendBookingCancelled(booking);
+            break;
+        default:
+            console.log(`[Email] No specific email template for status: ${status}`);
     }
 }
 
@@ -984,5 +1031,7 @@ export default {
     sendDriverAssigned,
     sendTripReminder,
     sendTripCompletedNotification,
-    sendReviewThankYou
+    sendReviewThankYou,
+    sendBookingCancelled,
+    sendBookingStatusUpdate
 };
