@@ -4,8 +4,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CurrencyContext = createContext();
 
-// Base currency is LKR because all our prices are in LKR
-const BASE_CURRENCY = 'LKR';
+// Base currency is USD as requested (though prices are stored in LKR)
+const BASE_CURRENCY = 'USD';
 
 const SUPPORTED_CURRENCIES = [
     { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: '🇱🇰' },
@@ -66,7 +66,7 @@ export function CurrencyProvider({ children }) {
                 }
             } catch (error) {
                 console.error('Failed to detect location:', error);
-                setCurrency('LKR'); // Fallback
+                setCurrency('USD'); // Fallback
             } finally {
                 setLoading(false);
             }
