@@ -459,12 +459,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
     const currentSymbol = SUPPORTED_CURRENCIES.find(c => c.code === currency)?.symbol || 'Rs';
 
-    // Scroll to top when step changes and handle clock behavior
-    useEffect(() => {
-        if (modalContentRef.current) {
-            modalContentRef.current.scrollTo({ top: 0, behavior: 'instant' });
-        }
-    }, [step]);
 
     return (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-emerald-900/95 p-0 sm:p-4 overflow-hidden touch-none overscroll-none select-none">
