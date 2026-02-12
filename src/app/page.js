@@ -117,11 +117,11 @@ export default function Home() {
                                 meta: "Whale Watching Hub"
                             },
                             {
-                                title: "Airport to Ella",
-                                price: "110",
-                                badge: "Scenic Route",
-                                img: "/ella.jpg",
-                                meta: "Highlands Escape"
+                                title: "Airport to Ahangama",
+                                price: "58",
+                                badge: "Deep South",
+                                img: "https://images.unsplash.com/photo-1586861635167-e52a3a1e262c?auto=format&fit=crop&q=80&w=1000",
+                                meta: "Surfing & Yoga Hub"
                             },
                             {
                                 title: "Airport to Sigiriya",
