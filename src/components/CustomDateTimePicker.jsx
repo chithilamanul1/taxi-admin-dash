@@ -72,7 +72,7 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
             onChange(date, `${val.toString().padStart(2, '0')}:${currentMin}`);
             setClockMode('minutes');
         } else {
-            const currentHour = time ? time.split(':')[0] : '12';
+            const currentHour = time ? time.split(':')[0] : '00';
             onChange(date, `${currentHour}:${val.toString().padStart(2, '0')}`);
         }
     };
@@ -82,9 +82,10 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
         if (!time) return 0;
         const [h, m] = time.split(':').map(Number);
         if (clockMode === 'hours') {
-            return (h / 24) * 360;
+            // Analog Hand: maps to 0-11 positions. 12 deg is same as 0 deg.
+            return (h % 12) * 30;
         } else {
-            return (m / 60) * 360;
+            return m * 6;
         }
     };
 
@@ -207,29 +208,30 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                             </div>
 
                             {/* Numbers - 24H Layout */}
-                            {/* We'll just show even numbers or major 4 points if too crowded, but let's try showing all 0-23 in a smart way. 
-                                Actually, Material Design 24h clock uses two rings. 00-11 inner, 12-23 outer.
-                                For simplicity on this UI, let's just use 0,3,6... logic or show reduced set if needed.
-                                Let's try 0-23 mapped roughly.
-                            */}
-                            {(clockMode === 'hours' ? hours : minutes).filter(v => clockMode === 'minutes' ? true : v % 2 === 0).map((val, i) => {
-                                // If showing subset, we need mapping logic. 
-                                // Let's just show 0, 2, 4... 22 for hours to reduce clutter
-                                const h = val;
-                                // 24 hours map to 360 deg. 0 = top (or -90deg). each hour is 360/24 = 15deg.
-                                // NOTE: Standard analog is 12h. A 24h dial is non-standard for "analog" usually, but let's do 0-23 on a single 360 ring? 
-                                // NO, standard 24h analog clock is 24 on top. 
-                                // WAIT - User probably wants digital 24h selection style logic? 
-                                // Let's just stick to 0-12 positions but toggle? NO, specifically asked 24h.
-                                // Let's map 0-23 to 360 degrees for a "24 Hour Dial". 0 at top. 12 at bottom.
+                            {(clockMode === 'hours' ? hours : minutes).map((val, i) => {
+                                const isHours = clockMode === 'hours';
+                                let angle, radius;
 
-                                // Angle: val * 15 (since 360/24=15). -90 to start top.
-                                const angle = (val * (clockMode === 'hours' ? 15 : 6)) - 90;
-                                const radius = 40;
+                                if (isHours) {
+                                    // Material 24h Clock: 1-12 outer, 13-24 (0) inner OR 0-11 inner, 12-23 outer?
+                                    // Let's do: 12-23 Outer, 0-11 Inner (standard for many digital analogs)
+                                    const isOuter = val >= 12 || val === 0; // 0 is often outer or inner. Let's do 12-23 Outer, 0-11 Inner.
+                                    // Wait, let's do 12-23 Outer (radius 42), 0-11 Inner (radius 28)
+                                    const isInner = val < 12;
+                                    radius = isInner ? 28 : 42;
+                                    // 12h positions: val % 12. 
+                                    // 12 is at top (0 deg maps to -90 for CSS)
+                                    angle = ((val % 12) * 30) - 90;
+                                } else {
+                                    // Minutes: 0, 5, 10... (radius 42)
+                                    radius = 42;
+                                    angle = (val * 6) - 90;
+                                }
+
                                 const x = 50 + radius * Math.cos(angle * Math.PI / 180);
                                 const y = 50 + radius * Math.sin(angle * Math.PI / 180);
 
-                                const isSelected = clockMode === 'hours'
+                                const isSelected = isHours
                                     ? parseInt(timeDisplay.h) === val
                                     : parseInt(timeDisplay.m) === val;
 
@@ -237,8 +239,8 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                                     <button
                                         key={val}
                                         onClick={() => handleTimeSelect(val)}
-                                        className={`absolute w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold transition-all z-20
-                                            ${isSelected ? 'text-black' : 'text-white hover:text-[#90CAF9]'}
+                                        className={`absolute w-7 h-7 flex items-center justify-center rounded-full text-[10px] font-black transition-all z-20
+                                            ${isSelected ? 'text-black' : 'text-white/80 hover:text-[#90CAF9] hover:bg-white/5'}
                                         `}
                                         style={{
                                             left: `${x}%`,
@@ -246,7 +248,7 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                                             transform: 'translate(-50%, -50%)'
                                         }}
                                     >
-                                        {val.toString().padStart(2, '0')}
+                                        {val.toString().padStart(clockMode === 'hours' ? 1 : 2, '0')}
                                     </button>
                                 );
                             })}

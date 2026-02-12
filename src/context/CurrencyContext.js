@@ -11,8 +11,8 @@ const SUPPORTED_CURRENCIES = [
     { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: '🇱🇰' },
     { code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸' },
     { code: 'EUR', symbol: '€', name: 'Euro', flag: '🇪🇺' },
-    { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳' },
     { code: 'GBP', symbol: '£', name: 'British Pound', flag: '🇬🇧' },
+    { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳' },
 ];
 
 export function CurrencyProvider({ children }) {
