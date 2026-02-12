@@ -6,10 +6,14 @@ const nextConfig = {
             {
                 protocol: 'https',
                 hostname: 'images.unsplash.com',
+                port: '',
+                pathname: '/**',
             },
             {
                 protocol: 'https',
-                hostname: 'lh3.googleusercontent.com', // For Google Reviews/Profiles
+                hostname: 'lh3.googleusercontent.com',
+                port: '',
+                pathname: '/**',
             }
         ],
         formats: ['image/avif', 'image/webp'],
