@@ -315,10 +315,10 @@ export default function AdminDashboard() {
 
     const formatPrice = (booking) => {
         if (!booking) return 'N/A';
-        const amount = booking.displayPrice || booking.totalPrice || 0;
-        const curr = booking.currency || 'LKR';
-        const symbol = curr === 'LKR' ? 'Rs' : curr;
-        return `${symbol} ${amount.toLocaleString()}`;
+        // Admin always sees the base LKR price (Revenue)
+        // If displayPrice exists, it might be in another currency, so fallback to totalPrice
+        const amount = booking.totalPrice || 0;
+        return `Rs ${amount.toLocaleString()}`;
     };
 
     const updateBookingStatus = async (id, status) => {
@@ -2099,589 +2099,588 @@ export default function AdminDashboard() {
                                                             <span className="text-xl font-bold text-emerald-600">{formatPrice(selectedBooking)}</span>
                                                         </div>
                                                         {selectedBooking.paymentType === 'partial' && (
-                                                            <div className="space-y-1 pt-1 border-t border-slate-200/50">
-                                                                <div className="flex justify-between items-center text-xs">
+                                                        <div className="flex justify-between items-center text-xs">
                                                                     <span className="text-gray-500">Paid (Online)</span>
                                                                     <span className="font-bold text-emerald-600">
-                                                                        {selectedBooking.currency || 'LKR'} {(selectedBooking.displayPaidAmount || selectedBooking.paidAmount || 0).toLocaleString()}
+                                                                        Rs {(selectedBooking.displayPaidAmount || selectedBooking.paidAmount || 0).toLocaleString()}
                                                                     </span>
                                                                 </div>
                                                                 <div className="flex justify-between items-center text-xs">
                                                                     <span className="text-gray-500">Balance (to Driver)</span>
                                                                     <span className="font-bold text-orange-600">
-                                                                        {selectedBooking.currency || 'LKR'} {(selectedBooking.displayBalanceAmount || selectedBooking.balanceAmount || 0).toLocaleString()}
+                                                                        Rs {(selectedBooking.displayBalanceAmount || selectedBooking.balanceAmount || 0).toLocaleString()}
                                                                     </span>
                                                                 </div>
                                                             </div>
                                                         )}
-                                                    </div>
-                                                    <div className="grid grid-cols-2 gap-4 pt-2">
-                                                        <div>
-                                                            <span className="text-xs text-gray-500 uppercase tracking-wider block">Method</span>
-                                                            <span className="font-medium capitalize">{selectedBooking.paymentMethod}</span>
-                                                        </div>
-                                                        <div>
-                                                            <span className="text-xs text-gray-500 uppercase tracking-wider block">Payment Status</span>
-                                                            <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold capitalize mt-1 ${selectedBooking.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' :
-                                                                selectedBooking.paymentStatus === 'pending' ? 'bg-orange-100 text-orange-700' :
-                                                                    'bg-gray-100 text-gray-600'
-                                                                }`}>
-                                                                {selectedBooking.paymentStatus}
-                                                            </span>
-                                                        </div>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-4 pt-2">
+                                                    <div>
+                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Method</span>
+                                                        <span className="font-medium capitalize">{selectedBooking.paymentMethod}</span>
                                                     </div>
                                                     <div>
-                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Booking Status</span>
-                                                        <select
-                                                            className="mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-600"
-                                                            value={selectedStatus}
-                                                            onChange={(e) => setSelectedStatus(e.target.value)}
-                                                        >
-                                                            <option value="pending">Pending</option>
-                                                            <option value="confirmed">Confirmed</option>
-                                                            <option value="assigned">Assigned</option>
-                                                            <option value="ongoing">Ongoing</option>
-                                                            <option value="completed">Completed</option>
-                                                            <option value="cancelled">Cancelled</option>
-                                                        </select>
+                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Payment Status</span>
+                                                        <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold capitalize mt-1 ${selectedBooking.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' :
+                                                            selectedBooking.paymentStatus === 'pending' ? 'bg-orange-100 text-orange-700' :
+                                                                'bg-gray-100 text-gray-600'
+                                                            }`}>
+                                                            {selectedBooking.paymentStatus}
+                                                        </span>
                                                     </div>
-                                                    <div>
-                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Assign Driver</span>
-                                                        <select
-                                                            className="mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-600"
-                                                            value={selectedDriver}
-                                                            onChange={(e) => {
-                                                                setSelectedDriver(e.target.value)
-                                                                if (e.target.value && selectedStatus === 'pending') {
-                                                                    setSelectedStatus('assigned')
-                                                                }
-                                                            }}
-                                                        >
-                                                            <option value="">-- Select Driver --</option>
-                                                            {drivers.map(driver => (
-                                                                <option key={driver._id} value={driver._id}>
-                                                                    {driver.name} ({driver.vehicleNumber} - {driver.vehicleType})
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <span className="text-xs text-gray-500 uppercase tracking-wider block">Booking Status</span>
+                                                    <select
+                                                        className="mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-600"
+                                                        value={selectedStatus}
+                                                        onChange={(e) => setSelectedStatus(e.target.value)}
+                                                    >
+                                                        <option value="pending">Pending</option>
+                                                        <option value="confirmed">Confirmed</option>
+                                                        <option value="assigned">Assigned</option>
+                                                        <option value="ongoing">Ongoing</option>
+                                                        <option value="completed">Completed</option>
+                                                        <option value="cancelled">Cancelled</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <span className="text-xs text-gray-500 uppercase tracking-wider block">Assign Driver</span>
+                                                    <select
+                                                        className="mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-600"
+                                                        value={selectedDriver}
+                                                        onChange={(e) => {
+                                                            setSelectedDriver(e.target.value)
+                                                            if (e.target.value && selectedStatus === 'pending') {
+                                                                setSelectedStatus('assigned')
+                                                            }
+                                                        }}
+                                                    >
+                                                        <option value="">-- Select Driver --</option>
+                                                        {drivers.map(driver => (
+                                                            <option key={driver._id} value={driver._id}>
+                                                                {driver.name} ({driver.vehicleNumber} - {driver.vehicleType})
+                                                            </option>
+                                                        ))}
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div className="p-6 border-t bg-gray-50 flex flex-wrap justify-end gap-3 md:gap-4 rounded-b-2xl">
-                                            <button
-                                                onClick={() => setSelectedBooking(null)}
-                                                className="px-6 py-2.5 text-gray-600 hover:bg-gray-200 rounded-lg font-bold transition-colors min-w-[100px]"
-                                            >
-                                                Close
-                                            </button>
-                                            <button
-                                                onClick={async () => {
-                                                    setUpdatingStatus(true)
-                                                    try {
-                                                        // Assuming we need a PUT endpoint to update status
-                                                        const res = await fetch(`/api/bookings/${selectedBooking._id}`, {
-                                                            method: 'PUT',
-                                                            headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify({
-                                                                status: selectedStatus,
-                                                                assignedDriver: selectedDriver || null
-                                                            })
-                                                        })
-
-                                                        const data = await res.json()
-
-                                                        if (data.success) {
-                                                            // Update local state
-                                                            const updatedList = bookings.map(b =>
-                                                                b._id === selectedBooking._id ? { ...b, status: selectedStatus } : b
-                                                            )
-                                                            setBookings(updatedList)
-                                                            setSelectedBooking({ ...selectedBooking, status: selectedStatus })
-                                                            alert('Booking status updated successfully')
-                                                        } else {
-                                                            alert('Failed to update: ' + (data.error || 'Unknown error'))
-                                                        }
-                                                    } catch (err) {
-                                                        console.error(err)
-                                                        alert('An error occurred while updating status')
-                                                    } finally {
-                                                        setUpdatingStatus(false)
-                                                    }
-                                                }}
-                                                disabled={updatingStatus}
-                                                className="px-8 py-2.5 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-800 transition-all disabled:opacity-50 min-w-[140px] shadow-lg flex items-center justify-center gap-2"
-                                            >
-                                                {updatingStatus ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
-                                                {updatingStatus ? 'Saving...' : 'Save Changes'}
-                                            </button>
-                                        </div>
                                     </div>
-                                </div>
-                            )}
-                        </div>
-                    )}
 
-                    {currentView === 'communications' && (
-                        <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-sm p-8">
-                            <h2 className="text-2xl font-bold text-emerald-900 mb-6 flex items-center gap-2">
-                                <Mail className="text-emerald-600" /> Email Center
-                            </h2>
-
-                            <div className="space-y-6">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
-                                    <select
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 bg-white"
-                                        value={emailForm.recipientType}
-                                        onChange={(e) => setEmailForm({ ...emailForm, recipientType: e.target.value })}
-                                    >
-                                        <option value="specific">Specific Email</option>
-                                        <option value="all_users">All Customers</option>
-                                        <option value="all_drivers">All Drivers</option>
-                                    </select>
-                                </div>
-
-                                {emailForm.recipientType === 'specific' && (
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                                        <input
-                                            type="email"
-                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
-                                            placeholder="customer@example.com"
-                                            value={emailForm.customEmail || ''}
-                                            onChange={(e) => setEmailForm({ ...emailForm, customEmail: e.target.value })}
-                                        />
-                                    </div>
-                                )}
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
-                                    <input
-                                        type="text"
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
-                                        placeholder="Important Update..."
-                                        value={emailForm.subject}
-                                        onChange={(e) => setEmailForm({ ...emailForm, subject: e.target.value })}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                                    <textarea
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 h-48"
-                                        placeholder="Write your message here..."
-                                        value={emailForm.message}
-                                        onChange={(e) => setEmailForm({ ...emailForm, message: e.target.value })}
-                                    />
-                                </div>
-
-                                <div className="flex justify-end pt-4">
-                                    <button
-                                        onClick={async () => {
-                                            setSendingEmail(true)
-                                            try {
-                                                const res = await fetch('/api/admin/email', {
-                                                    method: 'POST',
-                                                    headers: { 'Content-Type': 'application/json' },
-                                                    body: JSON.stringify(emailForm)
-                                                })
-                                                const data = await res.json()
-                                                if (data.success) {
-                                                    alert(`Sent ${data.sent} emails successfully!`)
-                                                    setEmailForm({ recipientType: 'specific', subject: '', message: '' })
-                                                } else {
-                                                    alert('Error: ' + data.error)
-                                                }
-                                            } catch (err) {
-                                                console.error(err)
-                                                alert('Failed to send emails')
-                                            } finally {
-                                                setSendingEmail(false)
-                                            }
-                                        }}
-                                        disabled={sendingEmail}
-                                        className="bg-emerald-900 text-white px-8 py-3 rounded-lg font-bold hover:bg-emerald-900/90 flex items-center gap-2 disabled:opacity-50"
-                                    >
-                                        {sendingEmail ? <Loader2 className="animate-spin" /> : <Mail size={18} />}
-                                        {sendingEmail ? 'Sending...' : 'Send Email'}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {currentView === 'support' && (
-                        <div className="space-y-6">
-                            {!selectedTicket ? (
-                                <div className="bg-white rounded-xl shadow-sm p-6">
-                                    <h2 className="text-2xl font-bold text-emerald-900 mb-6">Support Tickets</h2>
-                                    {isLoading ? (
-                                        <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div></div>
-                                    ) : (
-                                        <div className="space-y-2">
-                                            {supportTickets.map(ticket => (
-                                                <div
-                                                    key={ticket._id}
-                                                    onClick={() => setSelectedTicket(ticket)}
-                                                    className="flex items-center justify-between p-4 border border-slate-100 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
-                                                >
-                                                    <div className="flex items-center gap-4">
-                                                        <div className={`w-3 h-3 rounded-full ${ticket.status === 'open' ? 'bg-green-500' : ticket.status === 'answered' ? 'bg-blue-500' : 'bg-gray-400'}`}></div>
-                                                        <div>
-                                                            <h3 className="font-bold text-emerald-900">{ticket.subject}</h3>
-                                                            <p className="text-sm text-gray-500">{ticket.user?.name} ({ticket.user?.email})</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${ticket.priority === 'high' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'}`}>{ticket.priority}</span>
-                                                        <p className="text-xs text-gray-400 mt-1">{new Date(ticket.lastUpdated).toLocaleDateString()}</p>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                            {supportTickets.length === 0 && <p className="text-center text-gray-400 py-8">No tickets found.</p>}
-                                        </div>
-                                    )}
-                                </div>
-                            ) : (
-                                <div className="max-w-4xl mx-auto">
-                                    <button
-                                        onClick={() => setSelectedTicket(null)}
-                                        className="mb-4 text-gray-500 hover:text-emerald-900 font-medium flex items-center gap-2"
-                                    >
-                                        ← Back to List
-                                    </button>
-
-                                    <div className="bg-white rounded-t-2xl shadow-sm p-6 border-b border-slate-100 flex justify-between items-start">
-                                        <div>
-                                            <h2 className="text-xl font-bold text-emerald-900 mb-1">{selectedTicket.subject}</h2>
-                                            <p className="text-sm text-gray-500">Customer: {selectedTicket.user?.name} ({selectedTicket.user?.email})</p>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <select
-                                                className="text-xs border rounded px-2 py-1 bg-white"
-                                                value={selectedTicket.status}
-                                                onChange={async (e) => {
-                                                    const newStatus = e.target.value
-                                                    const res = await fetch(`/api/support/${selectedTicket._id}`, {
+                                    <div className="p-6 border-t bg-gray-50 flex flex-wrap justify-end gap-3 md:gap-4 rounded-b-2xl">
+                                        <button
+                                            onClick={() => setSelectedBooking(null)}
+                                            className="px-6 py-2.5 text-gray-600 hover:bg-gray-200 rounded-lg font-bold transition-colors min-w-[100px]"
+                                        >
+                                            Close
+                                        </button>
+                                        <button
+                                            onClick={async () => {
+                                                setUpdatingStatus(true)
+                                                try {
+                                                    // Assuming we need a PUT endpoint to update status
+                                                    const res = await fetch(`/api/bookings/${selectedBooking._id}`, {
                                                         method: 'PUT',
                                                         headers: { 'Content-Type': 'application/json' },
-                                                        body: JSON.stringify({ status: newStatus })
+                                                        body: JSON.stringify({
+                                                            status: selectedStatus,
+                                                            assignedDriver: selectedDriver || null
+                                                        })
                                                     })
-                                                    if (res.ok) setSelectedTicket({ ...selectedTicket, status: newStatus })
-                                                }}
-                                            >
-                                                <option value="open">Open</option>
-                                                <option value="answered">Answered</option>
-                                                <option value="closed">Closed</option>
-                                            </select>
-                                        </div>
-                                    </div>
 
-                                    <div className="bg-slate-50 p-6 space-y-6 min-h-[400px] max-h-[600px] overflow-y-auto">
-                                        {selectedTicket.messages.map((msg, idx) => (
-                                            <div key={idx} className={`flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}`}>
-                                                <div className={`max-w-[80%] rounded-2xl p-4 ${msg.sender === 'admin'
-                                                    ? 'bg-emerald-900 text-white rounded-tr-none'
-                                                    : 'bg-white text-gray-800 shadow-sm rounded-tl-none'
-                                                    }`}>
-                                                    <p className="whitespace-pre-wrap text-sm">{msg.message}</p>
-                                                    <p className={`text-[10px] mt-2 opacity-70 ${msg.sender === 'admin' ? 'text-right' : 'text-left'}`}>
-                                                        {new Date(msg.timestamp).toLocaleString()} • {msg.sender}
-                                                    </p>
+                                                    const data = await res.json()
+
+                                                    if (data.success) {
+                                                        // Update local state
+                                                        const updatedList = bookings.map(b =>
+                                                            b._id === selectedBooking._id ? { ...b, status: selectedStatus } : b
+                                                        )
+                                                        setBookings(updatedList)
+                                                        setSelectedBooking({ ...selectedBooking, status: selectedStatus })
+                                                        alert('Booking status updated successfully')
+                                                    } else {
+                                                        alert('Failed to update: ' + (data.error || 'Unknown error'))
+                                                    }
+                                                } catch (err) {
+                                                    console.error(err)
+                                                    alert('An error occurred while updating status')
+                                                } finally {
+                                                    setUpdatingStatus(false)
+                                                }
+                                            }}
+                                            disabled={updatingStatus}
+                                            className="px-8 py-2.5 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-800 transition-all disabled:opacity-50 min-w-[140px] shadow-lg flex items-center justify-center gap-2"
+                                        >
+                                            {updatingStatus ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
+                                            {updatingStatus ? 'Saving...' : 'Save Changes'}
+                                        </button>
+                                    </div>
+                                </div>
+                                </div>
+                    )}
+                </div>
+                    )}
+
+                {currentView === 'communications' && (
+                    <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-sm p-8">
+                        <h2 className="text-2xl font-bold text-emerald-900 mb-6 flex items-center gap-2">
+                            <Mail className="text-emerald-600" /> Email Center
+                        </h2>
+
+                        <div className="space-y-6">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
+                                <select
+                                    className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 bg-white"
+                                    value={emailForm.recipientType}
+                                    onChange={(e) => setEmailForm({ ...emailForm, recipientType: e.target.value })}
+                                >
+                                    <option value="specific">Specific Email</option>
+                                    <option value="all_users">All Customers</option>
+                                    <option value="all_drivers">All Drivers</option>
+                                </select>
+                            </div>
+
+                            {emailForm.recipientType === 'specific' && (
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                                    <input
+                                        type="email"
+                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                        placeholder="customer@example.com"
+                                        value={emailForm.customEmail || ''}
+                                        onChange={(e) => setEmailForm({ ...emailForm, customEmail: e.target.value })}
+                                    />
+                                </div>
+                            )}
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                                <input
+                                    type="text"
+                                    className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                    placeholder="Important Update..."
+                                    value={emailForm.subject}
+                                    onChange={(e) => setEmailForm({ ...emailForm, subject: e.target.value })}
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                                <textarea
+                                    className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 h-48"
+                                    placeholder="Write your message here..."
+                                    value={emailForm.message}
+                                    onChange={(e) => setEmailForm({ ...emailForm, message: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="flex justify-end pt-4">
+                                <button
+                                    onClick={async () => {
+                                        setSendingEmail(true)
+                                        try {
+                                            const res = await fetch('/api/admin/email', {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify(emailForm)
+                                            })
+                                            const data = await res.json()
+                                            if (data.success) {
+                                                alert(`Sent ${data.sent} emails successfully!`)
+                                                setEmailForm({ recipientType: 'specific', subject: '', message: '' })
+                                            } else {
+                                                alert('Error: ' + data.error)
+                                            }
+                                        } catch (err) {
+                                            console.error(err)
+                                            alert('Failed to send emails')
+                                        } finally {
+                                            setSendingEmail(false)
+                                        }
+                                    }}
+                                    disabled={sendingEmail}
+                                    className="bg-emerald-900 text-white px-8 py-3 rounded-lg font-bold hover:bg-emerald-900/90 flex items-center gap-2 disabled:opacity-50"
+                                >
+                                    {sendingEmail ? <Loader2 className="animate-spin" /> : <Mail size={18} />}
+                                    {sendingEmail ? 'Sending...' : 'Send Email'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {currentView === 'support' && (
+                    <div className="space-y-6">
+                        {!selectedTicket ? (
+                            <div className="bg-white rounded-xl shadow-sm p-6">
+                                <h2 className="text-2xl font-bold text-emerald-900 mb-6">Support Tickets</h2>
+                                {isLoading ? (
+                                    <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div></div>
+                                ) : (
+                                    <div className="space-y-2">
+                                        {supportTickets.map(ticket => (
+                                            <div
+                                                key={ticket._id}
+                                                onClick={() => setSelectedTicket(ticket)}
+                                                className="flex items-center justify-between p-4 border border-slate-100 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`w-3 h-3 rounded-full ${ticket.status === 'open' ? 'bg-green-500' : ticket.status === 'answered' ? 'bg-blue-500' : 'bg-gray-400'}`}></div>
+                                                    <div>
+                                                        <h3 className="font-bold text-emerald-900">{ticket.subject}</h3>
+                                                        <p className="text-sm text-gray-500">{ticket.user?.name} ({ticket.user?.email})</p>
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${ticket.priority === 'high' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'}`}>{ticket.priority}</span>
+                                                    <p className="text-xs text-gray-400 mt-1">{new Date(ticket.lastUpdated).toLocaleDateString()}</p>
                                                 </div>
                                             </div>
                                         ))}
+                                        {supportTickets.length === 0 && <p className="text-center text-gray-400 py-8">No tickets found.</p>}
                                     </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="max-w-4xl mx-auto">
+                                <button
+                                    onClick={() => setSelectedTicket(null)}
+                                    className="mb-4 text-gray-500 hover:text-emerald-900 font-medium flex items-center gap-2"
+                                >
+                                    ← Back to List
+                                </button>
 
-                                    <div className="bg-white rounded-b-2xl shadow-sm p-4">
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="text"
-                                                placeholder="Type your reply..."
-                                                className="flex-1 px-4 py-3 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-600/20"
-                                                value={adminReply}
-                                                onChange={e => setAdminReply(e.target.value)}
-                                                onKeyDown={async (e) => {
-                                                    if (e.key === 'Enter' && !e.shiftKey) {
-                                                        e.preventDefault();
-                                                        if (!adminReply.trim()) return;
-                                                        setSendingReply(true);
-                                                        try {
-                                                            const res = await fetch(`/api/support/${selectedTicket._id}`, {
-                                                                method: 'PUT',
-                                                                headers: { 'Content-Type': 'application/json' },
-                                                                body: JSON.stringify({ message: adminReply })
-                                                            });
-                                                            const data = await res.json();
-                                                            if (data.success) {
-                                                                setSelectedTicket(data.data);
-                                                                setAdminReply('');
-                                                            }
-                                                        } catch (err) {
-                                                            alert('Failed');
-                                                        } finally {
-                                                            setSendingReply(false);
-                                                        }
-                                                    }
-                                                }}
-                                            />
-                                            <button
-                                                onClick={async () => {
-                                                    if (!adminReply.trim()) return
-                                                    setSendingReply(true)
+                                <div className="bg-white rounded-t-2xl shadow-sm p-6 border-b border-slate-100 flex justify-between items-start">
+                                    <div>
+                                        <h2 className="text-xl font-bold text-emerald-900 mb-1">{selectedTicket.subject}</h2>
+                                        <p className="text-sm text-gray-500">Customer: {selectedTicket.user?.name} ({selectedTicket.user?.email})</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <select
+                                            className="text-xs border rounded px-2 py-1 bg-white"
+                                            value={selectedTicket.status}
+                                            onChange={async (e) => {
+                                                const newStatus = e.target.value
+                                                const res = await fetch(`/api/support/${selectedTicket._id}`, {
+                                                    method: 'PUT',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({ status: newStatus })
+                                                })
+                                                if (res.ok) setSelectedTicket({ ...selectedTicket, status: newStatus })
+                                            }}
+                                        >
+                                            <option value="open">Open</option>
+                                            <option value="answered">Answered</option>
+                                            <option value="closed">Closed</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="bg-slate-50 p-6 space-y-6 min-h-[400px] max-h-[600px] overflow-y-auto">
+                                    {selectedTicket.messages.map((msg, idx) => (
+                                        <div key={idx} className={`flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}`}>
+                                            <div className={`max-w-[80%] rounded-2xl p-4 ${msg.sender === 'admin'
+                                                ? 'bg-emerald-900 text-white rounded-tr-none'
+                                                : 'bg-white text-gray-800 shadow-sm rounded-tl-none'
+                                                }`}>
+                                                <p className="whitespace-pre-wrap text-sm">{msg.message}</p>
+                                                <p className={`text-[10px] mt-2 opacity-70 ${msg.sender === 'admin' ? 'text-right' : 'text-left'}`}>
+                                                    {new Date(msg.timestamp).toLocaleString()} • {msg.sender}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="bg-white rounded-b-2xl shadow-sm p-4">
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            placeholder="Type your reply..."
+                                            className="flex-1 px-4 py-3 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                            value={adminReply}
+                                            onChange={e => setAdminReply(e.target.value)}
+                                            onKeyDown={async (e) => {
+                                                if (e.key === 'Enter' && !e.shiftKey) {
+                                                    e.preventDefault();
+                                                    if (!adminReply.trim()) return;
+                                                    setSendingReply(true);
                                                     try {
                                                         const res = await fetch(`/api/support/${selectedTicket._id}`, {
                                                             method: 'PUT',
                                                             headers: { 'Content-Type': 'application/json' },
                                                             body: JSON.stringify({ message: adminReply })
-                                                        })
-                                                        const data = await res.json()
+                                                        });
+                                                        const data = await res.json();
                                                         if (data.success) {
-                                                            setSelectedTicket(data.data)
-                                                            setAdminReply('')
+                                                            setSelectedTicket(data.data);
+                                                            setAdminReply('');
                                                         }
-                                                    } catch (err) { alert('Failed') }
-                                                    finally { setSendingReply(false) }
-                                                }}
-                                                disabled={sendingReply || !adminReply.trim()}
-                                                className="bg-emerald-600 text-emerald-900 p-3 rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-50"
+                                                    } catch (err) {
+                                                        alert('Failed');
+                                                    } finally {
+                                                        setSendingReply(false);
+                                                    }
+                                                }
+                                            }}
+                                        />
+                                        <button
+                                            onClick={async () => {
+                                                if (!adminReply.trim()) return
+                                                setSendingReply(true)
+                                                try {
+                                                    const res = await fetch(`/api/support/${selectedTicket._id}`, {
+                                                        method: 'PUT',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify({ message: adminReply })
+                                                    })
+                                                    const data = await res.json()
+                                                    if (data.success) {
+                                                        setSelectedTicket(data.data)
+                                                        setAdminReply('')
+                                                    }
+                                                } catch (err) { alert('Failed') }
+                                                finally { setSendingReply(false) }
+                                            }}
+                                            disabled={sendingReply || !adminReply.trim()}
+                                            className="bg-emerald-600 text-emerald-900 p-3 rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-50"
+                                        >
+                                            {sendingReply ? '...' : <div className="font-bold px-2">Send</div>}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {currentView === 'coupons' && (
+                    <div className="space-y-6">
+                        {/* Header */}
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h2 className="text-3xl font-bold text-slate-800">Coupon Management</h2>
+                                <p className="text-slate-500 mt-1">Create and manage promotional discount codes</p>
+                            </div>
+                        </div>
+
+                        {/* Create New Coupon Card */}
+                        <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-xl shadow-emerald-500/30">
+                            <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                                <Percent size={20} />
+                                Create New Coupon
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Code</label>
+                                    <input
+                                        placeholder="e.g. GALLE10"
+                                        value={newCoupon.code}
+                                        onChange={e => setNewCoupon({ ...newCoupon, code: e.target.value.toUpperCase() })}
+                                        className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Type</label>
+                                    <select
+                                        value={newCoupon.discountType}
+                                        onChange={e => setNewCoupon({ ...newCoupon, discountType: e.target.value })}
+                                        className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 text-white font-bold"
+                                    >
+                                        <option value="percentage" className="text-slate-800">Percentage (%)</option>
+                                        <option value="flat" className="text-slate-800">Flat (Rs)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Value</label>
+                                    <input
+                                        type="number"
+                                        placeholder="10"
+                                        value={newCoupon.value}
+                                        onChange={e => setNewCoupon({ ...newCoupon, value: e.target.value })}
+                                        className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Expiry</label>
+                                    <input
+                                        type="date"
+                                        value={newCoupon.expiryDate}
+                                        onChange={e => setNewCoupon({ ...newCoupon, expiryDate: e.target.value })}
+                                        className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 text-white font-bold"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Location</label>
+                                    <input
+                                        placeholder="e.g. Galle"
+                                        value={newCoupon.locationsText || ''}
+                                        onChange={e => setNewCoupon({ ...newCoupon, locationsText: e.target.value })}
+                                        className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-4">
+                                <div className="lg:col-span-2">
+                                    <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Description</label>
+                                    <input
+                                        placeholder="e.g. Get 10% off on your next trip to Galle"
+                                        value={newCoupon.description}
+                                        onChange={e => setNewCoupon({ ...newCoupon, description: e.target.value })}
+                                        className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
+                                    />
+                                </div>
+                                <div className="lg:col-span-1">
+                                    <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Image URL</label>
+                                    <input
+                                        placeholder="https://..."
+                                        value={newCoupon.imageUrl}
+                                        onChange={e => setNewCoupon({ ...newCoupon, imageUrl: e.target.value })}
+                                        className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
+                                    />
+                                </div>
+                                <div className="lg:col-span-1">
+                                    <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Usage Limit</label>
+                                    <input
+                                        type="number"
+                                        placeholder="Unlimited"
+                                        value={newCoupon.usageLimit}
+                                        onChange={e => setNewCoupon({ ...newCoupon, usageLimit: e.target.value })}
+                                        className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
+                                    />
+                                </div>
+                                <div className="lg:col-span-1 flex items-center gap-3 pt-4">
+                                    <button
+                                        onClick={() => setNewCoupon({ ...newCoupon, displayInWidget: !newCoupon.displayInWidget })}
+                                        className={`w-12 h-6 rounded-full transition-colors relative ${newCoupon.displayInWidget ? 'bg-emerald-400' : 'bg-white/20'}`}
+                                    >
+                                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${newCoupon.displayInWidget ? 'left-7' : 'left-1'}`}></div>
+                                    </button>
+                                    <span className="text-xs font-bold text-emerald-100 uppercase tracking-wider">Display in Widget</span>
+                                </div>
+                                <div className="flex items-end">
+                                    <button
+                                        onClick={handleAddCoupon}
+                                        className="w-full p-3 bg-white text-emerald-600 font-bold rounded-xl hover:bg-emerald-50 transition-all hover:scale-105 shadow-lg"
+                                    >
+                                        + Create Coupon
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Coupons Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {coupons.map(c => (
+                                <div key={c._id} className="relative group bg-white rounded-2xl border-2 border-dashed border-slate-200 hover:border-emerald-300 overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1">
+                                    {/* Coupon Design */}
+                                    <div className="p-6">
+                                        <div className="flex items-start justify-between mb-4">
+                                            <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                                                <Percent className="text-white" size={20} />
+                                            </div>
+                                            <button
+                                                onClick={() => handleDeleteCoupon(c._id)}
+                                                className="opacity-0 group-hover:opacity-100 p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
                                             >
-                                                {sendingReply ? '...' : <div className="font-bold px-2">Send</div>}
+                                                <X size={18} />
                                             </button>
                                         </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    )}
 
-                    {currentView === 'coupons' && (
-                        <div className="space-y-6">
-                            {/* Header */}
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <h2 className="text-3xl font-bold text-slate-800">Coupon Management</h2>
-                                    <p className="text-slate-500 mt-1">Create and manage promotional discount codes</p>
-                                </div>
-                            </div>
-
-                            {/* Create New Coupon Card */}
-                            <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-xl shadow-emerald-500/30">
-                                <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                                    <Percent size={20} />
-                                    Create New Coupon
-                                </h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                                    <div>
-                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Code</label>
-                                        <input
-                                            placeholder="e.g. GALLE10"
-                                            value={newCoupon.code}
-                                            onChange={e => setNewCoupon({ ...newCoupon, code: e.target.value.toUpperCase() })}
-                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Type</label>
-                                        <select
-                                            value={newCoupon.discountType}
-                                            onChange={e => setNewCoupon({ ...newCoupon, discountType: e.target.value })}
-                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 text-white font-bold"
-                                        >
-                                            <option value="percentage" className="text-slate-800">Percentage (%)</option>
-                                            <option value="flat" className="text-slate-800">Flat (Rs)</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Value</label>
-                                        <input
-                                            type="number"
-                                            placeholder="10"
-                                            value={newCoupon.value}
-                                            onChange={e => setNewCoupon({ ...newCoupon, value: e.target.value })}
-                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Expiry</label>
-                                        <input
-                                            type="date"
-                                            value={newCoupon.expiryDate}
-                                            onChange={e => setNewCoupon({ ...newCoupon, expiryDate: e.target.value })}
-                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 text-white font-bold"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Location</label>
-                                        <input
-                                            placeholder="e.g. Galle"
-                                            value={newCoupon.locationsText || ''}
-                                            onChange={e => setNewCoupon({ ...newCoupon, locationsText: e.target.value })}
-                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-4">
-                                    <div className="lg:col-span-2">
-                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Description</label>
-                                        <input
-                                            placeholder="e.g. Get 10% off on your next trip to Galle"
-                                            value={newCoupon.description}
-                                            onChange={e => setNewCoupon({ ...newCoupon, description: e.target.value })}
-                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
-                                        />
-                                    </div>
-                                    <div className="lg:col-span-1">
-                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Image URL</label>
-                                        <input
-                                            placeholder="https://..."
-                                            value={newCoupon.imageUrl}
-                                            onChange={e => setNewCoupon({ ...newCoupon, imageUrl: e.target.value })}
-                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
-                                        />
-                                    </div>
-                                    <div className="lg:col-span-1">
-                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Usage Limit</label>
-                                        <input
-                                            type="number"
-                                            placeholder="Unlimited"
-                                            value={newCoupon.usageLimit}
-                                            onChange={e => setNewCoupon({ ...newCoupon, usageLimit: e.target.value })}
-                                            className="w-full p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 outline-none focus:bg-white/30 placeholder-white/50 text-white font-bold"
-                                        />
-                                    </div>
-                                    <div className="lg:col-span-1 flex items-center gap-3 pt-4">
-                                        <button
-                                            onClick={() => setNewCoupon({ ...newCoupon, displayInWidget: !newCoupon.displayInWidget })}
-                                            className={`w-12 h-6 rounded-full transition-colors relative ${newCoupon.displayInWidget ? 'bg-emerald-400' : 'bg-white/20'}`}
-                                        >
-                                            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${newCoupon.displayInWidget ? 'left-7' : 'left-1'}`}></div>
-                                        </button>
-                                        <span className="text-xs font-bold text-emerald-100 uppercase tracking-wider">Display in Widget</span>
-                                    </div>
-                                    <div className="flex items-end">
-                                        <button
-                                            onClick={handleAddCoupon}
-                                            className="w-full p-3 bg-white text-emerald-600 font-bold rounded-xl hover:bg-emerald-50 transition-all hover:scale-105 shadow-lg"
-                                        >
-                                            + Create Coupon
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Coupons Grid */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                {coupons.map(c => (
-                                    <div key={c._id} className="relative group bg-white rounded-2xl border-2 border-dashed border-slate-200 hover:border-emerald-300 overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1">
-                                        {/* Coupon Design */}
-                                        <div className="p-6">
-                                            <div className="flex items-start justify-between mb-4">
-                                                <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
-                                                    <Percent className="text-white" size={20} />
-                                                </div>
-                                                <button
-                                                    onClick={() => handleDeleteCoupon(c._id)}
-                                                    className="opacity-0 group-hover:opacity-100 p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                                                >
-                                                    <X size={18} />
-                                                </button>
-                                            </div>
-
-                                            {/* Discount Display */}
-                                            <div className="mb-2">
-                                                <div className="text-4xl font-black text-slate-800">
-                                                    {c.value}{c.discountType === 'percentage' ? '%' : ''}
-                                                    <span className="text-lg font-bold text-slate-400 ml-1">
-                                                        {c.discountType === 'percentage' ? 'OFF' : 'LKR OFF'}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            {/* Description */}
-                                            {c.description && (
-                                                <p className="text-xs text-slate-500 mb-4 line-clamp-2">{c.description}</p>
-                                            )}
-
-                                            {/* Image Preview if exists */}
-                                            {c.imageUrl && (
-                                                <div className="mb-4 rounded-lg overflow-hidden h-20 bg-slate-50 border border-slate-100">
-                                                    <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" />
-                                                </div>
-                                            )}
-
-                                            {/* Widget Display Link */}
-                                            {c.displayInWidget && (
-                                                <div className="mb-3 flex items-center gap-1.5">
-                                                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                                                    <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Visible in Widget</span>
-                                                </div>
-                                            )}
-
-                                            {/* Code */}
-                                            <div className="bg-slate-100 rounded-xl p-3 flex items-center justify-between mb-4">
-                                                <code className="font-mono font-bold text-emerald-600 text-lg tracking-wider">{c.code}</code>
-                                                <button
-                                                    onClick={() => navigator.clipboard.writeText(c.code)}
-                                                    className="text-xs text-slate-400 hover:text-emerald-600"
-                                                >
-                                                    Copy
-                                                </button>
-                                            </div>
-
-                                            {/* Details */}
-                                            <div className="space-y-2 text-sm">
-                                                {c.applicableLocations && c.applicableLocations.length > 0 && (
-                                                    <div className="flex items-center gap-2 text-slate-600">
-                                                        <MapPin size={14} className="text-emerald-500" />
-                                                        <span>{c.applicableLocations.join(', ')}</span>
-                                                    </div>
-                                                )}
-                                                <div className="flex items-center gap-2 text-slate-500">
-                                                    <Calendar size={14} />
-                                                    <span>{c.expiryDate ? `Expires ${new Date(c.expiryDate).toLocaleDateString()}` : 'No expiry'}</span>
-                                                </div>
-                                                <div className="flex items-center gap-2 text-slate-500">
-                                                    <Percent size={14} className="text-emerald-500" />
-                                                    <span>Used: <span className="font-bold text-slate-800">{c.usedCount || 0}</span> {c.usageLimit ? `/ ${c.usageLimit}` : '(Unlimited)'}</span>
-                                                </div>
+                                        {/* Discount Display */}
+                                        <div className="mb-2">
+                                            <div className="text-4xl font-black text-slate-800">
+                                                {c.value}{c.discountType === 'percentage' ? '%' : ''}
+                                                <span className="text-lg font-bold text-slate-400 ml-1">
+                                                    {c.discountType === 'percentage' ? 'OFF' : 'LKR OFF'}
+                                                </span>
                                             </div>
                                         </div>
 
-                                        {/* Decorative circles */}
-                                        <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-100 rounded-full"></div>
-                                        <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-100 rounded-full"></div>
-                                    </div>
-                                ))}
-                            </div>
+                                        {/* Description */}
+                                        {c.description && (
+                                            <p className="text-xs text-slate-500 mb-4 line-clamp-2">{c.description}</p>
+                                        )}
 
-                            {coupons.length === 0 && (
-                                <div className="bg-white rounded-2xl border-2 border-dashed border-slate-200 p-12 text-center">
-                                    <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                        <Percent className="text-slate-400" size={28} />
+                                        {/* Image Preview if exists */}
+                                        {c.imageUrl && (
+                                            <div className="mb-4 rounded-lg overflow-hidden h-20 bg-slate-50 border border-slate-100">
+                                                <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" />
+                                            </div>
+                                        )}
+
+                                        {/* Widget Display Link */}
+                                        {c.displayInWidget && (
+                                            <div className="mb-3 flex items-center gap-1.5">
+                                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                                <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Visible in Widget</span>
+                                            </div>
+                                        )}
+
+                                        {/* Code */}
+                                        <div className="bg-slate-100 rounded-xl p-3 flex items-center justify-between mb-4">
+                                            <code className="font-mono font-bold text-emerald-600 text-lg tracking-wider">{c.code}</code>
+                                            <button
+                                                onClick={() => navigator.clipboard.writeText(c.code)}
+                                                className="text-xs text-slate-400 hover:text-emerald-600"
+                                            >
+                                                Copy
+                                            </button>
+                                        </div>
+
+                                        {/* Details */}
+                                        <div className="space-y-2 text-sm">
+                                            {c.applicableLocations && c.applicableLocations.length > 0 && (
+                                                <div className="flex items-center gap-2 text-slate-600">
+                                                    <MapPin size={14} className="text-emerald-500" />
+                                                    <span>{c.applicableLocations.join(', ')}</span>
+                                                </div>
+                                            )}
+                                            <div className="flex items-center gap-2 text-slate-500">
+                                                <Calendar size={14} />
+                                                <span>{c.expiryDate ? `Expires ${new Date(c.expiryDate).toLocaleDateString()}` : 'No expiry'}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-slate-500">
+                                                <Percent size={14} className="text-emerald-500" />
+                                                <span>Used: <span className="font-bold text-slate-800">{c.usedCount || 0}</span> {c.usageLimit ? `/ ${c.usageLimit}` : '(Unlimited)'}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <h3 className="text-lg font-bold text-slate-800 mb-2">No Coupons Yet</h3>
-                                    <p className="text-slate-500">Create your first coupon above to start offering discounts</p>
+
+                                    {/* Decorative circles */}
+                                    <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-100 rounded-full"></div>
+                                    <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-100 rounded-full"></div>
                                 </div>
-                            )}
+                            ))}
                         </div>
-                    )}
 
-                    {/* Reviews Management */}
-                    {currentView === 'reviews' && (
-                        <ReviewsManagement />
-                    )}
+                        {coupons.length === 0 && (
+                            <div className="bg-white rounded-2xl border-2 border-dashed border-slate-200 p-12 text-center">
+                                <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                    <Percent className="text-slate-400" size={28} />
+                                </div>
+                                <h3 className="text-lg font-bold text-slate-800 mb-2">No Coupons Yet</h3>
+                                <p className="text-slate-500">Create your first coupon above to start offering discounts</p>
+                            </div>
+                        )}
+                    </div>
+                )}
 
-                    {/* Drivers Fleet View */}
-                    {currentView === 'drivers' && <DriversFleetView />}
+                {/* Reviews Management */}
+                {currentView === 'reviews' && (
+                    <ReviewsManagement />
+                )}
 
-                    {/* Live Driver Map */}
-                    {currentView === 'live-map' && <LiveDriverMap />}
-                </div>
-            </div >
+                {/* Drivers Fleet View */}
+                {currentView === 'drivers' && <DriversFleetView />}
+
+                {/* Live Driver Map */}
+                {currentView === 'live-map' && <LiveDriverMap />}
+            </div>
+        </div >
         </div >
     )
 }

@@ -1,60 +1,35 @@
 const mongoose = require('mongoose');
-const path = require('path');
-const dotenv = require('dotenv');
-dotenv.config({ path: path.join(process.cwd(), '.env.local') });
-dotenv.config({ path: path.join(process.cwd(), '.env') });
+require('dotenv').config();
 
-// Since the User model is in ES module format (export default), we need a dynamic import or define the schema here.
-// For simplicity in a script, defining the schema inline is often safer to avoid module resolution issues.
-
-const dbConnect = async () => {
-    if (mongoose.connection.readyState >= 1) {
-        return;
-    }
-    return mongoose.connect(process.env.MONGODB_URI);
-};
-
-const userSchema = new mongoose.Schema({
-    name: String,
-    email: { type: String, required: true, unique: true },
-    password: { type: String, select: false },
-    image: String,
-    role: { type: String, default: 'user' },
-    provider: { type: String, default: 'credentials' },
-}, { timestamps: true });
-
-const User = mongoose.models.User || mongoose.model('User', userSchema);
-
-async function promoteToAdmin(email) {
+async function promoteToAdmin() {
     try {
-        console.log('Connecting to DB...');
-        await dbConnect();
-        console.log('Connected.');
+        await mongoose.connect(process.env.MONGODB_URI);
+        console.log('Connected to DB');
 
-        if (!email) {
-            console.log('Please provide an email as argument.');
-            process.exit(1);
+        const User = require('../src/models/User').default || mongoose.model('User');
+
+        const email = 'chithilamanul1@gmail.com';
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            console.log('User not found:', email);
+            return;
         }
 
-        const user = await User.findOneAndUpdate(
-            { email: email },
-            { role: 'admin' },
-            { new: true }
-        );
+        console.log('Current Role:', user.role);
 
-        if (user) {
-            console.log(`Successfully promoted ${user.email} to '${user.role}'`);
-        } else {
-            console.log(`User with email ${email} not found.`);
-        }
+        user.role = 'admin';
+        user.isAdmin = true;
+        user.permissions = ['all'];
+
+        await user.save();
+        console.log('User promoted to ADMIN successfully');
 
     } catch (error) {
-        console.error('Error promoting user:', error);
+        console.error('Error:', error);
     } finally {
         await mongoose.disconnect();
     }
 }
 
-// Get email from command line argument
-const targetEmail = process.argv[2];
-promoteToAdmin(targetEmail);
+promoteToAdmin();

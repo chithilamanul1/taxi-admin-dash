@@ -117,14 +117,14 @@ export default function MyBookingsPage() {
                                         <div className="flex justify-between items-start">
                                             <div className="flex items-center gap-3">
                                                 <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${booking.status === 'confirmed' ? 'bg-green-100 text-green-700' :
-                                                        booking.status === 'pending' ? 'bg-blue-50 text-blue-600' :
-                                                            booking.status === 'cancelled' ? 'bg-red-50 text-red-600' : 'bg-gray-100 text-gray-600'
+                                                    booking.status === 'pending' ? 'bg-blue-50 text-blue-600' :
+                                                        booking.status === 'cancelled' ? 'bg-red-50 text-red-600' : 'bg-gray-100 text-gray-600'
                                                     }`}>
                                                     {booking.status}
                                                 </span>
                                                 <span className="text-xs text-gray-400 font-mono">#{booking._id.slice(-6).toUpperCase()}</span>
                                             </div>
-                                            <p className="font-bold text-emerald-900">Rs {booking.totalPrice.toLocaleString()}</p>
+                                            <p className="font-bold text-slate-900 bg-slate-100 px-3 py-1 rounded-lg">Rs {booking.totalPrice.toLocaleString()}</p>
                                         </div>
 
                                         <div className="space-y-3">

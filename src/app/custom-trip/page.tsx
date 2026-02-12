@@ -198,6 +198,7 @@ export default function CustomTripPage() {
                                                 <LocationInput
                                                     placeholder={index === 0 ? "Enter pickup location" : "Enter destination"}
                                                     value={stop.address}
+                                                    zIndex="z-50"
                                                     onSelect={(loc) => handleUpdateStop(stop.id, { address: loc.address, lat: loc.lat, lon: loc.lon })}
                                                     onChange={(val) => {
                                                         // CRITICAL: Only reset if the value is actually different and NOT just a manual tweak to a selected address

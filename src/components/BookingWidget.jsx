@@ -275,12 +275,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         const totalPax = passengerCount.adults + passengerCount.children;
         const totalLuggage = passengerCount.luggage;
 
-        // Check if current fits
-        if (totalPax <= currentVehicleData.capacity && totalLuggage <= (currentVehicleData.luggage || 0)) {
-            return; // Current is fine
-        }
-
-        // Find best fit (Cheapest that fits)
+        // Always find best fit (Cheapest that fits)
         const sortedVehicles = Object.values(vehiclePricing).sort((a, b) => (a.basePrice || 0) - (b.basePrice || 0));
         const bestFit = sortedVehicles.find(v =>
             totalPax <= v.capacity && totalLuggage <= (v.luggage || 0)
@@ -673,7 +668,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         <div className="flex items-center gap-3">
                                             <Signpost size={20} className={hasNameBoard ? 'text-emerald-600' : 'text-slate-400'} />
                                             <div className="text-left">
-                                                <span className="text-xs font-bold block uppercase tracking-tight text-slate-700">Display Board</span>
+                                                <span className="text-xs font-bold block uppercase tracking-tight text-slate-700">Board</span>
                                                 <span className="text-[10px] font-medium text-slate-400">Driver waits with name sign</span>
                                             </div>
                                         </div>

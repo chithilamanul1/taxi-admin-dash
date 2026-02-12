@@ -137,7 +137,7 @@ export default function ToursAdmin() {
                                 <h3 className="font-bold text-slate-900 dark:text-white mb-1 line-clamp-1">{tour.title}</h3>
                                 <div className="flex items-center justify-between text-sm">
                                     <span className="text-emerald-600 font-bold">${tour.price}</span>
-                                    <span className="text-slate-400">{typeof tour.duration === 'object' ? `${tour.duration.days}D / ${tour.duration.nights}N` : `${tour.duration} Day(s)`}</span>
+                                    <span className="text-slate-400">{tour.duration && typeof tour.duration === 'object' ? `${tour.duration.days}D / ${tour.duration.nights}N` : `${tour.duration || 0} Day(s)`}</span>
                                 </div>
                             </div>
                         ))}

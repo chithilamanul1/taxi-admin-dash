@@ -16,7 +16,7 @@ export default async function BookingStatusPage({ params }) {
 
     let booking;
     try {
-        booking = await Booking.findById(id).lean(); // Use lean for POJO
+        booking = await Booking.findById(id).populate('driver').lean(); // Use lean for POJO
         // Convert _id and dates to string if needed manually? 
         // lean() keeps _id as ObjectId usually. Next.js Client Component props require plain types.
         // We might need to serialize.
