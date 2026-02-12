@@ -120,7 +120,7 @@ export default function Home() {
                                 title: "Airport to Ahangama",
                                 price: "58",
                                 badge: "Deep South",
-                                img: "https://images.unsplash.com/photo-1586861635167-e52a3a1e262c?auto=format&fit=crop&q=80&w=1000",
+                                img: "https://images.unsplash.com/photo-1544256671-55db526437d0?auto=format&fit=crop&q=80&w=1000",
                                 meta: "Surfing & Yoga Hub"
                             },
                             {

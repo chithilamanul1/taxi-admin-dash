@@ -19,7 +19,7 @@ export const destinations = [
         name: "Ahangama",
         price: 58,
         badge: "Deep South",
-        img: "https://images.unsplash.com/photo-1586861635167-e52a3a1e262c?auto=format&fit=crop&q=80&w=1000",
+        img: "https://images.unsplash.com/photo-1544256671-55db526437d0?auto=format&fit=crop&q=80&w=1000",
         meta: "Surfing & Yoga Hub",
         description: "Ahangama is a charming coastal village known for its world-class surf breaks, stilt fishermen, and laid-back atmosphere. It's the perfect spot for those seeking a more authentic Sri Lankan beach experience.",
         distance: "160 km",
