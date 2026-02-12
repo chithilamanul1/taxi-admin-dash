@@ -537,7 +537,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     icon={MapPin}
                                     disabled={activeTab === 'pickup'}
                                     onChange={(val) => setPickupSearch(val)}
-                                    zIndex="z-[1000]"
+                                    zIndex={100}
                                     onSelect={(loc) => {
                                         setPickup({ name: loc.address, lat: loc.lat, lon: loc.lon });
                                         setPickupSearch(loc.address);
@@ -647,7 +647,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     placeholder="Drop-off Location"
                                     value={dropoffSearch}
                                     icon={MapPin}
-                                    zIndex="z-[1000]"
+                                    zIndex={100}
                                     disabled={activeTab === 'drop'}
                                     onChange={(val) => setDropoffSearch(val)}
                                     onSelect={(loc) => {
