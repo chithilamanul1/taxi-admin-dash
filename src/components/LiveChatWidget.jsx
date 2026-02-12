@@ -94,12 +94,16 @@ export default function LiveChatWidget() {
 
         return () => {
             try {
-                if (pusher && pusher.connection.state !== 'disconnected') {
+                if (pusher) {
                     pusher.unsubscribe(`chat-${chatId}`);
-                    pusher.disconnect();
+                    // Only disconnect if connected
+                    if (pusher.connection.state === 'connected') {
+                        pusher.disconnect();
+                    }
                 }
             } catch (e) {
-                // Silently handle websocket state errors on cleanup
+                // Silently handle websocket errors
+                console.warn('Pusher cleanup warning:', e);
             }
         };
     }, [chatId, status])

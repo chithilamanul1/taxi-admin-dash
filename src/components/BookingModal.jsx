@@ -39,24 +39,24 @@ function CustomDateTimePicker({ date, time, onChange }) {
     const formatDateValue = (d) => d.toISOString().split('T')[0];
 
     return (
-        <div className="bg-emerald-50/50 rounded-3xl p-4 border border-emerald-900/5">
+        <div className="bg-[#FFF8E1] rounded-3xl p-4 border border-amber-900/5">
             {/* Unified Header */}
-            <div className="flex items-center justify-between gap-3 mb-6 bg-white p-2 rounded-2xl border border-emerald-900/10 shadow-sm">
+            <div className="flex items-center justify-between gap-3 mb-4 bg-white p-2 rounded-2xl border border-amber-900/10 shadow-sm">
                 <button
                     onClick={() => setView('date')}
-                    className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all ${view === 'date' ? 'bg-emerald-50 text-emerald-900' : 'text-emerald-900/60 hover:bg-emerald-50/50'}`}
+                    className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all ${view === 'date' ? 'bg-amber-50 text-amber-900' : 'text-amber-900/60 hover:bg-amber-50/50'}`}
                 >
                     <Calendar size={18} className="opacity-50" />
-                    <span className="text-sm font-black tracking-wider uppercase text-emerald-900">
+                    <span className="text-sm font-black tracking-wider uppercase text-amber-900">
                         {date ? formatShortDate(new Date(date)) : 'SELECT DATE'}
                     </span>
                 </button>
 
-                <div className="h-8 w-px bg-emerald-900/10"></div>
+                <div className="h-8 w-px bg-amber-900/10"></div>
 
                 <button
                     onClick={() => setView('time')}
-                    className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl transition-all ${view === 'time' || time ? 'bg-emerald-900 text-white shadow-lg' : 'text-emerald-900/60 hover:bg-emerald-50/50'}`}
+                    className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl transition-all ${view === 'time' || time ? 'bg-amber-900 text-white shadow-lg' : 'text-amber-900/60 hover:bg-amber-50/50'}`}
                 >
                     <Clock size={18} className={view === 'time' ? 'opacity-100' : 'opacity-50'} />
                     <span className="text-sm font-black tracking-wider">
@@ -84,9 +84,9 @@ function CustomDateTimePicker({ date, time, onChange }) {
                                         onChange(val, time);
                                         setView('time');
                                     }}
-                                    className={`p-3 rounded-2xl border transition-all text-center group ${active ? 'border-emerald-900 bg-emerald-900 text-white shadow-md' : 'border-white bg-white text-emerald-900 hover:border-emerald-900/20 shadow-sm'}`}
+                                    className={`p-3 rounded-2xl border transition-all text-center group ${active ? 'border-amber-900 bg-amber-900 text-white shadow-md transform scale-105' : 'border-white bg-white text-amber-900 hover:border-amber-900/20 shadow-sm'}`}
                                 >
-                                    <p className={`text-[10px] font-bold uppercase tracking-tighter ${active ? 'text-emerald-400' : 'text-emerald-900/40'}`}>
+                                    <p className={`text-[10px] font-bold uppercase tracking-tighter ${active ? 'text-amber-100' : 'text-amber-900/40'}`}>
                                         {d.toLocaleDateString('en-US', { weekday: 'short' })}
                                     </p>
                                     <p className="text-xl font-black leading-none my-1">{d.getDate()}</p>
@@ -101,23 +101,23 @@ function CustomDateTimePicker({ date, time, onChange }) {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="space-y-6"
+                        className="space-y-4"
                     >
                         {/* AM/PM Switcher - Large Tabs */}
-                        <div className="flex bg-white p-1 rounded-2xl border border-emerald-900/5 shadow-sm">
+                        <div className="flex bg-white p-1 rounded-2xl border border-amber-900/5 shadow-sm">
                             {['AM', 'PM'].map(period => (
                                 <button
                                     key={period}
                                     onClick={() => setAmpm(period)}
-                                    className={`flex-1 py-3 rounded-xl text-sm font-black tracking-widest transition-all ${ampm === period ? 'bg-[#D97706] text-white shadow-md transform scale-[1.02]' : 'text-emerald-900/40 hover:bg-emerald-50'}`}
+                                    className={`flex-1 py-3 rounded-xl text-sm font-black tracking-widest transition-all ${ampm === period ? 'bg-[#FFC107] text-white shadow-md transform scale-[1.02]' : 'text-amber-900/40 hover:bg-amber-50'}`}
                                 >
                                     {period}
                                 </button>
                             ))}
                         </div>
 
-                        {/* Time Grid - Cards */}
-                        <div className="grid grid-cols-3 gap-3 max-h-[280px] overflow-y-auto pr-2 custom-scrollbar pb-2">
+                        {/* Vertical Time Grid */}
+                        <div className="grid grid-cols-3 gap-3 max-h-[240px] overflow-y-auto pr-2 custom-scrollbar pb-2">
                             {times.map((t, i) => {
                                 const active = time === t;
                                 const [hour, min] = t.split(':');
@@ -128,22 +128,19 @@ function CustomDateTimePicker({ date, time, onChange }) {
                                         key={i}
                                         onClick={() => onChange(date, t)}
                                         className={`py-4 px-2 rounded-2xl border transition-all flex flex-col items-center justify-center gap-0 ${active
-                                                ? 'border-emerald-900/0 bg-white ring-2 ring-[#D97706] shadow-lg transform scale-[1.02] z-10'
-                                                : 'border-white bg-white text-emerald-900 hover:border-[#D97706]/30 shadow-sm hover:shadow-md'
+                                                ? 'border-amber-900/0 bg-white ring-2 ring-[#FFC107] shadow-lg transform scale-[1.02] z-10'
+                                                : 'border-white bg-white text-amber-900 hover:border-[#FFC107]/30 shadow-sm hover:shadow-md'
                                             }`}
                                     >
-                                        <div className="flex items-baseline gap-0.5">
-                                            <span className={`text-2xl font-black ${active ? 'text-emerald-900' : 'text-emerald-900'}`}>{displayHour}</span>
-                                            <span className={`text-xs font-bold ${active ? 'text-[#D97706]' : 'text-emerald-900/40'}`}>:{min}</span>
-                                        </div>
-                                        <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-900/30 mt-1">{ampm}</p>
+                                        <span className={`text-2xl font-black ${active ? 'text-amber-900' : 'text-amber-900'}`}>{displayHour}<span className="text-sm align-top opacity-40">:{min}</span></span>
+                                        <span className="text-[9px] font-bold uppercase tracking-widest text-amber-900/30">{ampm}</span>
                                     </button>
                                 );
                             })}
                         </div>
 
                         {!date && (
-                            <div className="text-center p-4 bg-amber-50 rounded-xl border border-amber-100 text-amber-800/60 text-xs font-bold">
+                            <div className="text-center p-3 bg-red-50 rounded-xl border border-red-100 text-red-800/60 text-xs font-bold animate-pulse">
                                 Please select a date first
                             </div>
                         )}
@@ -926,6 +923,19 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <span className="text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-widest">Extra Services</span>
                                                 <span className="text-sm md:text-base font-bold text-emerald-900 text-right">{currentSymbol} {(subtotal + surcharges - subtotal).toLocaleString()}</span>
                                             </div>
+
+                                            {/* Applied Coupons Summary - Styled Row */}
+                                            {detailedBreakdown.discounts > 0 && (
+                                                <div className="flex justify-between items-center w-full py-2 border-t border-b border-amber-600/10 my-2">
+                                                    <div className="flex items-center gap-2 text-amber-900">
+                                                        <Tag size={14} className="fill-amber-900/20" />
+                                                        <span className="text-[10px] md:text-xs font-black uppercase tracking-widest">Discount Applied</span>
+                                                    </div>
+                                                    <span className="text-sm md:text-base font-black text-amber-900 text-right">
+                                                        - {currentSymbol} {detailedBreakdown.discounts.toLocaleString()}
+                                                    </span>
+                                                </div>
+                                            )}
 
                                             {/* Applied Coupons Summary */}
                                             {/* This section is removed as the discount is now consolidated in detailedBreakdown.discounts */}
