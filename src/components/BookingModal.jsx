@@ -809,7 +809,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 )}
                             </div>
 
-                            <div className="flex items-center justify-center gap-1.5 mt-4 text-emerald-600/80">
+                            <div className="flex items-center justify-center gap-1.5 mt-4 text-emerald-800">
                                 <ShieldCheck size={14} />
                                 <span className="text-[10px] font-bold uppercase tracking-widest">Inclusive of taxes & tolls</span>
                             </div>
