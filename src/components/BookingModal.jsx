@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { useSession, signIn } from 'next-auth/react';
@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCurrency } from '../context/CurrencyContext';
 import { calculateBasePrice, calculateSurcharges, calculatePaymentFees } from '../lib/pricing-util';
 import LocationInput from './LocationInput';
+import CustomDateTimePicker from './CustomDateTimePicker';
 
 const STEPS = [
     { id: 1, title: 'Route', icon: MapPin },
@@ -15,141 +16,6 @@ const STEPS = [
     { id: 3, title: 'Confirm', icon: CreditCard },
 ];
 
-function CustomDateTimePicker({ date, time, onChange }) {
-    const [view, setView] = useState('date'); // 'date' or 'time'
-    const [ampm, setAmpm] = useState(time ? (parseInt(time.split(':')[0]) >= 12 ? 'PM' : 'AM') : 'AM');
-
-    // Generate dates for the next 60 days
-    const dates = Array.from({ length: 60 }, (_, i) => {
-        const d = new Date();
-        d.setDate(d.getDate() + i);
-        return d;
-    });
-
-    // Generate times with 30-minute intervals
-    const hours = ampm === 'AM' ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] : [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-    const times = [];
-    hours.forEach(h => {
-        const hh = h.toString().padStart(2, '0');
-        times.push(`${hh}:00`);
-        times.push(`${hh}:30`);
-    });
-
-    const formatShortDate = (d) => d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase();
-    const formatDateValue = (d) => d.toISOString().split('T')[0];
-
-    return (
-        <div className="bg-[#FFF8E1] rounded-3xl p-4 border border-amber-900/5">
-            {/* Unified Header */}
-            <div className="flex items-center justify-between gap-3 mb-4 bg-white p-2 rounded-2xl border border-amber-900/10 shadow-sm">
-                <button
-                    onClick={() => setView('date')}
-                    className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all ${view === 'date' ? 'bg-amber-50 text-amber-900' : 'text-amber-900/60 hover:bg-amber-50/50'}`}
-                >
-                    <Calendar size={18} className="opacity-50" />
-                    <span className="text-sm font-black tracking-wider uppercase text-amber-900">
-                        {date ? formatShortDate(new Date(date)) : 'SELECT DATE'}
-                    </span>
-                </button>
-
-                <div className="h-8 w-px bg-amber-900/10"></div>
-
-                <button
-                    onClick={() => setView('time')}
-                    className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl transition-all ${view === 'time' || time ? 'bg-amber-900 text-white shadow-lg' : 'text-amber-900/60 hover:bg-amber-50/50'}`}
-                >
-                    <Clock size={18} className={view === 'time' ? 'opacity-100' : 'opacity-50'} />
-                    <span className="text-sm font-black tracking-wider">
-                        {time || 'TIME'}
-                    </span>
-                </button>
-            </div>
-
-            <AnimatePresence mode="wait">
-                {view === 'date' ? (
-                    <motion.div
-                        key="date-grid"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar"
-                    >
-                        {dates.map((d, i) => {
-                            const val = formatDateValue(d);
-                            const active = date === val;
-                            return (
-                                <button
-                                    key={i}
-                                    onClick={() => {
-                                        onChange(val, time);
-                                        setView('time');
-                                    }}
-                                    className={`p-3 rounded-2xl border transition-all text-center group ${active ? 'border-amber-900 bg-amber-900 text-white shadow-md transform scale-105' : 'border-white bg-white text-amber-900 hover:border-amber-900/20 shadow-sm'}`}
-                                >
-                                    <p className={`text-[10px] font-bold uppercase tracking-tighter ${active ? 'text-amber-100' : 'text-amber-900/40'}`}>
-                                        {d.toLocaleDateString('en-US', { weekday: 'short' })}
-                                    </p>
-                                    <p className="text-xl font-black leading-none my-1">{d.getDate()}</p>
-                                    <p className="text-[10px] font-bold uppercase opacity-60">{d.toLocaleDateString('en-US', { month: 'short' })}</p>
-                                </button>
-                            );
-                        })}
-                    </motion.div>
-                ) : (
-                    <motion.div
-                        key="time-grid"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="space-y-4"
-                    >
-                        {/* AM/PM Switcher - Large Tabs */}
-                        <div className="flex bg-white p-1 rounded-2xl border border-amber-900/5 shadow-sm">
-                            {['AM', 'PM'].map(period => (
-                                <button
-                                    key={period}
-                                    onClick={() => setAmpm(period)}
-                                    className={`flex-1 py-3 rounded-xl text-sm font-black tracking-widest transition-all ${ampm === period ? 'bg-[#FFC107] text-white shadow-md transform scale-[1.02]' : 'text-amber-900/40 hover:bg-amber-50'}`}
-                                >
-                                    {period}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* Vertical Time Grid */}
-                        <div className="grid grid-cols-3 gap-3 max-h-[240px] overflow-y-auto pr-2 custom-scrollbar pb-2">
-                            {times.map((t, i) => {
-                                const active = time === t;
-                                const [hour, min] = t.split(':');
-                                const displayHour = parseInt(hour) % 12 || 12;
-
-                                return (
-                                    <button
-                                        key={i}
-                                        onClick={() => onChange(date, t)}
-                                        className={`py-4 px-2 rounded-2xl border transition-all flex flex-col items-center justify-center gap-0 ${active
-                                                ? 'border-amber-900/0 bg-white ring-2 ring-[#FFC107] shadow-lg transform scale-[1.02] z-10'
-                                                : 'border-white bg-white text-amber-900 hover:border-[#FFC107]/30 shadow-sm hover:shadow-md'
-                                            }`}
-                                    >
-                                        <span className={`text-2xl font-black ${active ? 'text-amber-900' : 'text-amber-900'}`}>{displayHour}<span className="text-sm align-top opacity-40">:{min}</span></span>
-                                        <span className="text-[9px] font-bold uppercase tracking-widest text-amber-900/30">{ampm}</span>
-                                    </button>
-                                );
-                            })}
-                        </div>
-
-                        {!date && (
-                            <div className="text-center p-3 bg-red-50 rounded-xl border border-red-100 text-red-800/60 text-xs font-bold animate-pulse">
-                                Please select a date first
-                            </div>
-                        )}
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
-    );
-}
 
 export default function BookingModal({ isOpen, onClose, initialData = {}, pricingCategory = 'airport-transfer' }) {
     const { data: session } = useSession();
@@ -255,11 +121,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
     // Currency conversion helper
     const SUPPORTED_CURRENCIES = [
-        { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: '🇱🇰' },
-        { code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸' },
-        { code: 'EUR', symbol: '€', name: 'Euro', flag: '🇪🇺' },
-        { code: 'GBP', symbol: '£', name: 'British Pound', flag: '🇬🇧' },
-        { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳' },
+        { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: 'ðŸ‡±ðŸ‡°' },
+        { code: 'USD', symbol: '$', name: 'US Dollar', flag: 'ðŸ‡ºðŸ‡¸' },
+        { code: 'EUR', symbol: 'â‚¬', name: 'Euro', flag: 'ðŸ‡ªðŸ‡º' },
+        { code: 'GBP', symbol: 'Â£', name: 'British Pound', flag: 'ðŸ‡¬ðŸ‡§' },
+        { code: 'INR', symbol: 'â‚¹', name: 'Indian Rupee', flag: 'ðŸ‡®ðŸ‡³' },
     ];
 
     const convertToAllCurrencies = (amountLKR) => {
@@ -1040,8 +906,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Payment Method</label>
                                 <div className="grid grid-cols-1 gap-4">
                                     {[
-                                        { id: 'cash', label: 'Cash Payment', icon: '💵', desc: 'Pay directly to chauffeur' },
-                                        { id: 'card', label: 'Online Payment', icon: '💳', desc: 'Secure digital transaction' },
+                                        { id: 'cash', label: 'Cash Payment', icon: 'ðŸ’µ', desc: 'Pay directly to chauffeur' },
+                                        { id: 'card', label: 'Online Payment', icon: 'ðŸ’³', desc: 'Secure digital transaction' },
                                     ].map(m => (
                                         <div key={m.id}>
                                             <button onClick={() => setFormData({ ...formData, paymentMethod: m.id })} className={`w-full p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left ${formData.paymentMethod === m.id ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}>
