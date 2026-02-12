@@ -1,5 +1,5 @@
 export const loadGoogleMapsScript = () => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         if (window.google && window.google.maps) {
             resolve();
             return;
@@ -8,6 +8,7 @@ export const loadGoogleMapsScript = () => {
         const existingScript = document.getElementById('google-maps-script');
         if (existingScript) {
             existingScript.addEventListener('load', resolve);
+            existingScript.addEventListener('error', () => reject(new Error("Google Maps script failed to load")));
             return;
         }
 
@@ -17,6 +18,7 @@ export const loadGoogleMapsScript = () => {
         script.async = true;
         script.defer = true;
         script.onload = resolve;
+        script.onerror = (e) => reject(new Error("Google Maps script failed to load"));
         document.body.appendChild(script);
     });
 };

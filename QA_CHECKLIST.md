@@ -1,142 +1,91 @@
-# 🧪 Comprehensive QA Checklist: Airport Taxis Sri Lanka
+# 🧪 Master QA Checklist: Airport Taxis Sri Lanka
 
-This checklist covers every aspect of the application, from critical booking flows to pixel-perfect UI details. Use this to manually verify the system before deployment.
+## 🚨 1. Booking Engine (The Core)
 
----
+- [ ] **Data Entry & Validation**
+  - [ ] Pickup/Dropoff inputs autocomplete correctly (Google Places API).
+  - [ ] Selecting "Airport" triggers flight number input (if applicable) or popular route logic.
+  - [ ] Date/Time picker blocks past dates/times.
+  - [ ] Passenger count limits (Max 3 for Car, 5 for Van, etc.) - *Check logic*.
+- [ ] **Pricing Logic**
+  - [ ] Distance calculation is accurate (> 0km).
+  - [ ] Base price calculates correctly for standard routes.
+  - [ ] **Popular Route Check**: Airport -> Mirissa/Galle triggers fixed price.
+  - [ ] Round Trip toggle doubles price (approx).
+  - [ ] Currency conversion works (USD/EUR/GBP/INR -> LKR).
+- [ ] **Vehicle Selection**
+  - [ ] All vehicle categories (Car, Mini Van, KDH, Bus) displayed.
+  - [ ] Correct images for each category.
+  - [ ] "Features" list (AC, Bags, etc.) is correct for each.
+- [ ] **Checkout & Payment**
+  - [ ] Payment Method selection (Cash/Card) updates total (if fees apply).
+  - [ ] "Complete Booking" submits data to DB.
+  - [ ] Loading state appears during submission.
+  - [ ] Success page/modal appears after booking.
+  - [ ] Email confirmation sent to User & Admin.
 
-## 🚨 1. Critical User Flows (Must Pass)
+## 🛠️ 2. Admin Dashboard (`/admin`)
 
-### A. Booking Process (Guest)
+- [ ] **Authentication**
+  - [ ] Protected route: Redirects to `/admin/login` if unauthenticated.
+  - [ ] Admin Login works.
+  - [ ] Logout works.
+- [ ] **Booking Management**
+  - [ ] List View: Shows all bookings with correct status colors.
+  - [ ] Detail View: Shows full route, customer info, and price.
+  - [ ] Actions: Can Confirm, Complete, and Cancel bookings.
+- [ ] **Driver Management**
+  - [ ] Driver List loads.
+  - [ ] "Add Driver" form works (validation on phone/email).
+  - [ ] "Assign Driver" to booking works.
+- [ ] **Pricing Engine**
+  - [ ] Pricing table loads.
+  - [ ] Edit Pricing works and saves to DB.
+- [ ] **Support & Reviews**
+  - [ ] Support Ticket list loads (Fixed `undefined` error).
+  - [ ] Can reply to tickets.
+  - [ ] Review moderation (Approve/Reject) works.
 
-- [ ] **Homepage Widget:**
-  - [ ] Can select "Pickup" tab and enter location (Autocomplete works?).
-  - [ ] Can select "Dropoff" tab and enter location.
-  - [ ] "See Prices" button scrolls/redirects correctly.
-- **Booking Modal (The Checkout Flow):**
-  - [ ] **Step 1: Route & Vehicle:**
-    - [ ] "Pick-up Location" input is visible and autocompletes.
-    - [ ] "Drop-off Location" input is visible and autocompletes.
-    - [ ] Map route distance is calculated (not 0.0 km).
-    - [ ] Pricing updates instantly when locations change.
-    - [ ] "Vehicle Category" cards show correct **Image** (not generic icon).
-    - [ ] "Mini Bus" and "SUV" options are selectable.
-    - [ ] "Passenger Details" counters work (Adult/Child).
-    - [ ] "Round Trip" toggle doubles the price correctly.
-  - [ ] **Step 2: Client Details:**
-    - [ ] Form validation prevents continuing without Name/Phone.
-    - [ ] Date/Time picker allows future dates only.
-  - [ ] **Step 3: Confirmation:**
-    - [ ] Summary shows correct Route, Vehicle, and Total Price.
-    - [ ] Payment Method selection works (Cash/Card).
-    - [ ] "Complete Booking" button shows loading state.
-  - [ ] **Success Redirect:**
-    - [ ] Redirects to `/booking/[id]` or `/payment/success`.
-    - [ ] No 404 Errors.
-    - [ ] Success message is visible (not hidden by header).
+## 🚕 3. Driver Portal (`/driver`)
 
-### B. Destination Pages (`/destination/[slug]`)
+- [ ] **Access**
+  - [ ] Driver Login works.
+  - [ ] Dashboard loads specific driver data.
+- [ ] **Job Management**
+  - [ ] "New Jobs" appear when assigned.
+  - [ ] Can Accept/Reject jobs.
+  - [ ] "Trip Status" updates (On way -> Picked up -> Dropped).
 
-- [ ] Links from Homepage Cards work (e.g., "Airport to Mirissa").
-- [ ] Page loads with Hero Image and Description.
-- [ ] "Fixed Pricing" table shows all vehicle rates.
-- [ ] "Book Now" sidebar button opens Booking Modal with **Dropoff Pre-filled**.
+## 🌍 4. Public Pages & UI
 
----
+- [ ] **Homepage**
+  - [ ] Hero section loads LCP (Largest Contentful Paint) fast.
+  - [ ] "Why Choose Us" icons aligned.
+  - [ ] Testimonials carousel works.
+- [ ] **Destinations**
+  - [ ] `/destinations` lists all locations.
+  - [ ] Individual slug pages (`/destination/mirissa`) load correct data.
+  - [ ] "Book This Route" button pre-fills booking widget.
+- [ ] **Fleet Page**
+  - [ ] Vehicle grid responsive (mobile stack, desktop grid).
+- [ ] **Contact**
+  - [ ] Contact form submission works.
+  - [ ] Google Map loads.
 
-## 🎨 2. UI/UX & Visual Polish
+## ⚙️ 5. Technical & Performance
 
-### A. Responsiveness (Mobile/Tablet)
+- [ ] **Build Integrity**
+  - [ ] `npm run build` succeeds.
+  - [ ] No critical lint errors.
+- [ ] **Mobile Responsiveness**
+  - [ ] Navbar hamburger menu toggles.
+  - [ ] No horizontal scroll on mobile.
+  - [ ] Buttons are touch-friendly size.
+- [ ] **SEO & Metadata**
+  - [ ] Title tags and Meta descriptions present on key pages.
+  - [ ] Heading hierarchy (H1 -> H2 -> H3) correct.
 
-- [ ] **Navbar:**
-  - [ ] Hamburger menu works on mobile.
-  - [ ] Navbar background is legible on scroll.
-  - [ ] **Z-Index Check:** Content does not scroll *over* the navbar.
-  - [ ] **Padding Check:** Page titles are not hidden behind the navbar (Requires `pt-24` on pages).
-- [ ] **Booking Modal:**
-  - [ ] Fits on mobile screen (no horizontal scroll).
-  - [ ] Inputs are tap-friendly size.
-  - [ ] "Continue" buttons are always visible/reachable.
-- [ ] **Vehicle List:**
-  - [ ] Images are scaling correctly (not stretched).
-  - [ ] "Mini Bus" card is aligned properly in the grid.
+## 🔒 6. Security
 
-### B. Aesthetics
-
-- [ ] **Typography:** Font is consistent (Outfit/Inter). No Times New Roman.
-- [ ] **Colors:** Primary Emerald Green is consistent. No mismatched greens.
-- [ ] **Images:**
-  - [ ] All vehicle images load (no broken icons).
-  - [ ] Blog post images work (Unsplash placeholders active).
-- [ ] **Blog Section:**
-  - [ ] Markdown content renders rich text (Bold, Lists, Headings), not raw symbols (`**text**`).
-
----
-
-## 🛠️ 3. Admin Dashboard (`/admin`)
-
-### A. Access & Security
-
-- [ ] `/admin` redirects to login if not authenticated.
-- [ ] Login works with `admin@airporttaxitours.lk` / `password123`.
-
-### B. Management Tabs
-
-- [ ] **Bookings Tab:**
-  - [ ] New bookings appear instantly (or on refresh).
-  - [ ] Status buttons (Confirm/Complete/Cancel) update the status.
-- [ ] **Pricing Tab:**
-  - [ ] Can edit rates for "Mini Car" or "Mini Bus".
-  - [ ] Changes reflect in the frontend Booking Widget.
-- [ ] **Drivers Tab:**
-  - [ ] Can Add New Driver.
-  - [ ] Can Assign Driver to a Booking.
-  - [ ] Can View Driver Status (Online/Offline).
-- [ ] **Support Tab:**
-  - [ ] "Support" button exists in sidebar (LifeBuoy icon).
-  - [ ] Ticket list loads without crash (`tickets undefined` error fixed?).
-- [ ] **Reviews Tab:**
-  - [ ] Can Approve/Reject new reviews.
-
----
-
-## 🚕 4. Driver App (`/driver`)
-
-### A. Functionality
-
-- [ ] Driver Login works.
-- [ ] **Dashboard:**
-  - [ ] "Go Online" toggle updates status.
-  - [ ] "Assigned Trips" list shows new jobs.
-  - [ ] Status buttons (Start Trip / End Trip) call the API correctly (`PATCH` fixed?).
-
----
-
-## 📧 5. Communications
-
-- [ ] **Contact Form:**
-  - [ ] Submitting `/contact` form triggers email (or logs to console if dev mode).
-- [ ] **Ticket System:**
-  - [ ] Creating a ticket via API/Contact creates record in Admin.
-
----
-
-## 🐛 6. Known Fixes Verification
-
-- [ ] **Booking Modal:** Location inputs appear in Step 1.
-- [ ] **Price Calculation:** Price is > 0 when locations are entered.
-- [ ] **Redirects:** `/booking/[id]` loads a confirmation page, not 404.
-- [ ] **Blog:** Posts use `ReactMarkdown` rendering.
-
----
-
-## 🚀 7. Deployment Checklist
-
-- [ ] `npm run build` passes without errors.
-- [ ] Environment variables (MongoDB URI, NextAuth Secret) are set in Vercel/Netlify.
-- [ ] MongoDB indexes created (if applicable).
-- [ ] Seed data run (if fresh DB).
-
----
-
-**Generated by Antigravity AI**
-*Last Updated: 2026-01-24*
+- [ ] API Routes protected (Check `getServerSession`).
+- [ ] No sensitive keys exposed in client bundles.
