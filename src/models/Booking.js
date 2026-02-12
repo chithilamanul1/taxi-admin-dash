@@ -30,8 +30,8 @@ const bookingSchema = new mongoose.Schema({
     passengerCount: {
         adults: { type: Number, default: 1 },
         children: { type: Number, default: 0 },
-        infants: { type: Number, default: 0 },
-        bags: { type: Number, default: 0 }
+        luggage: { type: Number, default: 0 },
+        handLuggage: { type: Number, default: 0 }
     },
     distanceKm: { type: Number },
     duration: { type: String },

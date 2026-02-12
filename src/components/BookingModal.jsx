@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession, signIn } from 'next-auth/react';
-import { X, MapPin, User, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag } from 'lucide-react';
+import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { useCurrency } from '../context/CurrencyContext';
@@ -50,7 +50,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         dropoff: initialData.dropoff || '',
         dropoffCoords: initialData.dropoffCoords || null,
         tripType: initialData.tripType || 'one-way',
-        passengerCount: initialData.passengerCount || { adults: 1, children: 0, bags: 0, handLuggage: 0 },
+        passengerCount: initialData.passengerCount || { adults: 1, children: 0, luggage: 0, handLuggage: 0 },
         waitingHours: initialData.waitingHours || 0,
         hasNameBoard: initialData.hasNameBoard || false,
         nameBoardText: initialData.nameBoardText || '',
@@ -549,30 +549,73 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Vehicle Category</label>
                                     <div className="grid grid-cols-2 gap-4 md:gap-6">
                                         {pricing.map(v => (
-                                            <button key={v.vehicleType} onClick={() => setFormData({ ...formData, vehicle: v.vehicleType })} className={`p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex flex-col items-center gap-3 relative overflow-hidden ${formData.vehicle === v.vehicleType ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}>
+                                            <button key={v.vehicleType} onClick={() => setFormData({ ...formData, vehicle: v.vehicleType })} className={`p-3 md:p-4 rounded-[1.5rem] border-2 transition-all flex flex-col items-center gap-2 relative overflow-hidden group ${formData.vehicle === v.vehicleType ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}>
+                                                {/* Capacity Badges */}
+                                                <div className="flex items-center gap-1.5 absolute top-2 right-2 opacity-60">
+                                                    <div className="flex items-center gap-0.5 bg-white/50 px-1 rounded text-[8px] font-bold text-emerald-900">
+                                                        <Users size={8} /> {v.capacity}
+                                                    </div>
+                                                </div>
+
                                                 {v.image ? (
-                                                    <img src={v.image} alt={v.name} className="w-24 h-14 object-contain mb-1 mix-blend-multiply" />
+                                                    <img src={v.image} alt={v.name} className="w-20 h-10 object-contain mb-1 mix-blend-multiply" />
                                                 ) : (
                                                     <Car className={formData.vehicle === v.vehicleType ? 'text-emerald-900' : 'text-emerald-900/20'} size={24} />
                                                 )}
-                                                <span className={`text-[8px] md:text-[10px] font-bold uppercase tracking-widest text-center ${formData.vehicle === v.vehicleType ? 'text-emerald-900' : 'text-emerald-900/40'}`}>{v.name}</span>
+
+                                                <span className={`text-[8px] md:text-[9px] font-bold uppercase tracking-widest text-center leading-tight mb-1 ${formData.vehicle === v.vehicleType ? 'text-emerald-900' : 'text-emerald-900/40'}`}>{v.name}</span>
+
+                                                {/* Luggage Info - User Requested */}
+                                                <div className="flex items-center gap-2 text-[8px] font-bold text-emerald-900/50">
+                                                    <div className="flex items-center gap-0.5" title="Max Luggage">
+                                                        <Briefcase size={9} /> {v.luggage || 0}
+                                                    </div>
+                                                    <div className="flex items-center gap-0.5" title="Max Hand Luggage">
+                                                        <ShoppingBag size={9} /> {v.handLuggage || 0}
+                                                    </div>
+                                                </div>
                                             </button>
                                         ))}
                                     </div>
                                 </div>
 
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Passenger Details</label>
+                                    <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Passenger & Luggage</label>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        {Object.entries(formData.passengerCount).map(([type, count]) => (
-                                            <div key={type} className="bg-white border border-emerald-900/10 p-3 md:p-4 rounded-xl flex items-center justify-between">
-                                                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-900/40">
-                                                    {type === 'handLuggage' ? 'Hand Luggage' : type}
-                                                </span>
+                                        {[
+                                            { id: 'adults', label: 'Adults', icon: Users },
+                                            { id: 'children', label: 'Children', icon: User },
+                                            { id: 'luggage', label: 'Luggage', icon: Briefcase }, // Large Luggage
+                                            { id: 'handLuggage', label: 'Hand Luggage', icon: Briefcase } // Small/Hand
+                                        ].map((field) => (
+                                            <div key={field.id} className="bg-white border border-emerald-900/10 p-3 md:p-4 rounded-xl flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-900/40">
+                                                        {field.label}
+                                                    </span>
+                                                </div>
                                                 <div className="flex items-center gap-3">
-                                                    <button onClick={() => setFormData({ ...formData, passengerCount: { ...formData.passengerCount, [type]: Math.max(0, count - 1) } })} className="text-emerald-600 font-bold text-lg w-8 h-8 flex items-center justify-center bg-emerald-50 rounded-lg">-</button>
-                                                    <span className="font-bold text-sm w-4 text-center text-emerald-900">{count}</span>
-                                                    <button onClick={() => setFormData({ ...formData, passengerCount: { ...formData.passengerCount, [type]: count + 1 } })} className="text-emerald-600 font-bold text-lg w-8 h-8 flex items-center justify-center bg-emerald-50 rounded-lg">+</button>
+                                                    <button
+                                                        onClick={() => setFormData({
+                                                            ...formData,
+                                                            passengerCount: {
+                                                                ...formData.passengerCount,
+                                                                [field.id]: Math.max(0, formData.passengerCount[field.id] - 1)
+                                                            }
+                                                        })}
+                                                        className="text-emerald-600 font-bold text-lg w-8 h-8 flex items-center justify-center bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors"
+                                                    >-</button>
+                                                    <span className="font-bold text-sm min-w-[1rem] text-center text-emerald-900">{formData.passengerCount[field.id]}</span>
+                                                    <button
+                                                        onClick={() => setFormData({
+                                                            ...formData,
+                                                            passengerCount: {
+                                                                ...formData.passengerCount,
+                                                                [field.id]: formData.passengerCount[field.id] + 1
+                                                            }
+                                                        })}
+                                                        className="text-emerald-600 font-bold text-lg w-8 h-8 flex items-center justify-center bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors"
+                                                    >+</button>
                                                 </div>
                                             </div>
                                         ))}
@@ -582,7 +625,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 animate-pulse">
                                             <div className="pt-0.5 text-red-600"><Lock size={14} /></div>
                                             <p className="text-[10px] font-bold text-red-900 leading-tight uppercase tracking-widest">
-                                                Capacity Exceeded: {totalPassengers} Passengers for {selectedVehicle.name} (Max {selectedVehicle.capacity})
+                                                Capacity Exceeded: {totalPassengers} Pax (Max {selectedVehicle.capacity}), {formData.passengerCount.luggage} Lugg (Max {selectedVehicle.luggage || 0}), {formData.passengerCount.handLuggage} Hand (Max {selectedVehicle.handLuggage || 0})
                                             </p>
                                         </div>
                                     )}
