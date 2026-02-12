@@ -19,14 +19,14 @@ function CustomDateTimePicker({ date, time, onChange }) {
     const [view, setView] = useState('date'); // 'date' or 'time'
     const [ampm, setAmpm] = useState(time ? (parseInt(time.split(':')[0]) >= 12 ? 'PM' : 'AM') : 'AM');
 
-    // Generate dates for the next 60 days (approx 2 months)
+    // Generate dates for the next 60 days
     const dates = Array.from({ length: 60 }, (_, i) => {
         const d = new Date();
         d.setDate(d.getDate() + i);
         return d;
     });
 
-    // Generate times with 30-minute intervals for AM or PM
+    // Generate times with 30-minute intervals
     const hours = ampm === 'AM' ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] : [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
     const times = [];
     hours.forEach(h => {
@@ -35,28 +35,33 @@ function CustomDateTimePicker({ date, time, onChange }) {
         times.push(`${hh}:30`);
     });
 
-    const formatShortDate = (d) => {
-        return d.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' });
-    };
-
-    const formatDateValue = (d) => {
-        return d.toISOString().split('T')[0];
-    };
+    const formatShortDate = (d) => d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase();
+    const formatDateValue = (d) => d.toISOString().split('T')[0];
 
     return (
         <div className="bg-emerald-50/50 rounded-3xl p-4 border border-emerald-900/5">
-            <div className="flex bg-white p-1.5 rounded-2xl mb-4 border border-emerald-900/10">
+            {/* Unified Header */}
+            <div className="flex items-center justify-between gap-3 mb-6 bg-white p-2 rounded-2xl border border-emerald-900/10 shadow-sm">
                 <button
                     onClick={() => setView('date')}
-                    className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${view === 'date' ? 'bg-emerald-900 text-white shadow-lg' : 'text-emerald-900/40'}`}
+                    className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all ${view === 'date' ? 'bg-emerald-50 text-emerald-900' : 'text-emerald-900/60 hover:bg-emerald-50/50'}`}
                 >
-                    <Calendar size={14} /> {date ? formatShortDate(new Date(date)) : 'Select Date'}
+                    <Calendar size={18} className="opacity-50" />
+                    <span className="text-sm font-black tracking-wider uppercase text-emerald-900">
+                        {date ? formatShortDate(new Date(date)) : 'SELECT DATE'}
+                    </span>
                 </button>
+
+                <div className="h-8 w-px bg-emerald-900/10"></div>
+
                 <button
                     onClick={() => setView('time')}
-                    className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${view === 'time' ? 'bg-emerald-900 text-white shadow-lg' : 'text-emerald-900/40'}`}
+                    className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl transition-all ${view === 'time' || time ? 'bg-emerald-900 text-white shadow-lg' : 'text-emerald-900/60 hover:bg-emerald-50/50'}`}
                 >
-                    <Clock size={14} /> {time || 'Select Time'}
+                    <Clock size={18} className={view === 'time' ? 'opacity-100' : 'opacity-50'} />
+                    <span className="text-sm font-black tracking-wider">
+                        {time || 'TIME'}
+                    </span>
                 </button>
             </div>
 
@@ -64,9 +69,9 @@ function CustomDateTimePicker({ date, time, onChange }) {
                 {view === 'date' ? (
                     <motion.div
                         key="date-grid"
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 10 }}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
                         className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar"
                     >
                         {dates.map((d, i) => {
@@ -79,13 +84,13 @@ function CustomDateTimePicker({ date, time, onChange }) {
                                         onChange(val, time);
                                         setView('time');
                                     }}
-                                    className={`p-3 rounded-2xl border-2 transition-all text-center group ${active ? 'border-emerald-900 bg-emerald-900 text-white shadow-md' : 'border-white bg-white text-emerald-900 hover:border-emerald-900/20 shadow-sm'}`}
+                                    className={`p-3 rounded-2xl border transition-all text-center group ${active ? 'border-emerald-900 bg-emerald-900 text-white shadow-md' : 'border-white bg-white text-emerald-900 hover:border-emerald-900/20 shadow-sm'}`}
                                 >
                                     <p className={`text-[10px] font-bold uppercase tracking-tighter ${active ? 'text-emerald-400' : 'text-emerald-900/40'}`}>
                                         {d.toLocaleDateString('en-US', { weekday: 'short' })}
                                     </p>
-                                    <p className="text-lg font-black leading-none my-1">{d.getDate()}</p>
-                                    <p className="text-[10px] font-bold uppercase">{d.toLocaleDateString('en-US', { month: 'short' })}</p>
+                                    <p className="text-xl font-black leading-none my-1">{d.getDate()}</p>
+                                    <p className="text-[10px] font-bold uppercase opacity-60">{d.toLocaleDateString('en-US', { month: 'short' })}</p>
                                 </button>
                             );
                         })}
@@ -93,25 +98,26 @@ function CustomDateTimePicker({ date, time, onChange }) {
                 ) : (
                     <motion.div
                         key="time-grid"
-                        initial={{ opacity: 0, x: 10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -10 }}
-                        className="space-y-4"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="space-y-6"
                     >
-                        {/* AM/PM Switcher */}
-                        <div className="flex bg-white/50 p-1 rounded-xl gap-1">
+                        {/* AM/PM Switcher - Large Tabs */}
+                        <div className="flex bg-white p-1 rounded-2xl border border-emerald-900/5 shadow-sm">
                             {['AM', 'PM'].map(period => (
                                 <button
                                     key={period}
                                     onClick={() => setAmpm(period)}
-                                    className={`flex-1 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all ${ampm === period ? 'bg-emerald-600 text-white shadow-sm' : 'text-emerald-900/40 hover:bg-white'}`}
+                                    className={`flex-1 py-3 rounded-xl text-sm font-black tracking-widest transition-all ${ampm === period ? 'bg-[#D97706] text-white shadow-md transform scale-[1.02]' : 'text-emerald-900/40 hover:bg-emerald-50'}`}
                                 >
                                     {period}
                                 </button>
                             ))}
                         </div>
 
-                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 gap-2 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar">
+                        {/* Time Grid - Cards */}
+                        <div className="grid grid-cols-3 gap-3 max-h-[280px] overflow-y-auto pr-2 custom-scrollbar pb-2">
                             {times.map((t, i) => {
                                 const active = time === t;
                                 const [hour, min] = t.split(':');
@@ -121,17 +127,26 @@ function CustomDateTimePicker({ date, time, onChange }) {
                                     <button
                                         key={i}
                                         onClick={() => onChange(date, t)}
-                                        className={`p-3 rounded-2xl border-2 transition-all text-center flex flex-col items-center justify-center gap-0.5 ${active ? 'border-emerald-600 bg-emerald-600 text-white shadow-md' : 'border-white bg-white text-emerald-900 hover:border-emerald-600/20 shadow-sm'}`}
+                                        className={`py-4 px-2 rounded-2xl border transition-all flex flex-col items-center justify-center gap-0 ${active
+                                                ? 'border-emerald-900/0 bg-white ring-2 ring-[#D97706] shadow-lg transform scale-[1.02] z-10'
+                                                : 'border-white bg-white text-emerald-900 hover:border-[#D97706]/30 shadow-sm hover:shadow-md'
+                                            }`}
                                     >
                                         <div className="flex items-baseline gap-0.5">
-                                            <span className="text-base font-black leading-none">{displayHour}</span>
-                                            <span className="text-[10px] font-bold opacity-60">:{min}</span>
+                                            <span className={`text-2xl font-black ${active ? 'text-emerald-900' : 'text-emerald-900'}`}>{displayHour}</span>
+                                            <span className={`text-xs font-bold ${active ? 'text-[#D97706]' : 'text-emerald-900/40'}`}>:{min}</span>
                                         </div>
-                                        <p className="text-[8px] font-black uppercase tracking-tighter opacity-40">{ampm}</p>
+                                        <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-900/30 mt-1">{ampm}</p>
                                     </button>
                                 );
                             })}
                         </div>
+
+                        {!date && (
+                            <div className="text-center p-4 bg-amber-50 rounded-xl border border-amber-100 text-amber-800/60 text-xs font-bold">
+                                Please select a date first
+                            </div>
+                        )}
                     </motion.div>
                 )}
             </AnimatePresence>
