@@ -1023,6 +1023,54 @@ export async function sendBookingStatusUpdate(booking, status) {
     }
 }
 
+// 10. LOGIN NOTIFICATION
+export async function sendLoginNotification(user) {
+    const content = `
+        <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
+            <tr>
+                <td>
+                    <div style="font-size: 50px; margin-bottom: 15px;">🛡️</div>
+                    <h2 style="color: ${COLORS.text}; margin: 0 0 10px; font-size: 24px; font-weight: 700;">
+                        New Login Detected
+                    </h2>
+                    <p style="color: ${COLORS.textMuted}; margin: 0; font-size: 14px;">
+                        Hello ${user.name || 'User'}, we noticed a new login to your Airport Taxis account.
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
+            ${components.infoCard('👤', 'Account', user.email)}
+            ${components.infoCard('⏰', 'Time', new Date().toLocaleString('en-LK', { dateStyle: 'full', timeStyle: 'short' }))}
+            ${components.infoCard('🌐', 'Device/Source', 'Web Browser')}
+        </table>
+
+        <p style="color: ${COLORS.textMuted}; font-size: 13px; text-align: center; line-height: 1.6;">
+            If this was you, you can safely ignore this email. If you don't recognize this activity, please contact our support immediately.
+        </p>
+
+        ${components.button('Manage My Account', `${BASE_URL}/profile`)}
+    `;
+
+    if (user.email) {
+        try {
+            const resend = getResend();
+            if (resend) {
+                await resend.emails.send({
+                    from: FROM_EMAIL,
+                    to: user.email,
+                    subject: '🛡️ Security Alert: New Login to Airport Taxis',
+                    html: getPremiumTemplate(content, 'Login Notification')
+                });
+                console.log('[Email] Login notification sent to:', user.email);
+            }
+        } catch (error) {
+            console.error('[Email] Failed to send login notification:', error);
+        }
+    }
+}
+
 // Export all functions
 export default {
     sendLoginNotification,
