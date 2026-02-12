@@ -41,6 +41,41 @@ function PaymentFailedContent() {
                 </div>
 
                 <div className="grid gap-3">
+                    <button
+                        onClick={async () => {
+                            const btn = document.getElementById('retry-btn');
+                            if (btn) btn.disabled = true;
+                            const icon = document.getElementById('retry-icon');
+                            if (icon) icon.classList.add('animate-spin');
+
+                            try {
+                                const res = await fetch('/api/payment/initiate', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ bookingId, retry: true })
+                                });
+                                const data = await res.json();
+                                if (data.success && data.paymentUrl) {
+                                    window.location.href = data.paymentUrl;
+                                } else {
+                                    alert(data.message || 'Error re-initiating payment. Please try again or contact support.');
+                                    if (btn) btn.disabled = false;
+                                    if (icon) icon.classList.remove('animate-spin');
+                                }
+                            } catch (err) {
+                                console.error(err);
+                                alert('Network error. Please try again.');
+                                if (btn) btn.disabled = false;
+                                if (icon) icon.classList.remove('animate-spin');
+                            }
+                        }}
+                        id="retry-btn"
+                        className="flex items-center justify-center gap-2 w-full bg-amber-500 text-black py-4 rounded-xl font-black hover:bg-amber-400 transition-all shadow-lg active:scale-[0.98] group"
+                    >
+                        <RefreshCw id="retry-icon" size={20} className="group-hover:rotate-180 transition-transform duration-500" />
+                        Try Again (Re-enter Details)
+                    </button>
+
                     <a
                         href="https://wa.me/94722885885"
                         target="_blank"

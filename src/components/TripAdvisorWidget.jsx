@@ -5,16 +5,15 @@ import Script from 'next/script';
 
 const TripAdvisorWidget = () => {
     const [stats, setStats] = useState({ rating: '5.0', count: 'See all reviews' });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchStats = async () => {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+            const timeoutId = setTimeout(() => controller.abort(), 4000);
 
             try {
                 const res = await fetch('/api/reviews/tripadvisor', { signal: controller.signal });
-                if (!res.ok) throw new Error('Failed to fetch');
-
                 const response = await res.json();
                 if (response.success && response.data) {
                     setStats({
@@ -23,10 +22,11 @@ const TripAdvisorWidget = () => {
                     });
                 }
             } catch (err) {
-                // Silent fail or default stats
-                console.warn('TripAdvisor widget failed to load (timeout or error):', err.name);
+                console.warn('TripAdvisor widget load failed, using fallback:', err.name);
+                // Stats stay at default 5.0
             } finally {
                 clearTimeout(timeoutId);
+                setLoading(false);
             }
         };
         fetchStats();
@@ -39,7 +39,7 @@ const TripAdvisorWidget = () => {
                 </h3>
 
                 <div className="flex justify-center">
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-emerald-900/10 inline-block pointer-events-auto">
+                    <div className={`bg-white p-6 rounded-2xl shadow-sm border border-emerald-900/10 inline-block pointer-events-auto transition-opacity duration-500 ${loading ? 'opacity-50' : 'opacity-100'}`}>
                         {/* Dynamic Custom Widget */}
                         <a
                             href="https://www.tripadvisor.com/Attraction_Review-g293962-d33986804-Reviews-Airport_Taxis_Pvt_Ltd_Sri_Lanka-Colombo_Western_Province.html"
@@ -55,7 +55,9 @@ const TripAdvisorWidget = () => {
                                 </div>
                                 <span className="font-bold text-slate-900">{stats.rating}</span>
                             </div>
-                            <span className="text-xs text-slate-500 font-bold uppercase">{stats.count}</span>
+                            <span className="text-xs text-slate-500 font-bold uppercase">
+                                {loading ? 'Checking reviews...' : stats.count}
+                            </span>
                         </a>
                     </div>
                 </div>

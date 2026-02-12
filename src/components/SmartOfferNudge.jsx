@@ -6,14 +6,14 @@ const SmartOfferNudge = ({ offer, onClose }) => {
         if (!offer) return;
         const timer = setTimeout(() => {
             onClose();
-        }, 6000); // Auto close after 6 seconds
+        }, 5000); // Auto close after 5 seconds
         return () => clearTimeout(timer);
     }, [offer, onClose]);
 
     if (!offer) return null;
 
     return (
-        <div className="fixed bottom-6 right-4 md:bottom-8 md:left-8 md:right-auto z-[60] animate-slide-up-fade max-w-[calc(100vw-32px)] group/nudge">
+        <div className="fixed bottom-4 right-4 md:bottom-8 md:left-8 md:right-auto z-[60] animate-slide-up-fade max-w-[calc(100vw-32px)] group/nudge">
             <div className="relative bg-gradient-to-br from-emerald-500 via-teal-500 to-teal-600 p-[1px] rounded-[2rem] shadow-[0_25px_60px_-15px_rgba(16,185,129,0.3)]">
                 <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-[1.95rem] p-5 flex items-start gap-4 relative overflow-hidden">
 

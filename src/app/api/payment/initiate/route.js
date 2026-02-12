@@ -8,6 +8,47 @@ export async function POST(req) {
     try {
         await dbConnect();
         const data = await req.json();
+        const { bookingId, retry } = data;
+
+        // --- RETRY LOGIC for Existing Bookings ---
+        if (retry && bookingId) {
+            const existingBooking = await Booking.findById(bookingId);
+            if (!existingBooking) {
+                return NextResponse.json({ success: false, message: 'Booking not found' }, { status: 404 });
+            }
+
+            console.log(`[Payment Retry] Re-initiating for Booking: ${existingBooking._id}`);
+
+            const gateway = getActiveGateway();
+            const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
+
+            if (gateway === 'sampath') {
+                const { initiatePayCorpTransaction } = require('@/lib/payment');
+                const returnUrl = `${baseUrl}/api/payment/callback`;
+                const result = await initiatePayCorpTransaction(existingBooking, returnUrl);
+
+                if (result.success) {
+                    existingBooking.paymentReference = result.reqId;
+                    await existingBooking.save();
+                    return NextResponse.json({ success: true, paymentUrl: result.paymentUrl, gateway });
+                } else {
+                    return NextResponse.json({ success: false, message: result.message || 'Gateway error' }, { status: 500 });
+                }
+            } else if (gateway === 'mock') {
+                const chargeAmount = existingBooking.paidAmount > 0 ? existingBooking.paidAmount : existingBooking.totalPrice;
+                return NextResponse.json({
+                    success: true,
+                    paymentUrl: `${baseUrl}/payment/mock?bookingId=${existingBooking._id}&amount=${chargeAmount}`,
+                    gateway
+                });
+            } else if (gateway === 'payhere') {
+                return NextResponse.json({
+                    success: true,
+                    paymentUrl: `${baseUrl}/payment/payhere?bookingId=${existingBooking._id}`,
+                    gateway
+                });
+            }
+        }
 
         // Server-side sanitation: Remove invalid customer IDs (e.g. Google IDs)
         if (data.customer && typeof data.customer === 'string' && !/^[0-9a-fA-F]{24}$/.test(data.customer)) {

@@ -613,7 +613,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 <LocationInput
                                                     placeholder="Add Stop (Search City)"
                                                     icon={Navigation}
-                                                    zIndex="z-40"
+                                                    zIndex={40}
                                                     onSelect={(loc) => {
                                                         setWaypoints([...waypoints, { name: loc.address, lat: loc.lat, lon: loc.lon, waitingTime: 0 }]);
                                                         setWaypointSearches([]);

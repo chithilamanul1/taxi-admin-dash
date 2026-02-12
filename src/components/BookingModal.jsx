@@ -852,7 +852,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             type={f.type}
                                             value={formData[f.key] || ''}
                                             onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
-                                            className={`w-full ${f.key === 'flightNumber' || f.key === 'whatsapp' ? 'h-16 md:h-18 text-lg md:text-xl' : 'h-14 md:h-16 text-base'} bg-white border-2 border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-900/5 transition-all font-black text-emerald-900 placeholder:font-medium placeholder:text-slate-300 shadow-sm`}
+                                            className={`w-full ${f.key === 'flightNumber' || f.key === 'whatsapp' ? 'h-20 md:h-24 text-xl md:text-2xl shadow-emerald-500/10' : 'h-14 md:h-16 text-base'} bg-white border-2 border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-900/5 transition-all font-black text-emerald-900 placeholder:font-medium placeholder:text-slate-300 shadow-sm`}
                                             placeholder={f.placeholder}
                                         />
                                     </div>
