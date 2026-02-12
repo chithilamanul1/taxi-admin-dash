@@ -638,7 +638,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <div className="flex items-center gap-3">
                                                 <Signpost size={18} className={formData.hasNameBoard ? 'text-emerald-600' : ''} />
                                                 <div className="text-left">
-                                                    <span className="text-[10px] md:text-xs font-bold block uppercase tracking-tight">Display Name Board</span>
+                                                    <span className="text-[10px] md:text-xs font-bold block uppercase tracking-tight">Display Board</span>
                                                     <span className="text-[8px] font-medium opacity-60">Driver waits with name sign</span>
                                                 </div>
                                             </div>
