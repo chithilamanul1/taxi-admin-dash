@@ -447,7 +447,9 @@ const AdminDashboard = () => {
                                 <MessageSquare className="text-emerald-600" /> Support Tickets
                             </h2>
 
-                            <AdminSupportController />
+                            <AdminSupportController
+                                onAssignDriver={(booking) => setBookingToAssign(booking)}
+                            />
                         </div>
                     )}
 
@@ -635,7 +637,7 @@ const AdminDashboard = () => {
     );
 };
 
-function AdminSupportController() {
+function AdminSupportController({ onAssignDriver }) {
     const [tickets, setTickets] = useState([]);
     const [activeTicket, setActiveTicket] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -739,26 +741,14 @@ function AdminSupportController() {
                             </div>
                         </div>
                         <div className="p-6 border-t dark:border-white/10 bg-gray-50 dark:bg-slate-800 flex justify-end gap-3 rounded-b-2xl">
+                            {/* Removed out-of-scope and broken booking assignment controls. 
+                                Dashboard state management for assignments should be centralized. */}
                             <button
-                                onClick={() => setViewingBooking(null)}
-                                className="px-6 py-2 rounded-lg font-bold text-slate-500 hover:bg-slate-200 dark:hover:bg-white/5 transition-colors"
+                                onClick={() => setActiveTicket(null)}
+                                className="px-6 py-2 rounded-lg font-bold bg-emerald-900 text-white hover:bg-emerald-800 transition-colors shadow-lg shadow-emerald-900/20"
                             >
-                                Close
-                            </button>
-                            {viewingBooking.status === 'pending' || viewingBooking.status === 'paid' ? (
-                                <button
-                                    onClick={() => {
-                                        setBookingToAssign(viewingBooking);
-                                        setViewingBooking(null);
-                                    }}
-                                    className="px-6 py-2 rounded-lg font-bold bg-emerald-600 text-white hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-900/20"
-                                >
-                                    Assign Driver
-                                </button>
-                            ) : null}
-                            <button className="px-6 py-2 rounded-lg font-bold bg-emerald-900 text-white hover:bg-emerald-800 transition-colors shadow-lg shadow-emerald-900/20">
                                 <CheckCircle size={18} className="inline mr-2" />
-                                Save Changes
+                                Done
                             </button>
                         </div>
 
