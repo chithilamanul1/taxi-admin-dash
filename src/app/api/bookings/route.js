@@ -109,6 +109,46 @@ export async function POST(request) {
                 message: `New booking from ${booking.customerName || 'Guest'}: ${booking.pickupLocation?.address?.split(',')[0]} to ${booking.dropoffLocation?.address?.split(',')[0]}`,
                 link: '/admin?view=bookings'
             });
+
+            // --- WEB PUSH NOTIFICATION TO ADMINS ---
+            try {
+                const webpush = await import('web-push');
+                webpush.setVapidDetails(
+                    'mailto:admin@airporttaxitours.com',
+                    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+                    process.env.VAPID_PRIVATE_KEY
+                );
+
+                // Find all admins with subscriptions
+                const User = (await import('../../../models/User')).default;
+                const admins = await User.find({
+                    role: 'admin',
+                    pushSubscription: { $exists: true, $ne: null }
+                });
+
+                const payload = JSON.stringify({
+                    title: 'New Booking!',
+                    body: `${booking.pickupLocation?.address?.split(',')[0]} ➔ ${booking.dropoffLocation?.address?.split(',')[0]} ($${booking.totalPrice})`,
+                    url: '/admin?view=bookings'
+                });
+
+                const promises = admins.map(admin =>
+                    webpush.sendNotification(admin.pushSubscription, payload)
+                        .catch(err => {
+                            if (err.statusCode === 410) {
+                                // Subscription expired, remove it
+                                User.updateOne({ _id: admin._id }, { $unset: { pushSubscription: "" } }).exec();
+                            }
+                            console.error(`Push failed for admin ${admin.email}:`, err.message);
+                        })
+                );
+
+                await Promise.all(promises);
+            } catch (pushError) {
+                console.error('Web Push Failed:', pushError);
+            }
+            // ---------------------------------------
+
         } catch (discordError) {
             console.error('Logging/Notification failed:', discordError);
         }

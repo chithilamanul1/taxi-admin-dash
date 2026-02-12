@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
     provider: { type: String, default: 'credentials' }, // credentials, google
     role: { type: String, enum: ['admin', 'user', 'customer', 'driver'], default: 'user' },
     isAdmin: { type: Boolean, default: false },
-    permissions: { type: [String], default: [] } // For granular access control
+    permissions: { type: [String], default: [] }, // For granular access control
+    pushSubscription: { type: Object } // For Web Push Notifications
 }, {
     timestamps: true
 });

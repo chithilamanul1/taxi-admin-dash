@@ -8,6 +8,7 @@ import ReviewsManagement from '@/components/ReviewsManagement'
 import DriversFleetView from '@/components/DriversFleetView'
 import LiveDriverMap from '@/components/LiveDriverMap'
 import AdminChatManager from '@/components/AdminChatManager'
+import PushNotificationManager from '@/components/PushNotificationManager'
 
 export default function AdminDashboard() {
     const { data: session, status } = useSession()
@@ -449,6 +450,7 @@ export default function AdminDashboard() {
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
+                        <PushNotificationManager />
                         <button
                             onClick={() => {
                                 if ("Notification" in window) {
