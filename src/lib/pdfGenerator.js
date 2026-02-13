@@ -160,7 +160,7 @@ export const generateBookingPDF = (booking) => {
     doc.setFontSize(9);
     doc.setTextColor(...COLORS.slate);
     doc.setFont(undefined, 'bold');
-    doc.text("Important Information:", 15, finalY + 40);
+    doc.text("Important Information:", 15, currentY + 40);
     doc.setFont(undefined, 'normal');
     doc.setFontSize(8);
     const terms = [
@@ -169,7 +169,7 @@ export const generateBookingPDF = (booking) => {
         "3. Waiting charges: Rs. 500 per hour (First 30 minutes free for Airport pickups).",
         "4. Contact us immediately for any changes to your travel schedule."
     ];
-    terms.forEach((line, i) => doc.text(line, 15, finalY + 46 + (i * 5)));
+    terms.forEach((line, i) => doc.text(line, 15, currentY + 46 + (i * 5)));
 
     // -- Footer --
     doc.setFillColor(...COLORS.emerald);
