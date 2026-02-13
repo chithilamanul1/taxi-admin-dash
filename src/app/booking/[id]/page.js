@@ -176,7 +176,7 @@ export default async function BookingStatusPage({ params }) {
                             <p className="text-xs text-white/40">{booking.paymentMethod === 'card' ? 'Paid Online' : 'Pay to Driver'}</p>
                         </div>
                         <p className="text-3xl font-black">
-                            {booking.currency || 'LKR'} {booking.totalPrice?.toLocaleString()}
+                            {booking.currency || 'LKR'} {(booking.currency && booking.currency !== 'LKR' && booking.displayPrice) ? booking.displayPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : booking.totalPrice?.toLocaleString()}
                         </p>
                     </div>
 

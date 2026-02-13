@@ -111,16 +111,20 @@ export const generateBookingPDF = (booking) => {
     const labelX = 125;
     const valueX = 195;
     const currencyLabel = booking.currency || 'LKR';
+    const isLKR = currencyLabel === 'LKR';
+
+    // Amount to display - use displayPrice if not LKR
+    const basePrice = (!isLKR && booking.displayPrice) ? booking.displayPrice : (booking.totalPrice || 0);
+    const formatOptions = isLKR ? { minimumFractionDigits: 0 } : { minimumFractionDigits: 2, maximumFractionDigits: 2 };
 
     // Subtotal (Before discounts)
-    const basePrice = booking.totalPrice || 0;
     // Note: In this system, 'totalPrice' usually already includes discounts if coming from DB.
     // However, if we want to show a transparent breakdown, we need the original total.
     // Looking at the model, totalPrice is what we store.
     // Let's check how we can show discounts if they were applied.
 
     doc.text("Subtotal:", labelX, currentY);
-    doc.text(`${currencyLabel} ${basePrice.toLocaleString()}`, valueX, currentY, { align: 'right' });
+    doc.text(`${currencyLabel} ${basePrice.toLocaleString(undefined, formatOptions)}`, valueX, currentY, { align: 'right' });
     currentY += 7;
 
     // List Applied Coupons/Discounts
@@ -138,7 +142,7 @@ export const generateBookingPDF = (booking) => {
     doc.setFontSize(10);
     doc.setTextColor(...COLORS.slate);
     doc.text("Taxes & Fees:", labelX, currentY);
-    doc.text(`${currencyLabel} 0.00`, valueX, currentY, { align: 'right' });
+    doc.text(`${currencyLabel} ${isLKR ? '0' : '0.00'}`, valueX, currentY, { align: 'right' });
     currentY += 3;
 
     doc.setDrawColor(230);
@@ -150,7 +154,7 @@ export const generateBookingPDF = (booking) => {
     doc.setFont(undefined, 'bold');
     doc.text("Total Amount:", labelX, currentY);
     doc.setTextColor(...COLORS.emerald);
-    doc.text(`${currencyLabel} ${basePrice.toLocaleString()}`, valueX, currentY, { align: 'right' });
+    doc.text(`${currencyLabel} ${basePrice.toLocaleString(undefined, formatOptions)}`, valueX, currentY, { align: 'right' });
 
     // -- Terms and Branding --
     doc.setFontSize(9);
