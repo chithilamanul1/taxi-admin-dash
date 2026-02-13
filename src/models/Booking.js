@@ -66,6 +66,8 @@ const bookingSchema = new mongoose.Schema({
     flightNumber: { type: String },
     couponCode: { type: String },
     appliedCoupons: [String],
+    gatewayResponse: { type: String }, // Store raw JSON from bank
+    gatewayReason: { type: String },   // Store readable error message
 }, {
     timestamps: true
 });

@@ -322,9 +322,7 @@ export async function completePayCorpTransaction(reqId, clientId) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'AUTHTOKEN': config.authToken,
-                'AuthToken': config.authToken,
-                'Host': 'sampath.paycorp.lk'
+                'AuthToken': config.authToken
             },
             body: JSON.stringify(payload)
         });
@@ -333,6 +331,7 @@ export async function completePayCorpTransaction(reqId, clientId) {
         console.log("PayCorp Complete Response:", data);
 
         const responseCode = data.responseData?.responseCode || data.responseCode;
+        const responseDescription = data.responseData?.responseDescription || data.message;
 
         if (responseCode === '00') {
             return {
@@ -342,10 +341,10 @@ export async function completePayCorpTransaction(reqId, clientId) {
         } else {
             // Precise response mapping per Sampath Bank requirements
             const offlineCodes = ['91', '92', 'A4', 'C5', 'T3', 'T4', 'U9', 'X1', 'X3', '-1', 'C0', 'A6'];
-            let message = "Payment Declined - Please try an alternative card.";
+            let message = responseDescription || "Payment Declined - Please try an alternative card.";
 
             if (offlineCodes.includes(responseCode)) {
-                console.warn(`PayCorp Offline/System Error: ${responseCode}`);
+                console.warn(`PayCorp Offline/System Error: ${responseCode} - ${responseDescription}`);
             }
 
             return {

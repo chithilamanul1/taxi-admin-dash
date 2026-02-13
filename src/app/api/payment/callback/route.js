@@ -120,12 +120,15 @@ export async function GET(request) {
             console.error("Payment Verification Failed:", verification.message);
 
             if (booking) {
+                booking.paymentStatus = 'failed';
+                booking.gatewayResponse = JSON.stringify(verification.data);
+                booking.gatewayReason = verification.message;
                 await booking.save();
 
                 // Log Error to Discord
-                await logError(new Error(`Sampath Payment Failed: ${verification.message}`), `Booking: ${booking._id}`).catch(err => console.error("Discord Log Error:", err));
+                await logError(new Error(`Sampath Payment Failed: ${verification.responseCode} - ${verification.message}`), `Booking: ${booking._id}`).catch(err => console.error("Discord Log Error:", err));
 
-                return NextResponse.redirect(`${baseUrl}/payment/failed?bookingId=${booking._id}&reason=payment_failed`);
+                return NextResponse.redirect(`${baseUrl}/payment/failed?bookingId=${booking._id}&reason=${encodeURIComponent(verification.message || 'payment_failed')}`);
             }
 
             if (transaction) {
