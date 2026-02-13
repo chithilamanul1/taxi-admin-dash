@@ -65,15 +65,15 @@ function PaymentSuccessContent() {
                     </div>
                 )}
 
-                <div className="bg-gray-50 rounded-lg p-4 mb-6 grid grid-cols-2 gap-4 divide-x divide-gray-200">
-                    <div>
+                <div className="bg-gray-50 rounded-lg p-4 mb-6 grid grid-cols-2 gap-4 divide-x divide-gray-200 text-center">
+                    <div className="px-2">
                         <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Booking Ref</div>
-                        <div className="text-base font-black text-emerald-900">#{bookingId?.slice(-8).toUpperCase()}</div>
+                        <div className="text-base font-black text-emerald-900 break-all">#{bookingId?.slice(-8).toUpperCase()}</div>
                     </div>
                     {searchParams.get('txnId') && (
-                        <div className="pl-4">
+                        <div className="px-2">
                             <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Transaction Ref</div>
-                            <div className="text-base font-black text-emerald-900">#{searchParams.get('txnId')}</div>
+                            <div className="text-sm font-black text-emerald-900 break-all leading-tight">#{searchParams.get('txnId')}</div>
                         </div>
                     )}
                 </div>
