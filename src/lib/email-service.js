@@ -324,7 +324,9 @@ export async function sendBookingConfirmation(booking) {
                             </td>
                             <td>
                                 <p style="margin: 0 0 4px; color: ${COLORS.textMuted}; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Total Amount</p>
-                                <p style="margin: 0; color: ${COLORS.goldLight}; font-size: 28px; font-weight: 800;">${booking.currency || 'LKR'} ${booking.totalPrice?.toLocaleString() || 0}</p>
+                                <p style="margin: 0; color: ${COLORS.goldLight}; font-size: 28px; font-weight: 800;">
+                                    ${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPrice) ? booking.displayPrice : (booking.totalPrice || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
+                                </p>
                                 ${booking.appliedCoupons && booking.appliedCoupons.length > 0 ? `
                                 <p style="margin: 4px 0 8px; color: ${COLORS.warning}; font-size: 12px; font-weight: 600;">
                                     🏷️ Coupons Applied: ${booking.appliedCoupons.join(', ')}
@@ -510,12 +512,14 @@ export async function sendBookingConfirmation(booking) {
                 </td>
             </tr>
             <tr>
-                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Vehical Price</td>
-                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 14px;">$ ${((booking.totalPrice || 0) / 300).toFixed(2)}</td>
+                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Vehicle Price (USD Approx)</td>
+                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 14px;">$ ${((booking.currency === 'USD' && booking.displayPrice) ? booking.displayPrice : ((booking.totalPrice || 0) / 320)).toFixed(2)}</td>
             </tr>
             <tr>
                 <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Total Price (${booking.currency || 'LKR'})</td>
-                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 14px;">${booking.currency || 'LKR'} ${booking.totalPrice?.toLocaleString() || 0}</td>
+                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 14px;">
+                    ${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPrice) ? booking.displayPrice : (booking.totalPrice || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
+                </td>
             </tr>
             <tr>
                 <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Total Price (LKR)</td>
@@ -590,7 +594,9 @@ export async function sendPaymentConfirmation(booking) {
             <tr>
                 <td style="padding: 30px; text-align: center;">
                     <p style="margin: 0 0 8px; color: ${COLORS.goldLight}; font-size: 12px; text-transform: uppercase; letter-spacing: 2px;">Amount Paid</p>
-                    <p style="margin: 0; color: #ffffff; font-size: 42px; font-weight: 800;">${booking.currency || 'LKR'} ${booking.totalPrice?.toLocaleString() || 0}</p>
+                    <p style="margin: 0; color: #ffffff; font-size: 42px; font-weight: 800;">
+                        ${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPrice) ? booking.displayPrice : (booking.totalPrice || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
+                    </p>
                     ${booking.currency !== 'LKR' ? `<p style="margin: 5px 0 0; color: rgba(255,255,255,0.6); font-size: 16px; font-weight: 600;">(LKR ${(booking.totalPriceLkr || booking.totalPrice || 0).toLocaleString()})</p>` : ''}
                 </td>
             </tr>
@@ -623,7 +629,7 @@ export async function sendPaymentConfirmation(booking) {
                 await resend.emails.send({
                     from: FROM_EMAIL,
                     to: booking.customerEmail,
-                    subject: `💳 Payment Confirmed - ${booking.currency || 'LKR'} ${booking.totalPrice?.toLocaleString()} - Airport Taxis`,
+                    subject: `💳 Payment Confirmed - ${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPrice) ? booking.displayPrice : (booking.totalPrice || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))} - Airport Taxis`,
                     html: getPremiumTemplate(content, 'Payment Confirmation')
                 });
                 console.log('[Email] Payment confirmation sent to:', booking.customerEmail);
@@ -831,7 +837,7 @@ export async function sendTripCompletedNotification(booking) {
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
             ${components.infoCard('📍', 'Route', `${pickupShort} → ${dropoffShort}`)}
             ${components.infoCard('📏', 'Distance Covered', `${booking.distanceKm || 0} km`)}
-            ${components.infoCard('💰', 'Total Paid', `LKR ${booking.totalPrice?.toLocaleString() || 0}`, true)}
+            ${components.infoCard('💰', 'Total Paid', `${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPrice) ? booking.displayPrice : (booking.totalPrice || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}`, true)}
         </table>
 
         <!-- Review CTA -->
