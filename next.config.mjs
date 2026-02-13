@@ -36,6 +36,25 @@ const nextConfig = {
     eslint: {
         ignoreDuringBuilds: true,
     },
+    async redirects() {
+        return [
+            {
+                source: '/rate-guide',
+                destination: '/prices',
+                permanent: true,
+            },
+            {
+                source: '/taxi-rates-guide',
+                destination: '/prices',
+                permanent: true,
+            },
+            {
+                source: '/taxi-rates',
+                destination: '/prices',
+                permanent: true,
+            }
+        ];
+    },
 };
 
 const withPWA = withPWAInit({

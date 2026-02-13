@@ -4,6 +4,7 @@ import Coupon from '@/models/Coupon';
 import { NextResponse } from 'next/server';
 import { getActiveGateway, verifySampathSignature, completePayCorpTransaction, GATEWAY_CONFIG } from '@/lib/payment';
 import { sendPaymentConfirmation } from '@/lib/email-service';
+import { logPaymentReceived, logError } from '@/lib/discord';
 
 /**
  * GET /api/payment/callback
@@ -80,7 +81,14 @@ export async function GET(request) {
                 }
 
                 await sendPaymentConfirmation(booking).catch(err => console.error("Error sending receipt:", err));
-                return NextResponse.redirect(`${baseUrl}/payment/success?bookingId=${booking._id}&provider=sampath`);
+
+                // Log to Discord
+                await logPaymentReceived(booking, {
+                    method: 'Sampath Bank',
+                    transactionId: verification.data.txnId || reqid
+                }).catch(err => console.error("Discord Log Error:", err));
+
+                return NextResponse.redirect(`${baseUrl}/payment/success?bookingId=${booking._id}&provider=sampath&txnId=${verification.data.txnId || reqid}`);
             }
 
             if (transaction) {
@@ -112,9 +120,11 @@ export async function GET(request) {
             console.error("Payment Verification Failed:", verification.message);
 
             if (booking) {
-                booking.paymentStatus = 'failed';
-                booking.gatewayResponse = JSON.stringify(verification.data);
                 await booking.save();
+
+                // Log Error to Discord
+                await logError(new Error(`Sampath Payment Failed: ${verification.message}`), `Booking: ${booking._id}`).catch(err => console.error("Discord Log Error:", err));
+
                 return NextResponse.redirect(`${baseUrl}/payment/failed?bookingId=${booking._id}&reason=payment_failed`);
             }
 

@@ -52,7 +52,7 @@ function PaymentSuccessContent() {
                 <p className="text-gray-600 mb-6 font-medium">
                     {isCash
                         ? 'Your taxi is scheduled. You can pay the total amount directly to the driver at the end of your trip.'
-                        : 'Your booking has been confirmed. We\'ll send you a confirmation via WhatsApp shortly.'}
+                        : 'Transaction was processed successfully. We\'ll send you a confirmation via WhatsApp shortly.'}
                 </p>
 
                 {isCash && (
@@ -65,9 +65,17 @@ function PaymentSuccessContent() {
                     </div>
                 )}
 
-                <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                    <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Booking Reference</div>
-                    <div className="text-xl font-black text-emerald-900">#{bookingId?.slice(-8).toUpperCase()}</div>
+                <div className="bg-gray-50 rounded-lg p-4 mb-6 grid grid-cols-2 gap-4 divide-x divide-gray-200">
+                    <div>
+                        <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Booking Ref</div>
+                        <div className="text-base font-black text-emerald-900">#{bookingId?.slice(-8).toUpperCase()}</div>
+                    </div>
+                    {searchParams.get('txnId') && (
+                        <div className="pl-4">
+                            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Transaction Ref</div>
+                            <div className="text-base font-black text-emerald-900">#{searchParams.get('txnId')}</div>
+                        </div>
+                    )}
                 </div>
 
                 <div className="space-y-3">

@@ -18,7 +18,7 @@ function PaymentFailedContent() {
 
                 <h1 className="text-2xl font-bold text-gray-800 mb-2">Payment Failed</h1>
                 <p className="text-gray-600 mb-6 font-medium">
-                    We couldn't process your payment. Don't worry - no charges were made to your card.
+                    Payment Declined - Please try an alternative card.
                 </p>
 
                 {searchParams.get('reason') && (

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 
 import { useCurrency } from '../context/CurrencyContext';
 import { calculateBasePrice, calculateSurcharges, calculatePaymentFees } from '../lib/pricing-util';
@@ -21,6 +22,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const { data: session } = useSession();
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [hasAgreed, setHasAgreed] = useState(false);
     const [pricing, setPricing] = useState([]);
     const [distance, setDistance] = useState(0);
     const [verifiedCoupons, setVerifiedCoupons] = useState(initialData.verifiedCoupons || (initialData.verifiedCoupon ? [initialData.verifiedCoupon] : []));
@@ -1097,6 +1099,22 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </button>
                                     </div>
                                 </div>
+
+                                {/* Terms & Conditions Agreement (Mandatory for IPG Live) */}
+                                <div className="mt-8 p-6 bg-emerald-50 rounded-[2rem] border border-emerald-900/10 flex items-start gap-4">
+                                    <div className="relative">
+                                        <input
+                                            type="checkbox"
+                                            id="terms-agreement"
+                                            checked={hasAgreed}
+                                            onChange={(e) => setHasAgreed(e.target.checked)}
+                                            className="w-6 h-6 border-2 border-emerald-900/20 rounded-lg accent-emerald-900 cursor-pointer"
+                                        />
+                                    </div>
+                                    <label htmlFor="terms-agreement" className="text-xs font-bold text-emerald-900 leading-relaxed cursor-pointer select-none">
+                                        I have read and agree to the <Link href="/terms" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Terms of Service</Link> and <Link href="/refund-policy" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Refund Policy</Link>. I understand that I am making a secure payment to Airport Taxis (Pvt) Ltd.
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -1123,7 +1141,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                         ) : (
                             <button
                                 onClick={handleSubmit}
-                                disabled={loading}
+                                disabled={loading || !hasAgreed}
                                 className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[160px]"
                             >
                                 {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} className="md:block hidden" />}

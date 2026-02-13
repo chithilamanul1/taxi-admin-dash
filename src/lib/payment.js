@@ -333,9 +333,18 @@ export async function completePayCorpTransaction(reqId, clientId) {
                 data: data
             };
         } else {
+            // Precise response mapping per Sampath Bank requirements
+            const offlineCodes = ['91', '92', 'A4', 'C5', 'T3', 'T4', 'U9', 'X1', 'X3', '-1', 'C0', 'A6'];
+            let message = "Payment Declined - Please try an alternative card.";
+
+            if (offlineCodes.includes(responseCode)) {
+                console.warn(`PayCorp Offline/System Error: ${responseCode}`);
+            }
+
             return {
                 success: false,
-                message: data.message || `Payment Failed: ${responseCode}`,
+                message: message,
+                responseCode: responseCode,
                 data: data
             };
         }
