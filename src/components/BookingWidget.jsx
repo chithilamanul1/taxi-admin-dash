@@ -286,6 +286,26 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         }
     }, [passengerCount, vehiclePricing, vehicle]);
 
+    // Auto-open vehicle drawer when passengers/luggage exceed current vehicle capacity
+    useEffect(() => {
+        const currentVehicleData = vehiclePricing[vehicle];
+        if (!currentVehicleData) return;
+
+        const totalPax = passengerCount.adults + passengerCount.children;
+        const totalLuggage = passengerCount.luggage;
+
+        const exceedsCapacity =
+            totalPax > (currentVehicleData.capacity || 4) ||
+            totalLuggage > (currentVehicleData.luggage || 0);
+
+        if (exceedsCapacity && !isVehicleDrawerOpen) {
+            const timer = setTimeout(() => {
+                setIsVehicleDrawerOpen(true);
+            }, 600);
+            return () => clearTimeout(timer);
+        }
+    }, [passengerCount, vehiclePricing, vehicle, isVehicleDrawerOpen]);
+
     // Check for Location Offers (Smart Offers)
     useEffect(() => {
         const dest = (dropoff?.name || dropoffSearch || '').toLowerCase().trim();

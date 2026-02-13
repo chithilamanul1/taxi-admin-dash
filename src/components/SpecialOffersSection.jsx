@@ -35,7 +35,7 @@ export default function SpecialOffersSection() {
     if (!loading && coupons.length === 0) return null;
 
     return (
-        <section className="py-20 px-6 relative">
+        <section id="offers" className="py-20 px-6 relative">
             <div className="max-w-7xl mx-auto">
                 <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-900 to-emerald-950 shadow-2xl">
 
@@ -108,7 +108,7 @@ export default function SpecialOffersSection() {
                                             <div className="mb-2">
                                                 <h3 className="text-5xl font-black text-slate-900 tracking-tight leading-none">
                                                     {coupon.discountType === 'percentage' ? `${coupon.value}%` : `$${coupon.value}`}
-                                                    <span className="text-xl ml-1 text-slate-400 font-bold">%</span>
+                                                    <span className="text-xl ml-1 text-slate-400 font-bold">{coupon.discountType === 'percentage' ? 'OFF' : 'Rs OFF'}</span>
                                                 </h3>
                                                 <p className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mt-1 ml-1">Discount</p>
                                             </div>
