@@ -7,28 +7,28 @@ import { ThemeProvider } from '../components/ThemeProvider'
 import LiveChatWidget from '../components/LiveChatWidget'
 
 export const metadata = {
-    title: 'Airport Taxis Sri Lanka - Premium 24/7 Airport Transfer & Tour Service | Book Now',
+    title: 'Airport Taxis Pvt (Ltd) - Premium 24/7 Airport Transfer & Tour Service',
     description: '🚖 Trusted by thousands! Book reliable airport transfers, city tours & day trips in Sri Lanka. Professional English-speaking drivers, comfortable vehicles, instant confirmation. Available 24/7 from Colombo Airport (CMB) to anywhere in Sri Lanka. Best rates guaranteed!',
 
     keywords: 'airport taxi Sri Lanka, CMB airport transfer, Colombo airport taxi, Bandaranaike airport transportation, Sri Lanka taxi service, airport pickup Sri Lanka, airport drop off, reliable taxi service, 24/7 taxi Sri Lanka, English speaking driver, safe travel Sri Lanka, book taxi online, instant booking, best taxi rates, Sri Lanka tours, city tours Colombo, day trips Sri Lanka, tourism support, travel easy, hassle free travel, trusted taxi service, customer first, travel in comfort, local tours, travel safe, airport transfer service, flight transfer, ride to airport, never miss flight, on time every time, taxi near me, explore Sri Lanka, discover Sri Lanka, tour with us, travel made easy',
 
-    authors: [{ name: 'Airport Taxis (Pvt) Ltd' }],
-    creator: 'Airport Taxis (Pvt) Ltd',
-    publisher: 'Airport Taxis (Pvt) Ltd',
+    authors: [{ name: 'Airport Taxis Pvt (Ltd)' }],
+    creator: 'Airport Taxis Pvt (Ltd)',
+    publisher: 'Airport Taxis Pvt (Ltd)',
     formatDetection: {
         email: false,
         address: false,
         telephone: false,
     },
-    metadataBase: new URL('https://airporttaxi.lk'),
+    metadataBase: new URL('https://airporttaxis.lk'),
     alternates: {
         canonical: '/',
     },
     openGraph: {
         title: '🚖 Airport Taxis Sri Lanka - Trusted Airport Transfers & Tours',
         description: 'Book Now! Reliable 24/7 airport transfers from Colombo Airport (CMB). Professional drivers, comfortable vehicles, instant confirmation. Explore Sri Lanka with trusted taxi service.',
-        url: 'https://airporttaxi.lk',
-        siteName: 'Airport Taxis (Pvt) Ltd',
+        url: 'https://airporttaxis.lk',
+        siteName: 'Airport Taxis Pvt (Ltd)',
         locale: 'en_US',
         type: 'website',
         images: [
@@ -68,11 +68,11 @@ export const metadata = {
 const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'TaxiService',
-    name: 'Airport Taxis (Pvt) Ltd',
+    name: 'Airport Taxis Pvt (Ltd)',
     description: 'Premium airport transfer service in Sri Lanka',
-    url: 'https://airporttaxi.lk',
+    url: 'https://airporttaxis.lk',
     telephone: '+94716885880',
-    email: 'info@airporttaxi.lk',
+    email: 'info@airporttaxis.lk',
     address: {
         '@type': 'PostalAddress',
         addressCountry: 'LK',

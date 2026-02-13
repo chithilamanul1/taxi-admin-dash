@@ -1,7 +1,7 @@
 import Contact from '../../components/views/Contact'
 
 export const metadata = {
-    title: 'Contact Us - Airport Taxis Sri Lanka',
+    title: 'Contact Us - Airport Taxis Pvt (Ltd)',
     description: 'Get in touch with Airport Taxis for bookings and inquiries. 24/7 customer support available.',
 }
 

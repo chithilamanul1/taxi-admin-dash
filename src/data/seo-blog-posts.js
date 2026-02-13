@@ -83,7 +83,7 @@ Don't get overcharged. Here is what you need to know about taxi fares in Sri Lan
 
 *Note: Highway tolls are usually extra.*
 
-At **Airport Taxi Tours**, we offer all-inclusive fixed rates so you never have to worry about the meter!
+At **Airport Taxis Tours**, we offer all-inclusive fixed rates so you never have to worry about the meter!
         `,
         coverImage: "/hero.jpg",
         isPublished: true,

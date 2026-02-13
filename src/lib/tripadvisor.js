@@ -72,7 +72,7 @@ export async function getTripAdvisorReviews() {
         },
         {
             id: 'ta2',
-            text: 'Excellent experience with Airport Taxi Tours. Punctual, safe driving, and reasonable prices. Highly recommended for anyone visiting Sri Lanka.',
+            text: 'Excellent experience with Airport Taxis Tours. Punctual, safe driving, and reasonable prices. Highly recommended for anyone visiting Sri Lanka.',
             rating: 5,
             published_date: '2025-01-15T14:30:00Z',
             user: { username: 'Sarah J', avatar: null },

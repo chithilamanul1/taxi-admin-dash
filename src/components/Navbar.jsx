@@ -56,7 +56,7 @@ export default function Navbar() {
                         <span className={`font-extrabold text-xl tracking-tighter leading-none ${needsSolidBg ? 'text-emerald-900 dark:text-white' : 'text-white'}`}>
                             AIRPORT <span className="text-emerald-600 dark:text-emerald-400">TAXIS</span>
                         </span>
-                        <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${needsSolidBg ? 'text-emerald-600 dark:text-emerald-400' : 'text-white/60'}`}>Sri Lanka</span>
+                        <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${needsSolidBg ? 'text-emerald-600 dark:text-emerald-400' : 'text-white/60'}`}>Pvt (Ltd)</span>
                     </div>
                 </Link>
 
@@ -128,10 +128,15 @@ export default function Navbar() {
                                 <button
                                     key={c.code}
                                     onClick={() => changeCurrency(c.code)}
-                                    className={`w-full text-left px-5 py-2.5 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors text-sm font-bold flex items-center gap-3 ${currency === c.code ? 'text-emerald-900 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20' : 'text-slate-600 dark:text-slate-300'}`}
+                                    className={`w-full text-left px-5 py-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all text-sm font-bold flex items-center gap-3 border-b border-emerald-900/5 last:border-0 ${currency === c.code ? 'text-emerald-900 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 shadow-inner' : 'text-slate-600 dark:text-slate-300'}`}
                                 >
-                                    <span className="text-lg">{c.flag}</span>
-                                    <span>{c.name}</span>
+                                    <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg shadow-sm">
+                                        {c.flag}
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="leading-tight">{c.name}</span>
+                                        <span className="text-[10px] opacity-60 uppercase tracking-widest">{c.code}</span>
+                                    </div>
                                 </button>
                             ))}
                         </div>

@@ -62,7 +62,7 @@ export default function TermsPage() {
                                 <h2 className="text-2xl font-bold text-emerald-900">Booking & Payment</h2>
                             </div>
                             <div className="pl-13 space-y-3 text-slate-600 leading-relaxed">
-                                <p>Payments are processed securely via the <strong>Sampath Bank Internet Payment Gateway</strong>. The charge will appear as <strong>AIRPORT TAXIS (PVT) LTD</strong> on your card statement.</p>
+                                <p>Payments are processed securely via the <strong>Sampath Bank Internet Payment Gateway</strong>. The charge will appear as <strong>AIRPORT TAXIS PVT (LTD)</strong> on your card statement.</p>
                                 <p>Upon successful payment, a confirmation email will be sent, containing:</p>
                                 <ul className="list-disc pl-6 space-y-1">
                                     <li>Customer Name, Address, Contact Details</li>
@@ -243,7 +243,7 @@ export default function TermsPage() {
                                 <h2 className="text-2xl font-bold text-emerald-900">Contact</h2>
                             </div>
                             <div className="bg-emerald-50 rounded-2xl p-6 mt-4">
-                                <h3 className="font-bold text-emerald-900 text-lg mb-2">AIRPORT TAXIS (PVT) LTD</h3>
+                                <h3 className="font-bold text-emerald-900 text-lg mb-2">AIRPORT TAXIS PVT (LTD)</h3>
                                 <p className="text-sm text-emerald-700 mb-4">Reg. No: PV 00342552</p>
                                 <div className="space-y-3">
                                     <div className="flex items-start gap-3 text-slate-600">
@@ -256,7 +256,7 @@ export default function TermsPage() {
                                     </div>
                                     <div className="flex items-center gap-3 text-slate-600">
                                         <Mail size={18} className="text-emerald-600" />
-                                        <a href="mailto:info@airporttaxi.lk" className="hover:text-emerald-600">info@airporttaxi.lk</a>
+                                        <a href="mailto:info@airporttaxis.lk" className="hover:text-emerald-600">info@airporttaxis.lk</a>
                                     </div>
                                 </div>
                             </div>
@@ -275,7 +275,7 @@ export default function TermsPage() {
                                     By proceeding with booking and payment, you confirm that you have read, understood, and agree to these <strong>Terms & Conditions</strong> and the <strong>Refund/Cancellation Policy</strong>.
                                 </p>
                                 <p className="mt-4 text-emerald-300">
-                                    Thank you for choosing Airport Taxis (Pvt) Ltd. We look forward to serving you!
+                                    Thank you for choosing Airport Taxis Pvt (Ltd). We look forward to serving you!
                                 </p>
                             </div>
                         </section>

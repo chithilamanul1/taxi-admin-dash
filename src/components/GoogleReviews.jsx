@@ -14,7 +14,7 @@ const FALLBACK_REVIEWS = [
     {
         author_name: 'David Miller',
         rating: 5,
-        text: 'We used Airport Taxi Tours for a 7-day trip around Sri Lanka. Our driver, Kamal, was fantastic. He knew all the best spots to visit and was very flexible when we wanted to make changes. The pricing was transparent.',
+        text: 'We used Airport Taxis Tours for a 7-day trip around Sri Lanka. Our driver, Kamal, was fantastic. He knew all the best spots to visit and was very flexible when we wanted to make changes. The pricing was transparent.',
         relative_time_description: '1 month ago',
         profile_photo_url: null
     }

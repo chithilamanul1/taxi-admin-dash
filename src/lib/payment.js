@@ -210,32 +210,36 @@ export async function initiatePayCorpTransaction(booking, returnUrl) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'AUTHTOKEN': config.authToken,
                 'AuthToken': config.authToken,
-                'Host': 'sampath.paycorp.lk'
+                'Accept': 'application/json'
             },
             body: JSON.stringify(payload)
         });
 
         const data = await res.json();
-        console.log("PayCorp Response:", data);
 
-        if (data.responseData && data.responseData.paymentPageUrl) {
-            return {
-                success: true,
-                paymentUrl: data.responseData.paymentPageUrl,
-                reqId: data.reqId
-            };
-        } else {
-
+        // Verbose Logging for Debugging in Production
+        if (!res.ok || !data.responseData?.paymentPageUrl) {
+            console.error(`[Sampath IPG] Initialization FAILED for Booking ${booking._id}:`, {
+                status: res.status,
+                responseData: data
+            });
             return {
                 success: false,
-                message: data.message || "Payment Initialization Failed"
-            }
+                message: data.responseData?.responseDescription || data.message || "Payment Initialization Failed",
+                raw: data
+            };
         }
 
+        console.log(`[Sampath IPG] Success. Payment URL generated for Booking ${booking._id}`);
+        return {
+            success: true,
+            paymentUrl: data.responseData.paymentPageUrl,
+            reqId: data.reqId
+        };
+
     } catch (error) {
-        console.error("PayCorp Init Error:", error);
+        console.error("[Sampath IPG] Fetch Error:", error);
         return { success: false, message: error.message };
     }
 }

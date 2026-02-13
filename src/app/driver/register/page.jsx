@@ -111,7 +111,7 @@ export default function DriverRegister() {
                 {/* Header */}
                 <div className="p-8 pb-4 border-b border-slate-800">
                     <h1 className="text-2xl font-black text-slate-100 uppercase tracking-tight mb-2">Driver <span className="text-amber-400">Registration</span></h1>
-                    <p className="text-slate-400 text-sm">Join the elite fleet of Airport Taxi drivers.</p>
+                    <p className="text-slate-400 text-sm">Join the elite fleet of Airport Taxis drivers.</p>
                 </div>
 
                 {/* Progress */}
@@ -215,7 +215,7 @@ export default function DriverRegister() {
                                 <p className="text-sm text-slate-400 mb-2 font-bold uppercase">Bank Transfer Details</p>
                                 <div className="space-y-1 text-slate-200 font-mono text-sm">
                                     <p>Bank: <span className="text-amber-400">Sampath Bank</span></p>
-                                    <p>Account Name: <span className="text-amber-400">Airport Taxi Tours</span></p>
+                                    <p>Account Name: <span className="text-amber-400">Airport Taxis Tours</span></p>
                                     <p>Account No: <span className="text-amber-400 text-lg font-bold">1234 5678 9012</span></p>
                                     <p>Branch: <span className="text-amber-400">Colombo Super Branch</span></p>
                                 </div>

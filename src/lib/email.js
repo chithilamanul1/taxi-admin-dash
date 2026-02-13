@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 
-const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxi <info@airporttaxis.lk>';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxis <info@airporttaxis.lk>';
 
 export const sendEmail = async ({ to, subject, html, text }) => {
     try {
@@ -42,12 +42,12 @@ export const templates = {
             </div>
 
             <p>We will notify you once a driver is assigned.</p>
-            <p>Safe travels,<br/>Airport Taxi Tours</p>
+            <p>Safe travels,<br/>Airport Taxis Tours</p>
         </div>
     `,
     welcome: (name) => `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-            <h1>Welcome to Airport Taxi Tours!</h1>
+            <h1>Welcome to Airport Taxis Tours!</h1>
             <p>Hi ${name},</p>
             <p>Thank you for creating an account with us. You can now easily book rides, view your history, and manage your profile.</p>
             <p><a href="https://srilankantaxi.lk/prices">Book your first ride</a></p>

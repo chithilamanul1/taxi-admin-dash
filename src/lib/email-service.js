@@ -35,7 +35,7 @@ const COLORS = {
 };
 
 // Premium Base Template with Dark Theme
-const getPremiumTemplate = (content, title = 'Airport Taxis Sri Lanka') => `
+const getPremiumTemplate = (content, title = 'Airport Taxis Pvt (Ltd)') => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,7 +118,7 @@ const getPremiumTemplate = (content, title = 'Airport Taxis Sri Lanka') => `
                                 📞 +94 722 885 885 · +94 112 433 433
                             </p>
                             <p style="margin: 20px 0 0; color: #475569; font-size: 11px; text-align: center; letter-spacing: 1px;">
-                                © ${new Date().getFullYear()} AIRPORT TAXIS (PVT) LTD · ALL RIGHTS RESERVED
+                                © ${new Date().getFullYear()} AIRPORT TAXIS PVT (LTD) · ALL RIGHTS RESERVED
                             </p>
                         </td>
                     </tr>
@@ -186,7 +186,7 @@ const getPrintFriendlyTemplate = (content, title = 'Booking Details') => `
         <tr>
             <td style="padding: 10px 0; border-top: 1px solid #e5e7eb; text-align: center;">
                 <p style="margin: 0; font-size: 9px; color: #9ca3af;">
-                    Airport Taxis (Pvt) Ltd · 118/5 St. Joseph Street, Grandpass, Colombo 14
+                    Airport Taxis Pvt (Ltd) · 118/5 St. Joseph Street, Grandpass, Colombo 14
                 </p>
                 <p style="margin: 2px 0 0; font-size: 9px; color: #9ca3af;">
                     📞 +94 722 885 885 · ✉️ info@airporttaxi.lk · 🌐 airporttaxi.lk
@@ -325,6 +325,10 @@ export async function sendBookingConfirmation(booking) {
                             <td>
                                 <p style="margin: 0 0 4px; color: ${COLORS.textMuted}; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Total Amount</p>
                                 <p style="margin: 0; color: ${COLORS.goldLight}; font-size: 28px; font-weight: 800;">${booking.currency || 'LKR'} ${booking.totalPrice?.toLocaleString() || 0}</p>
+                                ${booking.appliedCoupons && booking.appliedCoupons.length > 0 ? `
+                                <p style="margin: 4px 0 8px; color: ${COLORS.warning}; font-size: 12px; font-weight: 600;">
+                                    🏷️ Coupons Applied: ${booking.appliedCoupons.join(', ')}
+                                </p>` : ''}
                                 ${booking.currency !== 'LKR' ? `<p style="margin: 2px 0 0; color: ${COLORS.textMuted}; font-size: 14px; font-weight: 600;">(LKR ${(booking.totalPriceLkr || booking.totalPrice || 0).toLocaleString()})</p>` : ''}
                                 <p style="margin: 4px 0 0; color: ${COLORS.textMuted}; font-size: 12px;">${booking.paymentMethod === 'card' ? '💳 Paid Online' : '💵 Cash on Arrival'}</p>
                             </td>

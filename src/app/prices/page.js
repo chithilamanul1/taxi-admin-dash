@@ -3,7 +3,7 @@ import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 
 export const metadata = {
-    title: 'Taxi Prices & Calculator - Airport Taxis Sri Lanka',
+    title: 'Taxi Prices & Calculator - Airport Taxis Pvt (Ltd)',
     description: 'Calculate your taxi fare from Bandaranaike Airport to any destination in Sri Lanka. Transparent pricing, no hidden fees.',
 }
 

@@ -61,6 +61,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [waitingHours, setWaitingHours] = useState(0)
     const [hasNameBoard, setHasNameBoard] = useState(false)
     const [couponCode, setCouponCode] = useState('')
+    const [isManualVehicle, setIsManualVehicle] = useState(false)
     const [isLocating, setIsLocating] = useState(false)
     const { convertPrice, currency, changeCurrency, SUPPORTED_CURRENCIES, rates } = useCurrency()
 
@@ -74,6 +75,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
     const [dismissedOfferIds, setDismissedOfferIds] = useState([]);
     const [nameBoardPrice, setNameBoardPrice] = useState(2000); // Default, updated via API
+    const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true });
 
 
     // Fetch Pricing based on Tab
@@ -108,6 +110,18 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 if (response.meta?.nameBoardPrice) {
                     setNameBoardPrice(response.meta.nameBoardPrice);
                 }
+
+                // Fetch Global Settings
+                try {
+                    const settingsRes = await fetch('/api/admin/pricing-settings', { cache: 'no-store' });
+                    const settingsData = await settingsRes.json();
+                    if (settingsData.success && settingsData.data) {
+                        setPricingSettings(settingsData.data);
+                    }
+                } catch (err) {
+                    console.error("Failed to fetch pricing settings", err);
+                }
+
             } catch (error) { console.error(error); } finally { setIsLoadingPricing(false); }
         };
         if (activeTab !== 'tours') fetchPricing();
@@ -267,24 +281,26 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         });
     }, [availableCoupons, pickup, pickupSearch, dropoff, dropoffSearch]);
 
-    // Auto-Select Vehicle based on Passengers
+    // Auto-Select Vehicle based on Passengers (ONLY if not manually selected)
     useEffect(() => {
+        if (isManualVehicle) return;
+
         const currentVehicleData = vehiclePricing[vehicle];
         if (!currentVehicleData) return;
 
-        const totalPax = passengerCount.adults + passengerCount.children;
-        const totalLuggage = passengerCount.luggage;
+        const totalPax = (passengerCount.adults || 0) + (passengerCount.children || 0);
+        const totalLuggage = passengerCount.luggage || 0;
 
-        // Always find best fit (Cheapest that fits)
+        // Find best fit (Cheapest that fits capacity)
         const sortedVehicles = Object.values(vehiclePricing).sort((a, b) => (a.basePrice || 0) - (b.basePrice || 0));
         const bestFit = sortedVehicles.find(v =>
-            totalPax <= v.capacity && totalLuggage <= (v.luggage || 0)
+            totalPax <= (v.capacity || 4) && totalLuggage <= (v.luggage || 0)
         );
 
         if (bestFit && bestFit.vehicleType !== vehicle) {
             setVehicle(bestFit.vehicleType);
         }
-    }, [passengerCount, vehiclePricing, vehicle]);
+    }, [passengerCount, vehiclePricing, vehicle, isManualVehicle]);
 
     // Auto-open vehicle drawer when passengers/luggage exceed current vehicle capacity
     useEffect(() => {
@@ -377,13 +393,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 }
 
                 // PRIORITY 3: Automated Rules (e.g. 175km Discount)
-                if (distance > 175) {
+                if (pricingSettings.isActive && distance > pricingSettings.longDistanceThreshold) {
                     dynamicOffers.push({
                         _id: 'auto-long-distance',
                         name: 'Long Distance Discount',
-                        discountPercentage: 10,
+                        discountPercentage: pricingSettings.longDistanceDiscountPercentage,
                         discountAmount: 0,
-                        description: 'Special 10% discount automatically applied for long distance airport transfers!',
+                        description: `Special ${pricingSettings.longDistanceDiscountPercentage}% discount automatically applied for long distance airport transfers!`,
                         isActive: true,
                         type: 'location'
                     });
@@ -411,7 +427,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
             return [...existingManual, ...finalDynamic];
         });
-    }, [dropoff, dropoffSearch, pickup, pickupSearch, availableCoupons, activeOffers, distance]);
+    }, [dropoff, dropoffSearch, pickup, pickupSearch, availableCoupons, activeOffers, distance, pricingSettings]);
 
 
     // Calculate total waiting hours including waypoints
@@ -1122,7 +1138,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 onClose={() => setIsVehicleDrawerOpen(false)}
                 vehicles={Object.values(vehiclePricing)}
                 selectedId={vehicle}
-                onSelect={setVehicle}
+                onSelect={(vType) => {
+                    setVehicle(vType);
+                    setIsManualVehicle(true);
+                }}
                 passengerCount={passengerCount}
                 isLoading={isLoadingPricing}
             />

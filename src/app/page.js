@@ -110,6 +110,7 @@ export default function Home() {
                         {/* Destination Cards */}
                         {[
                             {
+                                id: "mirissa",
                                 title: "Airport to Mirissa",
                                 price: "59",
                                 badge: "Top Choice",
@@ -117,6 +118,7 @@ export default function Home() {
                                 meta: "Whale Watching Hub"
                             },
                             {
+                                id: "ahangama",
                                 title: "Airport to Ahangama",
                                 price: "58",
                                 badge: "Deep South",
@@ -124,6 +126,7 @@ export default function Home() {
                                 meta: "Surfing & Yoga Hub"
                             },
                             {
+                                id: "sigiriya",
                                 title: "Airport to Sigiriya",
                                 price: "90",
                                 badge: "Historic",
@@ -131,7 +134,7 @@ export default function Home() {
                                 meta: "Ancient Rock Fortress"
                             }
                         ].map((route, i) => (
-                            <Link key={i} href={`/destination/${route.title.split(' ').pop().toLowerCase()}`} className="group relative h-[450px] rounded-3xl overflow-hidden border border-emerald-900/10 block shadow-md hover:shadow-xl transition-all duration-500">
+                            <Link key={i} href={`/destination/${route.id}`} className="group relative h-[450px] rounded-3xl overflow-hidden border border-emerald-900/10 block shadow-md hover:shadow-xl transition-all duration-500">
                                 <Image
                                     src={route.img}
                                     alt={route.title}

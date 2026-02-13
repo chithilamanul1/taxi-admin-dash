@@ -65,7 +65,7 @@ export const authOptions = {
                         // Send Welcome Email
                         await sendEmail({
                             to: user.email,
-                            subject: 'Welcome to Airport Taxi Tours',
+                            subject: 'Welcome to Airport Taxis Tours',
                             html: templates.welcome(user.name)
                         })
                     }

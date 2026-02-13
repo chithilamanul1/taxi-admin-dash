@@ -23,7 +23,7 @@ const Footer = () => {
                                 <span className="text-2xl font-black tracking-tighter">
                                     AIRPORT <span className="text-amber-400">TAXIS</span>
                                 </span>
-                                <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest opacity-80">Sri Lanka (Pvt) Ltd</span>
+                                <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest opacity-80">Pvt (Ltd)</span>
                             </div>
                         </div>
                         <p className="text-white/80 max-w-md leading-relaxed">
@@ -84,7 +84,7 @@ const Footer = () => {
                             </li>
                             <li className="flex gap-4">
                                 <Mail size={18} className="text-amber-400 shrink-0" />
-                                <a href="mailto:info@airporttaxi.lk" className="hover:text-white">info@airporttaxi.lk</a>
+                                <a href="mailto:info@airporttaxis.lk" className="hover:text-white">info@airporttaxis.lk</a>
                             </li>
                         </ul>
                     </div>
@@ -93,7 +93,7 @@ const Footer = () => {
                 {/* Bottom Bar */}
                 <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
                     <p className="text-xs text-white/80 font-medium uppercase tracking-widest">
-                        © 2026 Airport Taxis (Pvt) Ltd. All rights reserved.
+                        © 2026 Airport Taxis Pvt (Ltd). All rights reserved.
                     </p>
                     <a href="https://seranex.org" target="_blank" className="group flex items-center gap-1.5 text-xs text-white/80 font-bold hover:text-white transition-all uppercase tracking-widest">
                         Developed by <span className="text-white">Chithila Manul</span>

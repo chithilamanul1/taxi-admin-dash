@@ -41,6 +41,7 @@ export default function AdminDashboard() {
     const [pricingCategory, setPricingCategory] = useState('airport-transfer')
     const [editingVehicle, setEditingVehicle] = useState(null)
     const [editForm, setEditForm] = useState({})
+    const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true })
 
     // Tours State
     const [tours, setTours] = useState([])
@@ -178,6 +179,7 @@ export default function AdminDashboard() {
 
             if (currentView === 'pricing') {
                 setIsLoading(true)
+                // Fetch vehicle pricing
                 fetch(`/api/pricing?category=${pricingCategory}`, { cache: 'no-store' })
                     .then(res => res.json())
                     .then(data => {
@@ -185,6 +187,16 @@ export default function AdminDashboard() {
                             setVehiclePricing(data.data)
                         } else {
                             setVehiclePricing([])
+                        }
+                    })
+                    .catch(err => console.error(err))
+
+                // Fetch global settings
+                fetch('/api/admin/pricing-settings', { cache: 'no-store' })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && data.data) {
+                            setPricingSettings(data.data)
                         }
                         setIsLoading(false)
                     })
@@ -753,6 +765,67 @@ export default function AdminDashboard() {
                                         >
                                             Reset to Default
                                         </button>
+                                    </div>
+                                </div>
+
+                                {/* Global Discount Configuration */}
+                                <div className="bg-emerald-50 rounded-xl p-6 mb-6 border border-emerald-900/10">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="font-bold text-emerald-900 flex items-center gap-2">
+                                            <Percent size={18} /> Global Long-Distance Discount
+                                        </h3>
+                                        <button
+                                            onClick={async () => {
+                                                const res = await fetch('/api/admin/pricing-settings', {
+                                                    method: 'PUT',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify(pricingSettings)
+                                                });
+                                                const data = await res.json();
+                                                if (data.success) alert('Settings saved successfully!');
+                                                else alert('Failed to save settings.');
+                                            }}
+                                            className="text-xs bg-emerald-900 text-white px-3 py-1.5 rounded-lg hover:bg-emerald-900/90 font-bold shadow-md shadow-emerald-900/10 transition-all hover:scale-105"
+                                        >
+                                            Save Configuration
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <div>
+                                            <label className="block text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">
+                                                Distance Threshold (km)
+                                            </label>
+                                            <input
+                                                type="number"
+                                                value={pricingSettings.longDistanceThreshold}
+                                                onChange={e => setPricingSettings({ ...pricingSettings, longDistanceThreshold: Number(e.target.value) })}
+                                                className="w-full bg-white border border-emerald-900/10 rounded-lg px-3 py-2 text-sm font-bold text-emerald-900 outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                            />
+                                            <p className="text-[10px] text-emerald-900/60 mt-1">Minimum distance to automatically trigger discount.</p>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">
+                                                Discount Percentage (%)
+                                            </label>
+                                            <input
+                                                type="number"
+                                                value={pricingSettings.longDistanceDiscountPercentage}
+                                                onChange={e => setPricingSettings({ ...pricingSettings, longDistanceDiscountPercentage: Number(e.target.value) })}
+                                                className="w-full bg-white border border-emerald-900/10 rounded-lg px-3 py-2 text-sm font-bold text-emerald-900 outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                            />
+                                            <p className="text-[10px] text-emerald-900/60 mt-1">Percentage deducted from the total fare.</p>
+                                        </div>
+                                        <div className="flex items-center pt-4">
+                                            <label className="flex items-center gap-2 cursor-pointer select-none">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={pricingSettings.isActive}
+                                                    onChange={e => setPricingSettings({ ...pricingSettings, isActive: e.target.checked })}
+                                                    className="w-5 h-5 text-emerald-600 rounded focus:ring-emerald-500 border-gray-300 cursor-pointer"
+                                                />
+                                                <span className="text-sm font-medium text-emerald-900">Enable Automated Discount</span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 

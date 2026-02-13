@@ -207,7 +207,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const detailedExtras = [
                 { label: 'Waiting Time', value: Math.ceil(calculateSurcharges({ waitingHours: formData.waitingHours, hasNameBoard: false }, vehicleData) * rate) },
                 { label: 'Name Board', value: Math.ceil(calculateSurcharges({ waitingHours: 0, hasNameBoard: formData.hasNameBoard }, vehicleData) * rate) }
-            ].filter(s => s.value > 0);
+            ];
 
             return {
                 total: convertedTotal,
@@ -1112,7 +1112,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         />
                                     </div>
                                     <label htmlFor="terms-agreement" className="text-xs font-bold text-emerald-900 leading-relaxed cursor-pointer select-none">
-                                        I have read and agree to the <Link href="/terms" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Terms of Service</Link> and <Link href="/refund-policy" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Refund Policy</Link>. I understand that I am making a secure payment to Airport Taxis (Pvt) Ltd.
+                                        I have read and agree to the <Link href="/terms" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Terms of Service</Link> and <Link href="/refund-policy" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Refund Policy</Link>. I understand that I am making a secure payment to Airport Taxis Pvt (Ltd).
                                     </label>
                                 </div>
                             </div>

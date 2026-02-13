@@ -23,7 +23,7 @@ export const generateBookingPDF = (booking) => {
         doc.setFont(undefined, 'bold');
         doc.text("AIRPORT TAXIS", 15, 25);
         doc.setFontSize(8);
-        doc.text("SRI LANKA (PVT) LTD", 15, 30);
+        doc.text("PVT (LTD)", 15, 30);
     }
 
     // -- Header Details (Top Right) --
@@ -39,12 +39,13 @@ export const generateBookingPDF = (booking) => {
     doc.text(`Date: ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}`, 195, 37, { align: "right" });
 
     // -- Letterhead / Business Info --
-    doc.setFontSize(10);
+    doc.setFontSize(9); // Reduced from 10
     doc.setTextColor(...COLORS.black);
     doc.setFont(undefined, 'bold');
-    doc.text("Airport Taxi Tours Sri Lanka", 60, 20);
+    doc.text("Airport Taxis Pvt (Ltd)", 60, 20); // Updated name
     doc.setFont(undefined, 'normal');
     doc.setTextColor(...COLORS.slate);
+    doc.setFontSize(8); // Reduced from 10
     doc.text("118/5 St. Joseph Street, Grandpass, Colombo 14", 60, 25);
     doc.text("Hotline: +94 722 885 885 | +94 777 123 456", 60, 30);
     doc.text("Email: info@airporttaxis.lk | Web: www.airporttaxis.lk", 60, 35);
@@ -101,34 +102,55 @@ export const generateBookingPDF = (booking) => {
     });
 
     // -- Totals Section --
-    const finalY = doc.lastAutoTable.finalY + 15; // Increased spacing
+    let currentY = doc.lastAutoTable.finalY + 12;
 
     doc.setFontSize(10);
     doc.setTextColor(...COLORS.slate);
     doc.setFont(undefined, 'normal');
 
-    const labelX = 125; // Shifted further left
+    const labelX = 125;
     const valueX = 195;
-
-    // Use displayPrice/displayPaidAmount if available (already converted), otherwise fallback to totalPrice
-    const displayTotal = booking.displayPrice || booking.totalPrice || 0;
     const currencyLabel = booking.currency || 'LKR';
 
-    doc.text("Subtotal:", labelX, finalY);
-    doc.text(`${currencyLabel} ${displayTotal.toLocaleString()}`, valueX, finalY, { align: 'right' });
+    // Subtotal (Before discounts)
+    const basePrice = booking.totalPrice || 0;
+    // Note: In this system, 'totalPrice' usually already includes discounts if coming from DB.
+    // However, if we want to show a transparent breakdown, we need the original total.
+    // Looking at the model, totalPrice is what we store.
+    // Let's check how we can show discounts if they were applied.
 
-    doc.text("Taxes & Fees:", labelX, finalY + 7);
-    doc.text(`${currencyLabel} 0.00`, valueX, finalY + 7, { align: 'right' });
+    doc.text("Subtotal:", labelX, currentY);
+    doc.text(`${currencyLabel} ${basePrice.toLocaleString()}`, valueX, currentY, { align: 'right' });
+    currentY += 7;
+
+    // List Applied Coupons/Discounts
+    if (booking.appliedCoupons && booking.appliedCoupons.length > 0) {
+        booking.appliedCoupons.forEach(coupon => {
+            doc.setFontSize(9);
+            doc.setTextColor(...COLORS.amber);
+            doc.text(`Coupon (${coupon}):`, labelX, currentY);
+            doc.text(`Applied`, valueX, currentY, { align: 'right' });
+            currentY += 6;
+        });
+    }
+
+    // Taxes & Fees
+    doc.setFontSize(10);
+    doc.setTextColor(...COLORS.slate);
+    doc.text("Taxes & Fees:", labelX, currentY);
+    doc.text(`${currencyLabel} 0.00`, valueX, currentY, { align: 'right' });
+    currentY += 3;
 
     doc.setDrawColor(230);
-    doc.line(labelX, finalY + 10, valueX, finalY + 10);
+    doc.line(labelX, currentY + 2, valueX, currentY + 2);
+    currentY += 10;
 
-    doc.setFontSize(14);
+    doc.setFontSize(12);
     doc.setTextColor(...COLORS.black);
     doc.setFont(undefined, 'bold');
-    doc.text("Total Amount:", labelX, finalY + 18);
+    doc.text("Total Amount:", labelX, currentY);
     doc.setTextColor(...COLORS.emerald);
-    doc.text(`${currencyLabel} ${displayTotal.toLocaleString()}`, valueX, finalY + 18, { align: 'right' });
+    doc.text(`${currencyLabel} ${basePrice.toLocaleString()}`, valueX, currentY, { align: 'right' });
 
     // -- Terms and Branding --
     doc.setFontSize(9);

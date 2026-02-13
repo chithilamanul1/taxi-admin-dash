@@ -45,7 +45,7 @@ export default function DriverLogin() {
                         <Car size={40} className="text-white" />
                     </div>
                     <h1 className="text-2xl font-bold text-white">Driver Portal</h1>
-                    <p className="text-emerald-300 text-sm mt-1">Airport Taxi Tours Sri Lanka</p>
+                    <p className="text-emerald-300 text-sm mt-1">Airport Taxis Tours Sri Lanka</p>
                 </div>
 
                 <div className="p-8">
@@ -107,7 +107,7 @@ export default function DriverLogin() {
                     </div>
                 </div>
                 <div className="bg-slate-50 p-4 text-center text-xs text-gray-400">
-                    &copy; 2026 Airport Taxi Tours. Driver App v1.0
+                    &copy; 2026 Airport Taxis Tours. Driver App v1.0
                 </div>
             </div>
         </div>

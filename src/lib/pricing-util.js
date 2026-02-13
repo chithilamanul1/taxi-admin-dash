@@ -1,5 +1,5 @@
 /**
- * Unified Pricing Utility for Airport Taxi Tours
+ * Unified Pricing Utility for Airport Taxis Tours
  * Handles consistent price calculation across BookingWidget and BookingModal
  */
 

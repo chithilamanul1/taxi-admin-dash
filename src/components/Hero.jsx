@@ -113,12 +113,12 @@ const Hero = ({ onBookClick }) => {
                         Plan Your Trip
                         <ArrowRight className="group-hover:translate-x-1 transition-transform" />
                     </button>
-                    <a
-                        href="#offers"
+                    <Link
+                        href="/offers"
                         className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md text-white rounded-xl font-bold text-lg transition-all border border-white/20 hover:bg-white/20 text-center min-w-[200px]"
                     >
                         See Offers
-                    </a>
+                    </Link>
                 </div>
             </div>
 

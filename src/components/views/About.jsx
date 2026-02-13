@@ -7,7 +7,7 @@ const About = () => {
         <div className="pb-20 dark:bg-slate-950 transition-colors">
             {/* Header */}
             <div className="bg-emerald-900 py-20 text-center text-white px-4">
-                <h1 className="text-4xl md:text-5xl font-extrabold mb-4">About <span className="text-emerald-600 dark:text-emerald-400">Airport Taxis (Pvt) Ltd</span></h1>
+                <h1 className="text-4xl md:text-5xl font-extrabold mb-4">About <span className="text-emerald-600 dark:text-emerald-400">Airport Taxis Pvt (Ltd)</span></h1>
                 <p className="text-white/60 max-w-2xl mx-auto text-lg">Your trusted partner for seamless airport transfers and unforgettable island tours.</p>
             </div>
 
@@ -30,7 +30,7 @@ const About = () => {
                             <h2 className="text-3xl font-bold text-emerald-900 dark:text-white mt-2">More than just a Taxi Service</h2>
                         </div>
                         <p className="text-gray-600 dark:text-white/60 leading-relaxed">
-                            Airport Taxis (Pvt) Ltd is Sri Lanka's premier transportation provider, dedicated to offering safety, reliability, and comfort.
+                            Airport Taxis Pvt (Ltd) is Sri Lanka's premier transportation provider, dedicated to offering safety, reliability, and comfort.
                             Whether you need a quick airport transfer or a multi-day island adventure, our fleet of modern vehicles and professional
                             drivers ensures a premium experience at competitive rates.
                         </p>

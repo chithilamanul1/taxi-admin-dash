@@ -26,7 +26,7 @@ export default function RefundPolicyPage() {
                 <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
                     <div className="bg-emerald-50 p-8 border-b border-emerald-100">
                         <p className="text-emerald-900 text-lg leading-relaxed">
-                            At <strong>Airport Taxis (Pvt) Ltd</strong>, we understand plans can change. This policy outlines our fair and transparent cancellation and refund procedures.
+                            At <strong>Airport Taxis Pvt (Ltd)</strong>, we understand plans can change. This policy outlines our fair and transparent cancellation and refund procedures.
                         </p>
                     </div>
 
@@ -100,7 +100,7 @@ export default function RefundPolicyPage() {
                                         <span className="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold shrink-0">1</span>
                                         <div>
                                             <p className="font-bold text-slate-900">Contact Us</p>
-                                            <p className="text-slate-600">Email us at <a href="mailto:info@airporttaxi.lk" className="text-emerald-600">info@airporttaxi.lk</a> or call <a href="tel:+94722885885" className="text-emerald-600">+94 722 885 885</a></p>
+                                            <p className="text-slate-600">Email us at <a href="mailto:info@airporttaxis.lk" className="text-emerald-600">info@airporttaxis.lk</a> or call <a href="tel:+94722885885" className="text-emerald-600">+94 722 885 885</a></p>
                                         </div>
                                     </li>
                                     <li className="flex gap-4">
@@ -178,10 +178,10 @@ export default function RefundPolicyPage() {
                             <div className="space-y-4">
                                 <div className="flex flex-col gap-1">
                                     <p className="text-sm text-slate-500 font-medium">
-                                        Official Refund Policy of Airport Taxis (Pvt) Ltd. Last updated January 2024.
+                                        Official Refund Policy of Airport Taxis Pvt (Ltd). Last updated January 2024.
                                     </p>
-                                    <a href="mailto:info@airporttaxi.lk" className="flex items-center gap-2 text-emerald-600 font-bold hover:underline">
-                                        <Mail size={16} /> info@airporttaxi.lk
+                                    <a href="mailto:info@airporttaxis.lk" className="flex items-center gap-2 text-emerald-600 font-bold hover:underline">
+                                        <Mail size={16} /> info@airporttaxis.lk
                                     </a>
                                 </div>
                                 <div className="flex items-center gap-3 text-slate-600">
