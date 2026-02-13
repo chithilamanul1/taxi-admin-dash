@@ -18,11 +18,11 @@ import TripMap from './TripMap'
 import { calculateBasePrice, calculateSurcharges } from '@/lib/pricing-util';
 
 // (Helper to calculate price)
-const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000) => {
+const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, pickupName = '', dropoffName = '') => {
     if (!distance || !pricingMap[vehicleId]) return { total: 0 };
     const vehicleData = pricingMap[vehicleId];
 
-    const basePrice = calculateBasePrice(distance, vehicleData, tripType);
+    const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupName, dropoffName);
     const surcharges = calculateSurcharges({ waitingHours, hasNameBoard, nameBoardPrice }, vehicleData);
 
     return { total: basePrice + surcharges };
@@ -396,8 +396,18 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
     // Calculate total waiting hours including waypoints
     const totalWaitingHours = waitingHours + waypoints.reduce((sum, wp) => sum + (wp.waitingTime || 0), 0);
-    // Updated calculatePrice call with nameBoardPrice
-    const { total } = calculatePrice(distance, vehicle, tripType, vehiclePricing, totalWaitingHours, hasNameBoard, nameBoardPrice);
+    // Updated calculatePrice call with nameBoardPrice and locations
+    const { total } = calculatePrice(
+        distance,
+        vehicle,
+        tripType,
+        vehiclePricing,
+        totalWaitingHours,
+        hasNameBoard,
+        nameBoardPrice,
+        pickup?.name || pickupSearch,
+        dropoff?.name || dropoffSearch
+    );
 
     // Calculate total discount from all applied offers (MAX RULE: No Stacking)
     const discountAmount = appliedOffers.reduce((max, offer) => {
