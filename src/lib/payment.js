@@ -190,7 +190,8 @@ export async function initiatePayCorpTransaction(booking, returnUrl) {
             returnMethod: "GET"   // Or POST, usually GET for redirect back
         },
         clientRef: booking._id.toString(),
-        comment: `Booking #${booking._id.toString().slice(-6)}`
+        serviceEndpoint: "PROXY_PAYMENT_INIT",
+        comment: `Booking ${booking._id.toString().slice(-6)}`
     };
 
     const payload = {
@@ -209,7 +210,8 @@ export async function initiatePayCorpTransaction(booking, returnUrl) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'AUTHTOKEN': config.authToken, // Key Header
+                'AUTHTOKEN': config.authToken,
+                'AuthToken': config.authToken,
                 'Host': 'sampath.paycorp.lk'
             },
             body: JSON.stringify(payload)
@@ -304,8 +306,8 @@ export async function completePayCorpTransaction(reqId, clientId) {
         operation: "PAYMENT_COMPLETE",
         requestDate: reqDate,
         requestData: {
-            clientId: actualClientId,
-            reqid: reqId
+            clientId: actualClientId.toString(),
+            reqid: reqId.toString()
         }
     };
 
@@ -317,6 +319,7 @@ export async function completePayCorpTransaction(reqId, clientId) {
             headers: {
                 'Content-Type': 'application/json',
                 'AUTHTOKEN': config.authToken,
+                'AuthToken': config.authToken,
                 'Host': 'sampath.paycorp.lk'
             },
             body: JSON.stringify(payload)
