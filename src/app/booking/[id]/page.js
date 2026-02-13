@@ -1,5 +1,7 @@
 import dbConnect from '@/lib/db';
 import Booking from '@/models/Booking';
+import User from '@/models/User'; // Ensure User is registered
+import Driver from '@/models/Driver'; // Ensure Driver is registered
 import { notFound } from 'next/navigation';
 import { CheckCircle, MapPin, Calendar, Clock, Car, Star, Phone, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
@@ -16,18 +18,10 @@ export default async function BookingStatusPage({ params }) {
 
     let booking;
     try {
-        console.log(`[PAGE-DEBUG] Looking for booking ID: ${id}`);
         booking = await Booking.findById(id).populate('driver').lean();
 
         if (!booking) {
-            console.log(`[PAGE-DEBUG] Booking ${id} not found in database`);
-            return (
-                <div className="p-20 text-center">
-                    <h1 className="text-2xl font-bold text-red-600">Booking Not Found</h1>
-                    <p className="mt-4 text-gray-600">We couldn't find a booking with ID: <span className="font-mono">{id}</span></p>
-                    <Link href="/" className="mt-8 inline-block text-emerald-600 font-bold underline">Go back home</Link>
-                </div>
-            );
+            notFound();
         }
 
         // Serialize
@@ -37,17 +31,8 @@ export default async function BookingStatusPage({ params }) {
         booking = JSON.parse(JSON.stringify(booking));
 
     } catch (e) {
-        console.error(`[PAGE-DEBUG] Error fetching booking ${id}:`, e);
-        return (
-            <div className="p-20 text-center">
-                <h1 className="text-2xl font-bold text-red-600">Technical Error</h1>
-                <p className="mt-4 text-gray-600">Something went wrong while loading your booking.</p>
-                <div className="mt-4 p-4 bg-gray-100 rounded text-left overflow-auto max-w-xl mx-auto font-mono text-xs">
-                    {e.message}
-                </div>
-                <Link href="/" className="mt-8 inline-block text-emerald-600 font-bold underline">Go back home</Link>
-            </div>
-        );
+        console.error(`Error loading booking ${id}:`, e);
+        notFound();
     }
 
     return (
