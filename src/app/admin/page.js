@@ -2099,7 +2099,7 @@ export default function AdminDashboard() {
                                                             <span className="text-xl font-bold text-emerald-600">{formatPrice(selectedBooking)}</span>
                                                         </div>
                                                         {selectedBooking.paymentType === 'partial' && (
-                                                            <React.Fragment>
+                                                            <>
                                                                 <div className="flex justify-between items-center text-xs">
                                                                     <span className="text-gray-500">Paid (Online)</span>
                                                                     <span className="font-bold text-emerald-600">
@@ -2112,7 +2112,7 @@ export default function AdminDashboard() {
                                                                         Rs {(selectedBooking.displayBalanceAmount || selectedBooking.balanceAmount || 0).toLocaleString()}
                                                                     </span>
                                                                 </div>
-                                                            </React.Fragment>
+                                                            </>
                                                         )}
                                                     </div>
                                                     <div className="grid grid-cols-2 gap-4 pt-2">
