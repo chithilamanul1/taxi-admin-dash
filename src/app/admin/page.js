@@ -159,7 +159,8 @@ export default function AdminDashboard() {
                 fetch('/api/tickets')
                     .then(res => res.json())
                     .then(data => {
-                        if (Array.isArray(data)) setSupportTickets(data)
+                        if (data.success && Array.isArray(data.data)) setSupportTickets(data.data)
+                        else if (Array.isArray(data)) setSupportTickets(data) // Fallback for old format
                         setIsLoading(false)
                     })
                     .catch(err => {
@@ -1345,8 +1346,8 @@ export default function AdminDashboard() {
                                                     <div className="p-4">
                                                         <h3 className="font-bold text-emerald-900 text-lg mb-1">{tour.title}</h3>
                                                         <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
-                                                            <span className="flex items-center gap-1"><Clock size={12} /> {tour.duration}</span>
-                                                            <span className="flex items-center gap-1"><DollarSign size={12} /> {tour.price ? `From $${tour.price}` : 'Contact for price'}</span>
+                                                            <span className="flex items-center gap-1"><Clock size={12} /> {typeof tour.duration === 'object' ? `${tour.duration.days}D / ${tour.duration.nights}N` : tour.duration}</span>
+                                                            <span className="flex items-center gap-1"><DollarSign size={12} /> {tour.price ? `From ${(typeof tour.price === 'object' ? tour.price.currency : '$')}${typeof tour.price === 'object' ? tour.price.amount : tour.price}` : 'Contact for price'}</span>
                                                         </div>
                                                         <div className="flex justify-end gap-2">
                                                             <button

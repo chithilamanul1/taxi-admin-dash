@@ -67,6 +67,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         duration: initialData.duration || '',
         paymentMethod: 'cash',
         paymentType: 'full', // 'full' or 'partial'
+        billingName: '',
+        billingAddress: '',
+        billingCity: '',
+        billingCountry: '',
     });
 
     // Coupon handlers
@@ -422,7 +426,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 appliedCoupons: verifiedCoupons.map(c => c.code),
                 paymentMethod: formData.paymentMethod,
                 flightNumber: formData.flightNumber,
-                notes: formData.notes
+                notes: formData.notes,
+                billingDetails: {
+                    billingName: formData.billingName,
+                    billingAddress: formData.billingAddress,
+                    city: formData.billingCity,
+                    country: formData.billingCountry
+                }
             };
 
             console.log("Sending booking data:", bookingData);
@@ -717,7 +727,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
                             </div>
 
-                            <div className="p-6 md:p-8 bg-slate-900 rounded-[2.5rem] text-white flex flex-col shadow-2xl gap-8 relative overflow-hidden group">
+                            <div className="p-6 md:p-8 bg-gradient-to-br from-emerald-900 to-emerald-950 rounded-[2.5rem] text-white flex flex-col shadow-2xl gap-8 relative overflow-hidden group">
                                 {/* Decorative Background Glow */}
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/10 rounded-full blur-[100px] -mr-32 -mt-32"></div>
 
@@ -852,7 +862,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             type={f.type}
                                             value={formData[f.key] || ''}
                                             onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
-                                            className={`w-full ${f.key === 'flightNumber' || f.key === 'whatsapp' ? 'h-24 md:h-32 text-2xl md:text-4xl shadow-emerald-500/20' : 'h-14 md:h-16 text-base'} bg-white border-2 border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-900/5 transition-all font-black text-emerald-900 placeholder:font-medium placeholder:text-slate-300 shadow-sm`}
+                                            className={`w-full h-14 md:h-16 text-base bg-white border-2 border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-900/5 transition-all font-black text-emerald-900 placeholder:font-medium placeholder:text-gray-400 shadow-sm`}
                                             placeholder={f.placeholder}
                                         />
                                     </div>
@@ -866,18 +876,52 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     onChange={(d, t) => setFormData({ ...formData, date: d, time: t })}
                                 />
                             </div>
+
+                            <div className="space-y-4">
+                                <h4 className="text-sm font-black text-emerald-900 uppercase tracking-widest flex items-center gap-2">
+                                    <CreditCard size={16} className="text-emerald-600" />
+                                    Billing Details
+                                </h4>
+                                <div className="grid md:grid-cols-2 gap-4">
+                                    {[
+                                        { label: 'Billing Name', key: 'billingName', placeholder: 'Name for Invoice' },
+                                        { label: 'Full Address', key: 'billingAddress', placeholder: 'Street address' },
+                                        { label: 'City', key: 'billingCity', placeholder: 'City' },
+                                        { label: 'Country', key: 'billingCountry', placeholder: 'Country' },
+                                    ].map(b => (
+                                        <div key={b.key} className="space-y-2">
+                                            <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{b.label}</label>
+                                            <input
+                                                type="text"
+                                                value={formData[b.key] || ''}
+                                                onChange={e => setFormData({ ...formData, [b.key]: e.target.value })}
+                                                className="w-full h-14 bg-white border-2 border-emerald-900/10 px-6 rounded-2xl outline-none focus:border-emerald-600 transition-all font-bold text-sm text-emerald-900"
+                                                placeholder={b.placeholder}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     )}
 
                     {step === 3 && (
                         <div className="space-y-6 md:space-y-8 animate-slide-up">
                             <div className="flex items-center gap-4 p-4 md:p-6 bg-emerald-50 rounded-3xl border border-emerald-900/10 shadow-sm">
-                                <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
-                                    <ShieldCheck size={28} />
-                                </div>
                                 <div>
                                     <h4 className="font-bold text-emerald-900">Verified Route Summary</h4>
                                     <p className="text-[10px] text-emerald-600 uppercase font-extrabold tracking-widest">Ready for deployment</p>
+                                </div>
+                            </div>
+
+                            {/* Mandatory Highway Toll Notice */}
+                            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-3">
+                                <Info size={18} className="text-amber-500 shrink-0 mt-0.5" />
+                                <div>
+                                    <p className="text-xs font-black text-amber-600 uppercase tracking-widest leading-none mb-1">Mandatory Notice</p>
+                                    <p className="text-[11px] font-bold text-amber-500 leading-relaxed uppercase tracking-wider">
+                                        Highway tolls must be paid by the customer during the journey.
+                                    </p>
                                 </div>
                             </div>
 
@@ -1151,6 +1195,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

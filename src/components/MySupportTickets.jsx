@@ -146,8 +146,8 @@ export default function MySupportTickets() {
                                     <div className="flex justify-between items-start mb-2">
                                         <h3 className="font-bold text-emerald-900 group-hover:text-emerald-600 transition-colors">{ticket.subject}</h3>
                                         <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wide ${ticket.status === 'open' ? 'bg-blue-100 text-blue-700' :
-                                                ticket.status === 'pending_user' ? 'bg-yellow-100 text-yellow-700' :
-                                                    'bg-green-100 text-green-700'
+                                            ticket.status === 'answered' ? 'bg-yellow-100 text-yellow-700' :
+                                                'bg-green-100 text-green-700'
                                             }`}>
                                             {ticket.status.replace('_', ' ')}
                                         </span>
@@ -203,8 +203,8 @@ export default function MySupportTickets() {
                             {activeTicket.messages.map((msg, i) => (
                                 <div key={i} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`max-w-[80%] p-4 rounded-2xl ${msg.sender === 'user'
-                                            ? 'bg-emerald-600 text-white rounded-tr-none'
-                                            : 'bg-white border border-slate-200 text-emerald-900 rounded-tl-none shadow-sm'
+                                        ? 'bg-emerald-600 text-white rounded-tr-none'
+                                        : 'bg-white border border-slate-200 text-emerald-900 rounded-tl-none shadow-sm'
                                         }`}>
                                         <div className="flex items-center gap-2 mb-1 opacity-70">
                                             {msg.sender === 'admin' && <Shield size={12} />}

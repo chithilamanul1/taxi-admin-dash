@@ -68,6 +68,12 @@ const bookingSchema = new mongoose.Schema({
     appliedCoupons: [String],
     gatewayResponse: { type: String }, // Store raw JSON from bank
     gatewayReason: { type: String },   // Store readable error message
+    billingDetails: {
+        billingName: String,
+        billingAddress: String,
+        city: String,
+        country: String
+    },
 }, {
     timestamps: true
 });

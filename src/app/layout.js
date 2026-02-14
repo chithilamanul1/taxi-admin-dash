@@ -9,8 +9,16 @@ import LiveChatWidget from '../components/LiveChatWidget'
 export const metadata = {
     title: 'Airport Taxis Pvt (Ltd) - Premium 24/7 Airport Transfer & Tour Service',
     description: '🚖 Trusted by thousands! Book reliable airport transfers, city tours & day trips in Sri Lanka. Professional English-speaking drivers, comfortable vehicles, instant confirmation. Available 24/7 from Colombo Airport (CMB) to anywhere in Sri Lanka. Best rates guaranteed!',
-
-    keywords: 'airport taxi Sri Lanka, CMB airport transfer, Colombo airport taxi, Bandaranaike airport transportation, Sri Lanka taxi service, airport pickup Sri Lanka, airport drop off, reliable taxi service, 24/7 taxi Sri Lanka, English speaking driver, safe travel Sri Lanka, book taxi online, instant booking, best taxi rates, Sri Lanka tours, city tours Colombo, day trips Sri Lanka, tourism support, travel easy, hassle free travel, trusted taxi service, customer first, travel in comfort, local tours, travel safe, airport transfer service, flight transfer, ride to airport, never miss flight, on time every time, taxi near me, explore Sri Lanka, discover Sri Lanka, tour with us, travel made easy',
+    keywords: [
+        'Airport Taxi Sri Lanka',
+        'Colombo Airport Transfer',
+        'CMB Airport Taxi',
+        'Sri Lanka Day Trips',
+        'Sri Lanka Tour Packages',
+        'Private Chauffeur Sri Lanka',
+        'Airport Pickup Colombo',
+        'Travel Sri Lanka Transport'
+    ],
 
     authors: [{ name: 'Airport Taxis Pvt (Ltd)' }],
     creator: 'Airport Taxis Pvt (Ltd)',

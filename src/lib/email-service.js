@@ -101,7 +101,7 @@ const getPremiumTemplate = (content, title = 'Airport Taxis Pvt (Ltd)') => `
                                                     </a>
                                                 </td>
                                                 <td style="padding: 0 10px;">
-                                                    <a href="mailto:info@airporttaxi.lk" style="display: inline-block; width: 40px; height: 40px; background-color: ${COLORS.darkCard}; border-radius: 50%; text-align: center; line-height: 40px; text-decoration: none; border: 1px solid ${COLORS.border};">
+                                                    <a href="mailto:info@airporttaxis.lk" style="display: inline-block; width: 40px; height: 40px; background-color: ${COLORS.darkCard}; border-radius: 50%; text-align: center; line-height: 40px; text-decoration: none; border: 1px solid ${COLORS.border};">
                                                         ✉️
                                                     </a>
                                                 </td>
@@ -115,7 +115,7 @@ const getPremiumTemplate = (content, title = 'Airport Taxis Pvt (Ltd)') => `
                                 📍 118/5 St. Joseph Street, Grandpass, Colombo 14
                             </p>
                             <p style="margin: 0 0 8px; color: ${COLORS.textMuted}; font-size: 13px; text-align: center;">
-                                📞 +94 722 885 885 · +94 112 433 433
+                                📞 +94 722 885 885 · 0719 885 885
                             </p>
                             <p style="margin: 20px 0 0; color: #475569; font-size: 11px; text-align: center; letter-spacing: 1px;">
                                 © ${new Date().getFullYear()} AIRPORT TAXIS PVT (LTD) · ALL RIGHTS RESERVED
@@ -189,7 +189,7 @@ const getPrintFriendlyTemplate = (content, title = 'Booking Details') => `
                     Airport Taxis Pvt (Ltd) · 118/5 St. Joseph Street, Grandpass, Colombo 14
                 </p>
                 <p style="margin: 2px 0 0; font-size: 9px; color: #9ca3af;">
-                    📞 +94 722 885 885 · ✉️ info@airporttaxi.lk · 🌐 airporttaxi.lk
+                    📞 +94 722 885 885 · ✉️ info@airporttaxis.lk · 🌐 airporttaxis.lk
                 </p>
             </td>
         </tr>
@@ -529,6 +529,27 @@ export async function sendBookingConfirmation(booking) {
                 <td style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Payment Method</td>
                 <td style="border-bottom: 1px solid #e5e7eb; font-size: 13px;">${booking.paymentMethod === 'card' ? '💳 Online Payment' : '💵 Cash on Arrival'}</td>
             </tr>
+            ${booking.paymentType === 'partial' ? `
+            <tr style="background-color: #fffbeb;">
+                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #92400e; font-size: 12px; font-weight: bold;">Amount Paid (50%)</td>
+                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 14px; color: #92400e;">
+                    ${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPaidAmount) ? booking.displayPaidAmount : (booking.paidAmount || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
+                </td>
+            </tr>
+            <tr style="background-color: #fef2f2;">
+                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #991b1b; font-size: 12px; font-weight: bold;">Balance Due (at Stop)</td>
+                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 14px; color: #991b1b;">
+                    ${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayBalanceAmount) ? booking.displayBalanceAmount : (booking.balanceAmount || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
+                </td>
+            </tr>
+            ` : ''}
+            <tr>
+                <td colspan="2" style="background-color: #fee2e2; padding: 10px; border: 1px dashed #ef4444; text-align: center;">
+                    <p style="margin: 0; color: #991b1b; font-size: 11px; font-weight: bold; text-transform: uppercase;">
+                        ⚠️ REMINDER: Highway tolls must be paid by the customer during the journey.
+                    </p>
+                </td>
+            </tr>
         </table>
         
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
@@ -595,9 +616,10 @@ export async function sendPaymentConfirmation(booking) {
                 <td style="padding: 30px; text-align: center;">
                     <p style="margin: 0 0 8px; color: ${COLORS.goldLight}; font-size: 12px; text-transform: uppercase; letter-spacing: 2px;">Amount Paid</p>
                     <p style="margin: 0; color: #ffffff; font-size: 42px; font-weight: 800;">
-                        ${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPrice) ? booking.displayPrice : (booking.totalPrice || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
+                        ${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPaidAmount) ? booking.displayPaidAmount : (booking.paidAmount || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
                     </p>
-                    ${booking.currency !== 'LKR' ? `<p style="margin: 5px 0 0; color: rgba(255,255,255,0.6); font-size: 16px; font-weight: 600;">(LKR ${(booking.totalPriceLkr || booking.totalPrice || 0).toLocaleString()})</p>` : ''}
+                    ${booking.paymentType === 'partial' ? `<p style="margin: 5px 0 0; color: ${COLORS.goldLight}; font-size: 14px; font-weight: 600;">(50% Advance Payment Received)</p>` : ''}
+                    ${booking.currency !== 'LKR' ? `<p style="margin: 5px 0 0; color: rgba(255,255,255,0.6); font-size: 16px; font-weight: 600;">(LKR ${(booking.paidAmount || 0).toLocaleString()})</p>` : ''}
                 </td>
             </tr>
         </table>

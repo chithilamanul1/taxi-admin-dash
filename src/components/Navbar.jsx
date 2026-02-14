@@ -43,7 +43,7 @@ export default function Navbar() {
         <nav className={`fixed w-full z-50 transition-all duration-500 ${needsSolidBg ? 'py-4 bg-white dark:bg-slate-950 border-b border-emerald-900/10 dark:border-slate-800 shadow-md' : 'py-6 bg-transparent'}`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <Link href="/" className="flex items-center gap-3 group">
-                    <div className="relative h-12 w-12 overflow-hidden bg-emerald-900/5 dark:bg-white/10 rounded-xl p-2 border border-emerald-900/10 dark:border-white/10 group-hover:scale-110 transition-transform">
+                    <div className="relative h-11 w-11 overflow-hidden bg-emerald-900/5 dark:bg-white/10 rounded-xl p-2 border border-emerald-900/10 dark:border-white/10 group-hover:scale-110 transition-transform -translate-y-0.5">
                         <Image
                             src="/logo.png"
                             alt=""

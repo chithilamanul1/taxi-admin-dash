@@ -40,6 +40,12 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                 const conversionRate = 320;
                 baseTotal = priceUSD * conversionRate;
                 console.log(`[Pricing] Popular destination match: ${popDest.name} - $${priceUSD} (LKR ${baseTotal})`);
+
+                // If the distance is significant, log it for verification
+                if (distKm > 100) {
+                    console.log(`[Pricing] Long distance trip to ${popDest.name} - ${distKm}km`);
+                }
+
                 return Math.round(baseTotal);
             }
         }

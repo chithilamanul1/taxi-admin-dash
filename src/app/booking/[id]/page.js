@@ -136,6 +136,13 @@ export default async function BookingStatusPage({ params }) {
                                         <p className="text-[10px] font-bold text-gray-400 uppercase">Pickup</p>
                                         <p className="font-bold text-gray-800 text-sm leading-tight">{booking.pickupLocation?.address || 'N/A'}</p>
                                     </div>
+                                    {booking.waypoints?.length > 0 && booking.waypoints.map((wp, idx) => (
+                                        <div key={idx} className="relative">
+                                            <div className="absolute -left-5 top-1 w-1.5 h-1.5 rounded-full border border-gray-300 bg-white"></div>
+                                            <p className="text-[10px] font-bold text-gray-400 uppercase">Stop {idx + 1}</p>
+                                            <p className="font-bold text-gray-800 text-sm leading-tight">{wp.address}</p>
+                                        </div>
+                                    ))}
                                     <div>
                                         <p className="text-[10px] font-bold text-gray-400 uppercase">Dropoff</p>
                                         <p className="font-bold text-gray-800 text-sm leading-tight">{booking.dropoffLocation?.address || 'N/A'}</p>

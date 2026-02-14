@@ -3,8 +3,9 @@ import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 
 export const metadata = {
-    title: 'Taxi Prices & Calculator - Airport Taxis Pvt (Ltd)',
-    description: 'Calculate your taxi fare from Bandaranaike Airport to any destination in Sri Lanka. Transparent pricing, no hidden fees.',
+    title: 'Taxi Fare Calculator & Rates - Airport Taxis Pvt (Ltd) Sri Lanka',
+    description: 'Calculate your exact taxi fare from Colombo Airport (CMB) to any city in Sri Lanka. Transparent pricing, no hidden costs, and instant quotes for all vehicle types.',
+    keywords: 'Sri Lanka Taxi Fare Calculator, Airport Taxi Rates Sri Lanka, Colombo Airport Taxi Cost, Sri Lanka Transfer Prices, Taxi Price List Sri Lanka, Fixed Price Airport Taxi',
 }
 
 export default function PricesPage() {

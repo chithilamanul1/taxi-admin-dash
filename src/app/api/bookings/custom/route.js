@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import dbConnect from '@/lib/db';
-// We might want to save this to a new collection "CustomTrip" or just email it.
-// For now, let's assume we just email it or save to a "SupportTicket" type.
+// 1. Create a Support Ticket / Inquiry
 import Ticket from '@/models/Ticket';
 import { sendEmail } from '@/lib/email'; // Assuming this exists, or we mock it
 
@@ -22,7 +21,9 @@ export async function POST(req) {
         // 1. Create a Support Ticket / Inquiry
         const ticket = await Ticket.create({
             subject: `Custom Trip Request: ${pickup?.address?.split(',')[0]} to ${dropoff?.address?.split(',')[0]}`,
-            message: `
+            messages: [{
+                sender: 'user',
+                message: `
                 Customer: ${name} (${email}, ${phone})
                 Route: ${pickup?.address} -> ${waypoints?.map(w => w.address).join(' -> ')} -> ${dropoff?.address}
                 Est. Distance: ${distance} km
@@ -30,7 +31,8 @@ export async function POST(req) {
                 Passengers: ${passengerCount}
                 Vehicle Pref: ${vehicleType}
                 Notes: ${message}
-            `,
+            `
+            }],
             priority: 'medium',
             status: 'open',
             category: 'booking_inquiry',
@@ -38,7 +40,8 @@ export async function POST(req) {
             metadata: {
                 type: 'custom_trip',
                 routeData: data
-            }
+            },
+            lastUpdated: new Date()
         });
 
         // 2. Send Email Notification (Optional/Mock)

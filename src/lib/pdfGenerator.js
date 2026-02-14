@@ -16,7 +16,7 @@ export const generateBookingPDF = (booking) => {
     // -- Helper: Add Logo --
     // We try to add the logo. If it fails (e.g. path issues in some environments), we fallback to text.
     try {
-        doc.addImage('/invoice_logo.png', 'PNG', 15, 12, 35, 35);
+        doc.addImage('/invoice_logo.png', 'PNG', 15, 10, 35, 35);
     } catch (e) {
         doc.setFontSize(22);
         doc.setTextColor(...COLORS.emerald);
@@ -47,7 +47,7 @@ export const generateBookingPDF = (booking) => {
     doc.setTextColor(...COLORS.slate);
     doc.setFontSize(8); // Reduced from 10
     doc.text("118/5 St. Joseph Street, Grandpass, Colombo 14", 60, 25);
-    doc.text("Hotline: +94 722 885 885 | +94 777 123 456", 60, 30);
+    doc.text("Hotline: +94 722 885 885 | 0719 885 885", 60, 30);
     doc.text("Email: info@airporttaxis.lk | Web: www.airporttaxis.lk", 60, 35);
 
     // -- Accent Line --
@@ -155,6 +155,25 @@ export const generateBookingPDF = (booking) => {
     doc.text("Total Amount:", labelX, currentY);
     doc.setTextColor(...COLORS.emerald);
     doc.text(`${currencyLabel} ${basePrice.toLocaleString(undefined, formatOptions)}`, valueX, currentY, { align: 'right' });
+    currentY += 10;
+
+    // Partial Payment Breakdown
+    if (booking.paymentType === 'partial') {
+        doc.setFontSize(11);
+        doc.setTextColor(...COLORS.black);
+        doc.setFont(undefined, 'bold');
+        doc.text("Amount Paid (50%):", labelX, currentY);
+        doc.setTextColor(...COLORS.emerald);
+        const paidAmount = (!isLKR && booking.displayPaidAmount) ? booking.displayPaidAmount : (booking.paidAmount || 0);
+        doc.text(`${currencyLabel} ${paidAmount.toLocaleString(undefined, formatOptions)}`, valueX, currentY, { align: 'right' });
+        currentY += 7;
+
+        doc.setTextColor(...COLORS.black);
+        doc.text("Balance Due (to Driver):", labelX, currentY);
+        doc.setTextColor(220, 38, 38); // Red color for balance
+        const balanceAmount = (!isLKR && booking.displayBalanceAmount) ? booking.displayBalanceAmount : (booking.balanceAmount || 0);
+        doc.text(`${currencyLabel} ${balanceAmount.toLocaleString(undefined, formatOptions)}`, valueX, currentY, { align: 'right' });
+    }
 
     // -- Terms and Branding --
     doc.setFontSize(9);
@@ -165,7 +184,8 @@ export const generateBookingPDF = (booking) => {
     doc.setFontSize(8);
     const terms = [
         "1. This is a legally valid computer-generated " + (isCash ? "receipt" : "invoice") + ".",
-        "2. Rates are inclusive of toll fees and fuel unless stated otherwise.",
+        "2. Highway tolls must be paid by the customer during the journey.",
+        "3. Rates are inclusive of fuel and driver fees unless stated otherwise.",
         "3. Waiting charges: Rs. 500 per hour (First 30 minutes free for Airport pickups).",
         "4. Contact us immediately for any changes to your travel schedule."
     ];
@@ -180,7 +200,7 @@ export const generateBookingPDF = (booking) => {
     doc.text("Thank you for traveling with Airport Taxis!", 105, 288, { align: 'center' });
     doc.setFontSize(7);
     doc.setFont(undefined, 'normal');
-    doc.text("24/7 Hotline: +94 722 885 885 | info@airporttaxis.lk | www.airporttaxis.lk", 105, 292, { align: 'center' });
+    doc.text("24/7 Hotline: +94 722 885 885 | 0719 885 885 | info@airporttaxis.lk", 105, 292, { align: 'center' });
 
     // Save
     const fileName = `${isCash ? 'Receipt' : 'Invoice'}_${booking._id.slice(-8).toUpperCase()}.pdf`;

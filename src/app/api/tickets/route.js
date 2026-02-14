@@ -31,9 +31,9 @@ export async function GET() {
     }
     try {
         const tickets = await Ticket.find().populate('user', 'name email').sort({ lastUpdated: -1 });
-        return NextResponse.json(tickets);
+        return NextResponse.json({ success: true, data: tickets });
     } catch (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }
 

@@ -59,7 +59,7 @@ export default function FloatingContact() {
                     </a>
 
                     <a
-                        href="mailto:info@airporttaxi.lk"
+                        href="mailto:info@airporttaxis.lk"
                         className="group flex items-center gap-3"
                     >
                         <span className="bg-slate-700 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg whitespace-nowrap uppercase tracking-wider">Email Us</span>

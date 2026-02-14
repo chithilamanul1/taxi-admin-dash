@@ -1,8 +1,9 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Lock, Briefcase, Wind } from 'lucide-react'
+import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Lock, Briefcase, Wind, Zap } from 'lucide-react'
 import { debounce } from '@/lib/utils'
+import { useCurrency } from '../context/CurrencyContext'
 
 // Tiered Pricing Configuration (in LKR - Sri Lankan Rupees)
 const VEHICLE_PRICING = {
@@ -20,8 +21,8 @@ const VEHICLE_PRICING = {
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 3500 },
             { min: 20, max: 40, type: 'flat', price: 4000 },
-            { min: 40, max: 130, type: 'per_km', rate: 100 },
-            { min: 130, max: Infinity, type: 'per_km', rate: 92.5 }
+            { min: 40, max: 130, type: 'per_km', rate: 102 },
+            { min: 130, max: Infinity, type: 'per_km', rate: 102 }
         ]
     },
     'sedan': {
@@ -247,26 +248,28 @@ const Prices = ({ initialDestination }) => {
     const [arrivalDate, setArrivalDate] = useState('')
     const [arrivalTime, setArrivalTime] = useState('')
     const [isVehicleListExpanded, setIsVehicleListExpanded] = useState(true)
-    const [usdRate, setUsdRate] = useState(null)
+
+    const { currency, rates, changeCurrency } = useCurrency()
+
+    const SUPPORTED_CURRENCIES = [
+        { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: '🇱🇰' },
+        { code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸' },
+        { code: 'EUR', symbol: '€', name: 'Euro', flag: '🇪🇺' },
+        { code: 'GBP', symbol: '£', name: 'British Pound', flag: '🇬🇧' },
+        { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳' },
+    ];
+
+    const convertToAllCurrencies = (amountLKR) => {
+        return SUPPORTED_CURRENCIES.map(c => ({
+            ...c,
+            value: Math.ceil(amountLKR * (rates?.[c.code] || 1))
+        }));
+    };
 
     // Refs for scrolling
     const quoteRef = useRef(null)
 
-    // Fetch live exchange rate (LKR -> USD)
-    useEffect(() => {
-        const fetchRate = async () => {
-            try {
-                const res = await fetch('https://open.er-api.com/v6/latest/LKR')
-                const data = await res.json()
-                if (data && data.rates && data.rates.USD) {
-                    setUsdRate(data.rates.USD)
-                }
-            } catch (error) {
-                console.error("Failed to fetch exchange rate:", error)
-            }
-        }
-        fetchRate()
-    }, [])
+    // Exchange rate logic removed as it now uses global context
 
     // Handle initial destination from props (Popular Routes)
     useEffect(() => {
@@ -532,9 +535,9 @@ const Prices = ({ initialDestination }) => {
                         <div className="flex flex-col items-end gap-3">
                             <div className="flex flex-col items-end">
                                 <span className="text-emerald-600 font-bold text-lg">+ Rs 2,000.00</span>
-                                {usdRate && (
+                                {rates?.USD && (
                                     <span className="text-xs text-gray-400 font-medium">
-                                        (≈ ${(2000 * usdRate).toFixed(2)} USD)
+                                        (≈ ${(2000 * rates.USD).toFixed(2)} USD)
                                     </span>
                                 )}
                             </div>
@@ -754,22 +757,28 @@ const Prices = ({ initialDestination }) => {
 
                     {(() => {
                         const { total: baseTotal, breakdown } = calculatePrice(distance, vehicle, tripType)
-                        const total = baseTotal + (boardShow ? 2000 : 0)
+                        const totalLKR = baseTotal + (boardShow ? 2000 : 0)
+
+                        const currentSymbol = SUPPORTED_CURRENCIES.find(c => c.code === currency)?.symbol || 'Rs'
+                        const rate = rates?.[currency] || 1
+                        const totalSelected = Math.ceil(totalLKR * rate)
 
                         return (
                             <>
                                 <div className="space-y-6 flex-grow">
-                                    <div className="flex justify-between border-b border-white/10 pb-4">
-                                        <span className="text-white/60">Distance</span>
-                                        <span className="font-bold">{loading ? <Loader2 className="animate-spin inline" /> : (distance ? `${distance.toFixed(1)} km` : '--')}</span>
+                                    {/* Currency Indicator */}
+                                    <div className="flex items-center gap-2 text-amber-500 mb-2">
+                                        <Zap size={14} fill="currentColor" className="animate-pulse" />
+                                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">{currency} ESTIMATE</span>
                                     </div>
-                                    <div className="flex justify-between border-b border-white/10 pb-4 text-sm italic">
-                                        <span className="text-white/60">Vehicle</span>
-                                        <span className="capitalize">{VEHICLE_PRICING[vehicle]?.name}</span>
-                                    </div>
-                                    <div className="flex justify-between border-b border-white/10 pb-4 text-sm italic">
-                                        <span className="text-white/60">Trip Type</span>
-                                        <span className="capitalize">{tripType.replace('-', ' ')}</span>
+
+                                    <div className="text-5xl md:text-7xl font-black leading-tight tracking-tighter flex items-center gap-3">
+                                        <span className="text-xl md:text-3xl font-bold text-amber-500">
+                                            {currentSymbol}
+                                        </span>
+                                        <span className="text-white">
+                                            {totalSelected.toLocaleString()}
+                                        </span>
                                     </div>
 
                                     {/* Price Breakdown */}
@@ -792,12 +801,52 @@ const Prices = ({ initialDestination }) => {
                                                 {tripType === 'round-trip' && (
                                                     <div className="flex justify-between text-emerald-400/80 pt-2 border-t border-white/5">
                                                         <span className="text-xs">× 2 (Round Trip)</span>
-                                                        <span className="font-bold">Rs {total.toLocaleString()}</span>
+                                                        <span className="font-bold">Rs {(totalLKR).toLocaleString()}</span>
                                                     </div>
                                                 )}
                                             </div>
                                         </div>
                                     )}
+
+                                    {/* Multi-Currency Grid with Flags */}
+                                    <div className="mt-8 space-y-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="h-px flex-1 bg-white/10"></div>
+                                        </div>
+
+                                        {/* Highway Toll Notice */}
+                                        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-3">
+                                            <Info size={16} className="text-amber-500 shrink-0 mt-0.5" />
+                                            <p className="text-[11px] font-bold text-amber-500/90 leading-relaxed uppercase tracking-wider">
+                                                Note: Highway tolls must be paid by the customer during the journey.
+                                            </p>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-3">
+                                            {convertToAllCurrencies(totalLKR).map((c) => (
+                                                <button
+                                                    key={c.code}
+                                                    type="button"
+                                                    onClick={() => changeCurrency(c.code)}
+                                                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col gap-1 text-left cursor-pointer group/card ${currency === c.code
+                                                        ? 'bg-amber-500/10 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
+                                                        : 'bg-white/5 border-white/5 hover:border-white/20 hover:bg-white/10'
+                                                        }`}
+                                                >
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="text-[10px] font-black text-white/40 uppercase tracking-widest flex items-center gap-1.5">
+                                                            <span className="text-xs">{c.flag}</span> {c.code}
+                                                        </span>
+                                                        {currency === c.code && <div className="w-1.5 h-1.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgb(245,158,11)]"></div>}
+                                                    </div>
+                                                    <div className={`text-sm md:text-base font-black ${currency === c.code ? 'text-amber-500' : 'text-white'}`}>
+                                                        <span className="text-[10px] font-bold mr-1 opacity-60">{c.symbol}</span>
+                                                        {c.value.toLocaleString()}
+                                                    </div>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
 
                                 {/* Important Notices */}

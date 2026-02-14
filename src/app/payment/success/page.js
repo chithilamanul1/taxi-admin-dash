@@ -65,6 +65,18 @@ function PaymentSuccessContent() {
                     </div>
                 )}
 
+                {!isCash && (
+                    <div className="mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200 flex items-start gap-3 text-left">
+                        <Info className="text-emerald-600 shrink-0" size={20} />
+                        <div>
+                            <p className="text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">Important Notice</p>
+                            <p className="text-[11px] text-emerald-800 leading-relaxed font-medium">
+                                Highway tolls must be paid by the customer during the journey.
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 <div className="bg-gray-50 rounded-lg p-4 mb-6 grid grid-cols-2 gap-4 divide-x divide-gray-200 text-center">
                     <div className="px-2">
                         <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Booking Ref</div>
