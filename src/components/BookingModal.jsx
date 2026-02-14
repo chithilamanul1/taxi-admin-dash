@@ -1162,41 +1162,40 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </label>
                             </div>
                         </div>
-                        </div>
                     )}
-            </div>
+                </div>
 
-            {/* Footer Controls - Pinned to bottom */}
-            <div className="p-4 md:p-8 pt-3 md:pt-4 border-t border-emerald-900/10 bg-white/80 backdrop-blur-sm shrink-0">
-                <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-3 md:gap-4">
-                    <button
-                        onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                        className="flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-emerald-50 transition-all text-emerald-900 border border-emerald-900/10 shadow-sm w-full md:w-auto min-w-[120px]"
-                    >
-                        <ChevronLeft size={16} className="md:block hidden" /> {step === 1 ? 'Cancel' : 'Back'}
-                    </button>
+                {/* Footer Controls - Pinned to bottom */}
+                <div className="p-4 md:p-8 pt-3 md:pt-4 border-t border-emerald-900/10 bg-white/80 backdrop-blur-sm shrink-0">
+                    <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-3 md:gap-4">
+                        <button
+                            onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
+                            className="flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-emerald-50 transition-all text-emerald-900 border border-emerald-900/10 shadow-sm w-full md:w-auto min-w-[120px]"
+                        >
+                            <ChevronLeft size={16} className="md:block hidden" /> {step === 1 ? 'Cancel' : 'Back'}
+                        </button>
 
-                    {step < 3 ? (
-                        <button
-                            onClick={() => setStep(step + 1)}
-                            disabled={(step === 1 && (!formData.pickup || !formData.dropoff || isOverCapacity)) || (step === 2 && (!formData.name || !formData.phone))}
-                            className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[140px]"
-                        >
-                            Continue <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform md:block hidden" />
-                        </button>
-                    ) : (
-                        <button
-                            onClick={handleSubmit}
-                            disabled={loading || !hasAgreed}
-                            className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[160px]"
-                        >
-                            {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} className="md:block hidden" />}
-                            {loading ? 'Processing...' : 'Complete Booking'}
-                        </button>
-                    )}
+                        {step < 3 ? (
+                            <button
+                                onClick={() => setStep(step + 1)}
+                                disabled={(step === 1 && (!formData.pickup || !formData.dropoff || isOverCapacity)) || (step === 2 && (!formData.name || !formData.phone))}
+                                className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[140px]"
+                            >
+                                Continue <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform md:block hidden" />
+                            </button>
+                        ) : (
+                            <button
+                                onClick={handleSubmit}
+                                disabled={loading || !hasAgreed}
+                                className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[160px]"
+                            >
+                                {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} className="md:block hidden" />}
+                                {loading ? 'Processing...' : 'Complete Booking'}
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
-        </div >
     );
 }
