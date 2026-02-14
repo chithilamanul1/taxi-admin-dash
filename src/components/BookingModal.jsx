@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSession, signIn } from 'next-auth/react';
-import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag } from 'lucide-react';
+import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -77,6 +77,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         time: initialData.time || '',
         name: initialData.name || '',
         phone: initialData.phone || '',
+        whatsapp: initialData.whatsapp || '',
         email: initialData.email || '',
         flightNumber: initialData.flightNumber || '',
         notes: initialData.notes || '',
