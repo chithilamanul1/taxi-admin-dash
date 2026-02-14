@@ -82,6 +82,7 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
         let markersAdded = 0;
 
         if (hasStart) {
+            console.log(`TripMap: Adding pickup marker at ${pickup.lat}, ${pickup.lon}`);
             const m = new window.google.maps.Marker({
                 position: { lat: parseFloat(pickup.lat), lng: parseFloat(pickup.lon) },
                 map,
@@ -95,12 +96,13 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
 
         (waypoints || []).forEach((wp, i) => {
             if (wp.lat != null && wp.lon != null) {
+                console.log(`TripMap: Adding waypoint marker at ${wp.lat}, ${wp.lon}`);
                 const m = new window.google.maps.Marker({
                     position: { lat: parseFloat(wp.lat), lng: parseFloat(wp.lon) },
                     map,
                     label: (i + 1).toString(),
                     title: `Stop ${i + 1}`,
-                    icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                    icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
                 });
                 markersRef.current.push(m);
                 bounds.extend(m.getPosition());
@@ -109,12 +111,13 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
         });
 
         if (hasEnd) {
+            console.log(`TripMap: Adding dropoff marker at ${dropoff.lat}, ${dropoff.lon}`);
             const m = new window.google.maps.Marker({
                 position: { lat: parseFloat(dropoff.lat), lng: parseFloat(dropoff.lon) },
                 map,
                 label: 'B',
                 title: 'Dropoff',
-                icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
             });
             markersRef.current.push(m);
             bounds.extend(m.getPosition());
