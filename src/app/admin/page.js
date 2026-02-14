@@ -87,13 +87,17 @@ export default function AdminDashboard() {
     const filteredBookings = useMemo(() => {
         if (!bookingSearch.trim()) return bookings
         const search = bookingSearch.toLowerCase()
-        return bookings.filter(b =>
-            b._id?.toLowerCase().includes(search) ||
-            b.customerName?.toLowerCase().includes(search) ||
-            b.guestPhone?.includes(search) ||
-            b.pickupLocation?.address?.toLowerCase().includes(search) ||
-            b.dropoffLocation?.address?.toLowerCase().includes(search)
-        )
+        return bookings.filter(b => {
+            const shortId = b._id?.slice(-6).toLowerCase();
+            return (
+                b._id?.toLowerCase().includes(search) ||
+                shortId?.includes(search) || // Enable search by last 6 chars
+                b.customerName?.toLowerCase().includes(search) ||
+                b.guestPhone?.includes(search) ||
+                b.pickupLocation?.address?.toLowerCase().includes(search) ||
+                b.dropoffLocation?.address?.toLowerCase().includes(search)
+            )
+        })
     }, [bookings, bookingSearch])
 
     const handleAddCoupon = async () => {
@@ -457,9 +461,9 @@ export default function AdminDashboard() {
                         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-600">
                             <Activity size={20} />
                         </button>
-                        <div>
-                            <h2 className="font-bold text-slate-800 capitalize">{currentView}</h2>
-                            <p className="text-xs text-slate-400">Manage your business</p>
+                        <div className="flex-1 min-w-0">
+                            <h2 className="font-bold text-slate-800 capitalize truncate">{currentView}</h2>
+                            <p className="text-[10px] text-slate-400 truncate">Manage your business</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">

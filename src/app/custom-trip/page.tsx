@@ -145,8 +145,8 @@ export default function CustomTripPage() {
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr,450px] gap-8">
 
                 {/* Left Column: Map & Itinerary Builder */}
-                <div className="space-y-6">
-                    <div className="bg-white rounded-[2rem] p-8 shadow-xl border-none">
+                <div className="space-y-4 md:space-y-6">
+                    <div className="bg-white rounded-[1.5rem] md:rounded-[2rem] p-5 md:p-8 shadow-xl border-none">
                         <div className="flex items-center justify-between mb-6 md:mb-8">
                             <div>
                                 <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-[#006064] leading-tight flex items-center gap-3">
@@ -208,9 +208,9 @@ export default function CustomTripPage() {
                                                         }
                                                     }}
                                                 />
-                                                {/* Validation Warning - Shifted down to avoid overlapping the Add Stop button */}
+                                                {/* Validation Warning - Relative positioning to avoid overlapping */}
                                                 {stop.address && (stop.lat === null || stop.lon === null) && (
-                                                    <div className="absolute top-full left-0 mt-3 text-[10px] sm:text-xs font-bold text-amber-600 flex items-center gap-1 z-10 bg-amber-50 px-2 py-1 rounded-lg">
+                                                    <div className="mt-2 text-[10px] sm:text-xs font-bold text-amber-600 flex items-center gap-1 bg-amber-50 px-2 py-1.5 rounded-lg border border-amber-200">
                                                         <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                                                         Please select a location from the list to calculate distance.
                                                     </div>
