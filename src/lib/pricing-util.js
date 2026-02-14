@@ -11,13 +11,12 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const distKm = Math.ceil(distanceKm);
     let baseTotal = 0;
 
-    // 1. Check for Popular Destination Fixed Rates (Airport Transfers ONLY)
     const isFromAirport = pickup?.toLowerCase().includes('airport');
     const isToAirport = dropoff?.toLowerCase().includes('airport');
 
+    let fixedPrice = 0;
     if (isFromAirport || isToAirport) {
         const destinationName = isFromAirport ? dropoff : pickup;
-        // Find matching destination in destinations.js
         const popDest = destinations.find(d =>
             destinationName.toLowerCase().includes(d.name.toLowerCase()) ||
             destinationName.toLowerCase().includes(d.id.toLowerCase())
@@ -35,48 +34,45 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
             };
             const priceUSD = popDest.pricing[vehicleMap[vehicleData.vehicleType]];
             if (priceUSD) {
-                // Return fixed rate in LKR using 320 fallback or context rate
-                // Note: Live rates are handled in the UI, but here we return a consistent LKR base.
                 const conversionRate = 320;
-                baseTotal = priceUSD * conversionRate;
-                console.log(`[Pricing] Popular destination match: ${popDest.name} - $${priceUSD} (LKR ${baseTotal})`);
-
-                // If the distance is significant, log it for verification
-                if (distKm > 100) {
-                    console.log(`[Pricing] Long distance trip to ${popDest.name} - ${distKm}km`);
-                }
-
-                return Math.round(baseTotal);
+                fixedPrice = Math.round(priceUSD * conversionRate);
+                console.log(`[Pricing] Popular destination match: ${popDest.name} - LKR ${fixedPrice}`);
             }
         }
     }
 
     const tiers = (vehicleData.tiers || []).sort((a, b) => a.min - b.min);
 
-    // 1. Try matching by tiers
+    // Calculate distance-based price
+    let distancePrice = 0;
     if (tiers.length > 0) {
         const matchingTier = tiers.find(t => distKm >= t.min && distKm <= (t.max || Infinity));
         if (matchingTier) {
             if (matchingTier.type === 'flat') {
-                baseTotal = matchingTier.price || matchingTier.rate || 0;
+                distancePrice = matchingTier.price || matchingTier.rate || 0;
             } else {
-                // matchingTier.type === 'per_km'
-                baseTotal = distKm * (matchingTier.rate || matchingTier.price || 0);
+                distancePrice = distKm * (matchingTier.rate || matchingTier.price || 0);
             }
         }
     }
 
-    // 2. Fallback to legacy basePrice/perKmRate if tiers didn't catch it or aren't defined
-    if (baseTotal === 0) {
+    if (distancePrice === 0) {
         const basePrice = vehicleData.basePrice || 0;
         const baseKm = vehicleData.baseKm || 0;
         const perKmRate = vehicleData.perKmRate || 0;
-
         if (distKm <= baseKm) {
-            baseTotal = basePrice;
+            distancePrice = basePrice;
         } else {
-            baseTotal = basePrice + ((distKm - baseKm) * perKmRate);
+            distancePrice = basePrice + ((distKm - baseKm) * perKmRate);
         }
+    }
+
+    // Final Comparison: Take fixedPrice ONLY if it is lower than distancePrice
+    if (fixedPrice > 0 && distancePrice > 0) {
+        baseTotal = Math.min(fixedPrice, distancePrice);
+        console.log(`[Pricing] Comparison: Fixed ${fixedPrice} vs Distance ${distancePrice}. Selected: ${baseTotal}`);
+    } else {
+        baseTotal = fixedPrice || distancePrice;
     }
 
     // 3. Round Trip Multiplier

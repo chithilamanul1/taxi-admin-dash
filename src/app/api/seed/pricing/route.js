@@ -171,13 +171,13 @@ export async function GET(req) {
         // 1. Airport Transfer
         await Pricing.deleteMany({ category: 'airport-transfer' });
         await Pricing.insertMany([
-            { ...vehicles.miniCar, category: 'airport-transfer' },
-            { ...vehicles.sedan, category: 'airport-transfer' },
+            { ...vehicles.miniCar, category: 'airport-transfer', tiers: miniCarTiers },
+            { ...vehicles.sedan, category: 'airport-transfer', tiers: sedanTiers },
             { ...vehicles.vezel, category: 'airport-transfer', tiers: vezelTiers },
-            { ...vehicles.miniVan4, category: 'airport-transfer' },
+            { ...vehicles.miniVan4, category: 'airport-transfer', tiers: miniVanSeat05Tiers },
             { ...vehicles.miniVanEvery, category: 'airport-transfer', tiers: miniVanEveryTiers },
             { ...vehicles.suv, category: 'airport-transfer' },
-            { ...vehicles.kdhVan, category: 'airport-transfer' },
+            { ...vehicles.kdhVan, category: 'airport-transfer', tiers: kdhVanTiers },
             { ...vehicles.bus, category: 'airport-transfer', tiers: miniBusTiers },
             { ...vehicles.coach, category: 'airport-transfer' }
         ]);
