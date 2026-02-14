@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Check, MessageCircle, MapPin, Clock, Calendar, ArrowLeft, Plus, Minus } from 'lucide-react'
-import TourBookingModal from '../../../components/TourBookingModal'
+import TourBookingModal from './TourBookingModal'
 
 export default function TourPackageDetailsClient({ tour }) {
     const [activeDay, setActiveDay] = useState(1)
