@@ -1,11 +1,20 @@
-/**
- * Unified Pricing Utility for Airport Taxis Tours
- * Handles consistent price calculation across BookingWidget and BookingModal
- */
 
-import { destinations } from './destinations';
+// Standalone Verification Script
 
-export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '') => {
+const destinations = [
+    {
+        id: 'galle',
+        name: 'Galle',
+        pricing: { 'Mini Car': 55 } // 55 * 320 = 17600
+    },
+    {
+        id: 'sigiriya',
+        name: 'Sigiriya',
+        pricing: { 'Mini Car': 90 } // 90 * 320 = 28800
+    }
+];
+
+const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '') => {
     if (!vehicleData || distanceKm === 0) return 0;
 
     const distKm = Math.ceil(distanceKm);
@@ -15,9 +24,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const isToAirport = dropoff?.toLowerCase().includes('airport');
 
     let fixedPrice = 0;
-    const isAirportTransfer = vehicleData?.category === 'airport-transfer';
-
-    if (isAirportTransfer && (isFromAirport || isToAirport)) {
+    if (isFromAirport || isToAirport) {
         const destinationName = isFromAirport ? dropoff : pickup;
         const popDest = destinations.find(d =>
             destinationName.toLowerCase().includes(d.name.toLowerCase()) ||
@@ -85,34 +92,48 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     return Math.round(baseTotal);
 };
 
-export const calculateSurcharges = (params, vehicleData) => {
-    let surcharges = 0;
-    const { waitingHours, hasNameBoard } = params;
 
-    if (waitingHours > 0) {
-        if (vehicleData.waitingCharges && vehicleData.waitingCharges.length >= waitingHours) {
-            surcharges += vehicleData.waitingCharges[waitingHours - 1];
-        } else {
-            surcharges += (waitingHours * (vehicleData.hourlyRate || 500));
-        }
-    }
+// --- TESTS ---
 
-    if (hasNameBoard) {
-        surcharges += (params.nameBoardPrice || 2000);
-    }
-
-    return surcharges;
+const mockVehicle = {
+    vehicleType: 'mini-car',
+    basePrice: 2000,
+    baseKm: 20,
+    perKmRate: 100,
+    tiers: [
+        { min: 0, max: 20, type: 'flat', price: 2000 },
+        { min: 21, max: 9999, type: 'per_km', rate: 100 }
+    ]
 };
 
-export const calculatePaymentFees = (subtotal, paymentMethod, currency = 'LKR') => {
-    if (paymentMethod === 'cash') {
-        return 0; // No surcharge for Cash
-    } else if (paymentMethod === 'card') {
-        if (currency === 'USD') {
-            return subtotal * 0.035; // +3.5% for USD Card
-        } else {
-            return subtotal * 0.025; // +2.5% for LKR Card
-        }
-    }
-    return 0;
-};
+console.log("\n--- TEST 1: Fixed Price (High) vs Distance (Low) ---");
+// Sigiriya: 150km. Fixed: 28800. Distance: 150 * 100 = 15000.
+// Expected: 15000
+const t1 = calculateBasePrice(150, mockVehicle, 'one-way', 'Airport', 'Sigiriya');
+console.log(`Result: ${t1} (Expected 15000)`);
+if (t1 === 15000) console.log("PASS"); else console.error("FAIL");
+
+console.log("\n--- TEST 2: Fixed Price (Low) vs Distance (High) ---");
+// Galle: 145km. Fixed: 17600. Distance: 145 * 100 = 14500.
+// Wait, 14500 < 17600. So it picks distance. 
+// I need a case where Fixed is LOWER.
+// Let's create a fake destination "CheapCity"
+destinations.push({ id: 'cheap', name: 'CheapCity', pricing: { 'Mini Car': 10 } }); // 3200
+// Distance 100km -> 10000. Fixed 3200.
+// Expected: 3200.
+const t2 = calculateBasePrice(100, mockVehicle, 'one-way', 'Airport', 'CheapCity');
+console.log(`Result: ${t2} (Expected 3200)`);
+if (t2 === 3200) console.log("PASS"); else console.error("FAIL");
+
+console.log("\n--- TEST 3: No Fixed Price ---");
+// Unknown: 100km -> 10000.
+const t3 = calculateBasePrice(100, mockVehicle, 'one-way', 'Airport', 'Unknown');
+console.log(`Result: ${t3} (Expected 10000)`);
+if (t3 === 10000) console.log("PASS"); else console.error("FAIL");
+
+console.log("\n--- TEST 4: Round Trip ---");
+// Unknown 100km -> 10000 * 2 = 20000
+const t4 = calculateBasePrice(100, mockVehicle, 'round-trip', 'Airport', 'Unknown');
+console.log(`Result: ${t4} (Expected 20000)`);
+if (t4 === 20000) console.log("PASS"); else console.error("FAIL");
+

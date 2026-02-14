@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import dbConnect from '../../../lib/db';
 import Pricing from '../../../models/Pricing';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(req) {
     try {
         await dbConnect();
@@ -21,7 +24,8 @@ export async function GET(req) {
             headers: {
                 'Cache-Control': 'no-store, max-age=0, must-revalidate',
                 'Pragma': 'no-cache',
-                'Expires': '0'
+                'Expires': '0',
+                'X-Accel-Buffering': 'no'
             }
         });
     } catch (error) {

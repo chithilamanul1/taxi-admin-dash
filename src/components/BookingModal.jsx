@@ -28,6 +28,22 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const [verifiedCoupons, setVerifiedCoupons] = useState(initialData.verifiedCoupons || (initialData.verifiedCoupon ? [initialData.verifiedCoupon] : []));
     const [couponInput, setCouponInput] = useState('');
     const [couponLoading, setCouponLoading] = useState(false);
+    const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true });
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await fetch('/api/admin/pricing-settings', { cache: 'no-store' });
+                const data = await res.json();
+                if (data.success && data.data) {
+                    setPricingSettings(data.data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch settings in modal", err);
+            }
+        };
+        fetchSettings();
+    }, []);
 
     // Body Scroll Lock
     useEffect(() => {
@@ -146,7 +162,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const vehicleData = pricing.find(p => p.vehicleType === formData.vehicle);
             if (!vehicleData || distance === 0) return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0, lkr: { total: 0, payNow: 0, balance: 0, surcharges: 0, subtotal: 0 }, originalLKR: 0 };
 
-            const distKm = Math.ceil(distance);
+            const distKm = Math.ceil(distance || 0);
             const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType, formData.pickup, formData.dropoff);
             const surcharges = calculateSurcharges({
                 waitingHours: formData.waitingHours,
@@ -180,13 +196,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 });
             }
 
-            // 2. Calculate Long Distance Discount (>175km = 10% off) - ONLY FOR AIRPORT PICKUPS
+            // 2. Calculate Long Distance Discount (Dynamic from Settings) - ONLY FOR AIRPORT PICKUPS
             let longDistanceDiscountAmount = 0;
-            if (distKm > 175 && isAirportPickup) {
-                longDistanceDiscountAmount = total * 0.10;
+            if (pricingSettings?.isActive && distKm > (pricingSettings?.longDistanceThreshold || 175) && isAirportPickup) {
+                longDistanceDiscountAmount = total * ((pricingSettings?.longDistanceDiscountPercentage || 10) / 100);
             }
 
-            // 3. Apply MAX Rule (User gets the higher discount, no stacking)
+            // 3. Apply MAX Rule (User gets the higher discount, no stacking) - Consistent with Widget
             const finalDiscount = Math.max(couponDiscountAmount, longDistanceDiscountAmount);
             total = Math.max(0, total - finalDiscount);
 
