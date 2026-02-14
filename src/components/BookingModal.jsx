@@ -494,7 +494,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
 
     return (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-emerald-900/95 p-0 sm:p-4 overflow-hidden touch-none overscroll-none select-none">
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#064e3b]/95 p-0 sm:p-4 overflow-hidden touch-none overscroll-none">
             {/* Prevent Body Scroll Shadow Overlay */}
             <div className="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
 
@@ -507,7 +507,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             `}</style>
 
             {/* Modal Container */}
-            <div id="modal-container" className="bg-white w-full h-[100dvh] sm:h-auto sm:max-h-[90vh] sm:rounded-[2rem] sm:border sm:border-emerald-900/10 shadow-2xl sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative max-w-full overflow-y-auto">
+            <div id="modal-container" className="bg-white w-full h-full sm:h-auto sm:max-h-[95vh] sm:rounded-[2rem] sm:border sm:border-emerald-900/10 shadow-2xl sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative">
                 {/* Coupon Verification Notification - Moved to Bottom */}
                 <AnimatePresence>
                     {couponLoading && (
@@ -546,7 +546,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 </div>
 
                 {/* Main Viewport */}
-                <div className="flex-1 overflow-y-auto p-5 md:p-8 custom-scrollbar">
+                <div ref={modalContentRef} className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 custom-scrollbar overscroll-contain">
                     {step === 1 && (
                         <div className="space-y-6 md:space-y-8 animate-slide-up">
                             {/* Trip Header */}
@@ -969,27 +969,39 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             </div>
                                         </div>
                                         <div className="p-4 sm:p-5 md:p-6 bg-[#FFC107] rounded-3xl border border-amber-600/20 space-y-3 md:space-y-4 shadow-lg w-full">
-                                            <div className="flex justify-between items-center w-full">
-                                                <span className="text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-widest">Subtotal</span>
-                                                <span className="text-sm md:text-base font-bold text-emerald-900 text-right">{currentSymbol} {subtotal.toLocaleString()}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center w-full">
-                                                <span className="text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-widest">Extra Services</span>
-                                                <span className="text-sm md:text-base font-bold text-emerald-900 text-right">{currentSymbol} {(subtotal + surcharges - subtotal).toLocaleString()}</span>
-                                            </div>
-
-                                            {/* Applied Coupons Summary - Styled Row */}
-                                            {detailedBreakdown.discounts > 0 && (
-                                                <div className="flex justify-between items-center w-full py-2 border-t border-b border-amber-600/10 my-2">
-                                                    <div className="flex items-center gap-2 text-amber-900">
-                                                        <Tag size={14} className="fill-amber-900/20" />
-                                                        <span className="text-[10px] md:text-xs font-black uppercase tracking-widest">Discount Applied</span>
-                                                    </div>
-                                                    <span className="text-sm md:text-base font-black text-amber-900 text-right">
-                                                        - {currentSymbol} {detailedBreakdown.discounts.toLocaleString()}
-                                                    </span>
+                                            {/* Consolidated Price Breakdown for Mobile & Desktop */}
+                                            <div className="space-y-2 md:space-y-3">
+                                                <div className="flex justify-between items-center w-full">
+                                                    <span className="text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-widest">Base Rate</span>
+                                                    <span className="text-sm md:text-base font-bold text-emerald-900 text-right">{currentSymbol} {subtotal.toLocaleString()}</span>
                                                 </div>
-                                            )}
+
+                                                {detailedBreakdown.detailedExtras?.filter(s => s.value > 0).map((s, idx) => (
+                                                    <div key={idx} className="flex justify-between items-center w-full text-emerald-900/60 transition-all">
+                                                        <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest">{s.label}</span>
+                                                        <span className="text-sm md:text-base font-bold text-right">+{currentSymbol} {s.value.toLocaleString()}</span>
+                                                    </div>
+                                                ))}
+
+                                                {detailedBreakdown.paymentFee > 0 && (
+                                                    <div className="flex justify-between items-center w-full text-emerald-900/60">
+                                                        <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest">Payment Fee</span>
+                                                        <span className="text-sm md:text-base font-bold text-right">+{currentSymbol} {detailedBreakdown.paymentFee.toLocaleString()}</span>
+                                                    </div>
+                                                )}
+
+                                                {detailedBreakdown.discounts > 0 && (
+                                                    <div className="flex justify-between items-center w-full py-2 border-t border-emerald-900/10 mt-2 text-amber-900">
+                                                        <div className="flex items-center gap-2">
+                                                            <Tag size={12} className="fill-amber-900/20" />
+                                                            <span className="text-[10px] md:text-xs font-black uppercase tracking-widest">Discount Applied</span>
+                                                        </div>
+                                                        <span className="text-sm md:text-base font-black text-right">
+                                                            - {currentSymbol} {detailedBreakdown.discounts.toLocaleString()}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
 
                                             {/* Applied Coupons Summary */}
                                             {/* This section is removed as the discount is now consolidated in detailedBreakdown.discounts */}
@@ -1002,216 +1014,189 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 </div>
                                             ))} */}
 
-                                            <div className="pt-3 md:pt-4 border-t border-emerald-900/10 space-y-2 w-full">
+                                            {/* Final Totals moved directly into the main card logic */}
+
+                                            <div className="pt-2 mt-2 border-t border-emerald-900/10">
                                                 <div className="flex flex-row flex-wrap justify-between items-center w-full gap-2">
-                                                    <span className="text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-widest shrink-0">Subtotal</span>
-                                                    <span className="text-sm md:text-base font-bold text-emerald-900/60 text-right truncate">
-                                                        {currentSymbol} {subtotal.toLocaleString()}
+                                                    <span className="text-[10px] sm:text-xs md:text-sm font-black text-emerald-900 uppercase tracking-widest leading-tight">
+                                                        {formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Payable'}
+                                                    </span>
+                                                    <span className="text-lg sm:text-2xl md:text-3xl font-black text-emerald-900 text-right leading-none shrink-0 bg-white/90 px-3 py-1 rounded-xl shadow-md border border-emerald-900/5">
+                                                        {currentSymbol} {payNow.toLocaleString()}
                                                     </span>
                                                 </div>
+                                            </div>
 
-                                                {/* Break down Extras */}
-                                                {detailedBreakdown.detailedExtras?.map((s, idx) => (
-                                                    <div key={idx} className={`flex justify-between items-center w-full gap-2 ${s.isFee ? 'text-amber-700 font-black' : 'text-emerald-900/40'}`}>
-                                                        <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-tight shrink-0">{s.label}</span>
-                                                        <span className="text-[11px] md:text-sm font-bold text-right truncate">+{currentSymbol} {s.value.toLocaleString()}</span>
-                                                    </div>
-                                                ))}
-
-                                                {/* Applied Coupons Summary (In Step 3) */}
-                                                {(detailedBreakdown.discounts > 0 || verifiedCoupons.length > 0) && (
-                                                    <div className="flex justify-between items-center w-full gap-2 text-emerald-700 bg-white/50 p-2 rounded-lg">
-                                                        <div className="flex items-center gap-1.5 min-w-0">
-                                                            <Tag size={12} className="shrink-0" />
-                                                            <span className="text-[10px] md:text-[11px] font-black uppercase tracking-tight truncate">
-                                                                {verifiedCoupons.length > 0 ? `Coupon: ${verifiedCoupons.map(c => c.code).join(', ')}` : 'Discount Applied'}
-                                                            </span>
-                                                        </div>
-                                                        <span className="text-[11px] md:text-sm font-black text-right shrink-0">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
-                                                    </div>
-                                                )}
-
-                                                <div className="pt-2 mt-2 border-t border-emerald-900/10">
-                                                    <div className="flex flex-row flex-wrap justify-between items-center w-full gap-2">
-                                                        <span className="text-[10px] sm:text-xs md:text-sm font-black text-emerald-900 uppercase tracking-widest leading-tight">
-                                                            {formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Payable'}
-                                                        </span>
-                                                        <span className="text-lg sm:text-2xl md:text-3xl font-black text-emerald-900 text-right leading-none shrink-0 bg-white/90 px-3 py-1 rounded-xl shadow-md border border-emerald-900/5">
-                                                            {currentSymbol} {payNow.toLocaleString()}
-                                                        </span>
-                                                    </div>
+                                            {formData.paymentType === 'partial' && (
+                                                <div className="flex justify-between items-end pt-2 border-t border-dashed border-emerald-900/20 gap-2">
+                                                    <span className="font-bold text-red-600 uppercase text-[10px] md:text-xs tracking-wider md:tracking-[0.2em]">Balance Due</span>
+                                                    <span className="text-base md:text-lg font-bold text-red-600 ml-auto text-right">{currentSymbol} {balanceAmount.toLocaleString()}</span>
                                                 </div>
-
-                                                {formData.paymentType === 'partial' && (
-                                                    <div className="flex justify-between items-end pt-2 border-t border-dashed border-emerald-900/20 gap-2">
-                                                        <span className="font-bold text-red-600 uppercase text-[10px] md:text-xs tracking-wider md:tracking-[0.2em]">Balance Due</span>
-                                                        <span className="text-base md:text-lg font-bold text-red-600 ml-auto text-right">{currentSymbol} {balanceAmount.toLocaleString()}</span>
-                                                    </div>
-                                                )}
-                                            </div>
+                                            )}
                                         </div>
                                     </div>
-                                </div>
-                                <div className="space-y-6">
-                                    <div className="space-y-2">
-                                        <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Discount Coupon</label>
-                                        <div className="flex gap-2 relative">
-                                            <input
-                                                value={couponInput}
-                                                onChange={e => setCouponInput(e.target.value.toUpperCase())}
-                                                placeholder="ENTER CODE"
-                                                className="flex-1 h-14 bg-white border-2 border-amber-300 px-4 rounded-xl outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-200 transition-all font-black text-lg text-emerald-900 uppercase placeholder:normal-case shadow-sm"
-                                            />
-                                            <button
-                                                onClick={handleApplyCoupon}
-                                                disabled={couponLoading || !couponInput}
-                                                className={`px-6 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center min-w-[100px] shadow-lg ${couponInput ? 'bg-emerald-900 text-white hover:scale-105' : 'bg-slate-200 text-slate-400'}`}
-                                            >
-                                                {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'APPLY'}
-                                            </button>
-                                        </div>
-                                        {verifiedCoupons.length > 0 && (
-                                            <div className="flex flex-col gap-2 animate-fade-in mt-2">
-                                                {verifiedCoupons.map((c, i) => (
-                                                    <div key={i} className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-200 text-xs font-bold pl-2">
-                                                        <Check size={14} className="bg-emerald-500 text-white rounded-full p-0.5" />
-                                                        <span>Coupon: <span className="uppercase">{c.code}</span></span>
-                                                        <span className="text-emerald-900/60 font-medium ml-auto">
-                                                            (-{c.discountType === 'percentage' ? `${c.value}%` : `Rs ${c.value}`})
-                                                        </span>
-                                                        <button
-                                                            onClick={() => setVerifiedCoupons(prev => prev.filter(vc => vc.code !== c.code))}
-                                                            className="ml-2 text-red-500 hover:bg-red-50 rounded-full p-1"
-                                                        >
-                                                            <X size={12} />
-                                                        </button>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Payment Method</label>
-                                    <div className="grid grid-cols-1 gap-4">
-                                        {[
-                                            { id: 'cash', label: 'Cash Payment', icon: '💵', desc: 'Pay directly to chauffeur' },
-                                            { id: 'card', label: 'Online Payment', icon: '💳', desc: 'Secure digital transaction' },
-                                        ].map(m => (
-                                            <div key={m.id}>
-                                                <button onClick={() => setFormData({ ...formData, paymentMethod: m.id })} className={`w-full p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left ${formData.paymentMethod === m.id ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}>
-                                                    <span className="text-3xl md:text-4xl">{m.icon}</span>
-                                                    <div>
-                                                        <p className="font-bold text-emerald-900 text-sm tracking-tight">{m.label}</p>
-                                                        <p className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">{m.desc}</p>
-                                                    </div>
-                                                </button>
-
-                                                {/* Payment Options (Full vs 50%) for Card */}
-                                                {formData.paymentMethod === 'card' && m.id === 'card' && (
-                                                    <div className="mt-3 ml-4 pl-4 border-l-2 border-emerald-900/10 space-y-3 animate-slide-up">
-                                                        <button
-                                                            onClick={() => setFormData({ ...formData, paymentType: 'full' })}
-                                                            className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'full' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
-                                                        >
-                                                            <div className="flex items-center gap-3">
-                                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'full' ? 'border-white' : 'border-slate-400'}`}>
-                                                                    {formData.paymentType === 'full' && <div className="w-2 h-2 rounded-full bg-white"></div>}
-                                                                </div>
-                                                                <span className="text-xs font-bold uppercase tracking-wide">Pay Full Amount</span>
-                                                            </div>
-                                                            <span className="text-xs font-bold text-emerald-400">100%</span>
-                                                        </button>
-
-                                                        <button
-                                                            onClick={() => setFormData({ ...formData, paymentType: 'partial' })}
-                                                            className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'partial' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
-                                                        >
-                                                            <div className="flex items-center gap-3">
-                                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'partial' ? 'border-white' : 'border-slate-400'}`}>
-                                                                    {formData.paymentType === 'partial' && <div className="w-2 h-2 rounded-full bg-white"></div>}
-                                                                </div>
-                                                                <div className="text-left">
-                                                                    <span className="text-xs font-bold uppercase tracking-wide block">Pay Advance Only</span>
-                                                                    <span className="text-[10px] opacity-60">Pay balance to driver</span>
-                                                                </div>
-                                                            </div>
-                                                            <span className="text-xs font-bold text-amber-400">50%</span>
-                                                        </button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Extra Services</label>
-                                    <div className="p-4 rounded-2xl border transition-all flex items-center justify-between bg-amber-500/5 border-amber-500/20">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${formData.hasNameBoard ? 'bg-amber-500/10 text-amber-500' : 'bg-white/5 text-white/40'}`}>
-                                                <Signpost size={16} />
-                                            </div>
-                                            <div>
-                                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 block leading-tight">Board</span>
-                                                <span className="text-[11px] font-bold text-white uppercase">{formData.hasNameBoard ? 'Confirmed' : 'Not Requested'}</span>
-                                            </div>
-                                        </div>
-                                        <button
-                                            onClick={() => setFormData(prev => ({ ...prev, hasNameBoard: !prev.hasNameBoard }))}
-                                            className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${formData.hasNameBoard ? 'bg-amber-500 text-black' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}
-                                        >
-                                            {formData.hasNameBoard ? 'Remove' : 'Add'}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* Terms & Conditions Agreement (Mandatory for IPG Live) */}
-                                <div className="mt-8 p-6 bg-emerald-50 rounded-[2rem] border border-emerald-900/10 flex items-start gap-4">
-                                    <div className="relative">
-                                        <input
-                                            type="checkbox"
-                                            id="terms-agreement"
-                                            checked={hasAgreed}
-                                            onChange={(e) => setHasAgreed(e.target.checked)}
-                                            className="w-6 h-6 border-2 border-emerald-900/20 rounded-lg accent-emerald-900 cursor-pointer"
-                                        />
-                                    </div>
-                                    <label htmlFor="terms-agreement" className="text-xs font-bold text-emerald-900 leading-relaxed cursor-pointer select-none">
-                                        I have read and agree to the <Link href="/terms" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Terms of Service</Link> and <Link href="/refund-policy" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Refund Policy</Link>. I understand that I am making a secure payment to Airport Taxis Pvt (Ltd).
-                                    </label>
                                 </div>
                             </div>
+                            <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Discount Coupon</label>
+                                    <div className="flex gap-2 relative">
+                                        <input
+                                            value={couponInput}
+                                            onChange={e => setCouponInput(e.target.value.toUpperCase())}
+                                            placeholder="ENTER CODE"
+                                            className="flex-1 h-14 bg-white border-2 border-amber-300 px-4 rounded-xl outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-200 transition-all font-black text-lg text-emerald-900 uppercase placeholder:normal-case shadow-sm"
+                                        />
+                                        <button
+                                            onClick={handleApplyCoupon}
+                                            disabled={couponLoading || !couponInput}
+                                            className={`px-6 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center min-w-[100px] shadow-lg ${couponInput ? 'bg-emerald-900 text-white hover:scale-105' : 'bg-slate-200 text-slate-400'}`}
+                                        >
+                                            {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'APPLY'}
+                                        </button>
+                                    </div>
+                                    {verifiedCoupons.length > 0 && (
+                                        <div className="flex flex-col gap-2 animate-fade-in mt-2">
+                                            {verifiedCoupons.map((c, i) => (
+                                                <div key={i} className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-200 text-xs font-bold pl-2">
+                                                    <Check size={14} className="bg-emerald-500 text-white rounded-full p-0.5" />
+                                                    <span>Coupon: <span className="uppercase">{c.code}</span></span>
+                                                    <span className="text-emerald-900/60 font-medium ml-auto">
+                                                        (-{c.discountType === 'percentage' ? `${c.value}%` : `Rs ${c.value}`})
+                                                    </span>
+                                                    <button
+                                                        onClick={() => setVerifiedCoupons(prev => prev.filter(vc => vc.code !== c.code))}
+                                                        className="ml-2 text-red-500 hover:bg-red-50 rounded-full p-1"
+                                                    >
+                                                        <X size={12} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                                <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Payment Method</label>
+                                <div className="grid grid-cols-1 gap-4">
+                                    {[
+                                        { id: 'cash', label: 'Cash Payment', icon: '💵', desc: 'Pay directly to chauffeur' },
+                                        { id: 'card', label: 'Online Payment', icon: '💳', desc: 'Secure digital transaction' },
+                                    ].map(m => (
+                                        <div key={m.id}>
+                                            <button onClick={() => setFormData({ ...formData, paymentMethod: m.id })} className={`w-full p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left ${formData.paymentMethod === m.id ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}>
+                                                <span className="text-3xl md:text-4xl">{m.icon}</span>
+                                                <div>
+                                                    <p className="font-bold text-emerald-900 text-sm tracking-tight">{m.label}</p>
+                                                    <p className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">{m.desc}</p>
+                                                </div>
+                                            </button>
+
+                                            {/* Payment Options (Full vs 50%) for Card */}
+                                            {formData.paymentMethod === 'card' && m.id === 'card' && (
+                                                <div className="mt-3 ml-4 pl-4 border-l-2 border-emerald-900/10 space-y-3 animate-slide-up">
+                                                    <button
+                                                        onClick={() => setFormData({ ...formData, paymentType: 'full' })}
+                                                        className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'full' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
+                                                    >
+                                                        <div className="flex items-center gap-3">
+                                                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'full' ? 'border-white' : 'border-slate-400'}`}>
+                                                                {formData.paymentType === 'full' && <div className="w-2 h-2 rounded-full bg-white"></div>}
+                                                            </div>
+                                                            <span className="text-xs font-bold uppercase tracking-wide">Pay Full Amount</span>
+                                                        </div>
+                                                        <span className="text-xs font-bold text-emerald-400">100%</span>
+                                                    </button>
+
+                                                    <button
+                                                        onClick={() => setFormData({ ...formData, paymentType: 'partial' })}
+                                                        className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'partial' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
+                                                    >
+                                                        <div className="flex items-center gap-3">
+                                                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'partial' ? 'border-white' : 'border-slate-400'}`}>
+                                                                {formData.paymentType === 'partial' && <div className="w-2 h-2 rounded-full bg-white"></div>}
+                                                            </div>
+                                                            <div className="text-left">
+                                                                <span className="text-xs font-bold uppercase tracking-wide block">Pay Advance Only</span>
+                                                                <span className="text-[10px] opacity-60">Pay balance to driver</span>
+                                                            </div>
+                                                        </div>
+                                                        <span className="text-xs font-bold text-amber-400">50%</span>
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                                <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Extra Services</label>
+                                <div className="p-4 rounded-2xl border transition-all flex items-center justify-between bg-amber-500/5 border-amber-500/20">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${formData.hasNameBoard ? 'bg-amber-500/10 text-amber-500' : 'bg-white/5 text-white/40'}`}>
+                                            <Signpost size={16} />
+                                        </div>
+                                        <div>
+                                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 block leading-tight">Board</span>
+                                            <span className="text-[11px] font-bold text-white uppercase">{formData.hasNameBoard ? 'Confirmed' : 'Not Requested'}</span>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => setFormData(prev => ({ ...prev, hasNameBoard: !prev.hasNameBoard }))}
+                                        className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${formData.hasNameBoard ? 'bg-amber-500 text-black' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}
+                                    >
+                                        {formData.hasNameBoard ? 'Remove' : 'Add'}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Terms & Conditions Agreement (Mandatory for IPG Live) */}
+                            <div className="mt-8 p-6 bg-emerald-50 rounded-[2rem] border border-emerald-900/10 flex items-start gap-4">
+                                <div className="relative">
+                                    <input
+                                        type="checkbox"
+                                        id="terms-agreement"
+                                        checked={hasAgreed}
+                                        onChange={(e) => setHasAgreed(e.target.checked)}
+                                        className="w-6 h-6 border-2 border-emerald-900/20 rounded-lg accent-emerald-900 cursor-pointer"
+                                    />
+                                </div>
+                                <label htmlFor="terms-agreement" className="text-xs font-bold text-emerald-900 leading-relaxed cursor-pointer select-none">
+                                    I have read and agree to the <Link href="/terms" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Terms of Service</Link> and <Link href="/refund-policy" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Refund Policy</Link>. I understand that I am making a secure payment to Airport Taxis Pvt (Ltd).
+                                </label>
+                            </div>
+                        </div>
                         </div>
                     )}
-                </div>
+            </div>
 
-                {/* Footer Controls */}
-                <div className="p-4 md:p-8 pt-3 md:pt-4 border-t border-emerald-900/10 bg-emerald-50/50 shrink-0">
-                    <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-3 md:gap-4">
+            {/* Footer Controls - Pinned to bottom */}
+            <div className="p-4 md:p-8 pt-3 md:pt-4 border-t border-emerald-900/10 bg-white/80 backdrop-blur-sm shrink-0">
+                <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-3 md:gap-4">
+                    <button
+                        onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
+                        className="flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-emerald-50 transition-all text-emerald-900 border border-emerald-900/10 shadow-sm w-full md:w-auto min-w-[120px]"
+                    >
+                        <ChevronLeft size={16} className="md:block hidden" /> {step === 1 ? 'Cancel' : 'Back'}
+                    </button>
+
+                    {step < 3 ? (
                         <button
-                            onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                            className="flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-white rounded-xl md:rounded-2xl text-xs md:text-sm font-bold uppercase tracking-widest hover:bg-emerald-50 transition-all text-emerald-900 border border-emerald-900/10 shadow-sm w-full md:w-auto min-w-[120px]"
+                            onClick={() => setStep(step + 1)}
+                            disabled={(step === 1 && (!formData.pickup || !formData.dropoff || isOverCapacity)) || (step === 2 && (!formData.name || !formData.phone))}
+                            className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[140px]"
                         >
-                            <ChevronLeft size={16} className="md:block hidden" /> {step === 1 ? 'Cancel' : 'Back'}
+                            Continue <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform md:block hidden" />
                         </button>
-
-                        {step < 3 ? (
-                            <button
-                                onClick={() => setStep(step + 1)}
-                                disabled={(step === 1 && (!formData.pickup || !formData.dropoff || isOverCapacity)) || (step === 2 && (!formData.name || !formData.phone))}
-                                className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[140px]"
-                            >
-                                Continue <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform md:block hidden" />
-                            </button>
-                        ) : (
-                            <button
-                                onClick={handleSubmit}
-                                disabled={loading || !hasAgreed}
-                                className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[160px]"
-                            >
-                                {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} className="md:block hidden" />}
-                                {loading ? 'Processing...' : 'Complete Booking'}
-                            </button>
-                        )}
-                    </div>
+                    ) : (
+                        <button
+                            onClick={handleSubmit}
+                            disabled={loading || !hasAgreed}
+                            className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[160px]"
+                        >
+                            {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} className="md:block hidden" />}
+                            {loading ? 'Processing...' : 'Complete Booking'}
+                        </button>
+                    )}
                 </div>
             </div>
+        </div>
         </div >
     );
 }
