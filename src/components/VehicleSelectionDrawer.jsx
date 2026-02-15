@@ -77,12 +77,12 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                     }}
                                     className={`
                                         flex items-center gap-4 p-3 md:p-4 rounded-2xl border-2 transition-all relative overflow-hidden
-                                        ${isSelected ? 'border-emerald-600 bg-white dark:bg-slate-800 ring-2 ring-emerald-600/10 shadow-lg' : 'border-slate-50 dark:border-white/5 bg-white dark:bg-white/5 shadow-sm'}
-                                        ${!suitable ? 'opacity-60 grayscale-[0.8]' : 'active:scale-95 cursor-pointer hover:border-emerald-600/50'}
+                                        ${isSelected ? 'border-emerald-600 bg-white dark:bg-slate-800 ring-4 ring-emerald-600/20 shadow-xl' : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-white/5 shadow-sm'}
+                                        ${!suitable ? 'opacity-60 grayscale-[0.8]' : 'active:scale-95 cursor-pointer hover:border-emerald-600'}
                                     `}
                                 >
                                     {/* AC Badge */}
-                                    <div className="absolute top-2 left-2 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 px-2 py-1 rounded-lg text-[8px] font-black z-10 uppercase tracking-tighter">
+                                    <div className="absolute top-2 left-2 flex items-center gap-1 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 px-2 py-1 rounded-lg text-[8px] font-black z-10 uppercase tracking-tighter border border-emerald-200 dark:border-emerald-800">
                                         <Wind size={8} className="animate-pulse" /> 100% A/C
                                     </div>
 

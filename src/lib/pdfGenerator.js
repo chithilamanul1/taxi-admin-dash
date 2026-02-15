@@ -71,6 +71,11 @@ export const generateBookingPDF = (booking) => {
     doc.text(`Phone: ${booking.guestPhone || 'N/A'}`, 15, 75);
     doc.text(`Email: ${booking.customerEmail || 'N/A'}`, 15, 80);
 
+    if (booking.billingDetails?.billingAddress) {
+        const addr = `${booking.billingDetails.billingAddress}, ${booking.billingDetails.city || ''}, ${booking.billingDetails.country || ''}`;
+        doc.text(`Address: ${addr}`, 15, 85, { maxWidth: 100 });
+    }
+
     // -- Trip Status Badge --
     const badgeX = 140;
     const badgeY = 62;
@@ -96,7 +101,14 @@ export const generateBookingPDF = (booking) => {
             ['Date / Time', `${booking.scheduledDate} at ${booking.scheduledTime}`],
         ],
         theme: 'grid',
-        styles: { fontSize: 9, cellPadding: 4, font: 'helvetica' },
+        styles: {
+            fontSize: 9,
+            cellPadding: 4,
+            font: 'helvetica',
+            lineWidth: 0.2,
+            lineColor: [0, 0, 0], // Darker lines
+            textColor: [0, 0, 0]  // Darker text
+        },
         headStyles: { fillColor: COLORS.emerald, textColor: 255, fontStyle: 'bold' },
         columnStyles: { 0: { fontStyle: 'bold', cellWidth: 40, fillColor: [248, 250, 252] } },
     });
@@ -177,19 +189,25 @@ export const generateBookingPDF = (booking) => {
 
     // -- Terms and Branding --
     doc.setFontSize(9);
-    doc.setTextColor(...COLORS.slate);
+    doc.setTextColor(...COLORS.black); // Darker heading
     doc.setFont(undefined, 'bold');
-    doc.text("Important Information:", 15, currentY + 40);
+
+    // Position Important Info relative to bottom to avoid overlap
+    const infoY = 245;
+    doc.text("Important Information:", 15, infoY);
+
     doc.setFont(undefined, 'normal');
     doc.setFontSize(8);
     const terms = [
         "1. This is a legally valid computer-generated " + (isCash ? "receipt" : "invoice") + ".",
         "2. Highway ticket is not included. It must be paid at the counter.",
         "3. Rates are inclusive of fuel and driver fees unless stated otherwise.",
-        "3. Waiting charges: Rs. 500 per hour (First 30 minutes free for Airport pickups).",
-        "4. Contact us immediately for any changes to your travel schedule."
+        "4. Waiting charges: Rs. 500 per hour (First 30 minutes free for Airport pickups).",
+        "5. If paying by Cash or 50% Advance, the remaining balance must be paid in LKR to the driver.",
+        "6. The balance amount shown is calculated and must be settled in Sri Lankan Rupees (LKR).",
+        "7. Contact us immediately for any changes to your travel schedule."
     ];
-    terms.forEach((line, i) => doc.text(line, 15, currentY + 46 + (i * 5)));
+    terms.forEach((line, i) => doc.text(line, 15, infoY + 6 + (i * 5)));
 
     // -- Footer --
     doc.setFillColor(...COLORS.emerald);

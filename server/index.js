@@ -25,9 +25,13 @@ if (!admin.apps.length) {
     });
 }
 
-// Start Discord Bot
+// Start Discord Support Bot
 const supportBot = require('./services/discordBot');
-supportBot.start().catch(err => console.error('Bot Start Error:', err));
+supportBot.start().catch(err => console.error('Discord Bot Error:', err));
+
+// Start WhatsApp Bot
+const whatsappBot = require('./services/whatsappBot');
+whatsappBot.start().catch(err => console.error('WhatsApp Bot Error:', err));
 
 // Middleware
 app.use(cors());
