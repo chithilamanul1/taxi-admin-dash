@@ -782,21 +782,24 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 key={c.code}
                                                 type="button"
                                                 onClick={() => changeCurrency(c.code)}
-                                                className={`p-3 rounded-2xl border-2 transition-all flex flex-col gap-1 text-left cursor-pointer group/card ${currency === c.code
-                                                    ? 'bg-amber-500/10 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
-                                                    : 'bg-white/5 border-white/5 hover:border-white/20 hover:bg-white/10'
+                                                className={`p-3 rounded-2xl border-2 transition-all flex flex-col gap-1 text-left cursor-pointer group/card relative overflow-hidden ${currency === c.code
+                                                    ? 'bg-amber-500 border-amber-600 shadow-xl scale-[1.02]'
+                                                    : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
                                                     }`}
                                             >
-                                                <div className="flex items-center justify-between">
-                                                    <span className="text-[10px] font-black text-white/40 uppercase tracking-widest flex items-center gap-1.5">
+                                                <div className="flex items-center justify-between relative z-10">
+                                                    <span className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 ${currency === c.code ? 'text-amber-900' : 'text-white/40'}`}>
                                                         <span className="text-xs">{c.flag}</span> {c.code}
                                                     </span>
-                                                    {currency === c.code && <div className="w-1.5 h-1.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgb(245,158,11)]"></div>}
+                                                    {currency === c.code && (
+                                                        <span className="text-[8px] font-black bg-amber-900/20 text-amber-900 px-1.5 py-0.5 rounded-full uppercase tracking-tighter">Selected</span>
+                                                    )}
                                                 </div>
-                                                <div className={`text-sm md:text-base font-black ${currency === c.code ? 'text-amber-500' : 'text-white'}`}>
-                                                    <span className="text-[10px] font-bold mr-1 opacity-60">{c.symbol}</span>
+                                                <div className={`text-base md:text-lg font-black relative z-10 ${currency === c.code ? 'text-white' : 'text-slate-200'}`}>
+                                                    <span className={`text-[10px] font-bold mr-1 ${currency === c.code ? 'text-white/70' : 'opacity-40'}`}>{c.symbol}</span>
                                                     {c.value.toLocaleString()}
                                                 </div>
+                                                {currency === c.code && <div className="absolute top-0 right-0 w-16 h-16 bg-white/20 rounded-full blur-2xl -mr-8 -mt-8"></div>}
                                             </button>
                                         ))}
                                     </div>

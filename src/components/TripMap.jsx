@@ -142,6 +142,8 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
                     stopover: true
                 }));
 
+            console.log("TripMap: Calculating route...", { origin, destination, waypointsCount: waypointsList.length });
+
             directionsService.route(
                 {
                     origin,
@@ -150,24 +152,33 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
                     travelMode: window.google.maps.TravelMode.DRIVING,
                 },
                 (result, status) => {
+                    console.log("TripMap: Route status:", status);
                     if (status === window.google.maps.DirectionsStatus.OK) {
+                        console.log("TripMap: Route found successfully");
                         directionsRenderer.setDirections(result);
+
                         const route = result.routes[0];
-                        if (route && route.legs) {
-                            let totalDistanceMeters = 0;
-                            let totalDurationSeconds = 0;
-                            route.legs.forEach(leg => {
-                                totalDistanceMeters += leg.distance.value;
-                                totalDurationSeconds += leg.duration.value;
-                            });
-                            const distKm = totalDistanceMeters / 1000;
-                            const durMin = Math.round(totalDurationSeconds / 60);
-                            if (onRouteCalculated) onRouteCalculated({ distanceKm: distKm, durationMin: durMin });
-                        }
+                        let totalDistance = 0;
+                        let totalDuration = 0;
+
+                        route.legs.forEach(leg => {
+                            totalDistance += leg.distance.value;
+                            totalDuration += leg.duration.value;
+                        });
+
+                        onRouteCalculated({
+                            distanceKm: totalDistance / 1000,
+                            durationMin: Math.ceil(totalDuration / 60)
+                        });
                     } else {
-                        console.warn(`TripMap: Directions request failed: ${status}`);
+                        console.error("TripMap: Route calculation failed with status:", status);
                         setError(`Route Error: ${status}`);
-                        if (onRouteCalculated) onRouteCalculated({ distanceKm: 0, durationMin: 0 });
+                        // Provide basic stats based on markers if route fails
+                        onRouteCalculated({
+                            distanceKm: 0,
+                            durationMin: 0,
+                            error: status
+                        });
                     }
                 }
             );

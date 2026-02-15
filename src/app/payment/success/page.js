@@ -71,8 +71,26 @@ function PaymentSuccessContent() {
                         <div>
                             <p className="text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">Important Notice</p>
                             <p className="text-[11px] text-emerald-800 leading-relaxed font-medium">
-                                Highway tolls must be paid by the customer during the journey.
+                                Highway ticket is not included in this price. It means the customer must pay it at the counter.
                             </p>
+                        </div>
+                    </div>
+                )}
+
+                {!isCash && booking?.displayBalanceAmount > 0 && (
+                    <div className="mb-6 p-4 bg-red-50 rounded-xl border border-red-200 flex items-start gap-3 text-left animate-pulse-subtle">
+                        <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center shrink-0">
+                            <span className="text-red-600 font-black">!</span>
+                        </div>
+                        <div>
+                            <p className="text-xs font-bold text-red-900 uppercase tracking-wider mb-1">Balance Due to Driver</p>
+                            <p className="text-lg font-black text-red-600 leading-none">
+                                {booking.currency === 'GBP' ? '£' :
+                                    booking.currency === 'USD' ? '$' :
+                                        booking.currency === 'EUR' ? '€' :
+                                            booking.currency === 'INR' ? '₹' : 'Rs'} {booking.displayBalanceAmount.toLocaleString()}
+                            </p>
+                            <p className="text-[10px] text-red-800/60 mt-1 font-medium italic">Please pay this amount to the driver at the end of your journey.</p>
                         </div>
                     </div>
                 )}
