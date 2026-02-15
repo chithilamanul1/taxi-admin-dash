@@ -193,7 +193,7 @@ export const generateBookingPDF = (booking) => {
     doc.setFont(undefined, 'bold');
 
     // Position Important Info relative to bottom to avoid overlap
-    const infoY = 245;
+    const infoY = 238;
     doc.text("Important Information:", 15, infoY);
 
     doc.setFont(undefined, 'normal');
