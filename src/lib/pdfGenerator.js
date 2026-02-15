@@ -184,7 +184,7 @@ export const generateBookingPDF = (booking) => {
     doc.setFontSize(8);
     const terms = [
         "1. This is a legally valid computer-generated " + (isCash ? "receipt" : "invoice") + ".",
-        "2. Highway tolls must be paid by the customer during the journey.",
+        "2. Highway ticket is not included. It must be paid at the counter.",
         "3. Rates are inclusive of fuel and driver fees unless stated otherwise.",
         "3. Waiting charges: Rs. 500 per hour (First 30 minutes free for Airport pickups).",
         "4. Contact us immediately for any changes to your travel schedule."

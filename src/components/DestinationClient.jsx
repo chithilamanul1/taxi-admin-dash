@@ -74,8 +74,8 @@ export default function DestinationClient({ destination }) {
                         <div className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-xl border border-emerald-900/5 dark:border-white/5">
                             <div className="p-8 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
                                 <h2 className="text-2xl font-bold text-emerald-900 dark:text-white">Fixed Pricing</h2>
-                                <div className="flex items-center gap-2 text-emerald-600 text-xs font-bold uppercase tracking-widest bg-emerald-50 px-3 py-1 rounded-full">
-                                    <ShieldCheck size={14} /> All Inclusive
+                                <div className="flex items-center gap-2 text-rose-600 text-xs font-bold uppercase tracking-widest bg-rose-50 px-3 py-1 rounded-full">
+                                    <ShieldCheck size={14} /> Excludes Highway Tolls
                                 </div>
                             </div>
                             <div className="divide-y divide-gray-100 dark:divide-gray-800">

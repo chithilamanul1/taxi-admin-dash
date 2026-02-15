@@ -844,7 +844,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                             <div className="flex items-center justify-center gap-1.5 mt-4 text-emerald-800">
                                 <ShieldCheck size={14} />
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-950">Inclusive of taxes & tolls</span>
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-950">Taxes Included • Tolls Excluded</span>
                             </div>
                         </div>
                     )}
@@ -937,7 +937,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 <div>
                                     <p className="text-xs font-black text-amber-600 uppercase tracking-widest leading-none mb-1">Mandatory Notice</p>
                                     <p className="text-[11px] font-bold text-amber-500 leading-relaxed uppercase tracking-wider">
-                                        Highway tolls must be paid by the customer during the journey.
+                                        Highway ticket is not included in this price. It means the customer must pay it at the counter.
                                     </p>
                                 </div>
                             </div>
