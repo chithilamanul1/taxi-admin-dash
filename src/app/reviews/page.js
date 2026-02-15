@@ -22,10 +22,12 @@ export default function ReviewsPage() {
                 }
 
                 // Fetch TripAdvisor Reviews
-                const taRes = await fetch('/api/tripadvisor');
+                const taRes = await fetch('/api/reviews/tripadvisor'); // Corrected path
                 if (taRes.ok) {
                     const taJson = await taRes.json();
-                    setTripAdvisorData(taJson);
+                    if (taJson.success && taJson.data) {
+                        setTripAdvisorData(taJson.data);
+                    }
                 }
 
             } catch (err) {

@@ -19,10 +19,10 @@ const ReviewStatsBar = () => {
                 // Process TripAdvisor
                 if (tripRes.status === 'fulfilled') {
                     const data = await tripRes.value.json();
-                    if (data.success && data.rating) {
+                    if (data.success && data.data) {
                         setTaStats({
-                            rating: parseFloat(data.rating).toFixed(1),
-                            count: `${data.num_reviews}+ Reviews`
+                            rating: parseFloat(data.data.rating).toFixed(1),
+                            count: `${data.data.num_reviews}+ Reviews`
                         });
                     }
                 }
