@@ -202,7 +202,7 @@ export default function ReviewsSection() {
                         <div className="text-slate-600 dark:text-slate-400 text-sm">Happy Customers</div>
                     </div>
                     <div>
-                        <div className="text-4xl font-black text-emerald-600 dark:text-emerald-400 mb-2">4.9</div>
+                        <div className="text-4xl font-black text-emerald-600 dark:text-emerald-400 mb-2">5.0</div>
                         <div className="text-slate-600 dark:text-slate-400 text-sm">Average Rating</div>
                     </div>
                     <div>

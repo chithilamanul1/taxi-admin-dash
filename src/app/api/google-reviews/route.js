@@ -24,8 +24,8 @@ export async function GET() {
 
     // FALLBACK MOCK DATA (For testing without API Key)
     const mockReviews = {
-        rating: 4.9,
-        userRatingCount: 128,
+        rating: 5.0,
+        userRatingCount: 296,
         reviews: [
             {
                 name: 'places/ChIJ.../reviews/1',

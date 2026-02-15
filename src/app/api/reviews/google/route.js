@@ -11,7 +11,7 @@ export async function GET(req) {
             console.error('GOOGLE_PLACE_ID is not defined in .env');
         }
 
-        let googleStats = { rating: 4.9, totalReviews: 128 }; // Fallback defaults
+        let googleStats = { rating: 5.0, totalReviews: 296 }; // Fallback defaults
         let latestGoogleReviews = [];
 
         // 1. Check Cache Status (Smart Sync)

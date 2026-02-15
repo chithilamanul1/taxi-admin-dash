@@ -692,7 +692,7 @@ export async function sendDriverAssigned(booking, driver) {
                         👤
                     </div>
                     <p style="margin: 0 0 5px; color: #ffffff; font-size: 22px; font-weight: 700;">${driver.name || 'Your Driver'}</p>
-                    <p style="margin: 0; color: rgba(255,255,255,0.7); font-size: 14px;">⭐ ${driver.rating || '4.9'} Rating · ${driver.trips || '500'}+ Trips</p>
+                    <p style="margin: 0; color: rgba(255,255,255,0.7); font-size: 14px;">⭐ ${driver.rating || '5.0'} Rating · ${driver.trips || '500'}+ Trips</p>
                 </td>
             </tr>
         </table>

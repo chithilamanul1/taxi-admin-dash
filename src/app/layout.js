@@ -99,8 +99,8 @@ const jsonLd = {
     },
     aggregateRating: {
         '@type': 'AggregateRating',
-        ratingValue: '4.9',
-        reviewCount: '150',
+        ratingValue: '5.0',
+        reviewCount: '296',
     },
     sameAs: [
         'https://www.facebook.com/airporttaxistours',

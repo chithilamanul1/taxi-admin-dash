@@ -25,7 +25,7 @@ const GoogleReviews = () => {
     const [tripReviews, setTripReviews] = useState([]);
     const [activeSource, setActiveSource] = useState('google'); // 'google' or 'tripadvisor'
     const [stats, setStats] = useState({
-        google: { rating: 4.9, total: 128 },
+        google: { rating: 5.0, total: 296 },
         tripadvisor: { rating: 5.0, total: 100 }
     });
     const scrollContainerRef = useRef(null);

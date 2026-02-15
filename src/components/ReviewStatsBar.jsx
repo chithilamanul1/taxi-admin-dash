@@ -112,7 +112,7 @@ const ReviewStatsBar = () => {
                                     ))}
                                 </div>
                             </div>
-                            <span className="text-[10px] text-slate-400">{googleStats.count}</span>
+                            <span className="text-[10px] text-slate-400">296+ Reviews</span>
                         </div>
                     </a>
 
