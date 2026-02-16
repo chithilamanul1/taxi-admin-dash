@@ -49,5 +49,16 @@ export const destinations = {
         distance: "160km from Airport",
         duration: "4 Hours Drive",
         startingPrice: 90
+    },
+    sampath_test: {
+        title: "Sampath IPG Test (1 USD)",
+        description: "Special fixed-price product for Sampath Bank IPG integration testing. Do not use for real bookings.",
+        image: "/test-product.jpg",
+        badge: "Internal Test",
+        meta: "Bank Integration Test",
+        activities: ["Fixed Price Test", "Sampath Gateway Verification"],
+        distance: "1km from Airport",
+        duration: "10 Minutes",
+        startingPrice: 1
     }
 };

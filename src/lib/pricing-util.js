@@ -104,9 +104,9 @@ export const calculateSurcharges = (params, vehicleData) => {
     return surcharges;
 };
 
-export const calculatePaymentFees = (subtotal, paymentMethod, currency = 'LKR') => {
-    if (paymentMethod === 'cash') {
-        return 0; // No surcharge for Cash
+export const calculatePaymentFees = (subtotal, paymentMethod, currency = 'LKR', vehicleType = '') => {
+    if (paymentMethod === 'cash' || vehicleType === 'sampath-test') {
+        return 0; // No surcharge for Cash or Test Products
     } else if (paymentMethod === 'card') {
         if (currency === 'USD') {
             return subtotal * 0.035; // +3.5% for USD Card

@@ -173,10 +173,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
             // Payment Method Surcharges per User Request
             // 1. Calculate for the current display currency (for UI)
-            const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, currency);
+            const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, currency, formData.vehicle);
 
             // 2. Calculate for LKR (for backend storage/consistency)
-            const paymentSurchargeLKR = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, 'LKR');
+            const paymentSurchargeLKR = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, 'LKR', formData.vehicle);
 
             let total = baseTotal + surcharges + paymentSurcharge; // Total in current currency context (mixed if rates missing, resolved below)
 
@@ -218,12 +218,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             // This prevents "USD 4200" (LKR value with USD label)
             const effectiveRate = rate || 1;
             const usingFallback = !rate && currency !== 'LKR';
-            const convertedTotal = Math.ceil(total * rate);
-            const convertedPayNow = Math.ceil(payNow * rate);
-            const convertedBalance = Math.ceil(balance * rate);
-            const convertedSubtotal = Math.ceil(baseTotal * rate);
-            const convertedSurcharges = Math.ceil((surcharges + paymentSurcharge) * rate);
-            const convertedDiscounts = Math.ceil(finalDiscount * rate);
+
+            // For Sampath Test, use Math.round to ensure exactly 1 USD if possible
+            const roundFn = formData.vehicle === 'sampath-test' ? Math.round : Math.ceil;
+
+            const convertedTotal = roundFn(total * effectiveRate);
+            const convertedPayNow = roundFn(payNow * effectiveRate);
+            const convertedBalance = roundFn(balance * effectiveRate);
+            const convertedSubtotal = roundFn(baseTotal * effectiveRate);
+            const convertedSurcharges = roundFn((surcharges + paymentSurcharge) * effectiveRate);
+            const convertedDiscounts = roundFn(finalDiscount * effectiveRate);
 
             // Detailed Surcharges for UI
             const detailedExtras = [
