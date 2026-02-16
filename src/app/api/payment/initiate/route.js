@@ -71,9 +71,29 @@ export async function POST(req) {
         // Log to Discord
         await logBookingCreated(booking).catch(console.error);
 
-        // 2. Generate payment URL based on gateway
-        let paymentUrl;
+        const gateway = getActiveGateway();
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
+
+        // 2. Handle CASH payments (No gateway init needed)
+        if (data.paymentMethod === 'cash') {
+            // Send Email Confirmation immediately for Cash
+            try {
+                const { sendBookingConfirmation } = require('@/lib/email-service');
+                await sendBookingConfirmation(booking);
+            } catch (emailError) {
+                console.error('[Cash Booking] Email failed:', emailError);
+            }
+
+            return NextResponse.json({
+                success: true,
+                bookingId: booking._id,
+                paymentUrl: `${baseUrl}/payment/success?bookingId=${booking._id}`,
+                gateway: 'cash'
+            });
+        }
+
+        // 3. Generate payment URL based on gateway (For CARD payments)
+        let paymentUrl;
 
         if (gateway === 'mock') {
             // Mock payment: Redirect to our mock payment page

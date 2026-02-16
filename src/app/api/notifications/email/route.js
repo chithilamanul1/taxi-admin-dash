@@ -19,7 +19,7 @@ export async function POST(req) {
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         const { data, error } = await resend.emails.send({
-            from: 'Airport Taxis <bookings@airporttaxis.lk>',
+            from: process.env.FROM_EMAIL || 'Airport Taxis <onboarding@resend.dev>',
             to: [to],
             bcc: ['bookings@airporttaxis.lk'], // Owner Notification
             subject: `Booking Confirmed - #${bookingDetails.bookingId?.slice(-8).toUpperCase()}`,
