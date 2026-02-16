@@ -80,6 +80,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         whatsapp: initialData.whatsapp || '',
         email: initialData.email || '',
         flightNumber: initialData.flightNumber || '',
+        arrivalDate: initialData.arrivalDate || '', // Added to prevent crash
         notes: initialData.notes || '',
         duration: initialData.duration || '',
         paymentMethod: 'cash',
@@ -702,7 +703,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             </div>
                                             <div className="text-right">
                                                 <p className="text-sm font-black text-emerald-900 leading-none">
-                                                    {formData.arrivalDate ? new Date(formData.arrivalDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : '---'}
+                                                    {(formData.arrivalDate && !isNaN(new Date(formData.arrivalDate).getTime())) ? new Date(formData.arrivalDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : '---'}
                                                 </p>
                                             </div>
                                         </div>

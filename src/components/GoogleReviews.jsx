@@ -47,8 +47,8 @@ const GoogleReviews = () => {
                         setStats(prev => ({
                             ...prev,
                             google: {
-                                rating: googleData.data.rating || 4.9,
-                                total: googleData.data.totalReviews || 128
+                                rating: googleData.data.rating || 5.0,
+                                total: googleData.data.totalReviews || 296
                             }
                         }));
                     } else {

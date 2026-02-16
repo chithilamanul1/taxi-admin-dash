@@ -44,7 +44,7 @@ export async function POST(req) {
             const User = await import('@/models/User').then(mod => mod.default);
             user = await User.create({
                 name: data.name,
-                email: data.email || `driver.${data.phone}@airporttaxitours.lk`, // Dummy email if not provided
+                email: data.email || `driver.${data.phone}@airporttaxis.lk`, // Dummy email if not provided
                 phone: data.phone,
                 password: hashedPassword,
                 role: 'driver'

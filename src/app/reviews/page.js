@@ -194,22 +194,22 @@ export default function ReviewsPage() {
                                             <div className="flex justify-between items-start mb-6">
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-12 h-12 rounded-full overflow-hidden bg-[#00af87]/10 flex items-center justify-center border border-[#00af87]/20 relative">
-                                                        {review.user?.avatar ? (
+                                                        {review.profile_photo_url ? (
                                                             <img
-                                                                src={review.user.avatar}
-                                                                alt={review.user.username}
+                                                                src={review.profile_photo_url}
+                                                                alt={review.author_name}
                                                                 className="w-full h-full object-cover"
                                                             />
                                                         ) : (
-                                                            <span className="font-bold text-[#00af87] text-lg">{review.user.username?.charAt(0)}</span>
+                                                            <span className="font-bold text-[#00af87] text-lg">{review.author_name?.charAt(0)}</span>
                                                         )}
                                                     </div>
                                                     <div>
                                                         <h3 className="font-bold text-slate-900 dark:text-white text-sm">
-                                                            {review.user?.username || 'Traveler'}
+                                                            {review.author_name || 'Traveler'}
                                                         </h3>
                                                         <div className="text-xs text-slate-500 flex items-center gap-1">
-                                                            <span>{new Date(review.published_date).toLocaleDateString()}</span>
+                                                            <span>{review.relative_time_description}</span>
                                                         </div>
                                                     </div>
                                                 </div>

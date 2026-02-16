@@ -41,7 +41,7 @@ export async function POST(req, { params }) {
             if (!user) {
                 user = await User.create({
                     name: driver.name,
-                    email: driver.email || `driver.${driver.phone}@airporttaxitours.lk`,
+                    email: driver.email || `driver.${driver.phone}@airporttaxis.lk`,
                     password: hashedPassword,
                     role: 'driver',
                     phone: driver.phone

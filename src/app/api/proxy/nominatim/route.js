@@ -24,7 +24,7 @@ export async function GET(request) {
     try {
         const res = await fetch(url, {
             headers: {
-                'User-Agent': 'AirportTaxiTours/1.0 (contact@airporttaxitours.lk)', // Required by Nominatim
+                'User-Agent': 'AirportTaxis/1.0 (contact@airporttaxis.lk)', // Required by Nominatim
                 'Accept-Language': 'en-US,en;q=0.9'
             }
         });

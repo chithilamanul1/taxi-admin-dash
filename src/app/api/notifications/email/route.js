@@ -19,9 +19,9 @@ export async function POST(req) {
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         const { data, error } = await resend.emails.send({
-            from: 'Airport Taxi Tours <bookings@airporttaxitours.lk>',
+            from: 'Airport Taxis <bookings@airporttaxis.lk>',
             to: [to],
-            bcc: ['bookings@airporttaxitours.lk'], // Owner Notification
+            bcc: ['bookings@airporttaxis.lk'], // Owner Notification
             subject: `Booking Confirmed - #${bookingDetails.bookingId?.slice(-8).toUpperCase()}`,
             html: `
                 <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f8fafc;">
