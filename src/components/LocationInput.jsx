@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import { MapPin, Loader2, X } from 'lucide-react';
+import { loadGoogleMapsScript } from '@/lib/google-maps';
 
 const LocationInput = ({
     label = '',
@@ -11,14 +12,28 @@ const LocationInput = ({
     onFocus = () => { },
     disabled = false,
     icon: Icon = MapPin,
-    isLoaded = true, // IGNORED: No longer depends on Google Script
+    isLoaded: _isLoaded = true, // Ignored, handled internally
     zIndex = 20
 }) => {
     const [query, setQuery] = useState(value || '');
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const [googleLoaded, setGoogleLoaded] = useState(false);
     const wrapperRef = useRef(null);
+    const autocompleteService = useRef(null);
+    const placesService = useRef(null);
+
+    // Load Google Maps Script
+    useEffect(() => {
+        loadGoogleMapsScript().then(() => {
+            if (window.google) {
+                setGoogleLoaded(true);
+                autocompleteService.current = new window.google.maps.places.AutocompleteService();
+                placesService.current = new window.google.maps.places.PlacesService(document.createElement('div'));
+            }
+        }).catch(err => console.error("Google Maps Load Error:", err));
+    }, []);
 
     // Sync external value
     useEffect(() => {
@@ -47,33 +62,54 @@ const LocationInput = ({
             return;
         }
 
+        if (!autocompleteService.current) return;
+
         setLoading(true);
         try {
-            // Use Nominatim API (bounded to Sri Lanka for better relevance if needed, but general for now)
-            // viewbox=79.5,5.8,82.0,9.9&bounded=1 for Sri Lanka bias
-            const response = await fetch(`/api/proxy/photon?q=${encodeURIComponent(text)}`);
-            const data = await response.json();
-            setSuggestions(data);
-            setShowSuggestions(true);
+            autocompleteService.current.getPlacePredictions({
+                input: text,
+                componentRestrictions: { country: 'lk' } // Restrict to Sri Lanka
+            }, (predictions, status) => {
+                setLoading(false);
+                if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+                    setSuggestions(predictions);
+                    setShowSuggestions(true);
+                } else {
+                    setSuggestions([]);
+                }
+            });
         } catch (error) {
-            console.error("Nominatim Search Error:", error);
-        } finally {
+            console.error("Google Search Error:", error);
             setLoading(false);
         }
     };
 
     const handleSelect = (item) => {
-        const address = item.display_name;
+        const address = item.description;
         setQuery(address);
         setSuggestions([]);
         setShowSuggestions(false);
 
         if (onSelect) {
-            onSelect({
-                address: address,
-                lat: parseFloat(item.lat),
-                lon: parseFloat(item.lon) // Nominatim returns 'lon'
-            });
+            if (placesService.current) {
+                setLoading(true);
+                placesService.current.getDetails({
+                    placeId: item.place_id,
+                    fields: ['geometry', 'formatted_address']
+                }, (place, status) => {
+                    setLoading(false);
+                    if (status === window.google.maps.places.PlacesServiceStatus.OK && place.geometry) {
+                        onSelect({
+                            address: place.formatted_address || address,
+                            lat: place.geometry.location.lat(),
+                            lon: place.geometry.location.lng()
+                        });
+                        setQuery(place.formatted_address || address);
+                    }
+                });
+            } else {
+                onSelect({ address: address, lat: null, lon: null });
+            }
         }
         if (onChange) onChange(address);
     };
@@ -96,7 +132,7 @@ const LocationInput = ({
                 onChange={(e) => handleSearch(e.target.value)}
                 onFocus={() => { if (onFocus) onFocus(); if (suggestions.length > 0) setShowSuggestions(true); }}
                 disabled={disabled}
-                placeholder={placeholder}
+                placeholder={googleLoaded ? placeholder : 'Loading maps...'}
                 className={`w-full pl-16 pr-14 h-16 rounded-2xl text-base sm:text-lg font-bold bg-white dark:bg-white/5 border border-slate-900 dark:border-white/10 text-slate-900 dark:text-white outline-none focus:border-black dark:focus:border-emerald-500 focus:ring-4 focus:ring-slate-900/5 dark:focus:ring-emerald-500/10 placeholder:text-slate-500 dark:placeholder:text-white/40 truncate 
                 ${disabled ? 'cursor-not-allowed bg-slate-100 dark:bg-emerald-900/20 border-slate-300 dark:border-emerald-700' : 'bg-white dark:bg-emerald-900/20 border-slate-900 dark:border-emerald-800/50'}`}
             />
@@ -130,15 +166,15 @@ const LocationInput = ({
                             type="button"
                         >
                             <span className="font-bold text-emerald-900 dark:text-white block truncate group-hover:text-emerald-700 dark:group-hover:text-emerald-400">
-                                {item.display_name.split(',')[0]}
+                                {item.structured_formatting.main_text}
                             </span>
                             <span className="text-xs text-slate-500 dark:text-slate-400 block mt-0.5 truncate">
-                                {item.display_name}
+                                {item.description}
                             </span>
                         </button>
                     ))}
                     <div className="px-4 py-1 bg-slate-50 dark:bg-slate-900/50 text-[10px] text-slate-400 text-right">
-                        Search by OpenStreetMap
+                        Powered by Google
                     </div>
                 </div>
             )}

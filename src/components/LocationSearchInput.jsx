@@ -1,6 +1,6 @@
-'use client'
 import { useState, useRef, useEffect } from 'react'
 import { MapPin, Loader2, X } from 'lucide-react'
+import { loadGoogleMapsScript } from '@/lib/google-maps'
 
 export default function LocationSearchInput({
     label, icon: Icon = MapPin, placeholder,
@@ -10,7 +10,20 @@ export default function LocationSearchInput({
     const [suggestions, setSuggestions] = useState([])
     const [isOpen, setIsOpen] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [googleLoaded, setGoogleLoaded] = useState(false)
     const wrapperRef = useRef(null)
+    const autocompleteService = useRef(null)
+    const placesService = useRef(null)
+
+    useEffect(() => {
+        loadGoogleMapsScript().then(() => {
+            if (window.google) {
+                setGoogleLoaded(true)
+                autocompleteService.current = new window.google.maps.places.AutocompleteService()
+                placesService.current = new window.google.maps.places.PlacesService(document.createElement('div'))
+            }
+        }).catch(err => console.error('Google Maps Load Error:', err))
+    }, [])
 
     useEffect(() => {
         if (initialValue && initialValue !== inputValue) {
@@ -39,31 +52,55 @@ export default function LocationSearchInput({
             return
         }
 
+        if (!autocompleteService.current) return;
+
         setLoading(true)
         try {
-            const response = await fetch(`/api/proxy/photon?q=${encodeURIComponent(val)}`)
-            const data = await response.json()
-            setSuggestions(data || [])
-            setIsOpen(data && data.length > 0)
+            autocompleteService.current.getPlacePredictions({
+                input: val,
+                componentRestrictions: { country: 'lk' }
+            }, (predictions, status) => {
+                setLoading(false)
+                if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+                    setSuggestions(predictions)
+                    setIsOpen(true)
+                } else {
+                    setSuggestions([])
+                    setIsOpen(false)
+                }
+            })
         } catch (error) {
             console.error('Location search error:', error)
             setSuggestions([])
-        } finally {
             setLoading(false)
         }
     }
 
     const handleSelect = (item) => {
-        const address = item.display_name
+        const address = item.description
         setInputValue(address)
         setIsOpen(false)
         setSuggestions([])
 
-        onSelect({
-            address: address,
-            lat: parseFloat(item.lat),
-            lon: parseFloat(item.lon)
-        })
+        if (placesService.current) {
+            setLoading(true)
+            placesService.current.getDetails({
+                placeId: item.place_id,
+                fields: ['geometry', 'formatted_address']
+            }, (place, status) => {
+                if (status === window.google.maps.places.PlacesServiceStatus.OK && place.geometry) {
+                    onSelect({
+                        address: place.formatted_address || address,
+                        lat: place.geometry.location.lat(),
+                        lon: place.geometry.location.lng()
+                    })
+                    setInputValue(place.formatted_address || address)
+                }
+                setLoading(false)
+            })
+        } else {
+            onSelect({ address: address, lat: null, lon: null })
+        }
     }
 
     const clearInput = () => {
@@ -84,7 +121,7 @@ export default function LocationSearchInput({
                     value={inputValue}
                     onChange={handleInputChange}
                     onFocus={() => inputValue && suggestions.length > 0 && setIsOpen(true)}
-                    placeholder={placeholder}
+                    placeholder={googleLoaded ? placeholder : 'Loading maps...'}
                     required={required}
                     className="w-full h-12 md:h-14 bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-200 dark:border-emerald-800/50 pl-12 pr-10 rounded-2xl outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/20 transition-all font-bold text-sm text-emerald-900 dark:text-white truncate placeholder:text-emerald-900/40 dark:placeholder:text-emerald-400/40"
                 />
@@ -112,16 +149,16 @@ export default function LocationSearchInput({
                             <MapPin size={16} className="text-emerald-600 mt-0.5 shrink-0" />
                             <div className="min-w-0">
                                 <span className="font-bold text-emerald-900 dark:text-white block truncate">
-                                    {item.display_name.split(',')[0]}
+                                    {item.structured_formatting.main_text}
                                 </span>
                                 <span className="text-xs text-slate-500 dark:text-slate-400 block truncate">
-                                    {item.display_name}
+                                    {item.description}
                                 </span>
                             </div>
                         </button>
                     ))}
                     <div className="px-4 py-1 bg-slate-50 dark:bg-slate-900/50 text-[10px] text-slate-400 text-right">
-                        Search by OpenStreetMap
+                        Powered by Google
                     </div>
                 </div>
             )}

@@ -7,27 +7,19 @@ import { sendBookingConfirmation } from '../../../lib/email-service';
 import { authOptions } from '../../../lib/auth';
 import { cookies } from 'next/headers';
 
+import { isAdmin as checkAdmin } from '../../../lib/admin-check';
+
 export async function GET(request) {
     try {
         await dbConnect();
         const session = await getServerSession(authOptions);
+        const isAdmin = await checkAdmin();
         const { searchParams } = new URL(request.url);
         const ids = searchParams.get('ids');
 
-        // Check for admin cookie as fallback
+        // Check for driver token as fallback for driver view
         const cookieStore = await cookies();
-        const token = cookieStore.get('auth_token')?.value;
         const driverToken = cookieStore.get('driver_token')?.value;
-
-        let isCustomAdmin = false;
-        if (token) {
-            try {
-                const { verify } = await import('jsonwebtoken');
-                const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET;
-                const decoded = verify(token, secret);
-                if (decoded.role === 'admin') isCustomAdmin = true;
-            } catch (e) { }
-        }
 
         let isDriver = false;
         let driverId = null;
@@ -40,25 +32,37 @@ export async function GET(request) {
                     isDriver = true;
                     driverId = decoded.id;
                 }
-            } catch (e) { }
+            } catch (e) {
+                console.error('[Bookings API] Driver token error:', e.message);
+            }
         }
 
         let query = {};
 
-        // Admin access: either role is admin or has valid admin token
-        if ((session?.user?.role === 'admin') || isCustomAdmin) {
+        // 1. Admin Access: sees all
+        if (isAdmin) {
             // Admin sees all (no filter)
-        } else if (isDriver) {
+            console.log('[Bookings API] Admin access granted');
+        }
+        // 2. Driver Access: sees assigned bookings
+        else if (isDriver) {
             query.driver = driverId;
-        } else if (session) {
-            // Logged in user sees their own bookings by email (not ObjectId, since Google IDs aren't ObjectIds)
+            console.log('[Bookings API] Driver access granted for:', driverId);
+        }
+        // 3. Logged-in User: sees their own bookings
+        else if (session?.user?.email) {
             query.customerEmail = session.user.email;
-        } else if (ids) {
-            // Guest sees specific IDs
+            console.log('[Bookings API] User access granted for:', session.user.email);
+        }
+        // 4. Guest Access: sees specific IDs (from localStorage/share link)
+        else if (ids) {
             const idList = ids.split(',').filter(id => id.match(/^[0-9a-fA-F]{24}$/));
             query._id = { $in: idList };
-        } else {
-            // Unauthorized
+            console.log('[Bookings API] Guest access granted for IDs:', ids);
+        }
+        // 5. Unauthorized
+        else {
+            console.warn('[Bookings API] Unauthorized access attempt');
             return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
         }
 
