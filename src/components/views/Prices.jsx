@@ -669,35 +669,27 @@ const Prices = ({ initialDestination }) => {
                                                 if (!isLocked) {
                                                     setVehicle(key)
                                                     setIsVehicleListExpanded(false)
-                                                    // On mobile, smooth scroll to quote after selection
                                                     if (window.innerWidth < 1024) {
                                                         setTimeout(() => quoteRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100)
                                                     }
                                                 }
                                             }}
                                             disabled={isLocked}
-                                            className={`relative w-full overflow-hidden rounded-3xl border-2 transition-all group text-left bg-white dark:bg-slate-800 p-6
-                                                    ${vehicle === key
-                                                    ? 'border-emerald-600 shadow-xl scale-[1.02]'
+                                            className={`relative w-full overflow-hidden rounded-[2.5rem] border-[3px] transition-all group text-left bg-white dark:bg-slate-800 p-8
+                                                ${vehicle === key
+                                                    ? 'border-emerald-700 shadow-2xl scale-[1.02]'
                                                     : isLocked
                                                         ? 'border-gray-100 dark:border-white/5 opacity-60 cursor-not-allowed grayscale'
-                                                        : 'border-transparent dark:border-white/5 hover:border-emerald-600/30 shadow-md hover:shadow-lg'
+                                                        : 'border-black dark:border-white/20 hover:border-emerald-700 shadow-lg hover:shadow-xl'
                                                 }`}
                                         >
-                                            {/* Header */}
-                                            <div className="flex justify-between items-start mb-2">
-                                                <div>
-                                                    <h3 className="font-extrabold text-emerald-900 dark:text-white text-xl leading-relaxed pb-1">{v.name}</h3>
-                                                    <p className="text-xs text-gray-400 dark:text-slate-500 font-medium">{v.model}</p>
+                                            <div className="flex justify-between items-start mb-6">
+                                                <div className="w-full text-center">
+                                                    <h3 className="font-black text-black dark:text-white text-3xl md:text-4xl leading-tight pb-1 uppercase tracking-tight">{v.name}</h3>
+                                                    <p className="text-sm text-gray-400 dark:text-slate-500 font-bold">{v.model}</p>
                                                 </div>
-                                                {vehicle === key && (
-                                                    <div className="bg-emerald-600 text-emerald-900 p-1.5 rounded-full shadow-sm">
-                                                        <MapPin size={14} fill="currentColor" />
-                                                    </div>
-                                                )}
                                             </div>
 
-                                            {/* Image */}
                                             <div className="aspect-[16/9] w-full relative mb-4 flex items-center justify-center p-2">
                                                 <img
                                                     src={v.image}
@@ -707,25 +699,24 @@ const Prices = ({ initialDestination }) => {
                                                 />
                                             </div>
 
-                                            {/* Specs List */}
-                                            <div className="space-y-2 border-t border-gray-100 pt-3">
-                                                <div className="flex items-center gap-3 text-sm font-bold text-gray-600">
-                                                    <div className="w-6 flex justify-center"><Users size={16} className="text-emerald-900" /></div>
+                                            <div className="space-y-3 mb-6">
+                                                <div className="flex items-center gap-4 text-base font-bold text-gray-700 dark:text-slate-300">
+                                                    <Users size={20} className="text-slate-400" />
                                                     <span>1 - {v.maxPassengers} Passengers</span>
                                                 </div>
                                                 {v.specs && (
                                                     <>
-                                                        <div className="flex items-center gap-3 text-sm font-bold text-gray-600">
-                                                            <div className="w-6 flex justify-center"><Briefcase size={16} className="text-emerald-900" /></div>
+                                                        <div className="flex items-center gap-4 text-base font-bold text-gray-700 dark:text-slate-300">
+                                                            <Briefcase size={20} className="text-slate-400" />
                                                             <span>{v.specs.luggage} Luggages</span>
                                                         </div>
-                                                        <div className="flex items-center gap-3 text-sm font-bold text-gray-600">
-                                                            <div className="w-6 flex justify-center"><Briefcase size={14} className="text-emerald-900" /></div>
+                                                        <div className="flex items-center gap-4 text-base font-bold text-gray-700 dark:text-slate-300">
+                                                            <Briefcase size={18} className="text-slate-400" />
                                                             <span>{v.specs.handLuggage} Hand Baggages</span>
                                                         </div>
                                                         {v.specs.ac && (
-                                                            <div className="flex items-center gap-3 text-sm font-bold text-gray-600 dark:text-slate-400">
-                                                                <div className="w-6 flex justify-center"><Wind size={16} className="text-emerald-900 dark:text-emerald-400" /></div>
+                                                            <div className="flex items-center gap-4 text-base font-bold text-gray-700 dark:text-slate-300">
+                                                                <Wind size={20} className="text-slate-400" />
                                                                 <span>Air Conditioning</span>
                                                             </div>
                                                         )}
@@ -733,7 +724,38 @@ const Prices = ({ initialDestination }) => {
                                                 )}
                                             </div>
 
-                                            {/* Locked Overlay */}
+                                            {distance > 0 && (
+                                                <div className="space-y-1 mb-6 rounded-xl overflow-hidden shadow-inner font-black">
+                                                    {(() => {
+                                                        const p = calculatePrice(distance, key, tripType);
+                                                        const usdVal = Math.ceil(p.total * (rates?.USD || 0.0033));
+                                                        const eurVal = Math.ceil(p.total * (rates?.EUR || 0.0031));
+                                                        return (
+                                                            <>
+                                                                <div className="bg-black text-white p-3 flex justify-center items-center text-lg">
+                                                                    Rs {p.total.toLocaleString()}
+                                                                </div>
+                                                                <div className="bg-[#D1E1EC] text-slate-800 p-3 flex justify-center items-center text-lg">
+                                                                    $ {usdVal.toLocaleString()}
+                                                                </div>
+                                                                <div className="bg-[#E4E9ED] text-slate-800 p-3 flex justify-center items-center text-lg">
+                                                                    € {eurVal.toLocaleString()}
+                                                                </div>
+                                                            </>
+                                                        );
+                                                    })()}
+                                                </div>
+                                            )}
+
+                                            <div
+                                                className={`w-full py-4 text-center rounded-2xl font-black text-xl uppercase tracking-widest transition-all shadow-xl
+                                                    ${vehicle === key
+                                                        ? 'bg-emerald-900 text-white shadow-emerald-900/20'
+                                                        : 'bg-red-600 text-white hover:bg-red-700 shadow-red-600/20'}`}
+                                            >
+                                                {vehicle === key ? 'Selected ✓' : 'Select'}
+                                            </div>
+
                                             {isLocked && (
                                                 <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center z-10">
                                                     <div className="bg-red-500/90 text-white px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 shadow-lg">
@@ -991,7 +1013,7 @@ const Prices = ({ initialDestination }) => {
                     })()}
                 </div >
             </div>
-        </div>
+        </div >
     )
 }
 

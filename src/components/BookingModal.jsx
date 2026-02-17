@@ -499,9 +499,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
 
     return (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#064e3b]/95 p-0 sm:p-4 overflow-hidden touch-none overscroll-none">
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 p-0 sm:p-4 overflow-hidden touch-none overscroll-none backdrop-blur-md">
             {/* Prevent Body Scroll Shadow Overlay */}
-            <div className="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
+            <div className="absolute inset-0" onClick={onClose}></div>
 
             <style jsx global>{`
                 body {
@@ -528,18 +528,18 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     )}
                 </AnimatePresence>
                 {/* Header */}
-                <div className="p-4 md:p-8 pb-3 md:pb-4 flex items-center justify-between shrink-0">
-                    <div className="flex items-center gap-3 md:gap-4 min-w-0">
-                        <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-500/10 rounded-xl flex items-center justify-center border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.1)] shrink-0">
-                            <Zap size={22} className="text-amber-500 fill-amber-500" />
+                <div className="p-4 md:p-8 pb-3 md:pb-4 flex items-center justify-between shrink-0 pt-8 sm:pt-4">
+                    <div className="flex items-center gap-2 md:gap-4 min-w-0">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-amber-500/10 rounded-lg md:rounded-xl flex items-center justify-center border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.1)] shrink-0">
+                            <Zap size={18} className="text-amber-500 fill-amber-500 md:w-[22px] md:h-[22px]" />
                         </div>
                         <div className="min-w-0">
-                            <h2 className="text-xl md:text-2xl font-black tracking-tight text-slate-900 leading-none truncate">SECURE <span className="text-emerald-600 uppercase">BOOKING</span></h2>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Encrypted Payment</p>
+                            <h2 className="text-lg md:text-2xl font-black tracking-tight text-slate-900 leading-none truncate uppercase">Secure <span className="text-emerald-600">Booking</span></h2>
+                            <p className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Encrypted Payment</p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="w-8 h-8 md:w-10 md:h-10 bg-emerald-50 rounded-lg md:rounded-xl flex items-center justify-center border border-emerald-900/10 hover:bg-red-50 hover:text-red-600 transition-colors">
-                        <X size={18} />
+                    <button onClick={onClose} className="w-10 h-10 md:w-12 md:h-12 bg-emerald-50 rounded-xl flex items-center justify-center border border-emerald-900/10 hover:bg-red-50 hover:text-red-600 transition-colors z-[101]">
+                        <X size={22} />
                     </button>
                 </div>
 
@@ -617,8 +617,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <button
                                                     key={v.vehicleType}
                                                     onClick={() => isFit && setFormData({ ...formData, vehicle: v.vehicleType })}
-                                                    className={`group/card relative p-4 md:p-6 rounded-[2rem] border-2 transition-all cursor-pointer overflow-hidden flex flex-col gap-3 md:gap-4 h-full
-                                                ${isSelected ? 'border-amber-500 bg-white shadow-xl shadow-amber-500/10' : 'border-emerald-900/5 bg-white hover:border-emerald-900/10 hover:shadow-lg'}
+                                                    className={`group/card relative p-4 md:p-6 rounded-[2rem] border-[3px] transition-all cursor-pointer overflow-hidden flex flex-col gap-3 md:gap-4 h-full
+                                                ${isSelected ? 'border-emerald-700 bg-emerald-50 shadow-2xl scale-[1.02]' : 'border-black bg-white hover:border-emerald-700 hover:shadow-xl'}
                                                 ${!isFit ? 'opacity-40 grayscale pointer-events-none' : ''}
                                             `}
                                                 >
@@ -873,21 +873,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             )}
 
                             <h3 className="text-xl font-bold text-emerald-600 tracking-tight text-center md:text-left">Client Verification</h3>
-                            <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+                            <div className="grid md:grid-cols-2 gap-4 md:gap-8">
                                 {[
                                     { label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name' },
-                                    { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX' },
-                                    { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver communication' }, // New Field
                                     { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation' },
+                                    { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX' },
+                                    { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver communication' },
                                     { label: 'Flight Identifier', key: 'flightNumber', type: 'text', placeholder: 'e.g. EK 654' },
                                 ].map(f => (
-                                    <div key={f.key} className="space-y-2">
-                                        <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{f.label}</label>
+                                    <div key={f.key} className="space-y-2.5">
+                                        <label className="text-[10px] md:text-xs font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{f.label}</label>
                                         <input
                                             type={f.type}
                                             value={formData[f.key] || ''}
                                             onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
-                                            className={`w-full h-14 md:h-16 text-base bg-white border-2 border-emerald-900/10 px-4 md:px-6 rounded-2xl outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-900/5 transition-all font-black text-emerald-900 placeholder:font-medium placeholder:text-gray-400 shadow-sm`}
+                                            className="w-full h-14 md:h-16 text-base bg-white border-2 border-slate-200 px-5 md:px-7 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900 placeholder:font-medium placeholder:text-gray-300 shadow-sm"
                                             placeholder={f.placeholder}
                                         />
                                     </div>
@@ -907,24 +907,32 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <CreditCard size={16} className="text-emerald-600" />
                                     Billing Details
                                 </h4>
-                                <div className="grid md:grid-cols-2 gap-4">
+                                <div className="grid md:grid-cols-2 gap-4 md:gap-8">
                                     {[
                                         { label: 'Billing Name', key: 'billingName', placeholder: 'Name for Invoice' },
-                                        { label: 'Full Address', key: 'billingAddress', placeholder: 'Street address' },
-                                        { label: 'City', key: 'billingCity', placeholder: 'City' },
                                         { label: 'Country', key: 'billingCountry', placeholder: 'Country' },
                                     ].map(b => (
-                                        <div key={b.key} className="space-y-2">
-                                            <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{b.label}</label>
+                                        <div key={b.key} className="space-y-2.5">
+                                            <label className="text-[10px] md:text-xs font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{b.label}</label>
                                             <input
                                                 type="text"
                                                 value={formData[b.key] || ''}
                                                 onChange={e => setFormData({ ...formData, [b.key]: e.target.value })}
-                                                className="w-full h-14 bg-white border-2 border-emerald-900/10 px-6 rounded-2xl outline-none focus:border-emerald-600 transition-all font-bold text-sm text-emerald-900"
+                                                className="w-full h-14 md:h-16 bg-white border-2 border-slate-200 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-sm text-emerald-900 placeholder:text-slate-300"
                                                 placeholder={b.placeholder}
                                             />
                                         </div>
                                     ))}
+                                    <div className="md:col-span-2 space-y-2.5">
+                                        <label className="text-[10px] md:text-xs font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Full Billing Address</label>
+                                        <textarea
+                                            rows="2"
+                                            value={formData.billingAddress}
+                                            onChange={e => setFormData({ ...formData, billingAddress: e.target.value })}
+                                            className="w-full px-6 py-4 bg-white border-2 border-slate-200 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-sm text-emerald-900 placeholder:text-slate-300 resize-none"
+                                            placeholder="123 Street Name, City, City"
+                                        ></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>

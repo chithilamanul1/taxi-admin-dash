@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Super Admin",
+    "email": "admin@airporttaxitours.lk",
+    "role": "admin"
+  },
+  {
+    "name": "ceylon xpert",
+    "email": "ceylonxpert@gmail.com",
+    "role": "user"
+  },
+  {
+    "name": "Test Driver",
+    "email": "driver@test.com",
+    "role": "driver"
+  },
+  {
+    "name": "sda",
+    "email": "sadadada@sdasda.f",
+    "role": "driver"
+  },
+  {
+    "name": "Chithila Manul",
+    "email": "chithilamanul1@gmail.com",
+    "role": "admin"
+  },
+  {
+    "name": "sippi baba",
+    "email": "sippibaba1@gmail.com",
+    "role": "driver"
+  },
+  {
+    "name": "chithila",
+    "email": "chitilamanul1@gmail.com",
+    "role": "driver"
+  },
+  {
+    "name": "API Test Driver",
+    "email": "api.driver@test.com",
+    "role": "driver"
+  },
+  {
+    "name": "s",
+    "email": "chitilamanu1@gmail.com",
+    "role": "driver"
+  },
+  {
+    "name": "chithila manul",
+    "email": "furynetworks.lk@gmail.com",
+    "role": "driver"
+  },
+  {
+    "name": "chithila",
+    "email": "driver.0771234567@airporttaxitours.lk",
+    "role": "driver"
+  },
+  {
+    "name": "chithila",
+    "email": "driver.07712345@airporttaxitours.lk",
+    "role": "driver"
+  },
+  {
+    "name": "s",
+    "email": "driver.s@airporttaxitours.lk",
+    "role": "driver"
+  },
+  {
+    "name": "name",
+    "email": "driver.phone@airporttaxitours.lk",
+    "role": "driver"
+  },
+  {
+    "name": "u",
+    "email": "driver.0842@airporttaxitours.lk",
+    "role": "driver"
+  }
+]
