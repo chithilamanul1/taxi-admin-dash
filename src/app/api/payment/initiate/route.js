@@ -71,7 +71,6 @@ export async function POST(req) {
         // Log to Discord
         await logBookingCreated(booking).catch(console.error);
 
-        const gateway = getActiveGateway();
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
 
         // 2. Handle CASH payments (No gateway init needed)
