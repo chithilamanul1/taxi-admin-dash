@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGO_URI || process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URI;
 
 if (!MONGODB_URI) {
     // Fallback for local dev or build time without DB
-    console.warn('MONGO_URI not found.');
+    console.warn('CRITICAL: No MongoDB URI found in environment variables.');
     // PREVENT HANGING: Disable buffering so queries fail fast instead of waiting forever
     mongoose.set('bufferCommands', false);
 }
@@ -27,7 +27,7 @@ async function dbConnect() {
 
     if (!cached.promise) {
         if (!MONGODB_URI) {
-            console.error('MONGO_URI missing in dbConnect');
+            console.error('MONGO_URI/MONGODB_URI missing in dbConnect');
             // Mock connection object to prevent crashes
             cached.promise = Promise.resolve({
                 connection: { readyState: 0 },
@@ -37,9 +37,12 @@ async function dbConnect() {
         } else {
             const opts = {
                 bufferCommands: false,
+                dbName: 'taxiadmindash', // Explicitly target the correct database
             };
 
+            console.log(`Connecting to MongoDB... Target DB: ${opts.dbName}`);
             cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+                console.log('MongoDB connected successfully to', mongoose.connection.db.databaseName);
                 return mongoose;
             });
         }
@@ -48,6 +51,7 @@ async function dbConnect() {
     try {
         cached.conn = await cached.promise;
     } catch (e) {
+        console.error('MongoDB connection error:', e.message);
         cached.promise = null;
         throw e;
     }

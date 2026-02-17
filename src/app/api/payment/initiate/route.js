@@ -59,12 +59,19 @@ export async function POST(req) {
         const gateway = getActiveGateway();
 
         // 1. Create the booking record
-        const booking = await Booking.create({
+        const bookingData = {
             ...data,
-            whatsappNumber: data.whatsappNumber, // Store explicitly if schema supports, or it might be in ...data
+            whatsappNumber: data.whatsappNumber,
             paymentStatus: 'pending',
             paymentMethod: data.paymentMethod || 'card',
-        });
+        };
+
+        // Explicitly handle billingDetails if provided in the express checkout flow
+        if (data.billingDetails) {
+            bookingData.billingDetails = data.billingDetails;
+        }
+
+        const booking = await Booking.create(bookingData);
 
         console.log(`[Payment Init] Booking: ${booking._id} | Type: ${booking.paymentType} | Total: ${booking.totalPrice} | Charging: ${booking.paidAmount || booking.totalPrice}`);
 

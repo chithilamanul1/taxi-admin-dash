@@ -13,10 +13,13 @@ import ReviewStatsBar from './ReviewStatsBar'
 import RecentPosts from './RecentPosts'
 import SpecialOffersSection from './SpecialOffersSection'
 import MarketingPopup from './MarketingPopup'
+import ExpressCheckoutModal from './ExpressCheckoutModal'
 
 export default function HomeClient() {
     const [isBookingOpen, setIsBookingOpen] = useState(false);
     const [marketingOffer, setMarketingOffer] = useState(null);
+    const [isExpressOpen, setIsExpressOpen] = useState(false);
+    const [selectedExpressProduct, setSelectedExpressProduct] = useState(null);
 
     useEffect(() => {
         const checkMarketing = async () => {
@@ -60,6 +63,12 @@ export default function HomeClient() {
             <MarketingPopup
                 offer={marketingOffer}
                 onClose={handlePopupClose}
+            />
+
+            <ExpressCheckoutModal
+                isOpen={isExpressOpen}
+                onClose={() => setIsExpressOpen(false)}
+                product={selectedExpressProduct}
             />
 
             <div id="calculator" className="py-32 relative">
@@ -124,7 +133,14 @@ export default function HomeClient() {
                                 meta: "Ancient Rock Fortress"
                             }
                         ].map((route, i) => (
-                            <Link key={i} href={`/destination/${route.id}`} className="group relative h-[450px] rounded-3xl overflow-hidden border border-emerald-900/10 block shadow-md hover:shadow-xl transition-all duration-500">
+                            <button
+                                key={i}
+                                onClick={() => {
+                                    setSelectedExpressProduct(route);
+                                    setIsExpressOpen(true);
+                                }}
+                                className="group relative h-[450px] rounded-3xl overflow-hidden border border-emerald-900/10 block shadow-md hover:shadow-xl transition-all duration-500 text-left w-full"
+                            >
                                 <Image
                                     src={route.img}
                                     alt={route.title}
@@ -151,7 +167,7 @@ export default function HomeClient() {
                                         </div>
                                     </div>
                                 </div>
-                            </Link>
+                            </button>
                         ))}
                     </div>
                 </div>
