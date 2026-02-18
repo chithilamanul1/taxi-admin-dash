@@ -211,42 +211,40 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const payNow = formData.paymentType === 'partial' ? total * 0.5 : total;
             const balance = total - payNow;
 
-            // Convert values to the selected currency
-            const rate = rates?.[currency];
-
-            // If the rate for the selected currency is missing (e.g. API failed), fallback to LKR display
-            // This prevents "USD 4200" (LKR value with USD label)
-            const effectiveRate = rate || 1;
-            const usingFallback = !rate && currency !== 'LKR';
-
-            // For Sampath Test, use Math.round to ensure exactly 1 USD if possible
+            // Convert values TO the selected currency individually to ensure they SUM correctly in the UI
+            const rate = rates?.[currency] || 1;
             const roundFn = formData.vehicle === 'sampath-test' ? Math.round : Math.ceil;
 
-            const convertedTotal = roundFn(total * effectiveRate);
-            const convertedPayNow = roundFn(payNow * effectiveRate);
-            const convertedBalance = roundFn(balance * effectiveRate);
-            const convertedSubtotal = roundFn(baseTotal * effectiveRate);
-            const convertedSurcharges = roundFn((surcharges + paymentSurcharge) * effectiveRate);
-            const convertedDiscounts = roundFn(finalDiscount * effectiveRate);
+            const convertedSubtotal = roundFn(baseTotal * rate);
+            const convertedSurcharges = roundFn(surcharges * rate);
+            const convertedPaymentFee = roundFn(paymentSurcharge * rate);
+            const convertedDiscounts = roundFn(finalDiscount * rate);
+
+            // The Total displayed MUST be the sum of its parts to avoid "Rs 0" or mismatch errors
+            const convertedTotal = convertedSubtotal + convertedSurcharges + convertedPaymentFee - convertedDiscounts;
+
+            const payNowRatio = formData.paymentType === 'partial' ? 0.5 : 1;
+            const convertedPayNow = roundFn(convertedTotal * payNowRatio);
+            const convertedBalance = convertedTotal - convertedPayNow;
 
             // Detailed Surcharges for UI
             const detailedExtras = [
-                { label: 'Waiting Time', value: Math.ceil(calculateSurcharges({ waitingHours: formData.waitingHours, hasNameBoard: false }, vehicleData) * rate) },
-                { label: 'Name Board', value: Math.ceil(calculateSurcharges({ waitingHours: 0, hasNameBoard: formData.hasNameBoard }, vehicleData) * rate) }
+                { label: 'Waiting Time', value: roundFn(calculateSurcharges({ waitingHours: formData.waitingHours, hasNameBoard: false }, vehicleData) * rate) },
+                { label: 'Name Board', value: roundFn(calculateSurcharges({ waitingHours: 0, hasNameBoard: formData.hasNameBoard }, vehicleData) * rate) }
             ];
 
             return {
                 total: convertedTotal,
                 subtotal: convertedSubtotal,
-                surcharges: convertedSurcharges, // Keep this for legacy or total extra sum
-                paymentFee: Math.ceil(paymentSurcharge * rate),
+                surcharges: convertedSurcharges + convertedPaymentFee,
+                paymentFee: convertedPaymentFee,
                 detailedExtras,
                 discounts: convertedDiscounts,
                 appliedCoupons: verifiedCoupons,
                 payNow: convertedPayNow,
                 balance: convertedBalance,
                 lkr: {
-                    total: Math.ceil(baseTotal + surcharges + paymentSurchargeLKR - finalDiscount), // Re-calculate total strictly in LKR
+                    total: Math.ceil(baseTotal + surcharges + paymentSurchargeLKR - finalDiscount),
                     payNow: Math.ceil((formData.paymentType === 'partial' ? (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) * 0.5 : (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount))),
                     balance: Math.ceil((baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) - (formData.paymentType === 'partial' ? (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) * 0.5 : (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount))),
                     surcharges: Math.ceil(surcharges),
@@ -604,7 +602,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <div className="grid md:grid-cols-2 gap-6 md:gap-8">
                                 <div className="space-y-4">
                                     <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Vehicle Category</label>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 min-h-0">
+                                    <div className="grid grid-cols-1 gap-4">
                                         {pricingData.map((v) => {
                                             const totalPax = (formData.passengerCount?.adults || 0) + (formData.passengerCount?.children || 0);
                                             const totalLuggage = formData.passengerCount?.luggage || 0;
@@ -617,35 +615,48 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <button
                                                     key={v.vehicleType}
                                                     onClick={() => isFit && setFormData({ ...formData, vehicle: v.vehicleType })}
-                                                    className={`group/card relative p-4 md:p-6 rounded-[2rem] border-[3px] transition-all cursor-pointer overflow-hidden flex flex-col gap-3 md:gap-4 h-full
-                                                ${isSelected ? 'border-emerald-700 bg-emerald-50 shadow-2xl scale-[1.02]' : 'border-black bg-white hover:border-emerald-700 hover:shadow-xl'}
-                                                ${!isFit ? 'opacity-40 grayscale pointer-events-none' : ''}
-                                            `}
+                                                    className={`group/card relative p-4 rounded-2xl border-2 transition-all cursor-pointer overflow-hidden flex items-center gap-4 text-left
+                                                        ${isSelected ? 'border-amber-500 bg-amber-50 shadow-md translate-x-1' : 'border-slate-100 bg-white hover:border-amber-200 hover:shadow-sm'}
+                                                        ${!isFit ? 'opacity-40 grayscale pointer-events-none' : ''}
+                                                    `}
                                                 >
-                                                    {!isFit && (
-                                                        <div className="absolute top-2 right-2 bg-red-500 text-white text-[8px] font-black px-2 py-0.5 rounded-full z-10 uppercase tracking-widest">Limited Capacity</div>
+                                                    {/* Badge for AC */}
+                                                    <div className="absolute top-2 left-2 bg-amber-100/80 backdrop-blur-sm text-amber-800 text-[8px] font-black px-1.5 py-0.5 rounded-lg z-10 uppercase flex items-center gap-1">
+                                                        <Zap size={8} fill="currentColor" /> 100% A/C
+                                                    </div>
+
+                                                    {/* Selection Checkmark */}
+                                                    {isSelected && (
+                                                        <div className="absolute top-4 right-4 text-amber-600 bg-white rounded-full p-0.5 shadow-sm">
+                                                            <Check size={14} strokeWidth={4} />
+                                                        </div>
                                                     )}
-                                                    <div className="flex items-center gap-1.5 absolute top-2 right-2 opacity-60">
-                                                        <div className="flex items-center gap-0.5 bg-white/50 px-1 rounded text-[8px] font-bold text-emerald-900">
-                                                            <Users size={8} /> {v.capacity}
+
+                                                    <div className="w-24 h-16 bg-slate-50 rounded-xl flex items-center justify-center p-2 shrink-0 overflow-hidden">
+                                                        {v.image ? (
+                                                            <img src={v.image} alt={v.name} className="w-full h-full object-contain mix-blend-multiply transition-transform group-hover/card:scale-110" />
+                                                        ) : (
+                                                            <Car className="text-slate-300" size={32} />
+                                                        )}
+                                                    </div>
+
+                                                    <div className="flex-1 min-w-0">
+                                                        <h4 className="text-sm font-black text-slate-900 uppercase tracking-tight truncate leading-tight mb-1">{v.name}</h4>
+
+                                                        <div className="flex items-center gap-3 text-[10px] font-bold text-slate-500">
+                                                            <div className="flex items-center gap-1">
+                                                                <Users size={12} className="text-amber-600" />
+                                                                <span>{v.capacity} Pax</span>
+                                                            </div>
+                                                            <div className="flex items-center gap-1">
+                                                                <Briefcase size={12} className="text-amber-600" />
+                                                                <span>{v.luggage || 0} Lugg</span>
+                                                            </div>
                                                         </div>
                                                     </div>
 
-                                                    {v.image ? (
-                                                        <img src={v.image} alt={v.name} className="w-20 h-10 object-contain mb-1 mix-blend-multiply" />
-                                                    ) : (
-                                                        <Car className={isSelected ? 'text-emerald-900' : 'text-emerald-900/20'} size={24} />
-                                                    )}
-
-                                                    <span className={`text-[8px] md:text-[9px] font-bold uppercase tracking-widest text-center leading-tight mb-1 ${isSelected ? 'text-emerald-900' : 'text-emerald-900/40'}`}>{v.name}</span>
-
-                                                    <div className="flex items-center gap-2 text-[8px] font-bold text-emerald-900/50">
-                                                        <div className="flex items-center gap-0.5" title="Max Luggage">
-                                                            <Briefcase size={9} /> {v.luggage || 0}
-                                                        </div>
-                                                        <div className="flex items-center gap-0.5" title="Max Hand Luggage">
-                                                            <ShoppingBag size={9} /> {v.handLuggage || 0}
-                                                        </div>
+                                                    <div className="flex flex-col items-end gap-1">
+                                                        <Info size={14} className="text-slate-300 hover:text-amber-600 transition-colors" />
                                                     </div>
                                                 </button>
                                             );
@@ -988,21 +999,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             {/* Consolidated Price Breakdown for Mobile & Desktop */}
                                             <div className="space-y-2 md:space-y-3">
                                                 <div className="flex justify-between items-center w-full">
-                                                    <span className="text-[10px] md:text-xs font-bold text-emerald-900/60 uppercase tracking-widest">Base Rate</span>
-                                                    <span className="text-sm md:text-base font-bold text-emerald-900 text-right">{currentSymbol} {subtotal.toLocaleString()}</span>
+                                                    <span className="text-[10px] md:text-xs font-black text-black uppercase tracking-widest">Base Rate</span>
+                                                    <span className="text-sm md:text-base font-black text-black text-right">{currentSymbol} {subtotal.toLocaleString()}</span>
                                                 </div>
 
                                                 {detailedBreakdown.detailedExtras?.filter(s => s.value > 0).map((s, idx) => (
-                                                    <div key={idx} className="flex justify-between items-center w-full text-emerald-900/60 transition-all">
-                                                        <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest">{s.label}</span>
-                                                        <span className="text-sm md:text-base font-bold text-right">+{currentSymbol} {s.value.toLocaleString()}</span>
+                                                    <div key={idx} className="flex justify-between items-center w-full text-black transition-all">
+                                                        <span className="text-[10px] md:text-xs font-black uppercase tracking-widest">{s.label}</span>
+                                                        <span className="text-sm md:text-base font-black text-right">+{currentSymbol} {s.value.toLocaleString()}</span>
                                                     </div>
                                                 ))}
 
                                                 {detailedBreakdown.paymentFee > 0 && (
-                                                    <div className="flex justify-between items-center w-full text-emerald-900/60">
-                                                        <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest">Payment Fee</span>
-                                                        <span className="text-sm md:text-base font-bold text-right">+{currentSymbol} {detailedBreakdown.paymentFee.toLocaleString()}</span>
+                                                    <div className="flex justify-between items-center w-full text-black">
+                                                        <span className="text-[10px] md:text-xs font-black uppercase tracking-widest">Payment Fee</span>
+                                                        <span className="text-sm md:text-base font-black text-right">+{currentSymbol} {detailedBreakdown.paymentFee.toLocaleString()}</span>
                                                     </div>
                                                 )}
 
@@ -1032,12 +1043,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                             {/* Final Totals moved directly into the main card logic */}
 
-                                            <div className="pt-2 mt-2 border-t border-emerald-900/10">
+                                            <div className="pt-2 mt-2 border-t border-black/10">
                                                 <div className="flex flex-row flex-wrap justify-between items-center w-full gap-2">
-                                                    <span className="text-[10px] sm:text-xs md:text-sm font-black text-emerald-900 uppercase tracking-widest leading-tight">
+                                                    <span className="text-[10px] sm:text-xs md:text-sm font-black text-black uppercase tracking-widest leading-tight">
                                                         {formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Payable'}
                                                     </span>
-                                                    <span className="text-lg sm:text-2xl md:text-3xl font-black text-emerald-900 text-right leading-none shrink-0 bg-white/90 px-3 py-1 rounded-xl shadow-md border border-emerald-900/5">
+                                                    <span className="text-lg sm:text-2xl md:text-3xl font-black text-black text-right leading-none shrink-0 bg-white/90 px-3 py-1 rounded-xl shadow-md border border-black/5">
                                                         {currentSymbol} {payNow.toLocaleString()}
                                                     </span>
                                                 </div>
