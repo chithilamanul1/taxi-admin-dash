@@ -110,7 +110,7 @@ const RevenueStats = ({ bookings = [] }) => {
                     <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
                         <div
                             className="bg-blue-500 h-full transition-all duration-1000"
-                            style={{ width: `${Math.min(profitMargin, 100)}%` }}
+                            style={{ width: `${Math.min(stats.profitMargin, 100)}%` }}
                         ></div>
                     </div>
                     <p className="text-[10px] text-slate-500 mt-2 font-bold uppercase tracking-widest">
