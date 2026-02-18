@@ -152,6 +152,55 @@ export default function AdminDashboard() {
         } catch (e) { console.error(e); }
     }
 
+    const fetchQuickLinks = async () => {
+        try {
+            const res = await fetch('/api/admin/quick-links');
+            const data = await res.json();
+            if (data.success) setQuickLinks(data.data);
+        } catch (err) {
+            console.error('Failed to fetch quick links', err);
+        }
+    };
+
+    const handleSaveQuickLink = async () => {
+        if (!newQuickLink.title || !newQuickLink.price || !newQuickLink.slug) {
+            alert('Please fill in all fields');
+            return;
+        }
+        setIsSavingQuickLink(true);
+        try {
+            const res = await fetch('/api/admin/quick-links', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newQuickLink)
+            });
+            const data = await res.json();
+            if (data.success) {
+                setQuickLinks([data.data, ...quickLinks]);
+                setNewQuickLink({ title: '', price: '', slug: '', badge: 'Special Offer' });
+                alert('Quick Link created!');
+            } else {
+                alert('Error: ' + data.error);
+            }
+        } catch (err) {
+            alert('Failed to save quick link');
+        } finally {
+            setIsSavingQuickLink(false);
+        }
+    };
+
+    const handleDeleteQuickLink = async (id) => {
+        if (!confirm('Are you sure you want to delete this link?')) return;
+        try {
+            const res = await fetch(`/api/admin/quick-links?id=${id}`, { method: 'DELETE' });
+            const data = await res.json();
+            if (data.success) {
+                setQuickLinks(quickLinks.filter(l => l._id !== id));
+            }
+        } catch (err) {
+            alert('Failed to delete');
+        }
+    };
 
     useEffect(() => {
         const fetchData = () => {
@@ -282,6 +331,7 @@ export default function AdminDashboard() {
 
         // Initial fetch
         fetchData()
+        fetchQuickLinks()
 
         // Auto-refresh every 45 seconds to keep it fresh but not annoying
         // Only refresh if NO MODALS/EDITING IS ACTIVE
@@ -339,10 +389,15 @@ export default function AdminDashboard() {
 
     const formatPrice = (booking) => {
         if (!booking) return 'N/A';
-        // Admin always sees the base LKR price (Revenue)
-        // If displayPrice exists, it might be in another currency, so fallback to totalPrice
-        const amount = booking.totalPrice || 0;
-        return `Rs ${amount.toLocaleString()}`;
+        const currency = booking.currency || 'LKR';
+        if (currency === 'LKR') {
+            const amount = booking.totalPrice || 0;
+            return `Rs ${amount.toLocaleString()}`;
+        } else {
+            const amount = booking.displayPrice || 0;
+            const prefix = currency === 'USD' ? '$' : currency + ' ';
+            return `${prefix}${amount.toLocaleString()}`;
+        }
     };
 
     const updateBookingStatus = async (id, status) => {

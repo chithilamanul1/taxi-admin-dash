@@ -2,6 +2,8 @@ import dbConnect from '@/lib/db';
 import Booking from '@/models/Booking';
 import { NextResponse } from 'next/server';
 import { logBookingStatusChanged } from '@/lib/discord';
+import Driver from '@/models/Driver';
+import Transaction from '@/models/Transaction';
 import { sendBookingStatusUpdate } from '@/lib/email-service';
 import { isAdmin as checkAdmin } from '@/lib/admin-check';
 

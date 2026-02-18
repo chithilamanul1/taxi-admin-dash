@@ -37,46 +37,13 @@ export async function GET(req) {
 export async function POST(req) {
     try {
         await dbConnect();
-        const session = await getServerSession(authOptions);
-
-        let isAdmin = false;
-
-        // 1. Check NextAuth Session
-        if (session && session.user.role === 'admin') {
-            isAdmin = true;
-        }
-
-        // 2. Check Custom Auth Token (if not already admin)
-        if (!isAdmin) {
-            const { cookies } = await import('next/headers');
-            const jwt = await import('jsonwebtoken');
-            const cookieStore = await cookies();
-            const token = cookieStore.get('auth_token');
-
-            if (token) {
-                try {
-                    const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET;
-                    const decoded = jwt.default.verify(token.value, secret);
-                    if (decoded.role === 'admin') {
-                        isAdmin = true;
-                    }
-                } catch (err) {
-                    // Token invalid
-                }
-            }
-        }
+        const { isAdmin: checkAdmin } = await import('../../../../lib/admin-check');
+        const isAdmin = await checkAdmin();
 
         if (!isAdmin) {
-            console.log('Team API POST Unauthorized:', {
-                sessionRole: session?.user?.role,
-                headers: req.headers
-            });
+            console.log('Team API POST Unauthorized: Robust check failed');
             return NextResponse.json({ success: false, error: 'Unauthorized: Admin access required' }, { status: 401 });
         }
-
-        // Ideally, check for 'manage_admins' permission strictly
-        // const currentUser = await User.findById(session.user.id);
-        // if (!currentUser.permissions.includes('manage_admins')) ...
 
         const body = await req.json();
         const { email, password, name, permissions } = body;
