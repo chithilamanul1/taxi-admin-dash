@@ -528,8 +528,8 @@ const Prices = ({ initialDestination }) => {
                                 🛫
                             </div>
                             <div>
-                                <h4 className="text-emerald-900 dark:text-white font-bold text-lg">Airport Greeting (Board Show)</h4>
-                                <p className="text-gray-500 dark:text-slate-400 text-xs max-w-xs">Our driver will wait for you at the arrival terminal hall with your name on a board.</p>
+                                <h4 className="text-emerald-900 dark:text-white font-bold text-lg">Airport Greeting (NAME BOARD)</h4>
+                                <p className="text-gray-500 dark:text-slate-400 text-xs max-w-xs">Our driver will wait for you at the arrival terminal hall with your name on a NAME BOARD.</p>
                             </div>
                         </div>
                         <div className="flex flex-col items-end gap-3">

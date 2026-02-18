@@ -145,11 +145,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
     // Currency conversion helper
     const SUPPORTED_CURRENCIES = [
-        { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: '🇱🇰' },
-        { code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸' },
-        { code: 'EUR', symbol: '€', name: 'Euro', flag: '🇪🇺' },
-        { code: 'GBP', symbol: '£', name: 'British Pound', flag: '🇬🇧' },
-        { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳' },
+        { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: 'https://flagcdn.com/w40/lk.png' },
+        { code: 'USD', symbol: '$', name: 'US Dollar', flag: 'https://flagcdn.com/w40/us.png' },
+        { code: 'EUR', symbol: '€', name: 'Euro', flag: 'https://flagcdn.com/w40/eu.png' },
+        { code: 'GBP', symbol: '£', name: 'British Pound', flag: 'https://flagcdn.com/w40/gb.png' },
+        { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: 'https://flagcdn.com/w40/in.png' },
     ];
 
     const convertToAllCurrencies = (amountLKR) => {
@@ -747,7 +747,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <div className="flex items-center gap-3">
                                                 <Signpost size={18} className={formData.hasNameBoard ? 'text-emerald-600' : ''} />
                                                 <div className="text-left">
-                                                    <span className="text-[10px] md:text-xs font-bold block uppercase tracking-tight">Board</span>
+                                                    <span className="text-[10px] md:text-xs font-bold block uppercase tracking-tight">Name Board</span>
                                                     <span className="text-[8px] font-medium opacity-60">Driver waits with name sign</span>
                                                 </div>
                                             </div>
@@ -811,7 +811,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             >
                                                 <div className="flex items-center justify-between relative z-10">
                                                     <span className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 ${currency === c.code ? 'text-amber-900' : 'text-white/40'}`}>
-                                                        <span className="text-xs">{c.flag}</span> {c.code}
+                                                        <div className="w-4 h-4 rounded-full overflow-hidden border border-white/20">
+                                                            <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
+                                                        </div> {c.code}
                                                     </span>
                                                     {currency === c.code && (
                                                         <span className="text-[8px] font-black bg-amber-900/20 text-amber-900 px-1.5 py-0.5 rounded-full uppercase tracking-tighter">Selected</span>
@@ -1157,7 +1159,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                 <span className="text-[10px] opacity-60">Pay balance to driver</span>
                                                             </div>
                                                         </div>
-                                                        <span className="text-xs font-bold text-amber-400">50%</span>
+                                                        <span className="text-[10px] font-black leading-none block">NAME BOARD</span>
                                                     </button>
                                                 </div>
                                             )}
@@ -1171,7 +1173,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <Signpost size={16} />
                                         </div>
                                         <div>
-                                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 block leading-tight">Board</span>
+                                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 block leading-tight">Name Board</span>
                                             <span className="text-[11px] font-bold text-white uppercase">{formData.hasNameBoard ? 'Confirmed' : 'Not Requested'}</span>
                                         </div>
                                     </div>

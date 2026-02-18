@@ -62,8 +62,10 @@ export async function GET(req) {
 
                         if (reviewsData && reviewsData.data) {
                             // Sync to MongoDB (Upsert)
+                            // The instruction mentioned "18+ Reviews" for a UI badge, which is not applicable here.
+                            // This is a backend API route.
+                            // TripAdvisor API provides: id, published_date, rating, text, title, url, user { username }
                             for (const review of reviewsData.data) {
-                                // TripAdvisor API provides: id, published_date, rating, text, title, url, user { username }
                                 await Review.findOneAndUpdate(
                                     {
                                         externalUrl: review.url, // Unique identifier
@@ -119,7 +121,7 @@ export async function GET(req) {
             } else {
                 // Utmost fallback to match User's latest feedback
                 tripAdvisorStats.rating = 5.0;
-                tripAdvisorStats.totalReviews = 100; // Minimum known
+                tripAdvisorStats.totalReviews = 18; // Updated per request
             }
         }
 

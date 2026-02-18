@@ -82,7 +82,17 @@ const reviews = [
     { name: "Chandana wijayathilake", text: "Really Valuable service Very helpful team I am really happy their service Keep it up" },
     { name: "kasun sandamal", text: "Really nice driver, safe driving, calm atmosphere. Really nice trip from the airport to polonnaruwa!!! ❤️ Good Colombo airport taxi service .." },
     { name: "Buddhika kularathna", text: "We completed the first trip with Airport Taxi Tours. From Airport to Kottawa. They offered an excellent service. I recommend for others. 👏" },
-    { name: "Sanduni De Silva", text: "The best cab service we found from srilanka, affordable price , friendly manner full staff , we recommend this cab service for everyone, very safe driving.10/10" }
+    { name: "Sanduni De Silva", text: "The best cab service we found from srilanka, affordable price , friendly manner full staff , we recommend this cab service for everyone, very safe driving.10/10" },
+    { name: "Olena G", text: "Amazing experience, affordable transfer, safe, on time, nice drivers. Went with them for a 3 hour drive trip and also stopped at Galle and driver waited for me. Recommended!" },
+    { name: "kathriana m", text: "On-time airport transfer in Sri Lanka. Clean, comfortable car and smooth, stress-free ride. Easy to book. Reasonable price" },
+    { name: "Maxi Zaumseil", text: "Highly recommend this taxi service, not just for a pick up from the airport. I did all my rides around the island - in total six - with them and it was perfect. Punctual, kind and safe drivers. And also for a very good price!" },
+    { name: "Jürgen H", text: "I can only recommend this company! Always the best prices and communication perfect. The drivers all speak English, the vehicles always on time! 3x booked, 3x TOP!" },
+    { name: "Ishara U", text: "Superb experience. And the best price for anyone. No any hidden fee. Excellent drivers and great vehicle. Highly recommended 🫡" },
+    { name: "Lana I", text: "Used the service extensively throughout my 10 days in Sri Lanka. Numerous trips around the island, always on time and easy to book online. You have the option of paying online in advance via link or in cash to the driver. Excellent service, will be using next time for sure." },
+    { name: "Jason B", text: "I've traveled with them multiple times to and from the airport and they have never disappointed. Absolute professionals, and punctual. I always recommend them to family and friends traveling from or to CMB, great service as always." },
+    { name: "Manjula J", text: "In time and very reliable. Always use their service for my traveling. Excellent." },
+    { name: "Neeta Godambe", text: "I think this company was a surprise find. The rates are best as they are based as the Km .The service is prompt ,with regular information and communication via wapp . I availed the service twice and I found it the most Hassel free . I was picked up from a bus station to airport." },
+    { name: "RAUL P", text: "Best prices, good cars , prompt response , would recommend to anyone looking for taxi service in Sri Lanka." }
 ];
 
 export async function GET() {

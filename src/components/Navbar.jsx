@@ -133,8 +133,8 @@ export default function Navbar() {
                                     onClick={() => changeCurrency(c.code)}
                                     className={`w-full text-left px-5 py-3 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 transition-all text-sm font-bold flex items-center gap-4 ${currency === c.code ? 'text-white bg-emerald-700 shadow-inner' : 'text-slate-700 dark:text-slate-200'}`}
                                 >
-                                    <div className="w-9 h-9 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center text-xl shadow-md border-2 border-emerald-500/20">
-                                        {c.flag}
+                                    <div className="w-9 h-9 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center overflow-hidden shadow-md border-2 border-emerald-500/20">
+                                        <img src={c.flag} alt={c.name} className="w-full h-full object-cover scale-150" />
                                     </div>
                                     <div className="flex flex-col">
                                         <span className="leading-tight text-sm">{c.name}</span>
@@ -274,7 +274,9 @@ export default function Navbar() {
                                         onClick={() => changeCurrency(c.code)}
                                         className={`flex flex-col items-center justify-center gap-1 py-3 rounded-xl border transition-all text-xs font-bold ${currency === c.code ? 'bg-emerald-600 text-white border-emerald-600 shadow-md transform scale-105' : 'text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 border-slate-100 dark:border-slate-800'}`}
                                     >
-                                        <span className="text-base">{c.flag}</span>
+                                        <div className="w-6 h-6 rounded-full overflow-hidden border border-white/20">
+                                            <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
+                                        </div>
                                         <span>{c.code}</span>
                                     </button>
                                 ))}

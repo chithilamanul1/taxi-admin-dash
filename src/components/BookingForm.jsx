@@ -179,7 +179,7 @@ ${boardInfo}
             <div className="mt-8 p-6 bg-slate-50 rounded-2xl border border-slate-100">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3284/3284646.png" alt="Board" className="h-10 w-10 opacity-70" />
+                        <img src="https://cdn-icons-png.flaticon.com/512/3284/3284646.png" alt="NAME BORD" className="h-10 w-10 opacity-70" />
                         <div>
                             <div className="flex items-center gap-3">
                                 <Signpost size={20} className={formData.boardShow ? 'text-emerald-600' : 'text-slate-400'} />
@@ -191,6 +191,7 @@ ${boardInfo}
                         </div>
                     </div>
                     <div className="text-right">
+                        <span className="font-bold text-emerald-950 uppercase">NAME BOARD</span>
                         <span className="block font-bold text-emerald-600 text-sm">+ Rs 2000.00</span>
                         <label className="relative inline-flex items-center cursor-pointer mt-1">
                             <input

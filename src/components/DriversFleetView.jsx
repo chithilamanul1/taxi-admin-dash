@@ -244,14 +244,23 @@ const DriversFleetView = ({ bookings = [] }) => {
                         className="max-w-full max-h-full object-contain rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-500"
                     />
                 </div>
-                <a
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-full text-sm font-bold backdrop-blur-sm transition-all border border-white/10"
-                >
-                    Open in New Tab
-                </a>
+                <div className="flex gap-4">
+                    <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-full text-sm font-bold backdrop-blur-sm transition-all border border-white/10"
+                    >
+                        Open in New Tab
+                    </a>
+                    <a
+                        href={url}
+                        download
+                        className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg transition-all"
+                    >
+                        Download Image
+                    </a>
+                </div>
             </div>
         </div>
     );
@@ -435,7 +444,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                                             <div className="aspect-video bg-white rounded-lg flex items-center justify-center overflow-hidden border border-gray-100 shadow-inner">
                                                 {url && url !== 'placeholder' ? (
                                                     <img
-                                                        src={url.startsWith('/') ? url : `/uploads/drivers/${url}`}
+                                                        src={url.startsWith('https') || url.startsWith('http') || url.startsWith('/') ? url : `/api/upload?path=${url}`}
                                                         alt={key}
                                                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                                         onError={(e) => {

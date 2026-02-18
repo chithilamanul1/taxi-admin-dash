@@ -65,7 +65,7 @@ const RevenueStats = ({ bookings = [] }) => {
         return last7Days.map(date => {
             let dailyRev = 0;
             bookings.forEach(b => {
-                if (b.scheduledDate === date && (b.status === 'completed' || b.paymentStatus === 'paid')) {
+                if (b.scheduledDate && b.scheduledDate.includes(date) && (b.status === 'completed' || b.paymentStatus === 'paid')) {
                     dailyRev += (b.totalPrice || 0);
                 }
             });
@@ -148,10 +148,23 @@ const RevenueStats = ({ bookings = [] }) => {
                     <div className="h-48 flex items-end justify-between gap-2 px-2">
                         {dailyData.map((val, i) => {
                             const height = (val / maxDaily) * 100;
+
+                            // Color logic
+                            // Critical loss (< 20% margin or negative): Red
+                            // Average (20-40%): Yellow
+                            // Good (40-60%): Light Blue
+                            // Super amazing (> 60%): Green
+                            let barColor = 'bg-emerald-500';
+                            if (val === 0) barColor = 'bg-slate-100';
+                            else if (val < 5000) barColor = 'bg-red-500';
+                            else if (val < 15000) barColor = 'bg-yellow-400';
+                            else if (val < 35000) barColor = 'bg-sky-400';
+                            else barColor = 'bg-green-500';
+
                             return (
                                 <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
                                     <div
-                                        className="w-full bg-emerald-500/20 group-hover:bg-emerald-500 rounded-t-lg transition-all duration-500 relative"
+                                        className={`w-full ${barColor}/20 group-hover:${barColor} rounded-t-lg transition-all duration-500 relative`}
                                         style={{ height: `${height}%` }}
                                     >
                                         <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-xl">

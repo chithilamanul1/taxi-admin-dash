@@ -71,6 +71,7 @@ export default function AdminDashboard() {
     const [sendingReply, setSendingReply] = useState(false)
     const [selectedBooking, setSelectedBooking] = useState(null)
     const [selectedStatus, setSelectedStatus] = useState('pending')
+    const [selectedPaymentStatus, setSelectedPaymentStatus] = useState('pending')
     const [updatingStatus, setUpdatingStatus] = useState(false)
     const [drivers, setDrivers] = useState([])
     const [selectedDriver, setSelectedDriver] = useState('')
@@ -2342,6 +2343,7 @@ export default function AdminDashboard() {
                                                     onClick={() => {
                                                         setSelectedBooking(booking)
                                                         setSelectedStatus(booking.status || 'pending')
+                                                        setSelectedPaymentStatus(booking.paymentStatus || 'pending')
                                                         setSelectedDriver(booking.driver?._id || booking.driver || '')
                                                     }}
                                                     className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors"
@@ -2553,12 +2555,15 @@ export default function AdminDashboard() {
                                                         </div>
                                                         <div>
                                                             <span className="text-xs text-gray-500 uppercase tracking-wider block">Payment Status</span>
-                                                            <span className={`inline-block px-2 py-0.5 rounded text-xs font-bold capitalize mt-1 ${selectedBooking.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' :
-                                                                selectedBooking.paymentStatus === 'pending' ? 'bg-orange-100 text-orange-700' :
-                                                                    'bg-gray-100 text-gray-600'
-                                                                }`}>
-                                                                {selectedBooking.paymentStatus}
-                                                            </span>
+                                                            <select
+                                                                className={`mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-600 font-bold uppercase ${selectedPaymentStatus === 'paid' ? 'text-green-700' : 'text-orange-700'}`}
+                                                                value={selectedPaymentStatus}
+                                                                onChange={(e) => setSelectedPaymentStatus(e.target.value)}
+                                                            >
+                                                                <option value="pending">Pending</option>
+                                                                <option value="paid">Paid</option>
+                                                                <option value="cancelled">Cancelled</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                     <div>
@@ -2617,6 +2622,7 @@ export default function AdminDashboard() {
                                                             headers: { 'Content-Type': 'application/json' },
                                                             body: JSON.stringify({
                                                                 status: selectedStatus,
+                                                                paymentStatus: selectedPaymentStatus,
                                                                 assignedDriver: selectedDriver || null
                                                             })
                                                         })

@@ -46,51 +46,47 @@ export const authOptions = {
                 try {
                     await dbConnect()
 
-                    // Check if user exists
-                    let existingUser = await User.findOne({ email: user.email })
-                    let isNewUser = false
-
-                    // Define initial super-admins
                     const superAdmins = ['chithilamanul1@gmail.com', 'airporttaxis.lk@gmail.com', 'airporttaxis@gmail.com'];
                     const isAdminByEmail = superAdmins.includes(user.email);
 
+                    // Check if user exists in DB
+                    let existingUser = await User.findOne({ email: user.email })
+
+                    // If not a super admin AND not an existing admin in DB, block sign in
+                    if (!isAdminByEmail && (!existingUser || existingUser.role !== 'admin')) {
+                        console.log(`Unauthorized Google login attempt: ${user.email}`);
+                        return false; // Blocks the sign-in
+                    }
+
+                    let isNewUser = false
                     if (!existingUser) {
                         isNewUser = true;
-                        // Create new user from Google profile
                         existingUser = await User.create({
                             name: user.name,
                             email: user.email,
                             image: user.image,
-                            role: isAdminByEmail ? 'admin' : 'user',
-                            isAdmin: isAdminByEmail,
+                            role: 'admin', // Since we only allow admins to sign in via Google now
+                            isAdmin: true,
                             provider: 'google',
-                            password: 'google-oauth-' + Date.now() // Placeholder
+                            password: 'google-oauth-' + Date.now()
                         });
 
-                        // Send Welcome Email
                         await sendEmail({
                             to: user.email,
-                            subject: 'Welcome to Airport Taxis Tours',
+                            subject: 'Welcome to Airport Taxis Tours Admin Panel',
                             html: templates.welcome(user.name)
                         })
                     } else if (isAdminByEmail && existingUser.role !== 'admin') {
-                        // Upgrade existing Google user to admin if they are on the superAdmin list
                         existingUser.role = 'admin';
                         existingUser.isAdmin = true;
                         await existingUser.save();
                     }
 
-                    // Log login to Discord and send login notification email
                     try {
                         const { logUserLogin } = await import('./discord')
                         const { sendLoginNotification } = await import('./email-service')
-
                         await logUserLogin(user, 'Google')
-
-                        // Send login notification (not for new users - they get welcome email)
-                        if (!isNewUser) {
-                            await sendLoginNotification(user)
-                        }
+                        if (!isNewUser) await sendLoginNotification(user)
                     } catch (notifyError) {
                         console.error('Login notification failed:', notifyError)
                     }

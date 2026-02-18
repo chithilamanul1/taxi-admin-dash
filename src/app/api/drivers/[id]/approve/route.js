@@ -64,7 +64,7 @@ export async function POST(req, { params }) {
                 // Create Transaction Record
                 await WalletTransaction.create({
                     driver: driver._id,
-                    type: 'deposit',
+                    type: 'credit',
                     amount: amount,
                     status: 'completed',
                     description: 'Initial Registration Deposit',

@@ -78,7 +78,7 @@ const ReviewStatsBar = () => {
                                     ))}
                                 </div>
                             </div>
-                            <span className="text-[10px] text-slate-400">{taStats.count}</span>
+                            <span className="text-[10px] text-slate-400">18+ Reviews</span>
                         </div>
                     </a>
 

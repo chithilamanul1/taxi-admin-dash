@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Car, MapPin, Clock, Phone, LogOut, CheckCircle, XCircle, Navigation, Calendar, User, Loader2, Wifi, WifiOff, Radio } from 'lucide-react';
+import { Car, MapPin, Clock, Phone, LogOut, CheckCircle, XCircle, Navigation, Calendar, User, Loader2, Wifi, WifiOff, Radio, Signpost } from 'lucide-react';
 
 export default function DriverDashboard() {
     const router = useRouter();

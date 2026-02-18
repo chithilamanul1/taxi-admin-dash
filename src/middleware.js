@@ -1,34 +1,31 @@
 import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export function middleware(request) {
-    const token =
-        request.cookies.get("next-auth.session-token") ||
-        request.cookies.get("__Secure-next-auth.session-token") ||
-        request.cookies.get("auth_token");
-
+export async function middleware(request) {
     const { pathname } = request.nextUrl;
 
-    // Allow public routes explicitly
-    if (
-        pathname.startsWith("/login") ||
-        pathname.startsWith("/api") ||
-        pathname.startsWith("/_next") ||
-        pathname === "/"
-    ) {
-        return NextResponse.next();
-    }
+    if (pathname.startsWith("/admin")) {
+        const token = await getToken({
+            req: request,
+            secret: process.env.NEXTAUTH_SECRET || process.env.JWT_SECRET
+        });
 
-    // Protect admin routes
-    if (pathname.startsWith("/admin") && !token) {
-        if (pathname === "/admin/login") {
-            return NextResponse.next();
+        const isLoginPage = pathname === "/admin/login";
+
+        if (!token) {
+            if (isLoginPage) return NextResponse.next();
+            return NextResponse.redirect(new URL("/admin/login", request.url));
         }
-        return NextResponse.redirect(new URL("/admin/login", request.url));
-    }
 
-    // If trying to access login page while logged in, redirect to dashboard
-    if (pathname === "/admin/login" && token) {
-        return NextResponse.redirect(new URL("/admin", request.url));
+        // Check for admin role
+        if (token.role !== 'admin') {
+            console.log(`Unauthorized access attempt to ${pathname} by ${token.email}`);
+            return NextResponse.redirect(new URL("/", request.url));
+        }
+
+        if (isLoginPage) {
+            return NextResponse.redirect(new URL("/admin", request.url));
+        }
     }
 
     return NextResponse.next();

@@ -10,6 +10,30 @@ const LiveDriverMap = () => {
     const [lastRefresh, setLastRefresh] = useState(new Date());
     const [autoRefresh, setAutoRefresh] = useState(true);
     const [selectedDriver, setSelectedDriver] = useState(null);
+    const [map, setMap] = useState(null);
+
+    // Fit bounds to online drivers
+    useEffect(() => {
+        if (!map || drivers.length === 0) return;
+
+        const online = drivers.filter(d => d.isOnline && d.currentLocation?.lat && d.currentLocation?.lng);
+        if (online.length === 0) return;
+
+        const bounds = new window.google.maps.LatLngBounds();
+        online.forEach(d => {
+            bounds.extend({ lat: d.currentLocation.lat, lng: d.currentLocation.lng });
+        });
+
+        map.fitBounds(bounds);
+
+        // Don't zoom in too much for a single driver
+        if (online.length === 1) {
+            const listener = window.google.maps.event.addListener(map, 'idle', () => {
+                if (map.getZoom() > 14) map.setZoom(14);
+                window.google.maps.event.removeListener(listener);
+            });
+        }
+    }, [map, drivers]);
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
@@ -99,6 +123,8 @@ const LiveDriverMap = () => {
                         mapContainerStyle={{ width: '100%', height: '100%' }}
                         center={colomboCenter}
                         zoom={9}
+                        onLoad={setMap}
+                        onUnmount={() => setMap(null)}
                         options={{
                             disableDefaultUI: false,
                             styles: [
