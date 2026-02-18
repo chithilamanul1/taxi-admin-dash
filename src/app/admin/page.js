@@ -85,6 +85,11 @@ export default function AdminDashboard() {
     const [showNotifications, setShowNotifications] = useState(false)
     const [unreadCount, setUnreadCount] = useState(0)
 
+    // Quick Links State
+    const [quickLinks, setQuickLinks] = useState([])
+    const [newQuickLink, setNewQuickLink] = useState({ title: '', price: '', slug: '', badge: 'Special Offer' })
+    const [isSavingQuickLink, setIsSavingQuickLink] = useState(false)
+
     // Filter bookings based on search
     const filteredBookings = useMemo(() => {
         if (!bookingSearch.trim()) return bookings
@@ -1298,7 +1303,103 @@ export default function AdminDashboard() {
                                         </div>
                                     </div>
 
+                                    {/* Quick Link Generator Form */}
+                                    <div className="mb-12 bg-white p-6 rounded-2xl border border-emerald-900/10 shadow-sm">
+                                        <h4 className="text-sm font-bold text-emerald-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                            <Plus size={16} /> Quick Link Generator
+                                        </h4>
+                                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                                            <div>
+                                                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Destination/Title</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="e.g. Airport to Galle"
+                                                    value={newQuickLink.title}
+                                                    onChange={(e) => setNewQuickLink({ ...newQuickLink, title: e.target.value })}
+                                                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Price (USD)</label>
+                                                <input
+                                                    type="number"
+                                                    placeholder="59"
+                                                    value={newQuickLink.price}
+                                                    onChange={(e) => setNewQuickLink({ ...newQuickLink, price: e.target.value })}
+                                                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Link Slug (ID)</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="airport-to-galle"
+                                                    value={newQuickLink.slug}
+                                                    onChange={(e) => setNewQuickLink({ ...newQuickLink, slug: e.target.value })}
+                                                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                                />
+                                            </div>
+                                            <button
+                                                onClick={handleSaveQuickLink}
+                                                disabled={isSavingQuickLink}
+                                                className="bg-emerald-900 text-white h-[42px] px-6 rounded-xl font-bold text-sm hover:bg-emerald-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                            >
+                                                {isSavingQuickLink ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
+                                                Create Dynamic Link
+                                            </button>
+                                        </div>
+                                    </div>
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {/* Dynamic Links from DB */}
+                                        {quickLinks.map((rate) => (
+                                            <div key={rate._id} className="bg-emerald-900 text-white p-6 rounded-2xl shadow-lg border border-emerald-800 flex flex-col justify-between group hover:-translate-y-1 transition-all relative overflow-hidden">
+                                                <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/5 rounded-full blur-2xl"></div>
+                                                <div>
+                                                    <div className="flex items-start justify-between mb-4">
+                                                        <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-white font-black">
+                                                            {rate.title.split(' ').pop().charAt(0)}
+                                                        </div>
+                                                        <span className="text-[10px] font-bold text-emerald-400 border border-emerald-400/30 px-3 py-1 rounded-full uppercase tracking-widest">{rate.badge}</span>
+                                                    </div>
+                                                    <h4 className="font-bold text-white mb-1">{rate.title}</h4>
+                                                    <p className="text-2xl font-black text-white mb-4">${rate.price}</p>
+                                                </div>
+
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={() => {
+                                                            const url = `${window.location.origin}/checkout/${rate.slug}`;
+                                                            navigator.clipboard.writeText(url);
+                                                            alert('Link copied to clipboard!');
+                                                        }}
+                                                        className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white text-emerald-900 rounded-xl font-bold text-xs hover:bg-emerald-50 transition-all"
+                                                    >
+                                                        <Copy size={14} /> Copy Link
+                                                    </button>
+                                                    <Link
+                                                        href={`/checkout/${rate.slug}`}
+                                                        target="_blank"
+                                                        className="w-10 h-10 flex items-center justify-center bg-white/10 text-white rounded-xl hover:bg-white hover:text-emerald-900 transition-all"
+                                                        title="Preview"
+                                                    >
+                                                        <ExternalLink size={16} />
+                                                    </Link>
+                                                    <button
+                                                        onClick={() => handleDeleteQuickLink(rate._id)}
+                                                        className="w-10 h-10 flex items-center justify-center bg-white/10 text-white rounded-xl hover:bg-red-500 transition-all"
+                                                        title="Delete"
+                                                    >
+                                                        <X size={16} />
+                                                    </button>
+                                                </div>
+                                                <div className="mt-4 pt-4 border-t border-white/10 flex items-center gap-2">
+                                                    <span className="text-[9px] text-white/40 uppercase font-bold tracking-tighter">SLUG: {rate.slug}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                        {/* Static Flat Rates */}
                                         {flatRatesList.map((rate) => (
                                             <div key={rate.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-md transition-all">
                                                 <div>

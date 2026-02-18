@@ -19,6 +19,24 @@ export default function CheckoutPage() {
         if (id && flatRates[id]) {
             setProduct(flatRates[id]);
             setLoading(false);
+        } else if (id) {
+            // Try fetching from database
+            const fetchDynamicLink = async () => {
+                try {
+                    const res = await fetch(`/api/checkout/verify/${id}`);
+                    const data = await res.json();
+                    if (data.success) {
+                        setProduct(data.data);
+                    } else {
+                        setError(true);
+                    }
+                } catch (err) {
+                    setError(true);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchDynamicLink();
         } else {
             setError(true);
             setLoading(false);
