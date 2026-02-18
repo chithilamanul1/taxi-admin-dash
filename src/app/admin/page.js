@@ -2206,6 +2206,45 @@ export default function AdminDashboard() {
                                         </div>
 
                                         <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="md:col-span-2">
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Booking Type</label>
+                                                <div className="flex gap-4">
+                                                    <label className="flex items-center gap-2 cursor-pointer">
+                                                        <input
+                                                            type="radio"
+                                                            checked={manualBookingForm.type === 'transfer'}
+                                                            onChange={() => setManualBookingForm({ ...manualBookingForm, type: 'transfer' })}
+                                                            className="text-emerald-600 focus:ring-emerald-500"
+                                                        />
+                                                        <span className="text-sm font-medium">Taxi Transfer</span>
+                                                    </label>
+                                                    <label className="flex items-center gap-2 cursor-pointer">
+                                                        <input
+                                                            type="radio"
+                                                            checked={manualBookingForm.type === 'tour'}
+                                                            onChange={() => setManualBookingForm({ ...manualBookingForm, type: 'tour' })}
+                                                            className="text-emerald-600 focus:ring-emerald-500"
+                                                        />
+                                                        <span className="text-sm font-medium">Tour / Package</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            {manualBookingForm.type === 'tour' && (
+                                                <div className="md:col-span-2">
+                                                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Tour Package Title</label>
+                                                    <input
+                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                        value={manualBookingForm.tourDetails?.tourTitle || ''}
+                                                        onChange={e => setManualBookingForm({
+                                                            ...manualBookingForm,
+                                                            tourDetails: { ...manualBookingForm.tourDetails, tourTitle: e.target.value }
+                                                        })}
+                                                        placeholder="e.g. 7 Days Sri Lanka Grand Tour"
+                                                    />
+                                                </div>
+                                            )}
+
                                             <div>
                                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Customer Name</label>
                                                 <input
