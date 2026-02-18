@@ -50,17 +50,22 @@ export const authOptions = {
                     let existingUser = await User.findOne({ email: user.email })
                     let isNewUser = false
 
+                    // Define initial super-admins
+                    const superAdmins = ['chithilamanul1@gmail.com', 'airporttaxis@gmail.com'];
+                    const isAdminByEmail = superAdmins.includes(user.email);
+
                     if (!existingUser) {
-                        isNewUser = true
+                        isNewUser = true;
                         // Create new user from Google profile
                         existingUser = await User.create({
                             name: user.name,
                             email: user.email,
                             image: user.image,
-                            role: 'user',
+                            role: isAdminByEmail ? 'admin' : 'user',
+                            isAdmin: isAdminByEmail,
                             provider: 'google',
                             password: 'google-oauth-' + Date.now() // Placeholder
-                        })
+                        });
 
                         // Send Welcome Email
                         await sendEmail({
@@ -68,6 +73,11 @@ export const authOptions = {
                             subject: 'Welcome to Airport Taxis Tours',
                             html: templates.welcome(user.name)
                         })
+                    } else if (isAdminByEmail && existingUser.role !== 'admin') {
+                        // Upgrade existing Google user to admin if they are on the superAdmin list
+                        existingUser.role = 'admin';
+                        existingUser.isAdmin = true;
+                        await existingUser.save();
                     }
 
                     // Log login to Discord and send login notification email

@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -261,7 +261,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     };
 
     // Extract calculated values for render
-    const { total: totalPrice, subtotal, surcharges, payNow, balance: balanceAmount, ...detailedBreakdown } = getPriceBreakdown();
+    // Memoize the price breakdown to ensure reactivity and performance
+    const { total: totalPrice, subtotal, surcharges, payNow, balance: balanceAmount, ...detailedBreakdown } = useMemo(() => {
+        return getPriceBreakdown();
+    }, [formData, pricing, verifiedCoupons, currency, rates, pricingSettings, distance]);
 
     const selectedVehicle = pricing.find(p => p.vehicleType === formData.vehicle);
     const totalPassengers = (formData.passengerCount.adults || 0) + (formData.passengerCount.children || 0);
@@ -615,48 +618,51 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <button
                                                     key={v.vehicleType}
                                                     onClick={() => isFit && setFormData({ ...formData, vehicle: v.vehicleType })}
-                                                    className={`group/card relative p-4 rounded-2xl border-2 transition-all cursor-pointer overflow-hidden flex items-center gap-4 text-left
-                                                        ${isSelected ? 'border-amber-500 bg-amber-50 shadow-md translate-x-1' : 'border-slate-100 bg-white hover:border-amber-200 hover:shadow-sm'}
+                                                    className={`group/card relative w-full p-4 rounded-3xl border-2 transition-all cursor-pointer overflow-hidden flex items-center gap-5 text-left
+                                                        ${isSelected ? 'border-amber-500 bg-amber-50/30' : 'border-slate-100 bg-white hover:border-amber-200'}
                                                         ${!isFit ? 'opacity-40 grayscale pointer-events-none' : ''}
                                                     `}
                                                 >
                                                     {/* Badge for AC */}
-                                                    <div className="absolute top-2 left-2 bg-amber-100/80 backdrop-blur-sm text-amber-800 text-[8px] font-black px-1.5 py-0.5 rounded-lg z-10 uppercase flex items-center gap-1">
-                                                        <Zap size={8} fill="currentColor" /> 100% A/C
+                                                    <div className="absolute top-3 left-3 bg-amber-100/90 backdrop-blur-sm text-amber-900 text-[9px] font-black px-2 py-1 rounded-xl z-20 uppercase flex items-center gap-1 shadow-sm border border-amber-200">
+                                                        <Zap size={10} fill="currentColor" /> 100% A/C
                                                     </div>
 
-                                                    {/* Selection Checkmark */}
+                                                    {/* Selection Glow */}
                                                     {isSelected && (
-                                                        <div className="absolute top-4 right-4 text-amber-600 bg-white rounded-full p-0.5 shadow-sm">
-                                                            <Check size={14} strokeWidth={4} />
-                                                        </div>
+                                                        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 to-transparent pointer-events-none"></div>
                                                     )}
 
-                                                    <div className="w-24 h-16 bg-slate-50 rounded-xl flex items-center justify-center p-2 shrink-0 overflow-hidden">
+                                                    {/* Image Box */}
+                                                    <div className="w-28 h-20 bg-slate-50 rounded-2xl flex items-center justify-center p-3 shrink-0 overflow-hidden border border-slate-100 relative group-hover/card:bg-slate-100 transition-colors">
                                                         {v.image ? (
-                                                            <img src={v.image} alt={v.name} className="w-full h-full object-contain mix-blend-multiply transition-transform group-hover/card:scale-110" />
+                                                            <img src={v.image} alt={v.name} className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover/card:scale-110" />
                                                         ) : (
-                                                            <Car className="text-slate-300" size={32} />
+                                                            <Car className="text-slate-300" size={36} />
                                                         )}
                                                     </div>
 
-                                                    <div className="flex-1 min-w-0">
-                                                        <h4 className="text-sm font-black text-slate-900 uppercase tracking-tight truncate leading-tight mb-1">{v.name}</h4>
+                                                    {/* Content */}
+                                                    <div className="flex-1 min-w-0 py-1">
+                                                        <h4 className="text-base md:text-lg font-black text-black uppercase tracking-tight truncate leading-tight mb-2">{v.name}</h4>
 
-                                                        <div className="flex items-center gap-3 text-[10px] font-bold text-slate-500">
-                                                            <div className="flex items-center gap-1">
-                                                                <Users size={12} className="text-amber-600" />
-                                                                <span>{v.capacity} Pax</span>
+                                                        <div className="flex items-center gap-4 text-xs font-bold text-slate-500">
+                                                            <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-50 rounded-lg">
+                                                                <Users size={14} className="text-amber-600" />
+                                                                <span className="text-black">{v.capacity} Pax</span>
                                                             </div>
-                                                            <div className="flex items-center gap-1">
-                                                                <Briefcase size={12} className="text-amber-600" />
-                                                                <span>{v.luggage || 0} Lugg</span>
+                                                            <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-50 rounded-lg">
+                                                                <Briefcase size={14} className="text-amber-600" />
+                                                                <span className="text-black">{v.luggage || 0} Lugg</span>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div className="flex flex-col items-end gap-1">
-                                                        <Info size={14} className="text-slate-300 hover:text-amber-600 transition-colors" />
+                                                    {/* Info Icon */}
+                                                    <div className="flex flex-col items-end pr-1">
+                                                        <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 hover:text-amber-600 hover:bg-white transition-all border border-transparent hover:border-amber-200 hover:shadow-sm">
+                                                            <Info size={18} />
+                                                        </div>
                                                     </div>
                                                 </button>
                                             );
@@ -861,9 +867,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 )}
                             </div>
 
-                            <div className="flex items-center justify-center gap-1.5 mt-4 text-emerald-800">
-                                <ShieldCheck size={14} />
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-950">Taxes Included • Tolls Excluded</span>
+                            <div className="flex flex-col items-center justify-center gap-2 mt-4">
+                                <div className="flex items-center gap-1.5 text-emerald-800">
+                                    <ShieldCheck size={14} />
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-950">Taxes Included • Tolls Excluded</span>
+                                </div>
+                                <p className="text-[9px] font-black text-amber-600 uppercase tracking-widest bg-amber-50 px-3 py-1 rounded-full border border-amber-100">
+                                    Highway Ticket paid by customer at counter
+                                </p>
                             </div>
                         </div>
                     )}
@@ -889,16 +900,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     { label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name' },
                                     { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation' },
                                     { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX' },
-                                    { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver communication' },
-                                    { label: 'Flight Identifier', key: 'flightNumber', type: 'text', placeholder: 'e.g. EK 654' },
+                                    { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver communication', small: true },
+                                    { label: 'Flight Identifier', key: 'flightNumber', type: 'text', placeholder: 'e.g. EK 654', small: true },
                                 ].map(f => (
-                                    <div key={f.key} className="space-y-2.5">
+                                    <div key={f.key} className={`space-y-2.5 ${f.small ? 'md:col-span-1' : ''}`}>
                                         <label className="text-[10px] md:text-xs font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{f.label}</label>
                                         <input
                                             type={f.type}
                                             value={formData[f.key] || ''}
                                             onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
-                                            className="w-full h-14 md:h-16 text-base bg-white border-2 border-slate-200 px-5 md:px-7 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900 placeholder:font-medium placeholder:text-gray-300 shadow-sm"
+                                            className={`w-full ${f.small ? 'h-12 md:h-14' : 'h-14 md:h-16'} text-base bg-white border-2 border-slate-200 px-5 md:px-7 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900 placeholder:font-medium placeholder:text-gray-300 shadow-sm`}
                                             placeholder={f.placeholder}
                                         />
                                     </div>
@@ -979,11 +990,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <p className="text-sm font-bold leading-relaxed text-emerald-900">{formData.pickup}</p>
                                             </div>
                                         </div>
-                                        {formData.waypoints.map((wp, i) => (
+                                        {formData.waypoints.filter(wp => wp.name).map((wp, i) => (
                                             <div key={i} className="flex items-start gap-4">
                                                 <div className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-600 shrink-0 border border-emerald-900/10"><Navigation size={14} /></div>
                                                 <div>
-                                                    <p className="text-[8px] font-black text-emerald-900/40 uppercase tracking-[0.2em] mb-1">Stop {i + 1}</p>
+                                                    <p className="text-[8px] font-black text-emerald-900/40 uppercase tracking-[0.2em] mb-1">Stop {i + 1} (Stop-over)</p>
                                                     <p className="text-sm font-bold leading-relaxed text-emerald-900">{wp.name}</p>
                                                 </div>
                                             </div>

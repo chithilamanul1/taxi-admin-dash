@@ -85,7 +85,7 @@ export default function Navbar() {
                                 { label: 'Tour Packages', href: '/tour-packages' }
                             ].map(sub => (
                                 <Link
-                                    key={sub.href}
+                                    key={sub.label}
                                     href={sub.href}
                                     className="text-left px-5 py-2.5 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors text-sm font-bold text-emerald-900/80 dark:text-white/80 hover:text-emerald-900 dark:hover:text-white"
                                 >
@@ -96,16 +96,16 @@ export default function Navbar() {
                     </div>
 
                     {[
-                        { label: 'Airport Drop & Pickup', href: '/prices' },
-                        { label: 'Custom Trip', href: '/custom-trip' },
-                        { label: 'Rates', href: '/prices' },
-                        { label: 'Offers', href: '/offers' },
-                        { label: 'Reviews', href: '/reviews' },
-                        { label: 'Blog', href: '/blog' },
-                        { label: 'Contact', href: '/contact' },
+                        { label: 'Airport Drop & Pickup', href: '/prices', id: 'nav-drop-pickup' },
+                        { label: 'Custom Trip', href: '/custom-trip', id: 'nav-custom-trip' },
+                        { label: 'Rates', href: '/prices', id: 'nav-rates' },
+                        { label: 'Offers', href: '/offers', id: 'nav-offers' },
+                        { label: 'Reviews', href: '/reviews', id: 'nav-reviews' },
+                        { label: 'Blog', href: '/blog', id: 'nav-blog' },
+                        { label: 'Contact', href: '/contact', id: 'nav-contact' },
                     ].map(item => (
                         <Link
-                            key={item.href}
+                            key={item.id}
                             href={item.href}
                             className={`text-sm font-bold uppercase tracking-widest hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${pathname === item.href ? 'text-emerald-900 dark:text-white' : (needsSolidBg ? 'text-emerald-900/70 dark:text-slate-300' : 'text-white/80')}`}
                         >
@@ -123,19 +123,22 @@ export default function Navbar() {
                             <span>{currency}</span>
                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
                         </button>
-                        <div className="absolute top-full right-0 mt-3 w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-emerald-900/10 dark:border-slate-800">
+                        <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border-2 border-emerald-600/20 dark:border-emerald-500/30 overflow-hidden">
+                            <div className="px-5 py-2 mb-1 border-b border-emerald-900/5 dark:border-white/5 bg-emerald-50 dark:bg-emerald-900/20">
+                                <span className="text-[10px] font-black text-emerald-900/40 dark:text-emerald-400/40 uppercase tracking-widest">Select Currency</span>
+                            </div>
                             {SUPPORTED_CURRENCIES.map(c => (
                                 <button
                                     key={c.code}
                                     onClick={() => changeCurrency(c.code)}
-                                    className={`w-full text-left px-5 py-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all text-sm font-bold flex items-center gap-3 border-b border-emerald-900/5 last:border-0 ${currency === c.code ? 'text-emerald-900 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 shadow-inner' : 'text-slate-600 dark:text-slate-300'}`}
+                                    className={`w-full text-left px-5 py-3 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 transition-all text-sm font-bold flex items-center gap-4 ${currency === c.code ? 'text-white bg-emerald-700 shadow-inner' : 'text-slate-700 dark:text-slate-200'}`}
                                 >
-                                    <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg shadow-sm">
+                                    <div className="w-9 h-9 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center text-xl shadow-md border-2 border-emerald-500/20">
                                         {c.flag}
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="leading-tight">{c.name}</span>
-                                        <span className="text-[10px] opacity-60 uppercase tracking-widest">{c.code}</span>
+                                        <span className="leading-tight text-sm">{c.name}</span>
+                                        <span className={`text-[10px] uppercase tracking-widest font-black ${currency === c.code ? 'text-emerald-200' : 'text-emerald-600/40'}`}>{c.code}</span>
                                     </div>
                                 </button>
                             ))}
@@ -238,21 +241,21 @@ export default function Navbar() {
 
                         <div className="grid grid-cols-2 gap-3">
                             {[
-                                { label: 'Home', href: '/', icon: '🏠' },
-                                { label: 'Airport Drop & Pickup', href: '/prices', icon: '✈️' },
-                                { label: 'Custom Trip', href: '/custom-trip', icon: '✨' },
-                                { label: 'Day Tours', href: '/day-trips', icon: '🌴' },
-                                { label: 'City Tours', href: '/tours', icon: '🏙️' },
-                                { label: 'Safari', href: '/tours', icon: '🐘' },
-                                { label: 'Tour Packages', href: '/tour-packages', icon: '🗺️' },
-                                { label: 'Rates', href: '/prices', icon: '💰' },
-                                { label: 'Offers', href: '/offers', icon: '🎁' },
-                                { label: 'Reviews', href: '/reviews', icon: '⭐' },
-                                { label: 'Blog', href: '/blog', icon: '📝' },
-                                { label: 'Contact', href: '/contact', icon: '📞' }
+                                { label: 'Home', href: '/', icon: '🏠', id: 'm-home' },
+                                { label: 'Airport Drop & Pickup', href: '/prices', icon: '✈️', id: 'm-drop' },
+                                { label: 'Custom Trip', href: '/custom-trip', icon: '✨', id: 'm-custom' },
+                                { label: 'Day Tours', href: '/day-trips', icon: '🌴', id: 'm-day' },
+                                { label: 'City Tours', href: '/tours', icon: '🏙️', id: 'm-city' },
+                                { label: 'Safari', href: '/tours', icon: '🐘', id: 'm-safari' },
+                                { label: 'Tour Packages', href: '/tour-packages', icon: '🗺️', id: 'm-pkg' },
+                                { label: 'Rates', href: '/prices', icon: '💰', id: 'm-rates' },
+                                { label: 'Offers', href: '/offers', icon: '🎁', id: 'm-offers' },
+                                { label: 'Reviews', href: '/reviews', icon: '⭐', id: 'm-reviews' },
+                                { label: 'Blog', href: '/blog', icon: '📝', id: 'm-blog' },
+                                { label: 'Contact', href: '/contact', icon: '📞', id: 'm-contact' }
                             ].map(item => (
                                 <Link
-                                    key={item.label}
+                                    key={item.id}
                                     href={item.href}
                                     className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-emerald-900/10 dark:border-slate-800 text-emerald-900 dark:text-white font-bold shadow-sm hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all"
                                 >

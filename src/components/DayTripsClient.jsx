@@ -127,7 +127,7 @@ export default function DayTripsClient() {
                                             </span>
                                         )}
                                         <span className="text-2xl font-black text-emerald-900">
-                                            ${trip.price}
+                                            {typeof trip.price === 'object' ? (trip.price?.currency || '$') : (trip.currency || '$')} {typeof trip.price === 'object' ? (trip.price?.amount?.toLocaleString() || '0') : (trip.price?.toLocaleString() || '0')}
                                         </span>
                                         <span className="text-sm text-slate-500"> /person</span>
                                     </div>

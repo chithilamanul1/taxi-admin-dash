@@ -104,8 +104,12 @@ export default function TourPackagesClient() {
                             <div key={tour._id || index} className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all">
                                 <div className="grid md:grid-cols-[300px,1fr] lg:grid-cols-[350px,1fr]">
                                     <div className="relative h-64 md:h-full bg-gradient-to-br from-emerald-400 to-emerald-700">
-                                        {tour.image ? (
-                                            <img src={tour.image} alt={tour.title} className="w-full h-full object-cover" />
+                                        {tour.heroImage || (tour.images && tour.images.length > 0) || tour.image ? (
+                                            <img
+                                                src={tour.heroImage || tour.images?.[0] || tour.image}
+                                                alt={tour.title}
+                                                className="w-full h-full object-cover"
+                                            />
                                         ) : (
                                             <div className="absolute inset-0 bg-slate-200 flex items-center justify-center text-slate-400">No Image</div>
                                         )}
@@ -120,8 +124,10 @@ export default function TourPackagesClient() {
                                             <div className="bg-emerald-900/90 backdrop-blur-sm rounded-2xl p-4 text-white">
                                                 <div className="text-sm opacity-80 mb-1">Starting from</div>
                                                 <div className="flex items-baseline gap-2">
-                                                    <span className="text-3xl font-black">${tour.price?.toLocaleString() || '0'}</span>
-                                                    <span className="text-sm opacity-80">/{tour.priceType || 'Person'}</span>
+                                                    <span className="text-3xl font-black">
+                                                        {typeof tour.price === 'object' ? (tour.price?.currency || '$') : (tour.currency || '$')} {typeof tour.price === 'object' ? (tour.price?.amount?.toLocaleString() || '0') : (tour.price?.toLocaleString() || '0')}
+                                                    </span>
+                                                    <span className="text-sm opacity-80">/{tour.priceType || tour.price?.type || 'Person'}</span>
                                                 </div>
                                             </div>
                                         </div>

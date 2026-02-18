@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { Users, Car, MapPin, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink, Plus } from 'lucide-react'
-import { useSession } from 'next-auth/react'
+import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { flatRatesList } from '@/data/flatRates'
@@ -19,15 +19,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         if (status === 'loading') return;
 
-        // Robust check: if no NextAuth session, check if auth_token cookie might exist
-        // (We can't verify JWT on client but we can avoid immediate redirect if cookie present)
-        const hasAuthCookie = document.cookie.includes('auth_token');
-
-        if (!session && !hasAuthCookie) {
-            router.push('/admin/login');
-        }
-
-        if (session && session.user.role !== 'admin' && !hasAuthCookie) {
+        if (!session || session.user.role !== 'admin') {
             router.push('/admin/login');
         }
     }, [session, status, router])
@@ -508,7 +500,7 @@ export default function AdminDashboard() {
                 </nav>
 
                 <div className="p-3 border-t border-white/10">
-                    <button onClick={async () => { await fetch('/api/auth/logout', { method: 'POST' }); window.location.href = '/admin/login' }} className="flex items-center gap-3 p-3 w-full hover:bg-red-500/20 rounded-xl transition-all text-red-300 hover:text-red-100">
+                    <button onClick={() => signOut({ callbackUrl: '/admin/login' })} className="flex items-center gap-3 p-3 w-full hover:bg-red-500/20 rounded-xl transition-all text-red-300 hover:text-red-100">
                         <X size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Log Out</span>
                     </button>
@@ -595,8 +587,12 @@ export default function AdminDashboard() {
                             )}
                         </div>
 
-                        <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-500/30">
-                            A
+                        <div className="w-10 h-10 overflow-hidden bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-500/30">
+                            {session?.user?.image ? (
+                                <img src={session.user.image} alt="Admin" className="w-full h-full object-cover" />
+                            ) : (
+                                <span>{session?.user?.name?.charAt(0) || 'A'}</span>
+                            )}
                         </div>
                     </div>
                 </header>
