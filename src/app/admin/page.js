@@ -11,6 +11,7 @@ import DriversFleetView from '@/components/DriversFleetView'
 import LiveDriverMap from '@/components/LiveDriverMap'
 import AdminChatManager from '@/components/AdminChatManager'
 import PushNotificationManager from '@/components/PushNotificationManager'
+import RevenueStats from '@/components/RevenueStats'
 
 export default function AdminDashboard() {
     const { data: session, status } = useSession()
@@ -447,6 +448,10 @@ export default function AdminDashboard() {
                         <DollarSign size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Pricing</span>
                     </button>
+                    <button onClick={() => { setCurrentView('revenue'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'revenue' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <DollarSign size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Revenue</span>
+                    </button>
                     <button onClick={() => { setCurrentView('chat'); setSidebarOpen(false); }} className={`relative flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'chat' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <MessageCircle size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Live Chat</span>
@@ -456,12 +461,16 @@ export default function AdminDashboard() {
                         <Compass size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Tour Packages</span>
                     </button>
-                    <button onClick={() => { setCurrentView('bookings'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 relative ${currentView === 'bookings' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => {
+                        setCurrentView('bookings');
+                        setSidebarOpen(false);
+                        setUnreadCount(0); // Clear badge when viewing bookings
+                    }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 relative ${currentView === 'bookings' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Users size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Bookings</span>
-                        {bookings.filter(b => b.status === 'pending').length > 0 && (
+                        {unreadCount > 0 && (
                             <span className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse">
-                                {bookings.filter(b => b.status === 'pending').length}
+                                {unreadCount}
                             </span>
                         )}
                     </button>
@@ -598,6 +607,17 @@ export default function AdminDashboard() {
                 </header>
 
                 <div className="p-6">
+                    {currentView === 'revenue' && (
+                        <div className="space-y-8">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h2 className="text-3xl font-bold text-slate-800">Finance & Analytics</h2>
+                                    <p className="text-slate-500 mt-1">Detailed breakdown of income, fuel costs, and net profit.</p>
+                                </div>
+                            </div>
+                            <RevenueStats bookings={bookings} />
+                        </div>
+                    )}
                     {currentView === 'dashboard' && (
                         <div className="space-y-8">
                             <div className="flex items-center justify-between">
@@ -612,6 +632,8 @@ export default function AdminDashboard() {
                             </div>
 
                             {/* Premium Stats Cards */}
+                            <RevenueStats bookings={bookings} />
+
                             <div className="grid md:grid-cols-4 gap-6">
                                 {stats.map((stat, i) => {
                                     const gradients = [
@@ -2153,19 +2175,181 @@ export default function AdminDashboard() {
                                     <h2 className="text-2xl font-bold text-emerald-900">All Bookings</h2>
                                     <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">{filteredBookings.length} total</span>
                                 </div>
-                                <div className="relative w-full sm:w-auto">
-                                    <input
-                                        type="text"
-                                        placeholder="Search by ID, Name, Phone..."
-                                        value={bookingSearch}
-                                        onChange={(e) => setBookingSearch(e.target.value)}
-                                        className="w-full sm:w-80 pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20 shadow-sm"
-                                    />
-                                    <div className="absolute left-3 top-2.5 text-gray-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                <div className="flex items-center gap-3 w-full sm:w-auto">
+                                    <div className="relative w-full sm:w-80">
+                                        <input
+                                            type="text"
+                                            placeholder="Search by ID, Name, Phone..."
+                                            value={bookingSearch}
+                                            onChange={(e) => setBookingSearch(e.target.value)}
+                                            className="w-full sm:w-80 pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20 shadow-sm"
+                                        />
+                                        <div className="absolute left-3 top-2.5 text-gray-400">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                        </div>
                                     </div>
+                                    <button
+                                        onClick={() => setShowManualBooking(true)}
+                                        className="bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-700 text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all whitespace-nowrap"
+                                    >
+                                        <Plus size={16} /> Manual Booking
+                                    </button>
                                 </div>
                             </div>
+
+                            {/* Manual Booking Modal */}
+                            {showManualBooking && (
+                                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-6 animate-fade-in-up overflow-y-auto max-h-[90vh]">
+                                        <div className="flex items-center justify-between mb-6 border-b pb-4">
+                                            <h3 className="text-xl font-bold text-emerald-900">Add Manual / Offline Trip</h3>
+                                            <button onClick={() => setShowManualBooking(false)} className="text-gray-400 hover:text-gray-600">
+                                                <X size={24} />
+                                            </button>
+                                        </div>
+
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Customer Name</label>
+                                                <input
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.customerName}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, customerName: e.target.value })}
+                                                    placeholder="John Doe"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Phone Number</label>
+                                                <input
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.guestPhone}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, guestPhone: e.target.value })}
+                                                    placeholder="+94 77 XXX XXXX"
+                                                />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Pickup Location</label>
+                                                <input
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.pickupLocation.address}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, pickupLocation: { ...manualBookingForm.pickupLocation, address: e.target.value } })}
+                                                    placeholder="Airport Terminal 1"
+                                                />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Dropoff Location</label>
+                                                <input
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.dropoffLocation.address}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, dropoffLocation: { ...manualBookingForm.dropoffLocation, address: e.target.value } })}
+                                                    placeholder="Hotel Name / City"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Date</label>
+                                                <input
+                                                    type="date"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.scheduledDate}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, scheduledDate: e.target.value })}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Time</label>
+                                                <input
+                                                    type="time"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.scheduledTime}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, scheduledTime: e.target.value })}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Vehicle Type</label>
+                                                <select
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm bg-white"
+                                                    value={manualBookingForm.vehicleType}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, vehicleType: e.target.value })}
+                                                >
+                                                    <option value="sedan">Sedan (Car)</option>
+                                                    <option value="van">Van</option>
+                                                    <option value="mini-van">Mini Van</option>
+                                                    <option value="suv">SUV</option>
+                                                    <option value="luxury">Luxury</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Distance (KM)</label>
+                                                <input
+                                                    type="number"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.distanceKm}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, distanceKm: e.target.value })}
+                                                    placeholder="100"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Price (LKR)</label>
+                                                <input
+                                                    type="number"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.totalPrice}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, totalPrice: e.target.value })}
+                                                    placeholder="15000"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Payment Method</label>
+                                                <select
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm bg-white"
+                                                    value={manualBookingForm.paymentMethod}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, paymentMethod: e.target.value })}
+                                                >
+                                                    <option value="cash">Cash</option>
+                                                    <option value="card">Card (Manual Swipe)</option>
+                                                    <option value="online">Online Link</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-8 flex justify-end gap-3 pt-6 border-t">
+                                            <button
+                                                onClick={() => setShowManualBooking(false)}
+                                                className="px-6 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-bold"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                disabled={isSavingManual}
+                                                onClick={async () => {
+                                                    setIsSavingManual(true)
+                                                    try {
+                                                        const res = await fetch('/api/bookings', {
+                                                            method: 'POST',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({ ...manualBookingForm, isManual: true })
+                                                        })
+                                                        if (res.ok) {
+                                                            alert('Manual booking added successfully!')
+                                                            setShowManualBooking(false)
+                                                            // Refresh list
+                                                            fetch('/api/bookings').then(r => r.json()).then(d => setBookings(d))
+                                                        }
+                                                    } catch (e) {
+                                                        console.error(e)
+                                                        alert('Failed to save manual booking')
+                                                    } finally {
+                                                        setIsSavingManual(false)
+                                                    }
+                                                }}
+                                                className="px-8 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 flex items-center gap-2"
+                                            >
+                                                {isSavingManual ? <Loader2 size={18} className="animate-spin" /> : <Plus size={18} />}
+                                                Save Booking
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
                             {filteredBookings.length === 0 ? (
                                 <div className="text-center py-12 text-gray-400 bg-slate-50 rounded-lg border border-dashed">

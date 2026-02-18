@@ -51,7 +51,7 @@ export const authOptions = {
                     let isNewUser = false
 
                     // Define initial super-admins
-                    const superAdmins = ['chithilamanul1@gmail.com', 'airporttaxis@gmail.com'];
+                    const superAdmins = ['chithilamanul1@gmail.com', 'airporttaxis.lk@gmail.com', 'airporttaxis@gmail.com'];
                     const isAdminByEmail = superAdmins.includes(user.email);
 
                     if (!existingUser) {
