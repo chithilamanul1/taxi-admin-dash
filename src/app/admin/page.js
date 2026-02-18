@@ -634,28 +634,7 @@ export default function AdminDashboard() {
                             {/* Premium Stats Cards */}
                             <RevenueStats bookings={bookings} />
 
-                            <div className="grid md:grid-cols-4 gap-6">
-                                {stats.map((stat, i) => {
-                                    const gradients = [
-                                        'from-emerald-500 to-emerald-600',
-                                        'from-blue-500 to-blue-600',
-                                        'from-violet-500 to-violet-600',
-                                        'from-orange-500 to-orange-600'
-                                    ];
-                                    return (
-                                        <div key={i} className="relative group">
-                                            <div className={`absolute inset-0 bg-gradient-to-br ${gradients[i]} rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity`}></div>
-                                            <div className="relative bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                                                <div className={`w-14 h-14 bg-gradient-to-br ${gradients[i]} rounded-xl flex items-center justify-center mb-4 shadow-lg`}>
-                                                    <stat.icon className="text-white" size={24} />
-                                                </div>
-                                                <div className="text-slate-500 text-sm font-medium mb-1">{stat.title}</div>
-                                                <div className="text-3xl font-bold text-slate-800">{stat.value}</div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
+                            {/* Stats are now exclusively handled by RevenueStats to ensure verified data */}
 
                             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                                 <div className="px-8 py-5 border-b border-slate-100 flex items-center justify-between">
