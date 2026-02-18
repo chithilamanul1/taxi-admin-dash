@@ -180,6 +180,18 @@ const DriversFleetView = ({ bookings = [] }) => {
     // Create new driver (manual)
     const createDriver = async (e) => {
         e.preventDefault();
+
+        // Basic frontend validation
+        if (!newDriver.name || !newDriver.phone || !newDriver.vehicleNumber) {
+            alert('Please fill in Name, Phone, and Vehicle Number');
+            return;
+        }
+
+        if (newDriver.phone.length < 9) {
+            alert('Invalid phone number');
+            return;
+        }
+
         setIsSubmitting(true);
         try {
             const res = await fetch('/api/drivers', {

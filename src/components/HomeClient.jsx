@@ -14,6 +14,7 @@ import RecentPosts from './RecentPosts'
 import SpecialOffersSection from './SpecialOffersSection'
 import MarketingPopup from './MarketingPopup'
 import ExpressCheckoutModal from './ExpressCheckoutModal'
+import { flatRatesList } from '@/data/flatRates'
 
 export default function HomeClient() {
     const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -107,32 +108,7 @@ export default function HomeClient() {
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-8">
-                        {[
-                            {
-                                id: "mirissa",
-                                title: "Airport to Mirissa",
-                                price: "59",
-                                badge: "Top Choice",
-                                img: "/mirissa.jpg",
-                                meta: "Whale Watching Hub"
-                            },
-                            {
-                                id: "ahangama",
-                                title: "Airport to Ahangama",
-                                price: "58",
-                                badge: "Deep South",
-                                img: "/ahangama.jpg",
-                                meta: "Surfing & Yoga Hub"
-                            },
-                            {
-                                id: "sigiriya",
-                                title: "Airport to Sigiriya",
-                                price: "90",
-                                badge: "Historic",
-                                img: "/sigiriya.jpg",
-                                meta: "Ancient Rock Fortress"
-                            }
-                        ].map((route, i) => (
+                        {flatRatesList.filter(r => r.id !== 'sampath_test').slice(0, 3).map((route, i) => (
                             <button
                                 key={i}
                                 onClick={() => {
@@ -171,7 +147,7 @@ export default function HomeClient() {
                         ))}
                     </div>
                 </div>
-            </section>
+            </section >
 
             <ReviewStatsBar />
             <GoogleReviews />
@@ -211,6 +187,6 @@ export default function HomeClient() {
             </section>
 
             <Features />
-        </div>
+        </div >
     )
 }

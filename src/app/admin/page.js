@@ -1,9 +1,11 @@
 'use client'
 
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { Users, Car, MapPin, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle } from 'lucide-react'
+import { Users, Car, MapPin, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { flatRatesList } from '@/data/flatRates'
 import ReviewsManagement from '@/components/ReviewsManagement'
 import DriversFleetView from '@/components/DriversFleetView'
 import LiveDriverMap from '@/components/LiveDriverMap'
@@ -1284,6 +1286,56 @@ export default function AdminDashboard() {
                                         ))}
                                     </div>
                                 )}
+
+                                {/* Express Checkout Quick Links */}
+                                <div className="mt-12 bg-slate-50 rounded-2xl p-8 border-2 border-dashed border-slate-200">
+                                    <div className="flex items-center justify-between mb-8">
+                                        <div>
+                                            <h3 className="text-xl font-bold text-emerald-900 flex items-center gap-2">
+                                                <LinkIcon size={20} className="text-emerald-600" /> Shareable Flat Rate Links
+                                            </h3>
+                                            <p className="text-slate-500 text-sm mt-1">Direct payment links for marketing and manual sharing.</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {flatRatesList.map((rate) => (
+                                            <div key={rate.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-md transition-all">
+                                                <div>
+                                                    <div className="flex items-start justify-between mb-4">
+                                                        <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 font-black">
+                                                            {rate.title.split(' ').pop().charAt(0)}
+                                                        </div>
+                                                        <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">{rate.badge}</span>
+                                                    </div>
+                                                    <h4 className="font-bold text-slate-800 mb-1">{rate.title}</h4>
+                                                    <p className="text-2xl font-black text-emerald-900 mb-4">${rate.price}</p>
+                                                </div>
+
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={() => {
+                                                            const url = `${window.location.origin}/checkout/${rate.id}`;
+                                                            navigator.clipboard.writeText(url);
+                                                            alert('Link copied to clipboard!');
+                                                        }}
+                                                        className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-900 text-white rounded-xl font-bold text-xs hover:bg-emerald-800 transition-all"
+                                                    >
+                                                        <Copy size={14} /> Copy Link
+                                                    </button>
+                                                    <Link
+                                                        href={`/checkout/${rate.id}`}
+                                                        target="_blank"
+                                                        className="w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-400 rounded-xl hover:bg-emerald-50 hover:text-emerald-600 transition-all"
+                                                        title="Preview Link"
+                                                    >
+                                                        <ExternalLink size={16} />
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}

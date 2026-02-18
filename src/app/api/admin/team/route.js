@@ -81,6 +81,11 @@ export async function POST(req) {
         const body = await req.json();
         const { email, password, name, permissions } = body;
 
+        // Validation
+        if (!email || !name) {
+            return NextResponse.json({ success: false, error: 'Name and email are required' }, { status: 400 });
+        }
+
         let user = await User.findOne({ email });
 
         if (user) {
@@ -110,6 +115,7 @@ export async function POST(req) {
         return NextResponse.json({ success: true, data: user });
 
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        console.error('Team API POST Error:', error);
+        return NextResponse.json({ success: false, error: error.message || 'Server error' }, { status: 500 });
     }
 }

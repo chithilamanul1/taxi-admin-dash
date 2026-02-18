@@ -1,0 +1,44 @@
+export const flatRates = {
+    mirissa: {
+        id: "mirissa",
+        title: "Airport to Mirissa",
+        price: 59,
+        badge: "Top Choice",
+        img: "/mirissa.jpg",
+        meta: "Whale Watching Hub"
+    },
+    ahangama: {
+        id: "ahangama",
+        title: "Airport to Ahangama",
+        price: 58,
+        badge: "Deep South",
+        img: "/ahangama.jpg",
+        meta: "Surfing & Yoga Hub"
+    },
+    sigiriya: {
+        id: "sigiriya",
+        title: "Airport to Sigiriya",
+        price: 90,
+        badge: "Historic",
+        img: "/sigiriya.jpg",
+        meta: "Ancient Rock Fortress"
+    },
+    ella: {
+        id: "ella",
+        title: "Airport to Ella",
+        price: 110,
+        badge: "Scenic Route",
+        img: "/ella.jpg",
+        meta: "Highlands Escape"
+    },
+    sampath_test: {
+        id: "sampath_test",
+        title: "Sampath IPG Test",
+        price: 1,
+        badge: "Internal Test",
+        img: "/test-product.jpg",
+        meta: "Bank Integration Test"
+    }
+};
+
+export const flatRatesList = Object.values(flatRates);

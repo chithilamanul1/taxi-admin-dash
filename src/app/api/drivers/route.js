@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { isAdmin } from '@/lib/admin-check';
 import dbConnect from '@/lib/db';
 import Driver from '@/models/Driver';
+import User from '@/models/User';
 
 // GET - List all drivers
 export async function GET() {
@@ -32,21 +33,19 @@ export async function POST(req) {
         }
 
         // 1. Check if User exists, OR create new User
-        let user = await import('@/models/User').then(mod => mod.default.findOne({ phone: data.phone }));
+        let user = await User.findOne({ phone: data.phone });
 
         if (!user) {
-            const bcrypt = await import('bcryptjs'); // Dynamic import for performance if not used elsewhere
-            const salt = await bcrypt.genSalt(10);
             // Default password is last 4 digits of phone
             const defaultPin = data.phone.slice(-4);
-            const hashedPassword = await bcrypt.hash(defaultPin, salt);
 
-            const User = await import('@/models/User').then(mod => mod.default);
+            // Note: We pass the PLAIN password here. 
+            // The User model's pre-save hook handles the hashing correctly.
             user = await User.create({
                 name: data.name,
                 email: data.email || `driver.${data.phone}@airporttaxis.lk`, // Dummy email if not provided
                 phone: data.phone,
-                password: hashedPassword,
+                password: defaultPin,
                 role: 'driver'
             });
         }
