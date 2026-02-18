@@ -226,20 +226,22 @@ const RevenueStats = ({ bookings = [] }) => {
                                     const cost = (dist / eff) * FUEL_PRICE;
                                     const profit = (b.totalPrice || 0) - cost;
                                     const isTour = b.type === 'tour';
+                                    const isDayTrip = b.type === 'day-trip';
+                                    const isPackage = isTour || isDayTrip;
 
                                     return (
                                         <tr key={idx} className="hover:bg-slate-50">
                                             <td className="px-6 py-3 text-slate-600">{b.scheduledDate || 'N/A'}</td>
                                             <td className="px-6 py-3">
-                                                <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${isTour ? 'bg-purple-100 text-purple-700' : 'bg-emerald-100 text-emerald-700'}`}>
-                                                    {isTour ? 'Tour / Package' : 'Transfer'}
+                                                <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${isPackage ? 'bg-purple-100 text-purple-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                                                    {isTour ? 'Tour / Package' : isDayTrip ? 'Day Trip' : 'Transfer'}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-3">
                                                 <div className="capitalize text-slate-900 font-medium">
-                                                    {isTour ? (b.tourDetails?.tourTitle || 'Tour Package') : type}
+                                                    {isPackage ? (b.tourDetails?.tourTitle || (isDayTrip ? 'Day Trip' : 'Tour Package')) : type}
                                                 </div>
-                                                {isTour && <div className="text-[10px] text-slate-400">Duration: {b.tourDetails?.duration}</div>}
+                                                {isPackage && <div className="text-[10px] text-slate-400">Duration: {b.tourDetails?.duration}</div>}
                                             </td>
                                             <td className="px-6 py-3 font-mono">{dist} km</td>
                                             <td className="px-6 py-3 font-bold text-emerald-600">Rs. {(b.totalPrice || 0).toLocaleString()}</td>

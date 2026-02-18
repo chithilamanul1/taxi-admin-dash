@@ -726,87 +726,7 @@ export default function AdminDashboard() {
                         </div>
                     )}
 
-                    {currentView === 'bookings' && (
-                        <div className="space-y-6">
-                            <div className="flex justify-between items-center">
-                                <h2 className="text-2xl font-bold text-emerald-900">Manage Bookings</h2>
-                                <input
-                                    type="text"
-                                    placeholder="Search bookings..."
-                                    className="px-4 py-2 border rounded-lg outline-none focus:border-emerald-500"
-                                    onChange={(e) => setBookingSearch(e.target.value)}
-                                />
-                            </div>
-                            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                                <div className="overflow-x-auto">
-                                    <table className="w-full text-sm text-left">
-                                        <thead className="bg-emerald-50 text-emerald-900 font-bold uppercase text-xs">
-                                            <tr>
-                                                <th className="px-6 py-4">ID</th>
-                                                <th className="px-6 py-4">Customer</th>
-                                                <th className="px-6 py-4">Route</th>
-                                                <th className="px-6 py-4">Status</th>
-                                                <th className="px-6 py-4">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-emerald-900/5">
-                                            {filteredBookings.length === 0 ? (
-                                                <tr><td colSpan="5" className="p-8 text-center text-gray-400">No bookings found</td></tr>
-                                            ) : (
-                                                filteredBookings.map((booking) => (
-                                                    <tr key={booking._id}
-                                                        className={`hover:bg-slate-50 transition-colors cursor-pointer ${selectedBooking?._id === booking._id ? 'bg-emerald-50' : ''}`}
-                                                        onClick={() => {
-                                                            setSelectedBooking(booking);
-                                                            // Find and mark related notification as read
-                                                            const relatedNotif = notifications.find(n => !n.isRead && n.bookingId === booking._id);
-                                                            if (relatedNotif) {
-                                                                markNotificationRead(relatedNotif._id);
-                                                            }
-                                                        }}
-                                                    >
-                                                        <td className="px-6 py-4 font-mono text-xs text-slate-400">#{booking._id.slice(-6)}</td>
-                                                        <td className="px-6 py-4">
-                                                            <div className="font-bold text-emerald-900">{booking.customerName}</div>
-                                                            <div className="text-xs text-slate-500">{booking.guestPhone}</div>
-                                                        </td>
-                                                        <td className="px-6 py-4">
-                                                            <div className="max-w-[200px] truncate text-xs font-medium" title={booking.pickupLocation?.address}>{booking.pickupLocation?.address?.split(',')[0]}</div>
-                                                            <div className="text-emerald-300 font-bold text-xs pl-1">↓</div>
-                                                            <div className="max-w-[200px] truncate text-xs font-medium" title={booking.dropoffLocation?.address}>{booking.dropoffLocation?.address?.split(',')[0]}</div>
-                                                        </td>
-                                                        <td className="px-6 py-4">
-                                                            <select
-                                                                value={booking.status}
-                                                                onChange={(e) => updateBookingStatus(booking._id, e.target.value)}
-                                                                className={`px-3 py-1 rounded-lg text-xs font-bold uppercase bg-white border cursor-pointer
-                                                                    ${booking.status === 'completed' ? 'text-green-600 border-green-200 bg-green-50' :
-                                                                        booking.status === 'cancelled' ? 'text-red-600 border-red-200 bg-red-50' :
-                                                                            'text-emerald-900 border-emerald-200'}`}
-                                                            >
-                                                                <option value="pending">Pending</option>
-                                                                <option value="assigned">Assigned</option>
-                                                                <option value="ongoing">Ongoing</option>
-                                                                <option value="completed">Completed</option>
-                                                                <option value="cancelled">Cancelled</option>
-                                                            </select>
-                                                        </td>
-                                                        <td className="px-6 py-4 text-xs">
-                                                            <div className="flex gap-2">
-                                                                <span className={`px-2 py-1 rounded bg-slate-100 font-medium ${booking.paymentStatus === 'paid' ? 'text-green-600 bg-green-50' : 'text-slate-500'}`}>
-                                                                    {booking.paymentStatus}
-                                                                </span>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                ))
-                                            )}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+
 
                     {currentView === 'chat' && (
                         <div className="animate-fade-in-up">
@@ -2221,18 +2141,27 @@ export default function AdminDashboard() {
                                                     <label className="flex items-center gap-2 cursor-pointer">
                                                         <input
                                                             type="radio"
+                                                            checked={manualBookingForm.type === 'day-trip'}
+                                                            onChange={() => setManualBookingForm({ ...manualBookingForm, type: 'day-trip' })}
+                                                            className="text-emerald-600 focus:ring-emerald-500"
+                                                        />
+                                                        <span className="text-sm font-medium">Day Trip</span>
+                                                    </label>
+                                                    <label className="flex items-center gap-2 cursor-pointer">
+                                                        <input
+                                                            type="radio"
                                                             checked={manualBookingForm.type === 'tour'}
                                                             onChange={() => setManualBookingForm({ ...manualBookingForm, type: 'tour' })}
                                                             className="text-emerald-600 focus:ring-emerald-500"
                                                         />
-                                                        <span className="text-sm font-medium">Tour / Package</span>
+                                                        <span className="text-sm font-medium">Tour Package</span>
                                                     </label>
                                                 </div>
                                             </div>
 
-                                            {manualBookingForm.type === 'tour' && (
+                                            {(manualBookingForm.type === 'tour' || manualBookingForm.type === 'day-trip') && (
                                                 <div className="md:col-span-2">
-                                                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Tour Package Title</label>
+                                                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Package / Day Trip Title</label>
                                                     <input
                                                         className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
                                                         value={manualBookingForm.tourDetails?.tourTitle || ''}
@@ -2240,7 +2169,7 @@ export default function AdminDashboard() {
                                                             ...manualBookingForm,
                                                             tourDetails: { ...manualBookingForm.tourDetails, tourTitle: e.target.value }
                                                         })}
-                                                        placeholder="e.g. 7 Days Sri Lanka Grand Tour"
+                                                        placeholder="e.g. 7 Days Sri Lanka Grand Tour or Kandy Day Trip"
                                                     />
                                                 </div>
                                             )}
@@ -2412,8 +2341,8 @@ export default function AdminDashboard() {
                                                     key={booking._id}
                                                     onClick={() => {
                                                         setSelectedBooking(booking)
-                                                        setSelectedStatus(booking.status)
-                                                        setSelectedDriver(booking.driver || '')
+                                                        setSelectedStatus(booking.status || 'pending')
+                                                        setSelectedDriver(booking.driver?._id || booking.driver || '')
                                                     }}
                                                     className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors"
                                                 >

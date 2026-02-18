@@ -19,7 +19,7 @@ const bookingSchema = new mongoose.Schema({
         lng: { type: Number }
     },
     vehicleType: { type: String, required: false }, // Made optional for tours
-    type: { type: String, enum: ['transfer', 'tour'], default: 'transfer' }, // New Type Field
+    type: { type: String, enum: ['transfer', 'tour', 'day-trip'], default: 'transfer' }, // Extended Type Field
     tourDetails: {
         tourId: String,
         tourTitle: String,
