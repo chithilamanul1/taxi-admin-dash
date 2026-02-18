@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 import { LogIn, ShieldAlert, Loader2, Mail, Lock } from 'lucide-react';
 
-export default function AdminLogin() {
+function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -152,5 +152,20 @@ export default function AdminLogin() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function AdminLogin() {
+    return (
+        <Suspense fallback={
+            <div className="flex min-h-screen items-center justify-center bg-[#0a0f18]">
+                <div className="text-center">
+                    <Loader2 className="animate-spin text-emerald-600 mb-4 mx-auto" size={48} />
+                    <p className="text-slate-400 font-bold tracking-widest">LOADING PORTAL...</p>
+                </div>
+            </div>
+        }>
+            <LoginForm />
+        </Suspense>
     );
 }
