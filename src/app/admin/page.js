@@ -83,6 +83,24 @@ export default function AdminDashboard() {
     const [newQuickLink, setNewQuickLink] = useState({ title: '', price: '', slug: '', badge: 'Special Offer' })
     const [isSavingQuickLink, setIsSavingQuickLink] = useState(false)
 
+    // Manual Booking States
+    const [showManualBooking, setShowManualBooking] = useState(false);
+    const [manualBookingForm, setManualBookingForm] = useState({
+        customerName: '',
+        guestPhone: '',
+        pickupLocation: { address: '' },
+        dropoffLocation: { address: '' },
+        scheduledDate: '',
+        scheduledTime: '',
+        vehicleType: 'sedan',
+        distanceKm: '',
+        totalPrice: '',
+        paymentStatus: 'pending',
+        paymentMethod: 'cash',
+        type: 'transfer'
+    });
+    const [isSavingManual, setIsSavingManual] = useState(false);
+
     // Filter bookings based on search
     const filteredBookings = useMemo(() => {
         if (!bookingSearch.trim()) return bookings

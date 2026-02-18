@@ -207,7 +207,8 @@ const RevenueStats = ({ bookings = [] }) => {
                         <thead>
                             <tr className="bg-slate-50 text-left text-slate-500 uppercase font-bold tracking-wider">
                                 <th className="px-6 py-3">Trip Date</th>
-                                <th className="px-6 py-3">Vehicle</th>
+                                <th className="px-6 py-3">Category</th>
+                                <th className="px-6 py-3">Vehicle / Trip</th>
                                 <th className="px-6 py-3">Dist. (KM)</th>
                                 <th className="px-6 py-3">Revenue (Rs.)</th>
                                 <th className="px-6 py-3">Fuel Cost (Est.)</th>
@@ -224,11 +225,22 @@ const RevenueStats = ({ bookings = [] }) => {
                                     const eff = EFFICIENCY[type] || 12;
                                     const cost = (dist / eff) * FUEL_PRICE;
                                     const profit = (b.totalPrice || 0) - cost;
+                                    const isTour = b.type === 'tour';
 
                                     return (
                                         <tr key={idx} className="hover:bg-slate-50">
                                             <td className="px-6 py-3 text-slate-600">{b.scheduledDate || 'N/A'}</td>
-                                            <td className="px-6 py-3 capitalize text-slate-900 font-medium">{type}</td>
+                                            <td className="px-6 py-3">
+                                                <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${isTour ? 'bg-purple-100 text-purple-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                                                    {isTour ? 'Tour / Package' : 'Transfer'}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-3">
+                                                <div className="capitalize text-slate-900 font-medium">
+                                                    {isTour ? (b.tourDetails?.tourTitle || 'Tour Package') : type}
+                                                </div>
+                                                {isTour && <div className="text-[10px] text-slate-400">Duration: {b.tourDetails?.duration}</div>}
+                                            </td>
                                             <td className="px-6 py-3 font-mono">{dist} km</td>
                                             <td className="px-6 py-3 font-bold text-emerald-600">Rs. {(b.totalPrice || 0).toLocaleString()}</td>
                                             <td className="px-6 py-3 text-orange-600">Rs. {cost.toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
