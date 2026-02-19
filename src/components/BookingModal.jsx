@@ -29,6 +29,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const [couponInput, setCouponInput] = useState('');
     const [couponLoading, setCouponLoading] = useState(false);
     const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true });
+    const [destinations, setDestinations] = useState([]);
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -42,7 +43,17 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 console.error("Failed to fetch settings in modal", err);
             }
         };
+        const fetchDestinations = async () => {
+            try {
+                const res = await fetch('/api/admin/destinations', { cache: 'no-store' });
+                const data = await res.json();
+                if (data.success) setDestinations(data.data);
+            } catch (err) {
+                console.error("Failed to fetch destinations in modal", err);
+            }
+        };
         fetchSettings();
+        fetchDestinations();
     }, []);
 
     // Body Scroll Lock
@@ -80,6 +91,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         whatsapp: initialData.whatsapp || '',
         email: initialData.email || '',
         flightNumber: initialData.flightNumber || '',
+        flightArrivalDate: initialData.flightArrivalDate || '',
+        flightArrivalTime: initialData.flightArrivalTime || '',
         arrivalDate: initialData.arrivalDate || '', // Added to prevent crash
         notes: initialData.notes || '',
         duration: initialData.duration || '',
@@ -91,7 +104,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         billingCountry: '',
     });
 
-    // Coupon handlers
+    const [destinations, setDestinations] = useState([]);
+    const [infoVehicle, setInfoVehicle] = useState(null);
+
+    // Body Scroll Lock
 
     const handleApplyCoupon = async (codeToApply = couponInput, contextPickup = formData.pickup, contextDropoff = formData.dropoff) => {
         const input = (codeToApply || '').trim();
@@ -165,7 +181,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             if (!vehicleData || distance === 0) return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0, lkr: { total: 0, payNow: 0, balance: 0, surcharges: 0, subtotal: 0 }, originalLKR: 0 };
 
             const distKm = Math.ceil(distance || 0);
-            const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType, formData.pickup, formData.dropoff);
+            const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType, formData.pickup, formData.dropoff, destinations);
             const surcharges = calculateSurcharges({
                 waitingHours: formData.waitingHours,
                 hasNameBoard: formData.hasNameBoard
@@ -449,6 +465,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 appliedCoupons: verifiedCoupons.map(c => c.code),
                 paymentMethod: formData.paymentMethod,
                 flightNumber: formData.flightNumber,
+                flightArrivalDate: formData.flightArrivalDate,
+                flightArrivalTime: formData.flightArrivalTime,
                 notes: formData.notes,
                 billingDetails: {
                     billingName: formData.billingName,
@@ -660,9 +678,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                                     {/* Info Icon */}
                                                     <div className="flex flex-col items-end pr-1">
-                                                        <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 hover:text-amber-600 hover:bg-white transition-all border border-transparent hover:border-amber-200 hover:shadow-sm">
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setInfoVehicle(v);
+                                                            }}
+                                                            className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-amber-600 hover:bg-white transition-all border border-transparent hover:border-amber-200 hover:shadow-md z-30"
+                                                        >
                                                             <Info size={18} />
-                                                        </div>
+                                                        </button>
                                                     </div>
                                                 </button>
                                             );
@@ -903,7 +928,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation' },
                                     { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX' },
                                     { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver communication', small: true },
-                                    { label: 'Flight Identifier', key: 'flightNumber', type: 'text', placeholder: 'e.g. EK 654', small: true },
+                                    { label: 'Flight No', key: 'flightNumber', type: 'text', placeholder: 'e.g. EK 654', small: true },
+                                    { label: 'Arrival Date', key: 'flightArrivalDate', type: 'date', small: true },
+                                    { label: 'Arrival Time', key: 'flightArrivalTime', type: 'time', small: true },
                                 ].map(f => (
                                     <div key={f.key} className={`space-y-2.5 ${f.small ? 'md:col-span-1' : ''}`}>
                                         <label className="text-[10px] md:text-xs font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{f.label}</label>
@@ -1236,6 +1263,97 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     </div>
                 </div>
             </div>
+
+            {/* Vehicle Info Popup Modal */}
+            <AnimatePresence>
+                {infoVehicle && (
+                    <div className="fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="bg-white w-full max-w-lg rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-200"
+                        >
+                            {/* Header Image Area */}
+                            <div className="relative h-56 bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-12">
+                                <button
+                                    onClick={() => setInfoVehicle(null)}
+                                    className="absolute top-6 right-6 w-10 h-10 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-red-50 hover:text-red-600 transition-all z-10"
+                                >
+                                    <X size={20} />
+                                </button>
+
+                                {infoVehicle.image ? (
+                                    <img
+                                        src={infoVehicle.image}
+                                        alt={infoVehicle.name}
+                                        className="w-full h-full object-contain mix-blend-multiply transition-transform duration-700 hover:scale-110"
+                                    />
+                                ) : (
+                                    <Car size={80} className="text-slate-300" />
+                                )}
+                            </div>
+
+                            {/* Info Content */}
+                            <div className="p-8 space-y-6">
+                                <div>
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">{infoVehicle.name}</h3>
+                                        <div className="bg-amber-100/80 text-amber-900 text-[10px] font-black px-2 py-0.5 rounded-lg uppercase border border-amber-200">
+                                            Premium A/C
+                                        </div>
+                                    </div>
+                                    <p className="text-sm font-medium text-slate-500 leading-relaxed uppercase tracking-wide">
+                                        Professional airport transfer service with experienced chauffeur.
+                                    </p>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-amber-600 shadow-sm">
+                                            <Users size={20} />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Capacity</p>
+                                            <p className="text-base font-black text-slate-900 leading-none">{infoVehicle.capacity} Persons</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
+                                            <Briefcase size={20} />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Luggage</p>
+                                            <p className="text-base font-black text-slate-900 leading-none">{infoVehicle.luggage || 0} Luggages</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-3 bg-emerald-50/50 p-5 rounded-3xl border border-emerald-100">
+                                    <h4 className="text-[10px] font-black text-emerald-800 uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
+                                        <ShieldCheck size={14} /> Included Amenities
+                                    </h4>
+                                    <div className="grid grid-cols-2 gap-y-2 gap-x-4">
+                                        {['100% A/C', 'Water Bottles', 'Hand Sanitizer', 'English Speaking Chauffeur'].map(f => (
+                                            <div key={f} className="flex items-center gap-2 text-[11px] font-bold text-slate-700">
+                                                <Check size={12} className="text-emerald-500" /> {f}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <button
+                                    onClick={() => setInfoVehicle(null)}
+                                    className="w-full py-5 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-xs hover:bg-slate-800 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95"
+                                >
+                                    Understood
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

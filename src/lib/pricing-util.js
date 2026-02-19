@@ -5,10 +5,10 @@
 
 import { destinations } from './destinations';
 
-export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '') => {
-    if (!vehicleData || distanceKm === 0) return 0;
+export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '', dynamicDestinations = []) => {
+    if (!vehicleData || !distanceKm || distanceKm <= 0) return 0;
 
-    const distKm = Math.ceil(distanceKm);
+    const distKm = Math.ceil(Number(distanceKm) || 0);
     let baseTotal = 0;
 
     const isFromAirport = pickup?.toLowerCase().includes('airport');
@@ -19,12 +19,17 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
 
     if (isAirportTransfer && (isFromAirport || isToAirport)) {
         const destinationName = isFromAirport ? dropoff : pickup;
-        const popDest = destinations.find(d =>
+        // Search in dynamicDestinations first, fallback to static if needed (though dynamic should have all)
+        const popDest = dynamicDestinations.find(d =>
+            destinationName.toLowerCase().includes(d.name.toLowerCase()) ||
+            destinationName.toLowerCase().includes(d.id.toLowerCase())
+        ) || destinations.find(d =>
             destinationName.toLowerCase().includes(d.name.toLowerCase()) ||
             destinationName.toLowerCase().includes(d.id.toLowerCase())
         );
 
         if (popDest && popDest.pricing) {
+            const pricing = popDest.pricing instanceof Map ? Object.fromEntries(popDest.pricing) : popDest.pricing;
             const vehicleMap = {
                 'mini-car': 'Mini Car',
                 'sedan': 'Sedan',
@@ -61,7 +66,20 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     if (distancePrice === 0) {
         const basePrice = vehicleData.basePrice || 0;
         const baseKm = vehicleData.baseKm || 0;
-        const perKmRate = vehicleData.perKmRate || 0;
+
+        // Check for Location-Specific Per-KM Rate Override
+        const matchedOverride = dynamicDestinations.find(d =>
+            (pickup.toLowerCase().includes(d.name?.toLowerCase()) ||
+                dropoff.toLowerCase().includes(d.name?.toLowerCase())) &&
+            d.perKmRateOverride > 0
+        );
+
+        const perKmRate = matchedOverride ? matchedOverride.perKmRateOverride : (vehicleData.perKmRate || 0);
+
+        if (matchedOverride) {
+            console.log(`[Pricing] Applied rate override for ${matchedOverride.name}: LKR ${perKmRate}/km`);
+        }
+
         if (distKm <= baseKm) {
             distancePrice = basePrice;
         } else {
@@ -90,15 +108,15 @@ export const calculateSurcharges = (params, vehicleData) => {
     const { waitingHours, hasNameBoard } = params;
 
     if (waitingHours > 0) {
-        if (vehicleData.waitingCharges && vehicleData.waitingCharges.length >= waitingHours) {
-            surcharges += vehicleData.waitingCharges[waitingHours - 1];
+        if (vehicleData.waitingCharges && Array.isArray(vehicleData.waitingCharges) && vehicleData.waitingCharges.length >= waitingHours) {
+            surcharges += Number(vehicleData.waitingCharges[waitingHours - 1]) || 0;
         } else {
-            surcharges += (waitingHours * (vehicleData.hourlyRate || 500));
+            surcharges += (Number(waitingHours) * (Number(vehicleData.hourlyRate) || 500));
         }
     }
 
     if (hasNameBoard) {
-        surcharges += (params.nameBoardPrice || 2000);
+        surcharges += (Number(params.nameBoardPrice) || 2000);
     }
 
     return surcharges;

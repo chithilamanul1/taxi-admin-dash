@@ -18,11 +18,11 @@ import TripMap from './TripMap'
 import { calculateBasePrice, calculateSurcharges } from '@/lib/pricing-util';
 
 // (Helper to calculate price)
-const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, pickupName = '', dropoffName = '') => {
+const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, pickupName = '', dropoffName = '', destinations = []) => {
     if (!distance || !pricingMap[vehicleId]) return { total: 0 };
     const vehicleData = pricingMap[vehicleId];
 
-    const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupName, dropoffName);
+    const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupName, dropoffName, destinations);
     const surcharges = calculateSurcharges({ waitingHours, hasNameBoard, nameBoardPrice }, vehicleData);
 
     return { total: basePrice + surcharges };
@@ -74,6 +74,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [dismissedOfferIds, setDismissedOfferIds] = useState([]);
     const [nameBoardPrice, setNameBoardPrice] = useState(2000); // Default, updated via API
     const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true });
+    const [destinations, setDestinations] = useState([]);
 
 
     // Fetch Pricing based on Tab
@@ -227,7 +228,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         // We could also set duration if needed
     }
 
-    // Fetch Marketing Offers
+    // Fetch Marketing Offers & Destinations
     useEffect(() => {
         fetch('/api/admin/marketing')
             .then(res => res.json())
@@ -235,6 +236,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 if (data.offers) setActiveOffers(data.offers);
             })
             .catch(err => console.error("Error fetching offers:", err));
+
+        fetch('/api/admin/destinations')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) setDestinations(data.data);
+            })
+            .catch(err => console.error("Error fetching destinations:", err));
     }, []);
 
     // Fetch Available Coupons for Widget
@@ -440,7 +448,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         hasNameBoard,
         nameBoardPrice,
         pickup?.name || pickupSearch,
-        dropoff?.name || dropoffSearch
+        dropoff?.name || dropoffSearch,
+        destinations
     );
 
     // Calculate total discount from all applied offers (MAX RULE: No Stacking)
@@ -851,7 +860,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                             <div className="flex flex-col">
                                                                 <span className="text-2xl font-black text-slate-900 dark:text-white leading-tight">
                                                                     {c.value}{c.discountType === 'percentage' ? '%' : ''}
-                                                                    <span className="font-bold text-emerald-950 uppercase">NAME BOARD</span>
+                                                                    <span className="font-bold text-emerald-950 uppercase">OFF</span>
                                                                 </span>
                                                                 <div className="flex items-center gap-2 mt-2">
                                                                     <div className="px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center gap-2">
@@ -877,249 +886,246 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                 )}
                             </div>
-                        </div>
 
-                        {/* Counters Grid */}
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                            {[
-                                { id: 'adults', label: 'Adults' },
-                                { id: 'children', label: 'Children' },
-                                { id: 'luggage', label: 'Luggage' },
-                                { id: 'handLuggage', label: 'Hand Luggage' }
-                            ].map(c => (
-                                <div key={c.id} className="bg-[#FFC107] border border-black/10 p-3 rounded-2xl flex flex-col items-center justify-center transition-colors shadow-sm">
-                                    <span className="text-[9px] font-black text-black uppercase tracking-widest mb-2 opacity-80">{c.label}</span>
-                                    <div className="flex items-center gap-3">
-                                        <button
-                                            onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, p[c.id] - 1) }))}
-                                            className="w-8 h-8 rounded-xl bg-white border border-black/10 flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-black shadow-sm"
-                                            aria-label={`Decrease ${c.label}`}
-                                        >
-                                            <Minus size={12} strokeWidth={3} />
-                                        </button>
-                                        <span className="font-black text-lg text-black min-w-[12px] text-center" aria-live="polite">{passengerCount[c.id]}</span>
-                                        <button
-                                            onClick={() => setPassengerCount(p => ({ ...p, [c.id]: p[c.id] + 1 }))}
-                                            className="w-8 h-8 rounded-xl bg-black border border-black/10 flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-white shadow-sm"
-                                            aria-label={`Increase ${c.label}`}
-                                        >
-                                            <Plus size={12} strokeWidth={3} />
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Vehicle Selection - Unified for Desktop & Mobile */}
-                        <div className="mt-4">
-                            <label className="text-[10px] font-bold text-emerald-900 dark:text-white uppercase tracking-widest mb-2 block pl-1">Selected Vehicle</label>
-                            <button
-                                onClick={() => setIsVehicleDrawerOpen(true)}
-                                className="w-full h-20 px-4 flex items-center justify-between bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 rounded-2xl hover:border-emerald-600 dark:hover:border-emerald-500 hover:shadow-md transition-all group"
-                                aria-label="Select Vehicle"
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className="w-14 h-12 bg-slate-50 dark:bg-white/10 rounded-xl flex items-center justify-center p-1">
-                                        {vehiclePricing[vehicle]?.image ? (
-                                            <div className="relative w-full h-full">
-                                                <Image
-                                                    src={vehiclePricing[vehicle].image}
-                                                    alt={vehiclePricing[vehicle]?.name || "Vehicle"}
-                                                    fill
-                                                    className="object-contain mix-blend-multiply dark:mix-blend-normal"
-                                                    sizes="64px"
-                                                />
-                                            </div>
-                                        ) : (
-                                            <Car className="text-emerald-900/40 dark:text-white/40" />
-                                        )}
-                                    </div>
-                                    <div className="text-left">
-                                        <p className="font-bold text-base text-emerald-900 dark:text-white">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
-                                        <div className="flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300 font-medium">
-                                            <span>{vehiclePricing[vehicle]?.capacity || 4} Passengers</span>
-                                            <span className="w-1 h-1 bg-emerald-600/30 rounded-full"></span>
-                                            <span>{vehiclePricing[vehicle]?.luggage || 2} Lugg</span>
-                                            <span className="w-1 h-1 bg-emerald-600/30 rounded-full"></span>
-                                            <span>{vehiclePricing[vehicle]?.handLuggage || 2} Hand</span>
+                            {/* Counters Grid */}
+                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                                {[
+                                    { id: 'adults', label: 'Adults' },
+                                    { id: 'children', label: 'Children' },
+                                    { id: 'luggage', label: 'Luggage' },
+                                    { id: 'handLuggage', label: 'Hand Luggage' }
+                                ].map(c => (
+                                    <div key={c.id} className="bg-[#FFC107] border border-black/10 p-3 rounded-2xl flex flex-col items-center justify-center transition-colors shadow-sm">
+                                        <span className="text-[9px] font-black text-black uppercase tracking-widest mb-2 opacity-80">{c.label}</span>
+                                        <div className="flex items-center gap-3">
+                                            <button
+                                                onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, (Number(p[c.id]) || 0) - 1) }))}
+                                                className="w-8 h-8 rounded-xl bg-white border border-black/10 flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-black shadow-sm"
+                                                aria-label={`Decrease ${c.label}`}
+                                            >
+                                                <Minus size={12} strokeWidth={3} />
+                                            </button>
+                                            <span className="font-black text-lg text-black min-w-[12px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
+                                            <button
+                                                onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))}
+                                                className="w-8 h-8 rounded-xl bg-black border border-black/10 flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-white shadow-sm"
+                                                aria-label={`Increase ${c.label}`}
+                                            >
+                                                <Plus size={12} strokeWidth={3} />
+                                            </button>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="w-8 h-8 rounded-full bg-[#FFC107] text-black hover:bg-[#FFC107]/90 transition-colors flex items-center justify-center">
-                                    <ChevronDown size={16} />
-                                </div>
-                            </button>
+                                ))}
+                            </div>
+
+                            {/* Vehicle Selection - Unified for Desktop & Mobile */}
+                            <div className="mt-4">
+                                <label className="text-[10px] font-bold text-emerald-900 dark:text-white uppercase tracking-widest mb-2 block pl-1">Selected Vehicle</label>
+                                <button
+                                    onClick={() => setIsVehicleDrawerOpen(true)}
+                                    className="w-full h-20 px-4 flex items-center justify-between bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 rounded-2xl hover:border-emerald-600 dark:hover:border-emerald-500 hover:shadow-md transition-all group"
+                                    aria-label="Select Vehicle"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-14 h-12 bg-slate-50 dark:bg-white/10 rounded-xl flex items-center justify-center p-1">
+                                            {vehiclePricing[vehicle]?.image ? (
+                                                <div className="relative w-full h-full">
+                                                    <Image
+                                                        src={vehiclePricing[vehicle].image}
+                                                        alt={vehiclePricing[vehicle]?.name || "Vehicle"}
+                                                        fill
+                                                        className="object-contain mix-blend-multiply dark:mix-blend-normal"
+                                                        sizes="64px"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <Car className="text-emerald-900/40 dark:text-white/40" />
+                                            )}
+                                        </div>
+                                        <div className="text-left">
+                                            <p className="font-bold text-base text-emerald-900 dark:text-white">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
+                                            <div className="flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300 font-medium">
+                                                <span>{vehiclePricing[vehicle]?.capacity || 4} Passengers</span>
+                                                <span className="w-1 h-1 bg-emerald-600/30 rounded-full"></span>
+                                                <span>{vehiclePricing[vehicle]?.luggage || 2} Lugg</span>
+                                                <span className="w-1 h-1 bg-emerald-600/30 rounded-full"></span>
+                                                <span>{vehiclePricing[vehicle]?.handLuggage || 2} Hand</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="w-8 h-8 rounded-full bg-[#FFC107] text-black hover:bg-[#FFC107]/90 transition-colors flex items-center justify-center">
+                                        <ChevronDown size={16} />
+                                    </div>
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
                         {/* Section 2: Summary & Checkout */}
-                <div className="bg-[#FFC107] border-2 border-amber-600/30 rounded-3xl p-6 shadow-xl flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-8 lg:gap-0">
+                        <div className="bg-[#FFC107] border-2 border-amber-600/30 rounded-3xl p-6 shadow-xl flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-8 lg:gap-0">
+                            <div className="space-y-6 flex-1 flex flex-col">
+                                <div className="flex justify-between items-center">
+                                    <h2 className="text-xl font-bold text-emerald-900 tracking-tight">Trip Summary</h2>
 
-                    <div className="space-y-6 flex-1 flex flex-col">
-                        <div className="flex justify-between items-center">
-                            <h2 className="text-xl font-bold text-emerald-900 tracking-tight">Trip Summary</h2>
-
-                            {/* Currency Dropdown */}
-                            <div className="relative group">
-                                <button
-                                    className="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-black text-white shadow-md hover:bg-slate-800 transition-colors"
-                                    aria-label="Select currency"
-                                >
-                                    <span className="font-black">{currency}</span>
-                                    <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
-                                </button>
-                                <div className="absolute top-full right-0 mt-2 w-32 bg-white dark:bg-slate-900 rounded-xl shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-emerald-900/10 dark:border-slate-800 z-50">
-                                    {SUPPORTED_CURRENCIES.map(c => (
+                                    {/* Currency Dropdown */}
+                                    <div className="relative group">
                                         <button
-                                            key={c.code}
-                                            onClick={() => {
-                                                changeCurrency(c.code);
-                                            }}
-                                            className={`w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors text-xs font-bold flex items-center gap-2 ${currency === c.code ? 'bg-black text-white' : 'text-slate-500 dark:text-slate-400'}`}
+                                            className="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-black text-white shadow-md hover:bg-slate-800 transition-colors"
+                                            aria-label="Select currency"
                                         >
-                                            <div className="w-4 h-4 rounded-full overflow-hidden border border-white/20">
-                                                <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
-                                            </div>
-                                            <span>{c.code}</span>
+                                            <span className="font-black">{currency}</span>
+                                            <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
                                         </button>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Map Container - Fixed Height Mobile, Flex Desktop */}
-                        <div className="h-64 lg:flex-1 w-full rounded-2xl overflow-hidden shadow-inner relative isolate min-h-[300px] lg:min-h-[300px] border border-black/10 flex-shrink-0 lg:flex-shrink">
-                            <TripMap pickup={pickup} dropoff={dropoff} waypoints={waypoints} onRouteCalculated={handleRouteCalculated} />
-                        </div>
-
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-center text-sm">
-                                <span className="text-black font-bold">Est. Distance</span>
-                                <span className="text-black font-black">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
-                            </div>
-                            <div className="flex justify-between items-center text-sm">
-                                <span className="text-black font-bold">Vehicle Type</span>
-                                <span className="font-bold text-black bg-white/40 px-3 py-1 rounded-lg">
-                                    {vehiclePricing[vehicle]?.name || 'Select Vehicle'}
-                                </span>
-                            </div>
-
-                            {/* Detailed Price Breakdown */}
-                            <div className="pt-4 border-t border-black/5 space-y-3">
-                                <div className="flex justify-between items-center text-xs">
-                                    <span className="text-black/60 font-bold uppercase tracking-tight">Trip Subtotal</span>
-                                    <span className="text-black font-extrabold">{convertPrice(total - (calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard }, vehiclePricing[vehicle]) || 0)).symbol} {convertPrice(total - (calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard }, vehiclePricing[vehicle]) || 0)).value.toLocaleString()}</span>
-                                </div>
-
-                                {totalWaitingHours > 0 && calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle]) > 0 && (
-                                    <div className="flex justify-between items-center text-xs">
-                                        <span className="text-black/60 font-bold uppercase tracking-tight">Waiting ({totalWaitingHours}h)</span>
-                                        <span className="text-black font-extrabold">+{convertPrice(calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle])).symbol} {convertPrice(calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle])).value.toLocaleString()}</span>
-                                    </div>
-                                )}
-
-                                {hasNameBoard && nameBoardPrice > 0 && (
-                                    <div className="flex justify-between items-center text-xs">
-                                        <span className="text-black/60 font-bold uppercase tracking-tight">Name Board</span>
-                                        <span className="text-black font-extrabold">+{convertPrice(nameBoardPrice).symbol} {convertPrice(nameBoardPrice).value.toLocaleString()}</span>
-                                    </div>
-                                )}
-
-                                {discountAmount > 0 && (
-                                    <div className="flex justify-between items-center text-xs text-emerald-700 bg-emerald-50/50 p-2 rounded-lg border border-emerald-200/50">
-                                        <div className="flex items-center gap-1.5">
-                                            <Tag size={12} className="shrink-0" />
-                                            <span className="font-black uppercase tracking-tighter truncate max-w-[120px]">
-                                                {appliedOffers.length > 0 ? appliedOffers.map(o => o.name).join(', ') : 'Offer Applied'}
-                                            </span>
+                                        <div className="absolute top-full right-0 mt-2 w-32 bg-white dark:bg-slate-900 rounded-xl shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-emerald-900/10 dark:border-slate-800 z-50">
+                                            {SUPPORTED_CURRENCIES.map(c => (
+                                                <button
+                                                    key={c.code}
+                                                    onClick={() => {
+                                                        changeCurrency(c.code);
+                                                    }}
+                                                    className={`w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors text-xs font-bold flex items-center gap-2 ${currency === c.code ? 'bg-black text-white' : 'text-slate-500 dark:text-slate-400'}`}
+                                                >
+                                                    <div className="w-4 h-4 rounded-full overflow-hidden border border-white/20">
+                                                        <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
+                                                    </div>
+                                                    <span>{c.code}</span>
+                                                </button>
+                                            ))}
                                         </div>
-                                        <span className="font-black">-{convertPrice(discountAmount).symbol} {convertPrice(discountAmount).value.toLocaleString()}</span>
                                     </div>
-                                )}
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div className="pt-6 border-t border-emerald-900/10 dark:border-white/10 flex-shrink-0">
-                        <div className="flex justify-between items-end mb-8">
-                            <div className="flex flex-col">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <Zap size={14} className="text-amber-600 fill-amber-500" />
-                                    <span className="text-[10px] font-black text-emerald-900/50 uppercase tracking-[0.2em]">Final Payable</span>
                                 </div>
-                                <span className="text-4xl font-black text-emerald-900">
-                                    {distance && finalTotal > 0 ? (
-                                        <>
-                                            {convertPrice(finalTotal).symbol} {convertPrice(finalTotal).value.toLocaleString()}
-                                        </>
-                                    ) : (
-                                        <span className="text-emerald-900/20">---</span>
-                                    )}
-                                </span>
-                                {/* Secondary Currency Display */}
-                                {distance && finalTotal > 0 && (
-                                    <div className="text-sm font-bold text-black/60 mt-1">
-                                        {(() => {
-                                            const secCode = currency === 'LKR' ? 'USD' : 'LKR';
-                                            const secRate = rates ? (rates[secCode] || 1) : 1;
-                                            const secValue = Math.ceil(finalTotal * secRate);
-                                            const secSymbol = SUPPORTED_CURRENCIES.find(c => c.code === secCode)?.symbol || secCode;
-                                            return `approx. ${secSymbol} ${secValue.toLocaleString()}`;
-                                        })()}
+
+                                {/* Map Container - Fixed Height Mobile, Flex Desktop */}
+                                <div className="h-64 lg:flex-1 w-full rounded-2xl overflow-hidden shadow-inner relative isolate min-h-[300px] lg:min-h-[300px] border border-black/10 flex-shrink-0 lg:flex-shrink">
+                                    <TripMap pickup={pickup} dropoff={dropoff} waypoints={waypoints} onRouteCalculated={handleRouteCalculated} />
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div className="flex justify-between items-center text-sm">
+                                        <span className="text-black font-bold">Est. Distance</span>
+                                        <span className="text-black font-black">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
                                     </div>
-                                )}
+                                    <div className="flex justify-between items-center text-sm">
+                                        <span className="text-black font-bold">Vehicle Type</span>
+                                        <span className="font-bold text-black bg-white/40 px-3 py-1 rounded-lg">
+                                            {vehiclePricing[vehicle]?.name || 'Select Vehicle'}
+                                        </span>
+                                    </div>
+
+                                    {/* Detailed Price Breakdown */}
+                                    <div className="pt-4 border-t border-black/5 space-y-3">
+                                        <div className="flex justify-between items-center text-xs">
+                                            <span className="text-black/60 font-bold uppercase tracking-tight">Trip Subtotal</span>
+                                            <span className="text-black font-extrabold">{convertPrice(total - (calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard }, vehiclePricing[vehicle]) || 0)).symbol} {convertPrice(total - (calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard }, vehiclePricing[vehicle]) || 0)).value.toLocaleString()}</span>
+                                        </div>
+
+                                        {totalWaitingHours > 0 && calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle]) > 0 && (
+                                            <div className="flex justify-between items-center text-xs">
+                                                <span className="text-black/60 font-bold uppercase tracking-tight">Waiting ({totalWaitingHours}h)</span>
+                                                <span className="text-black font-extrabold">+{convertPrice(calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle])).symbol} {convertPrice(calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle])).value.toLocaleString()}</span>
+                                            </div>
+                                        )}
+
+                                        {hasNameBoard && nameBoardPrice > 0 && (
+                                            <div className="flex justify-between items-center text-xs">
+                                                <span className="text-black/60 font-bold uppercase tracking-tight">Name Board</span>
+                                                <span className="text-black font-extrabold">+{convertPrice(nameBoardPrice).symbol} {convertPrice(nameBoardPrice).value.toLocaleString()}</span>
+                                            </div>
+                                        )}
+
+                                        {discountAmount > 0 && (
+                                            <div className="flex justify-between items-center text-xs text-emerald-700 bg-emerald-50/50 p-2 rounded-lg border border-emerald-200/50">
+                                                <div className="flex items-center gap-1.5">
+                                                    <Tag size={12} className="shrink-0" />
+                                                    <span className="font-black uppercase tracking-tighter truncate max-w-[120px]">
+                                                        {appliedOffers.length > 0 ? appliedOffers.map(o => o.name).join(', ') : 'Offer Applied'}
+                                                    </span>
+                                                </div>
+                                                <span className="font-black">-{convertPrice(discountAmount).symbol} {convertPrice(discountAmount).value.toLocaleString()}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="pt-6 border-t border-emerald-900/10 dark:border-white/10 flex-shrink-0">
+                                <div className="flex justify-between items-end mb-8">
+                                    <div className="flex flex-col">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <Zap size={14} className="text-amber-600 fill-amber-500" />
+                                            <span className="text-[10px] font-black text-emerald-900/50 uppercase tracking-[0.2em]">Final Payable</span>
+                                        </div>
+                                        <span className="text-4xl font-black text-emerald-900">
+                                            {distance && finalTotal > 0 ? (
+                                                <>
+                                                    {convertPrice(finalTotal).symbol} {convertPrice(finalTotal).value.toLocaleString()}
+                                                </>
+                                            ) : (
+                                                <span className="text-emerald-900/20">---</span>
+                                            )}
+                                        </span>
+                                        {/* Secondary Currency Display */}
+                                        {distance && finalTotal > 0 && (
+                                            <div className="text-sm font-bold text-black/60 mt-1">
+                                                {(() => {
+                                                    const secCode = currency === 'LKR' ? 'USD' : 'LKR';
+                                                    const secRate = rates ? (rates[secCode] || 1) : 1;
+                                                    const secValue = Math.ceil(finalTotal * secRate);
+                                                    const secSymbol = SUPPORTED_CURRENCIES.find(c => c.code === secCode)?.symbol || secCode;
+                                                    return `approx. ${secSymbol} ${secValue.toLocaleString()}`;
+                                                })()}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <button
+                                    onClick={handleBook}
+                                    disabled={!distance}
+                                    className="w-full py-5 bg-black dark:bg-emerald-600 text-white rounded-[2rem] font-bold text-lg hover:bg-slate-900 dark:hover:bg-emerald-500 active:scale-[0.98] transition-all shadow-xl disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3 group"
+                                >
+                                    <ShieldCheck size={18} className="opacity-60" />
+                                    Secure Booking
+                                    <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+                                </button>
                             </div>
                         </div>
-
-                        <button
-                            onClick={handleBook}
-                            disabled={!distance}
-                            className="w-full py-5 bg-black dark:bg-emerald-600 text-white rounded-[2rem] font-bold text-lg hover:bg-slate-900 dark:hover:bg-emerald-500 active:scale-[0.98] transition-all shadow-xl disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3 group"
-                        >
-                            <ShieldCheck size={18} className="opacity-60" />
-                            Secure Booking
-                            <ChevronRight className="group-hover:translate-x-1 transition-transform" />
-                        </button>
                     </div>
-                </div>
+                )}
             </div>
-        )}
+
+            {/* Booking Modal */}
+            <BookingModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                initialData={bookingInitialData}
+                pricingCategory={pricingCategory}
+            />
+
+            {/* Smart Offer Nudge - Show first non-dismissed offer */}
+            <SmartOfferNudge
+                offer={appliedOffers.find(o => !dismissedOfferIds.includes(o._id)) || null}
+                onClose={() => {
+                    const visibleOffer = appliedOffers.find(o => !dismissedOfferIds.includes(o._id));
+                    if (visibleOffer) {
+                        setDismissedOfferIds(prev => [...prev, visibleOffer._id]);
+                    }
+                }}
+            />
+
+            {/* Vehicle Selection Drawer */}
+            <VehicleSelectionDrawer
+                isOpen={isVehicleDrawerOpen}
+                onClose={() => setIsVehicleDrawerOpen(false)}
+                vehicles={Object.values(vehiclePricing)}
+                selectedId={vehicle}
+                onSelect={(vType) => {
+                    setVehicle(vType);
+                    setIsManualVehicle(true);
+                }}
+                passengerCount={passengerCount}
+                isLoading={isLoadingPricing}
+            />
         </div>
-
-            {/* Booking Modal */ }
-    <BookingModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        initialData={bookingInitialData}
-        pricingCategory={pricingCategory}
-    />
-
-    {/* Smart Offer Nudge - Show first non-dismissed offer */ }
-    <SmartOfferNudge
-        offer={appliedOffers.find(o => !dismissedOfferIds.includes(o._id)) || null}
-        onClose={() => {
-            const visibleOffer = appliedOffers.find(o => !dismissedOfferIds.includes(o._id));
-            if (visibleOffer) {
-                setDismissedOfferIds(prev => [...prev, visibleOffer._id]);
-            }
-        }}
-    />
-
-    {/* Vehicle Selection Drawer */ }
-    <VehicleSelectionDrawer
-        isOpen={isVehicleDrawerOpen}
-        onClose={() => setIsVehicleDrawerOpen(false)}
-        vehicles={Object.values(vehiclePricing)}
-        selectedId={vehicle}
-        onSelect={(vType) => {
-            setVehicle(vType);
-            setIsManualVehicle(true);
-        }}
-        passengerCount={passengerCount}
-        isLoading={isLoadingPricing}
-    />
-        </div >
     );
 }
 

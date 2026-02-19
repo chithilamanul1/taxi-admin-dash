@@ -11,7 +11,7 @@ const getResend = () => {
     return new Resend(process.env.RESEND_API_KEY);
 };
 
-const OWNER_EMAIL = process.env.OWNER_EMAIL || 'info@airporttaxis.lk';
+const OWNER_EMAIL = process.env.OWNER_EMAIL || 'airporttaxis.lk@gmail.com';
 const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxis <noreply@airporttaxis.lk>';
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://airporttaxis.lk';
 

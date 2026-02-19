@@ -12,6 +12,8 @@ import LiveDriverMap from '@/components/LiveDriverMap'
 import AdminChatManager from '@/components/AdminChatManager'
 import PushNotificationManager from '@/components/PushNotificationManager'
 import RevenueStats from '@/components/RevenueStats'
+import InvoiceManager from '@/components/admin/InvoiceManager'
+import DestinationManager from '@/components/admin/DestinationManager'
 
 export default function AdminDashboard() {
     const { data: session, status } = useSession()
@@ -471,6 +473,10 @@ export default function AdminDashboard() {
                         <DollarSign size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Revenue</span>
                     </button>
+                    <button onClick={() => { setCurrentView('rates'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'rates' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <MapPin size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Destination Rates</span>
+                    </button>
                     <button onClick={() => { setCurrentView('chat'); setSidebarOpen(false); }} className={`relative flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'chat' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <MessageCircle size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Live Chat</span>
@@ -524,6 +530,10 @@ export default function AdminDashboard() {
                     <button onClick={() => { setCurrentView('reviews'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'reviews' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Activity size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Reviews</span>
+                    </button>
+                    <button onClick={() => { setCurrentView('invoices'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'invoices' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <FileText size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Invoices</span>
                     </button>
                 </nav>
 
@@ -732,6 +742,18 @@ export default function AdminDashboard() {
                     {currentView === 'chat' && (
                         <div className="animate-fade-in-up">
                             <AdminChatManager />
+                        </div>
+                    )}
+
+                    {currentView === 'invoices' && (
+                        <div className="animate-fade-in-up">
+                            <InvoiceManager />
+                        </div>
+                    )}
+
+                    {currentView === 'rates' && (
+                        <div className="animate-fade-in-up">
+                            <DestinationManager />
                         </div>
                     )}
 

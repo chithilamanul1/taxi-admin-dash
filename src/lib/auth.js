@@ -5,6 +5,12 @@ import User from "../models/User"
 import bcrypt from "bcryptjs"
 import { sendEmail, templates } from "./email"
 
+const SUPER_ADMINS = [
+    'chithilamanul1@gmail.com',
+    'airporttaxis.lk@gmail.com',
+    'airporttaxis@gmail.com'
+];
+
 export const authOptions = {
     providers: [
         GoogleProvider({
@@ -19,23 +25,53 @@ export const authOptions = {
             },
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
+                    console.log('[Auth] Missing credentials');
                     return null
                 }
 
-                await dbConnect()
-                const user = await User.findOne({ email: credentials.email })
+                try {
+                    await dbConnect()
+                    const user = await User.findOne({ email: credentials.email })
 
-                if (!user) return null
+                    if (!user) {
+                        console.log(`[Auth] User not found: ${credentials.email}`);
+                        return null
+                    }
 
-                const isValid = await bcrypt.compare(credentials.password, user.password)
-                if (!isValid) return null
+                    const isValid = await bcrypt.compare(credentials.password, user.password)
+                    if (!isValid) {
+                        console.log(`[Auth] Invalid password for: ${credentials.email}`);
+                        return null
+                    }
 
-                return {
-                    id: user._id.toString(),
-                    email: user.email,
-                    name: user.name,
-                    role: user.role || 'user',
-                    image: user.image || null
+                    // Strict Admin Check for Manual Login
+                    if (user.role !== 'admin' && !SUPER_ADMINS.includes(user.email)) {
+                        console.log(`[Auth] Unauthorized access attempt to admin panel: ${credentials.email}`);
+                        return null;
+                    }
+
+                    // Super Admin Check
+                    const isSuperAdmin = SUPER_ADMINS.includes(user.email);
+
+                    if (isSuperAdmin && (user.role !== 'admin' || !user.isAdmin)) {
+                        user.role = 'admin';
+                        user.isAdmin = true;
+                        await user.save();
+                        console.log(`[Auth] Verified/Promoted super admin: ${user.email}`);
+                    }
+
+                    return {
+                        id: user._id.toString(),
+                        email: user.email,
+                        name: user.name,
+                        role: user.role || 'user',
+                        isAdmin: user.isAdmin || user.role === 'admin',
+                        image: user.image || null,
+                        permissions: user.permissions || []
+                    }
+                } catch (error) {
+                    console.error('[Auth] Authorize error:', error);
+                    return null;
                 }
             }
         })
@@ -46,15 +82,14 @@ export const authOptions = {
                 try {
                     await dbConnect()
 
-                    const superAdmins = ['chithilamanul1@gmail.com', 'airporttaxis.lk@gmail.com', 'airporttaxis@gmail.com'];
-                    const isAdminByEmail = superAdmins.includes(user.email);
+                    const isAdminByEmail = SUPER_ADMINS.includes(user.email);
 
                     // Check if user exists in DB
                     let existingUser = await User.findOne({ email: user.email })
 
-                    // If not a super admin AND not an existing admin in DB, block sign in
+                    // STRICT WHITELIST: If not a super admin AND not already an existing admin in DB, reject
                     if (!isAdminByEmail && (!existingUser || existingUser.role !== 'admin')) {
-                        console.log(`Unauthorized Google login attempt: ${user.email}`);
+                        console.log(`[Auth] BLOCKED Google login attempt (Not Whitelisted): ${user.email}`);
                         return false; // Blocks the sign-in
                     }
 
@@ -76,10 +111,19 @@ export const authOptions = {
                             subject: 'Welcome to Airport Taxis Tours Admin Panel',
                             html: templates.welcome(user.name)
                         })
-                    } else if (isAdminByEmail && existingUser.role !== 'admin') {
-                        existingUser.role = 'admin';
-                        existingUser.isAdmin = true;
-                        await existingUser.save();
+                    } else {
+                        // Ensure super admins or established admins have the correct role and isAdmin flag
+                        let updated = false;
+                        if (isAdminByEmail && existingUser.role !== 'admin') {
+                            existingUser.role = 'admin';
+                            existingUser.isAdmin = true;
+                            updated = true;
+                        }
+                        if (existingUser.role === 'admin' && !existingUser.isAdmin) {
+                            existingUser.isAdmin = true;
+                            updated = true;
+                        }
+                        if (updated) await existingUser.save();
                     }
 
                     try {
@@ -100,17 +144,28 @@ export const authOptions = {
             return true
         },
         async jwt({ token, user, account }) {
+            // When user first logs in
             if (user) {
-                if (account?.provider === 'google') {
+                token.id = user.id
+                token.role = user.role
+                token.isAdmin = user.isAdmin || user.role === 'admin'
+                token.permissions = user.permissions || []
+            }
+
+            // For subsequent requests, if it's a social provider, we might want to refresh from DB
+            // to catch role/permission changes without waiting for re-login
+            if (account?.provider === 'google' || !token.role) {
+                try {
                     await dbConnect()
-                    const dbUser = await User.findOne({ email: user.email })
+                    const dbUser = await User.findOne({ email: token.email })
                     if (dbUser) {
                         token.id = dbUser._id.toString()
                         token.role = dbUser.role
+                        token.isAdmin = dbUser.isAdmin || dbUser.role === 'admin'
+                        token.permissions = dbUser.permissions || []
                     }
-                } else {
-                    token.role = user.role || 'user'
-                    token.id = user.id
+                } catch (e) {
+                    console.error('[Auth] JWT fetch error:', e)
                 }
             }
             return token
@@ -119,6 +174,8 @@ export const authOptions = {
             if (session?.user) {
                 session.user.role = token.role
                 session.user.id = token.id
+                session.user.isAdmin = token.isAdmin
+                session.user.permissions = token.permissions
             }
             return session
         }
