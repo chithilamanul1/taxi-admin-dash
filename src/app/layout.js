@@ -109,7 +109,6 @@ const jsonLd = {
 }
 
 import { CurrencyProvider } from '../context/CurrencyContext'
-import BottomNav from '../components/BottomNav'
 
 // ... existing imports
 
@@ -148,8 +147,7 @@ export default function RootLayout({ children }) {
                     <AuthProvider>
                         <CurrencyProvider>
                             <Navbar />
-                            <main className="pb-24 lg:pb-0">{children}</main>
-                            <BottomNav />
+                            <main>{children}</main>
                             <FloatingContact />
                             <LiveChatWidget />
                             <Footer />
