@@ -18,30 +18,24 @@ const STEPS = [
 
 export default function DriverRegister() {
     const router = useRouter();
-    const [step, setStep] = useState(1);
-    const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState({
-        name: '', phone: '', email: '', password: '', address: '', nic: '',
-        vehicleType: 'Car', vehicleModel: '', vehicleNumber: '', vehicleYear: '',
-        bankName: '', branch: '', accountNumber: '', accountName: '',
-        initialDepositAmount: '5000', initialDepositReceipt: null,
-        documents: { licenseFront: null, licenseBack: null, nicFront: null, nicBack: null }
-    });
+    const [error, setError] = useState(null);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+        if (error) setError(null);
     };
 
     const handleFileChange = (e, field, isDoc = true) => {
         const file = e.target.files[0];
         if (file) {
             setFormData(prev => {
-                if (isDoc) {
-                    return { ...prev, documents: { ...prev.documents, [field]: file } };
-                }
-                return { ...prev, [field]: file };
+                const newData = isDoc
+                    ? { ...prev, documents: { ...prev.documents, [field]: file } }
+                    : { ...prev, [field]: file };
+                return newData;
             });
+            if (error) setError(null);
         }
     };
 
@@ -49,19 +43,25 @@ export default function DriverRegister() {
         if (!file) return null;
         const data = new FormData();
         data.append('file', file);
-        data.append('folder', 'drivers'); // Correct field for folder
-        data.append('filename', `driver-${formData.nic}-${type}`); // Optional metadata
+        data.append('folder', 'drivers');
 
-        const res = await fetch('/api/upload', { // Correct generic upload endpoint
+        const res = await fetch('/api/upload', {
             method: 'POST',
             body: data
         });
+
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || 'Upload failed');
+        }
+
         const result = await res.json();
-        return result.success ? result.url : null; // Use result.url as returned by API
+        return result.success ? result.url : null;
     };
 
     const handleSubmit = async () => {
         setLoading(true);
+        setError(null);
         try {
             // 1. Upload images
             const licenseFrontPath = await uploadFile(formData.documents.licenseFront, 'license-front');
@@ -70,7 +70,7 @@ export default function DriverRegister() {
             const nicBackPath = await uploadFile(formData.documents.nicBack, 'nic-back');
             const depositReceiptPath = await uploadFile(formData.initialDepositReceipt, 'deposit-receipt');
 
-            // 2. Prepare payload with real paths
+            // 2. Prepare payload
             const payload = {
                 ...formData,
                 documents: {
@@ -95,11 +95,11 @@ export default function DriverRegister() {
             if (data.success) {
                 router.push('/driver/register/success');
             } else {
-                alert(data.message || 'Registration failed');
+                setError(data.message || 'Registration failed');
             }
-        } catch (error) {
-            console.error(error);
-            alert('An error occurred during registration. Please check your connection and try again.');
+        } catch (err) {
+            console.error(err);
+            setError(err.message || 'An error occurred. Please check your connection.');
         } finally {
             setLoading(false);
         }
@@ -129,6 +129,16 @@ export default function DriverRegister() {
                         ))}
                     </div>
                 </div>
+
+                {/* Error Display */}
+                {error && (
+                    <div className="mx-8 mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 animate-shake">
+                        <div className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center shrink-0">
+                            <X className="text-red-500" size={16} />
+                        </div>
+                        <p className="text-sm font-bold text-red-500">{error}</p>
+                    </div>
+                )}
 
                 {/* Form Content */}
                 <div className="p-8 flex-1 overflow-y-auto max-h-[60vh] custom-scrollbar">

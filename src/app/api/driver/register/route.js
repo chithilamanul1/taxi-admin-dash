@@ -17,12 +17,21 @@ export async function POST(req) {
 
         // 2. Check for existing driver
         const existingDriver = await Driver.findOne({
-            $or: [{ phone: data.phone }, { nic: data.nic }]
+            $or: [
+                { phone: data.phone },
+                { nic: data.nic },
+                { email: data.email }
+            ].filter(q => q[Object.keys(q)[0]]) // Only check if value exists
         });
 
         if (existingDriver) {
+            let conflict = 'Driver';
+            if (existingDriver.email === data.email) conflict = 'Email';
+            else if (existingDriver.nic === data.nic) conflict = 'NIC';
+            else if (existingDriver.phone === data.phone) conflict = 'Phone';
+
             return NextResponse.json(
-                { success: false, message: 'A driver with this Phone or NIC already exists.' },
+                { success: false, message: `${conflict} already registered. Please login or contact support.` },
                 { status: 409 }
             );
         }

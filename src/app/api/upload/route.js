@@ -19,64 +19,69 @@ export async function POST(req) {
             return NextResponse.json({ error: 'No file received.' }, { status: 400 });
         }
 
-        // --- CUSTOM EXPRESS API UPLOAD ---
-        // This bypasses Vercel's readonly FS and Cloudinary limits
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+        const buffer = Buffer.from(await file.arrayBuffer());
 
-        try {
-            const backendFormData = new FormData();
-            backendFormData.append('file', file);
-            backendFormData.append('folder', folder);
+        // --- CLOUDINARY UPLOAD (For Vercel Production) ---
+        if (process.env.CLOUDINARY_URL || (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY)) {
+            try {
+                const cloudName = process.env.CLOUDINARY_CLOUD_NAME || process.env.CLOUDINARY_URL.split('@')[1];
+                const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET || 'ml_default';
 
-            const backendRes = await fetch(`${backendUrl}/api/upload`, {
-                method: 'POST',
-                body: backendFormData
-            });
+                const cloudFormData = new FormData();
+                cloudFormData.append('file', `data:image/webp;base64,${buffer.toString('base64')}`);
+                cloudFormData.append('upload_preset', uploadPreset);
+                cloudFormData.append('folder', `airport-taxis/${folder}`);
 
-            if (backendRes.ok) {
-                const data = await backendRes.json();
-                if (data.success) {
+                const cloudRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+                    method: 'POST',
+                    body: cloudFormData
+                });
+
+                const cloudData = await cloudRes.json();
+                if (cloudData.secure_url) {
                     return NextResponse.json({
                         success: true,
-                        url: data.url
+                        url: cloudData.secure_url
                     });
                 }
-            }
-            const errorText = await backendRes.text();
-            console.error("Backend Upload Error:", errorText);
-        } catch (backendErr) {
-            console.error("Backend Connection failed:", backendErr.message);
-        }
-
-        // --- LOCAL FALLBACK (Only for Local Dev) ---
-        if (process.env.NODE_ENV === 'development') {
-            const buffer = Buffer.from(await file.arrayBuffer());
-            const filename = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '')}`;
-            const uploadDir = path.join(process.cwd(), 'public/uploads', folder);
-            await mkdir(uploadDir, { recursive: true });
-            const filePath = path.join(uploadDir, filename);
-
-            try {
-                await sharp(buffer)
-                    .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
-                    .webp({ quality: 80 })
-                    .toFile(filePath.replace(/\.[^/.]+$/, "") + ".webp");
-
-                return NextResponse.json({
-                    success: true,
-                    url: `/uploads/${folder}/${filename.replace(/\.[^/.]+$/, "")}.webp`
-                });
-            } catch (sharpError) {
-                console.error("Local fallback failed:", sharpError);
+                console.error("Cloudinary Error:", cloudData);
+            } catch (cloudErr) {
+                console.error("Cloudinary Upload failed:", cloudErr);
             }
         }
 
-        return NextResponse.json({
-            error: 'Upload service unavailable. Please check if the Custom API Server is running.'
-        }, { status: 503 });
+        // --- LOCAL FALLBACK (For Local Development) ---
+        if (process.env.NODE_ENV === 'production' && !process.env.CLOUDINARY_URL) {
+            return NextResponse.json({
+                error: 'FileUpload: Local filesystem is readonly on Vercel. Please configure Cloudinary.'
+            }, { status: 500 });
+        }
+
+        // Generate safe filename
+        const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, '');
+        const filename = `${Date.now()}_${originalName}`;
+
+        const uploadDir = path.join(process.cwd(), 'public/uploads', folder);
+        await mkdir(uploadDir, { recursive: true });
+        const filePath = path.join(uploadDir, filename);
+
+        try {
+            await sharp(buffer)
+                .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
+                .webp({ quality: 80 })
+                .toFile(filePath.replace(/\.[^/.]+$/, "") + ".webp");
+
+            return NextResponse.json({
+                success: true,
+                url: `/uploads/${folder}/${filename.replace(/\.[^/.]+$/, "")}.webp`
+            });
+        } catch (sharpError) {
+            console.error("Sharp optimization failed:", sharpError);
+            return NextResponse.json({ error: 'Failed to process image.' }, { status: 500 });
+        }
 
     } catch (error) {
-        console.error("Upload Route Error:", error);
-        return NextResponse.json({ error: 'Upload failed.' }, { status: 500 });
+        console.error("Upload Error:", error);
+        return NextResponse.json({ error: 'Upload process failed.' }, { status: 500 });
     }
 }
