@@ -117,6 +117,7 @@ export default function DestinationManager() {
                                     title: '',
                                     name: '',
                                     pricing: {},
+                                    perKmRateOverride: 0,
                                     sortOrder: destinations.length + 1
                                 });
                             }}
