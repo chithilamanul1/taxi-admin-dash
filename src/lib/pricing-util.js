@@ -52,7 +52,27 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
 
     // Calculate distance-based price
     let distancePrice = 0;
-    if (tiers.length > 0) {
+
+    // Check for Location-Specific Per-KM Rate Override (Priority for Mountain/Safari terrain)
+    const matchedOverride = dynamicDestinations.find(d =>
+        (pickup.toLowerCase().includes(d.name?.toLowerCase()) ||
+            dropoff.toLowerCase().includes(d.name?.toLowerCase())) &&
+        d.perKmRateOverride > 0
+    );
+
+    if (matchedOverride) {
+        const perKmRate = matchedOverride.perKmRateOverride;
+        console.log(`[Pricing] Applied PRIORITY rate override for ${matchedOverride.name}: LKR ${perKmRate}/km`);
+
+        const basePrice = vehicleData.basePrice || 0;
+        const baseKm = vehicleData.baseKm || 0;
+
+        if (distKm <= baseKm) {
+            distancePrice = basePrice;
+        } else {
+            distancePrice = basePrice + ((distKm - baseKm) * perKmRate);
+        }
+    } else if (tiers.length > 0) {
         const matchingTier = tiers.find(t => distKm >= t.min && distKm <= (t.max || Infinity));
         if (matchingTier) {
             if (matchingTier.type === 'flat') {
@@ -61,24 +81,10 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                 distancePrice = distKm * (matchingTier.rate || matchingTier.price || 0);
             }
         }
-    }
-
-    if (distancePrice === 0) {
+    } else {
         const basePrice = vehicleData.basePrice || 0;
         const baseKm = vehicleData.baseKm || 0;
-
-        // Check for Location-Specific Per-KM Rate Override
-        const matchedOverride = dynamicDestinations.find(d =>
-            (pickup.toLowerCase().includes(d.name?.toLowerCase()) ||
-                dropoff.toLowerCase().includes(d.name?.toLowerCase())) &&
-            d.perKmRateOverride > 0
-        );
-
-        const perKmRate = matchedOverride ? matchedOverride.perKmRateOverride : (vehicleData.perKmRate || 0);
-
-        if (matchedOverride) {
-            console.log(`[Pricing] Applied rate override for ${matchedOverride.name}: LKR ${perKmRate}/km`);
-        }
+        const perKmRate = vehicleData.perKmRate || 0;
 
         if (distKm <= baseKm) {
             distancePrice = basePrice;

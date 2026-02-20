@@ -104,10 +104,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         billingCountry: '',
     });
 
-    const [destinations, setDestinations] = useState([]);
     const [infoVehicle, setInfoVehicle] = useState(null);
-
-    // Body Scroll Lock
 
     const handleApplyCoupon = async (codeToApply = couponInput, contextPickup = formData.pickup, contextDropoff = formData.dropoff) => {
         const input = (codeToApply || '').trim();
