@@ -18,6 +18,15 @@ const STEPS = [
 
 export default function DriverRegister() {
     const router = useRouter();
+    const [step, setStep] = useState(1);
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '', phone: '', email: '', password: '', address: '', nic: '',
+        vehicleType: 'Car', vehicleModel: '', vehicleNumber: '', vehicleYear: '',
+        bankName: '', branch: '', accountNumber: '', accountName: '',
+        initialDepositAmount: '5000', initialDepositReceipt: null,
+        documents: { licenseFront: null, licenseBack: null, nicFront: null, nicBack: null }
+    });
     const [error, setError] = useState(null);
 
     const handleInputChange = (e) => {
