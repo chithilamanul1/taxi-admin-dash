@@ -59,7 +59,11 @@ const RevenueStats = ({ bookings = [] }) => {
         const last7Days = [...Array(7)].map((_, i) => {
             const d = new Date();
             d.setDate(d.getDate() - (6 - i));
-            return d.toISOString().split('T')[0];
+            // Robust local date string (YYYY-MM-DD) to avoid UTC shift
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
         });
 
         return last7Days.map(date => {
@@ -144,16 +148,12 @@ const RevenueStats = ({ bookings = [] }) => {
             <div className="grid md:grid-cols-2 gap-6">
                 {/* Chart Section */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h4 className="text-sm font-bold text-slate-800 mb-6">Revenue Trend (Last 7 Days)</h4>
-                    <div className="h-48 flex items-end justify-between gap-2 px-2">
+                    <h4 className="text-sm font-bold text-slate-800 mb-6 font-mono tracking-tighter uppercase">Revenue Trend <span className="text-emerald-500">(Last 7 Days)</span></h4>
+                    <div className="h-48 flex items-end justify-between gap-2 px-2 border-b border-slate-100 pb-2">
                         {dailyData.map((val, i) => {
                             const height = (val / maxDaily) * 100;
 
                             // Color logic
-                            // Critical loss (< 20% margin or negative): Red
-                            // Average (20-40%): Yellow
-                            // Good (40-60%): Light Blue
-                            // Super amazing (> 60%): Green
                             let barColor = 'bg-emerald-500';
                             if (val === 0) barColor = 'bg-slate-100';
                             else if (val < 5000) barColor = 'bg-red-500';
@@ -164,14 +164,14 @@ const RevenueStats = ({ bookings = [] }) => {
                             return (
                                 <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
                                     <div
-                                        className={`w-full ${barColor}/20 group-hover:${barColor} rounded-t-lg transition-all duration-500 relative`}
-                                        style={{ height: `${height}%` }}
+                                        className={`w-full ${barColor}/80 group-hover:${barColor} rounded-t-lg transition-all duration-500 relative shadow-sm`}
+                                        style={{ height: `${Math.max(height, val > 0 ? 4 : 0)}%` }}
                                     >
-                                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-xl">
+                                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-xl border border-white/10">
                                             Rs. {val.toLocaleString()}
                                         </div>
                                     </div>
-                                    <span className="text-[10px] font-bold text-slate-400">Day {i + 1}</span>
+                                    <span className="text-[8px] md:text-[10px] font-black text-slate-400 uppercase tracking-tighter">Day {i + 1}</span>
                                 </div>
                             );
                         })}

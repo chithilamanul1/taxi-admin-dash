@@ -1146,7 +1146,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         { id: 'card', label: 'Online Payment', icon: '💳', desc: 'Secure digital transaction' },
                                     ].map(m => (
                                         <div key={m.id}>
-                                            <button onClick={() => setFormData({ ...formData, paymentMethod: m.id })} className={`w-full p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left ${formData.paymentMethod === m.id ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}>
+                                            <button
+                                                onClick={() => setFormData(prev => ({
+                                                    ...prev,
+                                                    paymentMethod: m.id,
+                                                    paymentType: m.id === 'cash' ? 'full' : prev.paymentType
+                                                }))}
+                                                className={`w-full p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left ${formData.paymentMethod === m.id ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}
+                                            >
                                                 <span className="text-3xl md:text-4xl">{m.icon}</span>
                                                 <div>
                                                     <p className="font-bold text-emerald-900 text-sm tracking-tight">{m.label}</p>
@@ -1183,7 +1190,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                 <span className="text-[10px] opacity-60">Pay balance to driver</span>
                                                             </div>
                                                         </div>
-                                                        <span className="text-[10px] font-black leading-none block">NAME BOARD</span>
+                                                        <span className="text-[10px] font-black leading-none block text-emerald-400">50% DEPOSIT</span>
                                                     </button>
                                                 </div>
                                             )}
