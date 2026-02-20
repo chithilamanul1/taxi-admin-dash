@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
 import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
 const FALLBACK_REVIEWS = [
@@ -190,7 +191,13 @@ const GoogleReviews = () => {
                                 <div className="relative">
                                     <div className="w-12 h-12 rounded-full overflow-hidden bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-lg border-2 border-slate-50">
                                         {review.profile_photo_url ? (
-                                            <img src={review.profile_photo_url} alt={review.author_name} className="w-full h-full object-cover" />
+                                            <Image
+                                                src={review.profile_photo_url}
+                                                alt={review.author_name}
+                                                width={48}
+                                                height={48}
+                                                className="w-full h-full object-cover"
+                                            />
                                         ) : (
                                             review.author_name?.charAt(0) || 'T'
                                         )}

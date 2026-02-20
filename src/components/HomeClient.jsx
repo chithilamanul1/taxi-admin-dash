@@ -1,5 +1,6 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -8,13 +9,15 @@ import Hero from './Hero'
 import Features from './Features'
 import BookingModal from './BookingModal'
 import BookingWidget from './BookingWidget'
-import GoogleReviews from './GoogleReviews'
 import ReviewStatsBar from './ReviewStatsBar'
-import RecentPosts from './RecentPosts'
-import SpecialOffersSection from './SpecialOffersSection'
-import MarketingPopup from './MarketingPopup'
-import ExpressCheckoutModal from './ExpressCheckoutModal'
 import { flatRatesList } from '@/data/flatRates'
+
+// Dynamic imports for components below the fold
+const GoogleReviews = dynamic(() => import('./GoogleReviews'), { ssr: false })
+const RecentPosts = dynamic(() => import('./RecentPosts'), { ssr: false })
+const SpecialOffersSection = dynamic(() => import('./SpecialOffersSection'), { ssr: false })
+const MarketingPopup = dynamic(() => import('./MarketingPopup'), { ssr: false })
+const ExpressCheckoutModal = dynamic(() => import('./ExpressCheckoutModal'), { ssr: false })
 
 export default function HomeClient() {
     const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -41,7 +44,7 @@ export default function HomeClient() {
                 }
             } catch (e) { console.error("Marketing fetch error", e) }
         };
-        const t = setTimeout(checkMarketing, 2000);
+        const t = setTimeout(checkMarketing, 3500); // Delayed slightly more for performance
         return () => clearTimeout(t);
     }, []);
 
@@ -61,10 +64,12 @@ export default function HomeClient() {
                 onClose={() => setIsBookingOpen(false)}
             />
 
-            <MarketingPopup
-                offer={marketingOffer}
-                onClose={handlePopupClose}
-            />
+            {marketingOffer && (
+                <MarketingPopup
+                    offer={marketingOffer}
+                    onClose={handlePopupClose}
+                />
+            )}
 
             <ExpressCheckoutModal
                 isOpen={isExpressOpen}
@@ -118,10 +123,11 @@ export default function HomeClient() {
                                 className="group relative h-[450px] rounded-3xl overflow-hidden border border-emerald-900/10 block shadow-md hover:shadow-xl transition-all duration-500 text-left w-full"
                             >
                                 <Image
-                                    src={route.img}
+                                    src={`${route.img}${route.img.includes('?') ? '&' : '?'}w=600&q=75`}
                                     alt={route.title}
                                     fill
                                     className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-emerald-900 via-emerald-900/10 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
                                 <div className="absolute top-6 left-6">

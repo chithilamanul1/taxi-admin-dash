@@ -17,12 +17,14 @@ const heroImages = [
 
 const Hero = ({ onBookClick }) => {
     const [currentSlide, setCurrentSlide] = useState(0)
+    const [isLoaded, setIsLoaded] = useState(false);
 
     // Auto-advance slideshow
     useEffect(() => {
+        setIsLoaded(true);
         const timer = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % heroImages.length)
-        }, 5000)
+        }, 6000)
         return () => clearInterval(timer)
     }, [])
 
@@ -30,30 +32,43 @@ const Hero = ({ onBookClick }) => {
     const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length)
     const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroImages.length)
 
-
     return (
-        <section className="relative min-h-[90vh] flex items-center justify-center pt-32 pb-20 md:pb-40 overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors">
+        <section className="relative h-[85vh] md:h-[90vh] min-h-[600px] flex items-center justify-center pt-32 pb-20 md:pb-40 overflow-hidden bg-emerald-950 transition-colors">
             {/* Background Slideshow */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/95 via-emerald-900/70 to-black/30 pointer-events-none z-10"></div>
-                {heroImages.map((image, index) => (
-                    <div
-                        key={index}
-                        className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
-                    >
-                        <Image
-                            src={image.src}
-                            alt={image.alt}
-                            fill
-                            priority={index === 0}
-                            fetchPriority={index === 0 ? "high" : "auto"}
-                            loading={index === 0 ? "eager" : "lazy"}
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
-                            className="object-cover"
-                            quality={60}
-                        />
-                    </div>
-                ))}
+
+                {/* 
+                  PERFORMANCE OPTIMIZATION: 
+                  - We only render the first image eagerly.
+                  - Subsequent images only render when they become the current slide.
+                  - This prevents the browser from downloading 7 high-res images on initial pageload.
+                */}
+                {heroImages.map((image, index) => {
+                    const isVisible = index === currentSlide;
+                    const shouldRender = index === 0 || isVisible;
+
+                    if (!shouldRender) return null;
+
+                    return (
+                        <div
+                            key={index}
+                            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+                        >
+                            <Image
+                                src={image.src}
+                                alt={image.alt}
+                                fill
+                                priority={index === 0}
+                                fetchPriority={index === 0 ? "high" : "auto"}
+                                loading={index === 0 ? "eager" : "lazy"}
+                                sizes="100vw"
+                                className="object-cover"
+                                quality={index === 0 ? 75 : 60}
+                            />
+                        </div>
+                    );
+                })}
             </div>
 
             {/* Slideshow Navigation */}
