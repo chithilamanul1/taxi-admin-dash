@@ -33,7 +33,7 @@ const Hero = ({ onBookClick }) => {
     const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroImages.length)
 
     return (
-        <section className="relative h-[85vh] md:h-[90vh] min-h-[600px] flex flex-col justify-start items-center md:justify-center pt-52 md:pt-32 pb-20 md:pb-40 overflow-hidden bg-emerald-950 transition-colors">
+        <section className="relative h-[85vh] md:h-[90vh] min-h-[600px] flex items-center justify-center pt-28 md:pt-32 pb-20 md:pb-40 overflow-hidden bg-emerald-950 transition-colors">
             {/* Background Slideshow */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/95 via-emerald-900/70 to-black/30 pointer-events-none z-10"></div>
@@ -90,7 +90,7 @@ const Hero = ({ onBookClick }) => {
             </div>
 
             {/* Content */}
-            <div className="container mx-auto px-6 relative z-10 text-left lg:text-left mt-0 md:mt-[-5vh]">
+            <div className="container mx-auto px-6 relative z-10 text-left lg:text-left md:mt-[-5vh]">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-900/80 backdrop-blur-md border border-emerald-400/30 text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-4 animate-slide-up opacity-0 [animation-delay:0.2s] [animation-fill-mode:forwards] shadow-lg">
                     <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
