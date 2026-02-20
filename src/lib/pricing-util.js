@@ -3,7 +3,7 @@
  * Handles consistent price calculation across BookingWidget and BookingModal
  */
 
-import { destinations } from './destinations';
+import { destinations } from './destinations.js';
 
 export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '', dynamicDestinations = []) => {
     if (!vehicleData || !distanceKm || distanceKm <= 0) return 0;
@@ -14,19 +14,32 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const isFromAirport = pickup?.toLowerCase().includes('airport');
     const isToAirport = dropoff?.toLowerCase().includes('airport');
 
+    // Helper for robust location matching
+    const findMatchingDestination = (address, destinationsList) => {
+        if (!address || !destinationsList || destinationsList.length === 0) return null;
+        const addrLower = address.toLowerCase();
+
+        // Find all matches, then pick the one with the longest name (most specific)
+        const matches = destinationsList.filter(d => {
+            const nameLower = d.name?.toLowerCase().trim();
+            const idLower = d.id?.toLowerCase().trim();
+            if (!nameLower && !idLower) return false;
+
+            return (nameLower && addrLower.includes(nameLower)) ||
+                (idLower && addrLower.includes(idLower));
+        });
+
+        if (matches.length === 0) return null;
+        return matches.sort((a, b) => (b.name?.length || 0) - (a.name?.length || 0))[0];
+    };
+
     let fixedPrice = 0;
     const isAirportTransfer = vehicleData?.category === 'airport-transfer';
 
     if (isAirportTransfer && (isFromAirport || isToAirport)) {
         const destinationName = isFromAirport ? dropoff : pickup;
-        // Search in dynamicDestinations first, fallback to static if needed (though dynamic should have all)
-        const popDest = dynamicDestinations.find(d =>
-            destinationName.toLowerCase().includes(d.name.toLowerCase()) ||
-            destinationName.toLowerCase().includes(d.id.toLowerCase())
-        ) || destinations.find(d =>
-            destinationName.toLowerCase().includes(d.name.toLowerCase()) ||
-            destinationName.toLowerCase().includes(d.id.toLowerCase())
-        );
+        const popDest = findMatchingDestination(destinationName, dynamicDestinations) ||
+            findMatchingDestination(destinationName, destinations);
 
         if (popDest && popDest.pricing) {
             const pricing = popDest.pricing instanceof Map ? Object.fromEntries(popDest.pricing) : popDest.pricing;
@@ -39,7 +52,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                 'suv': 'Sedan',
                 'mini-bus': 'KDH Van'
             };
-            const priceUSD = popDest.pricing[vehicleMap[vehicleData.vehicleType]];
+            const priceUSD = pricing[vehicleMap[vehicleData.vehicleType]];
             if (priceUSD) {
                 const conversionRate = 320;
                 fixedPrice = Math.round(priceUSD * conversionRate);
@@ -52,15 +65,13 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
 
     // Calculate distance-based price
     let distancePrice = 0;
+    let overrideApplied = false;
 
     // Check for Location-Specific Per-KM Rate Override (Priority for Mountain/Safari terrain)
-    const matchedOverride = dynamicDestinations.find(d =>
-        (pickup.toLowerCase().includes(d.name?.toLowerCase()) ||
-            dropoff.toLowerCase().includes(d.name?.toLowerCase())) &&
-        d.perKmRateOverride > 0
-    );
+    const matchedOverride = findMatchingDestination(pickup, dynamicDestinations) ||
+        findMatchingDestination(dropoff, dynamicDestinations);
 
-    if (matchedOverride) {
+    if (matchedOverride && matchedOverride.perKmRateOverride > 0) {
         const perKmRate = matchedOverride.perKmRateOverride;
         console.log(`[Pricing] Applied PRIORITY rate override for ${matchedOverride.name}: LKR ${perKmRate}/km`);
 
@@ -72,6 +83,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         } else {
             distancePrice = basePrice + ((distKm - baseKm) * perKmRate);
         }
+        overrideApplied = true;
     } else if (tiers.length > 0) {
         const matchingTier = tiers.find(t => distKm >= t.min && distKm <= (t.max || Infinity));
         if (matchingTier) {
@@ -93,12 +105,16 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         }
     }
 
-    // Final Comparison: Take fixedPrice ONLY if it is lower than distancePrice
-    if (fixedPrice > 0 && distancePrice > 0) {
+    // Final Comparison: Take fixedPrice ONLY if it is lower than distancePrice 
+    // AND NO override was applied. Overrides are the absolute truth.
+    if (!overrideApplied && fixedPrice > 0 && distancePrice > 0) {
         baseTotal = Math.min(fixedPrice, distancePrice);
         console.log(`[Pricing] Comparison: Fixed ${fixedPrice} vs Distance ${distancePrice}. Selected: ${baseTotal}`);
     } else {
-        baseTotal = fixedPrice || distancePrice;
+        baseTotal = distancePrice || fixedPrice;
+        if (overrideApplied) {
+            console.log(`[Pricing] Override in effect. Selected DistancePrice: ${distancePrice}`);
+        }
     }
 
     // 3. Round Trip Multiplier
