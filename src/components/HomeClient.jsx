@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, MapPin, Star, Compass } from 'lucide-react'
 import Hero from './Hero'
+import MobileHero from './MobileHero'
 import Features from './Features'
 import BookingModal from './BookingModal'
 import BookingWidget from './BookingWidget'
@@ -55,7 +56,10 @@ export default function HomeClient() {
 
     return (
         <div className="bg-white dark:bg-slate-950 overflow-hidden transition-colors duration-300">
-            <Hero onBookClick={() => setIsBookingOpen(true)} />
+            <div className="hidden lg:block">
+                <Hero onBookClick={() => setIsBookingOpen(true)} />
+            </div>
+            <MobileHero onBookClick={() => setIsBookingOpen(true)} />
 
             <BookingWidget />
 
@@ -77,7 +81,7 @@ export default function HomeClient() {
                 product={selectedExpressProduct}
             />
 
-            <div id="calculator" className="py-32 relative">
+            <div id="calculator" className="hidden lg:block py-32 relative">
                 <div className="absolute inset-0 bg-emerald-900/5 flex items-center justify-center opacity-30">
                     <div className="w-[800px] h-[400px] border border-emerald-900/10 rounded-full blur-3xl"></div>
                 </div>

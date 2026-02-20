@@ -109,6 +109,7 @@ const jsonLd = {
 }
 
 import { CurrencyProvider } from '../context/CurrencyContext'
+import BottomNav from '../components/BottomNav'
 
 // ... existing imports
 
@@ -148,6 +149,7 @@ export default function RootLayout({ children }) {
                         <CurrencyProvider>
                             <Navbar />
                             <main>{children}</main>
+                            <BottomNav />
                             <FloatingContact />
                             <LiveChatWidget />
                             <Footer />

@@ -36,6 +36,7 @@ whatsappBot.start().catch(err => console.error('WhatsApp Bot Error:', err));
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // Basic Route
 app.get('/', (req, res) => {
@@ -46,6 +47,7 @@ app.get('/', (req, res) => {
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/pricing', require('./routes/pricingRoutes'));
 app.use('/api/bookings', require('./routes/bookingRoutes'));
+app.use('/api/upload', require('./routes/uploadRoutes'));
 
 const PORT = process.env.PORT || 5000;
 
