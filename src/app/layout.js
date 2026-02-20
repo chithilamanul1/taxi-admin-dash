@@ -148,7 +148,7 @@ export default function RootLayout({ children }) {
                     <AuthProvider>
                         <CurrencyProvider>
                             <Navbar />
-                            <main>{children}</main>
+                            <main className="pb-24 lg:pb-0">{children}</main>
                             <BottomNav />
                             <FloatingContact />
                             <LiveChatWidget />
