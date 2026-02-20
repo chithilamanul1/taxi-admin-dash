@@ -36,17 +36,16 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
         }
     }, [isLoaded, pickup, dropoff]);
 
-    // 2. Poll Driver Location
+    // 2. Real-time Driver Tracking with Pusher
     useEffect(() => {
         if (!driverId) return;
 
-        const fetchDriver = async () => {
+        // Initial Fetch
+        const fetchInitialDriver = async () => {
             try {
-                // Fetch all for now (optimize later)
                 const res = await fetch('/api/drivers');
                 const drivers = await res.json();
                 const matched = drivers.find(d => d._id === driverId || d.user?._id === driverId);
-
                 if (matched) {
                     setDriverData(matched);
                     if (matched.currentLocation?.lat) {
@@ -57,13 +56,36 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
                     }
                 }
             } catch (err) {
-                console.error("Driver Poll Error:", err);
+                console.error("Initial Driver Fetch Error:", err);
             }
         };
+        fetchInitialDriver();
 
-        fetchDriver();
-        const interval = setInterval(fetchDriver, 10000); // 10s Poll
-        return () => clearInterval(interval);
+        // Pusher Real-time Subscription
+        let pusher;
+        let channel;
+
+        try {
+            // Import pusher-js dynamically to avoid SSR issues if any
+            const Pusher = require('pusher-js');
+            pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
+                cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+            });
+
+            channel = pusher.subscribe(`driver-${driverId}`);
+            channel.bind('location-update', (data) => {
+                if (data.lat && data.lng) {
+                    setDriverLocation({ lat: data.lat, lng: data.lng });
+                }
+            });
+        } catch (err) {
+            console.error("Pusher Client Error:", err);
+        }
+
+        return () => {
+            if (channel) channel.unbind_all();
+            if (pusher) pusher.unsubscribe(`driver-${driverId}`);
+        };
     }, [driverId]);
 
     if (!isLoaded) return <div className="w-full h-64 bg-slate-100 animate-pulse rounded-2xl flex items-center justify-center">Loading Map...</div>;

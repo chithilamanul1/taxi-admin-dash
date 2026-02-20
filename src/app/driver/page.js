@@ -33,6 +33,14 @@ export default function DriverDashboard() {
                 })
             });
             setLastLocation({ lat, lng, time: new Date() });
+
+            // Broadcast location to Pusher for real-time user tracking
+            fetch('/api/location/broadcast', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ driverId, lat, lng })
+            }).catch(console.error);
+
         } catch (error) {
             console.error('Failed to update location:', error);
         }
@@ -143,18 +151,21 @@ export default function DriverDashboard() {
         router.push('/driver/login');
     };
 
-    const updateBookingStatus = async (bookingId, status) => {
+    const updateBookingStatus = async (bookingId, action) => {
+        const driverId = localStorage.getItem('driver_id');
         try {
-            const res = await fetch(`/api/bookings/${bookingId}`, {
-                method: 'PATCH',
+            const endpoint = action === 'ongoing' ? 'accept' : 'finish';
+            const res = await fetch(`/api/bookings/${bookingId}/${endpoint}`, {
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status })
+                body: JSON.stringify({ driverId })
             });
             if (res.ok) {
+                const status = action === 'ongoing' ? 'ongoing' : 'completed';
                 setBookings(prev => prev.map(b => b._id === bookingId ? { ...b, status } : b));
             }
         } catch (error) {
-            console.error('Failed to update booking:', error);
+            console.error(`Failed to ${action} booking:`, error);
         }
     };
 
@@ -467,20 +478,20 @@ export default function DriverDashboard() {
                                 {booking.status === 'assigned' && (
                                     <button
                                         onClick={() => updateBookingStatus(booking._id, 'ongoing')}
-                                        className="w-full bg-blue-500 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2"
+                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20"
                                     >
-                                        <Car size={18} />
-                                        Start Trip
+                                        <Car size={20} className="animate-bounce" />
+                                        START TRIP NOW
                                     </button>
                                 )}
 
                                 {booking.status === 'ongoing' && (
                                     <button
                                         onClick={() => updateBookingStatus(booking._id, 'completed')}
-                                        className="w-full bg-green-500 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2"
+                                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-emerald-500/20"
                                     >
-                                        <CheckCircle size={18} />
-                                        Complete Trip
+                                        <CheckCircle size={20} />
+                                        COMPLETE TRIP
                                     </button>
                                 )}
                             </div>

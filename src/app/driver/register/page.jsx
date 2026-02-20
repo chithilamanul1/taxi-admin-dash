@@ -213,11 +213,11 @@ export default function DriverRegister() {
                             </h3>
                             <div className="bg-slate-800 p-4 rounded-xl border border-slate-700">
                                 <p className="text-sm text-slate-400 mb-2 font-bold uppercase">Bank Transfer Details</p>
-                                <div className="space-y-1 text-slate-200 font-mono text-sm">
+                                <div className="space-y-1 text-slate-200 font-mono text-sm uppercase">
                                     <p>Bank: <span className="text-amber-400">Sampath Bank</span></p>
-                                    <p>Account Name: <span className="text-amber-400">Airport Taxis Tours</span></p>
-                                    <p>Account No: <span className="text-amber-400 text-lg font-bold">1234 5678 9012</span></p>
-                                    <p>Branch: <span className="text-amber-400">Colombo Super Branch</span></p>
+                                    <p>Account Name: <span className="text-amber-400">AIRPORT TAXIS PVT LTD</span></p>
+                                    <p>Account No: <span className="text-amber-400 text-lg font-black tracking-widest">1127 1403 9751</span></p>
+                                    <p>Branch: <span className="text-amber-400">Grandpass</span></p>
                                 </div>
                                 <p className="text-xs text-slate-500 mt-4">Please transfer a minimum of <span className="text-slate-300 font-bold">Rs 5,000</span> to activate your account.</p>
                             </div>
