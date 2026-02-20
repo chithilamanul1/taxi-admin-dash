@@ -82,6 +82,26 @@ const MOUNTAIN_LOCATIONS = [
         distance: '160 km',
         time: '4 hours',
         img: 'https://images.unsplash.com/photo-1549366021-9f761d450615?q=80&w=1951&auto=format&fit=crop'
+    },
+    {
+        id: 'horton-plains',
+        name: 'Horton Plains',
+        title: 'Airport to Horton Plains National Park / Ohiya',
+        perKmRateOverride: 140,
+        badge: 'Mist & Plains',
+        distance: '185 km',
+        time: '5.5 hours',
+        img: 'https://images.unsplash.com/photo-1588168333917-76cd640ae906?q=80&w=2070&auto=format&fit=crop'
+    },
+    {
+        id: 'adams-peak',
+        name: 'Adams Peak',
+        title: 'Airport to Adams Peak / Nallathanniya',
+        perKmRateOverride: 130,
+        badge: 'Holy Mountain',
+        distance: '145 km',
+        time: '4.5 hours',
+        img: 'https://images.unsplash.com/photo-1544211158-71e846067b58?q=80&w=2070&auto=format&fit=crop'
     }
 ];
 
