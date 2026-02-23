@@ -1103,6 +1103,123 @@ export async function sendLoginNotification(user) {
     }
 }
 
+// 11. CUSTOM TRIP INQUIRY (NEW!)
+export async function sendCustomTripInquiry(data) {
+    const inquiryId = Math.random().toString(36).substring(7).toUpperCase();
+
+    const ownerContent = `
+        <!-- Inquiry Header -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
+            <tr>
+                <td style="background-color: #064e3b; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
+                    NEW CUSTOM TRIP INQUIRY
+                </td>
+            </tr>
+        </table>
+
+        <!-- Customer Details -->
+        <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
+            <tr style="background-color: #f9fafb;">
+                <td colspan="2" style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
+                    CUSTOMER DETAILS
+                </td>
+            </tr>
+            <tr>
+                <td width="35%" style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Customer Name</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${data.name || 'Anonymous'}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Customer Email</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${data.email || 'N/A'}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Phone No</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${data.phone || 'N/A'}</td>
+            </tr>
+        </table>
+
+        <!-- Trip Requirements -->
+        <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
+            <tr style="background-color: #f9fafb;">
+                <td colspan="2" style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
+                    TRIP REQUIREMENTS
+                </td>
+            </tr>
+            <tr>
+                <td width="35%" style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Pickup</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-size: 12px;">${data.pickup?.address || 'N/A'}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Destination</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-size: 12px;">${data.dropoff?.address || 'N/A'}</td>
+            </tr>
+            ${data.waypoints && data.waypoints.length > 0 ? `
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Via Stops</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-size: 11px;">
+                    ${data.waypoints.map(wp => `• ${wp.address}`).join('<br/>')}
+                </td>
+            </tr>
+            ` : ''}
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Est. Distance</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${data.distance || 0} km</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Est. Duration</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${data.duration || 0} mins</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Passengers</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${data.passengerCount || 1}</td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Vehicle Type</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${data.vehicleType || 'Any'}</td>
+            </tr>
+        </table>
+
+        <!-- Message -->
+        <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
+            <tr style="background-color: #f9fafb;">
+                <td style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
+                    CUSTOMER MESSAGE
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 15px; font-size: 13px; line-height: 1.5; color: #4b5563; font-style: italic;">
+                    ${data.message || 'No additional notes provided.'}
+                </td>
+            </tr>
+        </table>
+
+        <table width="100%" cellpadding="0" cellspacing="0">
+             <tr>
+                <td style="text-align: center;">
+                    <a href="mailto:${data.email}" style="display: inline-block; background-color: #064e3b; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">
+                        Reply to Customer
+                    </a>
+                </td>
+            </tr>
+        </table>
+    `;
+
+    try {
+        const resend = getResend();
+        if (resend) {
+            await resend.emails.send({
+                from: FROM_EMAIL,
+                to: OWNER_EMAIL,
+                subject: `✨ CUSTOM TRIP: ${data.name || 'New Inquiry'} | ${data.pickup?.address?.split(',')[0]} -> ${data.dropoff?.address?.split(',')[0]}`,
+                html: getPrintFriendlyTemplate(ownerContent, `Custom Trip Inquiry`)
+            });
+            console.log('[Email] Custom trip inquiry notification sent to owner');
+        }
+    } catch (error) {
+        console.error('[Email] Failed to send custom trip inquiry notification:', error);
+    }
+}
+
 // Export all functions
 export default {
     sendLoginNotification,
@@ -1113,5 +1230,6 @@ export default {
     sendTripCompletedNotification,
     sendReviewThankYou,
     sendBookingCancelled,
-    sendBookingStatusUpdate
+    sendBookingStatusUpdate,
+    sendCustomTripInquiry
 };

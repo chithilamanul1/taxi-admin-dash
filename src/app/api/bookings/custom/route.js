@@ -4,7 +4,7 @@ import { authOptions } from '@/lib/auth';
 import dbConnect from '@/lib/db';
 // 1. Create a Support Ticket / Inquiry
 import Ticket from '@/models/Ticket';
-import { sendEmail } from '@/lib/email'; // Assuming this exists, or we mock it
+import { sendCustomTripInquiry } from '@/lib/email-service';
 
 export async function POST(req) {
     try {
@@ -44,8 +44,13 @@ export async function POST(req) {
             lastUpdated: new Date()
         });
 
-        // 2. Send Email Notification (Optional/Mock)
-        // await sendEmail({ ... }); 
+        // 2. Send Email Notification to Owner
+        try {
+            await sendCustomTripInquiry(data);
+        } catch (emailError) {
+            console.error("[Email] Custom Trip Inquiry Email Failed:", emailError);
+            // Don't throw, we want the ticket creation to succeed in the response
+        }
 
         return NextResponse.json({ success: true, ticketId: ticket._id });
 
