@@ -33,7 +33,7 @@ const Hero = ({ onBookClick }) => {
     const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroImages.length)
 
     return (
-        <section className="relative h-[85vh] md:h-[90vh] min-h-[650px] md:min-h-[800px] flex flex-col items-start justify-start pt-32 md:pt-48 pb-20 overflow-hidden bg-emerald-950 transition-colors">
+        <section className="relative h-[85vh] md:h-[90vh] min-h-[750px] md:min-h-[850px] flex flex-col items-start md:items-center justify-start md:justify-center pt-32 md:pt-36 pb-32 md:pb-48 overflow-hidden bg-emerald-950 transition-colors">
             {/* Background Slideshow */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/95 via-emerald-900/70 to-black/30 pointer-events-none z-10"></div>
@@ -90,7 +90,7 @@ const Hero = ({ onBookClick }) => {
             </div>
 
             {/* Content */}
-            <div className="container mx-auto px-6 relative z-10 text-left">
+            <div className="container mx-auto px-6 relative z-10 text-left md:text-center">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-900/80 backdrop-blur-md border border-emerald-400/30 text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-4 animate-slide-up opacity-0 [animation-delay:0.2s] [animation-fill-mode:forwards] shadow-lg">
                     <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -109,7 +109,7 @@ const Hero = ({ onBookClick }) => {
                         Reliable airport transfers and curated luxury tours.
                         Professional service tailored to your journey.
                     </p>
-                    <div className="flex flex-col gap-2 p-5 bg-emerald-950/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg max-w-xl">
+                    <div className="flex flex-col gap-2 p-5 bg-emerald-950/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg max-w-xl md:mx-auto">
                         <p className="text-sm text-white/80 leading-relaxed">
                             🇱🇰 <strong className="text-emerald-300">Premium Fleet & Service:</strong>
                         </p>
@@ -121,7 +121,7 @@ const Hero = ({ onBookClick }) => {
                     </div>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-start gap-4 animate-slide-up opacity-0 [animation-delay:0.8s] [animation-fill-mode:forwards] pb-8 md:pb-0">
+                <div className="flex flex-wrap items-center justify-start md:justify-center gap-4 animate-slide-up opacity-0 [animation-delay:0.8s] [animation-fill-mode:forwards] pb-8 md:pb-0">
                     <button
                         onClick={onBookClick}
                         className="group w-full sm:w-auto px-8 py-4 bg-emerald-700 text-white rounded-xl font-bold text-lg hover:bg-emerald-600 transition-all shadow-xl shadow-emerald-900/20 flex items-center justify-center gap-2 min-w-[200px]"
