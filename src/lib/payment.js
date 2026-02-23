@@ -50,6 +50,30 @@ export function getActiveGateway() {
 }
 
 /**
+ * Get the appropriate gateway for a given currency
+ */
+export function getGatewayForCurrency(currency) {
+    const defaultGateway = getActiveGateway();
+
+    // Logic: If LKR is selected, we can optionally use PayHere if merchant ID is set.
+    // Otherwise, we use the default gateway (Sampath).
+    if (currency === 'LKR' && process.env.PAYHERE_MERCHANT_ID) {
+        // Only switch to PayHere if it's explicitly allowed or if we want it as the LKR default
+        // For now, let's stick to the user's preference of keeping things flexible.
+        // If the user wants ALL LKR to go to PayHere, we do:
+        // return 'payhere';
+
+        // However, Sampath also supports LKR. 
+        // Let's check if a specific environment variable allows LKR override.
+        if (process.env.USE_PAYHERE_FOR_LKR === 'true') {
+            return 'payhere';
+        }
+    }
+
+    return defaultGateway;
+}
+
+/**
  * Generate PayHere MD5 Hash
  * Format: merchant_id + order_id + amount + currency + StatusCode + md5(secret)
  * But for Request: merchant_id + order_id + amount + currency + md5(secret)  (As per PayHere docs for checkout)

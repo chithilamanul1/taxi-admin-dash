@@ -18,6 +18,16 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
 
     if (!isOpen || !product) return null;
 
+    const getCurrencySymbol = (curr) => {
+        switch (curr) {
+            case 'LKR': return 'Rs.';
+            case 'EUR': return '€';
+            case 'GBP': return '£';
+            case 'USD': return '$';
+            default: return '$';
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -31,7 +41,7 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
                 dropoffLocation: { address: product?.title || '', lat: 0, lng: 0 },
                 totalPrice: product?.price || 0,
                 paidAmount: selectedPaymentType === 'partial' ? ((product?.price || 0) * 0.5) : (product?.price || 0),
-                currency: 'USD',
+                currency: product?.currency || 'USD',
                 displayPrice: product?.price || 0,
                 displayPaidAmount: selectedPaymentType === 'partial' ? ((product?.price || 0) * 0.5) : (product?.price || 0),
                 paymentMethod: 'card',
@@ -86,7 +96,8 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
                         <div className="flex flex-col items-end gap-2 bg-white/5 w-fit px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl border border-white/10 backdrop-blur-md">
                             <div className="flex items-baseline gap-2">
                                 <span className="text-2xl md:text-6xl font-black text-white">
-                                    ${selectedPaymentType === 'partial' ? ((product?.price || 0) * 0.5).toFixed(2) : (product?.price || 0)}
+                                    {getCurrencySymbol(product?.currency)}
+                                    {(selectedPaymentType === 'partial' ? ((product?.price || 0) * 0.5) : (product?.price || 0)).toLocaleString(undefined, { minimumFractionDigits: product?.currency === 'LKR' ? 0 : 2, maximumFractionDigits: 2 })}
                                 </span>
                                 <span className="text-emerald-400 font-bold uppercase text-[8px] md:text-[11px] tracking-widest">
                                     {selectedPaymentType === 'partial' ? 'Deposit (50%)' : 'Full Payment'}
@@ -157,7 +168,8 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
                                 ) : (
                                     <>
                                         <CreditCard size={28} />
-                                        Pay ${selectedPaymentType === 'partial' ? ((product?.price || 0) * 0.5).toFixed(2) : (product?.price || 0)} Now
+                                        Pay {getCurrencySymbol(product?.currency)}
+                                        {(selectedPaymentType === 'partial' ? ((product?.price || 0) * 0.5) : (product?.price || 0)).toLocaleString()} Now
                                         <ArrowRight size={26} className="group-hover:translate-x-2 transition-transform" />
                                     </>
                                 )}

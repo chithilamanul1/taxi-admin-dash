@@ -1,7 +1,7 @@
 import dbConnect from '@/lib/db';
 import Booking from '@/models/Booking';
 import { NextResponse } from 'next/server';
-import { getActiveGateway, GATEWAY_CONFIG } from '@/lib/payment';
+import { getGatewayForCurrency, GATEWAY_CONFIG } from '@/lib/payment';
 import { logBookingCreated } from '@/lib/discord';
 
 export async function POST(req) {
@@ -19,7 +19,7 @@ export async function POST(req) {
 
             console.log(`[Payment Retry] Re-initiating for Booking: ${existingBooking._id}`);
 
-            const gateway = getActiveGateway();
+            const gateway = getGatewayForCurrency(existingBooking.currency);
             const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
 
             if (gateway === 'sampath') {
@@ -56,7 +56,7 @@ export async function POST(req) {
             delete data.customer;
         }
 
-        const gateway = getActiveGateway();
+        const gateway = getGatewayForCurrency(data.currency || 'USD');
 
         // 1. Create the booking record
         const bookingData = {
