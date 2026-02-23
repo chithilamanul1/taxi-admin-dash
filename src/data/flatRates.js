@@ -5,7 +5,8 @@ export const flatRates = {
         price: 59,
         badge: "Top Choice",
         img: "/mirissa.jpg",
-        meta: "Whale Watching Hub"
+        meta: "Whale Watching Hub",
+        allowedPaymentMode: "both"
     },
     ahangama: {
         id: "ahangama",
@@ -13,7 +14,8 @@ export const flatRates = {
         price: 58,
         badge: "Deep South",
         img: "/ahangama.jpg",
-        meta: "Surfing & Yoga Hub"
+        meta: "Surfing & Yoga Hub",
+        allowedPaymentMode: "both"
     },
     sigiriya: {
         id: "sigiriya",
@@ -21,7 +23,8 @@ export const flatRates = {
         price: 90,
         badge: "Historic",
         img: "/sigiriya.jpg",
-        meta: "Ancient Rock Fortress"
+        meta: "Ancient Rock Fortress",
+        allowedPaymentMode: "both"
     },
     ella: {
         id: "ella",
@@ -29,7 +32,8 @@ export const flatRates = {
         price: 110,
         badge: "Scenic Route",
         img: "/ella.jpg",
-        meta: "Highlands Escape"
+        meta: "Highlands Escape",
+        allowedPaymentMode: "both"
     },
     sampath_test: {
         id: "sampath_test",
@@ -37,7 +41,8 @@ export const flatRates = {
         price: 1,
         badge: "Internal Test",
         img: "/test-product.jpg",
-        meta: "Bank Integration Test"
+        meta: "Bank Integration Test",
+        allowedPaymentMode: "both"
     }
 };
 

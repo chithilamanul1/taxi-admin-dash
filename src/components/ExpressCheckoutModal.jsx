@@ -12,6 +12,9 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
         billingAddress: '',
         country: '',
     });
+    const [selectedPaymentType, setSelectedPaymentType] = useState(
+        product.allowedPaymentMode === 'partial' ? 'partial' : 'full'
+    );
 
     if (!isOpen || !product) return null;
 
@@ -25,14 +28,14 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
                 type: 'transfer',
                 tripType: 'one-way',
                 pickupLocation: { address: 'Bandaranaike International Airport (CMB)', lat: 7.1811, lng: 79.8837 },
-                dropoffLocation: { address: product.title, lat: 0, lng: 0 }, // Placeholder for fixed price
-                totalPrice: 0, // Backend will calculate or we pass fixed
-                paidAmount: product.price,
+                dropoffLocation: { address: product.title, lat: 0, lng: 0 },
+                totalPrice: product.price,
+                paidAmount: selectedPaymentType === 'partial' ? (product.price * 0.5) : product.price,
                 currency: 'USD',
                 displayPrice: product.price,
-                displayPaidAmount: product.price,
+                displayPaidAmount: selectedPaymentType === 'partial' ? (product.price * 0.5) : product.price,
                 paymentMethod: 'card',
-                paymentType: 'full',
+                paymentType: selectedPaymentType,
                 billingDetails: {
                     billingName: formData.customerName,
                     billingAddress: formData.billingAddress,
@@ -80,9 +83,29 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
                             <p className="text-[10px] md:text-lg text-emerald-200/80 font-medium">{product.title}</p>
                         </div>
 
-                        <div className="flex items-baseline gap-2 bg-white/5 w-fit px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl border border-white/10 backdrop-blur-md">
-                            <span className="text-2xl md:text-6xl font-black text-white">${product.price}</span>
-                            <span className="text-emerald-400 font-bold uppercase text-[8px] md:text-[11px] tracking-widest">Fixed Amount</span>
+                        <div className="flex flex-col items-end gap-2 bg-white/5 w-fit px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl border border-white/10 backdrop-blur-md">
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-2xl md:text-6xl font-black text-white">
+                                    ${selectedPaymentType === 'partial' ? (product.price * 0.5).toFixed(2) : product.price}
+                                </span>
+                                <span className="text-emerald-400 font-bold uppercase text-[8px] md:text-[11px] tracking-widest">
+                                    {selectedPaymentType === 'partial' ? 'Deposit (50%)' : 'Full Payment'}
+                                </span>
+                            </div>
+                            {product.allowedPaymentMode === 'both' && (
+                                <div className="flex bg-black/20 p-1 rounded-xl border border-white/5">
+                                    {['full', 'partial'].map(t => (
+                                        <button
+                                            key={t}
+                                            type="button"
+                                            onClick={() => setSelectedPaymentType(t)}
+                                            className={`px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest transition-all ${selectedPaymentType === t ? 'bg-emerald-500 text-white shadow-lg' : 'text-emerald-300 hover:text-white hover:bg-white/5'}`}
+                                        >
+                                            {t === 'full' ? '100%' : '50%'}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -134,7 +157,7 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
                                 ) : (
                                     <>
                                         <CreditCard size={28} />
-                                        Pay ${product.price} Now
+                                        Pay ${selectedPaymentType === 'partial' ? (product.price * 0.5).toFixed(2) : product.price} Now
                                         <ArrowRight size={26} className="group-hover:translate-x-2 transition-transform" />
                                     </>
                                 )}

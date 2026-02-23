@@ -25,6 +25,11 @@ const QuickLinkSchema = new mongoose.Schema({
         type: String,
         default: '/test-product.jpg'
     },
+    allowedPaymentMode: {
+        type: String,
+        enum: ['full', 'partial', 'both'],
+        default: 'both'
+    },
     isActive: {
         type: Boolean,
         default: true

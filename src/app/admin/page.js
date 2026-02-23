@@ -83,7 +83,7 @@ export default function AdminDashboard() {
 
     // Quick Links State
     const [quickLinks, setQuickLinks] = useState([])
-    const [newQuickLink, setNewQuickLink] = useState({ title: '', price: '', slug: '', badge: 'Special Offer' })
+    const [newQuickLink, setNewQuickLink] = useState({ title: '', price: '', slug: '', badge: 'Special Offer', allowedPaymentMode: 'both' })
     const [isSavingQuickLink, setIsSavingQuickLink] = useState(false)
 
     // Manual Booking States
@@ -191,7 +191,7 @@ export default function AdminDashboard() {
             const data = await res.json();
             if (data.success) {
                 setQuickLinks([data.data, ...quickLinks]);
-                setNewQuickLink({ title: '', price: '', slug: '', badge: 'Special Offer' });
+                setNewQuickLink({ title: '', price: '', slug: '', badge: 'Special Offer', allowedPaymentMode: 'both' });
                 alert('Quick Link created!');
             } else {
                 alert('Error: ' + data.error);
@@ -1352,10 +1352,22 @@ export default function AdminDashboard() {
                                                     className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20"
                                                 />
                                             </div>
+                                            <div>
+                                                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Payment Mode</label>
+                                                <select
+                                                    value={newQuickLink.allowedPaymentMode}
+                                                    onChange={(e) => setNewQuickLink({ ...newQuickLink, allowedPaymentMode: e.target.value })}
+                                                    className="w-full px-4 py-[9px] bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20 font-bold text-emerald-900"
+                                                >
+                                                    <option value="both">Both (Choice)</option>
+                                                    <option value="full">100% Only</option>
+                                                    <option value="partial">50% Only</option>
+                                                </select>
+                                            </div>
                                             <button
                                                 onClick={handleSaveQuickLink}
                                                 disabled={isSavingQuickLink}
-                                                className="bg-emerald-900 text-white h-[42px] px-6 rounded-xl font-bold text-sm hover:bg-emerald-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                                className="bg-emerald-900 text-white h-[42px] px-6 rounded-xl font-bold text-sm hover:bg-emerald-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 md:col-span-4 lg:col-span-1"
                                             >
                                                 {isSavingQuickLink ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
                                                 Create Dynamic Link
@@ -1406,8 +1418,11 @@ export default function AdminDashboard() {
                                                         <X size={16} />
                                                     </button>
                                                 </div>
-                                                <div className="mt-4 pt-4 border-t border-white/10 flex items-center gap-2">
+                                                <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between gap-2">
                                                     <span className="text-[9px] text-white/40 uppercase font-bold tracking-tighter">SLUG: {rate.slug}</span>
+                                                    <span className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest bg-emerald-400/10 px-2 py-0.5 rounded">
+                                                        {rate.allowedPaymentMode === 'full' ? '100% Only' : rate.allowedPaymentMode === 'partial' ? '50% Only' : 'Customer Choice'}
+                                                    </span>
                                                 </div>
                                             </div>
                                         ))}
