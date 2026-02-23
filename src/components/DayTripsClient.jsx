@@ -1,23 +1,41 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Clock, MapPin, Users, Tag, Star, ArrowRight, Filter, Search } from 'lucide-react'
-import { dayTrips } from '@/data/tours-data'
+import React, { useState, useEffect } from 'react'
+import { Clock, MapPin, Users, Tag, Star, ArrowRight, Filter, Search, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 
 export default function DayTripsClient() {
+    const [trips, setTrips] = useState([])
+    const [loading, setLoading] = useState(true)
     const [filter, setFilter] = useState('all')
     const [search, setSearch] = useState('')
 
-    const filteredTrips = dayTrips.filter(trip => {
-        const matchesFilter = filter === 'all' || trip.type === filter
+    useEffect(() => {
+        const fetchTrips = async () => {
+            try {
+                const res = await fetch('/api/tours?category=day-trip')
+                const data = await res.json()
+                if (data.success) {
+                    setTrips(data.data)
+                }
+            } catch (error) {
+                console.error("Failed to fetch tours:", error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchTrips()
+    }, [])
+
+    const filteredTrips = trips.filter(trip => {
+        const matchesFilter = filter === 'all' || trip.category === filter
         const matchesSearch = trip.title.toLowerCase().includes(search.toLowerCase()) ||
             trip.description.toLowerCase().includes(search.toLowerCase()) ||
             trip.destinations?.some(d => d.toLowerCase().includes(search.toLowerCase()))
         return matchesFilter && matchesSearch
     })
 
-    const types = ['all', 'day trip', 'private tour', 'water activity']
+    const types = ['all', 'day-trip']
 
     return (
         <main className="min-h-screen bg-gradient-to-b from-emerald-900 to-slate-950 pt-32 pb-20">
@@ -67,85 +85,91 @@ export default function DayTripsClient() {
                 </div>
 
                 <div className="max-w-6xl mx-auto mb-6">
-                    <p className="text-white/60 text-sm">{filteredTrips.length} experiences found</p>
+                    <p className="text-white/60 text-sm">{loading ? 'Loading...' : `${filteredTrips.length} experiences found`}</p>
                 </div>
 
-                <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-                    {filteredTrips.map((trip) => (
-                        <div key={trip.id} className="bg-white rounded-[2rem] overflow-hidden shadow-xl hover:shadow-[#00A99D]/20 transition-all hover:-translate-y-2 group flex flex-col h-full border border-slate-100">
-                            {/* Image Section */}
-                            <div className="relative h-64 overflow-hidden bg-slate-900 shrink-0">
-                                {trip.image || trip.heroImage || (trip.images && trip.images.length > 0) ? (
-                                    <img
-                                        src={trip.image || trip.heroImage || trip.images?.[0]}
-                                        alt={trip.title}
-                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
-                                    />
-                                ) : (
-                                    <div className="absolute inset-0 bg-slate-800 flex items-center justify-center text-slate-500">No Image</div>
-                                )}
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent pointer-events-none" />
+                {loading ? (
+                    <div className="flex justify-center py-20">
+                        <Loader2 className="animate-spin text-emerald-500" size={48} />
+                    </div>
+                ) : (
+                    <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                        {filteredTrips.map((trip) => (
+                            <div key={trip.slug || trip._id || trip.id} className="bg-white rounded-[2rem] overflow-hidden shadow-xl hover:shadow-[#00A99D]/20 transition-all hover:-translate-y-2 group flex flex-col h-full border border-slate-100">
+                                {/* Image Section */}
+                                <div className="relative h-64 overflow-hidden bg-slate-900 shrink-0">
+                                    {trip.image || trip.heroImage || (trip.images && trip.images.length > 0) ? (
+                                        <img
+                                            src={trip.image || trip.heroImage || trip.images?.[0]}
+                                            alt={trip.title}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 bg-slate-800 flex items-center justify-center text-slate-500">No Image</div>
+                                    )}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent pointer-events-none" />
 
-                                <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                                    {trip.tags?.slice(0, 2).map((tag, i) => (
-                                        <span key={i} className="px-3 py-1 bg-white/90 backdrop-blur text-[#006064] text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
-                                            {tag}
-                                        </span>
-                                    ))}
-                                </div>
-                                <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                                    <span className="px-3 py-1.5 bg-[#00A99D]/90 backdrop-blur text-white text-[10px] font-black uppercase tracking-widest rounded-lg">
-                                        {trip.type}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Content Section */}
-                            <div className="p-8 flex flex-col flex-1">
-                                <h3 className="text-2xl font-black text-[#006064] mb-3 line-clamp-2 leading-tight">
-                                    {trip.title}
-                                </h3>
-
-                                <p className="text-slate-600 text-sm mb-6 line-clamp-3 leading-relaxed">
-                                    {trip.description}
-                                </p>
-
-                                <div className="flex items-center gap-4 text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">
-                                    <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-lg text-[#00A99D]">
-                                        <Clock size={16} />
-                                        <span>{trip.duration}</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-lg text-[#00A99D]">
-                                        <MapPin size={16} />
-                                        <span>{trip.pickupLocations?.length || 1} Pickups</span>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center justify-between mt-auto pt-6 border-t border-slate-100">
-                                    <div>
-                                        {trip.originalPrice && (
-                                            <span className="text-sm text-slate-400 line-through mr-2 font-medium">
-                                                ${trip.originalPrice}
+                                    <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                                        {trip.tags?.slice(0, 2).map((tag, i) => (
+                                            <span key={i} className="px-3 py-1 bg-white/90 backdrop-blur text-[#006064] text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
+                                                {tag}
                                             </span>
-                                        )}
-                                        <span className="text-sm text-slate-400 font-bold uppercase tracking-widest block mb-1">From</span>
-                                        <span className="text-3xl font-black text-[#006064]">
-                                            {typeof trip.price === 'object' ? (trip.price?.currency || '$') : (trip.currency || '$')} {typeof trip.price === 'object' ? (trip.price?.amount?.toLocaleString() || '0') : (trip.price?.toLocaleString() || '0')}
+                                        ))}
+                                    </div>
+                                    <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                                        <span className="px-3 py-1.5 bg-[#00A99D]/90 backdrop-blur text-white text-[10px] font-black uppercase tracking-widest rounded-lg">
+                                            {trip.type}
                                         </span>
                                     </div>
-                                    <Link
-                                        href={`/day-trips/${trip.id}`}
-                                        className="flex items-center justify-center w-14 h-14 bg-[#006064] text-white rounded-2xl group-hover:bg-[#004D40] hover:scale-110 transition-all shadow-xl shadow-cyan-900/20"
-                                    >
-                                        <ArrowRight size={20} />
-                                    </Link>
+                                </div>
+
+                                {/* Content Section */}
+                                <div className="p-8 flex flex-col flex-1">
+                                    <h3 className="text-2xl font-black text-[#006064] mb-3 line-clamp-2 leading-tight">
+                                        {trip.title}
+                                    </h3>
+
+                                    <p className="text-slate-600 text-sm mb-6 line-clamp-3 leading-relaxed">
+                                        {trip.description}
+                                    </p>
+
+                                    <div className="flex items-center gap-4 text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">
+                                        <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-lg text-[#00A99D]">
+                                            <Clock size={16} />
+                                            <span>{trip.duration}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-lg text-[#00A99D]">
+                                            <MapPin size={16} />
+                                            <span>{trip.pickupLocations?.length || 1} Pickups</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-between mt-auto pt-6 border-t border-slate-100">
+                                        <div>
+                                            {trip.originalPrice && (
+                                                <span className="text-sm text-slate-400 line-through mr-2 font-medium">
+                                                    ${trip.originalPrice}
+                                                </span>
+                                            )}
+                                            <span className="text-sm text-slate-400 font-bold uppercase tracking-widest block mb-1">From</span>
+                                            <span className="text-3xl font-black text-[#006064]">
+                                                {typeof trip.price === 'object' ? (trip.price?.currency || '$') : (trip.currency || '$')} {typeof trip.price === 'object' ? (trip.price?.amount?.toLocaleString() || '0') : (trip.price?.toLocaleString() || '0')}
+                                            </span>
+                                        </div>
+                                        <Link
+                                            href={`/day-trips/${trip.slug}`}
+                                            className="flex items-center justify-center w-14 h-14 bg-[#006064] text-white rounded-2xl group-hover:bg-[#004D40] hover:scale-110 transition-all shadow-xl shadow-cyan-900/20"
+                                        >
+                                            <ArrowRight size={20} />
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
 
-                {filteredTrips.length === 0 && (
+                {filteredTrips.length === 0 && !loading && (
                     <div className="text-center py-20">
                         <p className="text-white/60 text-lg">No trips found matching your criteria.</p>
                         <button

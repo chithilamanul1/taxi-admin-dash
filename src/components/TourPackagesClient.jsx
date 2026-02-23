@@ -1,14 +1,31 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Clock, MapPin, Check, ArrowRight, Calendar, Users, Plane, Hotel, Car, Utensils } from 'lucide-react'
-import Link from 'next/link'
 import { tourPackages } from '@/data/tours-data'
+import { Clock, MapPin, Check, ArrowRight, Calendar, Users, Plane, Hotel, Car, Utensils, Loader2 } from 'lucide-react'
+import Link from 'next/link'
 
 export default function TourPackagesClient() {
     const [activeCategory, setActiveCategory] = useState('All')
+    const [tours, setTours] = useState([])
+    const [loading, setLoading] = useState(true)
 
-    const tours = tourPackages; // Directly map the local luxury data
+    useEffect(() => {
+        const fetchTours = async () => {
+            try {
+                const res = await fetch('/api/tours?category=tour-package')
+                const data = await res.json()
+                if (data.success) {
+                    setTours(data.data)
+                }
+            } catch (error) {
+                console.error("Failed to fetch tours:", error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchTours()
+    }, [])
 
     return (
         <main className="min-h-screen bg-gradient-to-b from-emerald-900 to-slate-950 pt-32 pb-20">
@@ -74,10 +91,15 @@ export default function TourPackagesClient() {
                 </div>
 
                 <div className="max-w-7xl mx-auto space-y-12">
-                    {Array.isArray(tours) && tours
-                        .filter(tour => activeCategory === 'All' || tour.category === activeCategory)
-                        .map((tour, index) => (
-                            <div key={tour._id || index} className="bg-white rounded-[2.5rem] overflow-hidden shadow-2xl hover:shadow-cyan-900/10 transition-all group border border-slate-100">
+                    {loading ? (
+                        <div className="flex justify-center py-20">
+                            <Loader2 className="animate-spin text-emerald-500" size={48} />
+                        </div>
+                    ) : (
+                        Array.isArray(tours) && tours
+                            .filter(tour => activeCategory === 'All' || tour.category === activeCategory)
+                            .map((tour, index) => (
+                                <div key={tour.slug || tour._id || index} className="bg-white rounded-[2.5rem] overflow-hidden shadow-2xl hover:shadow-cyan-900/10 transition-all group border border-slate-100">
                                 <div className="grid lg:grid-cols-[450px,1fr] xl:grid-cols-[550px,1fr] min-h-[400px]">
                                     {/* Image Section */}
                                     <div className="relative h-72 lg:h-full bg-slate-900 overflow-hidden">
@@ -150,7 +172,7 @@ export default function TourPackagesClient() {
 
                                         <div className="flex flex-col sm:flex-row gap-4 mt-auto pt-6 border-t border-slate-100">
                                             <Link
-                                                href={`/tour-packages/${tour.id}`}
+                                                href={`/tour-packages/${tour.slug}`}
                                                 className="flex-1 flex items-center justify-center gap-2 px-8 py-4 bg-[#006064] text-white rounded-2xl font-black hover:bg-[#004D40] hover:scale-[1.02] transition-all shadow-xl"
                                             >
                                                 View Full Itinerary <ArrowRight size={18} />
@@ -165,7 +187,8 @@ export default function TourPackagesClient() {
                                     </div>
                                 </div>
                             </div>
-                        ))}
+                        ))
+                    )}
                 </div>
 
                 <div className="max-w-4xl mx-auto mt-16 text-center">

@@ -6,8 +6,10 @@ import Link from 'next/link';
 export default function ToursAdmin() {
     const [tours, setTours] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [uploading, setUploading] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [editingTour, setEditingTour] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
     const [formData, setFormData] = useState({
         title: '',
         category: 'Day Tours',
@@ -18,6 +20,26 @@ export default function ToursAdmin() {
         highlights: '', // Comma separated for simplicity first
         isActive: true
     });
+
+    const uploadFile = async (file) => {
+        if (!file) return null;
+        const data = new FormData();
+        data.append('file', file);
+        data.append('folder', 'tours');
+
+        const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: data
+        });
+
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || 'Upload failed');
+        }
+
+        const result = await res.json();
+        return result.success ? result.url : null;
+    };
 
     useEffect(() => {
         fetchTours();
@@ -50,6 +72,7 @@ export default function ToursAdmin() {
 
     const handleCreate = () => {
         setEditingTour(null);
+        setImageFile(null);
         setFormData({
             title: '', category: 'Day Tours', price: '', duration: 1, image: '', description: '', highlights: '', isActive: true
         });
@@ -58,15 +81,23 @@ export default function ToursAdmin() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const payload = {
-            ...formData,
-            highlights: formData.highlights.split(',').map(s => s.trim()).filter(Boolean)
-        };
-
-        const method = editingTour ? 'PUT' : 'POST';
-        const url = editingTour ? `/api/tours/${editingTour._id}` : '/api/tours';
-
+        setUploading(true);
         try {
+            let imageUrl = formData.image;
+            if (imageFile) {
+                const uploadedUrl = await uploadFile(imageFile);
+                if (uploadedUrl) imageUrl = uploadedUrl;
+            }
+
+            const payload = {
+                ...formData,
+                image: imageUrl,
+                highlights: formData.highlights.split(',').map(s => s.trim()).filter(Boolean)
+            };
+
+            const method = editingTour ? 'PUT' : 'POST';
+            const url = editingTour ? `/api/tours/${editingTour._id}` : '/api/tours';
+
             const res = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
@@ -75,13 +106,16 @@ export default function ToursAdmin() {
             const data = await res.json();
             if (data.success) {
                 setShowModal(false);
+                setImageFile(null);
                 fetchTours();
             } else {
                 alert(data.error);
             }
         } catch (e) {
             console.error(e);
-            alert('Operation failed');
+            alert(e.message || 'Operation failed');
+        } finally {
+            setUploading(false);
         }
     };
 
@@ -183,10 +217,29 @@ export default function ToursAdmin() {
                                 </div>
 
                                 <div className="space-y-1">
-                                    <label className="font-bold text-slate-600 dark:text-slate-400">Image URL</label>
-                                    <input className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
-                                        placeholder="/tours/example.jpg or https://..."
-                                        value={formData.image} onChange={e => setFormData({ ...formData, image: e.target.value })} />
+                                    <label className="font-bold text-slate-600 dark:text-slate-400">Tour Image</label>
+                                    <div className="flex gap-4 items-start">
+                                        <div className="w-24 h-24 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden shrink-0">
+                                            {imageFile ? (
+                                                <img src={URL.createObjectURL(imageFile)} className="w-full h-full object-cover" />
+                                            ) : formData.image ? (
+                                                <img src={formData.image} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="flex items-center justify-center h-full text-slate-300"><ImageIcon size={24} /></div>
+                                            )}
+                                        </div>
+                                        <div className="flex-1 space-y-2">
+                                            <label className="block w-full cursor-pointer bg-white dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 p-4 rounded-xl text-center hover:border-emerald-500 transition-colors">
+                                                <input type="file" className="hidden" accept="image/*" onChange={e => setImageFile(e.target.files[0])} />
+                                                <span className="text-xs font-bold text-slate-500">
+                                                    {imageFile ? imageFile.name : 'Click to upload image'}
+                                                </span>
+                                            </label>
+                                            <input className="w-full p-2 text-xs rounded-lg border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none dark:text-white"
+                                                placeholder="Or paste direct image URL here"
+                                                value={formData.image} onChange={e => setFormData({ ...formData, image: e.target.value })} />
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div className="space-y-1">
@@ -201,8 +254,9 @@ export default function ToursAdmin() {
                                         value={formData.highlights} onChange={e => setFormData({ ...formData, highlights: e.target.value })} />
                                 </div>
 
-                                <button type="submit" className="w-full bg-emerald-600 text-white font-bold py-4 rounded-xl hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20 mt-4">
-                                    {editingTour ? 'Update Tour' : 'Create Tour'}
+                                <button type="submit" disabled={uploading} className="w-full bg-emerald-600 text-white font-bold py-4 rounded-xl hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20 mt-4 disabled:opacity-50 flex items-center justify-center gap-2">
+                                    {uploading && <Loader2 className="animate-spin" size={20} />}
+                                    {editingTour ? (uploading ? 'Updating...' : 'Update Tour') : (uploading ? 'Creating...' : 'Create Tour')}
                                 </button>
                             </form>
                         </div>
