@@ -1421,7 +1421,7 @@ export default function AdminDashboard() {
                                                 <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between gap-2">
                                                     <span className="text-[9px] text-white/40 uppercase font-bold tracking-tighter">SLUG: {rate.slug}</span>
                                                     <span className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest bg-emerald-400/10 px-2 py-0.5 rounded">
-                                                        {rate.allowedPaymentMode === 'full' ? '100% Only' : rate.allowedPaymentMode === 'partial' ? '50% Only' : 'Customer Choice'}
+                                                        {rate?.allowedPaymentMode === 'full' ? '100% Only' : rate?.allowedPaymentMode === 'partial' ? '50% Only' : 'Customer Choice'}
                                                     </span>
                                                 </div>
                                             </div>
