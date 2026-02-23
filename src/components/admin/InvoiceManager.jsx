@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CreditCard, User, Mail, Phone, MapPin, Calendar, Clock, Link as LinkIcon, Check, Copy, Loader2, Send, FileText } from 'lucide-react';
+import { CreditCard, User, Mail, Phone, MapPin, Calendar, Clock, Link as LinkIcon, Check, Copy, Loader2, Send, FileText, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function InvoiceManager() {

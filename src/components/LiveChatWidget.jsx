@@ -109,10 +109,19 @@ export default function LiveChatWidget() {
             try {
                 if (pusher) {
                     const channelName = `chat-${chatId}`;
-                    // Only unsubscribe if connected or connecting
-                    if (pusher.connection && (pusher.connection.state === 'connected' || pusher.connection.state === 'connecting')) {
-                        pusher.unsubscribe(channelName);
-                        pusher.disconnect();
+                    // Only unsubscribe/disconnect if states are appropriate to avoid "already closing" errors
+                    const isConnected = pusher.connection && (
+                        pusher.connection.state === 'connected' ||
+                        pusher.connection.state === 'connecting'
+                    );
+
+                    if (isConnected) {
+                        try {
+                            pusher.unsubscribe(channelName);
+                            pusher.disconnect();
+                        } catch (innerError) {
+                            // Ignore inner errors during intentional disconnect
+                        }
                     }
                 }
             } catch (e) {
