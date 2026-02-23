@@ -1321,8 +1321,8 @@ export default function AdminDashboard() {
                                         <h4 className="text-sm font-bold text-emerald-900 uppercase tracking-widest mb-4 flex items-center gap-2">
                                             <Plus size={16} /> Quick Link Generator
                                         </h4>
-                                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-                                            <div>
+                                        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                                            <div className="md:col-span-1">
                                                 <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Destination/Title</label>
                                                 <input
                                                     type="text"
@@ -1333,13 +1333,25 @@ export default function AdminDashboard() {
                                                 />
                                             </div>
                                             <div>
-                                                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Price (USD)</label>
+                                                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Currency</label>
+                                                <select
+                                                    value={newQuickLink.currency || 'USD'}
+                                                    onChange={(e) => setNewQuickLink({ ...newQuickLink, currency: e.target.value })}
+                                                    className="w-full px-4 py-[9px] bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20 font-bold"
+                                                >
+                                                    <option value="USD">USD ($)</option>
+                                                    <option value="LKR">LKR (Rs)</option>
+                                                    <option value="EUR">EUR (€)</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Price</label>
                                                 <input
                                                     type="number"
                                                     placeholder="59"
                                                     value={newQuickLink.price}
                                                     onChange={(e) => setNewQuickLink({ ...newQuickLink, price: e.target.value })}
-                                                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20"
+                                                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20 font-bold"
                                                 />
                                             </div>
                                             <div>
@@ -1367,7 +1379,7 @@ export default function AdminDashboard() {
                                             <button
                                                 onClick={handleSaveQuickLink}
                                                 disabled={isSavingQuickLink}
-                                                className="bg-emerald-900 text-white h-[42px] px-6 rounded-xl font-bold text-sm hover:bg-emerald-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 md:col-span-4 lg:col-span-1"
+                                                className="bg-emerald-900 text-white h-[42px] px-6 rounded-xl font-bold text-sm hover:bg-emerald-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 md:col-span-5"
                                             >
                                                 {isSavingQuickLink ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
                                                 Create Dynamic Link
@@ -1388,7 +1400,10 @@ export default function AdminDashboard() {
                                                         <span className="text-[10px] font-bold text-emerald-400 border border-emerald-400/30 px-3 py-1 rounded-full uppercase tracking-widest">{rate.badge}</span>
                                                     </div>
                                                     <h4 className="font-bold text-white mb-1">{rate.title}</h4>
-                                                    <p className="text-2xl font-black text-white mb-4">${rate.price}</p>
+                                                    <p className="text-2xl font-black text-white mb-4">
+                                                        {rate.currency === 'LKR' ? 'Rs.' : rate.currency === 'EUR' ? '€' : '$'}
+                                                        {rate.price?.toLocaleString()}
+                                                    </p>
                                                 </div>
 
                                                 <div className="flex gap-2">
@@ -1419,7 +1434,10 @@ export default function AdminDashboard() {
                                                     </button>
                                                 </div>
                                                 <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between gap-2">
-                                                    <span className="text-[9px] text-white/40 uppercase font-bold tracking-tighter">SLUG: {rate.slug}</span>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[9px] text-white/40 uppercase font-bold tracking-tighter">SLUG: {rate.slug}</span>
+                                                        <span className="text-[9px] text-emerald-400 font-bold uppercase">{rate.currency || 'USD'}</span>
+                                                    </div>
                                                     <span className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest bg-emerald-400/10 px-2 py-0.5 rounded">
                                                         {rate?.allowedPaymentMode === 'full' ? '100% Only' : rate?.allowedPaymentMode === 'partial' ? '50% Only' : 'Customer Choice'}
                                                     </span>

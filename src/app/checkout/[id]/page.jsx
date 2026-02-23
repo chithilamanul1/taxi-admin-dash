@@ -106,7 +106,10 @@ export default function CheckoutPage() {
 
                         <div className="bg-slate-50 w-full rounded-2xl p-6 flex flex-col items-center mb-8 border border-slate-100">
                             <span className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Total Amount Due</span>
-                            <span className="text-5xl font-black text-emerald-900">${Number(product.price).toFixed(2)}</span>
+                            <span className="text-5xl font-black text-emerald-900">
+                                {product.currency === 'LKR' ? 'Rs.' : product.currency === 'EUR' ? '€' : '$'}
+                                {Number(product.price).toLocaleString(undefined, { minimumFractionDigits: product.currency === 'LKR' ? 0 : 2, maximumFractionDigits: 2 })}
+                            </span>
                             {product.allowedPaymentMode === 'partial' && (
                                 <span className="mt-2 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 uppercase tracking-widest">
                                     50% Deposit Requested
@@ -139,7 +142,7 @@ export default function CheckoutPage() {
                             className="w-full py-5 bg-emerald-900 hover:bg-emerald-800 text-white font-black text-xl rounded-2xl flex items-center justify-center gap-3 transition-all disabled:opacity-70 shadow-xl shadow-emerald-900/20"
                         >
                             {paymentProcessing ? <Loader2 className="animate-spin" size={24} /> : <CreditCard size={24} />}
-                            {paymentProcessing ? 'Processing Securely...' : `Pay $${product.allowedPaymentMode === 'partial' ? (Number(product.price) * 0.5).toFixed(2) : Number(product.price).toFixed(2)} Now`}
+                            {paymentProcessing ? 'Processing Securely...' : `Pay ${product.currency === 'LKR' ? 'Rs.' : product.currency === 'EUR' ? '€' : '$'}${product.allowedPaymentMode === 'partial' ? (Number(product.price) * 0.5).toLocaleString() : Number(product.price).toLocaleString()} Now`}
                         </button>
                     </div>
 
@@ -167,7 +170,10 @@ export default function CheckoutPage() {
                                 </div>
                                 <div className="text-center">
                                     <h3 className="font-bold text-slate-800 text-xl">{product.title}</h3>
-                                    <span className="text-4xl font-black text-emerald-900">${product.price}</span>
+                                    <span className="text-4xl font-black text-emerald-900">
+                                        {product.currency === 'LKR' ? 'Rs.' : product.currency === 'EUR' ? '€' : '$'}
+                                        {Number(product.price).toLocaleString()}
+                                    </span>
                                 </div>
                                 <button
                                     onClick={() => router.refresh()}

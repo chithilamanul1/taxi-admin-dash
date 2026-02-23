@@ -22,6 +22,7 @@ export async function GET(req, { params }) {
                         _id: booking._id,
                         title: `Invoice Ref: ${booking._id.toString().slice(-6).toUpperCase()}`,
                         price: booking.totalPrice,
+                        currency: booking.currency || 'LKR',
                         img: '/logo.png',
                         allowedPaymentMode: booking.paymentType === 'partial' ? 'partial' : 'full',
                         isBookingInvoice: true,

@@ -248,7 +248,7 @@ export default function InvoiceManager() {
                             <div className="flex items-center justify-between">
                                 <h3 className="text-sm font-bold uppercase tracking-widest text-emerald-400">Success! Payment Link Ready</h3>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-[10px] font-bold px-2 py-1 bg-emerald-500/10 text-emerald-500 rounded-lg">LKR {formData.amount}</span>
+                                    <span className="text-[10px] font-bold px-2 py-1 bg-emerald-500/10 text-emerald-500 rounded-lg">{formData.currency} {formData.amount}</span>
                                 </div>
                             </div>
 
