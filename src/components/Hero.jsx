@@ -91,7 +91,7 @@ const Hero = ({ onBookClick }) => {
 
             {/* Content */}
             <div className="container mx-auto px-6 relative z-10 text-left md:text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-900/80 backdrop-blur-md border border-emerald-400/30 text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-4 animate-slide-up opacity-0 [animation-delay:0.2s] [animation-fill-mode:forwards] shadow-lg">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-900/80 backdrop-blur-md border border-emerald-400/30 text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-4 animate-slide-up opacity-0 [animation-delay:0.2s] [animation-fill-mode:forwards] shadow-lg md:mx-auto">
                     <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -99,17 +99,17 @@ const Hero = ({ onBookClick }) => {
                     Sri Lanka's #1 Luxury Provider
                 </div>
 
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 leading-[1.1] text-white animate-slide-up opacity-0 [animation-delay:0.4s] [animation-fill-mode:forwards] tracking-tight max-w-4xl">
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 leading-[1.1] text-white animate-slide-up opacity-0 [animation-delay:0.4s] [animation-fill-mode:forwards] tracking-tight max-w-4xl md:mx-auto">
                     The Smart Way <br />to <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-200">Explore</span> Sri Lanka
                 </h1>
 
                 {/* Sri Lanka Info Text */}
-                <div className="max-w-2xl mb-6 md:mb-8 animate-slide-up opacity-0 [animation-delay:0.5s] [animation-fill-mode:forwards]">
+                <div className="max-w-2xl mb-6 md:mb-8 animate-slide-up opacity-0 [animation-delay:0.5s] [animation-fill-mode:forwards] md:mx-auto">
                     <p className="text-base md:text-xl text-white/90 leading-relaxed mb-4 md:mb-6 font-medium text-shadow-sm">
                         Reliable airport transfers and curated luxury tours.
                         Professional service tailored to your journey.
                     </p>
-                    <div className="flex flex-col gap-2 p-5 bg-emerald-950/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg max-w-xl md:mx-auto">
+                    <div className="flex flex-col gap-2 p-5 bg-emerald-950/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg max-w-xl md:mx-auto md:text-left">
                         <p className="text-sm text-white/80 leading-relaxed">
                             🇱🇰 <strong className="text-emerald-300">Premium Fleet & Service:</strong>
                         </p>

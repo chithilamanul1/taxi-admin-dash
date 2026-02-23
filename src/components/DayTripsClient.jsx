@@ -70,72 +70,74 @@ export default function DayTripsClient() {
                     <p className="text-white/60 text-sm">{filteredTrips.length} experiences found</p>
                 </div>
 
-                <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                     {filteredTrips.map((trip) => (
-                        <div key={trip.id} className="bg-white rounded-3xl overflow-hidden shadow-xl group hover:shadow-2xl transition-all hover:-translate-y-1">
-                            <div className="relative h-48 bg-gradient-to-br from-emerald-400 to-emerald-600">
-                                <div className="absolute inset-0 bg-black/20" />
+                        <div key={trip.id} className="bg-white rounded-[2rem] overflow-hidden shadow-xl hover:shadow-[#00A99D]/20 transition-all hover:-translate-y-2 group flex flex-col h-full border border-slate-100">
+                            {/* Image Section */}
+                            <div className="relative h-64 overflow-hidden bg-slate-900 shrink-0">
+                                {trip.image || trip.heroImage || (trip.images && trip.images.length > 0) ? (
+                                    <img
+                                        src={trip.image || trip.heroImage || trip.images?.[0]}
+                                        alt={trip.title}
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+                                    />
+                                ) : (
+                                    <div className="absolute inset-0 bg-slate-800 flex items-center justify-center text-slate-500">No Image</div>
+                                )}
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent pointer-events-none" />
+
                                 <div className="absolute top-4 left-4 flex flex-wrap gap-2">
                                     {trip.tags?.slice(0, 2).map((tag, i) => (
-                                        <span key={i} className="px-3 py-1 bg-white/90 text-emerald-900 text-xs font-bold rounded-full">
+                                        <span key={i} className="px-3 py-1 bg-white/90 backdrop-blur text-[#006064] text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
                                             {tag}
                                         </span>
                                     ))}
                                 </div>
-                                <div className="absolute bottom-4 left-4">
-                                    <span className="px-3 py-1 bg-emerald-900/90 text-white text-xs font-bold uppercase rounded-full">
+                                <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                                    <span className="px-3 py-1.5 bg-[#00A99D]/90 backdrop-blur text-white text-[10px] font-black uppercase tracking-widest rounded-lg">
                                         {trip.type}
                                     </span>
                                 </div>
                             </div>
 
-                            <div className="p-6">
-                                <h3 className="font-bold text-lg text-emerald-900 mb-2 line-clamp-2 group-hover:text-emerald-700 transition-colors">
+                            {/* Content Section */}
+                            <div className="p-8 flex flex-col flex-1">
+                                <h3 className="text-2xl font-black text-[#006064] mb-3 line-clamp-2 leading-tight">
                                     {trip.title}
                                 </h3>
 
-                                <p className="text-slate-500 text-sm mb-4 line-clamp-2">
+                                <p className="text-slate-600 text-sm mb-6 line-clamp-3 leading-relaxed">
                                     {trip.description}
                                 </p>
 
-                                <div className="flex items-center gap-4 text-sm text-slate-400 mb-4">
-                                    <div className="flex items-center gap-1">
-                                        <Clock size={14} />
+                                <div className="flex items-center gap-4 text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">
+                                    <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-lg text-[#00A99D]">
+                                        <Clock size={16} />
                                         <span>{trip.duration}</span>
                                     </div>
-                                    <div className="flex items-center gap-1">
-                                        <MapPin size={14} />
-                                        <span>{trip.pickupLocations.length} pickup points</span>
+                                    <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-lg text-[#00A99D]">
+                                        <MapPin size={16} />
+                                        <span>{trip.pickupLocations?.length || 1} Pickups</span>
                                     </div>
                                 </div>
 
-                                <div className="mb-4">
-                                    <div className="flex flex-wrap gap-1">
-                                        {trip.highlights?.slice(0, 3).map((h, i) => (
-                                            <span key={i} className="text-xs bg-emerald-50 text-emerald-700 px-2 py-1 rounded">
-                                                {h}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                                <div className="flex items-center justify-between mt-auto pt-6 border-t border-slate-100">
                                     <div>
                                         {trip.originalPrice && (
-                                            <span className="text-sm text-slate-400 line-through mr-2">
+                                            <span className="text-sm text-slate-400 line-through mr-2 font-medium">
                                                 ${trip.originalPrice}
                                             </span>
                                         )}
-                                        <span className="text-2xl font-black text-emerald-900">
+                                        <span className="text-sm text-slate-400 font-bold uppercase tracking-widest block mb-1">From</span>
+                                        <span className="text-3xl font-black text-[#006064]">
                                             {typeof trip.price === 'object' ? (trip.price?.currency || '$') : (trip.currency || '$')} {typeof trip.price === 'object' ? (trip.price?.amount?.toLocaleString() || '0') : (trip.price?.toLocaleString() || '0')}
                                         </span>
-                                        <span className="text-sm text-slate-500"> /person</span>
                                     </div>
                                     <Link
                                         href={`/day-trips/${trip.id}`}
-                                        className="flex items-center gap-2 px-4 py-2 bg-emerald-900 text-white rounded-xl font-bold text-sm hover:bg-emerald-800 transition-colors"
+                                        className="flex items-center justify-center w-14 h-14 bg-[#006064] text-white rounded-2xl group-hover:bg-[#004D40] hover:scale-110 transition-all shadow-xl shadow-cyan-900/20"
                                     >
-                                        Book <ArrowRight size={16} />
+                                        <ArrowRight size={20} />
                                     </Link>
                                 </div>
                             </div>
