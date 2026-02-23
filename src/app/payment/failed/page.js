@@ -8,32 +8,49 @@ import { XCircle, RefreshCw, Home, Phone, Loader2 } from 'lucide-react';
 function PaymentFailedContent() {
     const searchParams = useSearchParams();
     const bookingId = searchParams.get('bookingId');
+    const reason = searchParams.get('reason');
+    const isCancelled = reason === 'cancelled';
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-100 flex items-center justify-center p-4">
+        <div className={`min-h-screen bg-gradient-to-br ${isCancelled ? 'from-amber-50 to-orange-100' : 'from-red-50 to-orange-100'} flex items-center justify-center p-4`}>
             <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 text-center">
-                <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <XCircle className="text-red-500" size={48} />
+                <div className={`w-20 h-20 ${isCancelled ? 'bg-amber-100' : 'bg-red-100'} rounded-full flex items-center justify-center mx-auto mb-6`}>
+                    {isCancelled ? (
+                        <AlertCircle className="text-amber-500" size={48} />
+                    ) : (
+                        <XCircle className="text-red-500" size={48} />
+                    )}
                 </div>
 
-                <h1 className="text-2xl font-bold text-gray-800 mb-2">Payment Failed</h1>
+                <h1 className="text-2xl font-bold text-gray-800 mb-2">
+                    {isCancelled ? 'Transaction Cancelled' : 'Payment Failed'}
+                </h1>
                 <p className="text-gray-600 mb-6 font-medium">
-                    Payment Declined - Please try an alternative card.
+                    {isCancelled
+                        ? 'Your session timed out or the transaction was cancelled.'
+                        : 'Payment Declined - Please try an alternative card.'}
                 </p>
 
-                {searchParams.get('reason') && (
-                    <div className="mb-6 p-4 bg-red-50 rounded-xl border border-red-100 text-left">
-                        <p className="text-[10px] font-black uppercase text-red-500 tracking-widest mb-1">Error Details</p>
-                        <p className="text-sm font-bold text-red-900 capitalize">{searchParams.get('reason').replace(/_/g, ' ')}</p>
+                {reason && (
+                    <div className={`mb-6 p-4 rounded-xl border text-left ${isCancelled ? 'bg-amber-50 border-amber-100' : 'bg-red-50 border-red-100'}`}>
+                        <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${isCancelled ? 'text-amber-500' : 'text-red-500'}`}>
+                            {isCancelled ? 'Status Update' : 'Error Details'}
+                        </p>
+                        <p className={`text-sm font-bold capitalize ${isCancelled ? 'text-amber-900' : 'text-red-900'}`}>{reason.replace(/_/g, ' ')}</p>
                     </div>
                 )}
 
                 <div className="bg-slate-50 rounded-2xl p-6 mb-8 text-left border border-slate-100">
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Common reasons:</div>
+                    <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">
+                        {isCancelled ? 'Why did this happen?' : 'Common reasons:'}
+                    </div>
                     <ul className="space-y-2">
-                        {['Insufficient funds', 'Card declined by bank', 'Network timeout', 'Security verification failed'].map((item, i) => (
+                        {(isCancelled
+                            ? ['Session expired (15+ mins)', 'Closed the payment window', 'Incomplete MFA/OTP verification', 'Back button pressed']
+                            : ['Insufficient funds', 'Card declined by bank', 'Network timeout', 'Security verification failed']
+                        ).map((item, i) => (
                             <li key={i} className="flex items-center gap-2 text-sm text-slate-600 font-medium">
-                                <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                                <div className={`w-1.5 h-1.5 rounded-full ${isCancelled ? 'bg-amber-400' : 'bg-red-400'}`}></div>
                                 {item}
                             </li>
                         ))}

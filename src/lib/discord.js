@@ -126,6 +126,19 @@ export async function logPaymentReceived(booking, paymentDetails) {
     });
 }
 
+export async function logPaymentCancelled(booking, reason) {
+    await sendDiscordLog({
+        title: '⚠️ Transaction Cancelled/Timed Out',
+        color: DiscordColors.WARNING,
+        fields: [
+            { name: 'Booking ID', value: booking._id },
+            { name: 'Customer', value: booking.customerName || 'Guest' },
+            { name: 'Reason', value: reason || 'User cancelled or session timed out', inline: false },
+            { name: 'Status', value: 'PENDING (Awaiting Retry)' }
+        ]
+    });
+}
+
 export async function logNewReview(review) {
     await sendDiscordLog({
         title: '⭐ New Customer Review',

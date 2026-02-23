@@ -117,18 +117,28 @@ export async function GET(request) {
             }
         } else {
             // Payment Failed
-            console.error("Payment Verification Failed:", verification.message);
+            const responseCode = verification.responseCode;
+            console.error(`Payment Verification Failed. Code: ${responseCode}, Message: ${verification.message}`);
 
             if (booking) {
+                const isCancelled = responseCode === '0R';
+
                 booking.paymentStatus = 'failed';
                 booking.gatewayResponse = JSON.stringify(verification.data);
                 booking.gatewayReason = verification.message;
                 await booking.save();
 
-                // Log Error to Discord
-                await logError(new Error(`Sampath Payment Failed: ${verification.responseCode} - ${verification.message}`), `Booking: ${booking._id}`).catch(err => console.error("Discord Log Error:", err));
+                // Import logging utilities
+                const { logError, logPaymentCancelled } = await import('@/lib/discord');
 
-                return NextResponse.redirect(`${baseUrl}/payment/failed?bookingId=${booking._id}&reason=${encodeURIComponent(verification.message || 'payment_failed')}`);
+                if (isCancelled) {
+                    await logPaymentCancelled(booking, "User cancelled or session timed out (0R)").catch(err => console.error("Discord Log Error:", err));
+                    return NextResponse.redirect(`${baseUrl}/payment/failed?bookingId=${booking._id}&reason=cancelled`);
+                } else {
+                    // Log Error to Discord
+                    await logError(new Error(`Sampath Payment Failed: ${responseCode} - ${verification.message}`), `Booking: ${booking._id}`).catch(err => console.error("Discord Log Error:", err));
+                    return NextResponse.redirect(`${baseUrl}/payment/failed?bookingId=${booking._id}&reason=${encodeURIComponent(verification.message || 'payment_failed')}`);
+                }
             }
 
             if (transaction) {
