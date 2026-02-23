@@ -33,6 +33,19 @@ export default function LiveChatWidget() {
         return () => window.removeEventListener('open-live-chat', handleOpen);
     }, [])
 
+    // Helper for safe events
+    const dispatchChatEvent = (name) => {
+        try {
+            if (typeof window !== 'undefined') {
+                const event = document.createEvent('Event');
+                event.initEvent(name, true, true);
+                window.dispatchEvent(event);
+            }
+        } catch (e) {
+            console.warn(`Failed to dispatch ${name}:`, e);
+        }
+    };
+
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }
@@ -40,9 +53,9 @@ export default function LiveChatWidget() {
     useEffect(() => {
         if (isOpen) {
             scrollToBottom();
-            window.dispatchEvent(new CustomEvent('live-chat-opened'));
+            dispatchChatEvent('live-chat-opened');
         } else {
-            window.dispatchEvent(new CustomEvent('live-chat-closed'));
+            dispatchChatEvent('live-chat-closed');
         }
     }, [messages, isOpen])
 
@@ -95,9 +108,10 @@ export default function LiveChatWidget() {
         return () => {
             try {
                 if (pusher) {
-                    pusher.unsubscribe(`chat-${chatId}`);
-                    // Only disconnect if connected
-                    if (pusher.connection.state === 'connected') {
+                    const channelName = `chat-${chatId}`;
+                    // Only unsubscribe if connected or connecting
+                    if (pusher.connection && (pusher.connection.state === 'connected' || pusher.connection.state === 'connecting')) {
+                        pusher.unsubscribe(channelName);
                         pusher.disconnect();
                     }
                 }

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSession, signIn } from 'next-auth/react';
-import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag, Info } from 'lucide-react';
+import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag, Info, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -12,9 +12,8 @@ import LocationInput from './LocationInput';
 import CustomDateTimePicker from './CustomDateTimePicker';
 
 const STEPS = [
-    { id: 1, title: 'Route', icon: MapPin },
-    { id: 2, title: 'Details', icon: User },
-    { id: 3, title: 'Confirm', icon: CreditCard },
+    { id: 1, title: 'Route & Vehicle', icon: MapPin },
+    { id: 2, title: 'Checkout & Pay', icon: CreditCard },
 ];
 
 
@@ -543,21 +542,23 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                         </motion.div>
                     )}
                 </AnimatePresence>
-                {/* Header */}
-                <div className="p-4 md:p-8 pb-3 md:pb-4 flex items-center justify-between shrink-0 pt-8 sm:pt-4">
-                    <div className="flex items-center gap-2 md:gap-4 min-w-0">
-                        <div className="w-8 h-8 md:w-12 md:h-12 bg-amber-500/10 rounded-lg md:rounded-xl flex items-center justify-center border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.1)] shrink-0">
-                            <Zap size={18} className="text-amber-500 fill-amber-500 md:w-[22px] md:h-[22px]" />
+                {/* Header - Hidden in Step 2 */}
+                {step !== 2 && (
+                    <div className="p-4 md:p-8 pb-3 md:pb-4 flex items-center justify-between shrink-0 pt-8 sm:pt-4">
+                        <div className="flex items-center gap-2 md:gap-4 min-w-0">
+                            <div className="w-8 h-8 md:w-12 md:h-12 bg-amber-500/10 rounded-lg md:rounded-xl flex items-center justify-center border border-amber-500/20 shadow-[0_0_15px_rgba(245,158,11,0.1)] shrink-0">
+                                <Zap size={18} className="text-amber-500 fill-amber-500 md:w-[22px] md:h-[22px]" />
+                            </div>
+                            <div className="min-w-0">
+                                <h2 className="text-lg md:text-2xl font-black tracking-tight text-slate-900 leading-none truncate uppercase">Secure <span className="text-emerald-600">Booking</span></h2>
+                                <p className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Encrypted Payment</p>
+                            </div>
                         </div>
-                        <div className="min-w-0">
-                            <h2 className="text-lg md:text-2xl font-black tracking-tight text-slate-900 leading-none truncate uppercase">Secure <span className="text-emerald-600">Booking</span></h2>
-                            <p className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Encrypted Payment</p>
-                        </div>
+                        <button onClick={onClose} className="w-10 h-10 md:w-12 md:h-12 bg-emerald-50 rounded-xl flex items-center justify-center border border-emerald-900/10 hover:bg-red-50 hover:text-red-600 transition-colors z-[101]">
+                            <X size={22} />
+                        </button>
                     </div>
-                    <button onClick={onClose} className="w-10 h-10 md:w-12 md:h-12 bg-emerald-50 rounded-xl flex items-center justify-center border border-emerald-900/10 hover:bg-red-50 hover:text-red-600 transition-colors z-[101]">
-                        <X size={22} />
-                    </button>
-                </div>
+                )}
 
                 {/* Progress Indicators */}
                 <div className="px-5 md:px-8 py-4 flex gap-2">
@@ -599,7 +600,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             </div>
                                             {/* Connecting Line */}
                                             <div className="absolute left-6 -top-4 w-0.5 h-8 bg-emerald-900/10 -z-10"></div>
-                                            {/* Red countdown bar removed as requested */}
                                         </div>
                                     ))}
 
@@ -633,58 +633,69 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <button
                                                     key={v.vehicleType}
                                                     onClick={() => isFit && setFormData({ ...formData, vehicle: v.vehicleType })}
-                                                    className={`group/card relative w-full p-4 rounded-3xl border-2 transition-all cursor-pointer overflow-hidden flex items-center gap-5 text-left
-                                                        ${isSelected ? 'border-amber-500 bg-amber-50/30' : 'border-slate-100 bg-white hover:border-amber-200'}
+                                                    className={`group/card relative w-full p-6 rounded-[2rem] border-2 transition-all cursor-pointer overflow-hidden flex flex-col gap-5 text-left
+                                                        ${isSelected ? 'border-amber-500 bg-amber-50/30 shadow-xl' : 'border-slate-100 bg-white hover:border-amber-200'}
                                                         ${!isFit ? 'opacity-40 grayscale pointer-events-none' : ''}
                                                     `}
                                                 >
                                                     {/* Badge for AC */}
-                                                    <div className="absolute top-3 left-3 bg-amber-100/90 backdrop-blur-sm text-amber-900 text-[9px] font-black px-2 py-1 rounded-xl z-20 uppercase flex items-center gap-1 shadow-sm border border-amber-200">
-                                                        <Zap size={10} fill="currentColor" /> 100% A/C
+                                                    <div className="absolute top-4 right-4 bg-amber-100/90 backdrop-blur-sm text-amber-900 text-[9px] font-black px-3 py-1 rounded-xl z-20 uppercase flex items-center gap-1 shadow-sm border border-amber-200">
+                                                        <Zap size={10} fill="currentColor" /> Premium A/C
                                                     </div>
 
                                                     {/* Selection Glow */}
                                                     {isSelected && (
-                                                        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 to-transparent pointer-events-none"></div>
+                                                        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none"></div>
                                                     )}
 
-                                                    {/* Image Box */}
-                                                    <div className="w-28 h-20 bg-slate-50 rounded-2xl flex items-center justify-center p-3 shrink-0 overflow-hidden border border-slate-100 relative group-hover/card:bg-slate-100 transition-colors">
-                                                        {v.image ? (
-                                                            <img src={v.image} alt={v.name} className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover/card:scale-110" />
-                                                        ) : (
-                                                            <Car className="text-slate-300" size={36} />
-                                                        )}
+                                                    {/* Header info */}
+                                                    <div className="flex items-center gap-5">
+                                                        {/* Image Box */}
+                                                        <div className="w-32 h-24 bg-slate-50 rounded-2xl flex items-center justify-center p-3 shrink-0 overflow-hidden border border-slate-100 relative group-hover/card:bg-slate-100 transition-colors">
+                                                            {v.image ? (
+                                                                <img src={v.image} alt={v.name} className="w-full h-full object-contain transition-transform duration-500 group-hover/card:scale-110" />
+                                                            ) : (
+                                                                <Car className="text-slate-300" size={36} />
+                                                            )}
+                                                        </div>
+
+                                                        {/* Title */}
+                                                        <div className="flex-1 min-w-0">
+                                                            <h4 className="text-xl md:text-2xl font-black text-slate-900 uppercase tracking-tight leading-none mb-1">{v.name}</h4>
+                                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Professional Service</p>
+                                                        </div>
                                                     </div>
 
-                                                    {/* Content */}
-                                                    <div className="flex-1 min-w-0 py-1">
-                                                        <h4 className="text-base md:text-lg font-black text-black uppercase tracking-tight truncate leading-tight mb-2">{v.name}</h4>
-
-                                                        <div className="flex items-center gap-4 text-xs font-bold text-slate-500">
-                                                            <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-50 rounded-lg">
-                                                                <Users size={14} className="text-amber-600" />
-                                                                <span className="text-black">{v.capacity} Pax</span>
+                                                    {/* New Redesigned Capacity Grid */}
+                                                    <div className="grid grid-cols-2 gap-4 mt-2">
+                                                        <div className="flex items-center gap-4 p-4 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                                                            <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-amber-600">
+                                                                <Users size={20} />
                                                             </div>
-                                                            <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-50 rounded-lg">
-                                                                <Briefcase size={14} className="text-amber-600" />
-                                                                <span className="text-black">{v.luggage || 0} Lugg</span>
+                                                            <div>
+                                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Capacity</p>
+                                                                <p className="text-base font-black text-slate-900 leading-none">{v.capacity} <span className="text-[10px] text-slate-500 font-bold uppercase ml-0.5">Persons</span></p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="flex items-center gap-4 p-4 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                                                            <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-amber-600">
+                                                                <Briefcase size={20} />
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Luggage</p>
+                                                                <p className="text-base font-black text-slate-900 leading-none">{v.luggage || 0} <span className="text-[10px] text-slate-500 font-bold uppercase ml-0.5">Luggages</span></p>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    {/* Info Icon */}
-                                                    <div className="flex flex-col items-end pr-1">
-                                                        <button
-                                                            type="button"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setInfoVehicle(v);
-                                                            }}
-                                                            className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-amber-600 hover:bg-white transition-all border border-transparent hover:border-amber-200 hover:shadow-md z-30"
-                                                        >
-                                                            <Info size={18} />
-                                                        </button>
+                                                    {/* Included Perks */}
+                                                    <div className="flex flex-wrap gap-2 mt-2">
+                                                        {['100% A/C', 'Water Bottles', 'Hand Sanitizer', 'English Chauffeur'].slice(0, 3).map(f => (
+                                                            <div key={f} className="flex items-center gap-1.5 text-[9px] font-black uppercase text-emerald-600 tracking-wider bg-emerald-50 px-2 py-1 rounded-lg">
+                                                                <Check size={10} /> {f}
+                                                            </div>
+                                                        ))}
                                                     </div>
                                                 </button>
                                             );
@@ -754,9 +765,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                     {isOverCapacity && (
                                         <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 animate-pulse">
-                                            <div className="pt-0.5 text-red-600"><Lock size={14} /></div>
+                                            <div className="pt-0.5 text-red-600"><Briefcase size={14} /></div>
                                             <p className="text-[10px] font-bold text-red-900 leading-tight uppercase tracking-widest">
-                                                Capacity Exceeded: {totalPassengers} Pax (Max {selectedVehicle.capacity}), {formData.passengerCount.luggage} Lugg (Max {selectedVehicle.luggage || 0}), {formData.passengerCount.handLuggage} Hand (Max {selectedVehicle.handLuggage || 0})
+                                                Capacity Exceeded: {totalPassengers} Pax (Max {selectedVehicle.capacity})
                                             </p>
                                         </div>
                                     )}
@@ -904,333 +915,312 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     )}
 
                     {step === 2 && (
-                        <div className="space-y-6 md:space-y-8 animate-slide-up">
-                            {!session && (
-                                <div className="bg-emerald-50 border border-emerald-900/10 p-4 rounded-xl flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600"><User size={16} /></div>
-                                        <div>
-                                            <p className="text-xs font-bold text-emerald-900">Have an account?</p>
-                                            <p className="text-[10px] text-emerald-900/60">Log in to track bookings easily.</p>
-                                        </div>
-                                    </div>
-                                    <button onClick={() => signIn()} className="px-4 py-2 bg-white border border-emerald-900/10 rounded-lg text-xs font-bold text-emerald-900 hover:bg-emerald-50 transition-colors">Log In</button>
-                                </div>
-                            )}
-
-                            <h3 className="text-xl font-bold text-emerald-600 tracking-tight text-center md:text-left">Client Verification</h3>
-                            <div className="grid md:grid-cols-2 gap-4 md:gap-8">
-                                {[
-                                    { label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name' },
-                                    { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation' },
-                                    { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX' },
-                                    { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver communication', small: true },
-                                    { label: 'Flight No', key: 'flightNumber', type: 'text', placeholder: 'e.g. EK 654', small: true },
-                                    { label: 'Arrival Date', key: 'flightArrivalDate', type: 'date', small: true },
-                                    { label: 'Arrival Time', key: 'flightArrivalTime', type: 'time', small: true },
-                                ].map(f => (
-                                    <div key={f.key} className={`space-y-2.5 ${f.small ? 'md:col-span-1' : ''}`}>
-                                        <label className="text-[10px] md:text-xs font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{f.label}</label>
-                                        <input
-                                            type={f.type}
-                                            value={formData[f.key] || ''}
-                                            onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
-                                            className={`w-full ${f.small ? 'h-12 md:h-14' : 'h-14 md:h-16'} text-base bg-white border-2 border-slate-200 px-5 md:px-7 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900 placeholder:font-medium placeholder:text-gray-300 shadow-sm`}
-                                            placeholder={f.placeholder}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="space-y-4">
-                                <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Pick-up Logistics</label>
-                                <CustomDateTimePicker
-                                    date={formData.date}
-                                    time={formData.time}
-                                    onChange={(d, t) => setFormData({ ...formData, date: d, time: t })}
-                                />
+                        <div className="animate-slide-up">
+                            <div className="flex items-center justify-between mb-8">
+                                <h3 className="text-3xl font-black text-slate-900 tracking-tight">Final <span className="text-emerald-600">Checkout</span></h3>
+                                <button onClick={onClose} className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center border border-emerald-900/10 hover:bg-red-50 hover:text-red-600 transition-colors">
+                                    <X size={24} />
+                                </button>
                             </div>
 
-                            <div className="space-y-4">
-                                <h4 className="text-sm font-black text-emerald-900 uppercase tracking-widest flex items-center gap-2">
-                                    <CreditCard size={16} className="text-emerald-600" />
-                                    Billing Details
-                                </h4>
-                                <div className="grid md:grid-cols-2 gap-4 md:gap-8">
-                                    {[
-                                        { label: 'Billing Name', key: 'billingName', placeholder: 'Name for Invoice' },
-                                        { label: 'Country', key: 'billingCountry', placeholder: 'Country' },
-                                    ].map(b => (
-                                        <div key={b.key} className="space-y-2.5">
-                                            <label className="text-[10px] md:text-xs font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{b.label}</label>
-                                            <input
-                                                type="text"
-                                                value={formData[b.key] || ''}
-                                                onChange={e => setFormData({ ...formData, [b.key]: e.target.value })}
-                                                className="w-full h-14 md:h-16 bg-white border-2 border-slate-200 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-sm text-emerald-900 placeholder:text-slate-300"
-                                                placeholder={b.placeholder}
-                                            />
-                                        </div>
-                                    ))}
-                                    <div className="md:col-span-2 space-y-2.5">
-                                        <label className="text-[10px] md:text-xs font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Full Billing Address</label>
-                                        <textarea
-                                            rows="2"
-                                            value={formData.billingAddress}
-                                            onChange={e => setFormData({ ...formData, billingAddress: e.target.value })}
-                                            className="w-full px-6 py-4 bg-white border-2 border-slate-200 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-sm text-emerald-900 placeholder:text-slate-300 resize-none"
-                                            placeholder="123 Street Name, City, City"
-                                        ></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {step === 3 && (
-                        <div className="space-y-6 md:space-y-8 animate-slide-up">
-                            <div className="flex items-center gap-4 p-4 md:p-6 bg-emerald-50 rounded-3xl border border-emerald-900/10 shadow-sm">
-                                <div>
-                                    <h4 className="font-bold text-emerald-900">Verified Route Summary</h4>
-                                    <p className="text-[10px] text-emerald-600 uppercase font-extrabold tracking-widest">Ready for deployment</p>
-                                </div>
-                            </div>
-
-                            {/* Mandatory Highway Toll Notice */}
-                            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-3">
-                                <Info size={18} className="text-amber-500 shrink-0 mt-0.5" />
-                                <div>
-                                    <p className="text-xs font-black text-amber-600 uppercase tracking-widest leading-none mb-1">Mandatory Notice</p>
-                                    <p className="text-[11px] font-bold text-amber-500 leading-relaxed uppercase tracking-wider">
-                                        Highway ticket is not included in this price. It means the customer must pay it at the counter.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-                                <div className="space-y-6">
-                                    <div className="space-y-4">
-                                        <div className="flex items-start gap-4">
-                                            <div className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-600 shrink-0 border border-emerald-900/10"><MapPin size={16} /></div>
-                                            <div>
-                                                <p className="text-[8px] font-black text-emerald-900/40 uppercase tracking-[0.2em] mb-1">Pick up From</p>
-                                                <p className="text-sm font-bold leading-relaxed text-emerald-900">{formData.pickup}</p>
-                                            </div>
-                                        </div>
-                                        {formData.waypoints.filter(wp => wp.name).map((wp, i) => (
-                                            <div key={i} className="flex items-start gap-4">
-                                                <div className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-600 shrink-0 border border-emerald-900/10"><Navigation size={14} /></div>
+                            <div className="grid lg:grid-cols-12 gap-8">
+                                {/* Left Column: Client Info & Logistics */}
+                                <div className="lg:col-span-7 space-y-8">
+                                    {!session && (
+                                        <div className="bg-emerald-50 border border-emerald-900/10 p-5 rounded-[1.5rem] flex items-center justify-between shadow-sm">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-inner"><User size={20} /></div>
                                                 <div>
-                                                    <p className="text-[8px] font-black text-emerald-900/40 uppercase tracking-[0.2em] mb-1">Stop {i + 1} (Stop-over)</p>
-                                                    <p className="text-sm font-bold leading-relaxed text-emerald-900">{wp.name}</p>
+                                                    <p className="text-sm font-black text-emerald-900 uppercase">Have an account?</p>
+                                                    <p className="text-[10px] font-bold text-emerald-900/60 uppercase tracking-widest">Auto-fill details & track bookings.</p>
                                                 </div>
                                             </div>
-                                        ))}
-                                        <div className="flex items-start gap-4">
-                                            <div className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center text-red-600 shrink-0 border border-emerald-900/10"><MapPin size={16} /></div>
-                                            <div>
-                                                <p className="text-[8px] font-black text-emerald-900/40 uppercase tracking-[0.2em] mb-1">Drop off To</p>
-                                                <p className="text-sm font-bold leading-relaxed text-emerald-900">{formData.dropoff}</p>
-                                            </div>
+                                            <button onClick={() => signIn()} className="px-5 py-2.5 bg-white border border-emerald-900/10 rounded-xl text-xs font-black text-emerald-900 hover:bg-emerald-900 hover:text-white transition-all shadow-sm">Log In</button>
                                         </div>
-                                        <div className="p-4 sm:p-5 md:p-6 bg-[#FFC107] rounded-3xl border border-amber-600/20 space-y-3 md:space-y-4 shadow-lg w-full">
-                                            {/* Consolidated Price Breakdown for Mobile & Desktop */}
-                                            <div className="space-y-2 md:space-y-3">
-                                                <div className="flex justify-between items-center w-full">
-                                                    <span className="text-[10px] md:text-xs font-black text-black uppercase tracking-widest">Base Rate</span>
-                                                    <span className="text-sm md:text-base font-black text-black text-right">{currentSymbol} {subtotal.toLocaleString()}</span>
-                                                </div>
+                                    )}
 
-                                                {detailedBreakdown.detailedExtras?.filter(s => s.value > 0).map((s, idx) => (
-                                                    <div key={idx} className="flex justify-between items-center w-full text-black transition-all">
-                                                        <span className="text-[10px] md:text-xs font-black uppercase tracking-widest">{s.label}</span>
-                                                        <span className="text-sm md:text-base font-black text-right">+{currentSymbol} {s.value.toLocaleString()}</span>
+                                    {/* Passenger & Luggage Controls (Requested for Step 2) */}
+                                    <div className="space-y-4">
+                                        <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Adjust Passengers & Luggage</label>
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                            {[
+                                                { id: 'adults', label: 'Adults' },
+                                                { id: 'children', label: 'Children' },
+                                                { id: 'luggage', label: 'Luggage' },
+                                                { id: 'handLuggage', label: 'Hand' }
+                                            ].map((field) => (
+                                                <div key={field.id} className="bg-slate-50 border border-emerald-900/5 p-3 rounded-2xl flex flex-col items-center justify-center gap-2">
+                                                    <span className="text-[8px] font-black uppercase tracking-tighter text-emerald-900/40">{field.label}</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <button
+                                                            onClick={() => setFormData(prev => ({
+                                                                ...prev,
+                                                                passengerCount: {
+                                                                    ...prev.passengerCount,
+                                                                    [field.id]: Math.max(0, (prev.passengerCount[field.id] || 0) - 1)
+                                                                }
+                                                            }))}
+                                                            className="w-6 h-6 flex items-center justify-center bg-white border border-emerald-900/10 rounded-md text-emerald-600 font-bold hover:bg-emerald-50"
+                                                        >-</button>
+                                                        <span className="font-bold text-xs text-emerald-900">{(formData.passengerCount[field.id] || 0)}</span>
+                                                        <button
+                                                            onClick={() => setFormData(prev => ({
+                                                                ...prev,
+                                                                passengerCount: {
+                                                                    ...prev.passengerCount,
+                                                                    [field.id]: (prev.passengerCount[field.id] || 0) + 1
+                                                                }
+                                                            }))}
+                                                            className="w-6 h-6 flex items-center justify-center bg-white border border-emerald-900/10 rounded-md text-emerald-600 font-bold hover:bg-emerald-50"
+                                                        >+</button>
                                                     </div>
-                                                ))}
-
-                                                {detailedBreakdown.paymentFee > 0 && (
-                                                    <div className="flex justify-between items-center w-full text-black">
-                                                        <span className="text-[10px] md:text-xs font-black uppercase tracking-widest">Payment Fee</span>
-                                                        <span className="text-sm md:text-base font-black text-right">+{currentSymbol} {detailedBreakdown.paymentFee.toLocaleString()}</span>
-                                                    </div>
-                                                )}
-
-                                                {detailedBreakdown.discounts > 0 && (
-                                                    <div className="flex justify-between items-center w-full py-2 border-t border-emerald-900/10 mt-2 text-amber-900">
-                                                        <div className="flex items-center gap-2">
-                                                            <Tag size={12} className="fill-amber-900/20" />
-                                                            <span className="text-[10px] md:text-xs font-black uppercase tracking-widest">Discount Applied</span>
-                                                        </div>
-                                                        <span className="text-sm md:text-base font-black text-right">
-                                                            - {currentSymbol} {detailedBreakdown.discounts.toLocaleString()}
-                                                        </span>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            {/* Applied Coupons Summary */}
-                                            {/* This section is removed as the discount is now consolidated in detailedBreakdown.discounts */}
-                                            {/* {verifiedCoupons.length > 0 && verifiedCoupons.map((c, i) => (
-                                                <div key={i} className="flex justify-between items-center w-full text-emerald-800">
-                                                    <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest flex items-center gap-1">
-                                                        <Tag size={10} /> {c.code}
-                                                    </span>
-                                                    <span className="text-sm md:text-base font-bold text-right">- {currentSymbol} {c.discountType === 'percentage' ? ((totalPrice * c.value) / 100).toLocaleString() : c.value}</span>
-                                                </div>
-                                            ))} */}
-
-                                            {/* Final Totals moved directly into the main card logic */}
-
-                                            <div className="pt-2 mt-2 border-t border-black/10">
-                                                <div className="flex flex-row flex-wrap justify-between items-center w-full gap-2">
-                                                    <span className="text-[10px] sm:text-xs md:text-sm font-black text-black uppercase tracking-widest leading-tight">
-                                                        {formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Payable'}
-                                                    </span>
-                                                    <span className="text-lg sm:text-2xl md:text-3xl font-black text-black text-right leading-none shrink-0 bg-white/90 px-3 py-1 rounded-xl shadow-md border border-black/5">
-                                                        {currentSymbol} {payNow.toLocaleString()}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            {formData.paymentType === 'partial' && (
-                                                <div className="flex justify-between items-end pt-2 border-t border-dashed border-emerald-900/20 gap-2">
-                                                    <span className="font-bold text-red-600 uppercase text-[10px] md:text-xs tracking-wider md:tracking-[0.2em]">Balance Due</span>
-                                                    <span className="text-base md:text-lg font-bold text-red-600 ml-auto text-right">{currentSymbol} {balanceAmount.toLocaleString()}</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Discount Coupon</label>
-                                    <div className="flex gap-2 relative">
-                                        <input
-                                            value={couponInput}
-                                            onChange={e => setCouponInput(e.target.value.toUpperCase())}
-                                            placeholder="ENTER CODE"
-                                            className="flex-1 h-14 bg-white border-2 border-amber-300 px-4 rounded-xl outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-200 transition-all font-black text-lg text-emerald-900 uppercase placeholder:normal-case shadow-sm"
-                                        />
-                                        <button
-                                            onClick={handleApplyCoupon}
-                                            disabled={couponLoading || !couponInput}
-                                            className={`px-6 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center min-w-[100px] shadow-lg ${couponInput ? 'bg-emerald-900 text-white hover:scale-105' : 'bg-slate-200 text-slate-400'}`}
-                                        >
-                                            {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'APPLY'}
-                                        </button>
-                                    </div>
-                                    {verifiedCoupons.length > 0 && (
-                                        <div className="flex flex-col gap-2 animate-fade-in mt-2">
-                                            {verifiedCoupons.map((c, i) => (
-                                                <div key={i} className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-200 text-xs font-bold pl-2">
-                                                    <Check size={14} className="bg-emerald-500 text-white rounded-full p-0.5" />
-                                                    <span>Coupon: <span className="uppercase">{c.code}</span></span>
-                                                    <span className="text-emerald-900/60 font-medium ml-auto">
-                                                        (-{c.discountType === 'percentage' ? `${c.value}%` : `Rs ${c.value}`})
-                                                    </span>
-                                                    <button
-                                                        onClick={() => setVerifiedCoupons(prev => prev.filter(vc => vc.code !== c.code))}
-                                                        className="ml-2 text-red-500 hover:bg-red-50 rounded-full p-1"
-                                                    >
-                                                        <X size={12} />
-                                                    </button>
                                                 </div>
                                             ))}
                                         </div>
-                                    )}
-                                </div>
-                                <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Payment Method</label>
-                                <div className="grid grid-cols-1 gap-4">
-                                    {[
-                                        { id: 'cash', label: 'Cash Payment', icon: '💵', desc: 'Pay directly to chauffeur' },
-                                        { id: 'card', label: 'Online Payment', icon: '💳', desc: 'Secure digital transaction' },
-                                    ].map(m => (
-                                        <div key={m.id}>
-                                            <button
-                                                onClick={() => setFormData(prev => ({
-                                                    ...prev,
-                                                    paymentMethod: m.id,
-                                                    paymentType: m.id === 'cash' ? 'full' : prev.paymentType
-                                                }))}
-                                                className={`w-full p-4 md:p-6 rounded-[1.5rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left ${formData.paymentMethod === m.id ? 'border-emerald-900 bg-emerald-50' : 'border-emerald-900/5 bg-white hover:border-emerald-900/20 shadow-sm'}`}
-                                            >
-                                                <span className="text-3xl md:text-4xl">{m.icon}</span>
-                                                <div>
-                                                    <p className="font-bold text-emerald-900 text-sm tracking-tight">{m.label}</p>
-                                                    <p className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">{m.desc}</p>
-                                                </div>
-                                            </button>
+                                        {isOverCapacity && (
+                                            <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3 animate-pulse">
+                                                <AlertCircle size={14} className="text-red-600" />
+                                                <p className="text-[9px] font-black text-red-900 uppercase tracking-widest leading-none">
+                                                    Capacity Warning: Trip exceeds {selectedVehicle?.name || 'Vehicle'} limits
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
 
-                                            {/* Payment Options (Full vs 50%) for Card */}
-                                            {formData.paymentMethod === 'card' && m.id === 'card' && (
-                                                <div className="mt-3 ml-4 pl-4 border-l-2 border-emerald-900/10 space-y-3 animate-slide-up">
-                                                    <button
-                                                        onClick={() => setFormData({ ...formData, paymentType: 'full' })}
-                                                        className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'full' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
-                                                    >
-                                                        <div className="flex items-center gap-3">
-                                                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'full' ? 'border-white' : 'border-slate-400'}`}>
-                                                                {formData.paymentType === 'full' && <div className="w-2 h-2 rounded-full bg-white"></div>}
-                                                            </div>
-                                                            <span className="text-xs font-bold uppercase tracking-wide">Pay Full Amount</span>
-                                                        </div>
-                                                        <span className="text-xs font-bold text-emerald-400">100%</span>
-                                                    </button>
-
-                                                    <button
-                                                        onClick={() => setFormData({ ...formData, paymentType: 'partial' })}
-                                                        className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${formData.paymentType === 'partial' ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-900/30'}`}
-                                                    >
-                                                        <div className="flex items-center gap-3">
-                                                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${formData.paymentType === 'partial' ? 'border-white' : 'border-slate-400'}`}>
-                                                                {formData.paymentType === 'partial' && <div className="w-2 h-2 rounded-full bg-white"></div>}
-                                                            </div>
-                                                            <div className="text-left">
-                                                                <span className="text-xs font-bold uppercase tracking-wide block">Pay Advance Only</span>
-                                                                <span className="text-[10px] opacity-60">Pay balance to driver</span>
-                                                            </div>
-                                                        </div>
-                                                        <span className="text-[10px] font-black leading-none block text-emerald-400">50% DEPOSIT</span>
-                                                    </button>
+                                    <div className="space-y-6">
+                                        <div className="grid md:grid-cols-2 gap-6">
+                                            {[
+                                                { label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name' },
+                                                { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation' },
+                                                { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX' },
+                                                { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver chat' },
+                                            ].map(f => (
+                                                <div key={f.key} className="space-y-2">
+                                                    <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{f.label}</label>
+                                                    <input
+                                                        type={f.type}
+                                                        value={formData[f.key] || ''}
+                                                        onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
+                                                        className="w-full h-14 bg-white border border-slate-200 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900 placeholder:text-gray-300"
+                                                        placeholder={f.placeholder}
+                                                    />
                                                 </div>
-                                            )}
+                                            ))}
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Flight Number (Optional)</label>
+                                                <input
+                                                    type="text"
+                                                    value={formData.flightNumber || ''}
+                                                    onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
+                                                    className="w-full h-14 bg-white border border-slate-200 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900 placeholder:text-gray-300"
+                                                    placeholder="e.g. EK 654"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Waiting Hours</label>
+                                                <input
+                                                    type="number"
+                                                    min="0"
+                                                    value={formData.waitingHours || 0}
+                                                    onChange={e => setFormData({ ...formData, waitingHours: parseInt(e.target.value) || 0 })}
+                                                    className="w-full h-14 bg-white border border-slate-200 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900"
+                                                />
+                                            </div>
                                         </div>
-                                    ))}
-                                </div>
-                                <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Extra Services</label>
-                                <div className="p-4 rounded-2xl border transition-all flex items-center justify-between bg-amber-500/5 border-amber-500/20">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${formData.hasNameBoard ? 'bg-amber-500/10 text-amber-500' : 'bg-white/5 text-white/40'}`}>
-                                            <Signpost size={16} />
+
+                                        <div className="space-y-4">
+                                            <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Pick-up Logistics</label>
+                                            <CustomDateTimePicker
+                                                date={formData.date}
+                                                time={formData.time}
+                                                onChange={(d, t) => setFormData({ ...formData, date: d, time: t })}
+                                            />
                                         </div>
-                                        <div>
-                                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 block leading-tight">Name Board</span>
-                                            <span className="text-[11px] font-bold text-white uppercase">{formData.hasNameBoard ? 'Confirmed' : 'Not Requested'}</span>
+
+                                        <div className="space-y-4 pt-4 border-t border-slate-100">
+                                            <h4 className="text-xs font-black text-emerald-900 uppercase tracking-widest flex items-center gap-2">
+                                                <Mail size={14} className="text-emerald-600" />
+                                                Billing Details
+                                            </h4>
+                                            <div className="grid md:grid-cols-2 gap-6">
+                                                <input
+                                                    type="text"
+                                                    value={formData.billingName || ''}
+                                                    onChange={e => setFormData({ ...formData, billingName: e.target.value })}
+                                                    className="w-full h-14 bg-white border border-slate-200 px-6 rounded-2xl text-sm font-bold text-emerald-900 placeholder:text-slate-300"
+                                                    placeholder="Billing Name"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    value={formData.billingCountry || ''}
+                                                    onChange={e => setFormData({ ...formData, billingCountry: e.target.value })}
+                                                    className="w-full h-14 bg-white border border-slate-200 px-6 rounded-2xl text-sm font-bold text-emerald-900 placeholder:text-slate-300"
+                                                    placeholder="Country"
+                                                />
+                                                <textarea
+                                                    rows="2"
+                                                    value={formData.billingAddress}
+                                                    onChange={e => setFormData({ ...formData, billingAddress: e.target.value })}
+                                                    className="md:col-span-2 w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-emerald-900 placeholder:text-slate-300 resize-none"
+                                                    placeholder="Full Billing Address"
+                                                ></textarea>
+                                            </div>
                                         </div>
                                     </div>
-                                    <button
-                                        onClick={() => setFormData(prev => ({ ...prev, hasNameBoard: !prev.hasNameBoard }))}
-                                        className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${formData.hasNameBoard ? 'bg-amber-500 text-black' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}
-                                    >
-                                        {formData.hasNameBoard ? 'Remove' : 'Add'}
-                                    </button>
                                 </div>
-                            </div>
 
-                            {/* Terms & Conditions Agreement (Mandatory for IPG Live) */}
-                            <div className="mt-8 p-6 bg-emerald-50 rounded-[2rem] border border-emerald-900/10 flex items-start gap-4">
-                                <div className="relative">
-                                    <input
-                                        type="checkbox"
-                                        id="terms-agreement"
-                                        checked={hasAgreed}
-                                        onChange={(e) => setHasAgreed(e.target.checked)}
-                                        className="w-6 h-6 border-2 border-emerald-900/20 rounded-lg accent-emerald-900 cursor-pointer"
-                                    />
+                                {/* Right Column: Summary & Payment */}
+                                <div className="lg:col-span-5 space-y-6">
+                                    <div className="p-6 md:p-8 bg-emerald-900 rounded-[2.5rem] text-white shadow-xl relative overflow-hidden group">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-600/20 rounded-full blur-3xl -mr-16 -mt-16"></div>
+
+                                        <div className="relative z-10 space-y-6">
+                                            <div className="flex items-center justify-between">
+                                                <div className="px-3 py-1 bg-white/10 rounded-full border border-white/10 text-[9px] font-black uppercase tracking-widest text-emerald-400">
+                                                    Trip Summary
+                                                </div>
+                                                <div className="text-[10px] font-black text-white/40 uppercase tracking-widest">
+                                                    {formData.tripType.replace('-', ' ')}
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-4 py-4 border-y border-white/10">
+                                                <div className="flex gap-4">
+                                                    <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-emerald-400 shrink-0 border border-white/10"><MapPin size={16} /></div>
+                                                    <div>
+                                                        <p className="text-[8px] font-black text-white/40 uppercase tracking-widest mb-1">Pick up</p>
+                                                        <p className="text-xs font-bold text-white leading-tight">{formData.pickup}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-4">
+                                                    <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-orange-400 shrink-0 border border-white/10"><Navigation size={16} /></div>
+                                                    <div>
+                                                        <p className="text-[8px] font-black text-white/40 uppercase tracking-widest mb-1">Drop off</p>
+                                                        <p className="text-xs font-bold text-white leading-tight">{formData.dropoff}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-3">
+                                                <div className="flex justify-between items-center text-xs">
+                                                    <span className="text-white/40 font-bold uppercase tracking-widest">Base Rate</span>
+                                                    <span className="font-black text-white">{currentSymbol} {subtotal.toLocaleString()}</span>
+                                                </div>
+
+                                                {detailedBreakdown.detailedExtras?.filter(s => s.value > 0).map((s, idx) => (
+                                                    <div key={idx} className="flex justify-between items-center text-xs">
+                                                        <span className="text-white/40 font-bold uppercase tracking-widest">{s.label}</span>
+                                                        <span className="font-black text-white">+{currentSymbol} {s.value.toLocaleString()}</span>
+                                                    </div>
+                                                ))}
+
+                                                {detailedBreakdown.discounts > 0 && (
+                                                    <div className="flex justify-between items-center text-xs text-emerald-400">
+                                                        <span className="font-bold uppercase tracking-widest">Discount</span>
+                                                        <span className="font-black">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
+                                                    </div>
+                                                )}
+
+                                                <div className="pt-4 mt-2 border-t border-white/10 flex justify-between items-end">
+                                                    <div>
+                                                        <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-1">
+                                                            {formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Price'}
+                                                        </p>
+                                                        <p className="text-4xl font-black tracking-tighter text-white">
+                                                            {currentSymbol} {payNow.toLocaleString()}
+                                                        </p>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-1">Vehicle</p>
+                                                        <p className="text-[11px] font-black text-emerald-400 uppercase tracking-widest">{selectedVehicle?.name}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Payment Selection */}
+                                    <div className="space-y-4">
+                                        <div className="flex gap-3">
+                                            {['cash', 'card'].map(m => (
+                                                <button
+                                                    key={m}
+                                                    onClick={() => setFormData(prev => ({
+                                                        ...prev,
+                                                        paymentMethod: m,
+                                                        paymentType: m === 'cash' ? 'full' : prev.paymentType
+                                                    }))}
+                                                    className={`flex-1 p-4 rounded-3xl border-2 transition-all flex flex-col items-center gap-2 ${formData.paymentMethod === m ? 'border-emerald-900 bg-emerald-50 shadow-md' : 'border-slate-100 bg-slate-50 opacity-60'}`}
+                                                >
+                                                    <span className="text-2xl">{m === 'cash' ? '💵' : '💳'}</span>
+                                                    <span className="text-[10px] font-black uppercase tracking-widest text-emerald-900">{m === 'cash' ? 'Cash' : 'Online'}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+
+                                        {formData.paymentMethod === 'card' && (
+                                            <div className="grid grid-cols-2 gap-3 p-1.5 bg-slate-100 rounded-2xl">
+                                                {['full', 'partial'].map(t => (
+                                                    <button
+                                                        key={t}
+                                                        onClick={() => setFormData(prev => ({ ...prev, paymentType: t }))}
+                                                        className={`py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t ? 'bg-white text-emerald-900 shadow-sm' : 'text-slate-400'}`}
+                                                    >
+                                                        {t === 'full' ? 'Pay 100%' : 'Pay 50%'}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <div className="flex gap-2">
+                                            <input
+                                                value={couponInput}
+                                                onChange={e => setCouponInput(e.target.value.toUpperCase())}
+                                                placeholder="COUPON CODE"
+                                                className="flex-1 h-12 bg-slate-50 border border-slate-200 px-4 rounded-xl text-xs font-bold uppercase placeholder:normal-case"
+                                            />
+                                            <button
+                                                onClick={() => handleApplyCoupon()}
+                                                disabled={couponLoading || !couponInput}
+                                                className="px-5 bg-emerald-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest disabled:opacity-20"
+                                            >
+                                                {couponLoading ? <Loader2 className="animate-spin" size={14} /> : 'Apply'}
+                                            </button>
+                                        </div>
+                                        {verifiedCoupons.length > 0 && (
+                                            <div className="flex flex-wrap gap-2 mt-2">
+                                                {verifiedCoupons.map((c, i) => (
+                                                    <span key={i} className="px-2 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-[10px] font-bold border border-emerald-100 flex items-center gap-2">
+                                                        <Tag size={10} /> {c.code}
+                                                        <X size={10} className="cursor-pointer" onClick={() => setVerifiedCoupons(prev => prev.filter(vc => vc.code !== c.code))} />
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="p-4 rounded-[1.5rem] bg-amber-500/5 border border-amber-500/10 flex items-start gap-3">
+                                        <Info size={16} className="text-amber-600 shrink-0 mt-0.5" />
+                                        <p className="text-[10px] font-bold text-amber-700 leading-relaxed uppercase tracking-wider">
+                                            Highway tolls are not included in the fixed price and must be paid by the customer at the counter.
+                                        </p>
+                                    </div>
+
+                                    <div className="flex items-start gap-4 p-5 bg-emerald-50 rounded-3xl border border-emerald-900/5 transition-all group-hover:border-emerald-900/20">
+                                        <input
+                                            type="checkbox"
+                                            id="terms"
+                                            checked={hasAgreed}
+                                            onChange={e => setHasAgreed(e.target.checked)}
+                                            className="w-5 h-5 rounded border-2 border-emerald-900/20 checked:bg-emerald-900 mt-0.5 cursor-pointer"
+                                        />
+                                        <label htmlFor="terms" className="text-[10px] font-bold text-emerald-900/60 leading-relaxed uppercase tracking-wide cursor-pointer select-none">
+                                            I agree to the <Link href="/conditions" target="_blank" className="text-emerald-600 underline">Terms of Service</Link> & <Link href="/policy" target="_blank" className="text-emerald-600 underline">Refund Policy</Link>. Final payment is secure.
+                                        </label>
+                                    </div>
                                 </div>
-                                <label htmlFor="terms-agreement" className="text-xs font-bold text-emerald-900 leading-relaxed cursor-pointer select-none">
-                                    I have read and agree to the <Link href="/terms" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Terms of Service</Link> and <Link href="/refund-policy" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Refund Policy</Link>. I understand that I am making a secure payment to Airport Taxis Pvt (Ltd).
-                                </label>
                             </div>
                         </div>
                     )}
@@ -1246,18 +1236,18 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <ChevronLeft size={16} className="md:block hidden" /> {step === 1 ? 'Cancel' : 'Back'}
                         </button>
 
-                        {step < 3 ? (
+                        {step < 2 ? (
                             <button
                                 onClick={() => setStep(step + 1)}
-                                disabled={(step === 1 && (!formData.pickup || !formData.dropoff || isOverCapacity)) || (step === 2 && (!formData.name || !formData.phone))}
+                                disabled={(step === 1 && (!formData.pickup || !formData.dropoff || isOverCapacity))}
                                 className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[140px]"
                             >
-                                Continue <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform md:block hidden" />
+                                Continue To Checkout <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform md:block hidden" />
                             </button>
                         ) : (
                             <button
                                 onClick={handleSubmit}
-                                disabled={loading || !hasAgreed}
+                                disabled={loading || !hasAgreed || !formData.name || !formData.phone}
                                 className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-emerald-900 text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-emerald-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[160px]"
                             >
                                 {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} className="md:block hidden" />}
