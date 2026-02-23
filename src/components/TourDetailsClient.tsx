@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import {
-    Clock, MapPin, CheckCircle, ArrowLeft, ShieldCheck, Star, User, Plus, Minus,
+    Clock, MapPin, CheckCircle, ArrowLeft, ShieldCheck, Star, User, Plus, Minus, Check,
     MessageCircle, XCircle, AlertCircle, Info, Construction, Calendar,
     Ship, Heart, Utensils, Camera, Home, Leaf, Coffee, Waves, Sun, Bike, Shield, Mountain, Landmark
 } from 'lucide-react';
