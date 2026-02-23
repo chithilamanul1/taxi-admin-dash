@@ -71,11 +71,11 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const matchedOverride = findMatchingDestination(pickup, dynamicDestinations) ||
         findMatchingDestination(dropoff, dynamicDestinations);
 
-    if (matchedOverride && matchedOverride.perKmRateOverride > 0) {
+    if (!isAirportTransfer && matchedOverride && matchedOverride.perKmRateOverride > 0) {
         const perKmRate = matchedOverride.perKmRateOverride;
         console.log(`[Pricing] Applied PRIORITY rate override for ${matchedOverride.name}: LKR ${perKmRate}/km`);
 
-        distancePrice = (distKm * perKmRate) + 500;
+        distancePrice = (distKm * perKmRate);
         overrideApplied = true;
     } else if (tiers.length > 0) {
         const matchingTier = tiers.find(t => distKm >= t.min && distKm <= (t.max || Infinity));
@@ -83,12 +83,12 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
             if (matchingTier.type === 'flat') {
                 distancePrice = matchingTier.price || matchingTier.rate || 0;
             } else {
-                distancePrice = (distKm * (matchingTier.rate || matchingTier.price || 0)) + 500;
+                distancePrice = (distKm * (matchingTier.rate || matchingTier.price || 0));
             }
         }
     } else {
         const perKmRate = vehicleData.perKmRate || 0;
-        distancePrice = (distKm * perKmRate) + 500;
+        distancePrice = (distKm * perKmRate);
     }
 
     // Final Comparison: Take fixedPrice ONLY if it is lower than distancePrice 

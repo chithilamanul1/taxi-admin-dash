@@ -254,7 +254,7 @@ export default function DestinationManager() {
                                             </div>
                                             <div className="mt-3 space-y-1">
                                                 <p className="text-[10px] text-amber-600/80 font-medium italic">Used for high-altitude/safari terrain where standard rates don't apply.</p>
-                                                <p className="text-[10px] text-amber-600/90 font-bold bg-amber-500/10 px-2 py-1 rounded-md inline-block">Calculation: (Distance × Rate Override) + 500 LKR Fixed Fee</p>
+                                                <p className="text-[10px] text-amber-600/90 font-bold bg-amber-500/10 px-2 py-1 rounded-md inline-block">Calculation: Distance × Rate Override</p>
                                             </div>
                                         </div>
 

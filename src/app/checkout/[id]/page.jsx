@@ -6,12 +6,14 @@ import ExpressCheckoutModal from '@/components/ExpressCheckoutModal';
 import { flatRates } from '@/data/flatRates';
 import { Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { CreditCard, CheckCircle } from 'lucide-react';
 
 export default function CheckoutPage() {
     const params = useParams();
     const router = useRouter();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [paymentProcessing, setPaymentProcessing] = useState(false);
     const [error, setError] = useState(false);
 
     useEffect(() => {
@@ -84,38 +86,104 @@ export default function CheckoutPage() {
                 <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-emerald-900 rounded-full blur-[120px]"></div>
             </div>
 
-            <div className="relative z-10 text-center space-y-8 animate-fade-in">
-                <Link href="/" className="inline-block">
-                    <img src="/logo.png" alt="Airport Taxis Sri Lanka" className="h-12 md:h-16 mx-auto mb-4" />
-                </Link>
+            {product.isBookingInvoice ? (
+                <div className="relative z-10 w-full max-w-lg mx-auto animate-fade-in">
+                    <div className="text-center mb-10">
+                        <Link href="/" className="inline-block">
+                            <img src="/logo.png" alt="Airport Taxis Sri Lanka" className="h-16 mx-auto mb-6" />
+                        </Link>
+                        <h1 className="text-4xl font-black text-emerald-900 uppercase">Secure Payment</h1>
+                        <p className="text-slate-500 mt-2">Complete payment for your invoice</p>
+                    </div>
 
-                <div className="space-y-2">
-                    <h1 className="text-3xl md:text-5xl font-black text-emerald-900 uppercase">Secure Payment</h1>
-                    <p className="text-slate-500 font-medium max-w-lg mx-auto">Complete your booking for <strong>{product.title}</strong> securely via our bank-verified portal.</p>
-                </div>
+                    <div className="bg-white rounded-[2.5rem] p-8 shadow-2xl border border-slate-100 flex flex-col items-center">
+                        <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center mb-6">
+                            <CreditCard size={40} />
+                        </div>
 
-                <div className="bg-white p-8 rounded-[2.5rem] shadow-2xl border border-slate-100 max-w-sm mx-auto transform hover:scale-105 transition-transform duration-500">
-                    <div className="flex flex-col items-center space-y-4">
-                        <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
-                            <img src={product.img} alt={product.title} className="w-full h-full object-cover rounded-2xl" />
+                        <h2 className="text-2xl font-bold text-slate-800 text-center mb-1">{product.title}</h2>
+                        {product.customerName && <p className="text-slate-500 text-sm font-medium mb-6">Billed to: {product.customerName}</p>}
+
+                        <div className="bg-slate-50 w-full rounded-2xl p-6 flex flex-col items-center mb-8 border border-slate-100">
+                            <span className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Total Amount Due</span>
+                            <span className="text-5xl font-black text-emerald-900">${Number(product.price).toFixed(2)}</span>
+                            {product.allowedPaymentMode === 'partial' && (
+                                <span className="mt-2 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 uppercase tracking-widest">
+                                    50% Deposit Requested
+                                </span>
+                            )}
                         </div>
-                        <div className="text-center">
-                            <h3 className="font-bold text-slate-800 text-xl">{product.title}</h3>
-                            <span className="text-4xl font-black text-emerald-900">${product.price}</span>
-                        </div>
+
                         <button
-                            onClick={() => router.refresh()} // Modal handles its own state if needed, but here we just want it to be "always open" or triggered
-                            className="hidden" // We'll trigger it automatically or use a simpler layout
-                        ></button>
+                            disabled={paymentProcessing}
+                            onClick={async () => {
+                                setPaymentProcessing(true);
+                                try {
+                                    const res = await fetch('/api/payment/initiate', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ retry: true, bookingId: product._id }),
+                                    });
+                                    const data = await res.json();
+                                    if (data.success && data.paymentUrl) {
+                                        window.location.href = data.paymentUrl;
+                                    } else {
+                                        alert(data.message || 'Payment initiation failed');
+                                        setPaymentProcessing(false);
+                                    }
+                                } catch (err) {
+                                    alert('Error processing payment.');
+                                    setPaymentProcessing(false);
+                                }
+                            }}
+                            className="w-full py-5 bg-emerald-900 hover:bg-emerald-800 text-white font-black text-xl rounded-2xl flex items-center justify-center gap-3 transition-all disabled:opacity-70 shadow-xl shadow-emerald-900/20"
+                        >
+                            {paymentProcessing ? <Loader2 className="animate-spin" size={24} /> : <CreditCard size={24} />}
+                            {paymentProcessing ? 'Processing Securely...' : `Pay $${product.allowedPaymentMode === 'partial' ? (Number(product.price) * 0.5).toFixed(2) : Number(product.price).toFixed(2)} Now`}
+                        </button>
+                    </div>
+
+                    <div className="flex items-center justify-center gap-6 mt-8">
+                        <div className="flex items-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest"><CheckCircle size={16} className="text-emerald-500" /> Bank Verified</div>
+                        <div className="flex items-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest"><CheckCircle size={16} className="text-emerald-500" /> 256-bit SSL</div>
                     </div>
                 </div>
-            </div>
+            ) : (
+                <>
+                    <div className="relative z-10 text-center space-y-8 animate-fade-in">
+                        <Link href="/" className="inline-block">
+                            <img src="/logo.png" alt="Airport Taxis Sri Lanka" className="h-12 md:h-16 mx-auto mb-4" />
+                        </Link>
 
-            <ExpressCheckoutModal
-                isOpen={true}
-                onClose={() => router.push('/')}
-                product={product}
-            />
+                        <div className="space-y-2">
+                            <h1 className="text-3xl md:text-5xl font-black text-emerald-900 uppercase">Secure Payment</h1>
+                            <p className="text-slate-500 font-medium max-w-lg mx-auto">Complete your booking for <strong>{product.title}</strong> securely via our bank-verified portal.</p>
+                        </div>
+
+                        <div className="bg-white p-8 rounded-[2.5rem] shadow-2xl border border-slate-100 max-w-sm mx-auto transform hover:scale-105 transition-transform duration-500">
+                            <div className="flex flex-col items-center space-y-4">
+                                <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
+                                    <img src={product.img} alt={product.title} className="w-full h-full object-cover rounded-2xl" />
+                                </div>
+                                <div className="text-center">
+                                    <h3 className="font-bold text-slate-800 text-xl">{product.title}</h3>
+                                    <span className="text-4xl font-black text-emerald-900">${product.price}</span>
+                                </div>
+                                <button
+                                    onClick={() => router.refresh()}
+                                    className="hidden"
+                                ></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ExpressCheckoutModal
+                        isOpen={true}
+                        onClose={() => router.push('/')}
+                        product={product}
+                    />
+                </>
+            )}
         </div>
     );
 }
