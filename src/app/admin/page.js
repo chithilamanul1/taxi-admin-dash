@@ -1340,8 +1340,10 @@ export default function AdminDashboard() {
                                                     className="w-full px-4 py-[9px] bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20 font-bold"
                                                 >
                                                     <option value="USD">USD ($)</option>
-                                                    <option value="LKR">LKR (Rs)</option>
+                                                    <option value="GBP">GBP (£)</option>
                                                     <option value="EUR">EUR (€)</option>
+                                                    <option value="LKR">LKR (Rs)</option>
+                                                    <option value="INR">INR (₹)</option>
                                                 </select>
                                             </div>
                                             <div>
@@ -1401,7 +1403,7 @@ export default function AdminDashboard() {
                                                     </div>
                                                     <h4 className="font-bold text-white mb-1">{rate.title}</h4>
                                                     <p className="text-2xl font-black text-white mb-4">
-                                                        {rate.currency === 'LKR' ? 'Rs.' : rate.currency === 'EUR' ? '€' : '$'}
+                                                        {rate.currency === 'LKR' ? 'Rs.' : rate.currency === 'EUR' ? '€' : rate.currency === 'GBP' ? '£' : rate.currency === 'INR' ? '₹' : '$'}
                                                         {rate.price?.toLocaleString()}
                                                     </p>
                                                 </div>

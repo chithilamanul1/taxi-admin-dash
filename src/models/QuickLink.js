@@ -19,7 +19,7 @@ const QuickLinkSchema = new mongoose.Schema({
     },
     currency: {
         type: String,
-        enum: ['LKR', 'USD', 'EUR'],
+        enum: ['LKR', 'USD', 'EUR', 'GBP', 'INR'],
         default: 'USD'
     },
     badge: {

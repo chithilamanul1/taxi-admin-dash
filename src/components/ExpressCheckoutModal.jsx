@@ -23,6 +23,7 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
             case 'LKR': return 'Rs.';
             case 'EUR': return '€';
             case 'GBP': return '£';
+            case 'INR': return '₹';
             case 'USD': return '$';
             default: return '$';
         }
