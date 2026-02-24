@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSession, signIn } from 'next-auth/react';
@@ -634,13 +634,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     key={v.vehicleType}
                                                     onClick={() => isFit && setFormData({ ...formData, vehicle: v.vehicleType })}
                                                     className={`group/card relative w-full p-6 rounded-[2rem] border-2 transition-all cursor-pointer overflow-hidden flex flex-col gap-4 text-left
-                                                        ${isSelected ? 'border-amber-500 bg-amber-50/30 shadow-xl' : 'border-black/20 bg-white hover:border-black/40'}
+                                                        ${isSelected ? 'border-black bg-slate-50/50 shadow-xl' : 'border-black/20 bg-white hover:border-black/40'}
                                                         ${!isFit ? 'opacity-40 grayscale pointer-events-none' : ''}
                                                     `}
                                                 >
                                                     {/* Selection Glow */}
                                                     {isSelected && (
-                                                        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none"></div>
+                                                        <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-transparent pointer-events-none"></div>
                                                     )}
 
                                                     {/* Header info */}
@@ -656,11 +656,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                                         {/* Title & Badge Container */}
                                                         <div className="flex-1 min-w-0">
-                                                            {/* Badge for AC - Moved here to avoid overlap */}
-                                                            <div className="inline-flex bg-amber-100/90 backdrop-blur-sm text-amber-900 text-[8px] md:text-[9px] font-black px-2.5 py-0.5 rounded-lg mb-2 uppercase items-center gap-1 shadow-sm border border-amber-200">
+                                                            {/* Badge for AC */}
+                                                            <div className="inline-flex bg-slate-100 backdrop-blur-sm text-black text-[8px] md:text-[9px] font-black px-2.5 py-0.5 rounded-lg mb-2 uppercase items-center gap-1 shadow-sm border border-black/10">
                                                                 <Zap size={10} fill="currentColor" /> Premium A/C
                                                             </div>
-                                                            <h4 className="text-lg md:text-2xl font-black text-slate-900 uppercase tracking-tight leading-tight mb-1">{v.name}</h4>
+                                                            <h4 className="text-lg md:text-2xl font-black text-black uppercase tracking-tight leading-tight mb-1">{v.name}</h4>
                                                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Professional Service</p>
                                                         </div>
                                                     </div>
@@ -668,22 +668,22 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     {/* New Redesigned Capacity Grid */}
                                                     <div className="grid grid-cols-2 gap-3 mt-1">
                                                         <div className="flex items-center gap-3 p-3 bg-white rounded-2xl border border-black/10 shadow-sm">
-                                                            <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-amber-600">
+                                                            <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-black">
                                                                 <Users size={16} />
                                                             </div>
                                                             <div>
                                                                 <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Capacity</p>
-                                                                <p className="text-sm font-black text-slate-900 leading-none">{v.capacity} <span className="text-[9px] text-slate-500 font-bold uppercase ml-0.5">Persons</span></p>
+                                                                <p className="text-sm font-black text-black leading-none">{v.capacity} <span className="text-[9px] text-slate-500 font-bold uppercase ml-0.5">Persons</span></p>
                                                             </div>
                                                         </div>
 
                                                         <div className="flex items-center gap-3 p-3 bg-white rounded-2xl border border-black/10 shadow-sm">
-                                                            <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-amber-600">
+                                                            <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-black">
                                                                 <Briefcase size={16} />
                                                             </div>
                                                             <div>
                                                                 <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Luggage</p>
-                                                                <p className="text-sm font-black text-slate-900 leading-none">{v.luggage || 0} <span className="text-[9px] text-slate-500 font-bold uppercase ml-0.5">Luggages</span></p>
+                                                                <p className="text-sm font-black text-black leading-none">{v.luggage || 0} <span className="text-[9px] text-slate-500 font-bold uppercase ml-0.5">Luggages</span></p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -691,7 +691,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     {/* Included Perks */}
                                                     <div className="flex flex-wrap gap-2 mt-2">
                                                         {['100% A/C', 'Water Bottles', 'Hand Sanitizer', 'English Chauffeur'].slice(0, 3).map(f => (
-                                                            <div key={f} className="flex items-center gap-1.5 text-[9px] font-black uppercase text-emerald-600 tracking-wider bg-emerald-50 px-2 py-1 rounded-lg">
+                                                            <div key={f} className="flex items-center gap-1.5 text-[9px] font-black uppercase text-black tracking-wider bg-slate-100 border border-black/10 px-2 py-1 rounded-lg">
                                                                 <Check size={10} /> {f}
                                                             </div>
                                                         ))}
