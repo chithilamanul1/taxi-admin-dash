@@ -633,16 +633,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <button
                                                     key={v.vehicleType}
                                                     onClick={() => isFit && setFormData({ ...formData, vehicle: v.vehicleType })}
-                                                    className={`group/card relative w-full p-6 rounded-[2rem] border-2 transition-all cursor-pointer overflow-hidden flex flex-col gap-5 text-left
-                                                        ${isSelected ? 'border-amber-500 bg-amber-50/30 shadow-xl' : 'border-slate-100 bg-white hover:border-amber-200'}
+                                                    className={`group/card relative w-full p-6 rounded-[2rem] border-2 transition-all cursor-pointer overflow-hidden flex flex-col gap-4 text-left
+                                                        ${isSelected ? 'border-amber-500 bg-amber-50/30 shadow-xl' : 'border-black/20 bg-white hover:border-black/40'}
                                                         ${!isFit ? 'opacity-40 grayscale pointer-events-none' : ''}
                                                     `}
                                                 >
-                                                    {/* Badge for AC */}
-                                                    <div className="absolute top-4 right-4 bg-amber-100/90 backdrop-blur-sm text-amber-900 text-[9px] font-black px-3 py-1 rounded-xl z-20 uppercase flex items-center gap-1 shadow-sm border border-amber-200">
-                                                        <Zap size={10} fill="currentColor" /> Premium A/C
-                                                    </div>
-
                                                     {/* Selection Glow */}
                                                     {isSelected && (
                                                         <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent pointer-events-none"></div>
@@ -651,7 +646,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     {/* Header info */}
                                                     <div className="flex items-center gap-5">
                                                         {/* Image Box */}
-                                                        <div className="w-32 h-24 bg-slate-50 rounded-2xl flex items-center justify-center p-3 shrink-0 overflow-hidden border border-slate-100 relative group-hover/card:bg-slate-100 transition-colors">
+                                                        <div className="w-24 md:w-32 h-20 md:h-24 bg-slate-50 rounded-2xl flex items-center justify-center p-3 shrink-0 overflow-hidden border border-black/5 relative group-hover/card:bg-slate-100 transition-colors">
                                                             {v.image ? (
                                                                 <img src={v.image} alt={v.name} className="w-full h-full object-contain transition-transform duration-500 group-hover/card:scale-110" />
                                                             ) : (
@@ -659,32 +654,36 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             )}
                                                         </div>
 
-                                                        {/* Title */}
+                                                        {/* Title & Badge Container */}
                                                         <div className="flex-1 min-w-0">
-                                                            <h4 className="text-xl md:text-2xl font-black text-slate-900 uppercase tracking-tight leading-none mb-1">{v.name}</h4>
+                                                            {/* Badge for AC - Moved here to avoid overlap */}
+                                                            <div className="inline-flex bg-amber-100/90 backdrop-blur-sm text-amber-900 text-[8px] md:text-[9px] font-black px-2.5 py-0.5 rounded-lg mb-2 uppercase items-center gap-1 shadow-sm border border-amber-200">
+                                                                <Zap size={10} fill="currentColor" /> Premium A/C
+                                                            </div>
+                                                            <h4 className="text-lg md:text-2xl font-black text-slate-900 uppercase tracking-tight leading-tight mb-1">{v.name}</h4>
                                                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Professional Service</p>
                                                         </div>
                                                     </div>
 
                                                     {/* New Redesigned Capacity Grid */}
-                                                    <div className="grid grid-cols-2 gap-4 mt-2">
-                                                        <div className="flex items-center gap-4 p-4 bg-white rounded-3xl border border-slate-100 shadow-sm">
-                                                            <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-amber-600">
-                                                                <Users size={20} />
+                                                    <div className="grid grid-cols-2 gap-3 mt-1">
+                                                        <div className="flex items-center gap-3 p-3 bg-white rounded-2xl border border-black/10 shadow-sm">
+                                                            <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-amber-600">
+                                                                <Users size={16} />
                                                             </div>
                                                             <div>
-                                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Capacity</p>
-                                                                <p className="text-base font-black text-slate-900 leading-none">{v.capacity} <span className="text-[10px] text-slate-500 font-bold uppercase ml-0.5">Persons</span></p>
+                                                                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Capacity</p>
+                                                                <p className="text-sm font-black text-slate-900 leading-none">{v.capacity} <span className="text-[9px] text-slate-500 font-bold uppercase ml-0.5">Persons</span></p>
                                                             </div>
                                                         </div>
 
-                                                        <div className="flex items-center gap-4 p-4 bg-white rounded-3xl border border-slate-100 shadow-sm">
-                                                            <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-amber-600">
-                                                                <Briefcase size={20} />
+                                                        <div className="flex items-center gap-3 p-3 bg-white rounded-2xl border border-black/10 shadow-sm">
+                                                            <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-amber-600">
+                                                                <Briefcase size={16} />
                                                             </div>
                                                             <div>
-                                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Luggage</p>
-                                                                <p className="text-base font-black text-slate-900 leading-none">{v.luggage || 0} <span className="text-[10px] text-slate-500 font-bold uppercase ml-0.5">Luggages</span></p>
+                                                                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Luggage</p>
+                                                                <p className="text-sm font-black text-slate-900 leading-none">{v.luggage || 0} <span className="text-[9px] text-slate-500 font-bold uppercase ml-0.5">Luggages</span></p>
                                                             </div>
                                                         </div>
                                                     </div>
