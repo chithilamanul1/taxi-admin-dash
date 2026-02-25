@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MapPin, DollarSign, Clock, Edit2, Trash2, Plus, Check, X, Loader2, Image as ImageIcon, Search, Tag } from 'lucide-react';
+import { MapPin, DollarSign, Clock, Edit2, Trash2, Plus, Check, X, Loader2, Image as ImageIcon, Search, Tag, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const VEHICLE_TYPES = [
