@@ -21,6 +21,15 @@ const destinationSchema = new mongoose.Schema({
     timestamps: true
 });
 
+import { slugify } from '@/lib/slugify';
+
+destinationSchema.pre('save', function (next) {
+    if (this.isModified('name') || !this.slug) {
+        this.slug = slugify(this.name);
+    }
+    next();
+});
+
 const Destination = mongoose.models.Destination || mongoose.model('Destination', destinationSchema);
 
 export default Destination;
