@@ -46,6 +46,8 @@ const ToursWidget = () => {
         return t.category === dbCategory;
     });
 
+    const [selectedTour, setSelectedTour] = useState(null);
+
     return (
         <div className="space-y-10 animate-fade-in py-4">
             {/* Category Selector */}
@@ -53,7 +55,7 @@ const ToursWidget = () => {
                 {TOUR_CATEGORIES.map(cat => (
                     <button
                         key={cat}
-                        onClick={() => setActiveCategory(cat)}
+                        onClick={() => { setActiveCategory(cat); setSelectedTour(null); }}
                         className={`px-4 md:px-8 py-2.5 md:py-3 rounded-2xl text-[10px] md:text-xs font-bold uppercase tracking-[0.1em] md:tracking-[0.2em] transition-all
                         ${activeCategory === cat
                                 ? 'bg-emerald-900 text-white shadow-xl scale-105'
@@ -89,9 +91,110 @@ const ToursWidget = () => {
                 </div>
             </div>
 
-            {/* Tours Grid */}
+            {/* Tours Grid or Detailed View */}
             {loading && activeCategory !== 'Custom Trip' ? (
                 <div className="flex justify-center py-20"><Loader2 className="animate-spin text-emerald-600" size={32} /></div>
+            ) : selectedTour ? (
+                <div className="animate-fade-in bg-white rounded-[2.5rem] border border-emerald-900/10 overflow-hidden shadow-xl">
+                    <div className="relative h-64 md:h-80 bg-slate-900">
+                        {selectedTour.heroImage || selectedTour.image || selectedTour.images?.[0] ? (
+                            <img src={selectedTour.heroImage || selectedTour.image || selectedTour.images[0]} alt={selectedTour.title} className="w-full h-full object-cover opacity-80" />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center text-slate-500">No Image Available</div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
+                        <button onClick={() => setSelectedTour(null)} className="absolute top-6 left-6 px-4 py-2 bg-white/20 backdrop-blur-md rounded-xl text-white font-bold hover:bg-white/30 transition-colors flex items-center gap-2 text-sm z-10 border border-white/20">
+                            ← Back to Tours
+                        </button>
+                        <div className="absolute bottom-6 left-8 right-8">
+                            <h2 className="text-3xl md:text-5xl font-black text-white mb-2">{selectedTour.title}</h2>
+                            <div className="flex flex-wrap items-center gap-4 text-emerald-100 font-medium">
+                                <span className="flex items-center gap-1.5 bg-black/40 px-3 py-1.5 rounded-lg backdrop-blur-md border border-white/10"><Clock size={16} className="text-emerald-400" /> {selectedTour.duration?.days || 1} Days / {selectedTour.duration?.nights || 0} Nights</span>
+                                {selectedTour.destinations && selectedTour.destinations.length > 0 && (
+                                    <span className="flex items-center gap-1.5 bg-black/40 px-3 py-1.5 rounded-lg backdrop-blur-md border border-white/10"><Signpost size={16} className="text-emerald-400" /> {selectedTour.destinations.join(', ')}</span>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="p-8 md:p-10 space-y-10">
+                        <div className="grid md:grid-cols-3 gap-8">
+                            <div className="md:col-span-2 space-y-8">
+                                <div>
+                                    <h3 className="text-xl font-bold text-emerald-900 mb-3 border-b border-emerald-900/10 pb-2">Overview</h3>
+                                    <p className="text-slate-600 leading-relaxed">{selectedTour.description}</p>
+                                </div>
+
+                                {selectedTour.itinerary && selectedTour.itinerary.length > 0 && (
+                                    <div>
+                                        <h3 className="text-xl font-bold text-emerald-900 mb-4 border-b border-emerald-900/10 pb-2">Itinerary</h3>
+                                        <div className="space-y-4">
+                                            {selectedTour.itinerary.map((day, ix) => (
+                                                <div key={ix} className="bg-emerald-50/50 border border-emerald-900/10 rounded-2xl p-5">
+                                                    <div className="flex gap-4">
+                                                        <div className="shrink-0 w-12 h-12 bg-emerald-100 rounded-xl flex flex-col items-center justify-center text-emerald-700 font-bold border border-emerald-200">
+                                                            <span className="text-[10px] uppercase. tracking-widest leading-none">Day</span>
+                                                            <span className="text-lg leading-none mt-1">{day.day}</span>
+                                                        </div>
+                                                        <div>
+                                                            <h4 className="font-bold text-emerald-900 text-lg mb-1">{day.title}</h4>
+                                                            <p className="text-slate-600 text-sm mb-3">{day.description}</p>
+                                                            {day.activities && day.activities.length > 0 && (
+                                                                <div className="flex flex-wrap gap-2">
+                                                                    {day.activities.map((act, i) => (
+                                                                        <span key={i} className="text-[10px] font-bold bg-white text-emerald-700 px-3 py-1 rounded-full border border-emerald-200 shadow-sm">{act}</span>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="space-y-6">
+                                <div className="bg-emerald-900 rounded-3xl p-6 text-white shadow-xl shadow-emerald-900/20">
+                                    <div className="text-[10px] font-bold uppercase tracking-widest text-emerald-300 mb-1">Total Price</div>
+                                    <div className="text-4xl font-black mb-6">
+                                        {selectedTour.price?.currency || 'USD'} {selectedTour.price?.amount || selectedTour.price}
+                                        <span className="text-sm font-medium text-emerald-200 block mt-1">per person</span>
+                                    </div>
+                                    <a href={`https://wa.me/+94722885885?text=I'm interested in booking the ${selectedTour.title} package.`} target="_blank" rel="noreferrer" className="w-full bg-emerald-400 hover:bg-emerald-300 text-emerald-950 font-black py-4 rounded-xl transition-colors flex justify-center items-center gap-2">
+                                        Inquire via WhatsApp <ArrowRight size={18} />
+                                    </a>
+                                </div>
+
+                                {(selectedTour.inclusions?.length > 0 || selectedTour.exclusions?.length > 0) && (
+                                    <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6">
+                                        {selectedTour.inclusions?.length > 0 && (
+                                            <div className="mb-6">
+                                                <h4 className="text-sm font-black text-emerald-700 uppercase tracking-widest mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-emerald-500"></div> Included</h4>
+                                                <ul className="space-y-2">
+                                                    {selectedTour.inclusions.map((inc, i) => (
+                                                        <li key={i} className="text-sm text-slate-600 flex items-start gap-2"><span className="text-emerald-500 mt-0.5">✓</span> {inc}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+                                        {selectedTour.exclusions?.length > 0 && (
+                                            <div>
+                                                <h4 className="text-sm font-black text-red-500 uppercase tracking-widest mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500"></div> Excluded</h4>
+                                                <ul className="space-y-2">
+                                                    {selectedTour.exclusions.map((exc, i) => (
+                                                        <li key={i} className="text-sm text-slate-500 flex items-start gap-2"><span className="text-red-400 mt-0.5">✕</span> {exc}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             ) : activeCategory === 'Custom Trip' ? (
                 <div className="grid grid-cols-1 animate-slide-up px-2">
                     <Link href="/custom-trip" className="group relative rounded-[2.5rem] overflow-hidden min-h-[380px] md:h-[450px] flex items-center justify-center bg-emerald-900 border border-emerald-800 shadow-2xl hover:scale-[1.01] transition-all duration-500">
@@ -124,16 +227,21 @@ const ToursWidget = () => {
 
                         return (
                             <div
-                                key={tour._id || tour.id}
+                                key={tour._id || tour.id || idx}
                                 style={{ animationDelay: `${idx * 0.1}s` }}
-                                className="group relative rounded-[2.5rem] overflow-hidden bg-white border border-emerald-900/10 hover:border-emerald-600 transition-all duration-500 animate-slide-up h-[480px] flex flex-col shadow-sm hover:shadow-xl"
+                                className="group relative rounded-[2.5rem] overflow-hidden bg-white border border-emerald-900/10 hover:border-emerald-600 transition-all duration-500 animate-slide-up h-[480px] flex flex-col shadow-sm hover:shadow-xl cursor-pointer"
+                                onClick={() => setSelectedTour(tour)}
                             >
-                                <div className="relative h-60 overflow-hidden">
-                                    <img
-                                        src={tour.heroImage || tour.image}
-                                        alt={tour.title}
-                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                    />
+                                <div className="relative h-60 overflow-hidden bg-slate-900 flex items-center justify-center">
+                                    {tour.heroImage || tour.image || tour.images?.[0] ? (
+                                        <img
+                                            src={tour.heroImage || tour.image || tour.images[0]}
+                                            alt={tour.title}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+                                            onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                                        />
+                                    ) : null}
+                                    <div className="absolute inset-0 flex items-center justify-center text-slate-500/50 font-medium" style={{ display: (tour.heroImage || tour.image || tour.images?.[0]) ? 'none' : 'flex' }}>No Image</div>
                                     <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/80 via-emerald-900/20 to-transparent"></div>
                                     <div className="absolute top-4 left-4">
                                         <div className="bg-emerald-900 px-4 py-1.5 rounded-full flex items-center gap-2 text-[10px] font-extrabold text-white uppercase tracking-widest shadow-lg">
@@ -163,9 +271,9 @@ const ToursWidget = () => {
                                             <span className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">Starting From</span>
                                             <span className="text-xl font-black text-emerald-900">{converted.symbol} {converted.value.toLocaleString()}</span>
                                         </div>
-                                        <Link href={`/tour-packages/${tour.slug || tour.id}`} className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-900 flex items-center justify-center group-hover:bg-emerald-900 group-hover:text-white transition-all duration-500 shadow-sm">
+                                        <button className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-900 flex items-center justify-center group-hover:bg-emerald-900 group-hover:text-white transition-all duration-500 shadow-sm pointer-events-none">
                                             <ChevronRight size={20} />
-                                        </Link>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

@@ -13,7 +13,7 @@ export default function TourPackagesClient() {
     useEffect(() => {
         const fetchTours = async () => {
             try {
-                const res = await fetch('/api/tours?category=tour-package')
+                const res = await fetch('/api/tours')
                 const data = await res.json()
                 if (data.success) {
                     setTours(data.data)
@@ -76,7 +76,7 @@ export default function TourPackagesClient() {
                 </div>
 
                 <div className="flex flex-wrap justify-center gap-4 mb-12">
-                    {['All', 'Day Tours', 'City Tours', 'Safari', 'Multi-Day'].map((cat) => (
+                    {['All', 'Day Trips', 'City Tours', 'Safaris', 'Multi-Day'].map((cat) => (
                         <button
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
@@ -97,7 +97,14 @@ export default function TourPackagesClient() {
                         </div>
                     ) : (
                         Array.isArray(tours) && tours
-                            .filter(tour => activeCategory === 'All' || tour.category === activeCategory)
+                            .filter(tour => {
+                                if (activeCategory === 'All') return true;
+                                if (activeCategory === 'Day Trips' && tour.category === 'day-trip') return true;
+                                if (activeCategory === 'City Tours' && tour.category === 'city-tour') return true;
+                                if (activeCategory === 'Safaris' && tour.category === 'safari') return true;
+                                if (activeCategory === 'Multi-Day' && tour.category === 'tour-package') return true;
+                                return false;
+                            })
                             .map((tour, index) => (
                                 <div key={tour.slug || tour._id || index} className="bg-white rounded-[2.5rem] overflow-hidden shadow-2xl hover:shadow-cyan-900/10 transition-all group border border-slate-100">
                                     <div className="grid lg:grid-cols-[450px,1fr] xl:grid-cols-[550px,1fr] min-h-[400px]">

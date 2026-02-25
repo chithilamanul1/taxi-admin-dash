@@ -914,7 +914,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     )}
 
                     {step === 2 && (
-                        <div className="animate-slide-up">
+                        <div className="animate-slide-up pt-20 sm:pt-4">
                             <div className="flex items-center justify-between mb-8">
                                 <h3 className="text-3xl font-black text-slate-900 tracking-tight">Final <span className="text-emerald-600">Checkout</span></h3>
                                 <button onClick={onClose} className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center border border-emerald-900/10 hover:bg-red-50 hover:text-red-600 transition-colors">
@@ -948,8 +948,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 { id: 'luggage', label: 'Luggage' },
                                                 { id: 'handLuggage', label: 'Hand' }
                                             ].map((field) => (
-                                                <div key={field.id} className="bg-slate-50 border border-emerald-900/5 p-3 rounded-2xl flex flex-col items-center justify-center gap-2">
-                                                    <span className="text-[8px] font-black uppercase tracking-tighter text-emerald-900/40">{field.label}</span>
+                                                <div key={field.id} className="bg-slate-50 border border-slate-300 p-3 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-sm">
+                                                    <span className="text-[8px] font-black uppercase tracking-tighter text-slate-500">{field.label}</span>
                                                     <div className="flex items-center gap-2">
                                                         <button
                                                             onClick={() => setFormData(prev => ({
@@ -1000,7 +1000,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         type={f.type}
                                                         value={formData[f.key] || ''}
                                                         onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
-                                                        className="w-full h-14 bg-white border border-slate-200 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900 placeholder:text-gray-300"
+                                                        className="w-full h-14 bg-white border border-slate-300 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900 placeholder:text-gray-400 focus:bg-emerald-50 shadow-sm"
                                                         placeholder={f.placeholder}
                                                     />
                                                 </div>
@@ -1011,7 +1011,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     type="text"
                                                     value={formData.flightNumber || ''}
                                                     onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                    className="w-full h-14 bg-white border border-slate-200 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900 placeholder:text-gray-300"
+                                                    className="w-full h-14 bg-white border border-slate-300 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900 placeholder:text-gray-400 focus:bg-emerald-50 shadow-sm"
                                                     placeholder="e.g. EK 654"
                                                 />
                                             </div>
@@ -1046,21 +1046,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     type="text"
                                                     value={formData.billingName || ''}
                                                     onChange={e => setFormData({ ...formData, billingName: e.target.value })}
-                                                    className="w-full h-14 bg-white border border-slate-200 px-6 rounded-2xl text-sm font-bold text-emerald-900 placeholder:text-slate-300"
+                                                    className="w-full h-14 bg-white border border-slate-300 px-6 rounded-2xl text-sm font-bold text-emerald-900 placeholder:text-gray-400 focus:bg-emerald-50 shadow-sm"
                                                     placeholder="Billing Name"
                                                 />
                                                 <input
                                                     type="text"
                                                     value={formData.billingCountry || ''}
                                                     onChange={e => setFormData({ ...formData, billingCountry: e.target.value })}
-                                                    className="w-full h-14 bg-white border border-slate-200 px-6 rounded-2xl text-sm font-bold text-emerald-900 placeholder:text-slate-300"
+                                                    className="w-full h-14 bg-white border border-slate-300 px-6 rounded-2xl text-sm font-bold text-emerald-900 placeholder:text-gray-400 focus:bg-emerald-50 shadow-sm"
                                                     placeholder="Country"
                                                 />
                                                 <textarea
                                                     rows="2"
                                                     value={formData.billingAddress}
                                                     onChange={e => setFormData({ ...formData, billingAddress: e.target.value })}
-                                                    className="md:col-span-2 w-full px-6 py-4 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-emerald-900 placeholder:text-slate-300 resize-none"
+                                                    className="md:col-span-2 w-full px-6 py-4 bg-white border border-slate-300 rounded-2xl text-sm font-bold text-emerald-900 placeholder:text-gray-400 resize-none focus:bg-emerald-50 shadow-sm"
                                                     placeholder="Full Billing Address"
                                                 ></textarea>
                                             </div>

@@ -238,11 +238,11 @@ export default function DestinationManager() {
                                     </div>
 
                                     <div className="space-y-6">
-                                        <div className="bg-amber-50 dark:bg-amber-500/5 p-6 rounded-[2rem] border border-amber-500/10 mb-6">
+                                        <div className="bg-amber-50 dark:bg-amber-500/5 p-6 rounded-[2rem] border border-amber-500/10 mb-6 md:col-span-2">
                                             <h4 className="text-xs font-black text-amber-600 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                                <Tag size={16} /> Premium Route Per-KM Override (LKR)
+                                                <Tag size={16} /> Per KM Rate (LKR)
                                             </h4>
-                                            <div className="relative">
+                                            <div className="relative max-w-sm">
                                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600 text-xs font-bold">LKR</span>
                                                 <input
                                                     type="number"
@@ -253,33 +253,11 @@ export default function DestinationManager() {
                                                 />
                                             </div>
                                             <div className="mt-3 space-y-1">
-                                                <p className="text-[10px] text-amber-600/80 font-medium italic">Used for high-altitude/safari terrain where standard rates don't apply.</p>
+                                                <p className="text-[10px] text-amber-600/80 font-medium italic">This rate is used to calculate the price for all vehicles bound for this destination.</p>
                                                 <p className="text-[10px] text-amber-600/90 font-bold bg-amber-500/10 px-2 py-1 rounded-md inline-block">Calculation: Distance × Rate Override</p>
                                             </div>
                                         </div>
 
-                                        <div className="bg-emerald-50 dark:bg-emerald-500/5 p-6 rounded-[2rem] border border-emerald-500/10">
-                                            <h4 className="text-xs font-black text-emerald-600 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                                <Tag size={16} /> Fixed Vehicle Pricing (USD)
-                                            </h4>
-                                            <div className="space-y-3">
-                                                {VEHICLE_TYPES.map(v => (
-                                                    <div key={v} className="flex items-center gap-3">
-                                                        <span className="text-xs font-medium text-slate-600 dark:text-slate-400 flex-1">{v}</span>
-                                                        <div className="relative w-32">
-                                                            <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-500" size={14} />
-                                                            <input
-                                                                type="number"
-                                                                className="w-full pl-8 pr-3 py-2 bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/30 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                                value={form.pricing?.[v] || ''}
-                                                                onChange={e => updatePricing(v, e.target.value)}
-                                                                placeholder="0"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
                                     </div>
 
                                     <div className="md:col-span-2">

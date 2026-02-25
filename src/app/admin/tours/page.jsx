@@ -12,12 +12,17 @@ export default function ToursAdmin() {
     const [imageFile, setImageFile] = useState(null);
     const [formData, setFormData] = useState({
         title: '',
-        category: 'Day Tours',
+        category: 'day-trip',
         price: '',
-        duration: 1,
+        priceType: 'from',
+        durationDays: 1,
+        durationNights: 0,
         image: '',
         description: '',
         highlights: '', // Comma separated for simplicity first
+        inclusions: '',
+        exclusions: '',
+        itinerary: [],
         isActive: true
     });
 
@@ -59,12 +64,17 @@ export default function ToursAdmin() {
         setEditingTour(tour);
         setFormData({
             title: tour.title,
-            category: tour.category,
-            price: tour.price,
-            duration: tour.duration,
-            image: tour.image,
+            category: tour.category || 'day-trip',
+            price: tour.price?.amount || tour.price || '',
+            priceType: tour.price?.type || 'from',
+            durationDays: tour.duration?.days || 1,
+            durationNights: tour.duration?.nights || 0,
+            image: tour.image || tour.heroImage || '',
             description: tour.description,
             highlights: tour.highlights?.join(', ') || '',
+            inclusions: tour.inclusions?.join(', ') || '',
+            exclusions: tour.exclusions?.join(', ') || '',
+            itinerary: tour.itinerary || [],
             isActive: tour.isActive
         });
         setShowModal(true);
@@ -74,9 +84,31 @@ export default function ToursAdmin() {
         setEditingTour(null);
         setImageFile(null);
         setFormData({
-            title: '', category: 'Day Tours', price: '', duration: 1, image: '', description: '', highlights: '', isActive: true
+            title: '', category: 'day-trip', price: '', priceType: 'from', durationDays: 1, durationNights: 0, image: '', description: '', highlights: '', inclusions: '', exclusions: '', itinerary: [], isActive: true
         });
         setShowModal(true);
+    };
+
+    const handleAddItineraryDay = () => {
+        setFormData({
+            ...formData,
+            itinerary: [...formData.itinerary, { day: formData.itinerary.length + 1, title: '', description: '', activities: [] }]
+        });
+    };
+
+    const handleUpdateItineraryDay = (index, field, value) => {
+        const newItinerary = [...formData.itinerary];
+        if (field === 'activities') {
+            newItinerary[index][field] = value.split(',').map(s => s.trim()).filter(Boolean);
+        } else {
+            newItinerary[index][field] = value;
+        }
+        setFormData({ ...formData, itinerary: newItinerary });
+    };
+
+    const handleRemoveItineraryDay = (index) => {
+        const newItinerary = formData.itinerary.filter((_, i) => i !== index).map((day, i) => ({ ...day, day: i + 1 }));
+        setFormData({ ...formData, itinerary: newItinerary });
     };
 
     const handleSubmit = async (e) => {
@@ -92,7 +124,19 @@ export default function ToursAdmin() {
             const payload = {
                 ...formData,
                 image: imageUrl,
-                highlights: formData.highlights.split(',').map(s => s.trim()).filter(Boolean)
+                heroImage: imageUrl,
+                price: {
+                    amount: Number(formData.price),
+                    currency: 'USD',
+                    type: formData.priceType
+                },
+                duration: {
+                    days: Number(formData.durationDays),
+                    nights: Number(formData.durationNights)
+                },
+                highlights: formData.highlights.split(',').map(s => s.trim()).filter(Boolean),
+                inclusions: formData.inclusions.split(',').map(s => s.trim()).filter(Boolean),
+                exclusions: formData.exclusions.split(',').map(s => s.trim()).filter(Boolean)
             };
 
             const method = editingTour ? 'PUT' : 'POST';
@@ -198,21 +242,29 @@ export default function ToursAdmin() {
                                         <label className="font-bold text-slate-600 dark:text-slate-400">Category</label>
                                         <select className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
                                             value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}>
-                                            {['Day Tours', 'City Tours', 'Safari', 'Multi-Day'].map(c => <option key={c} value={c}>{c}</option>)}
+                                            <option value="day-trip">Day Trip</option>
+                                            <option value="city-tour">City Tour</option>
+                                            <option value="safari">Safari</option>
+                                            <option value="tour-package">Multi-Day Package</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-3 gap-4">
                                     <div className="space-y-1">
                                         <label className="font-bold text-slate-600 dark:text-slate-400">Price (USD)</label>
                                         <input type="number" required className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
                                             value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="font-bold text-slate-600 dark:text-slate-400">Duration (Days)</label>
+                                        <label className="font-bold text-slate-600 dark:text-slate-400">Days</label>
                                         <input type="number" required min="1" className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
-                                            value={formData.duration} onChange={e => setFormData({ ...formData, duration: e.target.value })} />
+                                            value={formData.durationDays} onChange={e => setFormData({ ...formData, durationDays: e.target.value })} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="font-bold text-slate-600 dark:text-slate-400">Nights</label>
+                                        <input type="number" required min="0" className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                            value={formData.durationNights} onChange={e => setFormData({ ...formData, durationNights: e.target.value })} />
                                     </div>
                                 </div>
 
@@ -252,6 +304,57 @@ export default function ToursAdmin() {
                                     <label className="font-bold text-slate-600 dark:text-slate-400">Highlights (comma separated)</label>
                                     <textarea rows="2" className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
                                         value={formData.highlights} onChange={e => setFormData({ ...formData, highlights: e.target.value })} />
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1">
+                                        <label className="font-bold text-emerald-600">Inclusions (comma separated)</label>
+                                        <textarea rows="2" className="w-full p-3 rounded-xl border bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                            value={formData.inclusions} onChange={e => setFormData({ ...formData, inclusions: e.target.value })} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="font-bold text-red-500">Exclusions (comma separated)</label>
+                                        <textarea rows="2" className="w-full p-3 rounded-xl border bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800 outline-none focus:ring-2 focus:ring-red-500 dark:text-white"
+                                            value={formData.exclusions} onChange={e => setFormData({ ...formData, exclusions: e.target.value })} />
+                                    </div>
+                                </div>
+
+                                <div className="border-t border-slate-200 dark:border-slate-800 pt-6 mt-6">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="font-bold text-slate-800 dark:text-white text-lg">Itinerary Days</h3>
+                                        <button type="button" onClick={handleAddItineraryDay} className="text-sm bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg flex items-center gap-1 hover:bg-blue-100 font-bold">
+                                            <Plus size={16} /> Add Day
+                                        </button>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        {formData.itinerary.map((day, index) => (
+                                            <div key={index} className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4 relative">
+                                                <button type="button" onClick={() => handleRemoveItineraryDay(index)} className="absolute top-4 right-4 text-slate-400 hover:text-red-500">
+                                                    <Trash2 size={16} />
+                                                </button>
+                                                <h4 className="font-black text-slate-700 dark:text-slate-300 mb-3">Day {day.day}</h4>
+
+                                                <div className="space-y-3">
+                                                    <div>
+                                                        <label className="text-xs font-bold text-slate-500">Title</label>
+                                                        <input className="w-full p-2 text-sm rounded-lg border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:border-blue-500 dark:text-white"
+                                                            value={day.title} onChange={e => handleUpdateItineraryDay(index, 'title', e.target.value)} placeholder="e.g. Arrival & Move to Sigiriya" />
+                                                    </div>
+                                                    <div>
+                                                        <label className="text-xs font-bold text-slate-500">Description</label>
+                                                        <textarea rows="2" className="w-full p-2 text-sm rounded-lg border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:border-blue-500 dark:text-white"
+                                                            value={day.description} onChange={e => handleUpdateItineraryDay(index, 'description', e.target.value)} />
+                                                    </div>
+                                                    <div>
+                                                        <label className="text-xs font-bold text-slate-500">Activities (comma separated)</label>
+                                                        <input className="w-full p-2 text-sm rounded-lg border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:border-blue-500 dark:text-white"
+                                                            value={day.activities?.join(', ') || ''} onChange={e => handleUpdateItineraryDay(index, 'activities', e.target.value)} placeholder="e.g. Climb Rock, Safari" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
 
                                 <button type="submit" disabled={uploading} className="w-full bg-emerald-600 text-white font-bold py-4 rounded-xl hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20 mt-4 disabled:opacity-50 flex items-center justify-center gap-2">
