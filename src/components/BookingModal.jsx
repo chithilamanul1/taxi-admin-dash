@@ -10,6 +10,8 @@ import { useCurrency } from '../context/CurrencyContext';
 import { calculateBasePrice, calculateSurcharges, calculatePaymentFees } from '../lib/pricing-util';
 import LocationInput from './LocationInput';
 import CustomDateTimePicker from './CustomDateTimePicker';
+import { PhoneInput } from 'react-international-phone';
+import 'react-international-phone/style.css';
 
 const STEPS = [
     { id: 1, title: 'Route & Vehicle', icon: MapPin },
@@ -996,13 +998,24 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             ].map(f => (
                                                 <div key={f.key} className="space-y-2">
                                                     <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{f.label}</label>
-                                                    <input
-                                                        type={f.type}
-                                                        value={formData[f.key] || ''}
-                                                        onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
-                                                        className="w-full h-14 bg-white border border-slate-300 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900 placeholder:text-gray-400 focus:bg-emerald-50 shadow-sm"
-                                                        placeholder={f.placeholder}
-                                                    />
+                                                    {f.type === 'tel' ? (
+                                                        <PhoneInput
+                                                            defaultCountry="lk"
+                                                            value={formData[f.key] || ''}
+                                                            onChange={(phone) => setFormData({ ...formData, [f.key]: phone })}
+                                                            inputClassName="!w-full !h-14 !bg-transparent !border-none !px-4 !outline-none focus:!ring-0 !font-bold !text-slate-900 placeholder:!text-gray-400"
+                                                            countrySelectorStyleProps={{ buttonClassName: '!h-14 !bg-transparent !border-none !pl-4' }}
+                                                            className="w-full bg-white border-2 border-slate-900 rounded-2xl flex focus-within:ring-4 focus-within:ring-emerald-500/10 focus-within:bg-emerald-50 transition-all overflow-hidden"
+                                                        />
+                                                    ) : (
+                                                        <input
+                                                            type={f.type}
+                                                            value={formData[f.key] || ''}
+                                                            onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
+                                                            className="w-full h-14 bg-white border-2 border-slate-900 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-slate-900 placeholder:text-gray-400 focus:bg-emerald-50 shadow-sm"
+                                                            placeholder={f.placeholder}
+                                                        />
+                                                    )}
                                                 </div>
                                             ))}
                                             <div className="space-y-2">
@@ -1011,7 +1024,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     type="text"
                                                     value={formData.flightNumber || ''}
                                                     onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                    className="w-full h-14 bg-white border border-slate-300 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900 placeholder:text-gray-400 focus:bg-emerald-50 shadow-sm"
+                                                    className="w-full h-14 bg-white border-2 border-slate-900 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-slate-900 placeholder:text-gray-400 focus:bg-emerald-50 shadow-sm"
                                                     placeholder="e.g. EK 654"
                                                 />
                                             </div>
@@ -1022,7 +1035,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     min="0"
                                                     value={formData.waitingHours || 0}
                                                     onChange={e => setFormData({ ...formData, waitingHours: parseInt(e.target.value) || 0 })}
-                                                    className="w-full h-14 bg-white border border-slate-200 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-emerald-900"
+                                                    className="w-full h-14 bg-white border-2 border-slate-900 px-6 rounded-2xl outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all font-bold text-slate-900"
                                                 />
                                             </div>
                                         </div>
@@ -1046,21 +1059,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     type="text"
                                                     value={formData.billingName || ''}
                                                     onChange={e => setFormData({ ...formData, billingName: e.target.value })}
-                                                    className="w-full h-14 bg-white border border-slate-300 px-6 rounded-2xl text-sm font-bold text-emerald-900 placeholder:text-gray-400 focus:bg-emerald-50 shadow-sm"
+                                                    className="w-full h-14 bg-white border-2 border-slate-900 px-6 rounded-2xl text-sm font-bold text-slate-900 placeholder:text-gray-400 focus:bg-emerald-50 shadow-sm"
                                                     placeholder="Billing Name"
                                                 />
                                                 <input
                                                     type="text"
                                                     value={formData.billingCountry || ''}
                                                     onChange={e => setFormData({ ...formData, billingCountry: e.target.value })}
-                                                    className="w-full h-14 bg-white border border-slate-300 px-6 rounded-2xl text-sm font-bold text-emerald-900 placeholder:text-gray-400 focus:bg-emerald-50 shadow-sm"
+                                                    className="w-full h-14 bg-white border-2 border-slate-900 px-6 rounded-2xl text-sm font-bold text-slate-900 placeholder:text-gray-400 focus:bg-emerald-50 shadow-sm"
                                                     placeholder="Country"
                                                 />
                                                 <textarea
                                                     rows="2"
                                                     value={formData.billingAddress}
                                                     onChange={e => setFormData({ ...formData, billingAddress: e.target.value })}
-                                                    className="md:col-span-2 w-full px-6 py-4 bg-white border border-slate-300 rounded-2xl text-sm font-bold text-emerald-900 placeholder:text-gray-400 resize-none focus:bg-emerald-50 shadow-sm"
+                                                    className="md:col-span-2 w-full px-6 py-4 bg-white border-2 border-slate-900 rounded-2xl text-sm font-bold text-slate-900 placeholder:text-gray-400 resize-none focus:bg-emerald-50 shadow-sm"
                                                     placeholder="Full Billing Address"
                                                 ></textarea>
                                             </div>

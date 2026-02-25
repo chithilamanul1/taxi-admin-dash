@@ -29,9 +29,9 @@ export default function DayTripsClient() {
 
     const filteredTrips = trips.filter(trip => {
         const matchesFilter = filter === 'all' || trip.category === filter
-        const matchesSearch = trip.title.toLowerCase().includes(search.toLowerCase()) ||
-            trip.description.toLowerCase().includes(search.toLowerCase()) ||
-            trip.destinations?.some(d => d.toLowerCase().includes(search.toLowerCase()))
+        const matchesSearch = trip.title?.toLowerCase().includes(search.toLowerCase()) ||
+            trip.description?.toLowerCase().includes(search.toLowerCase()) ||
+            trip.destinations?.some(d => d?.toLowerCase().includes(search.toLowerCase()))
         return matchesFilter && matchesSearch
     })
 
