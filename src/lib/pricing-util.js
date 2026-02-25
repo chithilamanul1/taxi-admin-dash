@@ -44,31 +44,48 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     // Check for Location-Specific Per-KM Rate Override
     const matchedOverride = findMatchingDestination(pickup, dynamicDestinations) ||
         findMatchingDestination(dropoff, dynamicDestinations);
+    const vehicleType = vehicleData.vehicleType;
 
-    if (matchedOverride && matchedOverride.perKmRateOverride > 0) {
-        const perKmRate = matchedOverride.perKmRateOverride;
-        console.log(`[Pricing] Applied PRIORITY rate override for ${matchedOverride.name}: LKR ${perKmRate}/km`);
+    if (matchedOverride) {
+        // 1. Vehicle-Specific Override (Priority)
+        const vOverrides = matchedOverride.vehicleRateOverrides instanceof Map ?
+            Object.fromEntries(matchedOverride.vehicleRateOverrides) :
+            (matchedOverride.vehicleRateOverrides || {});
 
-        distancePrice = (distKm * perKmRate);
-        overrideApplied = true;
-    } else if (tiers.length > 0) {
-        const matchingTier = tiers.find(t => distKm >= t.min && distKm <= (t.max || Infinity));
-        if (matchingTier) {
-            if (matchingTier.type === 'flat') {
-                distancePrice = matchingTier.price || matchingTier.rate || 0;
-            } else {
-                distancePrice = (distKm * (matchingTier.rate || matchingTier.price || 0));
-            }
+        const vehicleSpecificRate = vOverrides[vehicleType];
+
+        if (vehicleSpecificRate > 0) {
+            console.log(`[Pricing] Applied VEHICLE-SPECIFIC rate override for ${matchedOverride.name} (${vehicleType}): LKR ${vehicleSpecificRate}/km`);
+            distancePrice = (distKm * vehicleSpecificRate);
+            overrideApplied = true;
         }
-    } else {
-        const perKmRate = vehicleData.perKmRate || 0;
-        distancePrice = (distKm * perKmRate);
+        // 2. Global Per-KM Override (Fallback)
+        else if (matchedOverride.perKmRateOverride > 0) {
+            const perKmRate = matchedOverride.perKmRateOverride;
+            console.log(`[Pricing] Applied GLOBAL destination rate override for ${matchedOverride.name}: LKR ${perKmRate}/km`);
+            distancePrice = (distKm * perKmRate);
+            overrideApplied = true;
+        }
+    }
+
+    if (!overrideApplied) {
+        if (tiers.length > 0) {
+            const matchingTier = tiers.find(t => distKm >= t.min && distKm <= (t.max || Infinity));
+            if (matchingTier) {
+                if (matchingTier.type === 'flat') {
+                    distancePrice = matchingTier.price || matchingTier.rate || 0;
+                } else {
+                    distancePrice = (distKm * (matchingTier.rate || matchingTier.price || 0));
+                }
+            }
+        } else {
+            const perKmRate = vehicleData.perKmRate || 0;
+            distancePrice = (distKm * perKmRate);
+        }
+
     }
 
     baseTotal = distancePrice;
-    if (overrideApplied) {
-        console.log(`[Pricing] Override in effect. Selected DistancePrice: ${distancePrice}`);
-    }
 
     // 3. Round Trip Multiplier
     if (tripType === 'round-trip') {

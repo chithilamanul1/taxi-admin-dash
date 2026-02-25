@@ -67,7 +67,8 @@ export default function DestinationManager() {
     const startEdit = (dest) => {
         setEditing(dest.id);
         const pricingMap = dest.pricing instanceof Map ? Object.fromEntries(dest.pricing) : (dest.pricing || {});
-        setForm({ ...dest, pricing: pricingMap });
+        const vehicleRatesMap = dest.vehicleRateOverrides instanceof Map ? Object.fromEntries(dest.vehicleRateOverrides) : (dest.vehicleRateOverrides || {});
+        setForm({ ...dest, pricing: pricingMap, vehicleRateOverrides: vehicleRatesMap });
     };
 
     const updatePricing = (vehicle, value) => {
@@ -237,27 +238,57 @@ export default function DestinationManager() {
                                         </div>
                                     </div>
 
-                                    <div className="space-y-6">
-                                        <div className="bg-amber-50 dark:bg-amber-500/5 p-6 rounded-[2rem] border border-amber-500/10 mb-6 md:col-span-2">
-                                            <h4 className="text-xs font-black text-amber-600 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                                <Tag size={16} /> Per KM Rate (LKR)
-                                            </h4>
-                                            <div className="relative max-w-sm">
-                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600 text-xs font-bold">LKR</span>
-                                                <input
-                                                    type="number"
-                                                    className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/30 rounded-2xl text-sm font-bold outline-none focus:ring-2 focus:ring-amber-500/20"
-                                                    value={form.perKmRateOverride || ''}
-                                                    onChange={e => setForm({ ...form, perKmRateOverride: Number(e.target.value) })}
-                                                    placeholder="e.g. 130"
-                                                />
+                                    <div className="md:col-span-2 space-y-6">
+                                        <div className="bg-amber-50 dark:bg-amber-500/5 p-6 rounded-[2rem] border border-amber-500/10">
+                                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                                                <h4 className="text-xs font-black text-amber-600 uppercase tracking-widest flex items-center gap-2">
+                                                    <Tag size={16} /> Per KM Rate Overrides
+                                                </h4>
+                                                <div className="flex items-center gap-2 bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-500/20">
+                                                    <span className="text-[10px] font-bold text-amber-600 uppercase">Global Fallback</span>
+                                                    <div className="relative w-24">
+                                                        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-amber-600 text-[10px] font-bold">LKR</span>
+                                                        <input
+                                                            type="number"
+                                                            className="w-full pl-8 pr-2 py-1 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/30 rounded-lg text-xs font-bold outline-none"
+                                                            value={form.perKmRateOverride || ''}
+                                                            onChange={e => setForm({ ...form, perKmRateOverride: Number(e.target.value) })}
+                                                            placeholder="130"
+                                                        />
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="mt-3 space-y-1">
-                                                <p className="text-[10px] text-amber-600/80 font-medium italic">This rate is used to calculate the price for all vehicles bound for this destination.</p>
-                                                <p className="text-[10px] text-amber-600/90 font-bold bg-amber-500/10 px-2 py-1 rounded-md inline-block">Calculation: Distance × Rate Override</p>
+
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                                {VEHICLE_TYPES.map(v => (
+                                                    <div key={v} className="bg-white dark:bg-slate-900/50 p-4 rounded-2xl border border-amber-500/10 space-y-2">
+                                                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none block">{v}</label>
+                                                        <div className="relative">
+                                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-600 text-[10px] font-bold">LKR</span>
+                                                            <input
+                                                                type="number"
+                                                                className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                                                value={form.vehicleRateOverrides?.[v] || ''}
+                                                                onChange={e => setForm({
+                                                                    ...form,
+                                                                    vehicleRateOverrides: {
+                                                                        ...(form.vehicleRateOverrides || {}),
+                                                                        [v]: Number(e.target.value)
+                                                                    }
+                                                                })}
+                                                                placeholder="Rate..."
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            <div className="mt-4 p-3 bg-amber-500/10 rounded-xl border border-amber-500/10">
+                                                <p className="text-[10px] text-amber-600/90 font-bold flex items-center gap-2">
+                                                    <Info size={12} /> Specific vehicle rates take priority over the global fallback rate.
+                                                </p>
                                             </div>
                                         </div>
-
                                     </div>
 
                                     <div className="md:col-span-2">

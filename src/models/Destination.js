@@ -15,6 +15,7 @@ const destinationSchema = new mongoose.Schema({
     highlights: { type: [String], default: [] },
     pricing: { type: Map, of: Number }, // Map of vehicleType/Label to Price
     perKmRateOverride: { type: Number }, // Manual override for Per KM Rate for this destination
+    vehicleRateOverrides: { type: Map, of: Number }, // Map of vehicleType to Per KM Rate
     isActive: { type: Boolean, default: true },
     sortOrder: { type: Number, default: 99 }
 }, {
