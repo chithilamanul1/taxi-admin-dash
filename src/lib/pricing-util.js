@@ -14,23 +14,33 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const isFromAirport = pickup?.toLowerCase().includes('airport');
     const isToAirport = dropoff?.toLowerCase().includes('airport');
 
-    // Helper for robust location matching
+    // Helper for robust location matching (e.g. "Ella" matches "Ravana Pool Club, Ella")
     const findMatchingDestination = (address, destinationsList) => {
         if (!address || !destinationsList || destinationsList.length === 0) return null;
-        const addrLower = address.toLowerCase();
 
-        // Find all matches, then pick the one with the longest name (most specific)
+        // Clean the address: remove extra spaces and punctuation
+        const addrLower = address.toLowerCase().replace(/[,.-]/g, ' ').replace(/\s+/g, ' ').trim();
+
+        // 1. Identify all destinations that match this address
         const matches = destinationsList.filter(d => {
-            const nameLower = d.name?.toLowerCase().trim();
-            const idLower = d.id?.toLowerCase().trim();
-            if (!nameLower && !idLower) return false;
+            const name = d.name?.toLowerCase().trim();
+            const title = d.title?.toLowerCase().trim();
+            if (!name && !title) return false;
 
-            return (nameLower && addrLower.includes(nameLower)) ||
-                (idLower && addrLower.includes(idLower));
+            // Check if name is a word/phrase within the address
+            const isMatch = (name && addrLower.includes(name)) || (title && addrLower.includes(title));
+            return isMatch;
         });
 
         if (matches.length === 0) return null;
-        return matches.sort((a, b) => (b.name?.length || 0) - (a.name?.length || 0))[0];
+
+        // 2. Sort matches by name length (longest/most specific first)
+        // This ensures "Mount Lavinia" takes priority over just "Lavinia" if both exist.
+        return matches.sort((a, b) => {
+            const lenA = a.name?.length || a.title?.length || 0;
+            const lenB = b.name?.length || b.title?.length || 0;
+            return lenB - lenA;
+        })[0];
     };
 
     const isAirportTransfer = vehicleData?.category === 'airport-transfer';

@@ -22,7 +22,18 @@ const destinationSchema = new mongoose.Schema({
     timestamps: true
 });
 
-import { slugify } from '@/lib/slugify';
+// Helper to slugify text within the model to avoid import issues in certain environments
+function slugify(text) {
+    if (!text) return '';
+    return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')     // Replace spaces with -
+        .replace(/[^\w-]+/g, '')     // Remove all non-word chars
+        .replace(/--+/g, '-')       // Replace multiple - with single -
+        .slice(0, 100);              // Limit length
+}
 
 destinationSchema.pre('save', function (next) {
     if (this.isModified('name') || !this.slug) {
