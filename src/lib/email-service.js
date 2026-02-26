@@ -661,9 +661,9 @@ export async function sendPaymentConfirmation(booking) {
 
     if (booking.customerEmail) {
         try {
-            const resend = getResend();
-            if (resend) {
-                await resend.emails.send({
+            const transporter = getTransporter();
+            if (transporter) {
+                await transporter.sendMail({
                     from: FROM_EMAIL,
                     to: booking.customerEmail,
                     subject: `💳 Payment Confirmed - ${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPrice) ? booking.displayPrice : (booking.totalPrice || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))} - Airport Taxis`,
@@ -748,9 +748,9 @@ export async function sendDriverAssigned(booking, driver) {
 
     if (booking.customerEmail) {
         try {
-            const resend = getResend();
-            if (resend) {
-                await resend.emails.send({
+            const transporter = getTransporter();
+            if (transporter) {
+                await transporter.sendMail({
                     from: FROM_EMAIL,
                     to: booking.customerEmail,
                     subject: `🚗 Driver Assigned - ${driver.name || 'Your Driver'} for Booking #${bookingId}`,
@@ -1248,3 +1248,41 @@ export default {
     sendBookingStatusUpdate,
     sendCustomTripInquiry
 };
+
+// 10. GENERIC OWNER NOTIFICATION (The "Everything" Alert)
+export async function sendOwnerNotification(subject, details) {
+    const transporter = getTransporter();
+    if (!transporter) return;
+
+    try {
+        const content = `
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
+                <tr>
+                    <td style="background-color: ${COLORS.primary}; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
+                        SYSTEM ALERT: ${subject.toUpperCase()}
+                    </td>
+                </tr>
+            </table>
+            <table width="100%" cellpadding="10" cellspacing="0" style="border: 1px solid ${COLORS.border}; background-color: rgba(15, 23, 42, 0.5);">
+                ${Object.entries(details).map(([key, value]) => `
+                    <tr>
+                        <td width="30%" style="color: ${COLORS.textMuted}; border-bottom: 1px solid ${COLORS.border}; font-size: 12px; text-transform: uppercase;">${key.replace(/([A-Z])/g, ' $1')}</td>
+                        <td style="color: ${COLORS.text}; border-bottom: 1px solid ${COLORS.border}; font-weight: 600;">${value}</td>
+                    </tr>
+                `).join('')}
+            </table>
+            <br/>
+            ${components.button('Open Admin Panel', `${BASE_URL}/admin`)}
+        `;
+
+        await transporter.sendMail({
+            from: FROM_EMAIL,
+            to: OWNER_EMAIL,
+            subject: `🔔 [Airport Taxis] ${subject}`,
+            html: getPremiumTemplate(content, 'System Notification')
+        });
+        console.log(`[Email] Owner notification sent: ${subject}`);
+    } catch (error) {
+        console.error('[Email] Owner notification failed:', error);
+    }
+}

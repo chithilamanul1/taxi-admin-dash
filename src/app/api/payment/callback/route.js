@@ -3,7 +3,7 @@ import Booking from '@/models/Booking';
 import Coupon from '@/models/Coupon';
 import { NextResponse } from 'next/server';
 import { getActiveGateway, verifySampathSignature, completePayCorpTransaction, GATEWAY_CONFIG } from '@/lib/payment';
-import { sendPaymentConfirmation } from '@/lib/email-service';
+import { sendPaymentConfirmation, sendOwnerNotification } from '@/lib/email-service';
 import { logPaymentReceived, logError } from '@/lib/discord';
 
 /**
@@ -82,6 +82,15 @@ export async function GET(request) {
 
                 await sendPaymentConfirmation(booking).catch(err => console.error("Error sending receipt:", err));
 
+                // Notify Owner
+                await sendOwnerNotification('Payment Received', {
+                    BookingId: booking._id.toString().slice(-8),
+                    Customer: booking.customerName,
+                    Amount: `${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPaidAmount) ? booking.displayPaidAmount : (booking.paidAmount || 0)).toLocaleString()}`,
+                    Reference: verification.data.txnId || reqid,
+                    Type: booking.type || 'Transfer'
+                }).catch(console.error);
+
                 // Log to Discord
                 await logPaymentReceived(booking, {
                     method: 'Sampath Bank',
@@ -137,6 +146,16 @@ export async function GET(request) {
                 } else {
                     // Log Error to Discord
                     await logError(new Error(`Sampath Payment Failed: ${responseCode} - ${verification.message}`), `Booking: ${booking._id}`).catch(err => console.error("Discord Log Error:", err));
+
+                    // Notify Owner
+                    await sendOwnerNotification('Payment Failed', {
+                        BookingId: booking._id.toString().slice(-8),
+                        Customer: booking.customerName,
+                        Amount: booking.totalPrice,
+                        Error: verification.message,
+                        Code: responseCode
+                    }).catch(console.error);
+
                     return NextResponse.redirect(`${baseUrl}/payment/failed?bookingId=${booking._id}&reason=${encodeURIComponent(verification.message || 'payment_failed')}`);
                 }
             }
@@ -233,8 +252,14 @@ export async function POST(request) {
 
         // Send Receipt if successful
         if (status === 'success') {
-            const { sendPaymentConfirmation } = require('@/lib/email-service');
             await sendPaymentConfirmation(booking).catch(err => console.error("Error sending receipt:", err));
+
+            // Notify Owner
+            await sendOwnerNotification('Background Payment Success', {
+                BookingId: booking._id.toString().slice(-8),
+                Customer: booking.customerName,
+                Status: booking.paymentStatus
+            }).catch(console.error);
         }
 
 

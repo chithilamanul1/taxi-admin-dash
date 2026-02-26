@@ -26,7 +26,8 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
         setError('');
 
         try {
-            const totalPrice = price ? (formData.adults + formData.children) * price : 0;
+            const isPerPerson = tourTitle.toLowerCase().includes('per person') || !!price && price < 500; // Heuristic if type not passed
+            const totalPrice = price ? (isPerPerson ? (formData.adults + formData.children) * price : price) : 0;
 
             const res = await fetch('/api/bookings/tour', {
                 method: 'POST',
@@ -37,7 +38,8 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                     tourId,
                     duration,
                     totalPrice,
-                    currency
+                    currency,
+                    isPerPerson
                 })
             });
 

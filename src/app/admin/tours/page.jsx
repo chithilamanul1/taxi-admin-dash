@@ -12,6 +12,7 @@ export default function ToursAdmin() {
     const [imageFile, setImageFile] = useState(null);
     const [formData, setFormData] = useState({
         title: '',
+        slug: '',
         category: 'day-trip',
         price: '',
         priceType: 'from',
@@ -64,12 +65,13 @@ export default function ToursAdmin() {
         setEditingTour(tour);
         setFormData({
             title: tour.title,
+            slug: tour.slug || '',
             category: tour.category || 'day-trip',
             price: tour.price?.amount || tour.price || '',
             priceType: tour.price?.type || 'from',
             durationDays: tour.duration?.days || 1,
             durationNights: tour.duration?.nights || 0,
-            image: tour.image || tour.heroImage || '',
+            image: tour.heroImage || tour.image || '',
             description: tour.description,
             highlights: tour.highlights?.join(', ') || '',
             inclusions: tour.inclusions?.join(', ') || '',
@@ -123,8 +125,10 @@ export default function ToursAdmin() {
 
             const payload = {
                 ...formData,
+                slug: formData.slug || formData.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''),
                 image: imageUrl,
                 heroImage: imageUrl,
+                images: [imageUrl],
                 price: {
                     amount: Number(formData.price),
                     currency: 'USD',
@@ -239,6 +243,14 @@ export default function ToursAdmin() {
                                             value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} />
                                     </div>
                                     <div className="space-y-1">
+                                        <label className="font-bold text-slate-600 dark:text-slate-400">Slug (URL path)</label>
+                                        <input required className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                            value={formData.slug} onChange={e => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/ /g, '-') })} />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1">
                                         <label className="font-bold text-slate-600 dark:text-slate-400">Category</label>
                                         <select className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
                                             value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}>
@@ -248,7 +260,16 @@ export default function ToursAdmin() {
                                             <option value="tour-package">Multi-Day Package</option>
                                         </select>
                                     </div>
+                                    <div className="space-y-1">
+                                        <label className="font-bold text-slate-600 dark:text-slate-400">Is Active?</label>
+                                        <select className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                            value={formData.isActive} onChange={e => setFormData({ ...formData, isActive: e.target.value === 'true' })}>
+                                            <option value="true">Yes (Visible)</option>
+                                            <option value="false">No (Hidden)</option>
+                                        </select>
+                                    </div>
                                 </div>
+
 
                                 <div className="grid grid-cols-3 gap-4">
                                     <div className="space-y-1">

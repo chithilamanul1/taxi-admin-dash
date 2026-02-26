@@ -170,10 +170,10 @@ export async function initiatePayCorpTransaction(booking, returnUrl) {
     const amountLKR = booking.paidAmount || booking.totalPrice;
 
     // CRITICAL: Use the amount shown to the user (displayPaidAmount) if it exists 
-    // and matches the currency. This prevents discrepancies like 78 USD vs 77.47 USD.
+    // and matches the currency. This prevents discrepancies like 10.00 vs 0.03 USD.
     let convertedAmount = (currency === 'LKR')
         ? amountLKR
-        : (booking.displayPaidAmount || booking.displayPrice || 0);
+        : (booking.displayPaidAmount || booking.displayPrice);
 
     // Only fetch rates and re-convert if the display amount is missing (fallback)
     if (currency !== 'LKR' && !convertedAmount) {

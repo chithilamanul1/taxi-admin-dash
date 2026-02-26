@@ -3,7 +3,7 @@ import dbConnect from '../../../lib/db';
 import Ticket from '../../../models/Ticket';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../lib/auth';
-import { sendEmail } from '@/lib/email';
+import { sendOwnerNotification } from '@/lib/email-service';
 
 // GET: List tickets
 export async function GET(req) {
@@ -58,12 +58,13 @@ export async function POST(req) {
             }]
         });
 
-        // Log to Discord
-        const { logTicketCreated } = await import('@/lib/discord');
-        await logTicketCreated(ticket).catch(console.error);
-
-        // Optional: Notify Admins via Email
-        // await sendEmail({ to: 'admin@srilankantaxi.lk', subject: 'New Support Ticket', html: ... })
+        // Notify Owner
+        await sendOwnerNotification('New Support Ticket', {
+            Subject: subject,
+            Priority: priority || 'medium',
+            User: session.user.name || session.user.email,
+            Message: message.substring(0, 200) + (message.length > 200 ? '...' : '')
+        }).catch(console.error);
 
         return NextResponse.json({ success: true, data: ticket });
     } catch (error) {

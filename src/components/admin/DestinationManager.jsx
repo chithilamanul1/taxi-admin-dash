@@ -102,23 +102,23 @@ export default function DestinationManager() {
     return (
         <div className="space-y-6">
             <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-sm">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-600">
+                        <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-600 shrink-0">
                             <MapPin size={20} />
                         </div>
                         <div>
                             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Manual Rate Management</h2>
-                            <p className="text-xs text-slate-500">Fixed rates for specific destinations (Overrides auto-pricing)</p>
+                            <p className="text-[10px] md:text-xs text-slate-500 leading-tight">Fixed rates for specific destinations (Overrides auto-pricing)</p>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <div className="relative">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                        <div className="relative flex-1 sm:flex-none">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                             <input
                                 type="text"
                                 placeholder="Search destinations..."
-                                className="pl-10 pr-4 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm outline-none w-64"
+                                className="pl-10 pr-4 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm outline-none w-full sm:w-64"
                                 value={search}
                                 onChange={e => setSearch(e.target.value)}
                             />
@@ -137,9 +137,9 @@ export default function DestinationManager() {
                                     sortOrder: destinations.length + 1
                                 });
                             }}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shadow-lg shadow-emerald-500/20"
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/20 active:scale-95"
                         >
-                            <Plus size={16} /> Add Destination
+                            <Plus size={16} /> <span className="whitespace-nowrap">Add Destination</span>
                         </button>
                     </div>
                 </div>
@@ -222,17 +222,17 @@ export default function DestinationManager() {
                         <motion.div
                             initial={{ scale: 0.9, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
-                            className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
+                            className="bg-white dark:bg-slate-900 rounded-3xl md:rounded-[2.5rem] shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
                         >
-                            <div className="px-8 py-6 border-b border-slate-100 dark:border-white/10 flex justify-between items-center bg-slate-50 dark:bg-white/5">
+                            <div className="px-5 transition-all md:px-8 py-4 md:py-6 border-b border-slate-100 dark:border-white/10 flex justify-between items-center bg-slate-50 dark:bg-white/5">
                                 <div>
-                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">{editing === 'NEW' ? 'New Destination' : 'Edit Rate Plan'}</h3>
-                                    <p className="text-xs text-slate-500">Configure override rates for this location</p>
+                                    <h3 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white">{editing === 'NEW' ? 'New Destination' : 'Edit Rate Plan'}</h3>
+                                    <p className="text-[10px] md:text-xs text-slate-500">Configure override rates for this location</p>
                                 </div>
                                 <button onClick={() => setEditing(null)} className="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-xl transition-colors"><X size={20} /></button>
                             </div>
 
-                            <form onSubmit={handleSave} className="flex-1 overflow-y-auto p-8 space-y-8">
+                            <form onSubmit={handleSave} className="flex-1 overflow-y-auto p-5 md:p-8 space-y-6 md:space-y-8">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="space-y-6">
                                         <div className="space-y-1">
@@ -283,17 +283,17 @@ export default function DestinationManager() {
                                     </div>
 
                                     <div className="md:col-span-2 p-6 bg-slate-50 dark:bg-white/5 rounded-[2.5rem] border border-slate-200 dark:border-white/5 space-y-6">
-                                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                        <div className="flex flex-col gap-4">
                                             <div>
-                                                <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                                                <h4 className="text-xs md:text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                                                     <Car size={18} className="text-blue-500" /> Vehicle Specific Wizard
                                                 </h4>
                                                 <p className="text-[10px] text-slate-500 font-medium">Select a vehicle to adjust its custom rates for this destination</p>
                                             </div>
 
-                                            <div className="flex items-center gap-2 p-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
-                                                <span className="text-[10px] font-black text-slate-400 uppercase px-2">Global Fallback</span>
-                                                <div className="relative w-28">
+                                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 p-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm self-start sm:self-auto w-full sm:w-auto">
+                                                <span className="text-[10px] font-black text-slate-400 uppercase px-2 py-1 sm:py-0 border-b sm:border-b-0 sm:border-r border-slate-100 dark:border-slate-800">Global Fallback</span>
+                                                <div className="relative flex-1 sm:w-28 pl-2">
                                                     <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-amber-600 text-[10px] font-black uppercase">LKR</span>
                                                     <input
                                                         type="number"
@@ -306,7 +306,7 @@ export default function DestinationManager() {
                                             </div>
                                         </div>
 
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap md:flex-nowrap gap-2 overflow-x-auto pb-2 scrollbar-hide">
                                             {VEHICLE_TYPES.map(v => {
                                                 const IconComponent = VEHICLE_ICONS[v]?.icon || Car;
                                                 const isActive = selectedVehicle === v;
@@ -317,19 +317,19 @@ export default function DestinationManager() {
                                                         key={v}
                                                         type="button"
                                                         onClick={() => setSelectedVehicle(v)}
-                                                        className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all relative ${isActive
+                                                        className={`flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2.5 md:py-3 rounded-2xl border transition-all shrink-0 relative ${isActive
                                                             ? 'bg-blue-600 border-blue-600 text-white shadow-xl shadow-blue-500/20'
                                                             : 'bg-white dark:bg-white/5 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-blue-500/50'}`}
                                                     >
-                                                        <IconComponent size={18} className={isActive ? 'text-white' : VEHICLE_ICONS[v]?.color} />
+                                                        <IconComponent size={16} className={isActive ? 'text-white' : VEHICLE_ICONS[v]?.color} />
                                                         <div className="text-left">
-                                                            <div className="text-[10px] font-black uppercase tracking-widest opacity-80 leading-none">{v}</div>
+                                                            <div className="text-[9px] md:text-[10px] font-black uppercase tracking-wider md:tracking-widest opacity-80 leading-none">{v}</div>
                                                             {hasOverride && (
-                                                                <div className={`text-[9px] font-bold mt-0.5 ${isActive ? 'text-blue-100' : 'text-emerald-500'}`}>Modified</div>
+                                                                <div className={`text-[8px] md:text-[9px] font-bold mt-0.5 ${isActive ? 'text-blue-100' : 'text-emerald-500'}`}>Modified</div>
                                                             )}
                                                         </div>
                                                         {isActive && (
-                                                            <motion.div layoutId="activeVehicle" className="absolute -bottom-1 left-1.2 right-1.2 h-1 bg-white rounded-full" />
+                                                            <motion.div layoutId="activeVehicle" className="absolute -bottom-1 left-2 right-2 h-0.5 md:h-1 bg-white rounded-full" />
                                                         )}
                                                     </button>
                                                 );
@@ -444,13 +444,13 @@ export default function DestinationManager() {
 
                                             <div className="space-y-3">
                                                 {(form.vehicleTiers?.[selectedVehicle] || []).map((tier, idx) => (
-                                                    <div key={idx} className="flex flex-wrap md:flex-nowrap items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                                                        <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
+                                                    <div key={idx} className="flex flex-col md:flex-row items-stretch md:items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative group">
+                                                        <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-3">
                                                             <div className="space-y-1">
                                                                 <label className="text-[8px] font-black text-slate-400 uppercase">Min KM</label>
                                                                 <input
                                                                     type="number"
-                                                                    className="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold outline-none"
+                                                                    className="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                                     value={tier.minKm}
                                                                     onChange={e => {
                                                                         const newTiers = [...form.vehicleTiers[selectedVehicle]];
@@ -463,7 +463,7 @@ export default function DestinationManager() {
                                                                 <label className="text-[8px] font-black text-slate-400 uppercase">Max KM</label>
                                                                 <input
                                                                     type="number"
-                                                                    className="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold outline-none"
+                                                                    className="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                                     value={tier.maxKm}
                                                                     onChange={e => {
                                                                         const newTiers = [...form.vehicleTiers[selectedVehicle]];
@@ -475,7 +475,7 @@ export default function DestinationManager() {
                                                             <div className="space-y-1">
                                                                 <label className="text-[8px] font-black text-slate-400 uppercase">Type</label>
                                                                 <select
-                                                                    className="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold outline-none"
+                                                                    className="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold outline-none cursor-pointer focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                                     value={tier.type}
                                                                     onChange={e => {
                                                                         const newTiers = [...form.vehicleTiers[selectedVehicle]];
@@ -491,7 +491,7 @@ export default function DestinationManager() {
                                                                 <label className="text-[8px] font-black text-slate-400 uppercase">Value (LKR)</label>
                                                                 <input
                                                                     type="number"
-                                                                    className="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold outline-none"
+                                                                    className="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                                     value={tier.value}
                                                                     onChange={e => {
                                                                         const newTiers = [...form.vehicleTiers[selectedVehicle]];
@@ -507,7 +507,7 @@ export default function DestinationManager() {
                                                                 const newTiers = form.vehicleTiers[selectedVehicle].filter((_, i) => i !== idx);
                                                                 setForm({ ...form, vehicleTiers: { ...form.vehicleTiers, [selectedVehicle]: newTiers } });
                                                             }}
-                                                            className="p-2 text-slate-400 hover:text-red-500 transition-colors"
+                                                            className="absolute top-2 right-2 md:static p-2 text-slate-400 hover:text-red-500 transition-colors"
                                                         >
                                                             <Trash2 size={16} />
                                                         </button>

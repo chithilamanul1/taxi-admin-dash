@@ -37,18 +37,21 @@ export async function POST(req) {
             guestPhone: customerPhone,
             pickupLocation: { address: pickupAddress || 'Manual Payment' },
             dropoffLocation: { address: dropoffAddress || 'Manual Payment' },
-            totalPrice: Number(amount),
-            paidAmount: paymentType === 'partial' ? Number(amount) * 0.5 : Number(amount),
-            balanceAmount: paymentType === 'partial' ? Number(amount) * 0.5 : 0,
+            totalPrice: currency === 'LKR' ? Number(amount) : Number(amount) * 330, // Base LKR for internal consistency
+            paidAmount: currency === 'LKR'
+                ? (paymentType === 'partial' ? Number(amount) * 0.5 : Number(amount))
+                : (paymentType === 'partial' ? Number(amount) * 0.5 * 330 : Number(amount) * 330),
             currency,
+            displayPrice: Number(amount), // The actual amount entered by admin
+            displayPaidAmount: paymentType === 'partial' ? Number(amount) * 0.5 : Number(amount),
             paymentType,
             status: 'pending',
             paymentStatus: 'pending',
-            paymentMethod: 'card', // For online links
+            paymentMethod: 'card',
             scheduledDate,
             scheduledTime,
             notes: notes || 'Manual Payment Link Generated',
-            isManual: true, // Tagging it as manual
+            isManual: true,
             type: 'transfer'
         };
 
