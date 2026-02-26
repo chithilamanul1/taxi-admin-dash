@@ -118,6 +118,7 @@ export default function DestinationManager() {
                                     title: '',
                                     name: '',
                                     pricing: {},
+                                    vehicleRateOverrides: {},
                                     perKmRateOverride: 0,
                                     sortOrder: destinations.length + 1
                                 });
@@ -234,6 +235,30 @@ export default function DestinationManager() {
                                             <div className="space-y-1">
                                                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Est. Time</label>
                                                 <input type="text" className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm outline-none" value={form.time} onChange={e => setForm({ ...form, time: e.target.value })} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="md:col-span-2 space-y-6">
+                                        <div className="bg-emerald-50 dark:bg-emerald-500/5 p-6 rounded-[2rem] border border-emerald-500/10">
+                                            <h4 className="text-xs font-black text-emerald-600 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                                <DollarSign size={16} /> Fixed Rates (USD)
+                                            </h4>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                                {VEHICLE_TYPES.map(v => (
+                                                    <div key={v} className="bg-white dark:bg-slate-900/50 p-4 rounded-2xl border border-emerald-500/10 space-y-2">
+                                                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none block">{v}</label>
+                                                        <div className="relative">
+                                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-600 text-[10px] font-bold">$</span>
+                                                            <input
+                                                                type="number"
+                                                                className="w-full pl-8 pr-4 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                                                value={form.pricing?.[v] || ''}
+                                                                onChange={e => updatePricing(v, e.target.value)}
+                                                                placeholder="Price..."
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                ))}
                                             </div>
                                         </div>
                                     </div>
