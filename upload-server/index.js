@@ -6,7 +6,7 @@ const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-const AUTH_TOKEN = process.env.UPLOAD_AUTH_TOKEN || 'your-secret-token-here';
+const AUTH_TOKEN = process.env.UPLOAD_AUTH_TOKEN || 'chithila123@';
 
 // Ensure uploads directory exists
 const uploadDir = path.join(__dirname, 'uploads');
