@@ -1501,16 +1501,15 @@ export default function AdminDashboard() {
                                             className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
                                         >
                                             <option value="All">All Categories</option>
-                                            <option value="Day Tours">Day Tours</option>
-                                            <option value="City Tours">City Tours</option>
+                                            <option value="Day Trips">Day Trips</option>
                                             <option value="Safari">Safari</option>
-                                            <option value="Tour Packages">Tour Packages</option>
+                                            <option value="Multi-Day Packages">Multi-Day Packages</option>
                                         </select>
                                         <button
                                             onClick={() => {
                                                 setTourForm({
                                                     title: '',
-                                                    category: 'Day Tours',
+                                                    category: 'Day Trips',
                                                     price: '',
                                                     priceType: 'per person',
                                                     duration: '',
@@ -1607,10 +1606,10 @@ export default function AdminDashboard() {
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                                                         <select
                                                             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none bg-white"
-                                                            value={tourForm.category || 'Day Tours'}
+                                                            value={tourForm.category || 'Day Trips'}
                                                             onChange={e => setTourForm({ ...tourForm, category: e.target.value })}
                                                         >
-                                                            {['Day Tours', 'City Tours', 'Safari', 'Tour Packages'].map(c => <option key={c} value={c}>{c}</option>)}
+                                                            {['Day Trips', 'Safari', 'Multi-Day Packages'].map(c => <option key={c} value={c}>{c}</option>)}
                                                         </select>
                                                     </div>
                                                     <div>
