@@ -3,6 +3,16 @@ import dbConnect from '@/lib/db';
 import Destination from '@/models/Destination';
 import { isAdmin } from '@/lib/admin-check';
 
+// Robust inlined slugify to avoid import crashes in certain environments
+function slugify(text) {
+    if (!text) return '';
+    return text.toString().toLowerCase().trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]+/g, '')
+        .replace(/--+/g, '-')
+        .slice(0, 100);
+}
+
 export async function GET(req) {
     try {
         await dbConnect();
@@ -28,10 +38,24 @@ export async function POST(req) {
 
         await dbConnect();
         const body = await req.json();
-        const dest = await Destination.create(body);
+
+        // Destructure to ensure we only save what we want and ignore weird frontend state
+        const { _id, ...safeBody } = body;
+
+        if (!safeBody.name && !safeBody.title) {
+            return NextResponse.json({ success: false, error: 'Name and Title are required' }, { status: 400 });
+        }
+
+        // Manual slug generation
+        if (safeBody.name) {
+            safeBody.slug = slugify(safeBody.name);
+        }
+
+        const dest = await Destination.create(safeBody);
         return NextResponse.json({ success: true, data: dest });
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        console.error('[API/Destinations] POST Error:', error);
+        return NextResponse.json({ success: false, error: `Server Error: ${error.message}` }, { status: 500 });
     }
 }
 
@@ -43,10 +67,19 @@ export async function PUT(req) {
         await dbConnect();
         const body = await req.json();
         const { _id, ...updateData } = body;
+
+        if (!_id) return NextResponse.json({ success: false, error: 'Module ID missing' }, { status: 400 });
+
+        // Manual slug update if name changed
+        if (updateData.name) {
+            updateData.slug = slugify(updateData.name);
+        }
+
         const dest = await Destination.findByIdAndUpdate(_id, updateData, { new: true });
         return NextResponse.json({ success: true, data: dest });
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        console.error('[API/Destinations] PUT Error:', error);
+        return NextResponse.json({ success: false, error: `Server Error: ${error.message}` }, { status: 500 });
     }
 }
 
