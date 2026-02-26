@@ -1,14 +1,17 @@
-// Premium Email Notification Service
-// Handles all customer and admin email notifications with stunning designs
+import nodemailer from 'nodemailer';
 
-import { Resend } from 'resend';
-
-const getResend = () => {
-    if (!process.env.RESEND_API_KEY) {
-        console.warn('[Email] RESEND_API_KEY is missing');
+const getTransporter = () => {
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+        console.warn('[Email] GMAIL_USER or GMAIL_APP_PASSWORD is missing');
         return null;
     }
-    return new Resend(process.env.RESEND_API_KEY);
+    return nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_APP_PASSWORD
+        }
+    });
 };
 
 const OWNER_EMAIL = process.env.OWNER_EMAIL || 'airporttaxis.lk@gmail.com';
@@ -379,9 +382,9 @@ export async function sendBookingConfirmation(booking) {
     // Send to customer
     if (booking.customerEmail) {
         try {
-            const resend = getResend();
-            if (resend) {
-                await resend.emails.send({
+            const transporter = getTransporter();
+            if (transporter) {
+                await transporter.sendMail({
                     from: FROM_EMAIL,
                     to: booking.customerEmail,
                     subject: `✅ Booking Confirmed #${bookingId} - Airport Taxis`,
@@ -389,7 +392,7 @@ export async function sendBookingConfirmation(booking) {
                 });
                 console.log('[Email] Booking confirmation sent to customer:', booking.customerEmail);
             } else {
-                console.error('[Email] Skipping customer email: RESEND_API_KEY is missing');
+                console.error('[Email] Skipping customer email: Gmail credentials missing');
             }
         } catch (error) {
             console.error('[Email] Failed to send customer booking confirmation:', {
@@ -581,9 +584,9 @@ export async function sendBookingConfirmation(booking) {
     `;
 
     try {
-        const resend = getResend();
-        if (resend) {
-            await resend.emails.send({
+        const transporter = getTransporter();
+        if (transporter) {
+            await transporter.sendMail({
                 from: FROM_EMAIL,
                 to: OWNER_EMAIL,
                 subject: `🆕 BOOKING #${bookingId} | ${booking.customerName || 'Guest'} | ${booking.scheduledDate || 'Today'}`,
@@ -591,7 +594,7 @@ export async function sendBookingConfirmation(booking) {
             });
             console.log('[Email] Print-friendly booking notification sent to owner');
         } else {
-            console.error('[Email] Skipping owner email: RESEND_API_KEY is missing');
+            console.error('[Email] Skipping owner email: Gmail credentials missing');
         }
     } catch (error) {
         console.error('[Email] Failed to send owner booking notification:', {
