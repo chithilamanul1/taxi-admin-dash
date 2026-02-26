@@ -338,7 +338,10 @@ export default function DestinationManager() {
                                             <div className="space-y-4">
                                                 <div className="flex items-center gap-3">
                                                     <div className={`p-3 rounded-xl ${VEHICLE_ICONS[selectedVehicle]?.bg}`}>
-                                                        {React.createElement(VEHICLE_ICONS[selectedVehicle]?.icon || Car, { size: 20, className: VEHICLE_ICONS[selectedVehicle]?.color })}
+                                                        {(() => {
+                                                            const Icon = VEHICLE_ICONS[selectedVehicle]?.icon || Car;
+                                                            return <Icon size={20} className={VEHICLE_ICONS[selectedVehicle]?.color} />;
+                                                        })()}
                                                     </div>
                                                     <div>
                                                         <h5 className="text-base font-bold text-slate-900 dark:text-white">{selectedVehicle} Config</h5>
