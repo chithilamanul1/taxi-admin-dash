@@ -482,9 +482,13 @@ export default function AdminDashboard() {
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Live Chat</span>
                         <span className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
                     </button>
-                    <button onClick={() => { setCurrentView('tours'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('Multi-Day Packages'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' && tourCategoryFilter === 'Multi-Day Packages' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Compass size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Tour Packages</span>
+                    </button>
+                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('Day Trips'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' && tourCategoryFilter === 'Day Trips' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <Map size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Day Trips</span>
                     </button>
                     <button onClick={() => {
                         setCurrentView('bookings');
@@ -1772,7 +1776,8 @@ export default function AdminDashboard() {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            )}
+                        </div>
                     )}
 
                     {currentView === 'blog' && (
