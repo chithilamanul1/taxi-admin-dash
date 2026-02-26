@@ -388,9 +388,15 @@ export async function sendBookingConfirmation(booking) {
                     html: getPremiumTemplate(customerContent, 'Booking Confirmation')
                 });
                 console.log('[Email] Booking confirmation sent to customer:', booking.customerEmail);
+            } else {
+                console.error('[Email] Skipping customer email: RESEND_API_KEY is missing');
             }
         } catch (error) {
-            console.error('[Email] Failed to send customer booking confirmation:', error);
+            console.error('[Email] Failed to send customer booking confirmation:', {
+                error: error.message,
+                bookingId: booking._id,
+                email: booking.customerEmail
+            });
         }
     }
 
@@ -584,9 +590,15 @@ export async function sendBookingConfirmation(booking) {
                 html: getPrintFriendlyTemplate(ownerContent, `Booking #${bookingId}`)
             });
             console.log('[Email] Print-friendly booking notification sent to owner');
+        } else {
+            console.error('[Email] Skipping owner email: RESEND_API_KEY is missing');
         }
     } catch (error) {
-        console.error('[Email] Failed to send owner booking notification:', error);
+        console.error('[Email] Failed to send owner booking notification:', {
+            error: error.message,
+            bookingId: booking._id,
+            ownerEmail: OWNER_EMAIL
+        });
     }
 }
 

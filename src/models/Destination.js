@@ -16,6 +16,17 @@ const destinationSchema = new mongoose.Schema({
     pricing: { type: Map, of: Number }, // Map of vehicleType/Label to Price
     perKmRateOverride: { type: Number }, // Manual override for Per KM Rate for this destination
     vehicleRateOverrides: { type: Map, of: Number }, // Map of vehicleType to Per KM Rate
+    // Tiered Rates (e.g. 0-20km flat rate, 20-50km per-km rate)
+    // Map of vehicleType -> Array of tiers
+    vehicleTiers: {
+        type: Map,
+        of: [{
+            minKm: { type: Number },
+            maxKm: { type: Number },
+            type: { type: String, enum: ['flat', 'per-km'], default: 'per-km' },
+            value: { type: Number }
+        }]
+    },
     isActive: { type: Boolean, default: true },
     sortOrder: { type: Number, default: 99 }
 }, {

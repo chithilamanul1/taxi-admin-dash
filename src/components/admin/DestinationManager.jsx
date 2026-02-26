@@ -80,7 +80,8 @@ export default function DestinationManager() {
         setEditing(dest.id);
         const pricingMap = dest.pricing instanceof Map ? Object.fromEntries(dest.pricing) : (dest.pricing || {});
         const vehicleRatesMap = dest.vehicleRateOverrides instanceof Map ? Object.fromEntries(dest.vehicleRateOverrides) : (dest.vehicleRateOverrides || {});
-        setForm({ ...dest, pricing: pricingMap, vehicleRateOverrides: vehicleRatesMap });
+        const vehicleTiersMap = dest.vehicleTiers instanceof Map ? Object.fromEntries(dest.vehicleTiers) : (dest.vehicleTiers || {});
+        setForm({ ...dest, pricing: pricingMap, vehicleRateOverrides: vehicleRatesMap, vehicleTiers: vehicleTiersMap });
     };
 
     const updatePricing = (vehicle, value) => {
@@ -131,6 +132,7 @@ export default function DestinationManager() {
                                     name: '',
                                     pricing: {},
                                     vehicleRateOverrides: {},
+                                    vehicleTiers: {},
                                     perKmRateOverride: 0,
                                     sortOrder: destinations.length + 1
                                 });
@@ -411,6 +413,111 @@ export default function DestinationManager() {
                                                         </span>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="md:col-span-2 space-y-4">
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                                                        <Zap size={18} className="text-amber-500" /> Tiered Pricing ({selectedVehicle})
+                                                    </h4>
+                                                    <p className="text-[10px] text-slate-500 font-medium">Add distance ranges for specialized pricing (e.g. 0-20km flat rate)</p>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const currentTiers = form.vehicleTiers?.[selectedVehicle] || [];
+                                                        setForm({
+                                                            ...form,
+                                                            vehicleTiers: {
+                                                                ...(form.vehicleTiers || {}),
+                                                                [selectedVehicle]: [...currentTiers, { minKm: 0, maxKm: 20, type: 'flat', value: 0 }]
+                                                            }
+                                                        });
+                                                    }}
+                                                    className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold flex items-center gap-2"
+                                                >
+                                                    <Plus size={14} /> Add Tier
+                                                </button>
+                                            </div>
+
+                                            <div className="space-y-3">
+                                                {(form.vehicleTiers?.[selectedVehicle] || []).map((tier, idx) => (
+                                                    <div key={idx} className="flex flex-wrap md:flex-nowrap items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                                                        <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
+                                                            <div className="space-y-1">
+                                                                <label className="text-[8px] font-black text-slate-400 uppercase">Min KM</label>
+                                                                <input
+                                                                    type="number"
+                                                                    className="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold outline-none"
+                                                                    value={tier.minKm}
+                                                                    onChange={e => {
+                                                                        const newTiers = [...form.vehicleTiers[selectedVehicle]];
+                                                                        newTiers[idx].minKm = Number(e.target.value);
+                                                                        setForm({ ...form, vehicleTiers: { ...form.vehicleTiers, [selectedVehicle]: newTiers } });
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <label className="text-[8px] font-black text-slate-400 uppercase">Max KM</label>
+                                                                <input
+                                                                    type="number"
+                                                                    className="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold outline-none"
+                                                                    value={tier.maxKm}
+                                                                    onChange={e => {
+                                                                        const newTiers = [...form.vehicleTiers[selectedVehicle]];
+                                                                        newTiers[idx].maxKm = Number(e.target.value);
+                                                                        setForm({ ...form, vehicleTiers: { ...form.vehicleTiers, [selectedVehicle]: newTiers } });
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <label className="text-[8px] font-black text-slate-400 uppercase">Type</label>
+                                                                <select
+                                                                    className="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold outline-none"
+                                                                    value={tier.type}
+                                                                    onChange={e => {
+                                                                        const newTiers = [...form.vehicleTiers[selectedVehicle]];
+                                                                        newTiers[idx].type = e.target.value;
+                                                                        setForm({ ...form, vehicleTiers: { ...form.vehicleTiers, [selectedVehicle]: newTiers } });
+                                                                    }}
+                                                                >
+                                                                    <option value="flat">Flat Price</option>
+                                                                    <option value="per-km">Per KM</option>
+                                                                </select>
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <label className="text-[8px] font-black text-slate-400 uppercase">Value (LKR)</label>
+                                                                <input
+                                                                    type="number"
+                                                                    className="w-full px-3 py-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold outline-none"
+                                                                    value={tier.value}
+                                                                    onChange={e => {
+                                                                        const newTiers = [...form.vehicleTiers[selectedVehicle]];
+                                                                        newTiers[idx].value = Number(e.target.value);
+                                                                        setForm({ ...form, vehicleTiers: { ...form.vehicleTiers, [selectedVehicle]: newTiers } });
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                const newTiers = form.vehicleTiers[selectedVehicle].filter((_, i) => i !== idx);
+                                                                setForm({ ...form, vehicleTiers: { ...form.vehicleTiers, [selectedVehicle]: newTiers } });
+                                                            }}
+                                                            className="p-2 text-slate-400 hover:text-red-500 transition-colors"
+                                                        >
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                                {(form.vehicleTiers?.[selectedVehicle] || []).length === 0 && (
+                                                    <div className="text-center py-6 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-2xl">
+                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">No tiers defined for {selectedVehicle}</p>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>

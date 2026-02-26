@@ -1003,9 +1003,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             defaultCountry="lk"
                                                             value={formData[f.key] || ''}
                                                             onChange={(phone) => setFormData({ ...formData, [f.key]: phone })}
-                                                            inputClassName="!w-full !h-14 !bg-transparent !border-none !px-4 !outline-none focus:!ring-0 !font-bold !text-slate-900 placeholder:!text-gray-400"
-                                                            countrySelectorStyleProps={{ buttonClassName: '!h-14 !bg-transparent !border-none !pl-4' }}
-                                                            className="w-full bg-white border-2 border-slate-900 rounded-2xl flex focus-within:ring-4 focus-within:ring-emerald-500/10 focus-within:bg-emerald-50 transition-all overflow-hidden"
+                                                            inputClassName="!w-full !h-14 !bg-transparent !border-none !px-4 !outline-none focus:!ring-0 !font-bold !text-slate-900 placeholder:!text-gray-400 !text-base"
+                                                            countrySelectorStyleProps={{
+                                                                buttonClassName: '!h-14 !bg-slate-50 !border-r !border-slate-200 !px-4 !flex !items-center !justify-center !min-w-[70px]',
+                                                                flagClassName: '!w-8 !h-auto !shadow-sm'
+                                                            }}
+                                                            className="w-full bg-white border-2 border-slate-900 rounded-2xl flex focus-within:ring-4 focus-within:ring-emerald-500/10 focus-within:bg-emerald-50 transition-all overflow-hidden shadow-sm hover:border-emerald-500"
                                                         />
                                                     ) : (
                                                         <input

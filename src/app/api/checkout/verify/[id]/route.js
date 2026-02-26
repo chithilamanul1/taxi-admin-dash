@@ -17,7 +17,12 @@ export async function GET(req, { params }) {
 
             if (!link) {
                 const booking = await Booking.findById(id);
-                if (booking && booking.isManual && booking.paymentStatus === 'pending') {
+                // Allow verification if it's tagged manual OR if it has the 'Manual Payment' placeholder addresses
+                const isLikelyManual = booking?.isManual ||
+                    booking?.pickupLocation?.address === 'Manual Payment' ||
+                    booking?.dropoffLocation?.address === 'Manual Payment';
+
+                if (booking && isLikelyManual && booking.paymentStatus === 'pending') {
                     link = {
                         _id: booking._id,
                         title: `Invoice Ref: ${booking._id.toString().slice(-6).toUpperCase()}`,
@@ -28,7 +33,8 @@ export async function GET(req, { params }) {
                         isBookingInvoice: true,
                         customerName: booking.customerName,
                         customerEmail: booking.customerEmail,
-                        customerPhone: booking.guestPhone
+                        customerPhone: booking.guestPhone,
+                        notes: booking.notes
                     };
                 }
             }

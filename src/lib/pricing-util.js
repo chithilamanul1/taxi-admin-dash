@@ -57,24 +57,47 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const vehicleType = vehicleData.vehicleType;
 
     if (matchedOverride) {
-        // 1. Vehicle-Specific Override (Priority)
-        const vOverrides = matchedOverride.vehicleRateOverrides instanceof Map ?
-            Object.fromEntries(matchedOverride.vehicleRateOverrides) :
-            (matchedOverride.vehicleRateOverrides || {});
+        // 1. Vehicle-Specific Tiers (Highest Priority)
+        const vTiersMap = matchedOverride.vehicleTiers instanceof Map ?
+            Object.fromEntries(matchedOverride.vehicleTiers) :
+            (matchedOverride.vehicleTiers || {});
 
-        const vehicleSpecificRate = vOverrides[vehicleType];
+        const vTiers = vTiersMap[vehicleType];
 
-        if (vehicleSpecificRate > 0) {
-            console.log(`[Pricing] Applied VEHICLE-SPECIFIC rate override for ${matchedOverride.name} (${vehicleType}): LKR ${vehicleSpecificRate}/km`);
-            distancePrice = (distKm * vehicleSpecificRate);
-            overrideApplied = true;
+        if (Array.isArray(vTiers) && vTiers.length > 0) {
+            const matchingTier = vTiers.find(t => distKm >= (t.minKm || 0) && distKm <= (t.maxKm || Infinity));
+            if (matchingTier) {
+                if (matchingTier.type === 'flat') {
+                    console.log(`[Pricing] Applied TIERED FLAT rate for ${matchedOverride.name} (${vehicleType}): LKR ${matchingTier.value}`);
+                    distancePrice = matchingTier.value;
+                } else {
+                    console.log(`[Pricing] Applied TIERED PER-KM rate for ${matchedOverride.name} (${vehicleType}): LKR ${matchingTier.value}/km`);
+                    distancePrice = (distKm * matchingTier.value);
+                }
+                overrideApplied = true;
+            }
         }
-        // 2. Global Per-KM Override (Fallback)
-        else if (matchedOverride.perKmRateOverride > 0) {
-            const perKmRate = matchedOverride.perKmRateOverride;
-            console.log(`[Pricing] Applied GLOBAL destination rate override for ${matchedOverride.name}: LKR ${perKmRate}/km`);
-            distancePrice = (distKm * perKmRate);
-            overrideApplied = true;
+
+        // 2. Vehicle-Specific Per-KM Override (Legacy/Fallback)
+        if (!overrideApplied) {
+            const vOverrides = matchedOverride.vehicleRateOverrides instanceof Map ?
+                Object.fromEntries(matchedOverride.vehicleRateOverrides) :
+                (matchedOverride.vehicleRateOverrides || {});
+
+            const vehicleSpecificRate = vOverrides[vehicleType];
+
+            if (vehicleSpecificRate > 0) {
+                console.log(`[Pricing] Applied VEHICLE-SPECIFIC rate override for ${matchedOverride.name} (${vehicleType}): LKR ${vehicleSpecificRate}/km`);
+                distancePrice = (distKm * vehicleSpecificRate);
+                overrideApplied = true;
+            }
+            // 3. Global Per-KM Override (Fallback)
+            else if (matchedOverride.perKmRateOverride > 0) {
+                const perKmRate = matchedOverride.perKmRateOverride;
+                console.log(`[Pricing] Applied GLOBAL destination rate override for ${matchedOverride.name}: LKR ${perKmRate}/km`);
+                distancePrice = (distKm * perKmRate);
+                overrideApplied = true;
+            }
         }
     }
 

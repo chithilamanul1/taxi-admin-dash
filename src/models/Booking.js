@@ -74,6 +74,8 @@ const bookingSchema = new mongoose.Schema({
         city: String,
         country: String
     },
+    isManual: { type: Boolean, default: false }, // For manually generated invoices
+    notes: { type: String }
 }, {
     timestamps: true
 });
