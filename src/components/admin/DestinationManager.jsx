@@ -160,17 +160,32 @@ export default function DestinationManager() {
                                     <div className="space-y-2 border-t border-slate-200 dark:border-white/5 pt-3">
                                         <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
                                             <span>Vehicle Type</span>
-                                            <span>Fixed Rate (USD)</span>
-                                        </div>
-                                        {VEHICLE_TYPES.slice(0, 4).map(v => (
-                                            <div key={v} className="flex justify-between items-center">
-                                                <span className="text-xs text-slate-700 dark:text-slate-300 font-medium">{v}</span>
-                                                <span className="text-xs font-black text-emerald-600">${dest.pricing?.[v] || (dest.pricing?.get?.(v)) || '—'}</span>
+                                            <div className="flex gap-4">
+                                                <span>USD ($)</span>
+                                                <span>LKR/km</span>
                                             </div>
-                                        ))}
-                                        {dest.perKmRateOverride > 0 && (
+                                        </div>
+                                        {VEHICLE_TYPES.slice(0, 5).map(v => {
+                                            const vOverrides = dest.vehicleRateOverrides instanceof Map ?
+                                                Object.fromEntries(dest.vehicleRateOverrides) :
+                                                (dest.vehicleRateOverrides || {});
+                                            const vRate = vOverrides[v];
+
+                                            return (
+                                                <div key={v} className="flex justify-between items-center">
+                                                    <span className="text-xs text-slate-700 dark:text-slate-300 font-medium">{v}</span>
+                                                    <div className="flex gap-4 items-center">
+                                                        <span className="text-xs font-black text-emerald-600">${dest.pricing?.[v] || (dest.pricing?.get?.(v)) || '—'}</span>
+                                                        <span className={`text-[10px] font-bold min-w-[40px] text-right ${vRate ? 'text-amber-600' : 'text-slate-300 dark:text-slate-700'}`}>
+                                                            {vRate ? `${vRate}` : (dest.perKmRateOverride > 0 ? `${dest.perKmRateOverride}` : '—')}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                        {dest.perKmRateOverride > 0 && !dest.vehicleRateOverrides?.size && (
                                             <div className="flex justify-between items-center pt-2 border-t border-slate-200 dark:border-white/5">
-                                                <span className="text-[10px] font-bold text-amber-600 uppercase">Rate Override</span>
+                                                <span className="text-[10px] font-bold text-amber-600 uppercase">Global Override</span>
                                                 <span className="text-xs font-black text-amber-600">LKR {dest.perKmRateOverride}/km</span>
                                             </div>
                                         )}
