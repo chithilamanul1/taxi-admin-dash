@@ -15,6 +15,7 @@ export default function ToursAdmin() {
         slug: '',
         category: 'day-trip',
         price: '',
+        currency: 'USD',
         priceType: 'from',
         durationDays: 1,
         durationNights: 0,
@@ -24,7 +25,8 @@ export default function ToursAdmin() {
         inclusions: '',
         exclusions: '',
         itinerary: [],
-        isActive: true
+        isActive: true,
+        isFeatured: false
     });
 
     const uploadFile = async (file) => {
@@ -68,6 +70,7 @@ export default function ToursAdmin() {
             slug: tour.slug || '',
             category: tour.category || 'day-trip',
             price: tour.price?.amount || tour.price || '',
+            currency: tour.price?.currency || 'USD',
             priceType: tour.price?.type || 'from',
             durationDays: tour.duration?.days || 1,
             durationNights: tour.duration?.nights || 0,
@@ -77,7 +80,8 @@ export default function ToursAdmin() {
             inclusions: tour.inclusions?.join(', ') || '',
             exclusions: tour.exclusions?.join(', ') || '',
             itinerary: tour.itinerary || [],
-            isActive: tour.isActive
+            isActive: tour.isActive,
+            isFeatured: tour.isFeatured || false
         });
         setShowModal(true);
     };
@@ -131,7 +135,7 @@ export default function ToursAdmin() {
                 images: [imageUrl],
                 price: {
                     amount: Number(formData.price),
-                    currency: 'USD',
+                    currency: formData.currency || 'USD',
                     type: formData.priceType
                 },
                 duration: {
@@ -140,7 +144,8 @@ export default function ToursAdmin() {
                 },
                 highlights: formData.highlights.split(',').map(s => s.trim()).filter(Boolean),
                 inclusions: formData.inclusions.split(',').map(s => s.trim()).filter(Boolean),
-                exclusions: formData.exclusions.split(',').map(s => s.trim()).filter(Boolean)
+                exclusions: formData.exclusions.split(',').map(s => s.trim()).filter(Boolean),
+                isFeatured: formData.isFeatured
             };
 
             const method = editingTour ? 'PUT' : 'POST';
@@ -218,9 +223,14 @@ export default function ToursAdmin() {
 
                                 <h3 className="font-bold text-slate-900 dark:text-white mb-1 line-clamp-1">{tour.title}</h3>
                                 <div className="flex items-center justify-between text-sm">
-                                    <span className="text-emerald-600 font-bold">${tour.price}</span>
+                                    <span className="text-emerald-600 font-bold">
+                                        {tour.price?.currency || 'USD'} {tour.price?.amount || tour.price || 0}
+                                    </span>
                                     <span className="text-slate-400">{tour.duration && typeof tour.duration === 'object' ? `${tour.duration.days}D / ${tour.duration.nights}N` : `${tour.duration || 0} Day(s)`}</span>
                                 </div>
+                                {tour.isFeatured && (
+                                    <span className="absolute bottom-4 right-4 bg-yellow-400 text-[10px] px-2 py-0.5 rounded-full font-bold">Featured</span>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -261,21 +271,29 @@ export default function ToursAdmin() {
                                         </select>
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="font-bold text-slate-600 dark:text-slate-400">Is Active?</label>
+                                        <label className="font-bold text-slate-600 dark:text-slate-400">Featured?</label>
                                         <select className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
-                                            value={formData.isActive} onChange={e => setFormData({ ...formData, isActive: e.target.value === 'true' })}>
-                                            <option value="true">Yes (Visible)</option>
-                                            <option value="false">No (Hidden)</option>
+                                            value={formData.isFeatured} onChange={e => setFormData({ ...formData, isFeatured: e.target.value === 'true' })}>
+                                            <option value="false">No</option>
+                                            <option value="true">Yes (Top of list)</option>
                                         </select>
                                     </div>
                                 </div>
 
 
-                                <div className="grid grid-cols-3 gap-4">
+                                <div className="grid grid-cols-4 gap-4">
                                     <div className="space-y-1">
-                                        <label className="font-bold text-slate-600 dark:text-slate-400">Price (USD)</label>
+                                        <label className="font-bold text-slate-600 dark:text-slate-400">Price</label>
                                         <input type="number" required className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
                                             value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="font-bold text-slate-600 dark:text-slate-400">Currency</label>
+                                        <select className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                            value={formData.currency} onChange={e => setFormData({ ...formData, currency: e.target.value })}>
+                                            <option value="USD">USD</option>
+                                            <option value="LKR">LKR</option>
+                                        </select>
                                     </div>
                                     <div className="space-y-1">
                                         <label className="font-bold text-slate-600 dark:text-slate-400">Days</label>

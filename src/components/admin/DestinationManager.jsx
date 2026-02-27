@@ -6,7 +6,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import LocationInput from '@/components/LocationInput';
 
 const VEHICLE_TYPES = [
-    "Mini Car", "Sedan", "Mini Van", "KDH Van", "SUV", "Bus", "Tuk Tuk"
+    { slug: "mini-car", label: "Mini Car" },
+    { slug: "sedan", label: "Sedan" },
+    { slug: "mini-van-every", label: "Mini Van (Every)" },
+    { slug: "mini-van-05", label: "Mini Van (KDH)" },
+    { slug: "suv", label: "SUV" },
+    { slug: "mini-bus", label: "Mini Bus" },
+    { slug: "bus", label: "Bus" }
 ];
 
 export default function DestinationManager() {
@@ -15,16 +21,17 @@ export default function DestinationManager() {
     const [editing, setEditing] = useState(null);
     const [search, setSearch] = useState('');
     const [form, setForm] = useState({});
-    const [selectedVehicle, setSelectedVehicle] = useState(VEHICLE_TYPES[0]);
+    const [selectedVehicle, setSelectedVehicle] = useState(VEHICLE_TYPES[0].slug);
 
     const VEHICLE_ICONS = {
-        "Mini Car": { icon: Zap, color: "text-amber-500", bg: "bg-amber-500/10" },
-        "Sedan": { icon: Car, color: "text-blue-500", bg: "bg-blue-500/10" },
-        "Mini Van": { icon: Shield, color: "text-emerald-500", bg: "bg-emerald-500/10" },
-        "KDH Van": { icon: ChevronRight, color: "text-purple-500", bg: "bg-purple-500/10" },
-        "SUV": { icon: Mountain, color: "text-red-500", bg: "bg-red-500/10" },
-        "Bus": { icon: HelpCircle, color: "text-slate-500", bg: "bg-slate-500/10" },
-        "Tuk Tuk": { icon: Zap, color: "text-orange-500", bg: "bg-orange-500/10" }
+        "mini-car": { icon: Zap, color: "text-amber-500", bg: "bg-amber-500/10" },
+        "sedan": { icon: Car, color: "text-blue-500", bg: "bg-blue-500/10" },
+        "mini-van-every": { icon: Shield, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+        "mini-van-05": { icon: ChevronRight, color: "text-purple-500", bg: "bg-purple-500/10" },
+        "suv": { icon: Mountain, color: "text-red-500", bg: "bg-red-500/10" },
+        "mini-bus": { icon: HelpCircle, color: "text-slate-500", bg: "bg-slate-500/10" },
+        "bus": { icon: HelpCircle, color: "text-slate-500", bg: "bg-slate-500/10" },
+        "tuk-tuk": { icon: Zap, color: "text-orange-500", bg: "bg-orange-500/10" }
     };
 
     useEffect(() => {
@@ -150,32 +157,18 @@ export default function DestinationManager() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filtered.map((dest) => (
                             <div key={dest.id} className="group relative bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden hover:shadow-xl transition-all">
-                                <div className="h-32 bg-slate-200 dark:bg-slate-800 relative">
-                                    {dest.img ? (
-                                        <img src={dest.img} alt={dest.title} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-slate-400"><ImageIcon size={32} /></div>
-                                    )}
+                                <div className="h-12 bg-slate-200 dark:bg-slate-800 relative flex items-center px-4">
+                                    <h3 className="font-bold text-slate-900 dark:text-white line-clamp-1">{dest.title}</h3>
                                     <div className="absolute top-2 right-2 flex gap-1">
                                         <button onClick={() => startEdit(dest)} className="p-2 bg-white/90 dark:bg-slate-900/90 rounded-lg text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors shadow-sm"><Edit2 size={14} /></button>
                                         <button onClick={() => handleDelete(dest._id)} className="p-2 bg-white/90 dark:bg-slate-900/90 rounded-lg text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors shadow-sm"><Trash2 size={14} /></button>
                                     </div>
-                                    <div className="absolute bottom-2 left-2 px-3 py-1 bg-black/40 backdrop-blur rounded-lg text-white text-[10px] font-bold uppercase tracking-widest">
-                                        {dest.time || 'N/A'} • {dest.distance || 'N/A'}
-                                    </div>
                                 </div>
-                                <div className="p-4">
-                                    <div className="flex items-start justify-between mb-2">
-                                        <h3 className="font-bold text-slate-900 dark:text-white line-clamp-1">{dest.title}</h3>
-                                        <span className="text-[10px] font-bold px-2 py-0.5 bg-blue-500/10 text-blue-500 rounded-full">{dest.badge || 'Standard'}</span>
-                                    </div>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-4 leading-relaxed">{dest.description || 'No description provided.'}</p>
 
                                     <div className="space-y-2 border-t border-slate-200 dark:border-white/5 pt-3">
                                         <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
                                             <span>Vehicle Type</span>
                                             <div className="flex gap-4">
-                                                <span>USD ($)</span>
                                                 <span>LKR/km</span>
                                             </div>
                                         </div>
@@ -183,13 +176,12 @@ export default function DestinationManager() {
                                             const vOverrides = dest.vehicleRateOverrides instanceof Map ?
                                                 Object.fromEntries(dest.vehicleRateOverrides) :
                                                 (dest.vehicleRateOverrides || {});
-                                            const vRate = vOverrides[v];
+                                            const vRate = vOverrides[v.slug];
 
                                             return (
-                                                <div key={v} className="flex justify-between items-center">
-                                                    <span className="text-xs text-slate-700 dark:text-slate-300 font-medium">{v}</span>
+                                                <div key={v.slug} className="flex justify-between items-center">
+                                                    <span className="text-xs text-slate-700 dark:text-slate-300 font-medium">{v.label}</span>
                                                     <div className="flex gap-4 items-center">
-                                                        <span className="text-xs font-black text-emerald-600">${dest.pricing?.[v] || (dest.pricing?.get?.(v)) || '—'}</span>
                                                         <span className={`text-[10px] font-bold min-w-[40px] text-right ${vRate ? 'text-amber-600' : 'text-slate-300 dark:text-slate-700'}`}>
                                                             {vRate ? `${vRate}` : (dest.perKmRateOverride > 0 ? `${dest.perKmRateOverride}` : '—')}
                                                         </span>
@@ -250,37 +242,7 @@ export default function DestinationManager() {
                                             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Full Display Title</label>
                                             <input required type="text" className="w-full px-4 py-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-base font-bold outline-none ring-offset-0 focus:ring-4 focus:ring-blue-500/10 transition-all" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="e.g. Airport to Galle Port" />
                                         </div>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="space-y-1">
-                                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Badge (Optional)</label>
-                                                <input type="text" className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm outline-none" value={form.badge} onChange={e => setForm({ ...form, badge: e.target.value })} placeholder="Top Rated" />
-                                            </div>
-                                            <div className="space-y-1">
-                                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Sort Order</label>
-                                                <input type="number" className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm outline-none" value={form.sortOrder} onChange={e => setForm({ ...form, sortOrder: Number(e.target.value) })} />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-6">
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Image URL</label>
-                                            <div className="relative">
-                                                <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                                                <input type="text" className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm outline-none" value={form.img} onChange={e => setForm({ ...form, img: e.target.value })} placeholder="https://images.unsplash.com/..." />
-                                            </div>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="space-y-1">
-                                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Distance (km)</label>
-                                                <input type="text" className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm outline-none" value={form.distance} onChange={e => setForm({ ...form, distance: e.target.value })} />
-                                            </div>
-                                            <div className="space-y-1">
-                                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Est. Time</label>
-                                                <input type="text" className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm outline-none" value={form.time} onChange={e => setForm({ ...form, time: e.target.value })} />
-                                            </div>
-                                        </div>
-                                    </div>
+                                        {/* Simplified Form */}
 
                                     <div className="md:col-span-2 p-6 bg-slate-50 dark:bg-white/5 rounded-[2.5rem] border border-slate-200 dark:border-white/5 space-y-6">
                                         <div className="flex flex-col gap-4">
@@ -304,26 +266,30 @@ export default function DestinationManager() {
                                                     />
                                                 </div>
                                             </div>
+                                            <div className="flex items-center gap-2">
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase px-2">Sort</label>
+                                                <input type="number" className="w-16 px-2 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-xs" value={form.sortOrder} onChange={e => setForm({ ...form, sortOrder: Number(e.target.value) })} />
+                                            </div>
                                         </div>
 
                                         <div className="flex flex-wrap md:flex-nowrap gap-2 overflow-x-auto pb-2 scrollbar-hide">
                                             {VEHICLE_TYPES.map(v => {
-                                                const IconComponent = VEHICLE_ICONS[v]?.icon || Car;
-                                                const isActive = selectedVehicle === v;
-                                                const hasOverride = (form.vehicleRateOverrides?.[v] > 0) || (form.pricing?.[v] > 0);
+                                                const IconComponent = VEHICLE_ICONS[v.slug]?.icon || Car;
+                                                const isActive = selectedVehicle === v.slug;
+                                                const hasOverride = (form.vehicleRateOverrides?.[v.slug] > 0) || (form.pricing?.[v.slug] > 0);
 
                                                 return (
                                                     <button
-                                                        key={v}
+                                                        key={v.slug}
                                                         type="button"
-                                                        onClick={() => setSelectedVehicle(v)}
+                                                        onClick={() => setSelectedVehicle(v.slug)}
                                                         className={`flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2.5 md:py-3 rounded-2xl border transition-all shrink-0 relative ${isActive
                                                             ? 'bg-blue-600 border-blue-600 text-white shadow-xl shadow-blue-500/20'
                                                             : 'bg-white dark:bg-white/5 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-blue-500/50'}`}
                                                     >
-                                                        <IconComponent size={16} className={isActive ? 'text-white' : VEHICLE_ICONS[v]?.color} />
+                                                        <IconComponent size={16} className={isActive ? 'text-white' : VEHICLE_ICONS[v.slug]?.color} />
                                                         <div className="text-left">
-                                                            <div className="text-[9px] md:text-[10px] font-black uppercase tracking-wider md:tracking-widest opacity-80 leading-none">{v}</div>
+                                                            <div className="text-[9px] md:text-[10px] font-black uppercase tracking-wider md:tracking-widest opacity-80 leading-none">{v.label}</div>
                                                             {hasOverride && (
                                                                 <div className={`text-[8px] md:text-[9px] font-bold mt-0.5 ${isActive ? 'text-blue-100' : 'text-emerald-500'}`}>Modified</div>
                                                             )}
@@ -346,26 +312,12 @@ export default function DestinationManager() {
                                                         })()}
                                                     </div>
                                                     <div>
-                                                        <h5 className="text-base font-bold text-slate-900 dark:text-white">{selectedVehicle} Config</h5>
+                                                        <h5 className="text-base font-bold text-slate-900 dark:text-white">{VEHICLE_TYPES.find(v => v.slug === selectedVehicle)?.label} Config</h5>
                                                         <p className="text-[10px] text-slate-500">Fine-tune rates for this specific vehicle category</p>
                                                     </div>
                                                 </div>
 
                                                 <div className="space-y-4">
-                                                    <div className="space-y-1.5">
-                                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Fixed USD Price (Package)</label>
-                                                        <div className="relative">
-                                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-600 font-black">$</span>
-                                                            <input
-                                                                type="number"
-                                                                className="w-full pl-10 pr-6 py-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-lg font-black outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all"
-                                                                value={form.pricing?.[selectedVehicle] || ''}
-                                                                onChange={e => updatePricing(selectedVehicle, e.target.value)}
-                                                                placeholder="0.00"
-                                                            />
-                                                        </div>
-                                                    </div>
-
                                                     <div className="space-y-1.5">
                                                         <label className="text-[10px] font-black text-slate-400 tracking-widest uppercase pl-1">Custom Per-KM Rate (LKR)</label>
                                                         <div className="relative">
@@ -394,7 +346,7 @@ export default function DestinationManager() {
                                                     <div>
                                                         <h6 className="text-xs font-bold text-slate-900 dark:text-white">Rate Logic Priority</h6>
                                                         <p className="text-[10px] text-slate-500 leading-relaxed mt-1">
-                                                            1. <strong>Custom Rate ({selectedVehicle})</strong>: Highest priority if set.<br />
+                                                            1. <strong>Custom Rate ({VEHICLE_TYPES.find(v => v.slug === selectedVehicle)?.label})</strong>: Highest priority if set.<br />
                                                             2. <strong>Global Fallback ({form.perKmRateOverride || 130} LKR)</strong>: Used if no custom vehicle rate is set.<br />
                                                             3. <strong>Standard System Rates</strong>: Used if all overrides are zero.
                                                         </p>
@@ -522,10 +474,6 @@ export default function DestinationManager() {
                                         </div>
                                     </div>
 
-                                    <div className="md:col-span-2">
-                                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Description</label>
-                                        <textarea className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm outline-none h-24 resize-none" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} placeholder="Tell us about this destination..." />
-                                    </div>
                                 </div>
 
                                 <div className="flex gap-4 pt-4 border-t border-slate-100 dark:border-white/5">
@@ -540,6 +488,6 @@ export default function DestinationManager() {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 }

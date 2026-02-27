@@ -136,24 +136,26 @@ export default function DayTripsClient() {
                                     <div className="flex items-center gap-4 text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">
                                         <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-lg text-[#00A99D]">
                                             <Clock size={16} />
-                                            <span>{trip.duration}</span>
+                                            <span>{typeof trip.duration === 'object' ? `${trip.duration.days}D ${trip.duration.nights}N` : trip.duration}</span>
                                         </div>
                                         <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-lg text-[#00A99D]">
                                             <MapPin size={16} />
-                                            <span>{trip.pickupLocations?.length || 1} Pickups</span>
+                                            <span>{trip.destinations?.length || 0} Destinations</span>
                                         </div>
                                     </div>
 
                                     <div className="flex items-center justify-between mt-auto pt-6 border-t border-slate-100">
                                         <div>
-                                            {trip.originalPrice && (
+                                            {trip.price?.originalPrice && (
                                                 <span className="text-sm text-slate-400 line-through mr-2 font-medium">
-                                                    ${trip.originalPrice}
+                                                    ${trip.price.originalPrice}
                                                 </span>
                                             )}
-                                            <span className="text-sm text-slate-400 font-bold uppercase tracking-widest block mb-1">From</span>
+                                            <span className="text-sm text-slate-400 font-bold uppercase tracking-widest block mb-1">
+                                                {trip.price?.type === 'per-person' ? 'Per Person' : 'From'}
+                                            </span>
                                             <span className="text-3xl font-black text-[#006064]">
-                                                {typeof trip.price === 'object' ? (trip.price?.currency || '$') : (trip.currency || '$')} {typeof trip.price === 'object' ? (trip.price?.amount?.toLocaleString() || '0') : (trip.price?.toLocaleString() || '0')}
+                                                {trip.price?.currency || 'LKR'} {trip.price?.amount?.toLocaleString() || '0'}
                                             </span>
                                         </div>
                                         <Link

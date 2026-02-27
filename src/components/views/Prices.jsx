@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Lock, Briefcase, Wind, Zap } from 'lucide-react'
 import { debounce } from '@/lib/utils'
 import { useCurrency } from '../context/CurrencyContext'
+import { calculateBasePrice } from '@/lib/pricing-util'
+import { destinations as staticDestinations } from '@/lib/destinations'
 
 // Tiered Pricing Configuration (in LKR - Sri Lankan Rupees)
 const VEHICLE_PRICING = {
@@ -183,46 +185,7 @@ const VEHICLE_PRICING = {
     }
 }
 
-// Calculate price based on tiered pricing
-const calculatePrice = (distance, vehicleType, tripType) => {
-    if (!distance || !vehicleType) return { total: 0, breakdown: [] }
-
-    const vehicle = VEHICLE_PRICING[vehicleType]
-    const matchingTier = vehicle.tiers.find(t => distance >= (t.min || 0) && distance <= (t.max || Infinity))
-
-    let oneWayPrice = 0
-    let description = ''
-
-    if (matchingTier) {
-        if (matchingTier.type === 'flat') {
-            oneWayPrice = matchingTier.price
-            description = `Flat rate`
-        } else {
-            oneWayPrice = distance * matchingTier.rate
-            description = `${distance.toFixed(1)} km × Rs ${matchingTier.rate}/km`
-        }
-    } else {
-        // Fallback: use last tier
-        const lastTier = vehicle.tiers[vehicle.tiers.length - 1]
-        if (lastTier.type === 'flat') {
-            oneWayPrice = lastTier.price
-        } else {
-            oneWayPrice = distance * lastTier.rate
-        }
-        description = 'Fallback rate'
-    }
-
-    const total = tripType === 'round-trip' ? oneWayPrice * 2 : oneWayPrice
-    return {
-        total,
-        breakdown: [{
-            range: `${distance.toFixed(1)} km`,
-            description,
-            amount: oneWayPrice
-        }],
-        oneWayPrice
-    }
-}
+// Local pricing calculation removed in favor of centralized pricing-util
 
 const Prices = ({ initialDestination }) => {
     const [pickup, setPickup] = useState({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lon: 79.8837 })
@@ -248,6 +211,13 @@ const Prices = ({ initialDestination }) => {
     const [arrivalDate, setArrivalDate] = useState('')
     const [arrivalTime, setArrivalTime] = useState('')
     const [isVehicleListExpanded, setIsVehicleListExpanded] = useState(true)
+    const [dynamicDestinations, setDynamicDestinations] = useState([])
+
+    useEffect(() => {
+        fetch('/api/destinations').then(res => res.json()).then(data => {
+            if (data.success) setDynamicDestinations(data.data)
+        }).catch(err => console.error(err))
+    }, [])
 
     const { currency, rates, changeCurrency } = useCurrency()
 
@@ -329,7 +299,7 @@ const Prices = ({ initialDestination }) => {
     }, [pickup, dropoff])
 
     return (
-        <div className="pt-24 sm:pt-10 pb-20 max-w-6xl mx-auto px-6 dark:bg-slate-950 transition-colors">
+        <div className="pt-32 pb-20 max-w-6xl mx-auto px-6 dark:bg-slate-950 transition-colors">
             <div id="prices" className="py-12 text-center scroll-mt-32">
                 <h1 className="text-4xl md:text-5xl font-extrabold text-emerald-900 dark:text-white mb-4">Price <span className="text-emerald-600 dark:text-emerald-400">Calculator</span></h1>
                 <p className="text-emerald-900/60 dark:text-white/60 max-w-2xl mx-auto">Select your pickup and destination points for an instant, transparent quote.</p>
@@ -727,13 +697,13 @@ const Prices = ({ initialDestination }) => {
                                             {distance > 0 && (
                                                 <div className="space-y-1 mb-6 rounded-xl overflow-hidden shadow-inner font-black">
                                                     {(() => {
-                                                        const p = calculatePrice(distance, key, tripType);
-                                                        const usdVal = Math.ceil(p.total * (rates?.USD || 0.0033));
-                                                        const eurVal = Math.ceil(p.total * (rates?.EUR || 0.0031));
+                                                        const basePrice = calculateBasePrice(distance, { ...v, vehicleType: key }, tripType, pickupSearch, dropoffSearch, [...staticDestinations, ...dynamicDestinations]);
+                                                        const usdVal = Math.ceil(basePrice * (rates?.USD || 0.0033));
+                                                        const eurVal = Math.ceil(basePrice * (rates?.EUR || 0.0031));
                                                         return (
                                                             <>
                                                                 <div className="bg-black text-white p-3 flex justify-center items-center text-lg">
-                                                                    Rs {p.total.toLocaleString()}
+                                                                    Rs {basePrice.toLocaleString()}
                                                                 </div>
                                                                 <div className="bg-[#D1E1EC] text-slate-800 p-3 flex justify-center items-center text-lg">
                                                                     $ {usdVal.toLocaleString()}
@@ -778,7 +748,7 @@ const Prices = ({ initialDestination }) => {
                     </h3>
 
                     {(() => {
-                        const { total: baseTotal, breakdown } = calculatePrice(distance, vehicle, tripType)
+                        const baseTotal = calculateBasePrice(distance, { ...VEHICLE_PRICING[vehicle], vehicleType: vehicle }, tripType, pickupSearch, dropoffSearch, [...staticDestinations, ...dynamicDestinations]);
                         const totalLKR = baseTotal + (boardShow ? 2000 : 0)
 
                         const currentSymbol = SUPPORTED_CURRENCIES.find(c => c.code === currency)?.symbol || 'Rs'
@@ -803,32 +773,7 @@ const Prices = ({ initialDestination }) => {
                                         </span>
                                     </div>
 
-                                    {/* Price Breakdown */}
-                                    {breakdown.length > 0 && (
-                                        <div className="mt-4 pt-4 border-t border-white/10">
-                                            <p className="text-xs text-white/40 uppercase tracking-widest mb-3">Price Breakdown</p>
-                                            <div className="space-y-2 text-sm">
-                                                {breakdown.map((item, idx) => (
-                                                    <div key={idx} className="flex justify-between text-white/70">
-                                                        <span className="text-xs">{item.range}: {item.description}</span>
-                                                        <span className="text-emerald-400 font-bold">Rs {item.amount.toLocaleString()}</span>
-                                                    </div>
-                                                ))}
-                                                {boardShow && (
-                                                    <div className="flex justify-between text-white/70">
-                                                        <span className="text-xs">Airport Greeting (Board Show)</span>
-                                                        <span className="text-emerald-400 font-bold">Rs 2,000</span>
-                                                    </div>
-                                                )}
-                                                {tripType === 'round-trip' && (
-                                                    <div className="flex justify-between text-emerald-400/80 pt-2 border-t border-white/5">
-                                                        <span className="text-xs">× 2 (Round Trip)</span>
-                                                        <span className="font-bold">Rs {(totalLKR).toLocaleString()}</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    )}
+                                    {/* Price Breakdown removed for simplicity/cleanliness in this view */}
 
                                     {/* Multi-Currency Grid with Flags */}
                                     <div className="mt-8 space-y-4">
@@ -886,15 +831,10 @@ const Prices = ({ initialDestination }) => {
                                 </div>
 
                                 <div className="mb-10 text-center">
-                                    <p className="text-white/60 uppercase tracking-widest text-xs mb-2">Estimated Total</p>
+                                    <p className="text-white/60 uppercase tracking-widest text-xs mb-2">Total</p>
                                     <div className="text-4xl md:text-6xl font-extrabold text-emerald-400 leading-none pb-2 break-words">
-                                        Rs {total.toLocaleString()}
+                                        {currentSymbol} {totalSelected.toLocaleString()}
                                     </div>
-                                    {usdRate && total > 0 && (
-                                        <div className="text-xl font-medium text-white/50">
-                                            ≈ ${(total * usdRate).toFixed(2)} USD
-                                        </div>
-                                    )}
                                 </div>
 
                                 <button
@@ -922,16 +862,17 @@ const Prices = ({ initialDestination }) => {
                                             payment: paymentMethod.toUpperCase(),
                                             boardShow: boardShow ? 'YES' : 'NO',
                                             boardDetails: boardShow ? "Name: " + boardName + ", Flight: " + flightNumber + ", Arrival: " + arrivalDate + " @ " + arrivalTime : 'N/A',
-                                            total: "Rs " + total.toLocaleString(),
-                                            usdTotal: usdRate ? "$" + (total * usdRate).toFixed(2) : 'N/A'
+                                            total: "Rs " + totalLKR.toLocaleString(),
+                                            usdTotal: rates?.USD ? "$" + (totalLKR * rates.USD).toFixed(2) : 'N/A'
                                         }
 
                                         // 1. Open WhatsApp Immediately (User Experience Priority)
-                                        const usdText = usdRate ? " (~$" + (total * usdRate).toFixed(2) + ")" : ''
+                                        const usdValue = rates?.USD ? Math.ceil(totalLKR * rates.USD) : 0;
+                                        const usdText = usdValue ? " (~$" + usdValue + ")" : ''
                                         const boardText = boardShow ? "%0A---%0ABoard Show: YES (+Rs 2000)%0AName: " + boardName + "%0AFlight: " + flightNumber + "%0AArrival: " + arrivalDate + " @ " + arrivalTime : ''
                                         const emailText = email ? "%0AEmail: " + email : ''
                                         const waText = whatsapp ? "%0AWhatsApp: " + whatsapp : ''
-                                        const msg = "Booking Request: %0AFrom: " + pickup.name + "%0ATo: " + dropoff.name + "%0ADistance: " + distance.toFixed(1) + "km%0AVehicle: " + VEHICLE_PRICING[vehicle].name + "%0ATrip: " + tripType + "%0ADate: " + date + "%0ATime: " + time + emailText + waText + "%0APayment: " + paymentMethod.toUpperCase() + boardText + "%0ATotal: Rs " + total.toLocaleString() + usdText
+                                        const msg = "Booking Request: %0AFrom: " + pickup.name + "%0ATo: " + dropoff.name + "%0ADistance: " + distance.toFixed(1) + "km%0AVehicle: " + VEHICLE_PRICING[vehicle].name + "%0ATrip: " + tripType + "%0ADate: " + date + "%0ATime: " + time + emailText + waText + "%0APayment: " + paymentMethod.toUpperCase() + boardText + "%0ATotal: Rs " + totalLKR.toLocaleString() + usdText
 
                                         window.open("https://wa.me/94716885880?text=" + msg, '_blank')
 

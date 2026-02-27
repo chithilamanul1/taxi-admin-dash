@@ -11,8 +11,8 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const distKm = Math.ceil(Number(distanceKm) || 0);
     let baseTotal = 0;
 
-    const isFromAirport = pickup?.toLowerCase().includes('airport');
-    const isToAirport = dropoff?.toLowerCase().includes('airport');
+    const isFromAirport = pickup?.toLowerCase().includes('airport') || pickup?.toLowerCase().includes('katunayake') || pickup?.toLowerCase().includes('cmb');
+    const isToAirport = dropoff?.toLowerCase().includes('airport') || dropoff?.toLowerCase().includes('katunayake') || dropoff?.toLowerCase().includes('cmb');
 
     // Helper for robust location matching (e.g. "Ella" matches "Ravana Pool Club, Ella")
     const findMatchingDestination = (address, destinationsList) => {
@@ -59,6 +59,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         null;
 
     const vehicleType = vehicleData.vehicleType;
+    const vehicleSlug = vehicleData.vehicleSlug || vehicleType; // Use vehicleSlug if available, fallback to vehicleType
 
     if (matchedOverride) {
 
@@ -67,10 +68,10 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
             Object.fromEntries(matchedOverride.vehicleTiers) :
             (matchedOverride.vehicleTiers || {});
 
-        const vTiers = vTiersMap[vehicleType];
+        const vTiers = vTiersMap[vehicleSlug] || vTiersMap[vehicleType];
 
         if (Array.isArray(vTiers) && vTiers.length > 0) {
-            const matchingTier = vTiers.find(t => distKm >= (t.minKm || 0) && distKm <= (t.maxKm || Infinity));
+            const matchingTier = vTiers.find(t => distKm >= (t.minKm || t.min || 0) && distKm <= (t.maxKm || t.max || Infinity));
             if (matchingTier) {
                 if (matchingTier.type === 'flat') {
                     console.log(`[Pricing] Applied TIERED FLAT rate for ${matchedOverride.name} (${vehicleType}): LKR ${matchingTier.value}`);
@@ -89,7 +90,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                 Object.fromEntries(matchedOverride.vehicleRateOverrides) :
                 (matchedOverride.vehicleRateOverrides || {});
 
-            const vehicleSpecificRate = vOverrides[vehicleType];
+            const vehicleSpecificRate = vOverrides[vehicleSlug] || vOverrides[vehicleType];
 
             if (vehicleSpecificRate > 0) {
                 console.log(`[Pricing] Applied VEHICLE-SPECIFIC rate override for ${matchedOverride.name} (${vehicleType}): LKR ${vehicleSpecificRate}/km`);
