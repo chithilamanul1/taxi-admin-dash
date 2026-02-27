@@ -53,10 +53,8 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     let overrideApplied = false;
 
     // Check for Location-Specific Per-KM Rate Override
-    // Only apply manual destination rates for "Ride Now" trips that are NOT airport rides
-    const matchedOverride = (!isAirportTransfer && !isAirportRide) ?
-        (findMatchingDestination(pickup, dynamicDestinations) || findMatchingDestination(dropoff, dynamicDestinations)) :
-        null;
+    // Allow overrides across all categories if a specific destination name is matched in the address
+    const matchedOverride = findMatchingDestination(pickup, dynamicDestinations) || findMatchingDestination(dropoff, dynamicDestinations);
 
     const vehicleType = vehicleData.vehicleType;
     const vehicleSlug = vehicleData.vehicleSlug || vehicleType; // Use vehicleSlug if available, fallback to vehicleType
@@ -109,19 +107,35 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
 
     if (!overrideApplied) {
         if (tiers.length > 0) {
+            // Priority 1: Exact Flat Rate Matching for Tiers (Robust)
             const matchingTier = tiers.find(t => distKm >= t.min && distKm <= (t.max || Infinity));
+
             if (matchingTier) {
                 if (matchingTier.type === 'flat') {
                     distancePrice = matchingTier.price || matchingTier.rate || 0;
+                    console.log(`[Pricing] Applied Tiered FLAT rate (${matchingTier.min}-${matchingTier.max}km): LKR ${distancePrice}`);
                 } else {
-                    distancePrice = (distKm * (matchingTier.rate || matchingTier.price || 0));
+                    const rate = matchingTier.rate || matchingTier.price || 0;
+                    distancePrice = (distKm * rate);
+                    console.log(`[Pricing] Applied Tiered PER-KM rate (${rate}/km): LKR ${distancePrice}`);
                 }
             }
-        } else {
-            const perKmRate = vehicleData.perKmRate || 0;
-            distancePrice = (distKm * perKmRate);
         }
 
+        // Final Fallback: Standard vehicle defaults
+        if (distancePrice === 0) {
+            const perKmRate = vehicleData.perKmRate || 0;
+            const basePrice = vehicleData.basePrice || 0;
+            const baseKm = vehicleData.baseKm || 0;
+
+            if (distKm <= baseKm) {
+                distancePrice = basePrice;
+                console.log(`[Pricing] Applied Base Price: LKR ${distancePrice}`);
+            } else {
+                distancePrice = basePrice + ((distKm - baseKm) * perKmRate);
+                console.log(`[Pricing] Applied Standard Per-KM: LKR ${distancePrice}`);
+            }
+        }
     }
 
     baseTotal = distancePrice;

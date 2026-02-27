@@ -12,6 +12,7 @@ export const config = {
 export async function POST(req) {
     try {
         const formData = await req.formData();
+        console.log("[Upload API] Form data received:", Array.from(formData.keys()));
         const file = formData.get('file');
         const folder = formData.get('folder') || 'misc';
 
@@ -20,6 +21,7 @@ export async function POST(req) {
         }
 
         const buffer = Buffer.from(await file.arrayBuffer());
+        console.log("[Upload API] File buffer size:", buffer.length);
 
         // --- CLOUDINARY UPLOAD (For Vercel Production) ---
         if (process.env.CLOUDINARY_URL || (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY)) {
@@ -81,7 +83,7 @@ export async function POST(req) {
         }
 
     } catch (error) {
-        console.error("Upload Error:", error);
-        return NextResponse.json({ error: 'Upload process failed.' }, { status: 500 });
+        console.error("Upload Error (Critical):", error);
+        return NextResponse.json({ error: 'Upload process failed.', details: error.message }, { status: 500 });
     }
 }

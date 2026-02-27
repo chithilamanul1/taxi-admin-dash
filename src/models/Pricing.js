@@ -12,7 +12,7 @@ const pricingSchema = new mongoose.Schema({
     vehicleType: {
         type: String,
         required: true,
-        enum: ['mini-car', 'sedan', 'mini-van-every', 'mini-van-05', 'suv', 'kdh-van', 'mini-bus', 'normal-kdh', 'tuk-tuk', 'mini', 'tour-sedan', 'tour-van', 'vezel', 'bus', 'coach-bus']
+        enum: ['mini-car', 'sedan', 'mini-van-every', 'mini-van-05', 'suv', 'kdh-van', 'mini-bus', 'normal-kdh', 'tuk-tuk', 'mini', 'tour-sedan', 'tour-van', 'vezel', 'bus', 'coach-bus', 'large-bus']
     },
     category: {
         type: String,

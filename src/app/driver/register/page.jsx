@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Upload, Check, ChevronRight, ChevronLeft, Loader2, Car, CreditCard, User, ShieldCheck } from 'lucide-react';
+import { Upload, Check, ChevronRight, ChevronLeft, Loader2, Car, CreditCard, User, ShieldCheck, X } from 'lucide-react';
 
 const STEPS = [
     { id: 1, title: 'Personal Info', icon: User },
@@ -296,22 +296,45 @@ const Input = ({ label, name, value, onChange, placeholder, type = "text" }) => 
     </div>
 );
 
-const FileUpload = ({ label, id, onChange, file }) => (
-    <div className="space-y-2">
-        <label className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-1">{label}</label>
-        <label htmlFor={id} className={`w-full h-32 border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all ${file ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-slate-700 bg-slate-800 hover:border-slate-600 hover:bg-slate-700/50'}`}>
-            {file ? (
-                <div className="text-center">
-                    <Check className="mx-auto text-emerald-500 mb-2" size={24} />
-                    <span className="text-xs font-bold text-emerald-400 block">{file.name.substring(0, 15)}...</span>
-                </div>
-            ) : (
-                <div className="text-center text-slate-500">
-                    <Upload className="mx-auto mb-2 opacity-50" size={24} />
-                    <span className="text-[10px] font-bold uppercase tracking-wider">Click to Upload</span>
-                </div>
-            )}
-            <input type="file" id={id} className="hidden" onChange={onChange} accept="image/*,application/pdf" />
-        </label>
-    </div>
-);
+const FileUpload = ({ label, id, onChange, file }) => {
+    const [preview, setPreview] = useState(null);
+
+    useEffect(() => {
+        if (file && file instanceof File && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onloadend = () => setPreview(reader.result);
+            reader.readAsDataURL(file);
+        } else {
+            setPreview(null);
+        }
+    }, [file]);
+
+    return (
+        <div className="space-y-2">
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{label}</p>
+            <input type="file" id={id} className="hidden" onChange={onChange} accept="image/*,.pdf" />
+            <label htmlFor={id} className={`w-full h-32 border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden ${file ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-slate-700 bg-slate-800 hover:border-slate-600 hover:bg-slate-700/50'}`}>
+                {preview ? (
+                    <div className="relative w-full h-full">
+                        <img src={preview} alt="Preview" className="w-full h-full object-cover opacity-60" />
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-emerald-500/10">
+                            <Check className="text-emerald-400 mb-1" size={24} />
+                            <span className="text-[10px] font-black text-emerald-400 uppercase bg-slate-900/80 px-2 py-0.5 rounded">Change File</span>
+                        </div>
+                    </div>
+                ) : file ? (
+                    <div className="text-center">
+                        <Check className="mx-auto text-emerald-500 mb-2" size={24} />
+                        <span className="text-xs font-bold text-emerald-400 block">{file.name.substring(0, 15)}...</span>
+                        <span className="text-[10px] text-slate-500 uppercase mt-1 block">Click to change</span>
+                    </div>
+                ) : (
+                    <div className="text-center group">
+                        <Upload className="mx-auto text-slate-500 group-hover:text-amber-500 transition-colors mb-2" size={24} />
+                        <span className="text-xs font-black text-slate-400 group-hover:text-slate-200 transition-colors uppercase tracking-tight">Upload File</span>
+                    </div>
+                )}
+            </label>
+        </div>
+    );
+};

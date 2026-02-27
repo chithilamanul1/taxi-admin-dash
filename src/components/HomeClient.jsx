@@ -114,13 +114,9 @@ export default function HomeClient() {
 
                     <div className="grid md:grid-cols-3 gap-8">
                         {flatRatesList.filter(r => r.id !== 'sampath_test').slice(0, 3).map((route, i) => (
-                            <button
+                            <div
                                 key={i}
-                                onClick={() => {
-                                    setSelectedExpressProduct(route);
-                                    setIsExpressOpen(true);
-                                }}
-                                className="group relative h-[450px] rounded-3xl overflow-hidden border border-emerald-900/10 block shadow-md hover:shadow-xl transition-all duration-500 text-left w-full"
+                                className="group relative h-[450px] rounded-3xl overflow-hidden border border-emerald-900/10 block shadow-md hover:shadow-2xl transition-all duration-500 text-left w-full"
                             >
                                 <Image
                                     src={`${route.img}${route.img.includes('?') ? '&' : '?'}w=600&q=75`}
@@ -130,26 +126,48 @@ export default function HomeClient() {
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-emerald-900 via-emerald-900/10 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                                <div className="absolute top-6 left-6">
-                                    <span className="bg-emerald-900 border border-emerald-400/20 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest">{route.badge}</span>
+
+                                <div className="absolute top-6 left-6 flex flex-col gap-2">
+                                    <span className="bg-emerald-900 border border-emerald-400/20 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest block w-fit shadow-lg">{route.badge}</span>
+                                    <Link
+                                        href={`/destination/${route.id}`}
+                                        className="bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest w-fit hover:bg-white hover:text-emerald-900 transition-colors shadow-lg"
+                                    >
+                                        Full Details
+                                    </Link>
                                 </div>
+
                                 <div className="absolute bottom-0 left-0 p-8 w-full">
                                     <div className="flex items-center gap-2 text-emerald-400 mb-2">
                                         <MapPin size={14} />
                                         <span className="text-[10px] font-bold uppercase tracking-[0.2em]">{route.meta}</span>
                                     </div>
-                                    <h3 className="text-2xl font-extrabold text-white mb-4 leading-tight">{route.title}</h3>
+                                    <h3
+                                        onClick={() => {
+                                            setSelectedExpressProduct(route);
+                                            setIsExpressOpen(true);
+                                        }}
+                                        className="text-2xl font-extrabold text-white mb-4 leading-tight cursor-pointer hover:text-emerald-400 transition-colors"
+                                    >
+                                        {route.title}
+                                    </h3>
                                     <div className="flex items-center justify-between">
                                         <div className="flex flex-col">
                                             <span className="text-[8px] text-white/60 uppercase font-bold tracking-widest">Starting From</span>
                                             <span className="text-2xl font-black text-white">${route.price}</span>
                                         </div>
-                                        <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:bg-white group-hover:text-emerald-900 transition-all font-bold">
-                                            <ArrowRight size={18} />
-                                        </div>
+                                        <button
+                                            onClick={() => {
+                                                setSelectedExpressProduct(route);
+                                                setIsExpressOpen(true);
+                                            }}
+                                            className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center group-hover:bg-white group-hover:text-emerald-900 transition-all font-bold shadow-lg"
+                                        >
+                                            <ArrowRight size={22} />
+                                        </button>
                                     </div>
                                 </div>
-                            </button>
+                            </div>
                         ))}
                     </div>
                 </div>

@@ -11,22 +11,35 @@ export async function generateMetadata({ params }) {
 
     if (!destination) return { title: 'Destination Not Found' };
 
+    const baseUrl = 'https://airporttaxis.lk';
+    const city = destination.name;
+
     return {
-        title: `Airport Taxi to ${destination.name} - Trusted Transfer & Rates - Airport Taxis Sri Lanka`,
-        description: `Book a reliable 24/7 airport transfer from Colombo Airport (CMB) to ${destination.name}. Fixed rates starting from $${destination.price}. Comfortable vehicles and professional drivers.`,
-        keywords: `Airport Taxi to ${destination.name}, Colombo Airport Transfer ${destination.name}, CMB to ${destination.name} Taxi, ${destination.name} Sri Lanka Taxi Service, ${destination.name} Airport Pickup`,
+        title: `Airport Taxi to ${city} - Fixed Rates $${destination.price} - 24/7 Service`,
+        description: `Book a reliable private airport transfer from Colombo Airport (CMB) to ${city}. Fixed rates starting from $${destination.price}. Professional drivers, comfortable vehicles, and 24/7 customer support. ${destination.description.slice(0, 100)}...`,
+        keywords: `Airport Taxi to ${city}, Colombo Airport Transfer to ${city}, CMB to ${city} Taxi, ${city} Sri Lanka Taxi Service, ${city} Airport Pickup, Sri Lanka Private Driver ${city}`,
+        alternates: {
+            canonical: `${baseUrl}/destination/${slug}`,
+        },
         openGraph: {
-            title: `🚖 Airport Transfer from CMB to ${destination.name} - Sri Lanka`,
-            description: `Safe and reliable airport taxi service to ${destination.name}. Book now for instant confirmation and best rates.`,
-            url: `https://airporttaxis.lk/destination/${slug}`,
+            title: `🚖 Reliable Airport Transfer: CMB to ${city}`,
+            description: `Safe and comfortable airport taxi service to ${city}. Fixed price of $${destination.price}. Book now for instant confirmation!`,
+            url: `${baseUrl}/destination/${slug}`,
             images: [
                 {
                     url: destination.img || '/hero-bg.jpg',
                     width: 1200,
                     height: 630,
-                    alt: `Airport Taxi to ${destination.name}`,
+                    alt: `Private Taxi from Colombo Airport to ${city}`,
                 }
-            ]
+            ],
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: `Airport Taxi to ${city}`,
+            description: `Fixed rate airport transfers to ${city}. Reliable, professional, and 24/7.`,
+            images: [destination.img || '/hero-bg.jpg'],
         }
     };
 }
@@ -43,5 +56,53 @@ export default async function DestinationPage({ params }) {
         notFound();
     }
 
-    return <DestinationClient destination={destination} />;
+    // JSON-LD Structured Data
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": `Airport Transfer to ${destination.name}`,
+        "description": destination.longDescription || destination.description,
+        "image": `https://airporttaxis.lk${destination.img}`,
+        "offers": {
+            "@type": "Offer",
+            "price": destination.price,
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": `https://airporttaxis.lk/destination/${slug}`
+        },
+        "brand": {
+            "@type": "Brand",
+            "name": "Airport Taxis Sri Lanka"
+        }
+    };
+
+    // FAQ Schema if available
+    const faqJsonLd = destination.faqs ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": destination.faqs.map(faq => ({
+            "@type": "Question",
+            "name": faq.q,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.a
+            }
+        }))
+    } : null;
+
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            {faqJsonLd && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+                />
+            )}
+            <DestinationClient destination={destination} />
+        </>
+    );
 }
