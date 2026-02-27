@@ -70,12 +70,13 @@ const DayTrips = () => {
             <div className="max-w-7xl mx-auto px-4 md:px-6 -mt-10">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {DAY_TRIPS.map((trip, idx) => (
-                        <div key={idx} className="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 flex flex-col">
+                        <div key={idx} itemScope itemType="https://schema.org/Product" className="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 flex flex-col">
                             {/* Image */}
                             <div className="h-56 overflow-hidden relative">
                                 <img
                                     src={trip.image}
                                     alt={trip.title}
+                                    itemProp="image"
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
                                 {trip.tags.map((tag, i) => (
@@ -98,17 +99,21 @@ const DayTrips = () => {
                                     </div>
                                 </div>
 
-                                <h3 className="text-xl font-bold text-emerald-900 mb-2 line-clamp-2" title={trip.title}>{trip.title}</h3>
+                                <h3 itemProp="name" className="text-xl font-bold text-emerald-900 mb-2 line-clamp-2" title={trip.title}>{trip.title}</h3>
 
                                 <div className="mt-auto pt-6 border-t border-gray-100 flex items-end justify-between">
-                                    <div>
+                                    <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
                                         {trip.originalPrice && (
                                             <span className="text-xs text-gray-400 line-through block mb-1">${trip.originalPrice}</span>
                                         )}
                                         <div className="text-3xl font-extrabold text-emerald-600 leading-none">
-                                            ${trip.price}
+                                            <meta itemProp="priceCurrency" content="USD" />
+                                            <span itemProp="price" content={trip.price}>
+                                                ${trip.price}
+                                            </span>
                                             <span className="text-xs text-gray-400 font-medium ml-1">/pp</span>
                                         </div>
+                                        <link itemProp="availability" href="https://schema.org/InStock" />
                                     </div>
                                     <button
                                         onClick={() => {

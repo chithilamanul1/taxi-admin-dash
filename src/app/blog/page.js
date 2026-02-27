@@ -8,8 +8,9 @@ export const metadata = {
 };
 
 async function getPosts() {
-    if (!process.env.MONGO_URI) {
-        console.warn('Skipping blog posts: MONGO_URI missing');
+    const connectionString = process.env.MONGODB_URI || process.env.MONGO_URI;
+    if (!connectionString) {
+        console.warn('Skipping blog posts: Database URI missing');
         return [];
     }
     try {

@@ -7,7 +7,8 @@ import ReactMarkdown from 'react-markdown';
 import BlogCoverImage from '../../../components/BlogCoverImage';
 
 async function getPost(slug) {
-    if (!process.env.MONGO_URI) return null;
+    const connectionString = process.env.MONGODB_URI || process.env.MONGO_URI;
+    if (!connectionString) return null;
     try {
         await dbConnect();
         const post = await Post.findOne({ slug, isPublished: true });
@@ -19,7 +20,8 @@ async function getPost(slug) {
 }
 
 export async function generateMetadata({ params }) {
-    const post = await getPost(params.slug);
+    const { slug } = await params;
+    const post = await getPost(slug);
     if (!post) return {};
 
     return {
@@ -34,7 +36,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function SinglePostPage({ params }) {
-    const post = await getPost(params.slug);
+    const { slug } = await params;
+    const post = await getPost(slug);
 
     if (!post) {
         notFound();

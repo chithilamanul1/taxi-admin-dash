@@ -3,7 +3,7 @@ export default function robots() {
         rules: {
             userAgent: '*',
             allow: '/',
-            disallow: ['/admin/', '/api/'],
+            disallow: ['/admin/', '/api/', '/driver/', '/checkout/', '/my-bookings/'],
         },
         sitemap: 'https://airporttaxis.lk/sitemap.xml',
     }

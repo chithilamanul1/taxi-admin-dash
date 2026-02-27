@@ -42,12 +42,13 @@ const TourPackages = () => {
                 ) : (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {tours.map((pkg) => (
-                            <div key={pkg._id || pkg.id} className="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 border border-slate-100 flex flex-col h-full">
+                            <div key={pkg._id || pkg.id} itemScope itemType="https://schema.org/Product" className="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 border border-slate-100 flex flex-col h-full">
                                 {/* Image */}
                                 <Link href={`/tour-packages/${pkg.slug || pkg.id}`} className="block h-56 overflow-hidden relative">
                                     <img
                                         src={pkg.heroImage || pkg.image || (pkg.images && pkg.images[0]) || '/placeholder.jpg'}
                                         alt={pkg.title}
+                                        itemProp="image"
                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                     />
                                     <div className="absolute top-3 right-3 bg-emerald-900/90 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm shadow flex items-center gap-1">
@@ -63,7 +64,7 @@ const TourPackages = () => {
                                 {/* Content */}
                                 <div className="p-5 flex flex-col flex-grow">
                                     <Link href={`/tour-packages/${pkg.slug || pkg.id}`} className="group-hover:text-emerald-700 transition-colors">
-                                        <h3 className="text-lg font-bold text-emerald-900 mb-2 line-clamp-2 leading-tight h-12">{pkg.title}</h3>
+                                        <h3 itemProp="name" className="text-lg font-bold text-emerald-900 mb-2 line-clamp-2 leading-tight h-12">{pkg.title}</h3>
                                     </Link>
 
                                     <div className="flex flex-wrap gap-2 mb-4">
@@ -78,15 +79,19 @@ const TourPackages = () => {
                                     </div>
 
                                     <div className="mt-auto pt-4 border-t border-gray-100 flex items-end justify-between">
-                                        <div>
+                                        <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
                                             <p className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">
                                                 {pkg.price?.type === 'per-person' ? 'Per Person' : 'From'}
                                             </p>
                                             <div className="flex items-baseline gap-1">
                                                 <span className="text-sm font-bold text-emerald-600">
-                                                    {pkg.price?.currency || 'USD'} {pkg.price?.amount?.toLocaleString() || '0'}
+                                                    <meta itemProp="priceCurrency" content={pkg.price?.currency || 'USD'} />
+                                                    <span itemProp="price" content={pkg.price?.amount || 0}>
+                                                        {pkg.price?.currency || 'USD'} {pkg.price?.amount?.toLocaleString() || '0'}
+                                                    </span>
                                                 </span>
                                             </div>
+                                            <link itemProp="availability" href="https://schema.org/InStock" />
                                         </div>
                                         <div className="flex gap-2">
                                             <Link

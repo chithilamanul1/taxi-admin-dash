@@ -4,15 +4,19 @@ export default function sitemap() {
     // Core Pages
     const routes = [
         '',
-        '/ride-now',
-        '/tours',
+        '/about',
         '/contact',
+        '/prices',
+        '/day-trips',
+        '/tour-packages',
+        '/blog',
         '/login',
-        '/register',
+        '/services',
+        '/review',
     ].map((route) => ({
         url: `${baseUrl}${route}`,
         lastModified: new Date(),
-        changeFrequency: 'weekly',
+        changeFrequency: route === '' ? 'daily' : 'weekly',
         priority: route === '' ? 1 : 0.8,
     }));
 

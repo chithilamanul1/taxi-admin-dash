@@ -152,7 +152,9 @@ export default function DestinationManager() {
                 </div>
 
                 {loading ? (
-                    <div className="flex justify-center py-20"><Loader2 className="animate-spin text-slate-400" size={32} /></div>
+                    <div className="flex justify-center py-20">
+                        <Loader2 className="animate-spin text-slate-400" size={32} />
+                    </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filtered.map((dest) => (
@@ -160,17 +162,20 @@ export default function DestinationManager() {
                                 <div className="h-12 bg-slate-200 dark:bg-slate-800 relative flex items-center px-4">
                                     <h3 className="font-bold text-slate-900 dark:text-white line-clamp-1">{dest.title}</h3>
                                     <div className="absolute top-2 right-2 flex gap-1">
-                                        <button onClick={() => startEdit(dest)} className="p-2 bg-white/90 dark:bg-slate-900/90 rounded-lg text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors shadow-sm"><Edit2 size={14} /></button>
-                                        <button onClick={() => handleDelete(dest._id)} className="p-2 bg-white/90 dark:bg-slate-900/90 rounded-lg text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors shadow-sm"><Trash2 size={14} /></button>
+                                        <button onClick={() => startEdit(dest)} className="p-2 bg-white/90 dark:bg-slate-900/90 rounded-lg text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors shadow-sm">
+                                            <Edit2 size={14} />
+                                        </button>
+                                        <button onClick={() => handleDelete(dest._id)} className="p-2 bg-white/90 dark:bg-slate-900/90 rounded-lg text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors shadow-sm">
+                                            <Trash2 size={14} />
+                                        </button>
                                     </div>
                                 </div>
 
-                                    <div className="space-y-2 border-t border-slate-200 dark:border-white/5 pt-3">
+                                <div className="p-5 space-y-4">
+                                    <div className="space-y-2">
                                         <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
                                             <span>Vehicle Type</span>
-                                            <div className="flex gap-4">
-                                                <span>LKR/km</span>
-                                            </div>
+                                            <span>LKR/km</span>
                                         </div>
                                         {VEHICLE_TYPES.slice(0, 5).map(v => {
                                             const vOverrides = dest.vehicleRateOverrides instanceof Map ?
@@ -181,21 +186,20 @@ export default function DestinationManager() {
                                             return (
                                                 <div key={v.slug} className="flex justify-between items-center">
                                                     <span className="text-xs text-slate-700 dark:text-slate-300 font-medium">{v.label}</span>
-                                                    <div className="flex gap-4 items-center">
-                                                        <span className={`text-[10px] font-bold min-w-[40px] text-right ${vRate ? 'text-amber-600' : 'text-slate-300 dark:text-slate-700'}`}>
-                                                            {vRate ? `${vRate}` : (dest.perKmRateOverride > 0 ? `${dest.perKmRateOverride}` : '—')}
-                                                        </span>
-                                                    </div>
+                                                    <span className={`text-[10px] font-bold ${vRate ? 'text-amber-600' : 'text-slate-300 dark:text-slate-700'}`}>
+                                                        {vRate ? `${vRate}` : (dest.perKmRateOverride > 0 ? `${dest.perKmRateOverride}` : '—')}
+                                                    </span>
                                                 </div>
                                             );
                                         })}
-                                        {dest.perKmRateOverride > 0 && !dest.vehicleRateOverrides?.size && (
-                                            <div className="flex justify-between items-center pt-2 border-t border-slate-200 dark:border-white/5">
-                                                <span className="text-[10px] font-bold text-amber-600 uppercase">Global Override</span>
-                                                <span className="text-xs font-black text-amber-600">LKR {dest.perKmRateOverride}/km</span>
-                                            </div>
-                                        )}
                                     </div>
+
+                                    {dest.perKmRateOverride > 0 && (
+                                        <div className="pt-2 border-t border-slate-200 dark:border-white/5 flex justify-between items-center">
+                                            <span className="text-[10px] font-bold text-amber-600 uppercase">Global Fallback</span>
+                                            <span className="text-xs font-black text-amber-600">LKR {dest.perKmRateOverride}{"/km"}</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -242,7 +246,7 @@ export default function DestinationManager() {
                                             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Full Display Title</label>
                                             <input required type="text" className="w-full px-4 py-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-2xl text-base font-bold outline-none ring-offset-0 focus:ring-4 focus:ring-blue-500/10 transition-all" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="e.g. Airport to Galle Port" />
                                         </div>
-                                        {/* Simplified Form */}
+                                    </div>
 
                                     <div className="md:col-span-2 p-6 bg-slate-50 dark:bg-white/5 rounded-[2.5rem] border border-slate-200 dark:border-white/5 space-y-6">
                                         <div className="flex flex-col gap-4">
@@ -473,10 +477,9 @@ export default function DestinationManager() {
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
 
-                                <div className="flex gap-4 pt-4 border-t border-slate-100 dark:border-white/5">
+                                <div className="flex gap-4 pt-4 border-t border-slate-100 dark:border-white/10">
                                     <button type="button" onClick={() => setEditing(null)} className="flex-1 py-4 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 rounded-2xl font-bold transition-all">Cancel</button>
                                     <button type="submit" className="flex-1 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/30 transition-all">
                                         <Check size={20} />
@@ -488,6 +491,6 @@ export default function DestinationManager() {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div >
+        </div>
     );
 }
