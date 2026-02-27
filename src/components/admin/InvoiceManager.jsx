@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { CreditCard, User, Mail, Phone, MapPin, Calendar, Clock, Link as LinkIcon, Check, Copy, Loader2, Send, FileText, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 export default function InvoiceManager() {
     const [loading, setLoading] = useState(false);
@@ -52,6 +54,84 @@ export default function InvoiceManager() {
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         }
+    };
+
+    const handleDownloadPDF = () => {
+        const doc = new jsPDF();
+        const primaryColor = '#059669'; // Emerald 600
+
+        // Header
+        doc.setFillColor(5, 150, 105);
+        doc.rect(0, 0, 210, 40, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(24);
+        doc.setFont('helvetica', 'bold');
+        doc.text('AIRPORT TAXIS PVT (LTD)', 20, 25);
+
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Sri Lanka\'s Premium 24/7 Transport Service', 20, 32);
+
+        // Invoice Details
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text('INVOICE', 20, 55);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.text(`Date: ${new Date().toLocaleDateString()}`, 150, 55);
+        doc.text(`Invoice #: AT-${Math.floor(1000 + Math.random() * 9000)}`, 150, 60);
+
+        // Customer Info
+        doc.setFont('helvetica', 'bold');
+        doc.text('BILL TO:', 20, 75);
+        doc.setFont('helvetica', 'normal');
+        doc.text(formData.customerName, 20, 82);
+        if (formData.customerEmail) doc.text(formData.customerEmail, 20, 87);
+        if (formData.customerPhone) doc.text(formData.customerPhone, 20, 92);
+
+        // Trip Info
+        doc.setFont('helvetica', 'bold');
+        doc.text('TRIP DETAILS:', 110, 75);
+        doc.setFont('helvetica', 'normal');
+        if (formData.pickupAddress) doc.text(`From: ${formData.pickupAddress}`, 110, 82);
+        if (formData.dropoffAddress) doc.text(`To: ${formData.dropoffAddress}`, 110, 87);
+        if (formData.scheduledDate) doc.text(`Date: ${formData.scheduledDate} ${formData.scheduledTime}`, 110, 92);
+
+        // Table
+        doc.autoTable({
+            startY: 110,
+            head: [['Description', 'Quantity', 'Price', 'Total']],
+            body: [
+                ['Airport Transfer / Private Tour Service', '1', `${formData.currency} ${formData.amount}`, `${formData.currency} ${formData.amount}`],
+            ],
+            headStyles: { fillColor: [5, 150, 105] },
+            theme: 'striped'
+        });
+
+        // Summary
+        const finalY = doc.lastAutoTable.finalY + 10;
+        doc.setFont('helvetica', 'bold');
+        doc.text('TOTAL AMOUNT:', 140, finalY + 10);
+        doc.setFontSize(16);
+        doc.setTextColor(5, 150, 105);
+        doc.text(`${formData.currency} ${formData.amount}`, 140, finalY + 20);
+
+        // Payment Link
+        doc.setFontSize(8);
+        doc.setTextColor(100, 100, 100);
+        doc.text('PAYMENT LINK:', 20, finalY + 40);
+        doc.setTextColor(5, 150, 105);
+        doc.text(result.paymentLink, 20, finalY + 45);
+
+        // Footer
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text('Thank you for choosing Airport Taxis Sri Lanka.', 105, 280, null, null, 'center');
+        doc.text('Web: airporttaxis.lk | Tel: +94 71 688 5880', 105, 285, null, null, 'center');
+
+        doc.save(`Invoice_${formData.customerName.replace(/\s+/g, '_')}.pdf`);
     };
 
     return (
@@ -175,18 +255,45 @@ export default function InvoiceManager() {
                         <div className="space-y-1">
                             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Payment Type</label>
                             <div className="flex gap-2">
-                                {['full', 'partial'].map((type) => (
+                                {[
+                                    { id: 'full', label: 'Full (100%)' },
+                                    { id: 'partial', label: 'Half (50%)' },
+                                    { id: 'custom', label: 'Custom' }
+                                ].map((type) => (
                                     <button
-                                        key={type}
+                                        key={type.id}
                                         type="button"
-                                        onClick={() => setFormData({ ...formData, paymentType: type })}
-                                        className={`flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all border ${formData.paymentType === type ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-slate-800 text-slate-400'}`}
+                                        onClick={() => setFormData({ ...formData, paymentType: type.id })}
+                                        className={`flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all border ${formData.paymentType === type.id ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-slate-800 text-slate-400'}`}
                                     >
-                                        {type} {type === 'partial' ? '(50%)' : ''}
+                                        {type.label}
                                     </button>
                                 ))}
                             </div>
                         </div>
+
+                        {formData.paymentType === 'custom' && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="space-y-1"
+                            >
+                                <label className="text-[10px] font-bold text-amber-500 uppercase tracking-widest pl-1">Custom Payment Amount ({formData.currency})</label>
+                                <div className="relative">
+                                    <Zap className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-500" size={16} />
+                                    <input
+                                        required
+                                        type="number"
+                                        className="w-full pl-10 pr-4 py-3 bg-amber-500/5 border border-amber-500/20 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 outline-none font-bold text-amber-600"
+                                        placeholder="Enter manual payment amount"
+                                        value={formData.customAmount || ''}
+                                        onChange={e => setFormData({ ...formData, customAmount: e.target.value })}
+                                    />
+                                </div>
+                                <p className="text-[9px] text-amber-600/70 pl-1 italic">* This is the amount the customer will pay now.</p>
+                            </motion.div>
+                        )}
+
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1">
@@ -247,8 +354,17 @@ export default function InvoiceManager() {
                         >
                             <div className="flex items-center justify-between">
                                 <h3 className="text-sm font-bold uppercase tracking-widest text-emerald-400">Success! Payment Link Ready</h3>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-[10px] font-bold px-2 py-1 bg-emerald-500/10 text-emerald-500 rounded-lg">{formData.currency} {formData.amount}</span>
+                                <div className="flex flex-col items-end gap-1">
+                                    <span className="text-[10px] font-bold px-2 py-1 bg-emerald-500/10 text-emerald-500 rounded-lg">
+                                        Total: {formData.currency} {formData.amount}
+                                    </span>
+                                    <span className="text-[14px] font-black px-3 py-1 bg-amber-500 text-white rounded-lg shadow-lg shadow-amber-500/20">
+                                        Pay Now: {formData.currency} {
+                                            formData.paymentType === 'full' ? formData.amount :
+                                                formData.paymentType === 'partial' ? (formData.amount / 2).toFixed(2) :
+                                                    formData.customAmount || '0.00'
+                                        }
+                                    </span>
                                 </div>
                             </div>
 
@@ -264,8 +380,20 @@ export default function InvoiceManager() {
                             </div>
 
                             <div className="flex gap-4">
-                                <button className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center gap-2 transition-all">
+                                <button
+                                    onClick={() => {
+                                        const url = `https://wa.me/?text=${encodeURIComponent(`Hi ${formData.customerName}, here is your invoice for ${formData.currency} ${formData.amount}: ${result.paymentLink}`)}`;
+                                        window.open(url, '_blank');
+                                    }}
+                                    className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center gap-2 transition-all"
+                                >
                                     <Send size={14} /> Send via WhatsApp
+                                </button>
+                                <button
+                                    onClick={handleDownloadPDF}
+                                    className="px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center gap-2 transition-all"
+                                >
+                                    <FileText size={14} /> Download PDF
                                 </button>
                                 <button className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-600/20">
                                     <Mail size={14} /> Email Invoice

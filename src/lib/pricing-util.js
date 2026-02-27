@@ -44,6 +44,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     };
 
     const isAirportTransfer = vehicleData?.category === 'airport-transfer';
+    const isAirportRide = isFromAirport || isToAirport;
 
     const tiers = (vehicleData.tiers || []).sort((a, b) => a.min - b.min);
 
@@ -52,11 +53,15 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     let overrideApplied = false;
 
     // Check for Location-Specific Per-KM Rate Override
-    const matchedOverride = findMatchingDestination(pickup, dynamicDestinations) ||
-        findMatchingDestination(dropoff, dynamicDestinations);
+    // Only apply manual destination rates for "Ride Now" trips that are NOT airport rides
+    const matchedOverride = (!isAirportTransfer && !isAirportRide) ?
+        (findMatchingDestination(pickup, dynamicDestinations) || findMatchingDestination(dropoff, dynamicDestinations)) :
+        null;
+
     const vehicleType = vehicleData.vehicleType;
 
     if (matchedOverride) {
+
         // 1. Vehicle-Specific Tiers (Highest Priority)
         const vTiersMap = matchedOverride.vehicleTiers instanceof Map ?
             Object.fromEntries(matchedOverride.vehicleTiers) :

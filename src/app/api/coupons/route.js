@@ -16,6 +16,11 @@ export async function GET(req) {
 
     try {
         const query = isPublic ? { displayInWidget: true, isActive: true } : {};
+
+        // Leakage protection: only documents with a definite code and value are actual Coupons
+        query.code = { $exists: true, $ne: null };
+        query.value = { $exists: true, $ne: null };
+
         if (isPublic) {
             query.expiryDate = { $gt: new Date() };
         }

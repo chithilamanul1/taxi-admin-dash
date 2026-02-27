@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { Users, Car, MapPin, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink, Plus } from 'lucide-react'
+import { Users, Car, MapPin, Map as MapIcon, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink, Plus } from 'lucide-react'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -487,7 +487,7 @@ export default function AdminDashboard() {
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Tour Packages</span>
                     </button>
                     <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('Day Trips'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' && tourCategoryFilter === 'Day Trips' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
-                        <Map size={20} />
+                        <MapIcon size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Day Trips</span>
                     </button>
                     <button onClick={() => {
@@ -3077,8 +3077,13 @@ export default function AdminDashboard() {
                                         {/* Coupon Design */}
                                         <div className="p-6">
                                             <div className="flex items-start justify-between mb-4">
-                                                <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
-                                                    <Percent className="text-white" size={20} />
+                                                <div className="flex flex-col gap-1">
+                                                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                                                        <Percent className="text-white" size={20} />
+                                                    </div>
+                                                    <span className={`text-[8px] font-black uppercase px-1.5 py-0.5 rounded-full self-start mt-1 ${c.applicableLocations?.length > 0 ? 'bg-amber-100 text-amber-600 border border-amber-200' : 'bg-blue-100 text-blue-600 border border-blue-200'}`}>
+                                                        {c.applicableLocations?.length > 0 ? 'Location Specific' : 'Global Coupon'}
+                                                    </span>
                                                 </div>
                                                 <button
                                                     onClick={() => handleDeleteCoupon(c._id)}

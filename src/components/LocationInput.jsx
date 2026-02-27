@@ -133,8 +133,8 @@ const LocationInput = ({
                 onFocus={() => { if (onFocus) onFocus(); if (suggestions.length > 0) setShowSuggestions(true); }}
                 disabled={disabled}
                 placeholder={googleLoaded ? placeholder : 'Loading maps...'}
-                className={`w-full pl-16 pr-14 h-16 rounded-2xl text-base sm:text-lg font-bold bg-white dark:bg-white/5 border border-slate-900 dark:border-white/10 text-slate-900 dark:text-white outline-none focus:border-black dark:focus:border-emerald-500 focus:ring-4 focus:ring-slate-900/5 dark:focus:ring-emerald-500/10 placeholder:text-slate-500 dark:placeholder:text-white/40 truncate 
-                ${disabled ? 'cursor-not-allowed bg-slate-100 dark:bg-emerald-900/20 border-slate-300 dark:border-emerald-700' : 'bg-white dark:bg-emerald-900/20 border-slate-900 dark:border-emerald-800/50'}`}
+                className={`w-full pl-16 pr-14 h-16 rounded-2xl text-base sm:text-lg font-bold bg-white dark:bg-white/5 border-2 border-slate-900 dark:border-white/10 text-slate-900 dark:text-white outline-none focus:border-emerald-600 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 dark:focus:ring-emerald-500/10 placeholder:text-slate-500 dark:placeholder:text-white/40 truncate 
+                ${disabled ? 'cursor-not-allowed bg-slate-100 dark:bg-emerald-900/20 border-slate-300 dark:border-emerald-700' : 'bg-white dark:bg-emerald-900/20 border-2 border-slate-900 dark:border-emerald-800/50 hover:border-emerald-600'}`}
             />
 
             {/* Clear Button */}

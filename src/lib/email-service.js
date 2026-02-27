@@ -1246,7 +1246,8 @@ export default {
     sendReviewThankYou,
     sendBookingCancelled,
     sendBookingStatusUpdate,
-    sendCustomTripInquiry
+    sendCustomTripInquiry,
+    sendManualInvoice
 };
 
 // 10. GENERIC OWNER NOTIFICATION (The "Everything" Alert)
@@ -1286,3 +1287,73 @@ export async function sendOwnerNotification(subject, details) {
         console.error('[Email] Owner notification failed:', error);
     }
 }
+
+// 11. MANUAL INVOICE / PAYMENT LINK
+export async function sendManualInvoice(booking) {
+    const amountToPay = booking.paidAmount || 0;
+    const totalAmount = booking.totalPrice || 0;
+    const bookingId = booking._id?.toString().slice(-8).toUpperCase();
+
+    const content = `
+        <!-- Hero Section -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
+            <tr>
+                <td>
+                    ${components.badge('📄 Invoice Ready', 'info')}
+                    <h2 style="color: ${COLORS.text}; margin: 20px 0 10px; font-size: 24px; font-weight: 700;">
+                        Hi ${booking.customerName?.split(' ')[0] || 'Traveler'},
+                    </h2>
+                    <p style="color: ${COLORS.textMuted}; margin: 0; font-size: 14px;">
+                        Your custom invoice and payment link are ready for review.
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Amount Card -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, ${COLORS.primary}, #047857); border-radius: 16px; margin-bottom: 30px;">
+            <tr>
+                <td style="padding: 30px; text-align: center;">
+                    <p style="margin: 0 0 8px; color: rgba(255,255,255,0.7); font-size: 11px; text-transform: uppercase; letter-spacing: 2px;">Amount to Pay Now</p>
+                    <p style="margin: 0; color: ${COLORS.goldLight}; font-size: 42px; font-weight: 800;">
+                        ${booking.currency || 'LKR'} ${amountToPay.toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
+                    </p>
+                    ${totalAmount > amountToPay ? `
+                    <p style="margin: 10px 0 0; color: rgba(255,255,255,0.6); font-size: 14px;">Total Invoice: ${booking.currency} ${totalAmount.toLocaleString()}</p>
+                    ` : ''}
+                </td>
+            </tr>
+        </table>
+
+        <!-- Details Card -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
+            ${components.infoCard('📍', 'Trip Route', `${booking.pickupLocation?.address?.split(',')[0] || 'Pickup'} to ${booking.dropoffLocation?.address?.split(',')[0] || 'Dropoff'}`)}
+            ${components.infoCard('📅', 'Date & Time', `${booking.scheduledDate || 'TBD'} ${booking.scheduledTime || ''}`)}
+            ${booking.notes ? components.infoCard('📝', 'Notes', booking.notes) : ''}
+        </table>
+
+        ${components.button('Pay Securely Online', booking.paymentLink)}
+
+        <p style="text-align: center; color: ${COLORS.textMuted}; font-size: 12px; margin-top: 20px;">
+            Ref: #${bookingId} | Secured by Airport Taxis Sri Lanka
+        </p>
+    `;
+
+    if (booking.customerEmail) {
+        try {
+            const transporter = getTransporter();
+            if (transporter) {
+                await transporter.sendMail({
+                    from: FROM_EMAIL,
+                    to: booking.customerEmail,
+                    subject: `📄 Invoice for your trip: ${booking.currency || 'LKR'} ${amountToPay.toLocaleString()} - Airport Taxis`,
+                    html: getPremiumTemplate(content, 'Custom Invoice')
+                });
+                console.log('[Email] Manual invoice sent to:', booking.customerEmail);
+            }
+        } catch (error) {
+            console.error('[Email] Failed to send manual invoice:', error);
+        }
+    }
+}
+
