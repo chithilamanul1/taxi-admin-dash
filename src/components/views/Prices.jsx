@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Lock, Briefcase, Wind, Zap } from 'lucide-react'
 import { debounce } from '@/lib/utils'
-import { useCurrency } from '../context/CurrencyContext'
+import { useCurrency } from '@/context/CurrencyContext'
 import { calculateBasePrice } from '@/lib/pricing-util'
 import { destinations as staticDestinations } from '@/lib/destinations'
 
