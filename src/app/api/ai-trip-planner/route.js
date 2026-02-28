@@ -1,3 +1,4 @@
+// Final build fix attempt: explicit dependency and relative paths
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
