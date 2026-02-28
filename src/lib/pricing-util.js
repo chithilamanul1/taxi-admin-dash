@@ -14,20 +14,29 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const isFromAirport = pickup?.toLowerCase().includes('airport') || pickup?.toLowerCase().includes('katunayake') || pickup?.toLowerCase().includes('cmb');
     const isToAirport = dropoff?.toLowerCase().includes('airport') || dropoff?.toLowerCase().includes('katunayake') || dropoff?.toLowerCase().includes('cmb');
 
-    // Helper for robust location matching (e.g. "Ella" matches "Ravana Pool Club, Ella")
+    // Helper for robust location matching
     const findMatchingDestination = (address, destinationsList) => {
         if (!address || !destinationsList || destinationsList.length === 0) return null;
 
-        // Clean the address: remove extra spaces and punctuation
-        const addrLower = address.toLowerCase().replace(/[,.-]/g, ' ').replace(/\s+/g, ' ').trim();
+        // More aggressive cleaning: remove "Sri Lanka", generic terms, extra spaces, and punctuation
+        const normalize = (str) => {
+            if (!str) return '';
+            return str.toLowerCase()
+                .replace(/sri lanka/g, '')
+                .replace(/[,.-]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+        };
+
+        const addrLower = normalize(address);
 
         // 1. Identify all destinations that match this address
         const matches = destinationsList.filter(d => {
-            const name = d.name?.toLowerCase().trim();
-            const title = d.title?.toLowerCase().trim();
+            const name = normalize(d.name);
+            const title = normalize(d.title);
             if (!name && !title) return false;
 
-            // Check if name is a word/phrase within the address
+            // Check if cleaned name is a word/phrase within the cleaned address
             const isMatch = (name && addrLower.includes(name)) || (title && addrLower.includes(title));
             return isMatch;
         });
@@ -35,10 +44,9 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         if (matches.length === 0) return null;
 
         // 2. Sort matches by name length (longest/most specific first)
-        // This ensures "Mount Lavinia" takes priority over just "Lavinia" if both exist.
         return matches.sort((a, b) => {
-            const lenA = a.name?.length || a.title?.length || 0;
-            const lenB = b.name?.length || b.title?.length || 0;
+            const lenA = (a.name || a.title || '').length;
+            const lenB = (b.name || b.title || '').length;
             return lenB - lenA;
         })[0];
     };
@@ -60,45 +68,59 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const vehicleSlug = vehicleData.vehicleSlug || vehicleType; // Use vehicleSlug if available, fallback to vehicleType
 
     if (matchedOverride) {
-
-        // 1. Vehicle-Specific Tiers (Highest Priority)
-        const vTiersMap = matchedOverride.vehicleTiers instanceof Map ?
-            Object.fromEntries(matchedOverride.vehicleTiers) :
-            (matchedOverride.vehicleTiers || {});
+        // Ensure we have a plain object for tiers regardless of source (Mongoose Map vs POJO)
+        let vTiersMap = {};
+        if (matchedOverride.vehicleTiers) {
+            if (typeof matchedOverride.vehicleTiers.get === 'function') {
+                // It's a Mongoose Map
+                vTiersMap = Object.fromEntries(matchedOverride.vehicleTiers);
+            } else {
+                // It's a plain object
+                vTiersMap = matchedOverride.vehicleTiers;
+            }
+        }
 
         const vTiers = vTiersMap[vehicleSlug] || vTiersMap[vehicleType];
 
         if (Array.isArray(vTiers) && vTiers.length > 0) {
-            const matchingTier = vTiers.find(t => distKm >= (t.minKm || t.min || 0) && distKm <= (t.maxKm || t.max || Infinity));
+            // Robust tier search
+            const matchingTier = vTiers.find(t => {
+                const min = Number(t.minKm || t.min || 0);
+                const max = Number(t.maxKm || t.max || Infinity);
+                const isMatch = distKm >= min && distKm <= max;
+                return isMatch;
+            });
+
             if (matchingTier) {
+                const val = Number(matchingTier.value || matchingTier.price || matchingTier.rate || 0);
                 if (matchingTier.type === 'flat') {
-                    console.log(`[Pricing] Applied TIERED FLAT rate for ${matchedOverride.name} (${vehicleType}): LKR ${matchingTier.value}`);
-                    distancePrice = matchingTier.value;
+                    distancePrice = val;
                 } else {
-                    console.log(`[Pricing] Applied TIERED PER-KM rate for ${matchedOverride.name} (${vehicleType}): LKR ${matchingTier.value}/km`);
-                    distancePrice = (distKm * matchingTier.value);
+                    distancePrice = (distKm * val);
                 }
                 overrideApplied = true;
             }
         }
 
-        // 2. Vehicle-Specific Per-KM Override (Legacy/Fallback)
+        // 2. Fallback to Per-KM Overrides
         if (!overrideApplied) {
-            const vOverrides = matchedOverride.vehicleRateOverrides instanceof Map ?
-                Object.fromEntries(matchedOverride.vehicleRateOverrides) :
-                (matchedOverride.vehicleRateOverrides || {});
+            let vOverrides = {};
+            if (matchedOverride.vehicleRateOverrides) {
+                if (typeof matchedOverride.vehicleRateOverrides.get === 'function') {
+                    vOverrides = Object.fromEntries(matchedOverride.vehicleRateOverrides);
+                } else {
+                    vOverrides = matchedOverride.vehicleRateOverrides;
+                }
+            }
 
-            const vehicleSpecificRate = vOverrides[vehicleSlug] || vOverrides[vehicleType];
+            const vehicleSpecificRate = Number(vOverrides[vehicleSlug] || vOverrides[vehicleType] || 0);
 
             if (vehicleSpecificRate > 0) {
-                console.log(`[Pricing] Applied VEHICLE-SPECIFIC rate override for ${matchedOverride.name} (${vehicleType}): LKR ${vehicleSpecificRate}/km`);
                 distancePrice = (distKm * vehicleSpecificRate);
                 overrideApplied = true;
             }
-            // 3. Global Per-KM Override (Fallback)
             else if (matchedOverride.perKmRateOverride > 0) {
-                const perKmRate = matchedOverride.perKmRateOverride;
-                console.log(`[Pricing] Applied GLOBAL destination rate override for ${matchedOverride.name}: LKR ${perKmRate}/km`);
+                const perKmRate = Number(matchedOverride.perKmRateOverride);
                 distancePrice = (distKm * perKmRate);
                 overrideApplied = true;
             }
@@ -113,7 +135,6 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
             if (matchingTier) {
                 if (matchingTier.type === 'flat') {
                     distancePrice = matchingTier.price || matchingTier.rate || 0;
-                    console.log(`[Pricing] Applied Tiered FLAT rate (${matchingTier.min}-${matchingTier.max}km): LKR ${distancePrice}`);
                 } else {
                     const rate = matchingTier.rate || matchingTier.price || 0;
                     distancePrice = (distKm * rate);

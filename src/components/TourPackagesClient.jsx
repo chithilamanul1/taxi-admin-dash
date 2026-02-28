@@ -76,7 +76,7 @@ export default function TourPackagesClient() {
                 </div>
 
                 <div className="flex flex-wrap justify-center gap-4 mb-12">
-                    {['All', 'Day Trips', 'City Tours', 'Safaris', 'Multi-Day'].map((cat) => (
+                    {['All', 'City Tours', 'Safaris', 'Multi-Day'].map((cat) => (
                         <button
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
@@ -98,8 +98,10 @@ export default function TourPackagesClient() {
                     ) : (
                         Array.isArray(tours) && tours
                             .filter(tour => {
+                                // Exclude day trips from the tour packages page entirely
+                                if (tour.category === 'day-trip') return false;
+
                                 if (activeCategory === 'All') return true;
-                                if (activeCategory === 'Day Trips' && tour.category === 'day-trip') return true;
                                 if (activeCategory === 'City Tours' && tour.category === 'city-tour') return true;
                                 if (activeCategory === 'Safaris' && tour.category === 'safari') return true;
                                 if (activeCategory === 'Multi-Day' && tour.category === 'tour-package') return true;
