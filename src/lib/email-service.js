@@ -343,6 +343,17 @@ export async function sendBookingConfirmation(booking) {
             </tr>
         </table>
 
+        <!-- Highway Tolls Reminder -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #fef2f2; border: 1px dashed #ef4444; border-radius: 12px; margin-bottom: 20px;">
+            <tr>
+                <td style="padding: 16px 20px; text-align: center;">
+                    <p style="margin: 0; color: #991b1b; font-size: 12px; font-weight: bold; text-transform: uppercase;">
+                        ⚠️ REMINDER: Highway tolls must be paid by the customer during the journey.
+                    </p>
+                </td>
+            </tr>
+        </table>
+
         ${booking.hasNameBoard ? `
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: rgba(212,175,55,0.1); border: 1px solid ${COLORS.gold}; border-radius: 12px; margin-bottom: 20px;">
             <tr>
@@ -552,13 +563,6 @@ export async function sendBookingConfirmation(booking) {
                 </td>
             </tr>
             ` : ''}
-            <tr>
-                <td colspan="2" style="background-color: #fee2e2; padding: 10px; border: 1px dashed #ef4444; text-align: center;">
-                    <p style="margin: 0; color: #991b1b; font-size: 11px; font-weight: bold; text-transform: uppercase;">
-                        ⚠️ REMINDER: Highway tolls must be paid by the customer during the journey.
-                    </p>
-                </td>
-            </tr>
         </table>
         
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">

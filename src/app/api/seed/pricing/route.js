@@ -90,7 +90,7 @@ export async function GET(req) {
             miniCar: {
                 vehicleType: 'mini-car',
                 name: 'Mini Car (Budget)',
-                image: '/vehicles/minicar.jpeg',
+                image: '/vehicles/minicar.png',
                 capacity: 3, luggage: 2, handLuggage: 2,
                 basePrice: 3500, baseKm: 20, perKmRate: 100,
                 features: commonFeatures,
@@ -99,7 +99,7 @@ export async function GET(req) {
             sedan: {
                 vehicleType: 'sedan',
                 name: 'Sedan Car',
-                image: '/vehicles/sedan.png',
+                image: '/vehicles/sedancar.png',
                 capacity: 4, luggage: 3, handLuggage: 3,
                 basePrice: 4500, baseKm: 20, perKmRate: 130,
                 features: commonFeatures,
@@ -108,7 +108,7 @@ export async function GET(req) {
             vezel: {
                 vehicleType: 'vezel',
                 name: 'Honda Vezel',
-                image: '/vehicles/vezel.png',
+                image: '/vehicles/Hondavezel.png',
                 capacity: 4, luggage: 3, handLuggage: 2,
                 basePrice: 5500, baseKm: 20, perKmRate: 130,
                 features: [...commonFeatures, 'Hybrid']
@@ -116,7 +116,7 @@ export async function GET(req) {
             miniVan4: {
                 vehicleType: 'mini-van-05',
                 name: 'Mini Van (Seat 05)',
-                image: '/vehicles/minivan-4.jpg',
+                image: '/vehicles/minivan5seat.png',
                 capacity: 5, luggage: 4, handLuggage: 2,
                 basePrice: 6000, baseKm: 20, perKmRate: 200,
                 features: commonFeatures,
@@ -125,7 +125,7 @@ export async function GET(req) {
             miniVanEvery: {
                 vehicleType: 'mini-van-every',
                 name: 'Mini Van (Every)',
-                image: '/vehicles/every.jpg',
+                image: '/vehicles/susukievery.png',
                 capacity: 4, luggage: 4, handLuggage: 2,
                 basePrice: 4500, baseKm: 20, perKmRate: 150,
                 features: commonFeatures,
@@ -134,7 +134,7 @@ export async function GET(req) {
             suv: {
                 vehicleType: 'suv',
                 name: 'SUV (Luxury)',
-                image: '/vehicles/suv.jpg',
+                image: '/vehicles/Hondavezel.png',
                 capacity: 4, luggage: 4, handLuggage: 3,
                 basePrice: 8000, baseKm: 20, perKmRate: 160,
                 features: [...commonFeatures, 'Leather Seats']
@@ -142,7 +142,7 @@ export async function GET(req) {
             kdhVan: {
                 vehicleType: 'kdh-van',
                 name: 'KDH High Roof Van',
-                image: '/vehicles/Van.jpg',
+                image: '/vehicles/toyota-highroof.png',
                 capacity: 9, luggage: 8, handLuggage: 5,
                 basePrice: 8500, baseKm: 40, perKmRate: 180,
                 features: commonFeatures,
@@ -151,7 +151,7 @@ export async function GET(req) {
             bus: {
                 vehicleType: 'bus',
                 name: 'Mini Bus (26-Seater)',
-                image: '/vehicles/minibus.jpg',
+                image: '/vehicles/costerbus.png',
                 capacity: 16, luggage: 10, handLuggage: 10,
                 basePrice: 15000, baseKm: 40, perKmRate: 250,
                 features: [...commonFeatures, 'TV', 'Microphone']
@@ -159,7 +159,7 @@ export async function GET(req) {
             coach: {
                 vehicleType: 'coach-bus',
                 name: 'Luxury Coach Bus',
-                image: '/vehicles/couch_bus.jpg',
+                image: '/vehicles/coach-bus.png',
                 capacity: 45, luggage: 50, handLuggage: 45,
                 basePrice: 25000, baseKm: 40, perKmRate: 450,
                 features: [...commonFeatures, 'TV', 'Reclining Seats']

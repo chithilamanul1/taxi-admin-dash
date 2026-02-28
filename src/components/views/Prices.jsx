@@ -12,7 +12,7 @@ const VEHICLE_PRICING = {
     'mini-car': {
         name: 'MINI CAR',
         model: '',
-        image: '/vehicles/wagon-r.jpeg',
+        image: '/vehicles/minicar.png',
         maxPassengers: 2,
         imageScale: 1.50,
         specs: {
@@ -30,7 +30,7 @@ const VEHICLE_PRICING = {
     'sedan': {
         name: 'SEDAN',
         model: '',
-        image: '/vehicles/sedan.png',
+        image: '/vehicles/sedancar.png',
         maxPassengers: 3,
         imageScale: 1.50,
         specs: {
@@ -51,7 +51,7 @@ const VEHICLE_PRICING = {
     'mini-van-every': {
         name: 'MINI VAN (Every)',
         model: '',
-        image: '/vehicles/every.jpg',
+        image: '/vehicles/susukievery.png',
         maxPassengers: 3,
         imageScale: 1.50,
         specs: {
@@ -72,7 +72,7 @@ const VEHICLE_PRICING = {
     'mini-van-05': {
         name: 'MINI VAN (4 Seat)',
         model: '',
-        image: '/vehicles/minivan-4.jpg',
+        image: '/vehicles/minivan5seat.png',
         maxPassengers: 4,
         imageScale: 1.15,
         specs: {
@@ -92,7 +92,7 @@ const VEHICLE_PRICING = {
     'suv': {
         name: 'SUV / VEZEL',
         model: '',
-        image: '/vehicles/vezel.jpg',
+        image: '/vehicles/Hondavezel.png',
         maxPassengers: 3,
         imageScale: 1.15,
         specs: {
@@ -112,7 +112,7 @@ const VEHICLE_PRICING = {
     'kdh-van': {
         name: 'VAN (KDH)',
         model: '',
-        image: '/vehicles/Van.jpg',
+        image: '/vehicles/toyota-highroof.png',
         maxPassengers: 6,
         imageScale: 1.35,
         specs: {
@@ -132,7 +132,7 @@ const VEHICLE_PRICING = {
     'mini-bus': {
         name: 'MINI BUS',
         model: '',
-        image: '/vehicles/minibus.jpg',
+        image: '/vehicles/costerbus.png',
         maxPassengers: 7,
         imageScale: 1.35,
         specs: {
@@ -152,7 +152,7 @@ const VEHICLE_PRICING = {
     'bus': {
         name: 'BUS (20+ SEATER)',
         model: '',
-        image: '/vehicles/bus.png',
+        image: '/vehicles/coach-bus.png',
         maxPassengers: 25,
         imageScale: 1.0,
         specs: { luggage: 20, handLuggage: 20, ac: true },
@@ -169,7 +169,7 @@ const VEHICLE_PRICING = {
     'coach-bus': {
         name: 'COACH BUS (40+ SEATER)',
         model: '',
-        image: '/vehicles/coach.png',
+        image: '/vehicles/coach-bus.png',
         maxPassengers: 45,
         imageScale: 1.0,
         specs: { luggage: 40, handLuggage: 40, ac: true },

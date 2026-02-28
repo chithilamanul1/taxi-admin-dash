@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {
     Check, MessageCircle, MapPin, Clock, Calendar, ArrowLeft, Plus, Minus,
-    ShieldCheck, User, CheckCircle, XCircle, AlertCircle, Info, Construction,
+    ShieldCheck, User, Users, Hotel, CheckCircle, XCircle, AlertCircle, Info, Construction,
     Ship, Heart, Utensils, Camera, Home, Leaf, Coffee, Waves, Sun, Bike, Shield, Mountain, Landmark, Map as MapIcon, Navigation
 } from 'lucide-react'
 import TourBookingModal from './TourBookingModal'

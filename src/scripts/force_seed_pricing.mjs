@@ -46,43 +46,61 @@ const PricingSchema = new mongoose.Schema({
 // Prevent Overwrite Error
 const Pricing = mongoose.models.Pricing || mongoose.model('Pricing', PricingSchema);
 
+const commonFeatures = ['Air Conditioning', 'Bluetooth', 'USB Charging'];
+
 const vehicles = [
-    // --- AIRPORT TRANSFER ---
     {
         name: 'Mini Car (Alto)',
         vehicleType: 'mini-car',
         category: 'airport-transfer',
         capacity: 3,
         luggage: 2,
-        basePrice: 3500, // Show min price
+        basePrice: 3500,
         baseKm: 0,
-        perKmRate: 92.5, // Lowest rate for display
-        image: '/vehicles/mini.png',
+        perKmRate: 100,
+        image: '/vehicles/minicar.png',
+        features: commonFeatures,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 3500 },
             { min: 21, max: 40, type: 'flat', price: 4000 },
             { min: 41, max: 130, type: 'per_km', rate: 100 },
-            { min: 131, max: 9999, type: 'per_km', rate: 92.50 }
+            { min: 131, max: 9999, type: 'per_km', rate: 102 }
         ]
     },
     {
-        name: 'Sedan (Prius/Axio)',
+        name: 'Sedan (Prius/Axio/Similar)',
         vehicleType: 'sedan',
         category: 'airport-transfer',
         capacity: 4,
         luggage: 3,
         basePrice: 4500,
         baseKm: 0,
-        perKmRate: 110,
-        image: '/vehicles/sedan.png',
+        perKmRate: 130,
+        image: '/vehicles/sedancar.png',
+        features: commonFeatures,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 4500 },
             { min: 21, max: 40, type: 'flat', price: 6000 },
-            { min: 41, max: 50, type: 'per_km', rate: 150 },
-            { min: 51, max: 100, type: 'per_km', rate: 130 },
-            { min: 101, max: 140, type: 'per_km', rate: 120 },
-            { min: 141, max: 200, type: 'per_km', rate: 115 },
-            { min: 201, max: 9999, type: 'per_km', rate: 110 }
+            { min: 41, max: 100, type: 'per_km', rate: 130 },
+            { min: 101, max: 9999, type: 'per_km', rate: 125 }
+        ]
+    },
+    {
+        name: 'Honda Vezel (Hybrid/Similar)',
+        vehicleType: 'vezel',
+        category: 'airport-transfer',
+        capacity: 4,
+        luggage: 3,
+        basePrice: 5500,
+        baseKm: 0,
+        perKmRate: 135,
+        image: '/vehicles/Hondavezel.png',
+        features: [...commonFeatures, 'Hybrid'],
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 5500 },
+            { min: 21, max: 40, type: 'flat', price: 7500 },
+            { min: 41, max: 100, type: 'per_km', rate: 145 },
+            { min: 101, max: 9999, type: 'per_km', rate: 135 }
         ]
     },
     {
@@ -94,92 +112,107 @@ const vehicles = [
         basePrice: 4500,
         baseKm: 0,
         perKmRate: 110,
-        image: '/vehicles/minivan.png',
+        image: '/vehicles/susukievery.png',
+        features: commonFeatures,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 4500 },
             { min: 21, max: 40, type: 'flat', price: 6000 },
-            { min: 41, max: 50, type: 'per_km', rate: 150 },
-            { min: 51, max: 100, type: 'per_km', rate: 130 },
-            { min: 101, max: 140, type: 'per_km', rate: 120 },
-            { min: 141, max: 200, type: 'per_km', rate: 115 },
-            { min: 201, max: 9999, type: 'per_km', rate: 110 }
+            { min: 41, max: 100, type: 'per_km', rate: 130 },
+            { min: 101, max: 9999, type: 'per_km', rate: 120 }
         ]
     },
     {
         name: 'Mini Van (5 Seater)',
-        vehicleType: 'mini-van-5',
+        vehicleType: 'mini-van-05',
         category: 'airport-transfer',
         capacity: 5,
         luggage: 5,
         basePrice: 6000,
         baseKm: 0,
-        perKmRate: 120,
-        image: '/vehicles/kdh.jpg', // Placeholder for van
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 6000 },
-            { min: 21, max: 40, type: 'flat', price: 8500 },
-            { min: 41, max: 100, type: 'per_km', rate: 200 },
-            { min: 101, max: 140, type: 'per_km', rate: 160 },
-            { min: 141, max: 200, type: 'per_km', rate: 130 },
-            { min: 201, max: 9999, type: 'per_km', rate: 120 }
-        ]
-    },
-    {
-        name: 'KDH Van',
-        vehicleType: 'kdh-van',
-        category: 'airport-transfer',
-        capacity: 9,
-        luggage: 8,
-        basePrice: 6000,
-        baseKm: 0,
-        perKmRate: 120,
-        image: '/vehicles/kdh.jpg',
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 6000 },
-            { min: 21, max: 40, type: 'flat', price: 8500 },
-            { min: 41, max: 100, type: 'per_km', rate: 200 },
-            { min: 101, max: 140, type: 'per_km', rate: 160 },
-            { min: 141, max: 200, type: 'per_km', rate: 130 },
-            { min: 201, max: 9999, type: 'per_km', rate: 120 }
-        ]
-    },
-    {
-        name: 'Mini Bus',
-        vehicleType: 'mini-bus',
-        category: 'airport-transfer',
-        capacity: 20,
-        luggage: 15,
-        basePrice: 7500,
-        baseKm: 0,
         perKmRate: 130,
-        image: '/vehicles/bus_placeholder.png', // Ensure this exists or use placeholder
+        image: '/vehicles/minivan5seat.png',
+        features: commonFeatures,
         tiers: [
-            { min: 0, max: 20, type: 'flat', price: 7500 },
-            { min: 21, max: 40, type: 'flat', price: 12000 },
-            { min: 41, max: 100, type: 'per_km', rate: 220 },
-            { min: 101, max: 140, type: 'per_km', rate: 200 },
-            { min: 141, max: 200, type: 'per_km', rate: 140 },
-            { min: 201, max: 9999, type: 'per_km', rate: 130 }
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 21, max: 40, type: 'flat', price: 8500 },
+            { min: 41, max: 100, type: 'per_km', rate: 200 },
+            { min: 101, max: 9999, type: 'per_km', rate: 130 }
         ]
     },
     {
-        name: 'SUV',
+        name: 'SUV (Luxury)',
         vehicleType: 'suv',
         category: 'airport-transfer',
         capacity: 4,
-        luggage: 3,
-        basePrice: 7000,
+        luggage: 4,
+        basePrice: 8000,
         baseKm: 0,
-        perKmRate: 180,
-        image: '/vehicles/sedan.png', // Placeholder
+        perKmRate: 160,
+        image: '/vehicles/Hondavezel.png',
+        features: [...commonFeatures, 'Leather Seats'],
         tiers: [
-            { min: 0, max: 20, type: 'flat', price: 7000 },
+            { min: 0, max: 20, type: 'flat', price: 8000 },
             { min: 21, max: 40, type: 'flat', price: 12000 },
             { min: 41, max: 100, type: 'per_km', rate: 250 },
             { min: 101, max: 9999, type: 'per_km', rate: 180 }
         ]
+    },
+    {
+        name: 'KDH High Roof Van',
+        vehicleType: 'kdh-van',
+        category: 'airport-transfer',
+        capacity: 9,
+        luggage: 8,
+        basePrice: 8500,
+        baseKm: 0,
+        perKmRate: 180,
+        image: '/vehicles/toyota-highroof.png',
+        features: commonFeatures,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 8500 },
+            { min: 21, max: 40, type: 'flat', price: 12000 },
+            { min: 41, max: 100, type: 'per_km', rate: 200 },
+            { min: 101, max: 9999, type: 'per_km', rate: 180 }
+        ]
+    },
+    {
+        name: 'Mini Bus (Coster)',
+        vehicleType: 'mini-bus',
+        category: 'airport-transfer',
+        capacity: 20,
+        luggage: 15,
+        basePrice: 15000,
+        baseKm: 0,
+        perKmRate: 250,
+        image: '/vehicles/costerbus.png',
+        features: [...commonFeatures, 'TV', 'Microphone'],
+        tiers: [
+            { min: 0, max: 40, type: 'flat', price: 15000 },
+            { min: 41, max: 100, type: 'per_km', rate: 250 },
+            { min: 101, max: 9999, type: 'per_km', rate: 220 }
+        ]
+    },
+    {
+        name: 'Luxury Coach Bus',
+        vehicleType: 'coach-bus',
+        category: 'airport-transfer',
+        capacity: 45,
+        luggage: 50,
+        basePrice: 25000,
+        baseKm: 0,
+        perKmRate: 450,
+        image: '/vehicles/coach-bus.png',
+        features: [...commonFeatures, 'TV', 'Reclining Seats'],
+        tiers: [
+            { min: 0, max: 40, type: 'flat', price: 25000 },
+            { min: 41, max: 100, type: 'per_km', rate: 450 },
+            { min: 101, max: 9999, type: 'per_km', rate: 400 }
+        ]
     }
 ];
+
+// Duplicate for city-tour/ride-now if needed or just use current
+const rideNowVehicles = vehicles.map(v => ({ ...v, category: 'ride-now' }));
 
 async function seed() {
     try {
@@ -193,16 +226,12 @@ async function seed() {
 
         // 2. Insert
         console.log('🌱 Seeding new data...');
-        const result = await Pricing.insertMany(vehicles);
+        const result = await Pricing.insertMany([...vehicles, ...rideNowVehicles]);
         console.log(`✅ Successfully seeded ${result.length} vehicles!`);
 
         // 3. Verify
         const count = await Pricing.countDocuments();
         console.log(`📊 Total Documents in Checking: ${count}`);
-
-        const airport = await Pricing.find({ category: 'airport-transfer' });
-        console.log(`✈️  Airport Vehicles: ${airport.length}`);
-        airport.forEach(v => console.log(`   - ${v.name} (${v.vehicleType})`));
 
         await mongoose.disconnect();
         console.log('👋 Done.');
