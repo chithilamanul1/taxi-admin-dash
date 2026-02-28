@@ -50,11 +50,11 @@ export default function TourDetailsClient({ tour }) {
             {/* Navigation Bar */}
             <div className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-                    <Link href="/day-trips" className="flex items-center gap-2 text-slate-500 hover:text-amber-600 transition-colors font-black uppercase tracking-widest text-xs">
+                    <Link href="/day-trips" className="flex items-center gap-2 text-slate-700 hover:text-amber-600 transition-colors font-black uppercase tracking-widest text-xs">
                         <ArrowLeft size={18} /> Back to Day Trips
                     </Link>
                     <div className="hidden md:flex items-center gap-6">
-                        <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">You are viewing</span>
+                        <span className="text-[10px] font-black text-slate-600 font-bold uppercase tracking-widest">You are viewing</span>
                         <span className="text-sm font-black text-slate-900 truncate max-w-[200px]">{tour.title}</span>
                     </div>
                     <button onClick={() => setIsBookingOpen(true)} className="px-6 py-2.5 bg-amber-500 text-white rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-amber-200 hover:bg-amber-600 transition-all">
@@ -87,7 +87,7 @@ export default function TourDetailsClient({ tour }) {
                         <h1 className="text-4xl md:text-6xl lg:text-8xl font-black text-slate-900 mb-6 leading-[1.1] max-w-5xl tracking-tighter drop-shadow-sm">
                             {tour.title}
                         </h1>
-                        <div className="flex items-center gap-3 text-slate-500 font-bold uppercase tracking-widest text-xs">
+                        <div className="flex items-center gap-3 text-slate-700 font-black uppercase tracking-widest text-xs">
                             <MapPin size={18} className="text-amber-500" />
                             <span>{Array.isArray(tour.destinations) ? tour.destinations.join(' • ') : tour.location || 'Sri Lanka'}</span>
                         </div>
@@ -103,22 +103,22 @@ export default function TourDetailsClient({ tour }) {
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                             <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col items-center text-center gap-2">
                                 <Clock size={24} className="text-amber-500" />
-                                <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Duration</span>
+                                <span className="text-[10px] font-black text-slate-600 font-bold uppercase tracking-widest">Duration</span>
                                 <span className="text-sm font-black text-slate-900">{tour.duration?.days ? `${tour.duration.days} Days` : tour.duration}</span>
                             </div>
                             <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col items-center text-center gap-2">
                                 <Navigation size={24} className="text-amber-500" />
-                                <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Transport</span>
+                                <span className="text-[10px] font-black text-slate-600 font-bold uppercase tracking-widest">Transport</span>
                                 <span className="text-sm font-black text-slate-900">Private AC Car</span>
                             </div>
                             <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col items-center text-center gap-2">
                                 <ShieldCheck size={24} className="text-amber-500" />
-                                <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Status</span>
+                                <span className="text-[10px] font-black text-slate-600 font-bold uppercase tracking-widest">Status</span>
                                 <span className="text-sm font-black text-slate-900">Instant Book</span>
                             </div>
                             <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col items-center text-center gap-2">
                                 <Users size={24} className="text-amber-500" />
-                                <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Group</span>
+                                <span className="text-[10px] font-black text-slate-600 font-bold uppercase tracking-widest">Group</span>
                                 <span className="text-sm font-black text-slate-900">Private</span>
                             </div>
                         </div>
@@ -131,7 +131,7 @@ export default function TourDetailsClient({ tour }) {
                                 </div>
                                 Tour Overview
                             </h2>
-                            <div className="prose prose-slate max-w-none text-slate-500 leading-relaxed text-lg mb-10">
+                            <div className="prose prose-slate max-w-none text-slate-800 leading-relaxed text-lg mb-10">
                                 {tour.description}
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -157,7 +157,7 @@ export default function TourDetailsClient({ tour }) {
                                 </div>
                                 Route Visualization
                             </h2>
-                            <p className="text-slate-500 mb-8 text-lg">See your journey across Sri Lanka's most beautiful destinations.</p>
+                            <p className="text-slate-700 mb-8 text-lg font-bold">See your journey across Sri Lanka's most beautiful destinations.</p>
 
                             {/* Google Map Placeholder */}
                             {/* Google Map Integration */}
@@ -205,13 +205,13 @@ export default function TourDetailsClient({ tour }) {
                                             <div className={`grid transition-all duration-500 ease-in-out ${activeDay === item.day ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0 overflow-hidden'}`}>
                                                 <div className="overflow-hidden">
                                                     <div className="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 ml-0 md:ml-6">
-                                                        <p className="text-slate-500 leading-relaxed text-lg whitespace-pre-line font-medium mb-6">
+                                                        <p className="text-slate-700 leading-relaxed text-lg whitespace-pre-line font-bold mb-6">
                                                             {item.description || item.desc}
                                                         </p>
                                                         {item.activities && (
                                                             <div className="flex flex-wrap gap-2">
                                                                 {item.activities.map((act, i) => (
-                                                                    <span key={i} className="px-4 py-2 bg-white rounded-xl text-[10px] font-black text-slate-400 uppercase tracking-widest border border-slate-200">{act}</span>
+                                                                    <span key={i} className="px-4 py-2 bg-white rounded-xl text-[10px] font-black text-slate-500 uppercase tracking-widest border border-slate-200">{act}</span>
                                                                 ))}
                                                             </div>
                                                         )}
@@ -235,7 +235,7 @@ export default function TourDetailsClient({ tour }) {
                                 </h3>
                                 <ul className="space-y-5">
                                     {(tour.includes || tour.inclusions)?.map((item, i) => (
-                                        <li key={i} className="flex gap-4 text-slate-500 group">
+                                        <li key={i} className="flex gap-4 text-slate-700 group">
                                             <div className="shrink-0 mt-1 w-5 h-5 bg-emerald-50 rounded flex items-center justify-center group-hover:bg-emerald-500 transition-colors">
                                                 <Check size={12} className="text-emerald-500 group-hover:text-white" />
                                             </div>
@@ -253,7 +253,7 @@ export default function TourDetailsClient({ tour }) {
                                 </h3>
                                 <ul className="space-y-5">
                                     {(tour.excludes || tour.exclusions)?.map((item, i) => (
-                                        <li key={i} className="flex gap-4 text-slate-500 group">
+                                        <li key={i} className="flex gap-4 text-slate-700 group">
                                             <div className="shrink-0 mt-1 w-5 h-5 bg-rose-50 rounded flex items-center justify-center group-hover:bg-rose-500 transition-colors">
                                                 <Plus size={12} className="text-rose-500 group-hover:text-white rotate-45" />
                                             </div>
@@ -273,17 +273,17 @@ export default function TourDetailsClient({ tour }) {
                                 <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 rounded-full blur-3xl -mr-24 -mt-24"></div>
 
                                 <div className="mb-10 text-center">
-                                    <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest block mb-1">Unbeatable Value</span>
+                                    <span className="text-[10px] font-black text-slate-600 font-bold uppercase tracking-widest block mb-1">Unbeatable Value</span>
                                     <div className="flex items-center justify-center gap-1">
                                         <span className="text-xl font-black text-amber-500 uppercase">{priceCurrency}</span>
                                         <span className="text-6xl font-black text-slate-900 tracking-tighter">{priceAmount?.toLocaleString()}</span>
                                     </div>
-                                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest">per person</span>
+                                    <span className="text-xs font-black text-slate-500 uppercase tracking-widest">per person</span>
                                 </div>
 
                                 <div className="space-y-6 mb-10">
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">Adults</label>
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-4">Adults</label>
                                         <div className="flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-slate-100">
                                             <button onClick={() => setMemberCount(prev => ({ ...prev, adults: Math.max(1, prev.adults - 1) }))} className="w-12 h-12 flex items-center justify-center bg-white border border-slate-200 hover:border-amber-400 rounded-xl transition-all shadow-sm"><Minus size={20} className="text-slate-400" /></button>
                                             <span className="text-2xl font-black text-slate-900">{memberCount.adults}</span>
@@ -291,7 +291,7 @@ export default function TourDetailsClient({ tour }) {
                                         </div>
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">Children</label>
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-4">Children</label>
                                         <div className="flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-slate-100">
                                             <button onClick={() => setMemberCount(prev => ({ ...prev, children: Math.max(0, prev.children - 1) }))} className="w-12 h-12 flex items-center justify-center bg-white border border-slate-200 hover:border-amber-400 rounded-xl transition-all shadow-sm"><Minus size={20} className="text-slate-400" /></button>
                                             <span className="text-2xl font-black text-slate-900">{memberCount.children}</span>
@@ -312,15 +312,15 @@ export default function TourDetailsClient({ tour }) {
                                 <div className="mt-8 pt-8 border-t border-slate-50 flex items-center justify-center gap-6">
                                     <div className="flex flex-col items-center gap-1">
                                         <ShieldCheck size={20} className="text-emerald-500" />
-                                        <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest text-center leading-tight">Secure Payments</span>
+                                        <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight">Secure Payments</span>
                                     </div>
                                     <div className="flex flex-col items-center gap-1">
                                         <Users size={20} className="text-amber-500" />
-                                        <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest text-center leading-tight">Private Transfers</span>
+                                        <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight">Private Transfers</span>
                                     </div>
                                     <div className="flex flex-col items-center gap-1">
                                         <Shield size={20} className="text-indigo-500" />
-                                        <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest text-center leading-tight">Full Insurance</span>
+                                        <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight">Full Insurance</span>
                                     </div>
                                 </div>
                             </div>

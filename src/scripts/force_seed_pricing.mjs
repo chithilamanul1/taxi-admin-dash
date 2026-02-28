@@ -50,7 +50,7 @@ const commonFeatures = ['Air Conditioning', 'Bluetooth', 'USB Charging'];
 
 const vehicles = [
     {
-        name: 'Mini Car (Alto)',
+        name: 'Mini Car (Wagon R)',
         vehicleType: 'mini-car',
         category: 'airport-transfer',
         capacity: 3,

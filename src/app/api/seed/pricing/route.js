@@ -89,7 +89,7 @@ export async function GET(req) {
         const vehicles = {
             miniCar: {
                 vehicleType: 'mini-car',
-                name: 'Mini Car (Budget)',
+                name: 'Mini Car (Wagon R)',
                 image: '/vehicles/minicar.png',
                 capacity: 3, luggage: 2, handLuggage: 2,
                 basePrice: 3500, baseKm: 20, perKmRate: 100,
