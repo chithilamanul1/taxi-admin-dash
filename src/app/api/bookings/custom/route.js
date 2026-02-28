@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/dbConnect';
+import dbConnect from '@/lib/db';
 import Booking from '@/models/Booking';
-import { sendBookingEmail } from '@/lib/email';
+import emailService from '@/lib/email-service';
 
 export async function POST(req) {
     try {
@@ -34,10 +34,8 @@ export async function POST(req) {
             status: 'pending'
         });
 
-        // Send email notification to owner
-        await sendBookingEmail(booking, 'owner');
-        // Send confirmation email to customer
-        await sendBookingEmail(booking, 'customer');
+        // Send inquiry email to owner
+        await emailService.sendCustomTripInquiry(data);
 
         return NextResponse.json({
             success: true,

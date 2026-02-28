@@ -16,6 +16,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@react-google-maps/api": "^2.20.8",
     "baseline-browser-mapping": "^2.9.15",
     "bcryptjs": "^3.0.3",

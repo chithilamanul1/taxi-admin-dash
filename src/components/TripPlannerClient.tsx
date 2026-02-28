@@ -9,12 +9,19 @@ import {
 import { useRouter } from 'next/navigation';
 import TripMap from '@/components/TripMap';
 
+interface FormData {
+    prompt: string;
+    duration: number;
+    travelers: number;
+    interests: string[];
+}
+
 export default function TripPlannerClient() {
     const router = useRouter();
     const [step, setStep] = useState(1);
     const [isGenerating, setIsGenerating] = useState(false);
-    const [itinerary, setItinerary] = useState(null);
-    const [formData, setFormData] = useState({
+    const [itinerary, setItinerary] = useState<any>(null);
+    const [formData, setFormData] = useState<FormData>({
         prompt: '',
         duration: 5,
         travelers: 2,
@@ -29,11 +36,11 @@ export default function TripPlannerClient() {
         { id: 'photography', label: 'Photography', icon: <Camera size={16} /> },
     ];
 
-    const handleInterestToggle = (id) => {
-        setFormData(prev => ({
+    const handleInterestToggle = (id: string) => {
+        setFormData((prev: FormData) => ({
             ...prev,
             interests: prev.interests.includes(id)
-                ? prev.interests.filter(i => i !== id)
+                ? prev.interests.filter((i: string) => i !== id)
                 : [...prev.interests, id]
         }));
     };
@@ -105,6 +112,7 @@ export default function TripPlannerClient() {
                                     pickup={itinerary.destinations?.[0] ? { name: itinerary.destinations[0] } : null}
                                     dropoff={itinerary.destinations?.length > 1 ? { name: itinerary.destinations[itinerary.destinations.length - 1] } : null}
                                     waypoints={itinerary.destinations?.slice(1, -1).map(d => ({ name: d })) || []}
+                                    onRouteCalculated={() => { }}
                                 />
                             </div>
                         </div>
@@ -265,8 +273,8 @@ export default function TripPlannerClient() {
                                         key={opt.id}
                                         onClick={() => handleInterestToggle(opt.id)}
                                         className={`flex items-center gap-3 px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border ${formData.interests.includes(opt.id)
-                                                ? 'bg-amber-500 border-amber-500 text-white shadow-xl shadow-amber-200 scale-105'
-                                                : 'bg-white border-slate-100 text-slate-400 hover:border-amber-200'
+                                            ? 'bg-amber-500 border-amber-500 text-white shadow-xl shadow-amber-200 scale-105'
+                                            : 'bg-white border-slate-100 text-slate-400 hover:border-amber-200'
                                             }`}
                                     >
                                         {opt.icon} {opt.label}
