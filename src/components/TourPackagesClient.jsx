@@ -28,61 +28,61 @@ export default function TourPackagesClient() {
     }, [])
 
     return (
-        <main className="min-h-screen bg-gradient-to-b from-emerald-900 to-slate-950 pt-32 pb-20">
+        <main className="min-h-screen bg-white pt-32 pb-20 text-slate-900">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-16">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-xs font-bold uppercase tracking-widest mb-6">
-                        <Plane size={14} />
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 border border-amber-100 text-amber-900 text-xs font-bold uppercase tracking-widest mb-6">
+                        <Plane size={14} className="text-amber-500" />
                         Multi-Day Adventures
                     </div>
-                    <h1 className="text-4xl md:text-6xl font-black text-white mb-4">
-                        Tour <span className="text-emerald-400">Packages</span>
+                    <h1 className="text-4xl md:text-6xl font-black text-slate-900 mb-4">
+                        Tour <span className="text-amber-500">Packages</span>
                     </h1>
-                    <p className="text-white/70 max-w-2xl mx-auto text-lg">
+                    <p className="text-slate-500 max-w-2xl mx-auto text-lg leading-relaxed">
                         Complete Sri Lanka tour packages with accommodation, transport, and guided experiences. Everything taken care of for an unforgettable journey.
                     </p>
                 </div>
 
                 <div className="max-w-5xl mx-auto mb-16">
-                    <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-                        <h3 className="text-white font-bold mb-4 text-center">All Tours Include:</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div className="flex items-center gap-3 text-white/80">
-                                <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center">
-                                    <Hotel size={18} className="text-emerald-400" />
+                    <div className="bg-amber-50/50 rounded-3xl p-8 border border-amber-100 shadow-sm">
+                        <h3 className="text-amber-900 font-black mb-6 text-center uppercase tracking-widest text-sm">All Tours Include:</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            <div className="flex flex-col items-center gap-3 text-center">
+                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-amber-100">
+                                    <Hotel size={20} className="text-amber-500" />
                                 </div>
-                                <span className="text-sm">Quality Hotels</span>
+                                <span className="text-xs font-bold text-slate-600">Quality Hotels</span>
                             </div>
-                            <div className="flex items-center gap-3 text-white/80">
-                                <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center">
-                                    <Car size={18} className="text-emerald-400" />
+                            <div className="flex flex-col items-center gap-3 text-center">
+                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-amber-100">
+                                    <Car size={20} className="text-amber-500" />
                                 </div>
-                                <span className="text-sm">Private AC Vehicle</span>
+                                <span className="text-xs font-bold text-slate-600">Private AC Vehicle</span>
                             </div>
-                            <div className="flex items-center gap-3 text-white/80">
-                                <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center">
-                                    <Utensils size={18} className="text-emerald-400" />
+                            <div className="flex flex-col items-center gap-3 text-center">
+                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-amber-100">
+                                    <Utensils size={20} className="text-amber-500" />
                                 </div>
-                                <span className="text-sm">Daily Breakfast</span>
+                                <span className="text-xs font-bold text-slate-600">Daily Breakfast</span>
                             </div>
-                            <div className="flex items-center gap-3 text-white/80">
-                                <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center">
-                                    <Users size={18} className="text-emerald-400" />
+                            <div className="flex flex-col items-center gap-3 text-center">
+                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-amber-100">
+                                    <Users size={20} className="text-amber-500" />
                                 </div>
-                                <span className="text-sm">Expert Driver-Guide</span>
+                                <span className="text-xs font-bold text-slate-600">Expert Driver-Guide</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-4 mb-12">
+                <div className="flex flex-wrap justify-center gap-3 mb-16">
                     {['All', 'City Tours', 'Safaris', 'Multi-Day'].map((cat) => (
                         <button
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
-                            className={`px-6 py-2.5 rounded-full text-sm font-bold uppercase tracking-widest transition-all ${activeCategory === cat
-                                ? 'bg-emerald-900 text-white shadow-lg scale-105'
-                                : 'bg-white text-emerald-900/70 hover:bg-emerald-50 border border-emerald-900/10'
+                            className={`px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${activeCategory === cat
+                                ? 'bg-amber-500 text-white shadow-xl shadow-amber-200 scale-105'
+                                : 'bg-slate-50 text-slate-400 hover:bg-white hover:text-amber-600 border border-slate-100'
                                 }`}
                         >
                             {cat}
@@ -90,151 +90,135 @@ export default function TourPackagesClient() {
                     ))}
                 </div>
 
-                <div className="max-w-7xl mx-auto space-y-12">
+                <div className="max-w-7xl mx-auto">
                     {loading ? (
-                        <div className="flex justify-center py-20">
-                            <Loader2 className="animate-spin text-emerald-500" size={48} />
+                        <div className="flex justify-center py-24">
+                            <Loader2 className="animate-spin text-amber-500" size={48} />
                         </div>
                     ) : (
-                        Array.isArray(tours) && tours
-                            .filter(tour => {
-                                // Exclude day trips from the tour packages page entirely
-                                if (tour.category === 'day-trip') return false;
-
-                                if (activeCategory === 'All') return true;
-                                if (activeCategory === 'City Tours' && tour.category === 'city-tour') return true;
-                                if (activeCategory === 'Safaris' && tour.category === 'safari') return true;
-                                if (activeCategory === 'Multi-Day' && tour.category === 'tour-package') return true;
-                                return false;
-                            })
-                            .map((tour, index) => (
-                                <div key={tour.slug || tour._id || index} className="bg-white rounded-[2.5rem] overflow-hidden shadow-2xl hover:shadow-cyan-900/10 transition-all group border border-slate-100">
-                                    <div className="grid lg:grid-cols-[450px,1fr] xl:grid-cols-[550px,1fr] min-h-[400px]">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                            {Array.isArray(tours) && tours
+                                .filter(tour => {
+                                    if (tour.category === 'day-trip') return false;
+                                    if (activeCategory === 'All') return true;
+                                    if (activeCategory === 'City Tours' && tour.category === 'city-tour') return true;
+                                    if (activeCategory === 'Safaris' && tour.category === 'safari') return true;
+                                    if (activeCategory === 'Multi-Day' && tour.category === 'tour-package') return true;
+                                    return false;
+                                })
+                                .map((tour, index) => (
+                                    <div key={tour.slug || tour._id || index} className="bg-white rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200/50 hover:shadow-amber-200/50 transition-all duration-500 hover:-translate-y-2 group flex flex-col h-full border border-slate-100">
                                         {/* Image Section */}
-                                        <div className="relative h-72 lg:h-full bg-slate-900 overflow-hidden">
+                                        <div className="relative h-72 overflow-hidden shrink-0">
                                             {tour.image || tour.heroImage || (tour.images && tour.images.length > 0) ? (
                                                 <img
                                                     src={tour.image || tour.heroImage || tour.images?.[0]}
                                                     alt={tour.title}
-                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+                                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                                 />
                                             ) : (
-                                                <div className="absolute inset-0 bg-slate-800 flex items-center justify-center text-slate-500">No Image Available</div>
+                                                <div className="absolute inset-0 bg-slate-100 flex items-center justify-center text-slate-300">No Image</div>
                                             )}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent pointer-events-none" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
 
                                             <div className="absolute top-6 left-6 flex flex-wrap gap-2">
                                                 {tour.tags?.slice(0, 2).map((tag, i) => (
-                                                    <span key={i} className="px-3 py-1 bg-white/90 backdrop-blur text-[#006064] text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
+                                                    <span key={i} className="px-3 py-1 bg-white/95 backdrop-blur text-amber-600 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
                                                         {tag}
                                                     </span>
                                                 ))}
                                             </div>
 
-                                            <div className="absolute bottom-6 left-6 right-6">
-                                                <div className="flex items-center gap-3 text-white/90 font-medium mb-2">
-                                                    <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10">
-                                                        <Calendar size={14} className="text-[#00A99D]" />
-                                                        <span className="text-sm">{typeof tour.duration === 'object' && tour.duration ? `${tour.duration.days || '?'}D / ${tour.duration.nights || '?'}N` : (tour.duration || 'N/A')}</span>
-                                                    </div>
+                                            <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+                                                <div className="flex items-center gap-2 bg-white/95 backdrop-blur px-4 py-2 rounded-2xl shadow-lg text-slate-900 border border-white/20">
+                                                    <Calendar size={14} className="text-amber-500" />
+                                                    <span className="text-[10px] font-black uppercase tracking-widest">
+                                                        {typeof tour.duration === 'object' && tour.duration ? `${tour.duration.days || '?'}D / ${tour.duration.nights || '?'}N` : (tour.duration || 'N/A')}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         {/* Content Section */}
-                                        <div className="p-8 md:p-12 flex flex-col justify-between">
-                                            <div>
-                                                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
-                                                    <h3 className="text-3xl md:text-4xl font-black text-[#006064] leading-tight">
-                                                        {tour.title}
-                                                    </h3>
-                                                    <div className="text-right shrink-0 bg-[#00A99D]/10 px-4 py-2 rounded-2xl border border-[#00A99D]/20 self-start">
-                                                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Starting From</span>
-                                                        <span className="text-2xl font-black text-[#006064]">
-                                                            {typeof tour.price === 'object' ? (tour.price?.currency || '$') : (tour.currency || '$')} {typeof tour.price === 'object' ? (tour.price?.amount?.toLocaleString() || '0') : (tour.price?.toLocaleString() || '0')}
+                                        <div className="p-8 pb-10 flex flex-col flex-1">
+                                            <h3 className="text-2xl font-black text-slate-900 mb-4 line-clamp-2 leading-[1.2]">
+                                                {tour.title}
+                                            </h3>
+
+                                            <p className="text-slate-500 text-sm mb-8 line-clamp-3 leading-relaxed">
+                                                {tour.description}
+                                            </p>
+
+                                            <div className="flex items-center gap-2 mb-8 flex-wrap">
+                                                <MapPin size={16} className="text-amber-500" />
+                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest line-clamp-1">
+                                                    {Array.isArray(tour.destinations) ? tour.destinations.join(' • ') : 'Multiple Locations'}
+                                                </span>
+                                            </div>
+
+                                            <div className="flex items-center justify-between mt-auto pt-8 border-t border-slate-50">
+                                                <div>
+                                                    <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest block mb-1">Price per person</span>
+                                                    <div className="flex items-baseline gap-1">
+                                                        <span className="text-xs font-black text-amber-500 uppercase">{typeof tour.price === 'object' ? (tour.price?.currency || '$') : (tour.currency || '$')}</span>
+                                                        <span className="text-3xl font-black text-slate-900 leading-none">
+                                                            {typeof tour.price === 'object' ? (tour.price?.amount?.toLocaleString() || '0') : (tour.price?.toLocaleString() || '0')}
                                                         </span>
                                                     </div>
                                                 </div>
-
-                                                <p className="text-slate-600 text-lg mb-6 leading-relaxed line-clamp-3">
-                                                    {tour.description}
-                                                </p>
-
-                                                <div className="flex items-center gap-2 mb-8 flex-wrap">
-                                                    <MapPin size={18} className="text-[#00A99D]" />
-                                                    {Array.isArray(tour.destinations) ? tour.destinations.map((dest, i) => (
-                                                        <span key={i} className="text-sm font-bold text-slate-500 uppercase tracking-wider">
-                                                            {dest}{i < (tour.destinations.length - 1) ? ' • ' : ''}
-                                                        </span>
-                                                    )) : <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Multiple Locations</span>}
-                                                </div>
-
-                                                <div className="grid sm:grid-cols-2 gap-3 mb-8 bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                                                    {tour.highlights?.slice(0, 4).map((highlight, i) => (
-                                                        <div key={i} className="flex items-start gap-3 text-sm text-slate-700 font-medium">
-                                                            <Check size={16} className="text-[#00A99D] shrink-0 mt-0.5" />
-                                                            <span>{highlight}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div className="flex flex-col sm:flex-row gap-4 mt-auto pt-6 border-t border-slate-100">
                                                 <Link
                                                     href={`/tour-packages/${tour.slug}`}
-                                                    className="flex-1 flex items-center justify-center gap-2 px-8 py-4 bg-[#006064] text-white rounded-2xl font-black hover:bg-[#004D40] hover:scale-[1.02] transition-all shadow-xl"
+                                                    className="flex items-center justify-center w-14 h-14 bg-amber-500 text-white rounded-[1.25rem] hover:bg-amber-600 hover:scale-110 transition-all duration-300 shadow-xl shadow-amber-200"
                                                 >
-                                                    View Full Itinerary <ArrowRight size={18} />
-                                                </Link>
-                                                <Link
-                                                    href={`https://wa.me/+94722885885?text=I'm interested in the ${tour.title} package`}
-                                                    className="flex items-center justify-center gap-2 px-8 py-4 bg-white text-[#006064] rounded-2xl font-black border-2 border-[#006064]/20 hover:border-[#006064] hover:bg-slate-50 transition-all"
-                                                >
-                                                    Inquire via WhatsApp
+                                                    <ArrowRight size={24} />
                                                 </Link>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))
+                                ))}
+                        </div>
                     )}
                 </div>
 
-                <div className="max-w-4xl mx-auto mt-16 text-center">
-                    <div className="bg-gradient-to-r from-amber-500 to-orange-600 rounded-3xl p-8 md:p-12">
-                        <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                            Want a Custom Tour?
-                        </h2>
-                        <p className="text-white/90 mb-6 max-w-xl mx-auto">
-                            Tell us your dream Sri Lanka experience and we'll create a personalized itinerary just for you.
-                            Family trips, honeymoons, adventure tours - we do it all!
-                        </p>
-                        <Link
-                            href="/contact"
-                            className="inline-flex items-center gap-2 px-8 py-4 bg-white text-orange-600 rounded-2xl font-bold shadow-lg hover:bg-orange-50 transition-all"
-                        >
-                            Create Custom Tour <ArrowRight size={18} />
-                        </Link>
+                <div className="max-w-4xl mx-auto mt-24 text-center">
+                    <div className="bg-slate-900 rounded-[3rem] p-10 md:p-16 relative overflow-hidden shadow-2xl shadow-slate-400/20">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-500/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
+
+                        <div className="relative z-10">
+                            <h2 className="text-3xl md:text-5xl font-black text-white mb-6 leading-tight">
+                                Tailor-Made <span className="text-amber-500">Journeys</span>
+                            </h2>
+                            <p className="text-slate-400 mb-10 max-w-xl mx-auto text-lg leading-relaxed">
+                                Every traveler is unique. Tell us your interests and we'll craft a personalized itinerary that matches your pace, budget, and style.
+                            </p>
+                            <Link
+                                href="/contact"
+                                className="inline-flex items-center gap-3 px-10 py-5 bg-amber-500 text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-amber-900/20 hover:bg-amber-600 hover:scale-105 transition-all duration-300"
+                            >
+                                Start Designing <ArrowRight size={18} />
+                            </Link>
+                        </div>
                     </div>
                 </div>
 
-                <div className="max-w-4xl mx-auto mt-16">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                        <div className="bg-white/5 rounded-2xl p-6">
-                            <div className="text-3xl font-black text-emerald-400 mb-2">500+</div>
-                            <div className="text-white/60 text-sm">Happy Travelers</div>
+                <div className="max-w-5xl mx-auto mt-24">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        <div className="bg-slate-50/50 rounded-3xl p-8 border border-slate-100 text-center">
+                            <div className="text-3xl font-black text-amber-500 mb-2">500+</div>
+                            <div className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Happy Travelers</div>
                         </div>
-                        <div className="bg-white/5 rounded-2xl p-6">
-                            <div className="text-3xl font-black text-emerald-400 mb-2">5★</div>
-                            <div className="text-white/60 text-sm">TripAdvisor Rating</div>
+                        <div className="bg-slate-50/50 rounded-3xl p-8 border border-slate-100 text-center">
+                            <div className="text-3xl font-black text-amber-500 mb-2">5.0</div>
+                            <div className="text-slate-400 text-[10px] font-black uppercase tracking-widest">User Rating</div>
                         </div>
-                        <div className="bg-white/5 rounded-2xl p-6">
-                            <div className="text-3xl font-black text-emerald-400 mb-2">24/7</div>
-                            <div className="text-white/60 text-sm">Support Available</div>
+                        <div className="bg-slate-50/50 rounded-3xl p-8 border border-slate-100 text-center">
+                            <div className="text-3xl font-black text-amber-500 mb-2">24/7</div>
+                            <div className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Local Support</div>
                         </div>
-                        <div className="bg-white/5 rounded-2xl p-6">
-                            <div className="text-3xl font-black text-emerald-400 mb-2">100%</div>
-                            <div className="text-white/60 text-sm">Customizable</div>
+                        <div className="bg-slate-50/50 rounded-3xl p-8 border border-slate-100 text-center">
+                            <div className="text-3xl font-black text-amber-500 mb-2">100%</div>
+                            <div className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Flexible</div>
                         </div>
                     </div>
                 </div>

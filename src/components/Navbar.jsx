@@ -101,6 +101,7 @@ export default function Navbar() {
                         { label: 'Rates', href: '/prices', id: 'nav-rates' },
                         { label: 'Offers', href: '/offers', id: 'nav-offers' },
                         { label: 'Reviews', href: '/reviews', id: 'nav-reviews' },
+                        { label: 'AI Trip Planner', href: '/trip-planner', id: 'nav-ai-planner' },
                         { label: 'Blog', href: '/blog', id: 'nav-blog' },
                         { label: 'Contact', href: '/contact', id: 'nav-contact' },
                     ].map(item => (
@@ -251,6 +252,7 @@ export default function Navbar() {
                                 { label: 'Rates', href: '/prices', icon: '💰', id: 'm-rates' },
                                 { label: 'Offers', href: '/offers', icon: '🎁', id: 'm-offers' },
                                 { label: 'Reviews', href: '/reviews', icon: '⭐', id: 'm-reviews' },
+                                { label: 'AI Trip Planner', href: '/trip-planner', icon: '🤖', id: 'm-ai-planner' },
                                 { label: 'Blog', href: '/blog', icon: '📝', id: 'm-blog' },
                                 { label: 'Contact', href: '/contact', icon: '📞', id: 'm-contact' }
                             ].map(item => (
