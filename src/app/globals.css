@@ -5,6 +5,15 @@
 :root {
     --color-navy: #001C3D;
     --color-gold: #FFCC00;
+    --background: #ffffff;
+    --foreground: #0f172a;
+}
+
+[class~="dark"] {
+    --background: #020617;
+    /* Matches Tailwind slate-950 */
+    --foreground: #f8fafc;
+    /* Matches Tailwind slate-50 */
 }
 
 * {
@@ -22,11 +31,11 @@ body {
     font-family: var(--font-inter), var(--font-montserrat), sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #0f172a;
-    /* Slate 900 - Dark Theme Default */
-    color: #e2e8f0;
-    /* Slate 200 */
+    background-color: var(--background);
+    color: var(--foreground);
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 
 @layer utilities {
     .animate-fade-in {

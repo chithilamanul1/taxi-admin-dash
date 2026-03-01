@@ -461,6 +461,16 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const finalTotal = Math.max(0, total - discountAmount);
 
     const handleBook = () => {
+        if (!distance || distance <= 0) {
+            alert("Please select valid pickup and dropoff locations to calculate the distance.");
+            return;
+        }
+
+        if (!total || total <= 0) {
+            alert("Pricing calculation failed. Please try re-selecting your locations or vehicle.");
+            return;
+        }
+
         const verifiedCoupons = appliedOffers.map(offer => ({
             code: offer.name,
             discountType: offer.discountPercentage > 0 ? 'percentage' : 'flat',
@@ -481,15 +491,18 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             vehicle,
             couponCode: verifiedCoupons.length > 0 ? verifiedCoupons[0].code : '',
             verifiedCoupons,
-            nameBoardPrice
+            nameBoardPrice,
+            isAirportPickup: (pickup?.name || '').toLowerCase().includes('airport') || (dropoff?.name || '').toLowerCase().includes('airport')
         });
         setShowModal(true);
     };
+
 
     const swapLocations = () => {
         const t = { ...pickup }; const ts = pickupSearch;
         setPickup(dropoff); setPickupSearch(dropoffSearch);
         setDropoff(t); setDropoffSearch(ts);
+        setDistance(null); // Force re-calculation trigger
     }
 
     // Determine Pricing Category

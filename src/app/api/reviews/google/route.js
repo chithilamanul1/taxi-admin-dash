@@ -26,7 +26,10 @@ export async function GET(req) {
             console.log('Google Reviews: Cache stale or legacy data. Fetching from API...');
             const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,rating,user_ratings_total,reviews&key=${apiKey}`;
             try {
-                const response = await fetch(url);
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+                const response = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeoutId);
                 const data = await response.json();
 
                 if (data.status === 'OK' && data.result) {

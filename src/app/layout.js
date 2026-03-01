@@ -226,8 +226,9 @@ export default function RootLayout({ children }) {
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             </head>
-            <body className="font-sans text-slate-800 antialiased selection:bg-emerald-600 selection:text-white dark:bg-slate-950 dark:text-slate-100">
-                <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <body className="font-sans antialiased selection:bg-emerald-600 selection:text-white transition-colors duration-300">
+                <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+
                     <AuthProvider>
                         <CurrencyProvider>
                             <Navbar />

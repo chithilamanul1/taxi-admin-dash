@@ -11,21 +11,26 @@ export default function OffersPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchOffers = async () => {
+        const fetchCoupons = async () => {
             try {
-                const res = await fetch('/api/admin/quick-links');
-                const json = await res.json();
-                if (json.success) {
-                    setOffers(json.data);
+                const res = await fetch('/api/coupons?public=true');
+                const data = await res.json();
+                if (Array.isArray(data)) {
+                    setOffers(data);
                 }
             } catch (err) {
-                console.error('Failed to fetch offers', err);
+                console.error('Failed to fetch coupons', err);
             } finally {
                 setLoading(false);
             }
         };
-        fetchOffers();
+        fetchCoupons();
     }, []);
+
+    const copyToClipboard = (code) => {
+        navigator.clipboard.writeText(code);
+        // Simple visual feedback could be added here
+    };
 
     return (
         <main className="min-h-screen bg-slate-50">
@@ -36,13 +41,13 @@ export default function OffersPage() {
                 <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-10 mix-blend-overlay"></div>
                 <div className="container mx-auto px-4 relative z-10 text-center text-white">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-400/20 rounded-full border border-emerald-400/30 text-emerald-400 text-xs font-black uppercase tracking-widest mb-6">
-                        <Zap size={14} fill="currentColor" /> Exclusive Deals
+                        <Tag size={14} fill="currentColor" /> Active Coupons
                     </div>
-                    <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tight uppercase">
-                        Flat Rate <span className="text-emerald-400">Destinations</span>
+                    <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tight uppercase text-white">
+                        Exclusive <span className="text-emerald-400">Savings</span>
                     </h1>
                     <p className="text-lg text-emerald-100/80 max-w-2xl mx-auto font-medium">
-                        Premium airport transfers and city-to-city taxi services at guaranteed fixed prices. No hidden costs, no meters.
+                        Apply these coupon codes during checkout to unlock special discounts on your Sri Lankan travels.
                     </p>
                 </div>
             </div>
@@ -56,46 +61,53 @@ export default function OffersPage() {
                     </div>
                 ) : offers.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {offers.map((offer) => (
-                            <div key={offer._id} className="bg-white rounded-[2.5rem] border border-slate-200 overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group">
+                        {offers.map((coupon) => (
+                            <div key={coupon._id} className="bg-white rounded-[2.5rem] border border-slate-200 overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative">
+                                {coupon.displayInWidget && (
+                                    <div className="absolute top-6 right-6 px-3 py-1 bg-amber-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full z-10 shadow-lg shadow-amber-200">
+                                        Featured
+                                    </div>
+                                )}
                                 <div className="p-8">
-                                    <div className="flex justify-between items-start mb-6">
-                                        <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 border border-emerald-100 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-500">
-                                            <MapPin size={28} />
+                                    <div className="flex items-center gap-4 mb-8">
+                                        <div className="w-16 h-16 bg-emerald-50 rounded-[1.5rem] flex items-center justify-center text-emerald-600 border border-emerald-100 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-500 shadow-inner">
+                                            <Tag size={32} />
                                         </div>
-                                        <div className="px-3 py-1 bg-amber-100 text-amber-800 text-[10px] font-black uppercase tracking-widest rounded-full">
-                                            {offer.badge || 'Special Offer'}
+                                        <div>
+                                            <h3 className="text-2xl font-black text-slate-900 leading-tight">
+                                                {coupon.discountType === 'percentage' ? `${coupon.value}% OFF` : `Rs. ${coupon.value.toLocaleString()} OFF`}
+                                            </h3>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                                {coupon.description || 'Valid on all bookings'}
+                                            </p>
                                         </div>
                                     </div>
 
-                                    <h3 className="text-xl font-black text-slate-900 mb-2 uppercase tracking-tight leading-tight">
-                                        {offer.title}
-                                    </h3>
-
-                                    <div className="flex items-center gap-4 text-xs font-bold text-slate-400 mb-8">
-                                        <div className="flex items-center gap-1">
-                                            <Car size={14} className="text-emerald-600" />
-                                            <span>Private Taxi</span>
-                                        </div>
-                                        <div className="flex items-center gap-1">
-                                            <Zap size={14} className="text-amber-500" />
-                                            <span>Door-to-Door</span>
+                                    <div className="bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] p-6 mb-8 relative group/code overflow-hidden">
+                                        <div className="absolute inset-0 bg-emerald-600 translate-y-full group-hover/code:translate-y-0 transition-transform duration-500 ease-out"></div>
+                                        <div className="relative z-10 flex items-center justify-between">
+                                            <span className="text-2xl font-black text-slate-900 group-hover/code:text-white transition-colors duration-500 tracking-wider">
+                                                {coupon.code}
+                                            </span>
+                                            <button
+                                                onClick={() => copyToClipboard(coupon.code)}
+                                                className="px-4 py-2 bg-white text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm hover:scale-110 active:scale-95 transition-all"
+                                            >
+                                                Copy
+                                            </button>
                                         </div>
                                     </div>
 
                                     <div className="pt-6 border-t border-slate-100 flex items-center justify-between">
-                                        <div>
-                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Fixed Price From</p>
-                                            <div className="text-3xl font-black text-emerald-900">
-                                                <span className="text-sm font-bold text-emerald-600 mr-1">Rs</span>
-                                                {offer.price.toLocaleString()}
-                                            </div>
+                                        <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
+                                            <Calendar size={14} className="text-emerald-600" />
+                                            <span>Exp: {coupon.expiryDate ? new Date(coupon.expiryDate).toLocaleDateString() : 'Never'}</span>
                                         </div>
                                         <Link
-                                            href={`/checkout/${offer.slug}`}
-                                            className="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center group-hover:bg-emerald-600 transition-colors shadow-lg"
+                                            href="/"
+                                            className="flex items-center gap-2 text-[10px] font-black text-emerald-600 uppercase tracking-widest hover:gap-3 transition-all"
                                         >
-                                            <ArrowRight size={24} />
+                                            Book Now <ArrowRight size={14} />
                                         </Link>
                                     </div>
                                 </div>

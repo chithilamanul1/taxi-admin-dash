@@ -43,7 +43,12 @@ export async function POST(req) {
             Only return the JSON object. Do not include any markdown formatting like \`\`\`json.
         `;
 
-        const result = await model.generateContent(fullPrompt);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout for AI
+
+        const result = await model.generateContent(fullPrompt, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
         const response = await result.response;
         const text = response.text();
 

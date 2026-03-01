@@ -176,9 +176,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const getPriceBreakdown = () => {
         try {
             const vehicleData = pricing.find(p => p.vehicleType === formData.vehicle);
-            if (!vehicleData || distance === 0) return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0, lkr: { total: 0, payNow: 0, balance: 0, surcharges: 0, subtotal: 0 }, originalLKR: 0 };
 
-            const distKm = Math.ceil(distance || 0);
+            // CRITICAL: Ensure we have a valid distance and vehicle data
+            const distKm = Math.ceil(distance || initialData.distance || 0);
+
+            if (!vehicleData || distKm === 0) {
+                console.warn("Missing pricing data or distance for breakdown:", { vehicle: formData.vehicle, distKm });
+                return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0, lkr: { total: 0, payNow: 0, balance: 0, surcharges: 0, subtotal: 0 }, originalLKR: 0 };
+            }
+
             const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType, formData.pickup, formData.dropoff, destinations);
             const surcharges = calculateSurcharges({
                 waitingHours: formData.waitingHours,
@@ -284,20 +290,32 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const totalPassengers = (formData.passengerCount.adults || 0) + (formData.passengerCount.children || 0);
     const isOverCapacity = selectedVehicle && totalPassengers > (selectedVehicle.capacity || 4);
 
-    // 1. Initialize State from initialData (Once) - FIX: Added condition to skip if already initialized to preserve state
-    const isInitialized = useRef(false);
+    // 1. Initialize State from initialData when modal opens or initialData changes
     useEffect(() => {
-        if (initialData && Object.keys(initialData).length > 0 && !isInitialized.current) {
-            setFormData(prev => ({ ...prev, ...initialData }));
+        if (isOpen && initialData && Object.keys(initialData).length > 0) {
+            console.log("Initializing Modal with data:", initialData);
+            setFormData(prev => ({
+                ...prev,
+                ...initialData,
+                // Ensure specific nested objects are merged correctly
+                passengerCount: { ...prev.passengerCount, ...(initialData.passengerCount || {}) },
+                waypoints: initialData.waypoints || prev.waypoints
+            }));
+
+            if (initialData.distance) {
+                const d = Number(initialData.distance);
+                console.log("Setting distance from initialData:", d);
+                setDistance(d);
+            }
             if (initialData.verifiedCoupons) {
                 setVerifiedCoupons(initialData.verifiedCoupons);
             }
             if (initialData.couponCode) {
                 setCouponInput(initialData.couponCode);
             }
-            isInitialized.current = true;
         }
-    }, [initialData]);
+    }, [isOpen, initialData]);
+
 
     const [pricingData, setPricingData] = useState([]);
 
@@ -322,13 +340,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     // useEffects for data fetching
     useEffect(() => {
         if (isOpen) {
-            // Reset distance if coords changed to avoid showing old prices from previous trip
-            if (initialData.distance) {
-                setDistance(initialData.distance);
-            } else {
-                setDistance(0);
-            }
-
             // Fetch pricing based on category
             fetch(`/api/pricing?category=${pricingCategory}`, { cache: 'no-store' })
                 .then(res => res.json())
@@ -344,7 +355,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 .catch(err => console.error("Error fetching pricing:", err));
         }
 
-    }, [isOpen, initialData, pricingCategory]);
+    }, [isOpen, pricingCategory]);
 
     const modalContentRef = useRef(null);
     // Scroll to top on step change
