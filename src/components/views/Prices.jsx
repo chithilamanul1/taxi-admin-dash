@@ -13,13 +13,12 @@ const VEHICLE_PRICING = {
         name: 'MINI CAR',
         model: '',
         image: '/vehicles/minicar.png',
-        maxPassengers: 2,
-        imageScale: 1.50,
         specs: {
             luggage: 2,
             handLuggage: 2,
             ac: true
         },
+        maxPassengers: 2,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 3500 },
             { min: 20, max: 40, type: 'flat', price: 4000 },
@@ -31,13 +30,12 @@ const VEHICLE_PRICING = {
         name: 'SEDAN',
         model: '',
         image: '/vehicles/sedancar.png',
-        maxPassengers: 3,
-        imageScale: 1.50,
         specs: {
             luggage: 3,
             handLuggage: 3,
             ac: true
         },
+        maxPassengers: 3,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 4500 },
             { min: 20, max: 40, type: 'flat', price: 6000 },
@@ -52,13 +50,12 @@ const VEHICLE_PRICING = {
         name: 'MINI VAN (Every)',
         model: '',
         image: '/vehicles/susukievery.png',
-        maxPassengers: 3,
-        imageScale: 1.50,
         specs: {
             luggage: 3,
             handLuggage: 3,
             ac: true
         },
+        maxPassengers: 3,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 4500 },
             { min: 20, max: 40, type: 'flat', price: 6000 },
@@ -73,13 +70,12 @@ const VEHICLE_PRICING = {
         name: 'MINI VAN (4 Seat)',
         model: '',
         image: '/vehicles/minivan5seat.png',
-        maxPassengers: 4,
-        imageScale: 1.15,
         specs: {
             luggage: 4,
             handLuggage: 4,
             ac: true
         },
+        maxPassengers: 4,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 6000 },
             { min: 20, max: 40, type: 'flat', price: 8500 },
@@ -93,13 +89,12 @@ const VEHICLE_PRICING = {
         name: 'SUV / VEZEL',
         model: '',
         image: '/vehicles/Hondavezel.png',
-        maxPassengers: 3,
-        imageScale: 1.15,
         specs: {
             luggage: 3,
             handLuggage: 3,
             ac: true
         },
+        maxPassengers: 3,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 6500 },
             { min: 20, max: 40, type: 'flat', price: 9500 },
@@ -113,6 +108,25 @@ const VEHICLE_PRICING = {
         name: 'VAN (KDH)',
         model: '',
         image: '/vehicles/toyota-highroof.png',
+        specs: {
+            luggage: 8,
+            handLuggage: 6,
+            ac: true
+        },
+        maxPassengers: 8,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 20, max: 40, type: 'flat', price: 8500 },
+            { min: 40, max: 100, type: 'per_km', rate: 200 },
+            { min: 100, max: 140, type: 'per_km', rate: 160 },
+            { min: 140, max: 200, type: 'per_km', rate: 130 },
+            { min: 200, max: Infinity, type: 'per_km', rate: 120 }
+        ]
+    },
+    'normal-kdh': {
+        name: 'VAN (KDH Flat Roof)',
+        model: '',
+        image: '/vehicles/kdh-flat.png',
         maxPassengers: 6,
         imageScale: 1.35,
         specs: {
@@ -133,13 +147,12 @@ const VEHICLE_PRICING = {
         name: 'MINI BUS',
         model: '',
         image: '/vehicles/costerbus.png',
-        maxPassengers: 7,
-        imageScale: 1.35,
         specs: {
-            luggage: 7,
-            handLuggage: 7,
+            luggage: 20,
+            handLuggage: 15,
             ac: true
         },
+        maxPassengers: 20,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 7500 },
             { min: 20, max: 40, type: 'flat', price: 12000 },

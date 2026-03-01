@@ -1,0 +1,51 @@
+--- Current Vehicles ---
+Type: mini-car             | Name: Mini Car                       | Capacity: 2 | Category: undefined
+Type: sedan                | Name: Sedan Car                      | Capacity: 3 | Category: undefined
+Type: mini-van-every       | Name: Suzuki Every                   | Capacity: 3 | Category: undefined
+Type: mini-van-05          | Name: Mini Van (5 Seat)              | Capacity: 3 | Category: undefined
+Type: vezel                | Name: Honda Vezel                    | Capacity: 3 | Category: undefined
+Type: suv                  | Name: SUV                            | Capacity: 3 | Category: undefined
+Type: van                  | Name: Van (9 Pax)                    | Capacity: 9 | Category: undefined
+Type: kdh-van              | Name: KDH High Roof Van              | Capacity: 9 | Category: undefined
+Type: mini-bus             | Name: Mini Bus                       | Capacity: 20 | Category: undefined
+Type: coach-bus            | Name: Luxury Coach Bus               | Capacity: 45 | Category: undefined
+Type: mini-car             | Name: Mini Car                       | Capacity: 2 | Category: airport-transfer
+Type: sedan                | Name: Sedan Car                      | Capacity: 3 | Category: airport-transfer
+Type: mini-van-every       | Name: Suzuki Every                   | Capacity: 3 | Category: airport-transfer
+Type: mini-van-05          | Name: Mini Van (5 Seat)              | Capacity: 3 | Category: airport-transfer
+Type: vezel                | Name: Honda Vezel                    | Capacity: 3 | Category: airport-transfer
+Type: suv                  | Name: SUV                            | Capacity: 3 | Category: airport-transfer
+Type: normal-kdh           | Name: Van (KDH Flat Roof)            | Capacity: 6 | Category: airport-transfer
+Type: kdh-van              | Name: KDH High Roof Van              | Capacity: 9 | Category: airport-transfer
+Type: mini-bus             | Name: Mini Bus                       | Capacity: 20 | Category: airport-transfer
+Type: coach-bus            | Name: Luxury Coach Bus               | Capacity: 45 | Category: airport-transfer
+Type: mini-car             | Name: Mini Car                       | Capacity: 2 | Category: ride-now
+Type: sedan                | Name: Sedan Car                      | Capacity: 3 | Category: ride-now
+Type: mini-van-every       | Name: Suzuki Every                   | Capacity: 3 | Category: ride-now
+Type: mini-van-05          | Name: Mini Van (5 Seat)              | Capacity: 3 | Category: ride-now
+Type: vezel                | Name: Honda Vezel                    | Capacity: 3 | Category: ride-now
+Type: suv                  | Name: SUV                            | Capacity: 3 | Category: ride-now
+Type: normal-kdh           | Name: Van (KDH Flat Roof)            | Capacity: 6 | Category: ride-now
+Type: kdh-van              | Name: KDH High Roof Van              | Capacity: 9 | Category: ride-now
+Type: mini-bus             | Name: Mini Bus                       | Capacity: 20 | Category: ride-now
+Type: coach-bus            | Name: Luxury Coach Bus               | Capacity: 45 | Category: ride-now
+Type: mini-car             | Name: Mini Car                       | Capacity: 2 | Category: rentals
+Type: sedan                | Name: Sedan Car                      | Capacity: 3 | Category: rentals
+Type: mini-van-every       | Name: Suzuki Every                   | Capacity: 3 | Category: rentals
+Type: mini-van-05          | Name: Mini Van (5 Seat)              | Capacity: 3 | Category: rentals
+Type: vezel                | Name: Honda Vezel                    | Capacity: 3 | Category: rentals
+Type: suv                  | Name: SUV                            | Capacity: 3 | Category: rentals
+Type: normal-kdh           | Name: Van (KDH Flat Roof)            | Capacity: 6 | Category: rentals
+Type: kdh-van              | Name: KDH High Roof Van              | Capacity: 9 | Category: rentals
+Type: mini-bus             | Name: Mini Bus                       | Capacity: 20 | Category: rentals
+Type: coach-bus            | Name: Luxury Coach Bus               | Capacity: 45 | Category: rentals
+Type: mini-car             | Name: Mini Car                       | Capacity: 2 | Category: tours
+Type: sedan                | Name: Sedan Car                      | Capacity: 3 | Category: tours
+Type: mini-van-every       | Name: Suzuki Every                   | Capacity: 3 | Category: tours
+Type: mini-van-05          | Name: Mini Van (5 Seat)              | Capacity: 3 | Category: tours
+Type: vezel                | Name: Honda Vezel                    | Capacity: 3 | Category: tours
+Type: suv                  | Name: SUV                            | Capacity: 3 | Category: tours
+Type: normal-kdh           | Name: Van (KDH Flat Roof)            | Capacity: 6 | Category: tours
+Type: kdh-van              | Name: KDH High Roof Van              | Capacity: 9 | Category: tours
+Type: mini-bus             | Name: Mini Bus                       | Capacity: 20 | Category: tours
+Type: coach-bus            | Name: Luxury Coach Bus               | Capacity: 45 | Category: tours

@@ -126,8 +126,10 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
 
         // Adjust Viewport if markers exist but no route yet
         if (markersAdded > 0 && !(hasStart && hasEnd)) {
-            map.fitBounds(bounds);
-            if (markersAdded === 1) map.setZoom(13);
+            if (map) {
+                map.fitBounds(bounds);
+                if (markersAdded === 1) map.setZoom(13);
+            }
         }
 
         // Calculate Route if both points exist
