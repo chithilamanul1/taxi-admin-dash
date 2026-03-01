@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '../../../lib/db';
-import Booking from '../../../models/Booking';
-import emailService from '../../../lib/email-service';
+import dbConnect from '@/lib/db';
+import Booking from '@/models/Booking';
+import emailService from '@/lib/email-service';
 
 export async function POST(req) {
     try {
