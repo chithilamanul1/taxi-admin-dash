@@ -21,7 +21,7 @@ const nextConfig = {
         formats: ['image/avif', 'image/webp'],
         // unoptimized: true, // Commented out to enable Vercel Image Optimization
     },
-    productionBrowserSourceMaps: true, // Enabled for debugging/Lighthouse insights
+    productionBrowserSourceMaps: false, // Disabled to reduce deployment payload size
     // Keep Express backend separate
     /*
     async rewrites() {

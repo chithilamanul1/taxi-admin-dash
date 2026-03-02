@@ -181,7 +181,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const distKm = Math.ceil(distance || initialData.distance || 0);
 
             if (!vehicleData || distKm === 0) {
-                console.warn("Missing pricing data or distance for breakdown:", { vehicle: formData.vehicle, distKm });
                 return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0, lkr: { total: 0, payNow: 0, balance: 0, surcharges: 0, subtotal: 0 }, originalLKR: 0 };
             }
 
