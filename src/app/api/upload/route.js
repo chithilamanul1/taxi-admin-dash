@@ -67,21 +67,14 @@ export async function POST(req) {
         const filePath = path.join(uploadDir, filename);
 
         try {
-            // Lazy load sharp using eval to hide it from Vercel's static bundler
-            const sharpLib = "sharp";
-            const sharp = eval(`require('${sharpLib}')`);
-
-            await sharp(buffer)
-                .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
-                .webp({ quality: 80 })
-                .toFile(filePath.replace(/\.[^/.]+$/, "") + ".webp");
+            await writeFile(filePath, buffer);
 
             return NextResponse.json({
                 success: true,
-                url: `/uploads/${folder}/${filename.replace(/\.[^/.]+$/, "")}.webp`
+                url: `/uploads/${folder}/${filename}`
             });
-        } catch (sharpError) {
-            console.error("Sharp optimization failed:", sharpError);
+        } catch (fileError) {
+            console.error("Local file save failed:", fileError);
             return NextResponse.json({ error: 'Failed to process image.' }, { status: 500 });
         }
 
