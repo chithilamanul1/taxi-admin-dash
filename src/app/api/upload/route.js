@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
-import sharp from 'sharp';
 
 export const config = {
     api: {
@@ -68,6 +67,10 @@ export async function POST(req) {
         const filePath = path.join(uploadDir, filename);
 
         try {
+            // Lazy load sharp using eval to hide it from Vercel's static bundler
+            const sharpLib = "sharp";
+            const sharp = eval(`require('${sharpLib}')`);
+
             await sharp(buffer)
                 .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
                 .webp({ quality: 80 })
