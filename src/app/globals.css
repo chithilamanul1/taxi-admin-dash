@@ -4,16 +4,19 @@
 
 :root {
     --color-navy: #001C3D;
-    --color-gold: #FFCC00;
-    --background: #ffffff;
-    --foreground: #0f172a;
+    --color-gold: #FFDA00;
+    /* Vibrant Yellow */
+    --color-electric-green: #22C55E;
+    /* Electric Green */
+    --background: #121212;
+    /* Deep Charcoal Black */
+    --foreground: #ffffff;
+    /* Bold White Typography */
 }
 
 [class~="dark"] {
-    --background: #020617;
-    /* Matches Tailwind slate-950 */
-    --foreground: #f8fafc;
-    /* Matches Tailwind slate-50 */
+    --background: #121212;
+    --foreground: #ffffff;
 }
 
 * {

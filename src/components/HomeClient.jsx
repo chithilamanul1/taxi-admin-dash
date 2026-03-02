@@ -54,7 +54,7 @@ export default function HomeClient() {
     };
 
     return (
-        <div className="bg-white dark:bg-slate-950 overflow-hidden transition-colors duration-300">
+        <div className="bg-[#121212] overflow-hidden transition-colors duration-300">
             <Hero onBookClick={() => setIsBookingOpen(true)} />
 
             <BookingWidget />
@@ -82,13 +82,13 @@ export default function HomeClient() {
                     <div className="w-[800px] h-[400px] border border-emerald-900/10 rounded-full blur-3xl"></div>
                 </div>
                 <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-                    <h2 className="text-4xl md:text-5xl font-extrabold text-emerald-900 dark:text-white mb-6 font-heading">
-                        Seamless <span className="text-emerald-600 dark:text-emerald-400">Airport Transfers</span>
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 font-heading">
+                        Seamless <span className="text-[#22C55E]">Airport Transfers</span>
                     </h2>
-                    <p className="text-emerald-900/60 dark:text-white/60 mb-10 text-lg">Predictable pricing, premium vehicles, and professional chauffeurs waiting for you.</p>
+                    <p className="text-white/70 mb-10 text-lg">Predictable pricing, premium vehicles, and professional chauffeurs waiting for you.</p>
                     <button
                         onClick={() => setIsBookingOpen(true)}
-                        className="bg-emerald-900 text-white px-12 py-5 rounded-2xl font-bold text-lg hover:bg-emerald-800 transition-all shadow-xl inline-flex items-center gap-3 group"
+                        className="bg-[#22C55E] text-black px-12 py-5 rounded-sm font-bold text-lg hover:bg-white hover:text-black transition-all shadow-[0_0_20px_rgba(34,197,94,0.4)] inline-flex items-center gap-3 group"
                     >
                         Book Your Trip Now
                         <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
@@ -102,12 +102,12 @@ export default function HomeClient() {
                 <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
                         <div className="max-w-2xl">
-                            <h2 className="text-4xl md:text-5xl font-extrabold mb-6 dark:text-white">
-                                Curated <span className="text-emerald-600 dark:text-emerald-400">Destinations</span>
+                            <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-white">
+                                Curated <span className="text-[#22C55E]">Destinations</span>
                             </h2>
-                            <p className="text-emerald-900/60 dark:text-white/60 text-lg">Explore the most iconic locations in Sri Lanka with our specialized airport transfer services.</p>
+                            <p className="text-white/70 text-lg">Explore the most iconic locations in Sri Lanka with our specialized airport transfer services.</p>
                         </div>
-                        <Link href="/prices" className="flex items-center gap-2 text-emerald-600 font-bold uppercase tracking-widest text-sm hover:gap-4 transition-all">
+                        <Link href="/prices" className="flex items-center gap-2 text-[#FFDA00] font-bold uppercase tracking-widest text-sm hover:gap-4 transition-all hover:text-white">
                             View All Rates <ArrowRight size={18} />
                         </Link>
                     </div>
