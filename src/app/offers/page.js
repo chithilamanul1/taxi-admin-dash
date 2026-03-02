@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import { Tag, MapPin, ArrowRight, Loader2, Zap, Car, Users, Briefcase } from 'lucide-react';
+import { Tag, ArrowRight, Loader2, Zap, Users, Briefcase, Calendar } from 'lucide-react';
 import Link from 'next/link';
 
 export default function OffersPage() {
