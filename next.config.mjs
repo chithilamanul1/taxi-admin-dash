@@ -59,7 +59,7 @@ const nextConfig = {
 
 const withPWA = withPWAInit({
     dest: 'public',
-    disable: process.env.NODE_ENV === 'development',
+    disable: true, // Temporarily disabled to debug Vercel internal deployment errors
     register: true,
     skipWaiting: true,
 });
