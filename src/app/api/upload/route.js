@@ -62,7 +62,9 @@ export async function POST(req) {
         const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, '');
         const filename = `${Date.now()}_${originalName}`;
 
-        const uploadDir = path.join(process.cwd(), 'public/uploads', folder);
+        // Obfuscate path to prevent Vercel NFT tracing
+        const pubDir = ['p', 'u', 'b', 'l', 'i', 'c'].join('');
+        const uploadDir = path.join(process.cwd(), pubDir, 'uploads', folder);
         await mkdir(uploadDir, { recursive: true });
         const filePath = path.join(uploadDir, filename);
 

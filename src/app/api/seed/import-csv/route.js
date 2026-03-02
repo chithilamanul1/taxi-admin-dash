@@ -117,7 +117,9 @@ export async function GET() {
 
         await dbConnect();
 
-        const publicPath = path.join(process.cwd(), 'public');
+        // Obfuscate path to prevent Next.js from tracing and bundling the entire public folder
+        const dirName = ['p', 'u', 'b', 'l', 'i', 'c'].join('');
+        const publicPath = path.join(process.cwd(), dirName);
         const dayTripsCsv = fs.readFileSync(path.join(publicPath, 'daytrips.csv'), 'utf8');
         const tourPackagesCsv = fs.readFileSync(path.join(publicPath, 'tourpackages.csv'), 'utf8');
 
