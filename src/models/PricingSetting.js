@@ -21,6 +21,10 @@ const PricingSettingSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    nameBoardPrice: {
+        type: Number,
+        default: 2000
+    },
     updatedBy: {
         type: String // Admin email or ID
     }

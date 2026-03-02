@@ -38,6 +38,22 @@ body {
 
 
 @layer utilities {
+    .border-black {
+        border: 1px solid #000000 !important;
+    }
+
+    .border-black-10 {
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .bg-pure-white {
+        background-color: #ffffff !important;
+    }
+
+    .text-contrast {
+        color: #000000 !important;
+    }
+
     .animate-fade-in {
         animation: fadeIn 0.5s ease-in;
     }

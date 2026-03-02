@@ -14,7 +14,8 @@ export async function GET(req) {
                 key: 'global_settings',
                 longDistanceThreshold: 175,
                 longDistanceDiscountPercentage: 10,
-                isActive: true
+                isActive: true,
+                nameBoardPrice: 2000
             });
         }
 
@@ -35,6 +36,7 @@ export async function PUT(req) {
                 longDistanceThreshold: Number(body.longDistanceThreshold),
                 longDistanceDiscountPercentage: Number(body.longDistanceDiscountPercentage),
                 isActive: body.isActive,
+                nameBoardPrice: Number(body.nameBoardPrice || 2000),
                 updatedBy: body.updatedBy || 'admin'
             },
             { new: true, upsert: true }

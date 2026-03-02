@@ -568,8 +568,8 @@ export async function sendBookingConfirmation(booking) {
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
              <tr>
                 <td style="text-align: center;">
-                    <a href="tel:${booking.guestPhone}" style="display: inline-block; background-color: #064e3b; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">
-                        Connect The Customer
+                    <a href="https://wa.me/${booking.guestPhone?.replace(/[^0-9]/g, '')}" style="display: inline-block; background-color: #25D366; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">
+                        Connect via WhatsApp
                     </a>
                 </td>
             </tr>
@@ -593,7 +593,7 @@ export async function sendBookingConfirmation(booking) {
             await transporter.sendMail({
                 from: FROM_EMAIL,
                 to: OWNER_EMAIL,
-                subject: `🆕 BOOKING #${bookingId} | ${booking.customerName || 'Guest'} | ${booking.scheduledDate || 'Today'}`,
+                subject: `NEW BOOKING #${bookingId} | ${booking.customerName || 'Guest'} | ${booking.scheduledDate || 'Today'}`,
                 html: getPrintFriendlyTemplate(ownerContent, `Booking #${bookingId}`)
             });
             console.log('[Email] Print-friendly booking notification sent to owner');
@@ -651,7 +651,7 @@ export async function sendPaymentConfirmation(booking) {
             ${components.infoCard('📅', 'Payment Date', new Date().toLocaleDateString('en-LK', { dateStyle: 'full' }))}
         </table>
 
-        <!-- Confirmation -->
+        <!--Confirmation -->
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: rgba(34,197,94,0.1); border: 1px solid ${COLORS.success}; border-radius: 12px; margin-bottom: 20px;">
             <tr>
                 <td style="padding: 20px; text-align: center;">
@@ -725,7 +725,7 @@ export async function sendDriverAssigned(booking, driver) {
             ${components.infoCard('📅', 'Pickup Date', `${booking.scheduledDate || 'Today'} at ${booking.scheduledTime || 'Soon'}`)}
         </table>
 
-        <!-- Instructions -->
+        <!--Instructions -->
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: rgba(212,175,55,0.1); border: 1px solid ${COLORS.gold}; border-radius: 12px; margin-bottom: 20px;">
             <tr>
                 <td style="padding: 20px;">
@@ -738,16 +738,16 @@ export async function sendDriverAssigned(booking, driver) {
         </table>
 
         ${components.button('Track My Ride', `${BASE_URL}/booking/${booking._id}`)}
-        
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
-            <tr>
-                <td style="text-align: center;">
-                    <a href="tel:${driver.phone || '+94722885885'}" style="color: ${COLORS.primaryLight}; text-decoration: none; font-size: 14px; font-weight: 600;">
-                        📞 Call Driver Now
-                    </a>
-                </td>
-            </tr>
-        </table>
+
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
+        <tr>
+            <td style="text-align: center;">
+                <a href="tel:${driver.phone || '+94722885885'}" style="color: ${COLORS.primaryLight}; text-decoration: none; font-size: 14px; font-weight: 600;">
+                    📞 Call Driver Now
+                </a>
+            </td>
+        </tr>
+    </table>
     `;
 
     if (booking.customerEmail) {
@@ -823,16 +823,16 @@ export async function sendTripReminder(booking) {
         </table>
 
         ${components.button('View Booking Details', `${BASE_URL}/my-bookings`)}
-        
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
-            <tr>
-                <td style="text-align: center;">
-                    <p style="margin: 0; color: ${COLORS.textMuted}; font-size: 13px;">
-                        Need to make changes? <a href="https://wa.me/94722885885" style="color: ${COLORS.primaryLight}; text-decoration: none; font-weight: 600;">Contact us on WhatsApp</a>
-                    </p>
-                </td>
-            </tr>
-        </table>
+
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
+        <tr>
+            <td style="text-align: center;">
+                <p style="margin: 0; color: ${COLORS.textMuted}; font-size: 13px;">
+                    Need to make changes? <a href="https://wa.me/94722885885" style="color: ${COLORS.primaryLight}; text-decoration: none; font-weight: 600;">Contact us on WhatsApp</a>
+                </p>
+            </td>
+        </tr>
+    </table>
     `;
 
     if (booking.customerEmail) {
@@ -881,7 +881,7 @@ export async function sendTripCompletedNotification(booking) {
             ${components.infoCard('💰', 'Total Paid', `${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPrice) ? booking.displayPrice : (booking.totalPrice || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}`, true)}
         </table>
 
-        <!-- Review CTA -->
+        <!--Review CTA-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(217,119,6,0.1)); border: 1px solid ${COLORS.warning}; border-radius: 16px; margin-bottom: 30px;">
             <tr>
                 <td style="padding: 30px; text-align: center;">
@@ -934,7 +934,7 @@ export async function sendReviewThankYou(review) {
             </tr>
         </table>
 
-        <!-- Review Card -->
+        <!--Review Card-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; margin-bottom: 30px;">
             <tr>
                 <td style="padding: 25px;">
@@ -982,7 +982,7 @@ export async function sendBookingCancelled(booking) {
     const bookingId = booking._id?.toString().slice(-8).toUpperCase();
 
     const content = `
-        <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
+        < table width = "100%" cellpadding = "0" cellspacing = "0" style = "text-align: center; margin-bottom: 30px;" >
             <tr>
                 <td>
                     ${components.badge('❌ Booking Cancelled', 'warning')}
@@ -994,7 +994,7 @@ export async function sendBookingCancelled(booking) {
                     </p>
                 </td>
             </tr>
-        </table>
+        </table >
 
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
             ${components.infoCard('📋', 'Booking ID', `#${bookingId}`)}
@@ -1070,14 +1070,14 @@ export async function sendBookingStatusUpdate(booking, status) {
             await sendBookingCancelled(booking);
             break;
         default:
-            console.log(`[Email] No specific email template for status: ${status}`);
+            console.log(`[Email] No specific email template for status: ${status} `);
     }
 }
 
 // 10. LOGIN NOTIFICATION
 export async function sendLoginNotification(user) {
     const content = `
-        <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
+        < table width = "100%" cellpadding = "0" cellspacing = "0" style = "text-align: center; margin-bottom: 30px;" >
             <tr>
                 <td>
                     <div style="font-size: 50px; margin-bottom: 15px;">🛡️</div>
@@ -1089,7 +1089,7 @@ export async function sendLoginNotification(user) {
                     </p>
                 </td>
             </tr>
-        </table>
+        </table >
 
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
             ${components.infoCard('👤', 'Account', user.email)}
@@ -1127,7 +1127,7 @@ export async function sendCustomTripInquiry(data) {
     const inquiryId = Math.random().toString(36).substring(7).toUpperCase();
 
     const ownerContent = `
-        <!-- Inquiry Header -->
+        < !--Inquiry Header-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
             <tr>
                 <td style="background-color: #064e3b; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
@@ -1136,7 +1136,7 @@ export async function sendCustomTripInquiry(data) {
             </tr>
         </table>
 
-        <!-- Customer Details -->
+        <!--Customer Details-- >
         <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
             <tr style="background-color: #f9fafb;">
                 <td colspan="2" style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
@@ -1157,7 +1157,7 @@ export async function sendCustomTripInquiry(data) {
             </tr>
         </table>
 
-        <!-- Trip Requirements -->
+        <!--Trip Requirements-- >
         <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
             <tr style="background-color: #f9fafb;">
                 <td colspan="2" style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
@@ -1198,7 +1198,7 @@ export async function sendCustomTripInquiry(data) {
             </tr>
         </table>
 
-        <!-- Message -->
+        <!--Message -->
         <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
             <tr style="background-color: #f9fafb;">
                 <td style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
@@ -1229,7 +1229,7 @@ export async function sendCustomTripInquiry(data) {
             await resend.emails.send({
                 from: FROM_EMAIL,
                 to: OWNER_EMAIL,
-                subject: `✨ CUSTOM TRIP: ${data.name || 'New Inquiry'} | ${data.pickup?.address?.split(',')[0]} -> ${data.dropoff?.address?.split(',')[0]}`,
+                subject: `✨ CUSTOM TRIP: ${data.name || 'New Inquiry'} | ${data.pickup?.address?.split(',')[0]} -> ${data.dropoff?.address?.split(',')[0]} `,
                 html: getPrintFriendlyTemplate(ownerContent, `Custom Trip Inquiry`)
             });
             console.log('[Email] Custom trip inquiry notification sent to owner');
@@ -1261,13 +1261,13 @@ export async function sendOwnerNotification(subject, details) {
 
     try {
         const content = `
-            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
-                <tr>
-                    <td style="background-color: ${COLORS.primary}; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
-                        SYSTEM ALERT: ${subject.toUpperCase()}
-                    </td>
-                </tr>
-            </table>
+        < table width = "100%" cellpadding = "0" cellspacing = "0" style = "margin-bottom: 20px;" >
+            <tr>
+                <td style="background-color: ${COLORS.primary}; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
+                    SYSTEM ALERT: ${subject.toUpperCase()}
+                </td>
+            </tr>
+            </table >
             <table width="100%" cellpadding="10" cellspacing="0" style="border: 1px solid ${COLORS.border}; background-color: rgba(15, 23, 42, 0.5);">
                 ${Object.entries(details).map(([key, value]) => `
                     <tr>
@@ -1278,15 +1278,15 @@ export async function sendOwnerNotification(subject, details) {
             </table>
             <br/>
             ${components.button('Open Admin Panel', `${BASE_URL}/admin`)}
-        `;
+    `;
 
         await transporter.sendMail({
             from: FROM_EMAIL,
             to: OWNER_EMAIL,
-            subject: `🔔 [Airport Taxis] ${subject}`,
+            subject: `🔔[Airport Taxis] ${subject} `,
             html: getPremiumTemplate(content, 'System Notification')
         });
-        console.log(`[Email] Owner notification sent: ${subject}`);
+        console.log(`[Email] Owner notification sent: ${subject} `);
     } catch (error) {
         console.error('[Email] Owner notification failed:', error);
     }
@@ -1314,7 +1314,7 @@ export async function sendManualInvoice(booking) {
             </tr>
         </table>
 
-        <!-- Amount Card -->
+        <!--Amount Card-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, ${COLORS.primary}, #047857); border-radius: 16px; margin-bottom: 30px;">
             <tr>
                 <td style="padding: 30px; text-align: center;">
@@ -1329,7 +1329,7 @@ export async function sendManualInvoice(booking) {
             </tr>
         </table>
 
-        <!-- Details Card -->
+        <!--Details Card-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
             ${components.infoCard('📍', 'Trip Route', `${booking.pickupLocation?.address?.split(',')[0] || 'Pickup'} to ${booking.dropoffLocation?.address?.split(',')[0] || 'Dropoff'}`)}
             ${components.infoCard('📅', 'Date & Time', `${booking.scheduledDate || 'TBD'} ${booking.scheduledTime || ''}`)}
@@ -1338,9 +1338,9 @@ export async function sendManualInvoice(booking) {
 
         ${components.button('Pay Securely Online', booking.paymentLink)}
 
-        <p style="text-align: center; color: ${COLORS.textMuted}; font-size: 12px; margin-top: 20px;">
-            Ref: #${bookingId} | Secured by Airport Taxis Sri Lanka
-        </p>
+    <p style="text-align: center; color: ${COLORS.textMuted}; font-size: 12px; margin-top: 20px;">
+        Ref: #${bookingId} | Secured by Airport Taxis Sri Lanka
+    </p>
     `;
 
     if (booking.customerEmail) {

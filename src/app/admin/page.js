@@ -83,7 +83,7 @@ export default function AdminDashboard() {
 
     // Quick Links State
     const [quickLinks, setQuickLinks] = useState([])
-    const [newQuickLink, setNewQuickLink] = useState({ title: '', price: '', slug: '', badge: 'Special Offer', allowedPaymentMode: 'both' })
+    const [newQuickLink, setNewQuickLink] = useState({ title: '', price: '', slug: '', badge: 'Special Offer' })
     const [isSavingQuickLink, setIsSavingQuickLink] = useState(false)
 
     // Manual Booking States
@@ -191,7 +191,7 @@ export default function AdminDashboard() {
             const data = await res.json();
             if (data.success) {
                 setQuickLinks([data.data, ...quickLinks]);
-                setNewQuickLink({ title: '', price: '', slug: '', badge: 'Special Offer', allowedPaymentMode: 'both' });
+                setNewQuickLink({ title: '', price: '', slug: '', badge: 'Special Offer' });
                 alert('Quick Link created!');
             } else {
                 alert('Error: ' + data.error);
@@ -844,6 +844,18 @@ export default function AdminDashboard() {
                                             />
                                             <p className="text-[10px] text-emerald-900/60 mt-1">Percentage deducted from the total fare.</p>
                                         </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">
+                                                Name Board Price (LKR)
+                                            </label>
+                                            <input
+                                                type="number"
+                                                value={pricingSettings.nameBoardPrice || 2000}
+                                                onChange={e => setPricingSettings({ ...pricingSettings, nameBoardPrice: Number(e.target.value) })}
+                                                className="w-full bg-white border border-emerald-900/10 rounded-lg px-3 py-2 text-sm font-bold text-emerald-900 outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                            />
+                                            <p className="text-[10px] text-emerald-900/60 mt-1">Fee for airport pickup name sign service.</p>
+                                        </div>
                                         <div className="flex items-center pt-4">
                                             <label className="flex items-center gap-2 cursor-pointer select-none">
                                                 <input
@@ -1370,18 +1382,7 @@ export default function AdminDashboard() {
                                                     className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20"
                                                 />
                                             </div>
-                                            <div>
-                                                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Payment Mode</label>
-                                                <select
-                                                    value={newQuickLink.allowedPaymentMode}
-                                                    onChange={(e) => setNewQuickLink({ ...newQuickLink, allowedPaymentMode: e.target.value })}
-                                                    className="w-full px-4 py-[9px] bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20 font-bold text-emerald-900"
-                                                >
-                                                    <option value="both">Both (Choice)</option>
-                                                    <option value="full">100% Only</option>
-                                                    <option value="partial">50% Only</option>
-                                                </select>
-                                            </div>
+                                            {/* Payment Mode Removed */}
                                             <button
                                                 onClick={handleSaveQuickLink}
                                                 disabled={isSavingQuickLink}
@@ -1444,9 +1445,7 @@ export default function AdminDashboard() {
                                                         <span className="text-[9px] text-white/40 uppercase font-bold tracking-tighter">SLUG: {rate.slug}</span>
                                                         <span className="text-[9px] text-emerald-400 font-bold uppercase">{rate.currency || 'USD'}</span>
                                                     </div>
-                                                    <span className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest bg-emerald-400/10 px-2 py-0.5 rounded">
-                                                        {rate?.allowedPaymentMode === 'full' ? '100% Only' : rate?.allowedPaymentMode === 'partial' ? '50% Only' : 'Customer Choice'}
-                                                    </span>
+                                                    {/* Payment Mode Display Removed */}
                                                 </div>
                                             </div>
                                         ))}

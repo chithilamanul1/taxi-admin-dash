@@ -65,13 +65,6 @@ export default function CustomTripPage() {
     const convertedEstimate = convertPrice(estimate);
 
     const handleAddStop = () => {
-        // Limit to 5 Stopovers (Waypoints)
-        const waypointsCount = stops.filter(s => s.type === 'waypoint').length;
-        if (waypointsCount >= 5) {
-            alert("Maximum of 5 stopovers allowed.");
-            return;
-        }
-
         const newStop = { id: Date.now(), type: 'waypoint', address: '', lat: null, lon: null };
         const newStops = [...stops];
         newStops.splice(newStops.length - 1, 0, newStop);

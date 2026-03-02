@@ -17,8 +17,9 @@ export async function GET(req) {
         const pricing = await Pricing.find(filter);
 
         // Fetch global settings (e.g. nameBoardPrice)
-        const nameBoardSetting = await import('../../../models/Settings').then(mod => mod.default.findOne({ key: 'nameBoardPrice' }));
-        const nameBoardPrice = nameBoardSetting ? nameBoardSetting.value : 2000;
+        const PricingSetting = await import('../../../models/PricingSetting').then(mod => mod.default);
+        const settings = await PricingSetting.findOne({ key: 'global_settings' });
+        const nameBoardPrice = settings ? settings.nameBoardPrice : 2000;
 
         return NextResponse.json({ success: true, data: pricing, meta: { nameBoardPrice } }, {
             headers: {

@@ -506,7 +506,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     }
 
     // Determine Pricing Category
-    const pricingCategory = ['pickup', 'drop'].includes(activeTab) ? 'airport-transfer' : 'ride-now';
+    const isAirportService = ['pickup', 'drop'].includes(activeTab);
+    const pricingCategory = isAirportService ? 'airport-transfer' : 'ride-now';
 
     return (
         <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4">
@@ -527,7 +528,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         aria-controls={`panel-${tab.id}`}
                         id={`tab-${tab.id}`}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all min-w-[120px] ${activeTab === tab.id ? 'bg-[#FFC107] text-black shadow-md border-b-2 border-amber-600/30 ring-1 ring-amber-400' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all min-w-[120px] ${activeTab === tab.id ? 'bg-black text-white shadow-md border-b-2 border-black ring-1 ring-black' : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 border border-slate-200'}`}
                     >
                         <tab.icon size={16} />
                         {tab.label}
@@ -577,7 +578,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     <button
                                                         key={c.code}
                                                         onClick={() => changeCurrency(c.code)}
-                                                        className={`w-full text-left px-5 py-3 text-xs font-bold flex items-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors ${currency === c.code ? 'text-amber-700 bg-amber-50 dark:bg-slate-700 border-l-2 border-amber-700' : 'text-slate-600 dark:text-slate-400'}`}
+                                                        className={`w-full text-left px-5 py-3 text-xs font-bold flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors ${currency === c.code ? 'text-black bg-slate-100 dark:bg-slate-700 border-l-2 border-black' : 'text-slate-600 dark:text-slate-400'}`}
                                                     >
                                                         <div className="w-4 h-4 rounded-full overflow-hidden border border-white/20">
                                                             <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
@@ -589,8 +590,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                     </div>
 
-                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-black text-xs font-black hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-[#FFC107] px-6 py-3 rounded-xl border border-black justify-center whitespace-nowrap shadow-sm hover:shadow-md hover:bg-[#FFC107]/90">
-                                        {isLocating ? <Loader2 size={16} className="animate-spin text-black" /> : <Zap size={16} className="fill-black text-black" />}
+                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-white text-xs font-black hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-black px-6 py-3 rounded-xl border border-black justify-center whitespace-nowrap shadow-sm hover:shadow-md">
+                                        {isLocating ? <Loader2 size={16} className="animate-spin text-white" /> : <Zap size={16} className="fill-white text-white" />}
                                         <span className="hidden sm:inline">Auto Detect</span>
                                         <span className="sm:hidden">GPS</span>
                                     </button>
@@ -627,25 +628,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         />
 
                                         <div className="flex flex-col items-center border-l border-slate-900/10 dark:border-white/10 px-2 min-w-[70px] sm:min-w-[100px] justify-center">
-                                            <div className="flex items-center gap-1">
-                                                <div className="relative">
-                                                    <Clock size={12} className="text-slate-900/40 dark:text-white/40 shrink-0 absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
-                                                    <select
-                                                        value={wp.waitingTime || 0}
-                                                        onChange={(e) => {
-                                                            const newWps = [...waypoints];
-                                                            newWps[idx].waitingTime = parseInt(e.target.value);
-                                                            setWaypoints(newWps);
-                                                        }}
-                                                        className="bg-slate-100 dark:bg-white/10 pl-5 pr-5 py-1.5 rounded-lg text-[10px] font-black text-slate-900 dark:text-white outline-none cursor-pointer appearance-none text-center hover:bg-slate-200 transition-colors border border-transparent focus:border-amber-500"
-                                                    >
-                                                        {[0, 1, 2, 3, 4, 5, 6].map(h => (
-                                                            <option key={h} value={h} className="bg-white text-slate-900 text-xs">{h}h</option>
-                                                        ))}
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <span className="text-[8px] font-black text-slate-400 mt-0.5 leading-none">(Rs 500/hr)</span>
+                                            {/* Waiting Hour Removed */}
                                         </div>
 
                                         <button
@@ -660,7 +643,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
 
                                 {/* Add Waypoint Search */}
-                                {waypoints.length < 8 && (
+                                {true && (
                                     <>
                                         {/* "Add Stop" Button - Aligned with icons */}
                                         {waypointSearches.length === 0 && (
@@ -731,7 +714,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <button
                                         onClick={() => setHasNameBoard(!hasNameBoard)}
                                         aria-pressed={hasNameBoard}
-                                        className={`h-16 px-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-amber-700 bg-amber-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-amber-900 dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-slate-900 dark:border-white/10 text-slate-900/60 dark:text-white/60 hover:border-black'}`}
+                                        className={`h-16 px-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-black bg-slate-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-black dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-slate-900 dark:border-white/10 text-slate-900/60 dark:text-white/60 hover:border-black'}`}
                                     >
                                         <div className="flex items-center gap-3">
                                             <Signpost size={20} className={hasNameBoard ? 'text-emerald-600' : 'text-slate-400'} />
@@ -740,7 +723,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 <span className="text-[10px] font-medium text-slate-400">Driver waits with name sign</span>
                                             </div>
                                         </div>
-                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${hasNameBoard ? 'border-amber-700 bg-amber-700 dark:border-emerald-500 dark:bg-emerald-500' : 'border-slate-900/20 dark:border-white/20'}`}>
+                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${hasNameBoard ? 'border-black bg-black dark:border-emerald-500 dark:bg-emerald-500' : 'border-slate-900/20 dark:border-white/20'}`}>
                                             {hasNameBoard && <Check size={12} className="text-white" />}
                                         </div>
                                     </button>
@@ -749,7 +732,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="space-y-3">
                                     <button
                                         onClick={() => setIsCouponOpen(!isCouponOpen)}
-                                        className="flex items-center gap-2 text-xs font-bold text-black hover:text-slate-900 transition-colors bg-[#FFC107] box-shadow-md px-4 py-3 rounded-xl w-full justify-center"
+                                        className="flex items-center gap-2 text-xs font-bold text-white hover:bg-slate-800 transition-colors bg-black box-shadow-md px-4 py-3 rounded-xl w-full justify-center"
                                     >
                                         <Tag size={16} className="fill-black/20" />
                                         {isCouponOpen ? 'Hide Coupon Field' : 'Do you have a Coupon Code?'}
@@ -778,13 +761,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                     {isCouponOpen && (
                                         <div className="relative h-16 animate-slide-up">
-                                            <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-amber-600 dark:text-amber-400" size={20} />
+                                            <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-black dark:text-white" size={20} />
                                             <input
                                                 type="text"
                                                 placeholder="ENTER COUPON CODE"
                                                 value={couponCode}
                                                 onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                                className="w-full h-full pl-14 pr-24 rounded-2xl bg-white dark:bg-white/5 border-2 border-amber-200 dark:border-amber-900/50 text-base font-black outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/20 transition-all uppercase text-slate-900 dark:text-white placeholder:text-slate-900/30 dark:placeholder:text-white/30 tracking-widest"
+                                                className="w-full h-full pl-14 pr-24 rounded-2xl bg-white dark:bg-white/5 border-2 border-black dark:border-slate-700 text-base font-black outline-none focus:ring-4 focus:ring-black/10 transition-all uppercase text-slate-900 dark:text-white placeholder:text-slate-900/30 dark:placeholder:text-white/30 tracking-widest"
                                                 aria-label="Coupon code"
                                             />
                                             <button
@@ -1028,15 +1011,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <div className="pt-4 border-t border-black/5 space-y-3">
                                         <div className="flex justify-between items-center text-xs">
                                             <span className="text-black/60 font-bold uppercase tracking-tight">Trip Subtotal</span>
-                                            <span className="text-black font-extrabold">{convertPrice(total - (calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard }, vehiclePricing[vehicle]) || 0)).symbol} {convertPrice(total - (calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard }, vehiclePricing[vehicle]) || 0)).value.toLocaleString()}</span>
+                                            <span className="text-black font-extrabold">{convertPrice(total - (calculateSurcharges({ hasNameBoard }, vehiclePricing[vehicle]) || 0)).symbol} {convertPrice(total - (calculateSurcharges({ hasNameBoard }, vehiclePricing[vehicle]) || 0)).value.toLocaleString()}</span>
                                         </div>
 
-                                        {totalWaitingHours > 0 && calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle]) > 0 && (
-                                            <div className="flex justify-between items-center text-xs">
-                                                <span className="text-black/60 font-bold uppercase tracking-tight">Waiting ({totalWaitingHours}h)</span>
-                                                <span className="text-black font-extrabold">+{convertPrice(calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle])).symbol} {convertPrice(calculateSurcharges({ waitingHours: totalWaitingHours, hasNameBoard: false }, vehiclePricing[vehicle])).value.toLocaleString()}</span>
-                                            </div>
-                                        )}
+                                        {/* Waiting Hour Surcharge Removed */}
 
                                         {hasNameBoard && nameBoardPrice > 0 && (
                                             <div className="flex justify-between items-center text-xs">

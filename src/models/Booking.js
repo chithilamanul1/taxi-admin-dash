@@ -39,7 +39,7 @@ const bookingSchema = new mongoose.Schema({
     totalPrice: { type: Number }, // Can be 0 for inquiries
     status: {
         type: String,
-        enum: ['pending', 'assigned', 'ongoing', 'completed', 'cancelled'],
+        enum: ['pending', 'assigned', 'arrived', 'ongoing', 'completed', 'cancelled'],
         default: 'pending'
     },
     driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver' },

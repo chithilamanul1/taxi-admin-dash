@@ -36,7 +36,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
             <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-t-[2rem] sm:rounded-[2rem] shadow-2xl overflow-hidden max-h-[85vh] animate-slide-up flex flex-col">
                 <div className="p-4 md:p-6 border-b border-slate-100 dark:border-white/10 flex justify-between items-center bg-white dark:bg-slate-800 shrink-0 z-10">
                     <div>
-                        <h3 className="text-lg font-black text-[#006064] dark:text-white">Select Vehicle {vehicles.length > 0 && `(${vehicles.length})`}</h3>
+                        <h3 className="text-lg font-black text-black dark:text-white">Select Vehicle {vehicles.length > 0 && `(${vehicles.length})`}</h3>
                         <p className="text-xs text-slate-500 dark:text-white/60 font-medium">Choose the best ride for your trip</p>
                     </div>
                     <button
@@ -50,15 +50,15 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                 <div className="overflow-y-auto p-4 space-y-3 custom-scrollbar flex-1 pb-10">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 gap-4">
-                            <Loader2 className="animate-spin text-emerald-600" size={32} />
-                            <p className="text-sm font-bold text-emerald-900/40 dark:text-white/40 uppercase tracking-widest">Loading Vehicles...</p>
+                            <Loader2 className="animate-spin text-black" size={32} />
+                            <p className="text-sm font-bold text-slate-900/40 dark:text-white/40 uppercase tracking-widest">Loading Vehicles...</p>
                         </div>
                     ) : vehicles.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-20 text-center px-6">
                             <div className="w-16 h-16 bg-emerald-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-4 text-emerald-600">
                                 <Car size={32} />
                             </div>
-                            <h4 className="font-bold text-emerald-900 dark:text-white mb-2">No Vehicles Available</h4>
+                            <h4 className="font-bold text-slate-900 dark:text-white mb-2">No Vehicles Available</h4>
                             <p className="text-xs text-slate-500 dark:text-white/60">We couldn't find any vehicles for this route. Please contact support or try again later.</p>
                         </div>
                     ) : (
@@ -77,12 +77,12 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                     }}
                                     className={`
                                         flex items-center gap-4 p-3 md:p-4 rounded-2xl border-2 transition-all relative overflow-hidden
-                                        ${isSelected ? 'border-emerald-600 bg-white dark:bg-slate-800 ring-4 ring-emerald-600/20 shadow-xl' : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-white/5 shadow-sm'}
-                                        ${!suitable ? 'opacity-60 grayscale-[0.8]' : 'active:scale-95 cursor-pointer hover:border-emerald-600'}
+                                        ${isSelected ? 'border-black bg-white dark:bg-slate-800 ring-4 ring-slate-900/10 shadow-xl' : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-white/5 shadow-sm'}
+                                        ${!suitable ? 'opacity-60 grayscale-[0.8]' : 'active:scale-95 cursor-pointer hover:border-black'}
                                     `}
                                 >
                                     {/* AC Badge */}
-                                    <div className="absolute top-2 left-2 flex items-center gap-1 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 px-2 py-1 rounded-lg text-[8px] font-black z-10 uppercase tracking-tighter border border-emerald-200 dark:border-emerald-800">
+                                    <div className="absolute top-2 left-2 flex items-center gap-1 bg-slate-100 dark:bg-slate-900/50 text-black dark:text-slate-400 px-2 py-1 rounded-lg text-[8px] font-black z-10 uppercase tracking-tighter border border-slate-200 dark:border-slate-800">
                                         <Wind size={8} className="animate-pulse" /> 100% A/C
                                     </div>
 
@@ -108,15 +108,15 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
 
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between items-start">
-                                            <h4 className="font-bold text-emerald-900 dark:text-white truncate">{vehicle.name}</h4>
-                                            {isSelected && <CheckCircle2 size={18} className="text-emerald-600 shrink-0" />}
+                                            <h4 className="font-bold text-slate-900 dark:text-white truncate">{vehicle.name}</h4>
+                                            {isSelected && <CheckCircle2 size={18} className="text-black shrink-0" />}
                                         </div>
                                         <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-white/40 mt-1">
                                             <div className="flex items-center gap-1">
-                                                <Users size={12} className="text-emerald-600" /> 1-{vehicle.capacity} Passengers
+                                                <Users size={12} className="text-black" /> 1-{vehicle.capacity} Passengers
                                             </div>
                                             <div className="flex items-center gap-1">
-                                                <Briefcase size={12} className="text-emerald-600" /> {vehicle.luggage}
+                                                <Briefcase size={12} className="text-black" /> {vehicle.luggage}
                                             </div>
                                         </div>
                                     </div>
@@ -127,12 +127,12 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                                 e.stopPropagation();
                                                 setDetailVehicle(vehicle);
                                             }}
-                                            className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-white/5 rounded-full transition-all"
+                                            className="p-2 text-slate-400 hover:text-black hover:bg-slate-50 dark:hover:bg-white/5 rounded-full transition-all"
                                             title="View Details"
                                         >
                                             <Info size={18} />
                                         </button>
-                                        <div className="text-[10px] font-black text-emerald-600/40 uppercase tracking-widest hidden sm:block">Details</div>
+                                        <div className="text-[10px] font-black text-black/40 uppercase tracking-widest hidden sm:block">Details</div>
                                     </div>
                                 </div>
                             );
@@ -147,7 +147,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
 
                             {/* Header - Fixed */}
                             <div className="p-6 pb-2 shrink-0 flex justify-between items-start relative">
-                                <h4 className="text-lg font-black text-emerald-900 dark:text-white uppercase tracking-tight pr-8">{detailVehicle.name}</h4>
+                                <h4 className="text-lg font-black text-black dark:text-white uppercase tracking-tight pr-8">{detailVehicle.name}</h4>
                                 <button
                                     onClick={() => setDetailVehicle(null)}
                                     className="p-2.5 bg-slate-100 dark:bg-white/10 rounded-full text-slate-500 dark:text-white/60 hover:bg-red-50 hover:text-red-600 transition-all shadow-sm"
@@ -163,19 +163,19 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                 </div>
 
                                 <div className="grid grid-cols-3 gap-4">
-                                    <div className="flex flex-col items-center gap-1 p-3 bg-emerald-50 dark:bg-white/5 rounded-2xl">
-                                        <Users size={16} className="text-emerald-600" />
-                                        <span className="text-sm font-black text-emerald-900 dark:text-white">1-{detailVehicle.capacity}</span>
+                                    <div className="flex flex-col items-center gap-1 p-3 bg-slate-50 dark:bg-white/5 rounded-2xl">
+                                        <Users size={16} className="text-black" />
+                                        <span className="text-sm font-black text-black dark:text-white">1-{detailVehicle.capacity}</span>
                                         <span className="text-[8px] font-bold text-slate-400 uppercase">Passengers</span>
                                     </div>
-                                    <div className="flex flex-col items-center gap-1 p-3 bg-emerald-50 dark:bg-white/5 rounded-2xl">
-                                        <Briefcase size={16} className="text-emerald-600" />
-                                        <span className="text-sm font-black text-emerald-900 dark:text-white">{detailVehicle.luggage}</span>
+                                    <div className="flex flex-col items-center gap-1 p-3 bg-slate-50 dark:bg-white/5 rounded-2xl">
+                                        <Briefcase size={16} className="text-black" />
+                                        <span className="text-sm font-black text-black dark:text-white">{detailVehicle.luggage}</span>
                                         <span className="text-[8px] font-bold text-slate-400 uppercase">Large Bags</span>
                                     </div>
-                                    <div className="flex flex-col items-center gap-1 p-3 bg-emerald-50 dark:bg-white/5 rounded-2xl">
-                                        <Wind size={16} className="text-emerald-600" />
-                                        <span className="text-sm font-black text-emerald-900 dark:text-white">Yes</span>
+                                    <div className="flex flex-col items-center gap-1 p-3 bg-slate-50 dark:bg-white/5 rounded-2xl">
+                                        <Wind size={16} className="text-black" />
+                                        <span className="text-sm font-black text-black dark:text-white">Yes</span>
                                         <span className="text-[8px] font-bold text-slate-400 uppercase">Air Con</span>
                                     </div>
                                 </div>
@@ -200,7 +200,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                         setDetailVehicle(null);
                                         onClose();
                                     }}
-                                    className="w-full h-14 bg-emerald-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-emerald-800 transition-all shadow-xl shadow-emerald-900/20"
+                                    className="w-full h-14 bg-black text-white rounded-2xl font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl"
                                 >
                                     Select This Ride
                                 </button>
