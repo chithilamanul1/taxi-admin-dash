@@ -46,10 +46,11 @@ export default function Navbar() {
                     <div className="relative h-11 w-11 overflow-hidden bg-slate-900/5 dark:bg-white/10 rounded-xl p-2 border border-slate-900/10 dark:border-white/10 group-hover:scale-110 transition-transform -translate-y-0.5">
                         <Image
                             src="/logo.png"
-                            alt=""
+                            alt="Airport Taxis Pvt Ltd logo"
                             fill
                             className="object-contain p-1"
                             sizes="48px"
+                            priority
                         />
                     </div>
                     <div className="flex flex-col">

@@ -585,10 +585,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                     </div>
 
-                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-black text-[10px] font-black uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 bg-[#FFDA00] px-6 py-3.5 rounded-xl justify-center whitespace-nowrap shadow-md border-none">
-                                        {isLocating ? <Loader2 size={16} className="animate-spin text-black" /> : <MapPin size={16} className="text-black hidden sm:block" />}
-                                        <span>GPS</span>
-                                    </button>
+                                    {(activeTab === 'drop' || activeTab === 'ride') && (
+                                        <button onClick={handleGetCurrentLocation} aria-label="Detect my current location" className="flex-1 text-black text-[10px] font-black uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 bg-[#FFDA00] px-6 py-3.5 rounded-xl justify-center whitespace-nowrap shadow-md border-none">
+                                            {isLocating ? <Loader2 size={16} className="animate-spin text-black" /> : <MapPin size={16} className="text-black hidden sm:block" />}
+                                            <span>Where Am I?</span>
+                                        </button>
+                                    )}
                                 </div>
                             </div>
 

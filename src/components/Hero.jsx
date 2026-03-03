@@ -63,7 +63,10 @@ const Hero = ({ onBookClick }) => {
                                     loop
                                     playsInline
                                     className="object-cover w-full h-full"
-                                />
+                                    aria-label="Sri Lanka airport taxi service promotional video"
+                                >
+                                    <track kind="captions" srcLang="en" label="English" default />
+                                </video>
                             )}
                         </div>
                     );
