@@ -1,9 +1,7 @@
-'use client'
-
-export const dynamic = 'force-dynamic'
+﻿'use client'
 
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { Users, Car, MapPin, Map as MapIcon, DollarSign, BarChart2, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink, Plus } from 'lucide-react'
+import { Users, Car, MapPin, Map as MapIcon, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink, Plus } from 'lucide-react'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -435,7 +433,7 @@ export default function AdminDashboard() {
     }
 
     return (
-        <div className="flex h-screen bg-[#fafafa]">
+        <div className="flex h-screen bg-slate-100">
             {/* Mobile Overlay */}
             {sidebarOpen && (
                 <div
@@ -444,108 +442,108 @@ export default function AdminDashboard() {
                 />
             )}
 
-            {/* Sidebar - Shadcn-Admin Aesthetic */}
-            <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 bg-[#09090b] text-white transition-all duration-300 ${sidebarOpen && 'md:w-64'} ${!sidebarOpen && 'md:w-20'} w-64 flex flex-col border-r border-slate-800 shadow-xl`}>
+            {/* Sidebar - Premium Gradient Design */}
+            <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 bg-slate-950 text-white transition-all duration-300 ${sidebarOpen && 'md:w-64'} ${!sidebarOpen && 'md:w-20'} w-64 flex flex-col shadow-2xl border-r border-white/5`}>
                 <button
                     onClick={() => setSidebarOpen(false)}
                     className="md:hidden absolute top-4 right-4 text-white/80 hover:text-white p-2 hover:bg-white/10 rounded-lg transition-all"
                 >
                     <X size={20} />
                 </button>
-                {/* Logo Area - Clean and Minimal */}
-                <div className="p-6 flex items-center gap-3 border-b border-slate-800/50">
-                    <div className="w-8 h-8 bg-white text-black rounded-lg flex items-center justify-center font-black text-sm">
-                        AT
+                {/* Logo Area with Glass Effect */}
+                <div className="p-5 flex items-center gap-3 border-b border-white/5">
+                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/10">
+                        <Car size={20} className="text-white" />
                     </div>
                     <div className={`${!sidebarOpen && 'md:hidden'}`}>
-                        <h1 className="font-bold text-sm leading-tight tracking-tight uppercase">Airport Taxis</h1>
-                        <p className="text-[9px] text-slate-500 uppercase tracking-[0.2em] font-black">Management</p>
+                        <h1 className="font-bold text-lg leading-tight tracking-tight">Admin Panel</h1>
+                        <p className="text-[10px] text-slate-400 uppercase tracking-widest">Airport Taxis</p>
                     </div>
                 </div>
-                <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto custom-scrollbar">
-                    <button onClick={() => { setCurrentView('dashboard'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'dashboard' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <BarChart2 size={18} className={currentView === 'dashboard' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Dashboard</span>
+                <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+                    <button onClick={() => { setCurrentView('dashboard'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'dashboard' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <Activity size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Dashboard</span>
                     </button>
-                    <button onClick={() => { setCurrentView('pricing'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'pricing' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <DollarSign size={18} className={currentView === 'pricing' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Pricing</span>
+                    <button onClick={() => { setCurrentView('pricing'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'pricing' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <DollarSign size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Pricing</span>
                     </button>
-                    <button onClick={() => { setCurrentView('revenue'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'revenue' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <DollarSign size={18} className={currentView === 'revenue' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Revenue</span>
+                    <button onClick={() => { setCurrentView('revenue'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'revenue' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <DollarSign size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Revenue</span>
                     </button>
-                    <button onClick={() => { setCurrentView('rates'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'rates' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <MapPin size={18} className={currentView === 'rates' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Destination Rates</span>
+                    <button onClick={() => { setCurrentView('rates'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'rates' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <MapPin size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Destination Rates</span>
                     </button>
-                    <button onClick={() => { setCurrentView('chat'); setSidebarOpen(false); }} className={`relative flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'chat' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <MessageCircle size={18} className={currentView === 'chat' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Live Chat</span>
-                        <span className="absolute right-3.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+                    <button onClick={() => { setCurrentView('chat'); setSidebarOpen(false); }} className={`relative flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'chat' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <MessageCircle size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Live Chat</span>
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
                     </button>
-                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('Multi-Day Packages'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'tours' && tourCategoryFilter === 'Multi-Day Packages' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <Compass size={18} className={currentView === 'tours' && tourCategoryFilter === 'Multi-Day Packages' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Tour Packages</span>
+                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('Multi-Day Packages'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'tours' && tourCategoryFilter === 'Multi-Day Packages' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <Compass size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Tour Packages</span>
                     </button>
-                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('Day Trips'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'tours' && tourCategoryFilter === 'Day Trips' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <MapIcon size={18} className={currentView === 'tours' && tourCategoryFilter === 'Day Trips' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Day Trips</span>
+                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('Day Trips'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'tours' && tourCategoryFilter === 'Day Trips' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <MapIcon size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Day Trips</span>
                     </button>
                     <button onClick={() => {
                         setCurrentView('bookings');
                         setSidebarOpen(false);
                         setUnreadCount(0);
-                    }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 relative group ${currentView === 'bookings' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <Users size={18} className={currentView === 'bookings' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Bookings</span>
+                    }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 relative ${currentView === 'bookings' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <Users size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Bookings</span>
                         {unreadCount > 0 && (
-                            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 px-1.5 min-w-[1.25rem] h-5 bg-white text-black text-[10px] font-black rounded-full flex items-center justify-center border border-black shadow-sm">
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse">
                                 {unreadCount}
                             </span>
                         )}
                     </button>
-                    <button onClick={() => { setCurrentView('drivers'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'drivers' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <Car size={18} className={currentView === 'drivers' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Drivers</span>
+                    <button onClick={() => { setCurrentView('drivers'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'drivers' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <Car size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Drivers</span>
                     </button>
-                    <button onClick={() => { setCurrentView('live-map'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'live-map' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <MapPin size={18} className={currentView === 'live-map' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Live Map</span>
+                    <button onClick={() => { setCurrentView('live-map'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'live-map' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <MapPin size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Live Map</span>
                     </button>
-                    <button onClick={() => { setCurrentView('blog'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'blog' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <FileText size={18} className={currentView === 'blog' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Blog</span>
+                    <button onClick={() => { setCurrentView('blog'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'blog' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <FileText size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Blog</span>
                     </button>
-                    <button onClick={() => { setCurrentView('team'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'team' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <Users size={18} className={currentView === 'team' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Team</span>
+                    <button onClick={() => { setCurrentView('team'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'team' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <Users size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Team</span>
                     </button>
-                    <button onClick={() => { setCurrentView('communications'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'communications' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <Mail size={18} className={currentView === 'communications' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Email</span>
+                    <button onClick={() => { setCurrentView('communications'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'communications' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <Mail size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Email</span>
                     </button>
-                    <button onClick={() => { setCurrentView('support'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'support' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <LifeBuoy size={18} className={currentView === 'support' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Support</span>
+                    <button onClick={() => { setCurrentView('support'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'support' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <LifeBuoy size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Support</span>
                     </button>
-                    <button onClick={() => { setCurrentView('coupons'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'coupons' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <Percent size={18} className={currentView === 'coupons' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Coupons</span>
+                    <button onClick={() => { setCurrentView('coupons'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'coupons' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <Percent size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Coupons</span>
                     </button>
-                    <button onClick={() => { setCurrentView('reviews'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'reviews' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <BarChart2 size={18} className={currentView === 'reviews' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Reviews</span>
+                    <button onClick={() => { setCurrentView('reviews'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'reviews' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <Activity size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Reviews</span>
                     </button>
-                    <button onClick={() => { setCurrentView('invoices'); setSidebarOpen(false); }} className={`flex items-center gap-3.5 p-2.5 w-full rounded-md transition-all duration-200 group ${currentView === 'invoices' ? 'bg-white text-black font-bold shadow-sm' : 'hover:bg-white/10 text-slate-400 hover:text-white'}`}>
-                        <FileText size={18} className={currentView === 'invoices' ? 'text-black' : 'text-slate-500 group-hover:text-white'} />
-                        <span className={`text-[13px] font-medium ${!sidebarOpen && 'md:hidden'}`}>Invoices</span>
+                    <button onClick={() => { setCurrentView('invoices'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'invoices' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
+                        <FileText size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Invoices</span>
                     </button>
                 </nav>
 
-                <div className="p-4 border-t border-slate-800/50 mt-auto">
-                    <button onClick={() => signOut({ callbackUrl: '/admin/login' })} className="flex items-center gap-3.5 p-2.5 w-full hover:bg-red-500/10 rounded-md transition-all text-red-500 font-medium text-[13px] group">
-                        <X size={18} className="text-red-500 group-hover:scale-110 transition-transform" />
+                <div className="p-3 border-t border-white/10">
+                    <button onClick={() => signOut({ callbackUrl: '/admin/login' })} className="flex items-center gap-3 p-3 w-full hover:bg-red-500/20 rounded-xl transition-all text-red-300 hover:text-red-100">
+                        <X size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Log Out</span>
                     </button>
                 </div>
@@ -553,15 +551,15 @@ export default function AdminDashboard() {
 
             {/* Main Content */}
             <div className="flex-1 overflow-auto">
-                {/* Header - Shadcn Clean Style */}
-                <header className="bg-white border-b border-slate-200 px-6 py-3.5 flex justify-between items-center sticky top-0 z-40 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
-                    <div className="flex items-center gap-5">
-                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-slate-50 rounded-md transition-colors text-slate-500 border border-slate-200 shadow-sm">
-                            <BarChart2 size={16} />
+                {/* Premium Header */}
+                <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200/50 px-6 py-4 flex justify-between items-center sticky top-0 z-40">
+                    <div className="flex items-center gap-4">
+                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-600">
+                            <Activity size={20} />
                         </button>
-                        <div className="flex flex-col">
-                            <h2 className="font-bold text-slate-900 text-sm capitalize">{currentView}</h2>
-                            <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">System Administration</p>
+                        <div className="flex-1 min-w-0">
+                            <h2 className="font-bold text-slate-800 capitalize truncate">{currentView}</h2>
+                            <p className="text-[10px] text-slate-400 truncate">Manage your business</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -631,7 +629,7 @@ export default function AdminDashboard() {
                             )}
                         </div>
 
-                        <div className="w-9 h-9 overflow-hidden bg-slate-950 rounded-lg flex items-center justify-center text-white text-xs font-black border border-slate-800 shadow-sm">
+                        <div className="w-10 h-10 overflow-hidden bg-slate-800 rounded-xl flex items-center justify-center text-white font-bold border border-slate-700">
                             {session?.user?.image ? (
                                 <img src={session.user.image} alt="Admin" className="w-full h-full object-cover" />
                             ) : (
@@ -654,15 +652,15 @@ export default function AdminDashboard() {
                         </div>
                     )}
                     {currentView === 'dashboard' && (
-                        <div className="space-y-10">
+                        <div className="space-y-8">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <h2 className="text-2xl font-black text-black tracking-tight">Management Overview</h2>
-                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Flight Ops & Command Center</p>
+                                    <h2 className="text-3xl font-bold text-slate-800">Dashboard Overview</h2>
+                                    <p className="text-slate-500 mt-1">Welcome back! Here's what's happening today.</p>
                                 </div>
-                                <button className="px-4 py-2 bg-black text-white rounded font-black hover:opacity-90 transition-all flex items-center gap-2 text-[10px] uppercase tracking-widest border border-black shadow-lg">
-                                    <BarChart2 size={14} />
-                                    Synchronize Data
+                                <button className="px-4 py-2 bg-black text-white rounded-lg font-bold hover:bg-slate-800 transition-colors flex items-center gap-2 text-sm">
+                                    <Activity size={16} />
+                                    Refresh
                                 </button>
                             </div>
 
@@ -671,61 +669,64 @@ export default function AdminDashboard() {
 
                             {/* Stats are now exclusively handled by RevenueStats to ensure verified data */}
 
-                            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm">
-                                <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/30">
-                                    <h3 className="text-xs font-black text-black uppercase tracking-widest">Recent Activity</h3>
-                                    <button onClick={() => setCurrentView('bookings')} className="text-[10px] text-black hover:underline font-black uppercase tracking-widest">
-                                        Exploration →
+                            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                                <div className="px-8 py-5 border-b border-slate-100 flex items-center justify-between">
+                                    <h3 className="text-xl font-bold text-slate-800">Recent Bookings</h3>
+                                    <button onClick={() => setCurrentView('bookings')} className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+                                        View All ΓåÆ
                                     </button>
                                 </div>
                                 <div className="overflow-x-auto">
                                     <table className="w-full">
                                         <thead>
-                                            <tr className="bg-white text-left font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">
-                                                <th className="px-6 py-4 text-[9px]">ID</th>
-                                                <th className="px-6 py-4 text-[9px]">Entity</th>
-                                                <th className="px-6 py-4 text-[9px]">Vector</th>
-                                                <th className="px-6 py-4 text-[9px]">Schedule</th>
-                                                <th className="px-6 py-4 text-[9px]">Value</th>
-                                                <th className="px-6 py-4 text-[9px]">Status</th>
+                                            <tr className="bg-gradient-to-r from-slate-50 to-slate-100 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">
+                                                <th className="px-6 py-4">ID</th>
+                                                <th className="px-6 py-4">Customer</th>
+                                                <th className="px-6 py-4">Route</th>
+                                                <th className="px-6 py-4">Date</th>
+                                                <th className="px-6 py-4">Price</th>
+                                                <th className="px-6 py-4">Payment</th>
+                                                <th className="px-6 py-4">Status</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-slate-50">
+                                        <tbody className="divide-y divide-slate-100">
                                             {bookings.length === 0 ? (
                                                 <tr>
-                                                    <td colSpan="6" className="py-12 text-center text-slate-300 text-[10px] font-black uppercase tracking-[0.2em]">Zero Active Records</td>
+                                                    <td colSpan="7" className="py-8 text-center text-gray-400">No bookings yet.</td>
                                                 </tr>
                                             ) : (
-                                                bookings.slice(0, 8).map((booking) => (
-                                                    <tr key={booking._id} className="border-b last:border-0 hover:bg-[#fafafa] transition-colors">
-                                                        <td className="px-6 py-4 font-black text-black text-[10px]">#{booking._id.slice(-6).toUpperCase()}</td>
-                                                        <td className="px-6 py-4">
-                                                            <div className="font-black text-black text-[10px] uppercase">{booking.customerName || 'GUEST'}</div>
-                                                            <div className="text-[9px] text-slate-400 font-medium">{booking.guestPhone}</div>
+                                                bookings.slice(0, 5).map((booking) => (
+                                                    <tr key={booking._id} className="border-b last:border-0 hover:bg-slate-50 transition-colors">
+                                                        <td className="py-4 font-medium text-emerald-900">#{booking._id.slice(-6)}</td>
+                                                        <td className="py-4">
+                                                            <div className="font-medium">{booking.customerName || 'Guest'}</div>
+                                                            <div className="text-xs text-gray-400">{booking.guestPhone}</div>
                                                         </td>
-                                                        <td className="px-6 py-4">
-                                                            <div className="max-w-[150px] truncate text-[10px] font-black text-black uppercase" title={booking.pickupLocation?.address}>{booking.pickupLocation?.address?.split(',')[0]}</div>
-                                                            <div className="text-[9px] text-slate-300 my-0.5">→</div>
-                                                            <div className="max-w-[150px] truncate text-[10px] font-black text-black uppercase" title={booking.dropoffLocation?.address}>{booking.dropoffLocation?.address?.split(',')[0]}</div>
+                                                        <td className="py-4 text-slate-500">
+                                                            <div className="max-w-[120px] truncate text-xs" title={booking.pickupLocation?.address}>{booking.pickupLocation?.address?.split(',')[0]}</div>
+                                                            <div className="text-xs text-gray-300">ΓåÆ</div>
+                                                            <div className="max-w-[120px] truncate text-xs" title={booking.dropoffLocation?.address}>{booking.dropoffLocation?.address?.split(',')[0]}</div>
                                                         </td>
-                                                        <td className="px-6 py-4">
-                                                            <div className="text-[10px] font-black text-black">{booking.scheduledDate || new Date(booking.createdAt).toLocaleDateString()}</div>
-                                                            <div className="text-[9px] text-slate-400 font-medium uppercase">{booking.scheduledTime || '--:--'}</div>
+                                                        <td className="py-4 text-xs">
+                                                            <div>{booking.scheduledDate || new Date(booking.createdAt).toLocaleDateString()}</div>
+                                                            <div className="text-gray-400">{booking.scheduledTime || ''}</div>
                                                         </td>
-                                                        <td className="px-6 py-4">
-                                                            <div className="font-black text-[10px] text-black">{formatPrice(booking)}</div>
-                                                            <span className={`text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-tighter mt-1 inline-block border ${booking.paymentStatus === 'paid' ? 'bg-black text-white border-black' :
-                                                                'bg-white text-slate-400 border-slate-100'
+                                                        <td className="py-4 font-bold text-sm">{formatPrice(booking)}</td>
+                                                        <td className="py-4">
+                                                            <span className={`px-2 py-1 rounded text-xs font-bold capitalize
+                                                                ${booking.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' :
+                                                                    booking.paymentStatus === 'failed' ? 'bg-red-100 text-red-800' :
+                                                                        'bg-yellow-100 text-yellow-800'
                                                                 }`}>
-                                                                {booking.paymentStatus || 'UNSET'}
+                                                                {booking.paymentStatus || 'pending'}
                                                             </span>
+                                                            <div className="text-xs text-gray-400 mt-1 capitalize">{booking.paymentMethod}</div>
                                                         </td>
-                                                        <td className="px-6 py-4">
-                                                            <span className={`px-2 py-1 rounded text-[9px] font-black uppercase tracking-widest border
-                                                                ${booking.status === 'pending' ? 'bg-white text-slate-500 border-slate-200 shadow-sm' :
-                                                                    booking.status === 'ongoing' ? 'bg-white text-black border-black shadow-sm' :
-                                                                        booking.status === 'completed' ? 'bg-black text-white border-black' :
-                                                                            'bg-slate-50 text-slate-400 border-slate-100'
+                                                        <td className="py-4">
+                                                            <span className={`px-2 py-1 rounded text-xs font-bold capitalize
+                                                                ${booking.status === 'pending' ? 'bg-orange-100 text-orange-800' :
+                                                                    booking.status === 'ongoing' ? 'bg-blue-100 text-blue-800' :
+                                                                        booking.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-gray-100'
                                                                 }`}>
                                                                 {booking.status}
                                                             </span>
@@ -762,21 +763,18 @@ export default function AdminDashboard() {
 
                     {currentView === 'pricing' && (
                         <div className="space-y-6">
-                            <div className="bg-white rounded-lg border border-slate-200 p-8 shadow-sm">
-                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                                    <div>
-                                        <h2 className="text-2xl font-black text-black tracking-tight uppercase">Fleet & Pricing Vector</h2>
-                                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Global Rate Configuration & Vehicle Tiers</p>
-                                    </div>
-                                    <div className="flex flex-wrap gap-3">
+                            <div className="bg-white rounded-xl shadow-sm p-6">
+                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                                    <h2 className="text-2xl font-bold text-emerald-900">Vehicle Pricing & Tiers</h2>
+                                    <div className="flex flex-wrap gap-2">
                                         <button
                                             onClick={() => {
                                                 setEditForm({})
                                                 setEditingVehicle('NEW')
                                             }}
-                                            className="bg-black text-white px-5 py-2.5 rounded font-bold hover:opacity-90 text-[10px] uppercase tracking-widest flex items-center gap-2 border border-black shadow-lg transition-all active:scale-95"
+                                            className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
                                         >
-                                            <Car size={14} /> Add New Asset
+                                            <Car size={16} /> Add New Vehicle
                                         </button>
                                         <button
                                             onClick={async () => {
@@ -800,10 +798,10 @@ export default function AdminDashboard() {
                                 </div>
 
                                 {/* Global Discount Configuration */}
-                                <div className="bg-slate-50 border border-slate-200 rounded-lg p-6 mb-8">
-                                    <div className="flex items-center justify-between mb-6">
-                                        <h3 className="text-xs font-black text-black uppercase tracking-widest flex items-center gap-2">
-                                            <Percent size={14} /> Long-Distance Logic
+                                <div className="bg-emerald-50 rounded-xl p-6 mb-6 border border-emerald-900/10">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="font-bold text-emerald-900 flex items-center gap-2">
+                                            <Percent size={18} /> Global Long-Distance Discount
                                         </h3>
                                         <button
                                             onClick={async () => {
@@ -813,26 +811,26 @@ export default function AdminDashboard() {
                                                     body: JSON.stringify(pricingSettings)
                                                 });
                                                 const data = await res.json();
-                                                if (data.success) alert('Settings protected successfully!');
+                                                if (data.success) alert('Settings saved successfully!');
                                                 else alert('Failed to save settings.');
                                             }}
-                                            className="text-[10px] bg-black text-white px-4 py-2 rounded font-black uppercase tracking-widest hover:opacity-90 shadow-md transition-all active:scale-95"
+                                            className="text-xs bg-emerald-900 text-white px-3 py-1.5 rounded-lg hover:bg-emerald-900/90 font-bold shadow-md shadow-emerald-900/10 transition-all hover:scale-105"
                                         >
-                                            Protect Config
+                                            Save Configuration
                                         </button>
                                     </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <div>
-                                            <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">
-                                                Trigger Threshold (km)
+                                            <label className="block text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">
+                                                Distance Threshold (km)
                                             </label>
                                             <input
                                                 type="number"
                                                 value={pricingSettings.longDistanceThreshold}
                                                 onChange={e => setPricingSettings({ ...pricingSettings, longDistanceThreshold: Number(e.target.value) })}
-                                                className="w-full bg-white border border-slate-200 rounded px-3 py-2 text-xs font-black text-black outline-none focus:border-black transition-colors"
+                                                className="w-full bg-white border border-emerald-900/10 rounded-lg px-3 py-2 text-sm font-bold text-emerald-900 outline-none focus:ring-2 focus:ring-emerald-500/20"
                                             />
-                                            <p className="text-[9px] text-slate-400 mt-1.5 font-bold italic">Minimum distance to trigger logical discount.</p>
+                                            <p className="text-[10px] text-emerald-900/60 mt-1">Minimum distance to automatically trigger discount.</p>
                                         </div>
                                         <div>
                                             <label className="block text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">
@@ -873,16 +871,16 @@ export default function AdminDashboard() {
                                 </div>
 
                                 {/* Category Tabs */}
-                                <div className="flex bg-slate-100 p-1.5 rounded w-fit mb-8 border border-slate-200">
+                                <div className="flex bg-slate-100 p-1 rounded-xl mb-6 w-fit">
                                     {[
-                                        { id: 'airport-transfer', label: 'AIRPORT OPS' },
-                                        { id: 'ride-now', label: 'POINT-TO-POINT' },
-                                        { id: 'tours', label: 'TOUR EXPEDITIONS' }
+                                        { id: 'airport-transfer', label: 'Airport Transfer' },
+                                        { id: 'ride-now', label: 'Ride Now / P2P' },
+                                        { id: 'tours', label: 'Tour Packages' }
                                     ].map(cat => (
                                         <button
                                             key={cat.id}
                                             onClick={() => setPricingCategory(cat.id)}
-                                            className={`px-8 py-2 rounded text-[10px] font-black tracking-widest transition-all ${pricingCategory === cat.id ? 'bg-black text-white shadow-md' : 'text-slate-400 hover:text-black hover:bg-white'}`}
+                                            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${pricingCategory === cat.id ? 'bg-emerald-900 text-white shadow-sm' : 'text-gray-500 hover:text-emerald-900'}`}
                                         >
                                             {cat.label}
                                         </button>
@@ -916,6 +914,38 @@ export default function AdminDashboard() {
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-4">
                                                     <div>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Base Price (LKR)</label>
+                                                        <input
+                                                            type="number"
+                                                            placeholder="e.g. 4500"
+                                                            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 focus:border-transparent outline-none transition-all"
+                                                            value={editForm.basePrice || ''}
+                                                            onChange={(e) => setEditForm({ ...editForm, basePrice: Number(e.target.value) })}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Base KM</label>
+                                                        <input
+                                                            type="number"
+                                                            placeholder="e.g. 20"
+                                                            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 focus:border-transparent outline-none transition-all"
+                                                            value={editForm.baseKm || ''}
+                                                            onChange={(e) => setEditForm({ ...editForm, baseKm: Number(e.target.value) })}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Rate per KM (LKR)</label>
+                                                    <input
+                                                        type="number"
+                                                        placeholder="e.g. 110"
+                                                        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 focus:border-transparent outline-none transition-all"
+                                                        value={editForm.perKmRate || ''}
+                                                        onChange={(e) => setEditForm({ ...editForm, perKmRate: Number(e.target.value) })}
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div>
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Capacity</label>
                                                         <input
                                                             type="text"
@@ -945,17 +975,18 @@ export default function AdminDashboard() {
                                                     </button>
                                                     <button
                                                         onClick={async () => {
-                                                            if (!editForm.name || !editForm.vehicleType) return alert('Name and Type are required');
+                                                            if (!editForm.name || !editForm.vehicleType || !editForm.basePrice || !editForm.perKmRate) return alert('Name, Type, Base Price and Rate are required');
                                                             const res = await fetch('/api/pricing', {
                                                                 method: 'POST',
                                                                 headers: { 'Content-Type': 'application/json' },
                                                                 body: JSON.stringify({
                                                                     ...editForm,
                                                                     category: pricingCategory,
-                                                                    tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 100 }], // Default tier
+                                                                    tiers: [{ min: 0, max: editForm.baseKm || 20, type: 'flat', price: editForm.basePrice, rate: 0 }, { min: (editForm.baseKm || 20) + 1, max: 9999, type: 'per_km', price: 0, rate: editForm.perKmRate }],
                                                                     features: ['Air Conditioned'],
-                                                                    basePrice: 0, // Required by model
-                                                                    perKmRate: 0   // Required by model
+                                                                    basePrice: editForm.basePrice,
+                                                                    perKmRate: editForm.perKmRate,
+                                                                    baseKm: editForm.baseKm || 20
                                                                 })
                                                             });
                                                             const data = await res.json();
@@ -989,7 +1020,7 @@ export default function AdminDashboard() {
                                             >
                                                 <div className="flex items-center justify-between mb-4">
                                                     <div className="flex items-center gap-4">
-                                                        <div className="w-20 h-14 bg-slate-50 border border-slate-100 rounded overflow-hidden flex items-center justify-center grayscale hover:grayscale-0 transition-all">
+                                                        <div className="w-20 h-14 bg-slate-100 rounded-lg overflow-hidden flex items-center justify-center">
                                                             <img
                                                                 src={vehicle.image || '/vehicles/placeholder.png'}
                                                                 alt={vehicle.name}
@@ -998,11 +1029,11 @@ export default function AdminDashboard() {
                                                             />
                                                         </div>
                                                         <div>
-                                                            <h3 className="font-black text-black text-sm uppercase tracking-tight">{vehicle.name}</h3>
+                                                            <h3 className="font-bold text-emerald-900 text-lg">{vehicle.name}</h3>
                                                             {pricingCategory === 'tours' ? (
-                                                                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Tour Package Asset</p>
+                                                                <p className="text-xs text-gray-400">Tour Package Rate</p>
                                                             ) : (
-                                                                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{vehicle.capacity} PAX • {vehicle.luggage} UNITS • {vehicle.vehicleType}</p>
+                                                                <p className="text-xs text-gray-400">1-{vehicle.capacity} pax ΓÇó {vehicle.luggage} bags ΓÇó {vehicle.vehicleType}</p>
                                                             )}
                                                         </div>
                                                     </div>
@@ -1026,9 +1057,9 @@ export default function AdminDashboard() {
                                                                 })
                                                             }
                                                         }}
-                                                        className={`px-4 py-2 rounded text-[10px] font-black uppercase tracking-widest transition-all border ${editingVehicle === vehicle.vehicleType ? 'bg-white text-red-500 border-red-200' : 'bg-black text-white border-black hover:opacity-90'}`}
+                                                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${editingVehicle === vehicle.vehicleType ? 'bg-red-100 text-red-600' : 'bg-emerald-600 text-emerald-900 hover:bg-emerald-600/80'}`}
                                                     >
-                                                        {editingVehicle === vehicle.vehicleType ? 'Abort Edit' : 'Adjust Rates'}
+                                                        {editingVehicle === vehicle.vehicleType ? 'Cancel' : 'Edit Rates'}
                                                     </button>
                                                     <button
                                                         onClick={async () => {
@@ -1303,7 +1334,7 @@ export default function AdminDashboard() {
                                                             <tbody>
                                                                 {(vehicle.tiers || []).map((tier, idx) => (
                                                                     <tr key={idx} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                                                                        <td className="px-4 py-2 font-medium bg-white">{tier.min} - {tier.max >= 9999 ? '∞' : tier.max} km</td>
+                                                                        <td className="px-4 py-2 font-medium bg-white">{tier.min} - {tier.max >= 9999 ? 'Γê₧' : tier.max} km</td>
                                                                         <td className="px-4 py-2 bg-white">
                                                                             <span className={`px-2 py-0.5 rounded text-xs ${tier.type === 'flat' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
                                                                                 {tier.type === 'flat' ? 'Flat Rate' : 'Per KM'}
@@ -1358,10 +1389,10 @@ export default function AdminDashboard() {
                                                     className="w-full px-4 py-[9px] bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20 font-bold"
                                                 >
                                                     <option value="USD">USD ($)</option>
-                                                    <option value="GBP">GBP (£)</option>
-                                                    <option value="EUR">EUR (€)</option>
+                                                    <option value="GBP">GBP (┬ú)</option>
+                                                    <option value="EUR">EUR (Γé¼)</option>
                                                     <option value="LKR">LKR (Rs)</option>
-                                                    <option value="INR">INR (₹)</option>
+                                                    <option value="INR">INR (Γé╣)</option>
                                                 </select>
                                             </div>
                                             <div>
@@ -1410,7 +1441,7 @@ export default function AdminDashboard() {
                                                     </div>
                                                     <h4 className="font-bold text-white mb-1">{rate.title}</h4>
                                                     <p className="text-2xl font-black text-white mb-4">
-                                                        {rate.currency === 'LKR' ? 'Rs.' : rate.currency === 'EUR' ? '€' : rate.currency === 'GBP' ? '£' : rate.currency === 'INR' ? '₹' : '$'}
+                                                        {rate.currency === 'LKR' ? 'Rs.' : rate.currency === 'EUR' ? 'Γé¼' : rate.currency === 'GBP' ? '┬ú' : rate.currency === 'INR' ? 'Γé╣' : '$'}
                                                         {rate.price?.toLocaleString()}
                                                     </p>
                                                 </div>
@@ -2040,7 +2071,7 @@ export default function AdminDashboard() {
                                                             </div>
                                                         </td>
                                                         <td className="px-4 py-3 text-right">
-                                                            <button className="text-gray-400 hover:text-emerald-900" title="Edit Permissions not implemented yet">•••</button>
+                                                            <button className="text-gray-400 hover:text-emerald-900" title="Edit Permissions not implemented yet">ΓÇóΓÇóΓÇó</button>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -2148,253 +2179,253 @@ export default function AdminDashboard() {
                     )}
 
                     {currentView === 'bookings' && (
-                        <div className="bg-white rounded-lg border border-slate-200 p-8 shadow-sm">
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
+                        <div className="bg-white rounded-xl shadow-sm p-6">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                                 <div className="flex items-center gap-4">
-                                    <div>
-                                        <h2 className="text-2xl font-black text-black tracking-tight uppercase">Mission Logs</h2>
-                                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Unified Booking & Command History</p>
-                                    </div>
-                                    <span className="text-[9px] font-black text-white bg-black px-3 py-1 rounded-full uppercase tracking-tighter">
-                                        {filteredBookings.length} Identifiers
-                                    </span>
+                                    <h2 className="text-2xl font-bold text-emerald-900">All Bookings</h2>
+                                    <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">{filteredBookings.length} total</span>
                                 </div>
-                                <div className="flex items-center gap-4 w-full sm:w-auto">
-                                    <div className="relative flex-1 sm:w-80">
+                                <div className="flex items-center gap-3 w-full sm:w-auto">
+                                    <div className="relative w-full sm:w-80">
                                         <input
                                             type="text"
-                                            placeholder="FILTER BY ID / ENTITY / SIGNAL..."
+                                            placeholder="Search by ID, Name, Phone..."
                                             value={bookingSearch}
                                             onChange={(e) => setBookingSearch(e.target.value)}
-                                            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-[10px] font-black uppercase tracking-widest outline-none focus:border-black transition-colors"
+                                            className="w-full sm:w-80 pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20 shadow-sm"
                                         />
-                                        <div className="absolute left-3 top-2.5 text-slate-400">
-                                            <Search size={14} />
+                                        <div className="absolute left-3 top-2.5 text-gray-400">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                                         </div>
                                     </div>
                                     <button
                                         onClick={() => setShowManualBooking(true)}
-                                        className="bg-black text-white px-5 py-2.5 rounded font-black hover:opacity-90 text-[10px] uppercase tracking-widest flex items-center gap-2 border border-black shadow-lg transition-all active:scale-95 whitespace-nowrap"
+                                        className="bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-700 text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all whitespace-nowrap"
                                     >
-                                        <Plus size={14} /> Create Record
+                                        <Plus size={16} /> Manual Booking
                                     </button>
                                 </div>
                             </div>
 
                             {/* Manual Booking Modal */}
                             {showManualBooking && (
-                                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                                    <div className="bg-white rounded-lg border border-slate-200 shadow-2xl w-full max-w-2xl p-8 animate-fade-in-up overflow-y-auto max-h-[90vh]">
-                                        <div className="flex items-center justify-between mb-8 border-b border-slate-100 pb-4">
-                                            <div>
-                                                <h3 className="text-xl font-black text-black tracking-tight uppercase">External Mission Entry</h3>
-                                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Manual Overwrite & Offline Traffic</p>
-                                            </div>
-                                            <button onClick={() => setShowManualBooking(false)} className="text-slate-400 hover:text-black transition-colors">
-                                                <X size={20} />
+                                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-6 animate-fade-in-up overflow-y-auto max-h-[90vh]">
+                                        <div className="flex items-center justify-between mb-6 border-b pb-4">
+                                            <h3 className="text-xl font-bold text-emerald-900">Add Manual / Offline Trip</h3>
+                                            <button onClick={() => setShowManualBooking(false)} className="text-gray-400 hover:text-gray-600">
+                                                <X size={24} />
                                             </button>
                                         </div>
 
-                                        <div className="grid md:grid-cols-2 gap-8">
+                                        <div className="grid md:grid-cols-2 gap-4">
                                             <div className="md:col-span-2">
-                                                <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3">Transmission Type</label>
-                                                <div className="flex gap-6">
-                                                    <label className="flex items-center gap-2 cursor-pointer group">
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Booking Type</label>
+                                                <div className="flex gap-4">
+                                                    <label className="flex items-center gap-2 cursor-pointer">
                                                         <input
                                                             type="radio"
                                                             checked={manualBookingForm.type === 'transfer'}
                                                             onChange={() => setManualBookingForm({ ...manualBookingForm, type: 'transfer' })}
-                                                            className="w-4 h-4 border-slate-300 text-black focus:ring-black"
+                                                            className="text-emerald-600 focus:ring-emerald-500"
                                                         />
-                                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-600 group-hover:text-black transition-colors">Tactical Transfer</span>
+                                                        <span className="text-sm font-medium">Taxi Transfer</span>
                                                     </label>
-                                                    <label className="flex items-center gap-2 cursor-pointer group">
+                                                    <label className="flex items-center gap-2 cursor-pointer">
+                                                        <input
+                                                            type="radio"
+                                                            checked={manualBookingForm.type === 'day-trip'}
+                                                            onChange={() => setManualBookingForm({ ...manualBookingForm, type: 'day-trip' })}
+                                                            className="text-emerald-600 focus:ring-emerald-500"
+                                                        />
+                                                        <span className="text-sm font-medium">Day Trip</span>
+                                                    </label>
+                                                    <label className="flex items-center gap-2 cursor-pointer">
                                                         <input
                                                             type="radio"
                                                             checked={manualBookingForm.type === 'tour'}
                                                             onChange={() => setManualBookingForm({ ...manualBookingForm, type: 'tour' })}
-                                                            className="w-4 h-4 border-slate-300 text-black focus:ring-black"
+                                                            className="text-emerald-600 focus:ring-emerald-500"
                                                         />
-                                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-600 group-hover:text-black transition-colors">Tour Expedition</span>
+                                                        <span className="text-sm font-medium">Tour Package</span>
                                                     </label>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        {(manualBookingForm.type === 'tour' || manualBookingForm.type === 'day-trip') && (
-                                            <div className="md:col-span-2">
-                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Package / Day Trip Title</label>
+                                            {(manualBookingForm.type === 'tour' || manualBookingForm.type === 'day-trip') && (
+                                                <div className="md:col-span-2">
+                                                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Package / Day Trip Title</label>
+                                                    <input
+                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                        value={manualBookingForm.tourDetails?.tourTitle || ''}
+                                                        onChange={e => setManualBookingForm({
+                                                            ...manualBookingForm,
+                                                            tourDetails: { ...manualBookingForm.tourDetails, tourTitle: e.target.value }
+                                                        })}
+                                                        placeholder="e.g. 7 Days Sri Lanka Grand Tour or Kandy Day Trip"
+                                                    />
+                                                </div>
+                                            )}
+
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Customer Name</label>
                                                 <input
                                                     className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
-                                                    value={manualBookingForm.tourDetails?.tourTitle || ''}
-                                                    onChange={e => setManualBookingForm({
-                                                        ...manualBookingForm,
-                                                        tourDetails: { ...manualBookingForm.tourDetails, tourTitle: e.target.value }
-                                                    })}
-                                                    placeholder="e.g. 7 Days Sri Lanka Grand Tour or Kandy Day Trip"
+                                                    value={manualBookingForm.customerName}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, customerName: e.target.value })}
+                                                    placeholder="John Doe"
                                                 />
                                             </div>
-                                        )}
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Phone Number</label>
+                                                <input
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.guestPhone}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, guestPhone: e.target.value })}
+                                                    placeholder="+94 77 XXX XXXX"
+                                                />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Pickup Location</label>
+                                                <input
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.pickupLocation.address}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, pickupLocation: { ...manualBookingForm.pickupLocation, address: e.target.value } })}
+                                                    placeholder="Airport Terminal 1"
+                                                />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Dropoff Location</label>
+                                                <input
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.dropoffLocation.address}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, dropoffLocation: { ...manualBookingForm.dropoffLocation, address: e.target.value } })}
+                                                    placeholder="Hotel Name / City"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Date</label>
+                                                <input
+                                                    type="date"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.scheduledDate}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, scheduledDate: e.target.value })}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Time</label>
+                                                <input
+                                                    type="time"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.scheduledTime}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, scheduledTime: e.target.value })}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Vehicle Type</label>
+                                                <select
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm bg-white"
+                                                    value={manualBookingForm.vehicleType}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, vehicleType: e.target.value })}
+                                                >
+                                                    <option value="sedan">Sedan (Car)</option>
+                                                    <option value="van">Van</option>
+                                                    <option value="mini-van">Mini Van</option>
+                                                    <option value="suv">SUV</option>
+                                                    <option value="luxury">Luxury</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Distance (KM)</label>
+                                                <input
+                                                    type="number"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.distanceKm}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, distanceKm: e.target.value })}
+                                                    placeholder="100"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Price (LKR)</label>
+                                                <input
+                                                    type="number"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.totalPrice}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, totalPrice: e.target.value })}
+                                                    placeholder="15000"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Payment Method</label>
+                                                <select
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm bg-white"
+                                                    value={manualBookingForm.paymentMethod}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, paymentMethod: e.target.value })}
+                                                >
+                                                    <option value="cash">Cash</option>
+                                                    <option value="card">Card (Manual Swipe)</option>
+                                                    <option value="online">Online Link</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Customer Name</label>
-                                            <input
-                                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
-                                                value={manualBookingForm.customerName}
-                                                onChange={e => setManualBookingForm({ ...manualBookingForm, customerName: e.target.value })}
-                                                placeholder="John Doe"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Phone Number</label>
-                                            <input
-                                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
-                                                value={manualBookingForm.guestPhone}
-                                                onChange={e => setManualBookingForm({ ...manualBookingForm, guestPhone: e.target.value })}
-                                                placeholder="+94 77 XXX XXXX"
-                                            />
-                                        </div>
-                                        <div className="md:col-span-2">
-                                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Pickup Location</label>
-                                            <input
-                                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
-                                                value={manualBookingForm.pickupLocation.address}
-                                                onChange={e => setManualBookingForm({ ...manualBookingForm, pickupLocation: { ...manualBookingForm.pickupLocation, address: e.target.value } })}
-                                                placeholder="Airport Terminal 1"
-                                            />
-                                        </div>
-                                        <div className="md:col-span-2">
-                                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Dropoff Location</label>
-                                            <input
-                                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
-                                                value={manualBookingForm.dropoffLocation.address}
-                                                onChange={e => setManualBookingForm({ ...manualBookingForm, dropoffLocation: { ...manualBookingForm.dropoffLocation, address: e.target.value } })}
-                                                placeholder="Hotel Name / City"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Date</label>
-                                            <input
-                                                type="date"
-                                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
-                                                value={manualBookingForm.scheduledDate}
-                                                onChange={e => setManualBookingForm({ ...manualBookingForm, scheduledDate: e.target.value })}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Time</label>
-                                            <input
-                                                type="time"
-                                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
-                                                value={manualBookingForm.scheduledTime}
-                                                onChange={e => setManualBookingForm({ ...manualBookingForm, scheduledTime: e.target.value })}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Vehicle Type</label>
-                                            <select
-                                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm bg-white"
-                                                value={manualBookingForm.vehicleType}
-                                                onChange={e => setManualBookingForm({ ...manualBookingForm, vehicleType: e.target.value })}
+                                        <div className="mt-8 flex justify-end gap-3 pt-6 border-t">
+                                            <button
+                                                onClick={() => setShowManualBooking(false)}
+                                                className="px-6 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-bold"
                                             >
-                                                <option value="sedan">Sedan (Car)</option>
-                                                <option value="van">Van</option>
-                                                <option value="mini-van">Mini Van</option>
-                                                <option value="suv">SUV</option>
-                                                <option value="luxury">Luxury</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Distance (KM)</label>
-                                            <input
-                                                type="number"
-                                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
-                                                value={manualBookingForm.distanceKm}
-                                                onChange={e => setManualBookingForm({ ...manualBookingForm, distanceKm: e.target.value })}
-                                                placeholder="100"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Price (LKR)</label>
-                                            <input
-                                                type="number"
-                                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
-                                                value={manualBookingForm.totalPrice}
-                                                onChange={e => setManualBookingForm({ ...manualBookingForm, totalPrice: e.target.value })}
-                                                placeholder="15000"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Payment Method</label>
-                                            <select
-                                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm bg-white"
-                                                value={manualBookingForm.paymentMethod}
-                                                onChange={e => setManualBookingForm({ ...manualBookingForm, paymentMethod: e.target.value })}
-                                            >
-                                                <option value="cash">Cash</option>
-                                                <option value="card">Card (Manual Swipe)</option>
-                                                <option value="online">Online Link</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-8 flex justify-end gap-3 pt-6 border-t">
-                                        <button
-                                            onClick={() => setShowManualBooking(false)}
-                                            className="px-6 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-bold"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            disabled={isSavingManual}
-                                            onClick={async () => {
-                                                setIsSavingManual(true)
-                                                try {
-                                                    const res = await fetch('/api/bookings', {
-                                                        method: 'POST',
-                                                        headers: { 'Content-Type': 'application/json' },
-                                                        body: JSON.stringify({ ...manualBookingForm, isManual: true })
-                                                    })
-                                                    if (res.ok) {
-                                                        alert('Manual booking added successfully!')
-                                                        setShowManualBooking(false)
-                                                        // Refresh list
-                                                        fetch('/api/bookings').then(r => r.json()).then(d => setBookings(d))
+                                                Cancel
+                                            </button>
+                                            <button
+                                                disabled={isSavingManual}
+                                                onClick={async () => {
+                                                    setIsSavingManual(true)
+                                                    try {
+                                                        const res = await fetch('/api/bookings', {
+                                                            method: 'POST',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({ ...manualBookingForm, isManual: true })
+                                                        })
+                                                        if (res.ok) {
+                                                            alert('Manual booking added successfully!')
+                                                            setShowManualBooking(false)
+                                                            // Refresh list
+                                                            fetch('/api/bookings').then(r => r.json()).then(d => setBookings(d))
+                                                        }
+                                                    } catch (e) {
+                                                        console.error(e)
+                                                        alert('Failed to save manual booking')
+                                                    } finally {
+                                                        setIsSavingManual(false)
                                                     }
-                                                } catch (e) {
-                                                    console.error(e)
-                                                    alert('Failed to save manual booking')
-                                                } finally {
-                                                    setIsSavingManual(false)
-                                                }
-                                            }}
-                                            className="px-8 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 flex items-center gap-2"
-                                        >
-                                            {isSavingManual ? <Loader2 size={18} className="animate-spin" /> : <Plus size={18} />}
-                                            Save Booking
-                                        </button>
+                                                }}
+                                                className="px-8 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 flex items-center gap-2"
+                                            >
+                                                {isSavingManual ? <Loader2 size={18} className="animate-spin" /> : <Plus size={18} />}
+                                                Save Booking
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             )}
 
                             {filteredBookings.length === 0 ? (
-                                <div className="text-center py-20 text-slate-400 bg-slate-50 border border-slate-200 border-dashed rounded-lg mt-8">
-                                    <Search className="mx-auto mb-4 opacity-20" size={48} />
-                                    <p className="text-[10px] font-black uppercase tracking-widest">No matching mission logs found</p>
+                                <div className="text-center py-12 text-gray-400 bg-slate-50 rounded-lg border border-dashed">
+                                    <p>No matching bookings found</p>
                                 </div>
                             ) : (
-                                <div className="overflow-x-auto mt-8 border border-slate-200 rounded-lg shadow-sm">
-                                    <table className="w-full text-[10px] bg-white">
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-sm">
                                         <thead>
-                                            <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-left">
-                                                <th className="px-6 py-4 font-black uppercase tracking-widest whitespace-nowrap">Identifier</th>
-                                                <th className="px-6 py-4 font-black uppercase tracking-widest whitespace-nowrap">Entity</th>
-                                                <th className="px-6 py-4 font-black uppercase tracking-widest whitespace-nowrap">Vector</th>
-                                                <th className="px-6 py-4 font-black uppercase tracking-widest whitespace-nowrap">Schedule</th>
-                                                <th className="px-6 py-4 font-black uppercase tracking-widest whitespace-nowrap">Asset</th>
-                                                <th className="px-6 py-4 font-black uppercase tracking-widest whitespace-nowrap text-right">Credit</th>
-                                                <th className="px-6 py-4 font-black uppercase tracking-widest whitespace-nowrap">Signal</th>
-                                                <th className="px-6 py-4 font-black uppercase tracking-widest whitespace-nowrap">Status</th>
+                                            <tr className="bg-slate-50 text-gray-500 text-left">
+                                                <th className="px-4 py-3 rounded-l-lg">Booking ID</th>
+                                                <th className="px-4 py-3">Customer</th>
+                                                <th className="px-4 py-3">Route</th>
+                                                <th className="px-4 py-3">Date & Time</th>
+                                                <th className="px-4 py-3">Vehicle</th>
+                                                <th className="px-4 py-3 text-right">Amount</th>
+                                                <th className="px-4 py-3">Payment</th>
+                                                <th className="px-4 py-3 rounded-r-lg">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -2428,10 +2459,10 @@ export default function AdminDashboard() {
                                                         ) : (
                                                             <>
                                                                 <div className="text-xs">
-                                                                    <span className="text-green-600">●</span> {booking.pickupLocation?.address?.split(',')[0] || 'N/A'}
+                                                                    <span className="text-green-600">ΓùÅ</span> {booking.pickupLocation?.address?.split(',')[0] || 'N/A'}
                                                                 </div>
                                                                 <div className="text-xs">
-                                                                    <span className="text-red-500">●</span> {booking.dropoffLocation?.address?.split(',')[0] || 'N/A'}
+                                                                    <span className="text-red-500">ΓùÅ</span> {booking.dropoffLocation?.address?.split(',')[0] || 'N/A'}
                                                                 </div>
                                                             </>
                                                         )}
@@ -2456,11 +2487,11 @@ export default function AdminDashboard() {
                                                         <div className="text-xs text-gray-400 mt-1">{booking.paymentMethod || 'cash'}</div>
                                                     </td>
                                                     <td className="px-4 py-4">
-                                                        <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter w-fit border ${booking.status === 'completed' ? 'bg-black text-white border-black' :
-                                                            booking.status === 'ongoing' ? 'bg-slate-100 text-black border-slate-300' :
-                                                                booking.status === 'pending' ? 'bg-white text-black border-slate-300' :
-                                                                    booking.status === 'cancelled' ? 'bg-red-50 text-red-500 border-red-200' :
-                                                                        'bg-slate-50 text-slate-400 border-slate-100'
+                                                        <span className={`px-2 py-1 rounded text-xs font-bold capitalize ${booking.status === 'completed' ? 'bg-green-100 text-green-700' :
+                                                            booking.status === 'ongoing' ? 'bg-blue-100 text-blue-700' :
+                                                                booking.status === 'pending' ? 'bg-orange-100 text-orange-700' :
+                                                                    booking.status === 'cancelled' ? 'bg-red-100 text-red-700' :
+                                                                        'bg-gray-100 text-gray-600'
                                                             }`}>
                                                             {booking.status || 'pending'}
                                                         </span>
@@ -2475,50 +2506,50 @@ export default function AdminDashboard() {
                             {/* Booking Detail Modal */}
                             {selectedBooking && (
                                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-                                    <div className="bg-white rounded-lg border border-slate-200 shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-                                        <div className="flex items-center justify-between p-8 border-b border-slate-100 sticky top-0 bg-white/90 backdrop-blur-sm z-10">
+                                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+                                        <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white z-10">
                                             <div>
-                                                <h3 className="text-xl font-black text-black tracking-tight uppercase">Mission Intelligence</h3>
-                                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">ID: {selectedBooking._id}</p>
+                                                <h3 className="text-xl font-bold text-emerald-900">Booking Details</h3>
+                                                <p className="text-sm text-gray-500">ID: {selectedBooking._id}</p>
                                             </div>
                                             <button
                                                 onClick={() => setSelectedBooking(null)}
-                                                className="p-2 hover:bg-slate-50 rounded transition-colors text-slate-400 hover:text-black"
+                                                className="p-2 hover:bg-slate-100 rounded-full transition-colors"
                                             >
-                                                <X size={20} />
+                                                <X size={24} className="text-gray-500" />
                                             </button>
                                         </div>
 
                                         <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                                             {/* Customer Info */}
-                                            <div className="bg-slate-50 p-8 border border-slate-200 rounded-lg space-y-6">
-                                                <h4 className="text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-2 border-b border-slate-200 pb-3">
-                                                    <Users size={14} /> Intelligence Profile
+                                            <div className="bg-slate-50 p-6 rounded-xl space-y-4">
+                                                <h4 className="font-bold text-emerald-900 flex items-center gap-2">
+                                                    <Users size={18} /> Customer Information
                                                 </h4>
                                                 <div className="space-y-3">
                                                     <div>
-                                                        <span className="text-[9px] text-slate-400 font-black uppercase tracking-widest block mb-1">Entity Name</span>
-                                                        <span className="text-xs font-black text-black uppercase tracking-tight">{selectedBooking.customerName || selectedBooking.guestPhone || 'GUEST-UNIDENTIFIED'}</span>
+                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Name</span>
+                                                        <span className="font-medium">{selectedBooking.customerName || selectedBooking.guestPhone || 'N/A'}</span>
                                                     </div>
                                                     <div>
-                                                        <span className="text-[9px] text-slate-400 font-black uppercase tracking-widest block mb-1">Comm Channel</span>
-                                                        <a href={`tel:${selectedBooking.guestPhone}`} className="text-xs font-black text-black underline flex items-center gap-2 hover:opacity-70 transition-opacity">
-                                                            <Phone size={12} /> {selectedBooking.guestPhone || 'NULL'}
+                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Phone</span>
+                                                        <a href={`tel:${selectedBooking.guestPhone}`} className="font-medium text-emerald-600 hover:underline flex items-center gap-1">
+                                                            <Phone size={14} /> {selectedBooking.guestPhone || 'N/A'}
                                                         </a>
                                                     </div>
                                                     <div>
-                                                        <span className="text-[9px] text-slate-400 font-black uppercase tracking-widest block mb-1">Signal Protocol</span>
-                                                        <a href={`mailto:${selectedBooking.customerEmail}`} className="text-xs font-black text-black underline flex items-center gap-2 hover:opacity-70 transition-opacity">
-                                                            <Mail size={12} /> {selectedBooking.customerEmail || 'NOT-STATED'}
+                                                        <span className="text-xs text-gray-500 uppercase tracking-wider block">Email</span>
+                                                        <a href={`mailto:${selectedBooking.customerEmail}`} className="font-medium text-blue-600 hover:underline flex items-center gap-1">
+                                                            <Mail size={14} /> {selectedBooking.customerEmail || 'N/A'}
                                                         </a>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             {/* Journey Info */}
-                                            <div className="bg-slate-50 p-8 border border-slate-200 rounded-lg space-y-6">
-                                                <h4 className="text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-2 border-b border-slate-200 pb-3">
-                                                    <Car size={14} /> Vector Terminal
+                                            <div className="bg-slate-50 p-6 rounded-xl space-y-4">
+                                                <h4 className="font-bold text-emerald-900 flex items-center gap-2">
+                                                    <Car size={18} /> Journey Details
                                                 </h4>
                                                 <div className="space-y-3">
                                                     <div>
@@ -2561,9 +2592,9 @@ export default function AdminDashboard() {
                                             </div>
 
                                             {/* Schedule Info */}
-                                            <div className="bg-slate-50 p-8 border border-slate-200 rounded-lg space-y-6">
-                                                <h4 className="text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-2 border-b border-slate-200 pb-3">
-                                                    <Calendar size={14} /> Timeline Logic
+                                            <div className="bg-slate-50 p-6 rounded-xl space-y-4">
+                                                <h4 className="font-bold text-emerald-900 flex items-center gap-2">
+                                                    <Calendar size={18} /> Schedule
                                                 </h4>
                                                 <div className="grid grid-cols-2 gap-4">
                                                     <div>
@@ -2582,9 +2613,9 @@ export default function AdminDashboard() {
                                             </div>
 
                                             {/* Payment Info */}
-                                            <div className="bg-slate-50 p-8 border border-slate-200 rounded-lg space-y-6">
-                                                <h4 className="text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-2 border-b border-slate-200 pb-3">
-                                                    <CreditCard size={14} /> Credit & Status
+                                            <div className="bg-slate-50 p-6 rounded-xl space-y-4">
+                                                <h4 className="font-bold text-emerald-900 flex items-center gap-2">
+                                                    <CreditCard size={18} /> Payment & Status
                                                 </h4>
                                                 <div className="space-y-3">
                                                     <div className="space-y-1">
@@ -2722,22 +2753,22 @@ export default function AdminDashboard() {
                     )}
 
                     {currentView === 'communications' && (
-                        <div className="max-w-2xl mx-auto bg-white rounded-lg border border-slate-200 p-12 shadow-sm">
-                            <h2 className="text-2xl font-black text-black tracking-tight uppercase mb-8 flex items-center gap-3">
-                                <Mail size={24} /> Communications Vector
+                        <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-sm p-8">
+                            <h2 className="text-2xl font-bold text-emerald-900 mb-6 flex items-center gap-2">
+                                <Mail className="text-emerald-600" /> Email Center
                             </h2>
 
-                            <div className="space-y-8">
+                            <div className="space-y-6">
                                 <div>
-                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Protocol Target</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
                                     <select
-                                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded text-[11px] font-black uppercase tracking-widest outline-none focus:border-black transition-colors"
+                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 bg-white"
                                         value={emailForm.recipientType}
                                         onChange={(e) => setEmailForm({ ...emailForm, recipientType: e.target.value })}
                                     >
-                                        <option value="specific">Single Identifier</option>
-                                        <option value="all_users">Global Customer Broadcast</option>
-                                        <option value="all_drivers">Global Driver Broadcast</option>
+                                        <option value="specific">Specific Email</option>
+                                        <option value="all_users">All Customers</option>
+                                        <option value="all_drivers">All Drivers</option>
                                     </select>
                                 </div>
 
@@ -2848,7 +2879,7 @@ export default function AdminDashboard() {
                                         onClick={() => setSelectedTicket(null)}
                                         className="mb-4 text-gray-500 hover:text-emerald-900 font-medium flex items-center gap-2"
                                     >
-                                        ← Back to List
+                                        ΓåÉ Back to List
                                     </button>
 
                                     <div className="bg-white rounded-t-2xl shadow-sm p-6 border-b border-slate-100 flex justify-between items-start">
@@ -2886,7 +2917,7 @@ export default function AdminDashboard() {
                                                     }`}>
                                                     <p className="whitespace-pre-wrap text-sm">{msg.message}</p>
                                                     <p className={`text-[10px] mt-2 opacity-70 ${msg.sender === 'admin' ? 'text-right' : 'text-left'}`}>
-                                                        {new Date(msg.timestamp).toLocaleString()} • {msg.sender}
+                                                        {new Date(msg.timestamp).toLocaleString()} ΓÇó {msg.sender}
                                                     </p>
                                                 </div>
                                             </div>

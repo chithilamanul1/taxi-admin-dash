@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
-import { DollarSign, TrendingUp, TrendingDown, Calendar, ArrowUpRight, ArrowDownRight, BarChart2, PieChart } from 'lucide-react';
+import { DollarSign, TrendingUp, TrendingDown, Fuel, Calculator, Activity, Percent } from 'lucide-react';
 
 const RevenueStats = ({ bookings = [] }) => {
     // Constants for profit calculation (Configurable)
@@ -81,75 +81,72 @@ const RevenueStats = ({ bookings = [] }) => {
     const maxDaily = Math.max(...dailyData, 1000);
 
     return (
-        <div className="space-y-10 animate-in fade-in duration-700">
-            <div className="grid md:grid-cols-3 gap-6">
+        <div className="space-y-12 animate-in fade-in duration-700">
+            <div className="grid md:grid-cols-3 gap-8">
                 {/* Total Revenue */}
-                <div className="bg-white border border-slate-200 p-6 shadow-sm rounded-lg relative overflow-hidden group">
-                    <div className="flex flex-col gap-4 relative z-10">
-                        <div className="flex items-center justify-between">
-                            <p className="text-black text-[10px] font-black uppercase tracking-widest">Total Revenue</p>
-                            <div className="w-8 h-8 bg-black text-white rounded flex items-center justify-center">
-                                <DollarSign size={18} />
-                            </div>
+                <div className="bg-[#121212] border border-white/5 p-8 shadow-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#22C55E]/5 blur-3xl rounded-full translate-x-16 -translate-y-16 group-hover:bg-[#22C55E]/10 transition-all"></div>
+
+                    <div className="flex flex-col gap-6 relative z-10">
+                        <div className="w-14 h-14 bg-[#22C55E] flex items-center justify-center text-white border border-white/10 shadow-lg shadow-[#22C55E]/20">
+                            <DollarSign size={28} />
                         </div>
                         <div>
-                            <h3 className="text-3xl font-black text-black tracking-tighter">
+                            <p className="text-[#FFDA00] text-[10px] font-black uppercase tracking-widest mb-1">Total Revenue</p>
+                            <h3 className="text-4xl font-black text-white tracking-tighter">
                                 Rs. {stats.totalRevenue.toLocaleString()}
                             </h3>
-                            <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">{stats.completedTrips} Verified Bookings</p>
                         </div>
-                        <div className="flex items-center gap-2 text-emerald-600 text-[10px] font-black uppercase tracking-widest bg-emerald-50 self-start px-2 py-0.5 rounded border border-emerald-100">
-                            <TrendingUp size={14} />
-                            <span>Operational Growth</span>
+                        <div className="flex items-center gap-2 text-[#22C55E] text-[10px] font-black uppercase tracking-widest">
+                            <TrendingUp size={16} />
+                            <span>{stats.completedTrips} Verified Operations</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Estimate Fuel Cost */}
-                <div className="bg-white border border-slate-200 p-6 shadow-sm rounded-lg relative overflow-hidden group">
-                    <div className="flex flex-col gap-4 relative z-10">
-                        <div className="flex items-center justify-between">
-                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Energy Cost</p>
-                            <div className="w-8 h-8 bg-slate-100 text-slate-600 rounded flex items-center justify-center">
-                                <BarChart2 size={18} />
-                            </div>
+                <div className="bg-[#121212] border border-white/5 p-8 shadow-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/5 blur-3xl rounded-full translate-x-16 -translate-y-16 group-hover:bg-orange-500/10 transition-all"></div>
+
+                    <div className="flex flex-col gap-6 relative z-10">
+                        <div className="w-14 h-14 bg-white/5 border border-white/10 flex items-center justify-center text-orange-500">
+                            <Fuel size={28} />
                         </div>
                         <div>
-                            <h3 className="text-3xl font-black text-black tracking-tighter">
+                            <p className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-1">Energy Expenditure</p>
+                            <h3 className="text-4xl font-black text-white tracking-tighter">
                                 Rs. {stats.totalFuelCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                             </h3>
-                            <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">{stats.totalDistance.toFixed(0)} KM Tracked</p>
                         </div>
-                        <div className="flex items-center gap-2 text-orange-600 text-[10px] font-black uppercase tracking-widest bg-orange-50 self-start px-2 py-0.5 rounded border border-orange-100">
-                            <BarChart2 size={14} />
-                            <span>Fuel Overhead</span>
+                        <div className="flex items-center gap-2 text-white/30 text-[10px] font-black uppercase tracking-widest bg-white/5 p-2 border border-white/5">
+                            <Activity size={14} />
+                            <span>{stats.totalDistance.toFixed(0)} KM Vector Track</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Net Profit */}
-                <div className="bg-black text-white border border-black p-6 shadow-xl rounded-lg relative overflow-hidden group">
-                    <div className="flex flex-col gap-4 relative z-10">
-                        <div className="flex items-center justify-between">
-                            <p className="text-white/70 text-[10px] font-black uppercase tracking-widest">Net Performance</p>
-                            <div className="w-8 h-8 bg-white text-black rounded flex items-center justify-center">
-                                <TrendingUp size={18} />
-                            </div>
+                <div className="bg-[#121212] border border-white/5 p-8 shadow-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 blur-3xl rounded-full translate-x-16 -translate-y-16 group-hover:bg-blue-500/10 transition-all"></div>
+
+                    <div className="flex flex-col gap-6 relative z-10">
+                        <div className="w-14 h-14 bg-[#FFDA00] flex items-center justify-center text-black border border-white/10 shadow-lg shadow-[#FFDA00]/20">
+                            <TrendingUp size={28} />
                         </div>
                         <div>
-                            <h3 className="text-3xl font-black text-white tracking-tighter">
+                            <p className="text-[#22C55E] text-[10px] font-black uppercase tracking-widest mb-1">Net Performance</p>
+                            <h3 className="text-4xl font-black text-white tracking-tighter">
                                 Rs. {stats.totalProfit.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                             </h3>
-                            <p className="text-[10px] text-white/40 font-bold mt-1 uppercase tracking-wider">Estimated Yield</p>
                         </div>
-                        <div className="space-y-2 pt-2">
-                            <div className="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+                        <div className="space-y-2">
+                            <div className="w-full bg-white/5 h-1.5 overflow-hidden">
                                 <div
-                                    className="bg-white h-full transition-all duration-1000"
+                                    className="bg-[#22C55E] h-full transition-all duration-1000"
                                     style={{ width: `${Math.min(stats.profitMargin, 100)}%` }}
                                 ></div>
                             </div>
-                            <p className="text-[9px] text-white/40 font-black uppercase tracking-widest text-right">
+                            <p className="text-[10px] text-white/30 font-black uppercase tracking-widest text-right">
                                 MARGIN: {stats.profitMargin.toFixed(1)}%
                             </p>
                         </div>
@@ -157,38 +154,37 @@ const RevenueStats = ({ bookings = [] }) => {
                 </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-8">
                 {/* Chart Section */}
-                <div className="bg-white border border-slate-200 p-6 shadow-sm rounded-lg relative overflow-hidden">
-                    <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-50">
-                        <h4 className="text-[10px] font-black text-black uppercase tracking-[0.2em] flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 bg-black rounded-full"></span>
-                            Revenue Velocity
+                <div className="bg-[#121212] border border-white/5 p-8 shadow-2xl relative overflow-hidden">
+                    <div className="flex items-center justify-between mb-8">
+                        <h4 className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-3">
+                            <div className="w-1.5 h-1.5 bg-[#22C55E] animate-pulse"></div>
+                            Revenue Velocity <span className="text-white/20">/ 7D PERIOD</span>
                         </h4>
-                        <span className="text-[9px] text-slate-400 font-black uppercase tracking-widest bg-slate-50 px-2 py-0.5 rounded border border-slate-100">7D ANALYSIS</span>
                     </div>
 
-                    <div className="h-56 flex items-end justify-between gap-3 px-2">
+                    <div className="h-56 flex items-end justify-between gap-4 px-4 border-b border-white/5 pb-4">
                         {dailyData.map((val, i) => {
                             const height = (val / maxDaily) * 100;
 
-                            // Minimalist color logic
-                            let barColor = 'bg-black';
-                            if (val === 0) barColor = 'bg-slate-100';
-                            else if (val < 20000) barColor = 'bg-slate-400';
-                            else if (val < 40000) barColor = 'bg-slate-800';
+                            // Color logic
+                            let barColor = 'bg-[#22C55E]';
+                            if (val === 0) barColor = 'bg-white/5';
+                            else if (val < 15000) barColor = 'bg-[#FFDA00]';
+                            else if (val < 35000) barColor = 'bg-blue-500';
 
                             return (
-                                <div key={i} className="flex-1 flex flex-col items-center gap-3 group relative">
+                                <div key={i} className="flex-1 flex flex-col items-center gap-4 group relative">
                                     <div
-                                        className={`w-full ${barColor} hover:bg-black transition-all duration-300 relative rounded-sm shadow-sm`}
+                                        className={`w-full ${barColor}/20 group-hover:${barColor} border border-transparent group-hover:border-white/20 transition-all duration-500 relative`}
                                         style={{ height: `${Math.max(height, val > 0 ? 4 : 0)}%` }}
                                     >
-                                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-[9px] font-black py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap z-10 shadow-lg tracking-wider">
-                                            Rs {val.toLocaleString()}
+                                        <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#22C55E] text-white text-[9px] font-black py-1.5 px-3 opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap z-10 shadow-xl tracking-widest uppercase">
+                                            Rs. {val.toLocaleString()}
                                         </div>
                                     </div>
-                                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-tighter">DAY {i + 1}</span>
+                                    <span className="text-[9px] font-black text-white/30 uppercase tracking-tighter">D{i + 1}</span>
                                 </div>
                             );
                         })}
@@ -196,67 +192,67 @@ const RevenueStats = ({ bookings = [] }) => {
                 </div>
 
                 {/* Parameters Section */}
-                <div className="bg-white border border-slate-200 p-6 shadow-sm rounded-lg relative overflow-hidden flex flex-col justify-center">
+                <div className="bg-[#121212] border border-white/5 p-8 shadow-2xl relative overflow-hidden flex flex-col justify-center">
+                    <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#22C55E]/50 to-transparent"></div>
+
                     <div className="flex items-center gap-3 mb-8">
-                        <div className="w-6 h-6 bg-slate-100 rounded flex items-center justify-center text-black">
-                            <PieChart size={14} />
+                        <div className="w-8 h-8 bg-[#22C55E]/10 flex items-center justify-center text-[#22C55E]">
+                            <Calculator size={18} />
                         </div>
-                        <h4 className="text-[10px] font-black text-black uppercase tracking-[0.2em]">Asset Configuration</h4>
+                        <h4 className="text-xs font-black text-white uppercase tracking-widest text-[#FFDA00]">Algorithmic Strategy</h4>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-y-6 gap-x-8">
+                    <div className="grid grid-cols-2 gap-y-8 gap-x-12">
                         <div>
-                            <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest mb-1">Fuel Index</p>
-                            <p className="font-black text-black text-lg tracking-tight">Rs. {FUEL_PRICE}<span className="text-[10px] text-slate-300">/L</span></p>
+                            <p className="text-white/30 text-[9px] font-black uppercase tracking-widest mb-1">Fuel Index</p>
+                            <p className="font-black text-white text-lg tracking-widest">Rs. {FUEL_PRICE}<span className="text-[10px] text-white/20">/L</span></p>
                         </div>
                         <div>
-                            <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest mb-1">Base Efficiency</p>
-                            <p className="font-black text-black text-lg tracking-tight">{EFFICIENCY.sedan} KM/L <span className="text-[10px] text-slate-300">/SEDAN</span></p>
+                            <p className="text-white/30 text-[9px] font-black uppercase tracking-widest mb-1">Base Efficiency</p>
+                            <p className="font-black text-white text-lg tracking-tighter">{EFFICIENCY.sedan} KM/L <span className="text-[10px] text-white/20">/SEDAN</span></p>
                         </div>
                         <div>
-                            <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest mb-1">Heavy Fleet</p>
-                            <p className="font-black text-black text-lg tracking-tight">{EFFICIENCY.van} KM/L <span className="text-[10px] text-slate-300">/VAN</span></p>
+                            <p className="text-white/30 text-[9px] font-black uppercase tracking-widest mb-1">Heavy Ops Eff.</p>
+                            <p className="font-black text-white text-lg tracking-tighter">{EFFICIENCY.van} KM/L <span className="text-[10px] text-white/20">/VAN</span></p>
                         </div>
                         <div>
-                            <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest mb-1">Tracked Flux</p>
-                            <p className="font-black text-black text-lg tracking-tight">{stats.totalDistance.toFixed(0)} <span className="text-[10px] text-slate-300">KM</span></p>
+                            <p className="text-white/30 text-[9px] font-black uppercase tracking-widest mb-1">Tracked Vector</p>
+                            <p className="font-black text-[#22C55E] text-lg tracking-widest">{stats.totalDistance.toFixed(0)} <span className="text-[10px] text-white/20">TOTAL KM</span></p>
                         </div>
                     </div>
 
-                    <div className="mt-8 p-3 bg-slate-50 border border-slate-100 rounded flex items-center gap-3">
-                        <BarChart2 size={12} className="text-slate-400" />
-                        <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest uppercase">
-                            YIELD FORMULA: GROSS REVENUE - CALCULATED OVERHEAD
+                    <div className="mt-10 p-4 bg-white/5 border border-white/5">
+                        <p className="text-[9px] text-white/20 font-black uppercase tracking-widest flex items-center gap-2">
+                            <Activity size={12} />
+                            NET Formula: ╬ú(Price) - ╬ú((Dist / Eff) * Index)
                         </p>
                     </div>
                 </div>
             </div>
 
             {/* Detailed Profit Breakdown Table */}
-            <div className="bg-white border border-slate-200 shadow-sm rounded-lg relative overflow-hidden group">
-                <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between relative z-10 bg-slate-50/50">
-                    <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 bg-black text-white rounded flex items-center justify-center">
-                            <TrendingUp size={14} />
-                        </div>
-                        <h3 className="text-xs font-black text-black uppercase tracking-widest">Operation Log</h3>
+            <div className="bg-[#121212] border border-white/5 shadow-2xl relative overflow-hidden group">
+                <div className="px-8 py-6 border-b border-white/5 flex items-center gap-4 relative z-10">
+                    <div className="w-10 h-10 bg-[#FFDA00] flex items-center justify-center text-black">
+                        <TrendingUp size={20} />
                     </div>
-                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em]">Verified Units: {bookings.filter(b => b.status === 'completed' || b.paymentStatus === 'paid').length}</span>
+                    <h3 className="text-xl font-black text-white uppercase tracking-tighter">Operation Breakdown</h3>
                 </div>
 
                 <div className="overflow-x-auto relative z-10">
                     <table className="w-full border-collapse">
                         <thead>
-                            <tr className="bg-white text-left border-b border-slate-50">
-                                <th className="px-6 py-3 text-[9px] font-black text-slate-400 uppercase tracking-widest">Timestamp</th>
-                                <th className="px-6 py-3 text-[9px] font-black text-slate-400 uppercase tracking-widest">Operation</th>
-                                <th className="px-6 py-3 text-[9px] font-black text-slate-400 uppercase tracking-widest">Asset</th>
-                                <th className="px-6 py-3 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Distance</th>
-                                <th className="px-6 py-3 text-[9px] font-black text-slate-400 uppercase tracking-widest text-right">Value</th>
-                                <th className="px-6 py-3 text-[9px] font-black text-slate-400 uppercase tracking-widest text-right">Yield</th>
+                            <tr className="bg-white/5 text-left">
+                                <th className="px-8 py-4 text-[10px] font-black text-white/40 uppercase tracking-widest">Operation Timestamp</th>
+                                <th className="px-8 py-4 text-[10px] font-black text-white/40 uppercase tracking-widest">Classification</th>
+                                <th className="px-8 py-4 text-[10px] font-black text-white/40 uppercase tracking-widest">Asset Category</th>
+                                <th className="px-8 py-4 text-[10px] font-black text-white/40 uppercase tracking-widest">Distance</th>
+                                <th className="px-8 py-4 text-[10px] font-black text-white/40 uppercase tracking-widest">Gross Value</th>
+                                <th className="px-8 py-4 text-[10px] font-black text-white/40 uppercase tracking-widest">Fuel Overhead</th>
+                                <th className="px-8 py-4 text-[10px] font-black text-[#22C55E] uppercase tracking-widest">Net Yield</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-50">
+                        <tbody className="divide-y divide-white/5">
                             {bookings
                                 .filter(b => b.status === 'completed' || b.paymentStatus === 'paid')
                                 .slice(0, 10)
@@ -271,25 +267,23 @@ const RevenueStats = ({ bookings = [] }) => {
                                     const isPackage = isTour || isDayTrip;
 
                                     return (
-                                        <tr key={idx} className="hover:bg-[#fafafa] transition-colors border-b border-slate-50 last:border-0">
-                                            <td className="px-6 py-4 text-[10px] font-black text-slate-600 uppercase tracking-tighter">{b.scheduledDate || 'N/A'}</td>
-                                            <td className="px-6 py-4">
-                                                <span className={`text-[8px] font-black px-2 py-0.5 uppercase tracking-widest border rounded-full ${isPackage ? 'bg-black text-white border-black' : 'bg-white text-black border-slate-200'}`}>
-                                                    {isTour ? 'TOURS' : isDayTrip ? 'DAY TRIP' : 'TRANS'}
+                                        <tr key={idx} className="hover:bg-white/5 transition-colors">
+                                            <td className="px-8 py-5 text-[11px] font-black text-white/60 uppercase tracking-widest">{b.scheduledDate || 'N/A'}</td>
+                                            <td className="px-8 py-5">
+                                                <span className={`text-[9px] font-black px-2 py-0.5 uppercase tracking-widest border ${isPackage ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-[#22C55E]/10 text-[#22C55E] border-[#22C55E]/20'}`}>
+                                                    {isTour ? 'TOUR OPS' : isDayTrip ? 'DAY TRIP' : 'TRANSFER'}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4">
-                                                <div className="text-[10px] font-black text-black uppercase tracking-tight">
-                                                    {isPackage ? (b.tourDetails?.tourTitle || (isDayTrip ? 'DAY TRIP' : 'TOUR')) : type}
+                                            <td className="px-8 py-5">
+                                                <div className="text-[11px] font-black text-white uppercase tracking-tighter">
+                                                    {isPackage ? (b.tourDetails?.tourTitle || (isDayTrip ? 'DAY TRIP' : 'TOUR PACKAGE')) : type}
                                                 </div>
+                                                {isPackage && <div className="text-[9px] text-white/30 uppercase font-bold mt-1">L: {b.tourDetails?.duration}</div>}
                                             </td>
-                                            <td className="px-6 py-4 text-[10px] font-black text-slate-400 tracking-tighter text-center">{dist} KM</td>
-                                            <td className="px-6 py-4 text-[10px] font-black text-black tracking-tight text-right">LKR {(b.totalPrice || 0).toLocaleString()}</td>
-                                            <td className="px-6 py-4 text-right">
-                                                <span className="text-[10px] font-black text-black bg-slate-50 px-2 py-1 rounded border border-slate-100">
-                                                    +{profit.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                                                </span>
-                                            </td>
+                                            <td className="px-8 py-5 text-[11px] font-black text-white/60 tracking-widest">{dist} KM</td>
+                                            <td className="px-8 py-5 text-[11px] font-black text-white tracking-widest">RS. {(b.totalPrice || 0).toLocaleString()}</td>
+                                            <td className="px-8 py-5 text-[11px] font-black text-orange-500 tracking-widest">RS. {cost.toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+                                            <td className="px-8 py-5 text-[11px] font-black text-[#22C55E] bg-[#22C55E]/5 tracking-widest border-l-2 border-l-[#22C55E]/20">RS. {profit.toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                         </tr>
                                     );
                                 })}
