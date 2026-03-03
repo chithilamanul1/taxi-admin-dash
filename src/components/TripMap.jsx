@@ -2,8 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
-import ReactDOMServer from 'react-dom/server';
-import MapMarkerIcon from './MapMarkerIcon';
 
 export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated }) {
     const mapRef = useRef(null);
@@ -85,22 +83,11 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
 
         if (hasStart) {
             console.log(`TripMap: Adding pickup marker at ${pickup.lat}, ${pickup.lon}`);
-
-            const svgString = ReactDOMServer.renderToString(
-                <MapMarkerIcon color="#059669" size={40} shadow={0.2} />
-            );
-            const encodedData = window.btoa(svgString);
-            const iconUrl = `data:image/svg+xml;base64,${encodedData}`;
-
             const m = new window.google.maps.Marker({
                 position: { lat: parseFloat(pickup.lat), lng: parseFloat(pickup.lon) },
                 map,
-                title: 'Pickup',
-                icon: {
-                    url: iconUrl,
-                    scaledSize: new window.google.maps.Size(40, 40),
-                    anchor: new window.google.maps.Point(20, 40)
-                }
+                label: 'A',
+                title: 'Pickup'
             });
             markersRef.current.push(m);
             bounds.extend(m.getPosition());
@@ -125,22 +112,12 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
 
         if (hasEnd) {
             console.log(`TripMap: Adding dropoff marker at ${dropoff.lat}, ${dropoff.lon}`);
-
-            const svgString = ReactDOMServer.renderToString(
-                <MapMarkerIcon color="#dc2626" size={40} shadow={0.2} />
-            );
-            const encodedData = window.btoa(svgString);
-            const iconUrl = `data:image/svg+xml;base64,${encodedData}`;
-
             const m = new window.google.maps.Marker({
                 position: { lat: parseFloat(dropoff.lat), lng: parseFloat(dropoff.lon) },
                 map,
+                label: 'B',
                 title: 'Dropoff',
-                icon: {
-                    url: iconUrl,
-                    scaledSize: new window.google.maps.Size(40, 40),
-                    anchor: new window.google.maps.Point(20, 40)
-                }
+                icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
             });
             markersRef.current.push(m);
             bounds.extend(m.getPosition());
@@ -230,8 +207,8 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
             {!mapInitialized && (
                 <div className="absolute inset-0 flex items-center justify-center bg-slate-50/50 backdrop-blur-[2px] z-10">
                     <div className="flex flex-col items-center gap-3">
-                        <div className="w-8 h-8 border-4 border-slate-600 border-t-transparent rounded-full animate-spin" />
-                        <p className="text-xs font-bold text-slate-900/40 uppercase tracking-widest">Loading Map...</p>
+                        <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+                        <p className="text-xs font-bold text-emerald-900/40 uppercase tracking-widest">Loading Map...</p>
                     </div>
                 </div>
             )}

@@ -50,10 +50,10 @@ const commonFeatures = ['Air Conditioning', 'Bluetooth', 'USB Charging'];
 
 const vehicles = [
     {
-        name: 'Mini Car',
+        name: 'Mini Car (Wagon R)',
         vehicleType: 'mini-car',
         category: 'airport-transfer',
-        capacity: 4,
+        capacity: 3,
         luggage: 2,
         basePrice: 3500,
         baseKm: 0,
@@ -68,7 +68,7 @@ const vehicles = [
         ]
     },
     {
-        name: 'Standard Sedan',
+        name: 'Sedan (Prius/Axio/Similar)',
         vehicleType: 'sedan',
         category: 'airport-transfer',
         capacity: 4,
@@ -158,10 +158,10 @@ const vehicles = [
         ]
     },
     {
-        name: 'KDH Van',
+        name: 'KDH High Roof Van',
         vehicleType: 'kdh-van',
         category: 'airport-transfer',
-        capacity: 10,
+        capacity: 9,
         luggage: 8,
         basePrice: 8500,
         baseKm: 0,

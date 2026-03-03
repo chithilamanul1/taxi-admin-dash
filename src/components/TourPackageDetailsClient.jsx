@@ -225,18 +225,18 @@ export default function TourPackageDetailsClient({ tour }) {
 
                         {/* Inclusions & Exclusions */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                            <section className="bg-white rounded-[3rem] p-10 shadow-2xl shadow-slate-900/5 border border-slate-50">
+                            <section className="bg-white rounded-[3rem] p-10 shadow-2xl shadow-emerald-900/5 border border-slate-50">
                                 <h3 className="text-xl font-black text-slate-900 mb-8 uppercase tracking-widest flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center">
-                                        <CheckCircle size={20} className="text-amber-500" />
+                                    <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center">
+                                        <CheckCircle size={20} className="text-emerald-500" />
                                     </div>
                                     What's Included
                                 </h3>
                                 <ul className="space-y-5">
                                     {tour.includes?.map((item, i) => (
                                         <li key={i} className="flex gap-4 text-slate-700 group">
-                                            <div className="shrink-0 mt-1 w-5 h-5 bg-slate-50 rounded flex items-center justify-center group-hover:bg-amber-500 transition-colors">
-                                                <Check size={12} className="text-amber-500 group-hover:text-white" />
+                                            <div className="shrink-0 mt-1 w-5 h-5 bg-emerald-50 rounded flex items-center justify-center group-hover:bg-emerald-500 transition-colors">
+                                                <Check size={12} className="text-emerald-500 group-hover:text-white" />
                                             </div>
                                             <span className="text-sm font-bold leading-snug">{item}</span>
                                         </li>
@@ -303,14 +303,14 @@ export default function TourPackageDetailsClient({ tour }) {
                                     <button onClick={() => setIsModalOpen(true)} className="w-full py-6 bg-amber-500 hover:bg-amber-600 text-white rounded-[1.5rem] font-black text-xl shadow-xl shadow-amber-200 transition-all hover:scale-[1.02] flex items-center justify-center gap-3">
                                         <Calendar size={24} /> Instant Booking
                                     </button>
-                                    <a href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking "${tour.title}".`)}`} target="_blank" className="w-full py-6 bg-[#25D366] hover:bg-[#1fae54] text-white rounded-[1.5rem] font-black text-xl shadow-xl shadow-slate-100 transition-all hover:scale-[1.02] flex items-center justify-center gap-3">
+                                    <a href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking "${tour.title}".`)}`} target="_blank" className="w-full py-6 bg-[#25D366] hover:bg-[#1fae54] text-white rounded-[1.5rem] font-black text-xl shadow-xl shadow-emerald-100 transition-all hover:scale-[1.02] flex items-center justify-center gap-3">
                                         <MessageCircle size={24} /> WhatsApp Us
                                     </a>
                                 </div>
 
                                 <div className="mt-8 pt-8 border-t border-slate-50 flex items-center justify-center gap-6">
                                     <div className="flex flex-col items-center gap-1">
-                                        <ShieldCheck size={20} className="text-amber-500" />
+                                        <ShieldCheck size={20} className="text-emerald-500" />
                                         <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight">Secure Payments</span>
                                     </div>
                                     <div className="flex flex-col items-center gap-1">

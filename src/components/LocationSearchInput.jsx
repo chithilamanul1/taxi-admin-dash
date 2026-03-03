@@ -111,7 +111,7 @@ export default function LocationSearchInput({
 
     return (
         <div className="relative space-y-2" ref={wrapperRef}>
-            {label && <label className="text-[10px] font-bold text-slate-900/40 uppercase tracking-widest pl-2">{label}</label>}
+            {label && <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{label}</label>}
             <div className="relative">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                     <Icon size={20} />
@@ -123,11 +123,11 @@ export default function LocationSearchInput({
                     onFocus={() => inputValue && suggestions.length > 0 && setIsOpen(true)}
                     placeholder={googleLoaded ? placeholder : 'Loading maps...'}
                     required={required}
-                    className="w-full h-12 md:h-14 bg-slate-50 dark:bg-slate-900/20 border-2 border-amber-200 dark:border-slate-800/50 pl-12 pr-10 rounded-2xl outline-none focus:border-slate-600 focus:ring-4 focus:ring-slate-600/20 transition-all font-bold text-sm text-slate-900 dark:text-white truncate placeholder:text-slate-900/40 dark:placeholder:text-amber-400/40"
+                    className="w-full h-12 md:h-14 bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-200 dark:border-emerald-800/50 pl-12 pr-10 rounded-2xl outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/20 transition-all font-bold text-sm text-emerald-900 dark:text-white truncate placeholder:text-emerald-900/40 dark:placeholder:text-emerald-400/40"
                 />
                 {loading && (
                     <div className="absolute right-10 top-1/2 -translate-y-1/2">
-                        <Loader2 size={16} className="animate-spin text-slate-600" />
+                        <Loader2 size={16} className="animate-spin text-emerald-600" />
                     </div>
                 )}
                 {inputValue && !loading && (
@@ -138,17 +138,17 @@ export default function LocationSearchInput({
             </div>
 
             {isOpen && suggestions.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-900/10 dark:border-white/10 z-50 overflow-hidden max-h-60 overflow-y-auto custom-scrollbar">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-emerald-900/10 dark:border-white/10 z-50 overflow-hidden max-h-60 overflow-y-auto custom-scrollbar">
                     {suggestions.map((item) => (
                         <button
                             key={item.place_id}
                             type="button"
                             onClick={() => handleSelect(item)}
-                            className="w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-gray-100 dark:border-white/5 last:border-0 transition-colors flex items-start gap-3"
+                            className="w-full text-left px-4 py-3 hover:bg-emerald-50 dark:hover:bg-white/5 border-b border-gray-100 dark:border-white/5 last:border-0 transition-colors flex items-start gap-3"
                         >
-                            <MapPin size={16} className="text-slate-600 mt-0.5 shrink-0" />
+                            <MapPin size={16} className="text-emerald-600 mt-0.5 shrink-0" />
                             <div className="min-w-0">
-                                <span className="font-bold text-slate-900 dark:text-white block truncate">
+                                <span className="font-bold text-emerald-900 dark:text-white block truncate">
                                     {item.structured_formatting.main_text}
                                 </span>
                                 <span className="text-xs text-slate-500 dark:text-slate-400 block truncate">

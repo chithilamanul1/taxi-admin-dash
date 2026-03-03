@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSession, signIn } from 'next-auth/react';
-import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, ShoppingBag, Info, AlertCircle } from 'lucide-react';
+import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag, Info, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -537,7 +537,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             `}</style>
 
             {/* Modal Container */}
-            <div id="modal-container" className="bg-white w-full h-full sm:h-auto sm:max-h-[95vh] sm:rounded-[3rem] sm:border sm:border-slate-100 shadow-2xl sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative">
+            <div id="modal-container" className="bg-white w-full h-full sm:h-auto sm:max-h-[95vh] sm:rounded-[2rem] sm:border sm:border-emerald-900/10 shadow-2xl sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative">
                 {/* Coupon Verification Notification - Moved to Bottom */}
                 <AnimatePresence>
                     {couponLoading && (
@@ -649,8 +649,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         {pricingData.map((v) => {
                                             const totalPax = (formData.passengerCount?.adults || 0) + (formData.passengerCount?.children || 0);
                                             const totalLuggage = formData.passengerCount?.luggage || 0;
-                                            const totalHandLuggage = formData.passengerCount?.handLuggage || 0;
-                                            const isFit = totalPax <= v.capacity && totalLuggage <= (v.luggage || 0) && totalHandLuggage <= (v.handLuggage || 0);
+                                            const isFit = totalPax <= v.capacity && totalLuggage <= (v.luggage || 0);
                                             const isSelected = formData.vehicle === v.vehicleType;
 
                                             if (!isFit && !isSelected) return null;
@@ -692,34 +691,24 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     </div>
 
                                                     {/* New Redesigned Capacity Grid */}
-                                                    <div className="grid grid-cols-3 gap-2 mt-1">
-                                                        <div className="flex items-center gap-2 p-2 bg-white rounded-xl border border-black/10 shadow-sm">
-                                                            <div className="w-6 h-6 bg-slate-50 rounded-lg flex items-center justify-center text-black shrink-0">
-                                                                <Users size={12} />
+                                                    <div className="grid grid-cols-2 gap-3 mt-1">
+                                                        <div className="flex items-center gap-3 p-3 bg-white rounded-2xl border border-black/10 shadow-sm">
+                                                            <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-black">
+                                                                <Users size={16} />
                                                             </div>
-                                                            <div className="min-w-0">
-                                                                <p className="text-[7px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Pax</p>
-                                                                <p className="text-[10px] font-black text-black leading-none">{v.capacity}</p>
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="flex items-center gap-2 p-2 bg-white rounded-xl border border-black/10 shadow-sm">
-                                                            <div className="w-6 h-6 bg-slate-50 rounded-lg flex items-center justify-center text-black shrink-0">
-                                                                <ShoppingBag size={12} />
-                                                            </div>
-                                                            <div className="min-w-0">
-                                                                <p className="text-[7px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Bags</p>
-                                                                <p className="text-[10px] font-black text-black leading-none">{v.luggage || 0}</p>
+                                                            <div>
+                                                                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Capacity</p>
+                                                                <p className="text-sm font-black text-black leading-none">{v.capacity} <span className="text-[9px] text-slate-500 font-bold uppercase ml-0.5">Persons</span></p>
                                                             </div>
                                                         </div>
 
-                                                        <div className="flex items-center gap-2 p-2 bg-white rounded-xl border border-black/10 shadow-sm">
-                                                            <div className="w-6 h-6 bg-slate-50 rounded-lg flex items-center justify-center text-black shrink-0">
-                                                                <ShoppingBag size={12} />
+                                                        <div className="flex items-center gap-3 p-3 bg-white rounded-2xl border border-black/10 shadow-sm">
+                                                            <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-black">
+                                                                <Briefcase size={16} />
                                                             </div>
-                                                            <div className="min-w-0">
-                                                                <p className="text-[7px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Hand</p>
-                                                                <p className="text-[10px] font-black text-black leading-none">{v.handLuggage || 0}</p>
+                                                            <div>
+                                                                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Luggage</p>
+                                                                <p className="text-sm font-black text-black leading-none">{v.luggage || 0} <span className="text-[9px] text-slate-500 font-bold uppercase ml-0.5">Luggages</span></p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -757,7 +746,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         type="text"
                                                         value={formData.flightNumber || ''}
                                                         onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                        className="w-full h-12 bg-white border-[3px] border-slate-900 px-6 rounded-xl outline-none focus:ring-4 focus:ring-black/5 transition-all font-bold text-xs text-slate-900 shadow-xl"
+                                                        className="w-full h-12 bg-slate-50 border border-slate-200 px-6 rounded-xl outline-none focus:border-black transition-all font-bold text-xs text-slate-900 shadow-inner"
                                                         placeholder="e.g. EK 654"
                                                     />
                                                 </div>
@@ -775,7 +764,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         {[
                                             { id: 'adults', label: 'Adults', icon: Users },
                                             { id: 'children', label: 'Children', icon: User },
-                                            { id: 'luggage', label: 'Check-in Luggage', icon: ShoppingBag },
+                                            { id: 'luggage', label: 'Check-in Luggage', icon: Briefcase },
                                             { id: 'handLuggage', label: 'Hand Luggage', icon: ShoppingBag }
                                         ].map((field) => (
                                             <div key={field.id} className="bg-white border border-slate-200 p-3 md:p-4 rounded-xl flex items-center justify-between">
@@ -811,7 +800,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         ))}
                                     </div>
                                     <div className="space-y-4">
-                                        <div className="flex items-center justify-between p-4 bg-white border-2 border-black/10 rounded-3xl shadow-sm">
+                                        <div className="flex items-center justify-between p-4 bg-white border-2 border-black/10 rounded-2xl shadow-sm">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-black">
                                                     <Navigation size={20} />
@@ -829,17 +818,19 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </div>
                                     </div>
 
-                                    <div className="p-3 bg-red-50 border border-red-100 rounded-2xl flex items-start gap-3 animate-pulse">
-                                        <div className="pt-0.5 text-red-600"><ShoppingBag size={14} /></div>
-                                        <p className="text-[10px] font-bold text-red-900 leading-tight uppercase tracking-widest">
-                                            Capacity Exceeded: {totalPassengers} Pax (Max {selectedVehicle.capacity})
-                                        </p>
-                                    </div>
+                                    {isOverCapacity && (
+                                        <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 animate-pulse">
+                                            <div className="pt-0.5 text-red-600"><Briefcase size={14} /></div>
+                                            <p className="text-[10px] font-bold text-red-900 leading-tight uppercase tracking-widest">
+                                                Capacity Exceeded: {totalPassengers} Pax (Max {selectedVehicle.capacity})
+                                            </p>
+                                        </div>
+                                    )}
 
                                     <div className="pt-2">
                                         <button
                                             onClick={() => setFormData({ ...formData, hasNameBoard: !formData.hasNameBoard })}
-                                            className={`w-full p-4 rounded-2xl border-2 transition-all flex items-center justify-between ${formData.hasNameBoard ? 'border-black bg-slate-100 text-black shadow-sm' : 'bg-white border-black/10 text-black/60 hover:bg-slate-50'}`}
+                                            className={`w-full p-4 rounded-xl border-2 transition-all flex items-center justify-between ${formData.hasNameBoard ? 'border-black bg-slate-100 text-black shadow-sm' : 'bg-white border-black/10 text-black/60 hover:bg-slate-50'}`}
                                         >
                                             <div className="flex items-center gap-3">
                                                 <Signpost size={18} className={formData.hasNameBoard ? 'text-black' : ''} />
@@ -863,17 +854,17 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
                             </div>
 
-                            <div className="p-6 md:p-8 bg-black rounded-[3rem] text-white flex flex-col shadow-2xl gap-8 relative overflow-hidden group">
+                            <div className="p-6 md:p-8 bg-gradient-to-br from-emerald-900 to-emerald-950 rounded-[2.5rem] text-white flex flex-col shadow-2xl gap-8 relative overflow-hidden group">
                                 {/* Decorative Background Glow */}
-                                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-[100px] -mr-32 -mt-32"></div>
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/10 rounded-full blur-[100px] -mr-32 -mt-32"></div>
 
                                 <div className="relative z-10 space-y-8">
-                                    <div className="flex items-center gap-2 text-white/70 mb-2">
+                                    <div className="flex items-center gap-2 text-amber-500 mb-2">
                                         <Zap size={14} fill="currentColor" className="animate-pulse" />
                                         <span className="text-[10px] font-black uppercase tracking-[0.2em]">{formData.paymentType === 'partial' ? 'Deposit Amount' : 'Total Price'}</span>
                                     </div>
                                     <div className="text-4xl md:text-6xl font-black leading-tight tracking-tighter flex items-center gap-2">
-                                        <span className="text-xl md:text-3xl font-bold text-white/50">
+                                        <span className="text-xl md:text-3xl font-bold text-amber-500">
                                             {(rates?.[currency]) ? currentSymbol : 'Rs'}
                                         </span>
                                         <span className="text-white">
@@ -884,7 +875,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
                                 <div className="text-left md:text-right bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
                                     <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Route Distance</div>
-                                    <div className="text-xl font-black text-white">{distance.toFixed(1)} <span className="text-sm font-bold text-white/50">KM</span></div>
+                                    <div className="text-xl font-black text-white">{distance.toFixed(1)} <span className="text-sm font-bold text-emerald-400">KM</span></div>
                                 </div>
 
                                 {/* Multi-Currency Grid - Moved INSIDE dark box */}
@@ -902,25 +893,25 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 type="button"
                                                 onClick={() => changeCurrency(c.code)}
                                                 className={`p-3 rounded-2xl border-2 transition-all flex flex-col gap-1 text-left cursor-pointer group/card relative overflow-hidden ${currency === c.code
-                                                    ? 'bg-white border-black shadow-xl scale-[1.02]'
+                                                    ? 'bg-amber-500 border-amber-600 shadow-xl scale-[1.02]'
                                                     : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
                                                     }`}
                                             >
                                                 <div className="flex items-center justify-between relative z-10">
-                                                    <span className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 ${currency === c.code ? 'text-black' : 'text-white/40'}`}>
-                                                        <div className="w-5 h-5 rounded-full overflow-hidden border border-slate-200 bg-white p-0.5 shadow-sm">
+                                                    <span className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 ${currency === c.code ? 'text-amber-900' : 'text-white/40'}`}>
+                                                        <div className="w-5 h-5 rounded-full overflow-hidden border border-white/20 bg-white p-0.5 shadow-sm">
                                                             <img src={c.flag} alt={c.code} className="w-full h-full object-cover rounded-full" />
                                                         </div> {c.code}
                                                     </span>
                                                     {currency === c.code && (
-                                                        <span className="text-[8px] font-black bg-black/10 text-black px-1.5 py-0.5 rounded-full uppercase tracking-tighter">Selected</span>
+                                                        <span className="text-[8px] font-black bg-amber-900/20 text-amber-900 px-1.5 py-0.5 rounded-full uppercase tracking-tighter">Selected</span>
                                                     )}
                                                 </div>
-                                                <div className={`text-base md:text-lg font-black relative z-10 ${currency === c.code ? 'text-black' : 'text-slate-200'}`}>
-                                                    <span className={`text-[10px] font-bold mr-1 ${currency === c.code ? 'text-black/50' : 'opacity-40'}`}>{c.symbol}</span>
+                                                <div className={`text-base md:text-lg font-black relative z-10 ${currency === c.code ? 'text-white' : 'text-slate-200'}`}>
+                                                    <span className={`text-[10px] font-bold mr-1 ${currency === c.code ? 'text-white/70' : 'opacity-40'}`}>{c.symbol}</span>
                                                     {c.value.toLocaleString()}
                                                 </div>
-                                                {currency === c.code && <div className="absolute top-0 right-0 w-16 h-16 bg-white/40 rounded-full blur-2xl -mr-8 -mt-8"></div>}
+                                                {currency === c.code && <div className="absolute top-0 right-0 w-16 h-16 bg-white/20 rounded-full blur-2xl -mr-8 -mt-8"></div>}
                                             </button>
                                         ))}
                                     </div>
@@ -942,7 +933,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 ))}
 
                                 {detailedBreakdown.discounts > 0 && (
-                                    <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-white bg-white/10 p-1.5 rounded-lg border border-white/20">
+                                    <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-emerald-400 bg-white/10 p-1.5 rounded-lg">
                                         <div className="flex items-center gap-2">
                                             <Tag size={12} />
                                             <span>
@@ -957,7 +948,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <div className="pt-2 border-t border-white/5">
                                         <div className="flex flex-wrap gap-2">
                                             {verifiedCoupons.map((c, idx) => (
-                                                <span key={idx} className="px-2 py-1 bg-white/10 border border-white/20 text-white text-[8px] font-black uppercase tracking-tighter rounded-md flex items-center gap-1">
+                                                <span key={idx} className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-tighter rounded-md flex items-center gap-1">
                                                     <Check size={8} strokeWidth={4} /> {c.code}
                                                 </span>
                                             ))}
@@ -967,9 +958,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             </div>
 
                             <div className="flex flex-col items-center justify-center gap-2 mt-4">
-                                <div className="flex items-center gap-1.5 text-slate-800">
+                                <div className="flex items-center gap-1.5 text-emerald-800">
                                     <ShieldCheck size={14} />
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-950">Taxes Included • Tolls Excluded</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-950">Taxes Included • Tolls Excluded</span>
                                 </div>
                                 <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest bg-white px-3 py-1 rounded-full border border-slate-200">
                                     Highway Ticket paid by customer at counter
@@ -991,30 +982,30 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 {/* Left Column: Client Info & Logistics */}
                                 <div className="lg:col-span-7 space-y-8">
                                     {!session && (
-                                        <div className="bg-slate-50 border border-black/10 p-5 rounded-[2rem] flex items-center justify-between shadow-sm">
+                                        <div className="bg-slate-100 border border-black/10 p-5 rounded-[1.5rem] flex items-center justify-between shadow-sm">
                                             <div className="flex items-center gap-4">
                                                 <div className="w-10 h-10 rounded-xl bg-white border border-black/10 flex items-center justify-center text-black shadow-inner"><User size={20} /></div>
                                                 <div>
                                                     <p className="text-sm font-black text-black uppercase">Have an account?</p>
-                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Auto-fill details & track bookings.</p>
+                                                    <p className="text-[10px] font-bold text-emerald-900/60 uppercase tracking-widest">Auto-fill details & track bookings.</p>
                                                 </div>
                                             </div>
-                                            <button onClick={() => signIn()} className="px-5 py-2.5 bg-black rounded-full text-xs font-black text-white hover:bg-slate-800 transition-all shadow-md">Log In</button>
+                                            <button onClick={() => signIn()} className="px-5 py-2.5 bg-white border border-emerald-900/10 rounded-xl text-xs font-black text-emerald-900 hover:bg-emerald-900 hover:text-white transition-all shadow-sm">Log In</button>
                                         </div>
                                     )}
 
                                     {/* Passenger & Luggage Controls (Requested for Step 2) */}
                                     <div className="space-y-4">
-                                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2">Adjust Passengers & Luggage</label>
-                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                        <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Adjust Passengers & Luggage</label>
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                             {[
                                                 { id: 'adults', label: 'Adults' },
                                                 { id: 'children', label: 'Children' },
                                                 { id: 'luggage', label: 'Luggage' },
                                                 { id: 'handLuggage', label: 'Hand' }
                                             ].map((field) => (
-                                                <div key={field.id} className="bg-white border-[3px] border-slate-900 p-2.5 rounded-2xl flex flex-col items-center justify-center gap-1.5 shadow-xl transition-all hover:translate-y-[-1px]">
-                                                    <span className="text-[7.5px] font-black uppercase tracking-tighter text-slate-400">{field.label}</span>
+                                                <div key={field.id} className="bg-slate-50 border border-slate-300 p-3 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-sm">
+                                                    <span className="text-[8px] font-black uppercase tracking-tighter text-slate-500">{field.label}</span>
                                                     <div className="flex items-center gap-2">
                                                         <button
                                                             onClick={() => setFormData(prev => ({
@@ -1024,9 +1015,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                     [field.id]: Math.max(0, (prev.passengerCount[field.id] || 0) - 1)
                                                                 }
                                                             }))}
-                                                            className="w-5 h-5 flex items-center justify-center bg-white border-2 border-slate-900 rounded-md text-black font-bold hover:bg-slate-100 text-[10px] active:scale-95 transition-all shadow-sm"
+                                                            className="w-6 h-6 flex items-center justify-center bg-white border border-emerald-900/10 rounded-md text-emerald-600 font-bold hover:bg-emerald-50"
                                                         >-</button>
-                                                        <span className="font-black text-xs text-black">{(formData.passengerCount[field.id] || 0)}</span>
+                                                        <span className="font-bold text-xs text-emerald-900">{(formData.passengerCount[field.id] || 0)}</span>
                                                         <button
                                                             onClick={() => setFormData(prev => ({
                                                                 ...prev,
@@ -1035,7 +1026,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                     [field.id]: (prev.passengerCount[field.id] || 0) + 1
                                                                 }
                                                             }))}
-                                                            className="w-5 h-5 flex items-center justify-center bg-black text-white border-b-2 border-black rounded-md font-bold hover:bg-slate-800 text-[10px] active:scale-95 transition-all shadow-sm"
+                                                            className="w-6 h-6 flex items-center justify-center bg-white border border-emerald-900/10 rounded-md text-emerald-600 font-bold hover:bg-emerald-50"
                                                         >+</button>
                                                     </div>
                                                 </div>
@@ -1071,17 +1062,17 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                 buttonClassName: '!h-14 !bg-slate-50 !border-r !border-slate-200 !px-4 !flex !items-center !justify-center !min-w-[70px]',
                                                                 flagClassName: '!w-8 !h-auto !shadow-sm',
                                                                 dropdownStyleProps: {
-                                                                    className: '!z-[20000] !min-w-[200px] !max-h-[300px] !rounded-[2rem] !border-2 !border-black/10 !shadow-2xl !bg-white'
+                                                                    className: '!z-[20000] !min-w-[200px] !max-h-[300px] !rounded-2xl !border-2 !border-emerald-900/10 !shadow-2xl !bg-white'
                                                                 }
                                                             }}
-                                                            className="w-full bg-white border-[3px] border-slate-900 rounded-2xl flex focus-within:ring-4 focus-within:ring-black/5 transition-all overflow-visible shadow-xl"
+                                                            className="w-full bg-white border-2 border-black rounded-2xl flex focus-within:ring-4 focus-within:ring-slate-900/10 transition-all overflow-visible shadow-sm"
                                                         />
                                                     ) : (
                                                         <input
                                                             type={f.type}
                                                             value={formData[f.key] || ''}
                                                             onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
-                                                            className="w-full h-14 bg-white border-[3px] border-slate-900 px-6 rounded-2xl outline-none focus:ring-4 focus:ring-black/5 transition-all font-bold text-slate-900 placeholder:text-gray-400 shadow-xl"
+                                                            className="w-full h-14 bg-white border-2 border-black px-6 rounded-2xl outline-none focus:ring-4 focus:ring-slate-900/10 transition-all font-bold text-slate-900 placeholder:text-gray-400 shadow-sm"
                                                             placeholder={f.placeholder}
                                                         />
                                                     )}
@@ -1096,7 +1087,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             required
                                                             value={formData.flightNumber || ''}
                                                             onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                            className="w-full h-14 bg-white border-[3px] border-slate-900 px-6 rounded-2xl outline-none focus:ring-4 focus:ring-black/5 transition-all font-bold text-slate-900 placeholder:text-gray-400 shadow-xl"
+                                                            className="w-full h-14 bg-white border-2 border-black px-6 rounded-2xl outline-none focus:ring-4 focus:ring-slate-900/10 transition-all font-bold text-slate-900 placeholder:text-gray-400 shadow-sm"
                                                             placeholder="e.g. EK 654"
                                                         />
                                                     </div>
@@ -1134,21 +1125,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         type="text"
                                                         value={formData.billingName || ''}
                                                         onChange={e => setFormData({ ...formData, billingName: e.target.value })}
-                                                        className="w-full h-14 bg-white border-[3px] border-slate-900 px-6 rounded-2xl text-sm font-bold text-slate-900 placeholder:text-gray-400 shadow-xl outline-none focus:ring-4 focus:ring-black/5"
+                                                        className="w-full h-14 bg-white border-2 border-black px-6 rounded-2xl text-sm font-bold text-slate-900 placeholder:text-gray-400 shadow-sm"
                                                         placeholder="Billing Name"
                                                     />
                                                     <input
                                                         type="text"
                                                         value={formData.billingCountry || ''}
                                                         onChange={e => setFormData({ ...formData, billingCountry: e.target.value })}
-                                                        className="w-full h-14 bg-white border-[3px] border-slate-900 px-6 rounded-2xl text-sm font-bold text-slate-900 placeholder:text-gray-400 shadow-xl outline-none focus:ring-4 focus:ring-black/5"
+                                                        className="w-full h-14 bg-white border-2 border-black px-6 rounded-2xl text-sm font-bold text-slate-900 placeholder:text-gray-400 shadow-sm"
                                                         placeholder="Country"
                                                     />
                                                     <textarea
                                                         rows="2"
                                                         value={formData.billingAddress}
                                                         onChange={e => setFormData({ ...formData, billingAddress: e.target.value })}
-                                                        className="md:col-span-2 w-full px-6 py-4 bg-white border-[3px] border-slate-900 rounded-2xl text-sm font-bold text-slate-900 placeholder:text-gray-400 resize-none shadow-xl outline-none focus:ring-4 focus:ring-black/5"
+                                                        className="md:col-span-2 w-full px-6 py-4 bg-white border-2 border-black rounded-2xl text-sm font-bold text-slate-900 placeholder:text-gray-400 resize-none shadow-sm"
                                                         placeholder="Full Billing Address"
                                                     ></textarea>
                                                 </div>
@@ -1211,7 +1202,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                                 <div className="pt-4 mt-2 border-t border-white/10 flex justify-between items-end">
                                                     <div>
-                                                        <p className="text-[10px] font-black text-white/70 uppercase tracking-widest mb-1">
+                                                        <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-1">
                                                             {formData.paymentType === 'partial' ? 'Pay Now (50%)' : 'Total Price'}
                                                         </p>
                                                         <p className="text-4xl font-black tracking-tighter text-white">
@@ -1267,7 +1258,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 value={couponInput}
                                                 onChange={e => setCouponInput(e.target.value.toUpperCase())}
                                                 placeholder="COUPON CODE"
-                                                className="flex-1 h-12 bg-white border-[3px] border-slate-900 px-4 rounded-xl text-xs font-black uppercase placeholder:normal-case shadow-xl outline-none"
+                                                className="flex-1 h-12 bg-slate-50 border border-slate-200 px-4 rounded-xl text-xs font-bold uppercase placeholder:normal-case"
                                             />
                                             <button
                                                 onClick={() => handleApplyCoupon()}
@@ -1330,6 +1321,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }

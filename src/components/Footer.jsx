@@ -7,10 +7,9 @@ import { Phone, Mail, MapPin, Instagram, Twitter, Facebook, ArrowUpRight } from 
 
 const Footer = () => {
     return (
-        <footer className="bg-[#050505] pt-32 pb-12 relative overflow-hidden text-white border-t border-white/5">
+        <footer className="bg-emerald-950 pt-32 pb-12 relative overflow-hidden text-white">
             {/* Background elements */}
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#FFDA00]/20 to-transparent"></div>
-            <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-full max-w-4xl h-48 bg-[#FFDA00]/5 blur-[120px] rounded-full"></div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
 
             <div className="container mx-auto px-6">
                 <div className="grid lg:grid-cols-4 gap-16 mb-24">
@@ -21,10 +20,10 @@ const Footer = () => {
                                 <Image src="/logo.png" alt="Logo" width={32} height={32} className="object-contain" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-3xl font-black tracking-tighter uppercase italic leading-none">
-                                    AIRPORT <span className="text-[#FFDA00] yellow-text-glow">TAXIS</span>
+                                <span className="text-2xl font-black tracking-tighter">
+                                    AIRPORT <span className="text-amber-400">TAXIS</span>
                                 </span>
-                                <span className="text-[10px] font-black text-[#FFDA00] uppercase tracking-[0.4em] mt-1">Pvt (Ltd)</span>
+                                <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest opacity-80">Pvt (Ltd)</span>
                             </div>
                         </div>
                         <p className="text-white/80 max-w-md leading-relaxed">
@@ -41,7 +40,7 @@ const Footer = () => {
                                 <a
                                     key={i}
                                     href="#"
-                                    className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-[#FFDA00] hover:text-black transition-all border border-white/5 hover:scale-110 active:scale-95 shadow-xl hover:shadow-[#FFDA00]/20"
+                                    className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center hover:bg-amber-400 hover:text-black transition-all border border-white/5"
                                     aria-label={`Visit our ${label} page`}
                                 >
                                     <Icon size={20} />
@@ -104,7 +103,7 @@ const Footer = () => {
             </div>
 
             {/* Bottom Glow */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-[#FFDA00]/5 rounded-full blur-[100px] pointer-events-none"></div>
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-emerald-900/10 rounded-full blur-[100px] pointer-events-none"></div>
         </footer>
     )
 }

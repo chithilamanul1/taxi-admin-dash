@@ -26,7 +26,7 @@ export default function DestinationManager() {
     const VEHICLE_ICONS = {
         "mini-car": { icon: Zap, color: "text-amber-500", bg: "bg-amber-500/10" },
         "sedan": { icon: Car, color: "text-blue-500", bg: "bg-blue-500/10" },
-        "mini-van-every": { icon: Shield, color: "text-amber-500", bg: "bg-amber-500/10" },
+        "mini-van-every": { icon: Shield, color: "text-emerald-500", bg: "bg-emerald-500/10" },
         "mini-van-05": { icon: ChevronRight, color: "text-purple-500", bg: "bg-purple-500/10" },
         "suv": { icon: Mountain, color: "text-red-500", bg: "bg-red-500/10" },
         "mini-bus": { icon: HelpCircle, color: "text-slate-500", bg: "bg-slate-500/10" },
@@ -144,7 +144,7 @@ export default function DestinationManager() {
                                     sortOrder: destinations.length + 1
                                 });
                             }}
-                            className="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-amber-500/20 active:scale-95"
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/20 active:scale-95"
                         >
                             <Plus size={16} /> <span className="whitespace-nowrap">Add Destination</span>
                         </button>
@@ -295,7 +295,7 @@ export default function DestinationManager() {
                                                         <div className="text-left">
                                                             <div className="text-[9px] md:text-[10px] font-black uppercase tracking-wider md:tracking-widest opacity-80 leading-none">{v.label}</div>
                                                             {hasOverride && (
-                                                                <div className={`text-[8px] md:text-[9px] font-bold mt-0.5 ${isActive ? 'text-blue-100' : 'text-amber-500'}`}>Modified</div>
+                                                                <div className={`text-[8px] md:text-[9px] font-bold mt-0.5 ${isActive ? 'text-blue-100' : 'text-emerald-500'}`}>Modified</div>
                                                             )}
                                                         </div>
                                                         {isActive && (
@@ -363,7 +363,7 @@ export default function DestinationManager() {
                                                     </div>
                                                     <div className="flex justify-between items-center mt-1">
                                                         <span className="text-sm font-black text-slate-900 dark:text-white">Active Rate</span>
-                                                        <span className="text-lg font-black text-slate-600">
+                                                        <span className="text-lg font-black text-emerald-600">
                                                             {form.vehicleRateOverrides?.[selectedVehicle] || form.perKmRateOverride || '--'}
                                                             <span className="text-[10px] ml-1 opacity-60">LKR/km</span>
                                                         </span>
@@ -392,7 +392,7 @@ export default function DestinationManager() {
                                                             }
                                                         });
                                                     }}
-                                                    className="px-3 py-1.5 bg-slate-600 text-white rounded-lg text-xs font-bold flex items-center gap-2"
+                                                    className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold flex items-center gap-2"
                                                 >
                                                     <Plus size={14} /> Add Tier
                                                 </button>
@@ -481,7 +481,7 @@ export default function DestinationManager() {
 
                                 <div className="flex gap-4 pt-4 border-t border-slate-100 dark:border-white/10">
                                     <button type="button" onClick={() => setEditing(null)} className="flex-1 py-4 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-slate-300 rounded-2xl font-bold transition-all">Cancel</button>
-                                    <button type="submit" className="flex-1 py-4 bg-slate-600 hover:bg-slate-700 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-amber-500/30 transition-all">
+                                    <button type="submit" className="flex-1 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/30 transition-all">
                                         <Check size={20} />
                                         Save Changes
                                     </button>

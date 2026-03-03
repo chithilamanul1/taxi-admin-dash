@@ -30,8 +30,8 @@ function PaymentSuccessContent() {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-                <Loader2 className="animate-spin text-slate-600" size={40} />
+            <div className="min-h-screen bg-emerald-50 flex items-center justify-center p-4">
+                <Loader2 className="animate-spin text-emerald-600" size={40} />
             </div>
         );
     }
@@ -39,38 +39,38 @@ function PaymentSuccessContent() {
     const isCash = booking?.paymentMethod === 'cash';
 
     return (
-        <div className="min-h-screen bg-[#121212] flex items-center justify-center pt-32 pb-12 px-4">
-            <div className="bg-[#1a1a1a] rounded-none shadow-2xl max-w-md w-full p-8 text-center animate-slide-up border-4 border-[#FFDA00]">
-                <div className="w-20 h-20 bg-[#22C55E]/10 rounded-none flex items-center justify-center mx-auto mb-6 border-2 border-[#22C55E]">
-                    <CheckCircle className="text-[#22C55E]" size={48} />
+        <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center pt-32 pb-12 px-4">
+            <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 text-center animate-slide-up">
+                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle className="text-green-500" size={48} />
                 </div>
 
-                <h1 className="text-2xl font-black text-white uppercase tracking-tight mb-2">
+                <h1 className="text-2xl font-bold text-gray-800 mb-2">
                     {isCash ? 'Booking Confirmed!' : 'Payment Successful!'}
                 </h1>
 
-                <p className="text-white/60 mb-6 font-bold text-sm leading-relaxed">
+                <p className="text-gray-600 mb-6 font-medium">
                     {isCash
                         ? 'Your taxi is scheduled. You can pay the total amount directly to the driver at the end of your trip.'
                         : 'Transaction was processed successfully. We\'ll send you a confirmation via WhatsApp shortly.'}
                 </p>
 
                 {isCash && (
-                    <div className="mb-6 p-4 bg-yellow-500/5 rounded-none border border-yellow-500/20 flex items-start gap-3 text-left">
-                        <Info className="text-yellow-500 shrink-0" size={20} />
+                    <div className="mb-6 p-4 bg-amber-50 rounded-xl border border-amber-200 flex items-start gap-3 text-left">
+                        <Info className="text-amber-600 shrink-0" size={20} />
                         <div>
-                            <p className="text-[10px] font-black text-yellow-500 uppercase tracking-widest mb-1">Cash Payment Required</p>
-                            <p className="text-[11px] text-white/60 leading-relaxed font-bold">Please ensure you have the cash ready for the driver. Our chauffeurs take local currency (LKR) or major currencies like USD/EUR.</p>
+                            <p className="text-xs font-bold text-amber-900 uppercase tracking-wider mb-1">Cash Payment Required</p>
+                            <p className="text-[11px] text-amber-800 leading-relaxed font-medium">Please ensure you have the cash ready for the driver. Our chauffeurs take local currency (LKR) or major currencies like USD/EUR.</p>
                         </div>
                     </div>
                 )}
 
                 {!isCash && (
-                    <div className="mb-6 p-4 bg-[#22C55E]/5 rounded-none border border-[#22C55E]/20 flex items-start gap-3 text-left">
-                        <Info className="text-[#22C55E] shrink-0" size={20} />
+                    <div className="mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200 flex items-start gap-3 text-left">
+                        <Info className="text-emerald-600 shrink-0" size={20} />
                         <div>
-                            <p className="text-[10px] font-black text-[#22C55E] uppercase tracking-widest mb-1">Important Notice</p>
-                            <p className="text-[11px] text-white/60 leading-relaxed font-bold">
+                            <p className="text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">Important Notice</p>
+                            <p className="text-[11px] text-emerald-800 leading-relaxed font-medium">
                                 Highway ticket is not included in this price. It means the customer must pay it at the counter.
                             </p>
                         </div>
@@ -78,33 +78,32 @@ function PaymentSuccessContent() {
                 )}
 
                 {!isCash && booking?.displayBalanceAmount > 0 && (
-                    <div className="mb-6 p-4 bg-red-500/5 rounded-none border border-red-500/20 flex items-start gap-3 text-left">
-                        <div className="w-10 h-10 bg-red-500/10 rounded-none flex items-center justify-center shrink-0 border border-red-500/20">
-                            <span className="text-red-500 font-black">!</span>
+                    <div className="mb-6 p-4 bg-red-50 rounded-xl border border-red-200 flex items-start gap-3 text-left animate-pulse-subtle">
+                        <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center shrink-0">
+                            <span className="text-red-600 font-black">!</span>
                         </div>
                         <div>
-                            <p className="text-[10px] font-black text-red-500 uppercase tracking-widest mb-1">Balance Due to Driver</p>
-                            <p className="text-2xl font-black text-white leading-none">
-                                <span className="text-red-500 mr-1">{booking.currency === 'GBP' ? '£' :
+                            <p className="text-xs font-bold text-red-900 uppercase tracking-wider mb-1">Balance Due to Driver</p>
+                            <p className="text-lg font-black text-red-600 leading-none">
+                                {booking.currency === 'GBP' ? '£' :
                                     booking.currency === 'USD' ? '$' :
                                         booking.currency === 'EUR' ? '€' :
-                                            booking.currency === 'INR' ? '₹' : 'Rs'}</span>
-                                {booking.displayBalanceAmount.toLocaleString()}
+                                            booking.currency === 'INR' ? '₹' : 'Rs'} {booking.displayBalanceAmount.toLocaleString()}
                             </p>
-                            <p className="text-[10px] text-white/40 mt-1 font-bold italic">Pay this to the driver at the end of your journey.</p>
+                            <p className="text-[10px] text-red-800/60 mt-1 font-medium italic">Please pay this amount to the driver at the end of your journey.</p>
                         </div>
                     </div>
                 )}
 
-                <div className="bg-black border border-white/5 rounded-none p-4 mb-6 grid grid-cols-2 gap-4 divide-x divide-white/5 text-center">
+                <div className="bg-gray-50 rounded-lg p-4 mb-6 grid grid-cols-2 gap-4 divide-x divide-gray-200 text-center">
                     <div className="px-2">
-                        <div className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">Booking Ref</div>
-                        <div className="text-base font-black text-[#FFDA00] break-all">#{bookingId?.slice(-8).toUpperCase()}</div>
+                        <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Booking Ref</div>
+                        <div className="text-base font-black text-emerald-900 break-all">#{bookingId?.slice(-8).toUpperCase()}</div>
                     </div>
                     {searchParams.get('txnId') && (
                         <div className="px-2">
-                            <div className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">Payment Ref</div>
-                            <div className="text-sm font-black text-white break-all leading-tight">#{searchParams.get('txnId')}</div>
+                            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Transaction Ref</div>
+                            <div className="text-sm font-black text-emerald-900 break-all leading-tight">#{searchParams.get('txnId')}</div>
                         </div>
                     )}
                 </div>
@@ -112,23 +111,23 @@ function PaymentSuccessContent() {
                 <div className="space-y-3">
                     <Link
                         href="/"
-                        className="flex items-center justify-center gap-2 w-full bg-[#22C55E] text-black py-4 rounded-none font-black text-sm uppercase tracking-widest hover:bg-white transition-all shadow-lg active:scale-[0.98]"
+                        className="flex items-center justify-center gap-2 w-full bg-emerald-900 text-white py-4 rounded-xl font-bold hover:bg-emerald-800 transition-all shadow-lg active:scale-[0.98]"
                     >
-                        <Home size={18} />
-                        Return to Home
+                        <Home size={20} />
+                        Back to Home
                     </Link>
 
                     <Link
                         href={`/booking/${bookingId}`}
-                        className="flex items-center justify-center gap-2 w-full border border-white/10 text-white py-4 rounded-none font-black text-sm uppercase tracking-widest hover:bg-white/5 transition-all"
+                        className="flex items-center justify-center gap-2 w-full border-2 border-emerald-900/10 text-emerald-900 py-4 rounded-xl font-bold hover:bg-emerald-50 transition-all"
                     >
-                        <FileText size={18} />
-                        Full Trip Receipt
+                        <FileText size={20} />
+                        View Booking Details
                     </Link>
                 </div>
 
-                <p className="text-[10px] text-white/20 mt-8 font-black uppercase tracking-widest">
-                    Support: +94 71 688 5880
+                <p className="text-xs text-gray-400 mt-8 font-medium">
+                    Questions? Contact us at +94 71 688 5880
                 </p>
             </div>
         </div>
@@ -137,8 +136,8 @@ function PaymentSuccessContent() {
 
 export default function PaymentSuccessPage() {
     return (
-        <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-            <Loader2 className="animate-spin text-slate-600" size={40} />
+        <Suspense fallback={<div className="min-h-screen bg-emerald-50 flex items-center justify-center p-4">
+            <Loader2 className="animate-spin text-emerald-600" size={40} />
         </div>}>
             <PaymentSuccessContent />
         </Suspense>

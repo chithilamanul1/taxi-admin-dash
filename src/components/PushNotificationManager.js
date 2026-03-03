@@ -83,7 +83,7 @@ const PushNotificationManager = () => {
                     onClick={isSubscribed ? () => { } : subscribeToPush}
                     disabled={isSubscribed || loading}
                     className={`px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition-all ${isSubscribed
-                            ? 'bg-slate-100 text-slate-700 cursor-default'
+                            ? 'bg-emerald-100 text-emerald-700 cursor-default'
                             : 'bg-slate-900 text-white hover:bg-slate-800'
                         }`}
                 >

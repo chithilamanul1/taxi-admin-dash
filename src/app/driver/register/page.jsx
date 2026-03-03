@@ -269,7 +269,7 @@ export default function DriverRegister() {
                         <button
                             onClick={handleSubmit}
                             disabled={loading}
-                            className="flex items-center gap-2 px-8 py-3 bg-amber-500 hover:bg-amber-400 text-white rounded-xl text-sm font-black uppercase tracking-wider transition-colors shadow-lg shadow-amber-500/20 disabled:opacity-50"
+                            className="flex items-center gap-2 px-8 py-3 bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl text-sm font-black uppercase tracking-wider transition-colors shadow-lg shadow-emerald-500/20 disabled:opacity-50"
                         >
                             {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} />}
                             Submit Application
@@ -313,19 +313,19 @@ const FileUpload = ({ label, id, onChange, file }) => {
         <div className="space-y-2">
             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{label}</p>
             <input type="file" id={id} className="hidden" onChange={onChange} accept="image/*,.pdf" />
-            <label htmlFor={id} className={`w-full h-32 border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden ${file ? 'border-amber-500/50 bg-amber-500/5' : 'border-slate-700 bg-slate-800 hover:border-slate-600 hover:bg-slate-700/50'}`}>
+            <label htmlFor={id} className={`w-full h-32 border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden ${file ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-slate-700 bg-slate-800 hover:border-slate-600 hover:bg-slate-700/50'}`}>
                 {preview ? (
                     <div className="relative w-full h-full">
                         <img src={preview} alt="Preview" className="w-full h-full object-cover opacity-60" />
-                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-amber-500/10">
-                            <Check className="text-amber-400 mb-1" size={24} />
-                            <span className="text-[10px] font-black text-amber-400 uppercase bg-slate-900/80 px-2 py-0.5 rounded">Change File</span>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-emerald-500/10">
+                            <Check className="text-emerald-400 mb-1" size={24} />
+                            <span className="text-[10px] font-black text-emerald-400 uppercase bg-slate-900/80 px-2 py-0.5 rounded">Change File</span>
                         </div>
                     </div>
                 ) : file ? (
                     <div className="text-center">
-                        <Check className="mx-auto text-amber-500 mb-2" size={24} />
-                        <span className="text-xs font-bold text-amber-400 block">{file.name.substring(0, 15)}...</span>
+                        <Check className="mx-auto text-emerald-500 mb-2" size={24} />
+                        <span className="text-xs font-bold text-emerald-400 block">{file.name.substring(0, 15)}...</span>
                         <span className="text-[10px] text-slate-500 uppercase mt-1 block">Click to change</span>
                     </div>
                 ) : (

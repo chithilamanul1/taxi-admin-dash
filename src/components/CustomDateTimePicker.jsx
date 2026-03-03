@@ -98,7 +98,7 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
     const timeDisplay = formatTimeDisplay();
 
     return (
-        <div className="bg-[#1A1A1A] rounded-[2.5rem] p-6 border-[3px] border-slate-900 text-white w-full max-w-[320px] mx-auto shadow-2xl relative overflow-hidden">
+        <div className="bg-[#212121] rounded-3xl p-6 border border-white/10 text-white w-full max-w-[320px] mx-auto shadow-2xl">
             {/* Header / Display */}
             <div className="flex justify-between items-start mb-6">
                 <div>

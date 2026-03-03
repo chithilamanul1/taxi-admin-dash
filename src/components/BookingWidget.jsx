@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X } from 'lucide-react'
+import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X } from 'lucide-react'
 
 import Image from 'next/image'
 import ToursWidget from './ToursWidget'
@@ -528,54 +528,59 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         aria-controls={`panel-${tab.id}`}
                         id={`tab-${tab.id}`}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-black transition-all min-w-[120px] shadow-sm transform active:scale-95 ${activeTab === tab.id
-                            ? 'bg-[#FFDA00] text-black border-b-4 border-amber-600 -translate-y-1 shadow-amber-600/20'
-                            : 'text-slate-600 dark:text-slate-400 bg-white dark:bg-slate-800 border-b-4 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
-                            }`}
+                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all min-w-[120px] ${activeTab === tab.id ? 'bg-black text-white shadow-md border-b-2 border-black ring-1 ring-black' : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 border border-slate-200'}`}
                     >
-                        <tab.icon size={16} strokeWidth={3} />
+                        <tab.icon size={16} />
                         {tab.label}
                     </button>
                 ))}
             </div>
 
             {/* Widget Main Content */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 lg:p-8 shadow-2xl border-2 border-black dark:border-slate-700 animate-slide-up relative z-10">
+            <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-5 lg:p-8 shadow-2xl border-2 border-black dark:border-slate-700 animate-slide-up relative z-10">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
                         {/* Section 1: Inputs */}
                         <div className="space-y-6 min-w-0">
-                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 w-full sm:w-auto gap-1">
-                                    <button onClick={() => setTripType('one-way')} className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${tripType === 'one-way' ? 'bg-black text-white shadow-md' : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-white/50'}`}>One Way</button>
+                                    <button onClick={() => setTripType('one-way')} aria-label="One Way Trip" className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-bold transition-all ${tripType === 'one-way' ? 'bg-black text-white shadow-md' : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-white/50'}`}>One Way</button>
                                     <button
-                                        onClick={() => setTripType('round-trip')}
-                                        className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${tripType === 'round-trip' ? 'bg-black text-white shadow-md' : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-white/50'}`}
+                                        onClick={() => (activeTab !== 'pickup' && activeTab !== 'drop') && setTripType('round-trip')}
+                                        disabled={activeTab === 'pickup' || activeTab === 'drop'}
+                                        aria-label="Round Trip"
+                                        className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-bold transition-all relative
+                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-black text-white shadow-md' : 'text-emerald-700 hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-white hover:bg-emerald-200/50 dark:hover:bg-emerald-800/30'}
+                                            ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-40 cursor-not-allowed' : ''}
+                                        `}
                                     >
                                         Round Trip
+                                        {(activeTab === 'pickup' || activeTab === 'drop') && (
+                                            <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center text-[7px] text-white shadow-sm">🔒</span>
+                                        )}
                                     </button>
                                 </div>
 
-                                <div className="flex items-center gap-3 w-full sm:w-auto">
+                                <div className="flex items-center gap-2 w-full sm:w-auto">
                                     {/* Currency Selector */}
                                     <div className="relative group z-[110]">
-                                        <button className="flex items-center gap-2 bg-slate-900 dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-xs font-black text-white transition-all shadow-md focus:outline-none hover:bg-black">
-                                            <div className="w-5 h-5 rounded-full overflow-hidden border border-slate-700">
+                                        <button className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-900 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-black text-slate-700 dark:text-slate-300 hover:border-black transition-all shadow-sm">
+                                            <div className="w-5 h-5 rounded-full overflow-hidden border border-white/20">
                                                 <img src={SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag} alt={currency} className="w-full h-full object-cover scale-150" />
                                             </div>
-                                            <span className="uppercase tracking-widest leading-none">{currency}</span>
+                                            <span className="opacity-80 uppercase">{currency}</span>
                                             <ChevronDown size={14} className="opacity-50" />
                                         </button>
-                                        <div className="absolute top-full left-0 mt-2 w-40 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden hidden group-hover:block animate-in fade-in duration-200">
+                                        <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
                                             <div className="py-2">
                                                 {SUPPORTED_CURRENCIES.map(c => (
                                                     <button
                                                         key={c.code}
                                                         onClick={() => changeCurrency(c.code)}
-                                                        className={`w-full text-left px-5 py-3 text-xs font-bold flex items-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors ${currency === c.code ? 'text-black bg-slate-50 dark:bg-slate-700 border-l-2 border-[#FFDA00]' : 'text-slate-600 dark:text-slate-400'}`}
+                                                        className={`w-full text-left px-5 py-3 text-xs font-bold flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors ${currency === c.code ? 'text-black bg-slate-100 dark:bg-slate-700 border-l-2 border-black' : 'text-slate-600 dark:text-slate-400'}`}
                                                     >
-                                                        <div className="w-4 h-4 rounded-full overflow-hidden border border-slate-200">
+                                                        <div className="w-4 h-4 rounded-full overflow-hidden border border-white/20">
                                                             <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
                                                         </div>
                                                         <span>{c.code}</span>
@@ -585,48 +590,50 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                     </div>
 
-                                    {(activeTab === 'drop' || activeTab === 'ride') && (
-                                        <button onClick={handleGetCurrentLocation} aria-label="Detect my current location" className="flex-1 text-black text-[10px] font-black uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 bg-[#FFDA00] px-6 py-3.5 rounded-xl justify-center whitespace-nowrap shadow-md border-none">
-                                            {isLocating ? <Loader2 size={16} className="animate-spin text-black" /> : <MapPin size={16} className="text-black hidden sm:block" />}
-                                            <span>Where Am I?</span>
-                                        </button>
-                                    )}
+                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-white text-xs font-black hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-black px-6 py-3 rounded-xl border border-black justify-center whitespace-nowrap shadow-sm hover:shadow-md">
+                                        {isLocating ? <Loader2 size={16} className="animate-spin text-white" /> : <Zap size={16} className="fill-white text-white" />}
+                                        <span className="hidden sm:inline">Auto Detect</span>
+                                        <span className="sm:hidden">GPS</span>
+                                    </button>
                                 </div>
                             </div>
 
-                            <div className="space-y-4 md:space-y-3 bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl">
+                            <div className="space-y-4 md:space-y-3">
                                 {/* Pickup Input */}
-                                <div className="relative">
-                                    <LocationInput
-                                        placeholder="Pick-up Location"
-                                        value={pickupSearch}
-                                        icon={MapPin}
-                                        disabled={activeTab === 'pickup'}
-                                        onChange={(val) => setPickupSearch(val)}
-                                        zIndex={100}
-                                        onSelect={(loc) => {
-                                            setPickup({ name: loc.address, lat: loc.lat, lon: loc.lon });
-                                            setPickupSearch(loc.address);
-                                        }}
-                                    />
-                                </div>
+                                <LocationInput
+                                    placeholder="Pick-up Location"
+                                    value={pickupSearch}
+                                    icon={MapPin}
+                                    disabled={activeTab === 'pickup'}
+                                    onChange={(val) => setPickupSearch(val)}
+                                    zIndex={100}
+                                    onSelect={(loc) => {
+                                        setPickup({ name: loc.address, lat: loc.lat, lon: loc.lon });
+                                        setPickupSearch(loc.address);
+                                    }}
+                                />
+
 
                                 {/* Waypoints List */}
                                 {waypoints.map((wp, idx) => (
-                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-slate-900 rounded-2xl border-none shadow-sm p-1 flex items-center overflow-hidden">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none z-10">
+                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-emerald-900/20 rounded-2xl border border-slate-900 dark:border-emerald-800/50 p-1 flex items-center overflow-hidden">
+                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-900/40 dark:text-emerald-400/40 pointer-events-none z-10">
                                             <Navigation size={18} />
                                         </div>
                                         <input
                                             type="text"
                                             readOnly
                                             value={wp.name}
-                                            className="flex-1 min-w-0 pl-12 pr-4 h-12 bg-transparent border-none text-sm font-bold text-slate-800 dark:text-white outline-none truncate"
+                                            className="flex-1 min-w-0 pl-12 pr-4 h-12 bg-transparent border-none text-sm font-bold text-slate-900 dark:text-white outline-none truncate"
                                         />
+
+                                        <div className="flex flex-col items-center border-l border-slate-900/10 dark:border-white/10 px-2 min-w-[70px] sm:min-w-[100px] justify-center">
+                                            {/* Waiting Hour Removed */}
+                                        </div>
 
                                         <button
                                             onClick={() => setWaypoints(prev => prev.filter((_, i) => i !== idx))}
-                                            className="ml-2 mr-2 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                            className="ml-2 mr-2 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                                             aria-label="Remove stop"
                                         >
                                             <X size={16} />
@@ -635,6 +642,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 ))}
 
 
+                                {/* Add Waypoint Search */}
                                 {true && (
                                     <>
                                         {/* "Add Stop" Button - Aligned with icons */}
@@ -643,7 +651,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 <button
                                                     onClick={() => setWaypointSearches([{ active: true }])}
                                                     aria-label="Add Stop"
-                                                    className="text-slate-500 hover:text-black dark:text-slate-400 dark:hover:text-white text-xs font-bold flex items-center gap-1 transition-colors"
+                                                    className="text-emerald-700 dark:text-emerald-400 text-xs font-bold flex items-center gap-1 hover:bg-emerald-50 dark:hover:bg-white/5 py-1.5 px-3 rounded-lg transition-colors"
                                                 >
                                                     <Plus size={14} /> Add Stop
                                                 </button>
@@ -678,7 +686,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="relative h-0 z-30 flex justify-end pr-6 pointer-events-none">
                                     <button
                                         onClick={swapLocations}
-                                        className="w-8 h-8 -translate-y-1/2 pointer-events-auto bg-white dark:bg-slate-700 border border-slate-200 dark:border-white/10 rounded-full flex items-center justify-center hover:scale-110 active:rotate-180 transition-all text-slate-800 dark:text-white shadow-sm"
+                                        className="w-8 h-8 -translate-y-1/2 pointer-events-auto bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-white/10 rounded-full flex items-center justify-center hover:scale-110 active:rotate-180 transition-all text-emerald-900 dark:text-white shadow-sm"
                                         aria-label="Swap pickup and dropoff locations"
                                     >
                                         <ArrowRightLeft size={14} />
@@ -686,20 +694,18 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 </div>
 
                                 {/* Dropoff Input */}
-                                <div className="relative">
-                                    <LocationInput
-                                        placeholder="Drop-off Location"
-                                        value={dropoffSearch}
-                                        icon={MapPin}
-                                        zIndex={100}
-                                        disabled={activeTab === 'drop'}
-                                        onChange={(val) => setDropoffSearch(val)}
-                                        onSelect={(loc) => {
-                                            setDropoff({ name: loc.address, lat: loc.lat, lon: loc.lon });
-                                            setDropoffSearch(loc.address);
-                                        }}
-                                    />
-                                </div>
+                                <LocationInput
+                                    placeholder="Drop-off Location"
+                                    value={dropoffSearch}
+                                    icon={MapPin}
+                                    zIndex={100}
+                                    disabled={activeTab === 'drop'}
+                                    onChange={(val) => setDropoffSearch(val)}
+                                    onSelect={(loc) => {
+                                        setDropoff({ name: loc.address, lat: loc.lat, lon: loc.lon });
+                                        setDropoffSearch(loc.address);
+                                    }}
+                                />
                             </div>
 
                             {/* Extra Options Grid - Stack on LG, Grid on XL */}
@@ -813,7 +819,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 {filteredCoupons.length > 0 && isCouponOpen && (
                                     <div className="lg:col-span-2 space-y-3 animate-fade-in">
                                         <div className="flex items-center gap-2 px-1">
-                                            <ShoppingBag size={14} className="text-slate-500" />
+                                            <Tag size={12} className="text-emerald-600" />
                                             <span className="text-[10px] font-bold text-emerald-900/50 uppercase tracking-widest">Available Offers</span>
                                         </div>
                                         <div className="flex overflow-x-auto pb-4 gap-4 no-scrollbar snap-x touch-pan-x">
@@ -878,30 +884,30 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             </div>
 
                             {/* Counters Grid */}
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                                 {[
                                     { id: 'adults', label: 'Adults' },
                                     { id: 'children', label: 'Children' },
                                     { id: 'luggage', label: 'Luggage' },
                                     { id: 'handLuggage', label: 'Hand Luggage' }
                                 ].map(c => (
-                                    <div key={c.id} className="bg-white border-2 border-slate-900 border-b-[5px] p-2 rounded-2xl flex flex-col items-center justify-center transition-all shadow-xl hover:translate-y-[-2px] active:translate-y-[1px]">
-                                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{c.label}</span>
-                                        <div className="flex items-center gap-2">
+                                    <div key={c.id} className="bg-white border border-slate-200 p-3 rounded-2xl flex flex-col items-center justify-center transition-colors shadow-sm">
+                                        <span className="text-[9px] font-black text-black uppercase tracking-widest mb-2 opacity-80">{c.label}</span>
+                                        <div className="flex items-center gap-3">
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, (Number(p[c.id]) || 0) - 1) }))}
-                                                className="w-7 h-7 rounded-lg bg-slate-50 border-2 border-slate-900 flex items-center justify-center hover:bg-slate-200 active:scale-90 transition-all text-black shadow-sm"
+                                                className="w-8 h-8 rounded-xl bg-white border border-black/10 flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-black shadow-sm"
                                                 aria-label={`Decrease ${c.label}`}
                                             >
-                                                <Minus size={10} strokeWidth={4} />
+                                                <Minus size={12} strokeWidth={3} />
                                             </button>
-                                            <span className="font-black text-sm text-black min-w-[12px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
+                                            <span className="font-black text-lg text-black min-w-[12px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))}
-                                                className="w-7 h-7 rounded-lg bg-black text-white border-b-2 border-black flex items-center justify-center hover:bg-slate-800 active:scale-90 transition-all shadow-sm"
+                                                className="w-8 h-8 rounded-xl bg-black border border-black/10 flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-white shadow-sm"
                                                 aria-label={`Increase ${c.label}`}
                                             >
-                                                <Plus size={10} strokeWidth={4} />
+                                                <Plus size={12} strokeWidth={3} />
                                             </button>
                                         </div>
                                     </div>
@@ -943,18 +949,18 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="w-10 h-10 rounded-xl bg-[#FFDA00] text-black hover:bg-black hover:text-white transition-all flex items-center justify-center shadow-lg group-hover:scale-110">
-                                        <ChevronDown size={20} className="group-hover:translate-y-0.5 transition-transform" />
+                                    <div className="w-8 h-8 rounded-full bg-slate-100 text-black hover:bg-slate-200 transition-colors flex items-center justify-center">
+                                        <ChevronDown size={16} />
                                     </div>
                                 </button>
                             </div>
                         </div>
 
                         {/* Section 2: Summary & Checkout */}
-                        <div className="bg-white border-2 border-slate-200 rounded-2xl p-6 shadow-xl flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-6 lg:gap-0">
+                        <div className="bg-white border-2 border-slate-200 rounded-3xl p-6 shadow-xl flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-8 lg:gap-0">
                             <div className="space-y-6 flex-1 flex flex-col">
                                 <div className="flex justify-between items-center">
-                                    <h2 className="text-xl font-bold text-slate-900 tracking-tight">Trip Summary</h2>
+                                    <h2 className="text-xl font-bold text-emerald-900 tracking-tight">Trip Summary</h2>
 
                                     {/* Currency Dropdown */}
                                     <div className="relative group">
@@ -985,7 +991,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 </div>
 
                                 {/* Map Container - Fixed Height Mobile, Flex Desktop */}
-                                <div className="aspect-square sm:aspect-video lg:flex-1 w-full rounded-xl overflow-hidden shadow-inner relative isolate border-2 border-black/10 flex-shrink-0 lg:flex-shrink">
+                                <div className="h-64 lg:flex-1 w-full rounded-2xl overflow-hidden shadow-inner relative isolate min-h-[300px] lg:min-h-[300px] border border-black/10 flex-shrink-0 lg:flex-shrink">
                                     <TripMap pickup={pickup} dropoff={dropoff} waypoints={waypoints} onRouteCalculated={handleRouteCalculated} />
                                 </div>
 
@@ -996,13 +1002,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                     <div className="flex justify-between items-center text-sm">
                                         <span className="text-black font-bold">Vehicle Type</span>
-                                        <span className="font-bold text-slate-900 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
+                                        <span className="font-bold text-black bg-white/40 px-3 py-1 rounded-lg">
                                             {vehiclePricing[vehicle]?.name || 'Select Vehicle'}
                                         </span>
                                     </div>
 
                                     {/* Detailed Price Breakdown */}
-                                    <div className="pt-4 border-t border-slate-200 space-y-3">
+                                    <div className="pt-4 border-t border-black/5 space-y-3">
                                         <div className="flex justify-between items-center text-xs">
                                             <span className="text-black/60 font-bold uppercase tracking-tight">Trip Subtotal</span>
                                             <span className="text-black font-extrabold">{convertPrice(total - (calculateSurcharges({ hasNameBoard }, vehiclePricing[vehicle]) || 0)).symbol} {convertPrice(total - (calculateSurcharges({ hasNameBoard }, vehiclePricing[vehicle]) || 0)).value.toLocaleString()}</span>
@@ -1032,20 +1038,20 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 </div>
                             </div>
 
-                            <div className="pt-6 border-t border-slate-200 dark:border-white/10 flex-shrink-0">
+                            <div className="pt-6 border-t border-emerald-900/10 dark:border-white/10 flex-shrink-0">
                                 <div className="flex justify-between items-end mb-8">
                                     <div className="flex flex-col">
                                         <div className="flex items-center gap-2 mb-1">
                                             <Zap size={14} className="text-amber-600 fill-amber-500" />
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Final Payable</span>
+                                            <span className="text-[10px] font-black text-emerald-900/50 uppercase tracking-[0.2em]">Final Payable</span>
                                         </div>
-                                        <span className="text-4xl font-black text-slate-900">
+                                        <span className="text-4xl font-black text-emerald-900">
                                             {distance && finalTotal > 0 ? (
                                                 <>
                                                     {convertPrice(finalTotal).symbol} {convertPrice(finalTotal).value.toLocaleString()}
                                                 </>
                                             ) : (
-                                                <span className="text-slate-300">---</span>
+                                                <span className="text-emerald-900/20">---</span>
                                             )}
                                         </span>
                                         {/* Secondary Currency Display */}
@@ -1066,7 +1072,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <button
                                     onClick={handleBook}
                                     disabled={!distance}
-                                    className="w-full py-5 bg-black text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-slate-900 active:scale-[0.98] transition-all shadow-xl disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3 group"
+                                    className="w-full py-5 bg-black dark:bg-emerald-600 text-white rounded-[2rem] font-bold text-lg hover:bg-slate-900 dark:hover:bg-emerald-500 active:scale-[0.98] transition-all shadow-xl disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3 group"
                                 >
                                     <ShieldCheck size={18} className="opacity-60" />
                                     Secure Booking
@@ -1076,42 +1082,42 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         </div>
                     </div>
                 )}
-
-                {/* Booking Modal */}
-                <BookingModal
-                    isOpen={showModal}
-                    onClose={() => setShowModal(false)}
-                    initialData={bookingInitialData}
-                    pricingCategory={pricingCategory}
-                />
-
-                {/* Smart Offer Nudge */}
-                <SmartOfferNudge
-                    offer={appliedOffers.find(o => !dismissedOfferIds.includes(o._id)) || null}
-                    onClose={() => {
-                        const visibleOffer = appliedOffers.find(o => !dismissedOfferIds.includes(o._id));
-                        if (visibleOffer) {
-                            setDismissedOfferIds(prev => [...prev, visibleOffer._id]);
-                        }
-                    }}
-                />
-
-                {/* Vehicle Selection Drawer */}
-                <VehicleSelectionDrawer
-                    isOpen={isVehicleDrawerOpen}
-                    onClose={() => setIsVehicleDrawerOpen(false)}
-                    vehicles={Object.values(vehiclePricing)}
-                    selectedId={vehicle}
-                    onSelect={(vType) => {
-                        setVehicle(vType);
-                        setIsManualVehicle(true);
-                    }}
-                    passengerCount={passengerCount}
-                    isLoading={isLoadingPricing}
-                />
             </div>
+
+            {/* Booking Modal */}
+            <BookingModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                initialData={bookingInitialData}
+                pricingCategory={pricingCategory}
+            />
+
+            {/* Smart Offer Nudge - Show first non-dismissed offer */}
+            <SmartOfferNudge
+                offer={appliedOffers.find(o => !dismissedOfferIds.includes(o._id)) || null}
+                onClose={() => {
+                    const visibleOffer = appliedOffers.find(o => !dismissedOfferIds.includes(o._id));
+                    if (visibleOffer) {
+                        setDismissedOfferIds(prev => [...prev, visibleOffer._id]);
+                    }
+                }}
+            />
+
+            {/* Vehicle Selection Drawer */}
+            <VehicleSelectionDrawer
+                isOpen={isVehicleDrawerOpen}
+                onClose={() => setIsVehicleDrawerOpen(false)}
+                vehicles={Object.values(vehiclePricing)}
+                selectedId={vehicle}
+                onSelect={(vType) => {
+                    setVehicle(vType);
+                    setIsManualVehicle(true);
+                }}
+                passengerCount={passengerCount}
+                isLoading={isLoadingPricing}
+            />
         </div>
     );
-};
+}
 
-export default BookingWidget;
+export default BookingWidget

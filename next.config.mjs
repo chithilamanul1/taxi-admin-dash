@@ -13,18 +13,6 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'images.pexels.com',
-                port: '',
-                pathname: '/**',
-            },
-            {
-                protocol: 'https',
-                hostname: 'www.pexels.com',
-                port: '',
-                pathname: '/**',
-            },
-            {
-                protocol: 'https',
                 hostname: 'lh3.googleusercontent.com',
                 port: '',
                 pathname: '/**',

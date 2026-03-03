@@ -1,3 +1,4 @@
+import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import Prices from '../../components/views/Prices'
 
@@ -27,6 +28,7 @@ export const metadata = {
 export default function PricesPage() {
     return (
         <main className="bg-slate-50 dark:bg-slate-950 min-h-screen">
+            <Navbar />
             <div className="pt-10 pb-20">
                 <Prices />
             </div>

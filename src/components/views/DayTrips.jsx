@@ -61,8 +61,8 @@ const DayTrips = () => {
     return (
         <div className="pb-20">
             {/* Header */}
-            <div className="bg-slate-900 py-16 md:py-24 text-center px-4">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Day <span className="text-slate-600">Trips</span></h1>
+            <div className="bg-emerald-900 py-16 md:py-24 text-center px-4">
+                <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Day <span className="text-emerald-600">Trips</span></h1>
                 <p className="text-white/60 max-w-2xl mx-auto">Short on time? Experience the best of Sri Lanka in just one day.</p>
             </div>
 
@@ -80,7 +80,7 @@ const DayTrips = () => {
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
                                 {trip.tags.map((tag, i) => (
-                                    <div key={i} className={`absolute top-3 ${i === 0 ? 'left-3' : 'right-3'} bg-slate-900/90 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm`}>
+                                    <div key={i} className={`absolute top-3 ${i === 0 ? 'left-3' : 'right-3'} bg-emerald-900/90 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm`}>
                                         {tag}
                                     </div>
                                 ))}
@@ -89,7 +89,7 @@ const DayTrips = () => {
                             {/* Content */}
                             <div className="p-6 flex flex-col flex-1">
                                 <div className="flex items-start justify-between mb-2">
-                                    <div className="flex items-center gap-2 text-slate-600 text-xs font-bold uppercase tracking-wider">
+                                    <div className="flex items-center gap-2 text-emerald-600 text-xs font-bold uppercase tracking-wider">
                                         <Clock size={14} />
                                         <span>{trip.duration}</span>
                                     </div>
@@ -99,14 +99,14 @@ const DayTrips = () => {
                                     </div>
                                 </div>
 
-                                <h3 itemProp="name" className="text-xl font-bold text-slate-900 mb-2 line-clamp-2" title={trip.title}>{trip.title}</h3>
+                                <h3 itemProp="name" className="text-xl font-bold text-emerald-900 mb-2 line-clamp-2" title={trip.title}>{trip.title}</h3>
 
                                 <div className="mt-auto pt-6 border-t border-gray-100 flex items-end justify-between">
                                     <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
                                         {trip.originalPrice && (
                                             <span className="text-xs text-gray-400 line-through block mb-1">${trip.originalPrice}</span>
                                         )}
-                                        <div className="text-3xl font-extrabold text-slate-600 leading-none">
+                                        <div className="text-3xl font-extrabold text-emerald-600 leading-none">
                                             <meta itemProp="priceCurrency" content="USD" />
                                             <span itemProp="price" content={trip.price}>
                                                 ${trip.price}
@@ -120,7 +120,7 @@ const DayTrips = () => {
                                             const msg = `Inquiry about Day Trip: ${trip.title} (${trip.duration})`
                                             window.open(`https://wa.me/94716885880?text=${msg}`, '_blank')
                                         }}
-                                        className="bg-slate-900 text-white p-3 rounded-xl hover:bg-slate-600 hover:text-slate-900 transition-all shadow-lg hover:checkbox-md"
+                                        className="bg-emerald-900 text-white p-3 rounded-xl hover:bg-emerald-600 hover:text-emerald-900 transition-all shadow-lg hover:checkbox-md"
                                     >
                                         <ArrowRight size={24} />
                                     </button>
@@ -133,7 +133,7 @@ const DayTrips = () => {
 
             <div className="text-center mt-16">
                 <p className="text-gray-500 mb-6">Need a custom itinerary? We can tailor a trip just for you.</p>
-                <Link href="/contact" className="inline-block bg-slate-600 text-slate-900 font-bold px-8 py-3 rounded-xl hover:scale-105 transition-transform">
+                <Link href="/contact" className="inline-block bg-emerald-600 text-emerald-900 font-bold px-8 py-3 rounded-xl hover:scale-105 transition-transform">
                     Contact Us for Custom Tours
                 </Link>
             </div>

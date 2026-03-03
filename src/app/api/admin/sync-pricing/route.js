@@ -3,89 +3,170 @@ import dbConnect from '@/lib/db';
 import Pricing from '@/models/Pricing';
 import { isAdmin } from '@/lib/admin-check';
 
-const DEFAULT_RATES = {
-    'mini-car': [
-        { min: 0, max: 20, type: 'flat', price: 3500 },
-        { min: 20, max: 40, type: 'flat', price: 4000 },
-        { min: 40, max: 130, type: 'per_km', rate: 100 },
-        { min: 130, max: 9999, type: 'per_km', rate: 102 }
-    ],
-    'sedan': [
-        { min: 0, max: 20, type: 'flat', price: 4500 },
-        { min: 20, max: 40, type: 'flat', price: 6000 },
-        { min: 40, max: 50, type: 'per_km', rate: 150 },
-        { min: 50, max: 100, type: 'per_km', rate: 130 },
-        { min: 100, max: 140, type: 'per_km', rate: 130 },
-        { min: 140, max: 200, type: 'per_km', rate: 127 },
-        { min: 200, max: 9999, type: 'per_km', rate: 122 }
-    ],
-    'mini-van-every': [
-        { min: 0, max: 20, type: 'flat', price: 4500 },
-        { min: 20, max: 40, type: 'flat', price: 6000 },
-        { min: 40, max: 50, type: 'per_km', rate: 150 },
-        { min: 50, max: 100, type: 'per_km', rate: 130 },
-        { min: 100, max: 140, type: 'per_km', rate: 129 },
-        { min: 140, max: 200, type: 'per_km', rate: 127 },
-        { min: 200, max: 9999, type: 'per_km', rate: 122 }
-    ],
-    'mini-van-05': [
-        { min: 0, max: 20, type: 'flat', price: 6000 },
-        { min: 20, max: 40, type: 'flat', price: 8500 },
-        { min: 40, max: 100, type: 'per_km', rate: 200 },
-        { min: 100, max: 140, type: 'per_km', rate: 176 },
-        { min: 140, max: 200, type: 'per_km', rate: 143 },
-        { min: 200, max: 9999, type: 'per_km', rate: 132 }
-    ],
-    'kdh-van': [
-        { min: 0, max: 20, type: 'flat', price: 6000 },
-        { min: 20, max: 40, type: 'flat', price: 8500 },
-        { min: 40, max: 100, type: 'per_km', rate: 200 },
-        { min: 100, max: 140, type: 'per_km', rate: 180 },
-        { min: 140, max: 200, type: 'per_km', rate: 145 },
-        { min: 200, max: 9999, type: 'per_km', rate: 135 }
-    ],
-    'mini-bus': [
-        { min: 0, max: 20, type: 'flat', price: 7500 },
-        { min: 20, max: 40, type: 'flat', price: 12000 },
-        { min: 40, max: 100, type: 'per_km', rate: 220 },
-        { min: 100, max: 140, type: 'per_km', rate: 220 },
-        { min: 140, max: 200, type: 'per_km', rate: 175 },
-        { min: 200, max: 9999, type: 'per_km', rate: 155 }
-    ],
-    'suv': [
-        { min: 0, max: 20, type: 'flat', price: 6500 },
-        { min: 20, max: 40, type: 'flat', price: 9500 },
-        { min: 40, max: 100, type: 'per_km', rate: 150 },
-        { min: 100, max: 140, type: 'per_km', rate: 145 },
-        { min: 140, max: 200, type: 'per_km', rate: 140 },
-        { min: 200, max: 9999, type: 'per_km', rate: 135 }
-    ],
-    'vezel': [
-        { min: 0, max: 20, type: 'flat', price: 6500 },
-        { min: 20, max: 40, type: 'flat', price: 9500 },
-        { min: 40, max: 100, type: 'per_km', rate: 150 },
-        { min: 100, max: 140, type: 'per_km', rate: 145 },
-        { min: 140, max: 200, type: 'per_km', rate: 140 },
-        { min: 200, max: 9999, type: 'per_km', rate: 135 }
-    ],
-    'bus': [
-        { min: 0, max: 20, type: 'flat', price: 20000 },
-        { min: 20, max: 40, type: 'flat', price: 30000 },
-        { min: 40, max: 100, type: 'flat', price: 50000 },
-        { min: 100, max: 150, type: 'flat', price: 70000 },
-        { min: 150, max: 200, type: 'flat', price: 85000 },
-        { min: 200, max: 300, type: 'flat', price: 120000 },
-        { min: 300, max: 9999, type: 'per_km', rate: 400 }
-    ],
-    'coach-bus': [
-        { min: 0, max: 20, type: 'flat', price: 25000 },
-        { min: 20, max: 40, type: 'flat', price: 45000 },
-        { min: 40, max: 100, type: 'flat', price: 60000 },
-        { min: 100, max: 150, type: 'flat', price: 85000 },
-        { min: 150, max: 200, type: 'flat', price: 95000 },
-        { min: 200, max: 300, type: 'flat', price: 135000 },
-        { min: 300, max: 9999, type: 'per_km', rate: 450 }
-    ]
+// Complete vehicle defaults including metadata AND tiers
+const VEHICLE_DEFAULTS = {
+    'mini-car': {
+        name: 'Mini Car',
+        image: '/vehicles/minicar.png',
+        capacity: 2,
+        luggage: 2,
+        handLuggage: 2,
+        features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 3500 },
+            { min: 20, max: 40, type: 'flat', price: 4000 },
+            { min: 40, max: 130, type: 'per_km', rate: 100 },
+            { min: 130, max: 9999, type: 'per_km', rate: 102 }
+        ]
+    },
+    'sedan': {
+        name: 'Sedan',
+        image: '/vehicles/sedancar.png',
+        capacity: 3,
+        luggage: 3,
+        handLuggage: 3,
+        features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 4500 },
+            { min: 20, max: 40, type: 'flat', price: 6000 },
+            { min: 40, max: 50, type: 'per_km', rate: 150 },
+            { min: 50, max: 100, type: 'per_km', rate: 130 },
+            { min: 100, max: 140, type: 'per_km', rate: 120 },
+            { min: 140, max: 200, type: 'per_km', rate: 115 },
+            { min: 200, max: 9999, type: 'per_km', rate: 110 }
+        ]
+    },
+    'mini-van-every': {
+        name: 'Mini Van (Every)',
+        image: '/vehicles/susukievery.png',
+        capacity: 3,
+        luggage: 3,
+        handLuggage: 3,
+        features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 4500 },
+            { min: 20, max: 40, type: 'flat', price: 6000 },
+            { min: 40, max: 50, type: 'per_km', rate: 150 },
+            { min: 50, max: 100, type: 'per_km', rate: 130 },
+            { min: 100, max: 140, type: 'per_km', rate: 120 },
+            { min: 140, max: 200, type: 'per_km', rate: 115 },
+            { min: 200, max: 9999, type: 'per_km', rate: 110 }
+        ]
+    },
+    'mini-van-05': {
+        name: 'Mini Van (4 Seat)',
+        image: '/vehicles/minivan5seat.png',
+        capacity: 4,
+        luggage: 4,
+        handLuggage: 4,
+        features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 20, max: 40, type: 'flat', price: 8500 },
+            { min: 40, max: 100, type: 'per_km', rate: 200 },
+            { min: 100, max: 140, type: 'per_km', rate: 160 },
+            { min: 140, max: 200, type: 'per_km', rate: 130 },
+            { min: 200, max: 9999, type: 'per_km', rate: 120 }
+        ]
+    },
+    'suv': {
+        name: 'SUV / Vezel',
+        image: '/vehicles/Hondavezel.png',
+        capacity: 3,
+        luggage: 3,
+        handLuggage: 3,
+        features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6500 },
+            { min: 20, max: 40, type: 'flat', price: 9500 },
+            { min: 40, max: 100, type: 'per_km', rate: 150 },
+            { min: 100, max: 140, type: 'per_km', rate: 145 },
+            { min: 140, max: 200, type: 'per_km', rate: 140 },
+            { min: 200, max: 9999, type: 'per_km', rate: 135 }
+        ]
+    },
+    'kdh-van': {
+        name: 'Van (KDH High Roof)',
+        image: '/vehicles/toyota-highroof.png',
+        capacity: 8,
+        luggage: 8,
+        handLuggage: 6,
+        features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 20, max: 40, type: 'flat', price: 8500 },
+            { min: 40, max: 100, type: 'per_km', rate: 200 },
+            { min: 100, max: 140, type: 'per_km', rate: 160 },
+            { min: 140, max: 200, type: 'per_km', rate: 130 },
+            { min: 200, max: 9999, type: 'per_km', rate: 120 }
+        ]
+    },
+    'normal-kdh': {
+        name: 'Van (KDH Flat Roof)',
+        image: '/vehicles/kdh-flat.png',
+        capacity: 6,
+        luggage: 7,
+        handLuggage: 7,
+        features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 20, max: 40, type: 'flat', price: 8500 },
+            { min: 40, max: 100, type: 'per_km', rate: 200 },
+            { min: 100, max: 140, type: 'per_km', rate: 160 },
+            { min: 140, max: 200, type: 'per_km', rate: 130 },
+            { min: 200, max: 9999, type: 'per_km', rate: 120 }
+        ]
+    },
+    'mini-bus': {
+        name: 'Mini Bus',
+        image: '/vehicles/costerbus.png',
+        capacity: 20,
+        luggage: 20,
+        handLuggage: 15,
+        features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 7500 },
+            { min: 20, max: 40, type: 'flat', price: 12000 },
+            { min: 40, max: 100, type: 'per_km', rate: 220 },
+            { min: 100, max: 140, type: 'per_km', rate: 220 },
+            { min: 140, max: 200, type: 'per_km', rate: 175 },
+            { min: 200, max: 9999, type: 'per_km', rate: 155 }
+        ]
+    },
+    'bus': {
+        name: 'Bus (20+ Seater)',
+        image: '/vehicles/coach-bus.png',
+        capacity: 25,
+        luggage: 20,
+        handLuggage: 20,
+        features: ['Air Conditioning'],
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 20000 },
+            { min: 20, max: 40, type: 'flat', price: 30000 },
+            { min: 40, max: 100, type: 'flat', price: 50000 },
+            { min: 100, max: 150, type: 'flat', price: 70000 },
+            { min: 150, max: 200, type: 'flat', price: 85000 },
+            { min: 200, max: 300, type: 'flat', price: 120000 },
+            { min: 300, max: 9999, type: 'per_km', rate: 400 }
+        ]
+    },
+    'coach-bus': {
+        name: 'Coach Bus (40+ Seater)',
+        image: '/vehicles/coach-bus.png',
+        capacity: 45,
+        luggage: 40,
+        handLuggage: 40,
+        features: ['Air Conditioning'],
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 25000 },
+            { min: 20, max: 40, type: 'flat', price: 45000 },
+            { min: 40, max: 100, type: 'flat', price: 60000 },
+            { min: 100, max: 150, type: 'flat', price: 85000 },
+            { min: 150, max: 200, type: 'flat', price: 95000 },
+            { min: 200, max: 300, type: 'flat', price: 135000 },
+            { min: 300, max: 9999, type: 'per_km', rate: 450 }
+        ]
+    }
 };
 
 export async function POST(req) {
@@ -96,37 +177,59 @@ export async function POST(req) {
 
         await dbConnect();
 
-        const allPricing = await Pricing.find({});
         let updatedCount = 0;
+        let createdCount = 0;
 
-        for (const pricing of allPricing) {
-            const newTiers = DEFAULT_RATES[pricing.vehicleType];
+        // For each category, sync all vehicle defaults
+        const categories = ['airport-transfer', 'ride-now'];
 
-            if (newTiers) {
-                // Update Tiers
-                pricing.tiers = newTiers;
+        for (const category of categories) {
+            for (const [vehicleType, defaults] of Object.entries(VEHICLE_DEFAULTS)) {
+                const { tiers, ...metadata } = defaults;
 
-                // Update basePrice/baseKm for fallback compatibility (using first tier)
-                const firstTier = newTiers[0];
-                if (firstTier.type === 'flat') {
-                    pricing.basePrice = firstTier.price;
-                    pricing.baseKm = firstTier.max;
+                // Compute basePrice/perKmRate from tiers
+                const firstTier = tiers.sort((a, b) => a.min - b.min)[0];
+                const lastTier = tiers[tiers.length - 1];
+                const basePrice = firstTier.type === 'flat' ? firstTier.price : 0;
+                const baseKm = firstTier.type === 'flat' ? firstTier.max : 0;
+                const perKmRate = lastTier.type === 'per_km' ? lastTier.rate : (lastTier.price / (lastTier.max || 1));
+
+                const existing = await Pricing.findOne({ vehicleType, category });
+
+                if (existing) {
+                    // Update ALL fields: tiers + metadata
+                    existing.tiers = tiers;
+                    existing.name = metadata.name;
+                    existing.image = metadata.image;
+                    existing.capacity = metadata.capacity;
+                    existing.luggage = metadata.luggage;
+                    existing.handLuggage = metadata.handLuggage;
+                    existing.features = metadata.features;
+                    existing.basePrice = basePrice;
+                    existing.baseKm = baseKm;
+                    existing.perKmRate = perKmRate;
+                    await existing.save();
+                    updatedCount++;
                 } else {
-                    pricing.basePrice = 0;
-                    pricing.baseKm = 0;
-                    pricing.perKmRate = firstTier.rate || 0;
+                    // Create new record
+                    await Pricing.create({
+                        vehicleType,
+                        category,
+                        ...metadata,
+                        tiers,
+                        basePrice,
+                        baseKm,
+                        perKmRate
+                    });
+                    createdCount++;
                 }
-
-                // Update perKmRate to the lowest/final rate for general reference
-                const lastTier = newTiers[newTiers.length - 1];
-                pricing.perKmRate = lastTier.type === 'per_km' ? lastTier.rate : (lastTier.price / (lastTier.max || 1));
-
-                await pricing.save();
-                updatedCount++;
             }
         }
 
-        return NextResponse.json({ success: true, message: `Successfully updated ${updatedCount} records.` });
+        return NextResponse.json({
+            success: true,
+            message: `Sync complete: ${updatedCount} updated, ${createdCount} created.`
+        });
     } catch (error) {
         console.error('Error syncing pricing:', error);
         return NextResponse.json({ success: false, error: 'Failed to sync pricing' }, { status: 500 });

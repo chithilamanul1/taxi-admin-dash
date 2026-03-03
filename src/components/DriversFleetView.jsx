@@ -215,7 +215,7 @@ const DriversFleetView = ({ bookings = [] }) => {
         }
     };
 
-    if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-slate-600" size={32} /></div>;
+    if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-emerald-600" size={32} /></div>;
 
     // Lightbox Component
     const Lightbox = ({ url, title, onClose }) => (
@@ -256,7 +256,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                     <a
                         href={url}
                         download
-                        className="bg-slate-600 hover:bg-amber-500 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg transition-all"
+                        className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg transition-all"
                     >
                         Download Image
                     </a>
@@ -269,20 +269,20 @@ const DriversFleetView = ({ bookings = [] }) => {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Fleet Management</h2>
+                    <h2 className="text-2xl font-bold text-emerald-900 dark:text-white">Fleet Management</h2>
                     <p className="text-gray-500 dark:text-slate-400">Manage drivers and approvals</p>
                 </div>
                 <div className="flex gap-3">
                     <div className="flex bg-slate-100 p-1 rounded-xl">
                         <button
                             onClick={() => setActiveTab('active')}
-                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'active' ? 'bg-white text-slate-900 shadow-sm' : 'text-gray-500 hover:text-slate-900'}`}
+                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'active' ? 'bg-white text-emerald-900 shadow-sm' : 'text-gray-500 hover:text-emerald-900'}`}
                         >
                             Active Fleet ({activeDrivers.length})
                         </button>
                         <button
                             onClick={() => setActiveTab('pending')}
-                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'pending' ? 'bg-white text-slate-900 shadow-sm flex items-center gap-2' : 'text-gray-500 hover:text-slate-900 flex items-center gap-2'}`}
+                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'pending' ? 'bg-white text-emerald-900 shadow-sm flex items-center gap-2' : 'text-gray-500 hover:text-emerald-900 flex items-center gap-2'}`}
                         >
                             Requests
                             {pendingDrivers.length > 0 && <span className="bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">{pendingDrivers.length}</span>}
@@ -302,7 +302,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                 <div className="space-y-4 animate-fade-in-up">
                     {pendingDrivers.length === 0 ? (
                         <div className="bg-white p-12 rounded-2xl text-center border border-dashed border-gray-200">
-                            <CheckCircle className="mx-auto text-amber-200 mb-4" size={48} />
+                            <CheckCircle className="mx-auto text-emerald-200 mb-4" size={48} />
                             <h3 className="text-lg font-bold text-gray-500">All Caught Up!</h3>
                             <p className="text-gray-400 text-sm">No pending driver applications.</p>
                         </div>
@@ -314,7 +314,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                                         {driver.name.charAt(0)}
                                     </div>
                                     <div className="min-w-0">
-                                        <h4 className="font-black text-xl text-slate-900 truncate">{driver.name}</h4>
+                                        <h4 className="font-black text-xl text-emerald-900 truncate">{driver.name}</h4>
                                         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 mt-1 font-bold">
                                             <span className="flex items-center gap-1.5"><Phone size={14} className="text-orange-500" /> {driver.phone}</span>
                                             <span className="flex items-center gap-1.5"><Car size={14} className="text-orange-500" /> {driver.vehicleModel} <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded uppercase">{driver.vehicleNumber}</span></span>
@@ -324,7 +324,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                                 <div className="w-full md:w-auto shrink-0 mt-2 md:mt-0">
                                     <button
                                         onClick={() => setApprovalModal(driver)}
-                                        className="w-full md:w-auto px-8 py-4 bg-slate-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-slate-900 transition-all shadow-xl shadow-slate-900/10 active:scale-95"
+                                        className="w-full md:w-auto px-8 py-4 bg-slate-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-emerald-900 transition-all shadow-xl shadow-slate-900/10 active:scale-95"
                                     >
                                         Review Application
                                     </button>
@@ -346,7 +346,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                                         <User size={24} className={driver.isOnline ? 'text-green-600' : 'text-gray-400'} />
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-slate-900 dark:text-white">{driver.name}</h4>
+                                        <h4 className="font-bold text-emerald-900 dark:text-white">{driver.name}</h4>
                                         <p className="text-xs text-gray-500 uppercase">{driver.vehicleType}</p>
                                     </div>
                                 </div>
@@ -358,7 +358,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                             <div className="grid grid-cols-2 gap-2 text-sm mb-4">
                                 <div className="bg-slate-50 dark:bg-white/5 rounded-lg p-2">
                                     <p className="text-xs text-gray-500">Vehicle</p>
-                                    <p className="font-bold text-slate-900">{driver.vehicleNumber}</p>
+                                    <p className="font-bold text-emerald-900">{driver.vehicleNumber}</p>
                                 </div>
                                 <div className="bg-slate-50 dark:bg-white/5 rounded-lg p-2">
                                     <p className="text-xs text-gray-500">Status</p>
@@ -367,22 +367,22 @@ const DriversFleetView = ({ bookings = [] }) => {
                             </div>
 
                             {/* Wallet Section */}
-                            <div className="mb-4 bg-slate-50/50 dark:bg-slate-900/10 p-3 rounded-xl border border-slate-100 dark:border-slate-900/20 flex justify-between items-center">
+                            <div className="mb-4 bg-emerald-50/50 dark:bg-emerald-900/10 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/20 flex justify-between items-center">
                                 <div>
-                                    <p className="text-[10px] text-slate-800 dark:text-amber-400 font-bold uppercase tracking-wider">Wallet Balance</p>
-                                    <p className={`font-mono font-bold text-lg ${driver.walletBalance < 5000 ? 'text-red-600' : 'text-slate-900 dark:text-amber-300'}`}>
+                                    <p className="text-[10px] text-emerald-800 dark:text-emerald-400 font-bold uppercase tracking-wider">Wallet Balance</p>
+                                    <p className={`font-mono font-bold text-lg ${driver.walletBalance < 5000 ? 'text-red-600' : 'text-emerald-900 dark:text-emerald-300'}`}>
                                         Rs {(driver.walletBalance || 0).toLocaleString()}
                                     </p>
                                 </div>
                                 <button
                                     onClick={() => setTopupModal(driver)}
-                                    className="bg-slate-900 text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-slate-800"
+                                    className="bg-emerald-900 text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-emerald-800"
                                 >
                                     + Top Up
                                 </button>
                             </div>
                             <div className="flex gap-2">
-                                <a href={`tel:${driver.phone}`} className="flex-1 flex items-center justify-center gap-2 bg-slate-50 text-slate-700 py-2 rounded-lg text-sm font-bold hover:bg-slate-100 transition-colors">
+                                <a href={`tel:${driver.phone}`} className="flex-1 flex items-center justify-center gap-2 bg-emerald-50 text-emerald-700 py-2 rounded-lg text-sm font-bold hover:bg-emerald-100 transition-colors">
                                     <Phone size={14} /> Call
                                 </a>
                                 <a
@@ -411,21 +411,21 @@ const DriversFleetView = ({ bookings = [] }) => {
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-slide-up">
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center sticky top-0 bg-white z-10">
-                            <h3 className="text-xl font-bold text-slate-900">Review Application</h3>
+                            <h3 className="text-xl font-bold text-emerald-900">Review Application</h3>
                             <button onClick={() => setApprovalModal(null)} className="p-2 hover:bg-gray-100 rounded-full"><X size={20} /></button>
                         </div>
                         <div className="p-6 space-y-6">
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div>
                                     <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Applicant</h4>
-                                    <p className="text-lg font-bold text-slate-900">{approvalModal.name}</p>
+                                    <p className="text-lg font-bold text-emerald-900">{approvalModal.name}</p>
                                     <p className="text-gray-500">{approvalModal.phone}</p>
                                     <p className="text-gray-500">{approvalModal.email || 'No email provided'}</p>
                                     <p className="text-sm text-gray-500 mt-2">{approvalModal.address}</p>
                                 </div>
                                 <div>
                                     <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Vehicle</h4>
-                                    <p className="text-lg font-bold text-slate-900">{approvalModal.vehicleModel} ({approvalModal.vehicleYear})</p>
+                                    <p className="text-lg font-bold text-emerald-900">{approvalModal.vehicleModel} ({approvalModal.vehicleYear})</p>
                                     <p className="text-gray-500">{approvalModal.vehicleNumber}</p>
                                     <span className="inline-block px-2 py-1 bg-gray-100 rounded text-xs font-bold uppercase mt-2">{approvalModal.vehicleType}</span>
                                 </div>
@@ -437,7 +437,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                                     {approvalModal.documents && Object.entries(approvalModal.documents).map(([key, url]) => (
                                         <div
                                             key={key}
-                                            className="border rounded-xl p-3 hover:border-amber-500 transition-colors cursor-pointer group relative bg-slate-50/50"
+                                            className="border rounded-xl p-3 hover:border-emerald-500 transition-colors cursor-pointer group relative bg-slate-50/50"
                                             onClick={() => url && setLightbox({ open: true, url, title: key.replace(/([A-Z])/g, ' $1').trim() })}
                                         >
                                             <p className="text-xs font-bold text-gray-500 capitalize mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</p>
@@ -461,7 +461,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                                                 )}
                                             </div>
                                             {url && (
-                                                <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white font-bold text-xs transition-opacity rounded-xl z-10 backdrop-blur-[2px]">
+                                                <div className="absolute inset-0 bg-emerald-900/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white font-bold text-xs transition-opacity rounded-xl z-10 backdrop-blur-[2px]">
                                                     <Plus size={20} className="mb-1" />
                                                     Click to view
                                                 </div>
@@ -480,14 +480,14 @@ const DriversFleetView = ({ bookings = [] }) => {
                                 <div className="grid grid-cols-2 gap-6">
                                     <div className="bg-white p-4 rounded-xl border border-amber-100 shadow-sm">
                                         <p className="text-xs text-gray-400 font-bold uppercase mb-1">Declared Amount</p>
-                                        <p className="text-2xl font-mono font-bold text-slate-900">Rs {approvalModal.initialDeposit.amount.toLocaleString()}</p>
+                                        <p className="text-2xl font-mono font-bold text-emerald-900">Rs {approvalModal.initialDeposit.amount.toLocaleString()}</p>
                                         <div className="mt-2 text-xs text-amber-700 bg-amber-100 px-2 py-1 rounded inline-block font-bold">
                                             Status: {approvalModal.initialDeposit.status}
                                         </div>
                                     </div>
 
                                     <div
-                                        className="border rounded-xl p-3 bg-white hover:border-amber-500 transition-colors group relative cursor-pointer"
+                                        className="border rounded-xl p-3 bg-white hover:border-emerald-500 transition-colors group relative cursor-pointer"
                                         onClick={() => approvalModal.initialDeposit.receipt && setLightbox({ open: true, url: approvalModal.initialDeposit.receipt, title: 'Initial Deposit Receipt' })}
                                     >
                                         <p className="text-xs font-bold text-gray-500 mb-2">Receipt Proof</p>
@@ -511,7 +511,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                                             )}
                                         </div>
                                         {approvalModal.initialDeposit.receipt && (
-                                            <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white font-bold text-xs transition-opacity rounded-xl z-10 backdrop-blur-[2px]">
+                                            <div className="absolute inset-0 bg-emerald-900/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white font-bold text-xs transition-opacity rounded-xl z-10 backdrop-blur-[2px]">
                                                 <Plus size={20} className="mb-1" />
                                                 Click to view
                                             </div>
@@ -533,7 +533,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                             <button
                                 onClick={() => handleApprove(approvalModal._id, 'approve')}
                                 disabled={isSubmitting}
-                                className="flex-[2] py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
+                                className="flex-[2] py-3 bg-emerald-900 text-white rounded-xl font-bold hover:bg-emerald-800 transition-colors flex items-center justify-center gap-2"
                             >
                                 {isSubmitting ? <Loader2 className="animate-spin" /> : <ShieldCheck size={18} />}
                                 Approve & Create Account
@@ -547,7 +547,7 @@ const DriversFleetView = ({ bookings = [] }) => {
             {topupModal && (
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-sm p-6 animate-slide-up">
-                        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Top Up Wallet</h3>
+                        <h3 className="text-lg font-bold text-emerald-900 dark:text-white mb-4">Top Up Wallet</h3>
                         <p className="text-sm text-gray-500 mb-4">Adding funds for <strong>{topupModal.name}</strong></p>
 
                         <form onSubmit={handleTopUp}>
@@ -555,7 +555,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                                 <label className="block text-xs font-bold text-gray-400 uppercase mb-1">Amount (LKR)</label>
                                 <input
                                     type="number"
-                                    className="w-full p-3 border rounded-xl font-mono text-lg font-bold outline-none ring-amber-500 focus:ring-2"
+                                    className="w-full p-3 border rounded-xl font-mono text-lg font-bold outline-none ring-emerald-500 focus:ring-2"
                                     placeholder="5000"
                                     value={topupAmount}
                                     onChange={e => setTopupAmount(e.target.value)}
@@ -605,7 +605,7 @@ const DriversFleetView = ({ bookings = [] }) => {
 
                             <div className="flex gap-3">
                                 <button type="button" onClick={() => setTopupModal(null)} className="flex-1 py-3 bg-gray-100 dark:bg-white/10 rounded-xl font-bold text-gray-500">Cancel</button>
-                                <button type="submit" disabled={isSubmitting} className="flex-1 py-3 bg-slate-900 text-white rounded-xl font-bold flex justify-center items-center gap-2">
+                                <button type="submit" disabled={isSubmitting} className="flex-1 py-3 bg-emerald-900 text-white rounded-xl font-bold flex justify-center items-center gap-2">
                                     {isSubmitting ? <Loader2 className="animate-spin" size={18} /> : <span>Confirm</span>}
                                 </button>
                             </div>
@@ -642,7 +642,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                             </div>
                             <div className="flex gap-2 pt-2">
                                 <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 p-2 bg-gray-100 rounded font-bold text-sm">Cancel</button>
-                                <button type="submit" disabled={isSubmitting} className="flex-1 p-2 bg-slate-900 text-white rounded font-bold text-sm flex items-center justify-center gap-2">
+                                <button type="submit" disabled={isSubmitting} className="flex-1 p-2 bg-emerald-900 text-white rounded font-bold text-sm flex items-center justify-center gap-2">
                                     {isSubmitting && <Loader2 size={14} className="animate-spin" />}
                                     Add Driver
                                 </button>

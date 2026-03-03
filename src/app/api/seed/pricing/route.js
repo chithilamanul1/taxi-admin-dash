@@ -89,16 +89,16 @@ export async function GET(req) {
         const vehicles = {
             miniCar: {
                 vehicleType: 'mini-car',
-                name: 'Mini Car',
+                name: 'Mini Car (Wagon R)',
                 image: '/vehicles/minicar.png',
-                capacity: 4, luggage: 2, handLuggage: 2,
+                capacity: 3, luggage: 2, handLuggage: 2,
                 basePrice: 3500, baseKm: 20, perKmRate: 100,
                 features: commonFeatures,
                 tiers: []
             },
             sedan: {
                 vehicleType: 'sedan',
-                name: 'Standard Sedan',
+                name: 'Sedan Car',
                 image: '/vehicles/sedancar.png',
                 capacity: 4, luggage: 3, handLuggage: 3,
                 basePrice: 4500, baseKm: 20, perKmRate: 130,
@@ -141,9 +141,9 @@ export async function GET(req) {
             },
             kdhVan: {
                 vehicleType: 'kdh-van',
-                name: 'KDH Van',
+                name: 'KDH High Roof Van',
                 image: '/vehicles/toyota-highroof.png',
-                capacity: 10, luggage: 8, handLuggage: 5,
+                capacity: 9, luggage: 8, handLuggage: 5,
                 basePrice: 8500, baseKm: 40, perKmRate: 180,
                 features: commonFeatures,
                 tiers: []

@@ -8,8 +8,8 @@ export default function CityToursPage() {
             <Navbar />
             <div className="pt-32 pb-20 px-4">
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4">
-                        City <span className="text-slate-600">tours</span>
+                    <h1 className="text-4xl md:text-5xl font-black text-emerald-900 dark:text-white mb-4">
+                        City <span className="text-emerald-600">tours</span>
                     </h1>
                     <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
                         Discover the best city experiences. From street food to historical landmarks.

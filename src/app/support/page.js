@@ -87,20 +87,20 @@ export default function SupportPage() {
         }
     }
 
-    if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="animate-spin text-slate-900" size={40} /></div>
+    if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="animate-spin text-emerald-900" size={40} /></div>
 
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-24 pb-12 px-4 transition-colors">
             <div className="max-w-4xl mx-auto">
                 <div className="flex justify-between items-center mb-8">
                     <div>
-                        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Support Center</h1>
+                        <h1 className="text-3xl font-bold text-emerald-900 dark:text-white">Support Center</h1>
                         <p className="text-gray-500 dark:text-slate-400">How can we help you today?</p>
                     </div>
                     {view === 'list' && (
                         <button
                             onClick={() => setView('new')}
-                            className="bg-slate-600 text-slate-900 px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-yellow-400 transition-colors"
+                            className="bg-emerald-600 text-emerald-900 px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-yellow-400 transition-colors"
                         >
                             <Plus size={20} /> New Ticket
                         </button>
@@ -108,7 +108,7 @@ export default function SupportPage() {
                     {view !== 'list' && (
                         <button
                             onClick={() => { setView('list'); setSelectedTicket(null); }}
-                            className="text-gray-500 hover:text-slate-900 font-medium"
+                            className="text-gray-500 hover:text-emerald-900 font-medium"
                         >
                             ← Back to Tickets
                         </button>
@@ -116,7 +116,7 @@ export default function SupportPage() {
                 </div>
 
                 {view === 'list' && (
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm overflow-hidden border border-slate-900/10 dark:border-white/5">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm overflow-hidden border border-emerald-900/10 dark:border-white/5">
                         {tickets.length === 0 ? (
                             <div className="p-12 text-center text-gray-400">
                                 <MessageSquare size={48} className="mx-auto mb-4 opacity-20" />
@@ -135,7 +135,7 @@ export default function SupportPage() {
                                                 <span className={`w-2 h-2 rounded-full ${ticket.status === 'open' ? 'bg-green-500' :
                                                     ticket.status === 'answered' ? 'bg-blue-500' : 'bg-gray-400'
                                                     }`} />
-                                                <h3 className="font-bold text-slate-900 dark:text-white">{ticket.subject}</h3>
+                                                <h3 className="font-bold text-emerald-900 dark:text-white">{ticket.subject}</h3>
                                                 <span className={`text-xs px-2 py-0.5 rounded capitalize ${ticket.priority === 'high' ? 'bg-red-100 dark:bg-red-950/30 text-red-600 dark:text-red-400' :
                                                     'bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-slate-400'
                                                     }`}>{ticket.priority}</span>
@@ -156,15 +156,15 @@ export default function SupportPage() {
                 )}
 
                 {view === 'new' && (
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm p-8 max-w-2xl mx-auto border border-slate-900/10 dark:border-white/5">
-                        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Create New Ticket</h2>
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm p-8 max-w-2xl mx-auto border border-emerald-900/10 dark:border-white/5">
+                        <h2 className="text-xl font-bold text-emerald-900 dark:text-white mb-6">Create New Ticket</h2>
                         <form onSubmit={handleCreateTicket} className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Subject</label>
                                 <input
                                     required
                                     type="text"
-                                    className="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-lg outline-none focus:ring-2 focus:ring-slate-600/20 text-slate-900 dark:text-white"
+                                    className="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 text-emerald-900 dark:text-white"
                                     value={newTicket.subject}
                                     onChange={e => setNewTicket({ ...newTicket, subject: e.target.value })}
                                 />
@@ -172,7 +172,7 @@ export default function SupportPage() {
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Priority</label>
                                 <select
-                                    className="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-lg outline-none focus:ring-2 focus:ring-slate-600/20 text-slate-900 dark:text-white"
+                                    className="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 text-emerald-900 dark:text-white"
                                     value={newTicket.priority}
                                     onChange={e => setNewTicket({ ...newTicket, priority: e.target.value })}
                                 >
@@ -185,7 +185,7 @@ export default function SupportPage() {
                                 <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">Message</label>
                                 <textarea
                                     required
-                                    className="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-lg outline-none focus:ring-2 focus:ring-slate-600/20 text-slate-900 dark:text-white h-32"
+                                    className="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 text-emerald-900 dark:text-white h-32"
                                     value={newTicket.message}
                                     onChange={e => setNewTicket({ ...newTicket, message: e.target.value })}
                                 />
@@ -193,7 +193,7 @@ export default function SupportPage() {
                             <button
                                 type="submit"
                                 disabled={submitting}
-                                className="w-full bg-slate-900 dark:bg-slate-600 text-white py-3 rounded-lg font-bold hover:bg-slate-900/90 dark:hover:bg-amber-500 transition-colors disabled:opacity-50"
+                                className="w-full bg-emerald-900 dark:bg-emerald-600 text-white py-3 rounded-lg font-bold hover:bg-emerald-900/90 dark:hover:bg-emerald-500 transition-colors disabled:opacity-50"
                             >
                                 {submitting ? 'Creating...' : 'Submit Ticket'}
                             </button>
@@ -205,7 +205,7 @@ export default function SupportPage() {
                     <div className="max-w-3xl mx-auto">
                         <div className="bg-white dark:bg-slate-900 rounded-t-2xl shadow-sm p-6 border-b border-slate-100 dark:border-white/5 flex justify-between items-start">
                             <div>
-                                <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-1">{selectedTicket.subject}</h2>
+                                <h2 className="text-xl font-bold text-emerald-900 dark:text-white mb-1">{selectedTicket.subject}</h2>
                                 <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-slate-400">
                                     <span className="capitalize">Status: {selectedTicket.status}</span>
                                     <span>•</span>
@@ -221,7 +221,7 @@ export default function SupportPage() {
                             {selectedTicket.messages.map((msg, idx) => (
                                 <div key={idx} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`max-w-[80%] rounded-2xl p-4 ${msg.sender === 'user'
-                                        ? 'bg-slate-900 dark:bg-slate-600 text-white rounded-tr-none'
+                                        ? 'bg-emerald-900 dark:bg-emerald-600 text-white rounded-tr-none'
                                         : 'bg-white dark:bg-slate-800 text-gray-800 dark:text-slate-200 shadow-sm rounded-tl-none border border-black/5 dark:border-white/5'
                                         }`}>
                                         <p className="whitespace-pre-wrap text-sm">{msg.message}</p>
@@ -238,7 +238,7 @@ export default function SupportPage() {
                                 <input
                                     type="text"
                                     placeholder="Type your reply..."
-                                    className="flex-1 px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-xl outline-none focus:ring-2 focus:ring-slate-600/20 text-slate-900 dark:text-white"
+                                    className="flex-1 px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-xl outline-none focus:ring-2 focus:ring-emerald-600/20 text-emerald-900 dark:text-white"
                                     value={replyMessage}
                                     onChange={e => setReplyMessage(e.target.value)}
                                     onKeyPress={e => e.key === 'Enter' && handleReply()}
@@ -246,7 +246,7 @@ export default function SupportPage() {
                                 <button
                                     onClick={handleReply}
                                     disabled={sendingReply || !replyMessage.trim()}
-                                    className="bg-slate-600 text-slate-900 p-3 rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="bg-emerald-600 text-emerald-900 p-3 rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {sendingReply ? <Loader2 className="animate-spin" /> : <Send size={20} />}
                                 </button>

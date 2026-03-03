@@ -28,8 +28,8 @@ export default async function PayHerePage({ searchParams }) {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-white">
             <div className="animate-pulse flex flex-col items-center gap-4">
-                <div className="w-12 h-12 border-4 border-slate-900 border-t-transparent rounded-full animate-spin"></div>
-                <h2 className="text-xl font-bold text-slate-900">Redirecting to Secure Payment...</h2>
+                <div className="w-12 h-12 border-4 border-emerald-900 border-t-transparent rounded-full animate-spin"></div>
+                <h2 className="text-xl font-bold text-emerald-900">Redirecting to Secure Payment...</h2>
                 <p className="text-gray-500">Please do not close this window.</p>
             </div>
 

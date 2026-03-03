@@ -79,7 +79,7 @@ const LiveDriverMap = () => {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center h-64">
-                <RefreshCw className="animate-spin text-slate-600" size={32} />
+                <RefreshCw className="animate-spin text-emerald-600" size={32} />
             </div>
         );
     }
@@ -89,7 +89,7 @@ const LiveDriverMap = () => {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Live Driver Tracking</h2>
+                    <h2 className="text-2xl font-bold text-emerald-900 dark:text-white">Live Driver Tracking</h2>
                     <p className="text-slate-600 dark:text-slate-400 text-sm">
                         Last updated: {lastRefresh.toLocaleTimeString()}
                     </p>
@@ -99,7 +99,7 @@ const LiveDriverMap = () => {
                     <button
                         onClick={() => setAutoRefresh(!autoRefresh)}
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all ${autoRefresh
-                            ? 'bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-amber-400'
+                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
                             : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                             }`}
                     >
@@ -109,7 +109,7 @@ const LiveDriverMap = () => {
                     {/* Manual Refresh */}
                     <button
                         onClick={fetchDrivers}
-                        className="px-4 py-2 bg-slate-600 text-white rounded-xl font-bold hover:bg-slate-700 transition-colors"
+                        className="px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-colors"
                     >
                         Refresh Now
                     </button>
@@ -117,7 +117,7 @@ const LiveDriverMap = () => {
             </div>
 
             {/* Google Map View */}
-            <div className="w-full h-[400px] bg-slate-100 rounded-3xl overflow-hidden border border-slate-900/10 relative">
+            <div className="w-full h-[400px] bg-slate-100 rounded-3xl overflow-hidden border border-emerald-900/10 relative">
                 {isLoaded ? (
                     <GoogleMap
                         mapContainerStyle={{ width: '100%', height: '100%' }}
@@ -162,11 +162,11 @@ const LiveDriverMap = () => {
             <div className="grid grid-cols-3 gap-4">
                 <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-slate-100 dark:bg-slate-900/30 rounded-xl flex items-center justify-center">
-                            <User size={20} className="text-slate-600" />
+                        <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center">
+                            <User size={20} className="text-emerald-600" />
                         </div>
                         <div>
-                            <p className="text-2xl font-bold text-slate-900 dark:text-white">{drivers.length}</p>
+                            <p className="text-2xl font-bold text-emerald-900 dark:text-white">{drivers.length}</p>
                             <p className="text-xs text-slate-500">Total Drivers</p>
                         </div>
                     </div>
@@ -203,7 +203,7 @@ const LiveDriverMap = () => {
                         <p className="text-xs text-gray-500">{driver.vehicleNumber}</p>
                     </div>
                     {driver.currentLocation && (
-                        <button onClick={() => openInGoogleMaps(driver.currentLocation.lat, driver.currentLocation.lng)} className="text-xs bg-slate-100 text-slate-700 px-3 py-1 rounded-lg">
+                        <button onClick={() => openInGoogleMaps(driver.currentLocation.lat, driver.currentLocation.lng)} className="text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-lg">
                             View Link
                         </button>
                     )}

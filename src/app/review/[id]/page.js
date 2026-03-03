@@ -96,18 +96,18 @@ export default function ReviewPage() {
 
     if (loading) {
         return (
-            <main className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950 pt-32 pb-20 flex items-center justify-center">
-                <Loader2 className="w-10 h-10 text-amber-400 animate-spin" />
+            <main className="min-h-screen bg-gradient-to-b from-emerald-900 to-slate-950 pt-32 pb-20 flex items-center justify-center">
+                <Loader2 className="w-10 h-10 text-emerald-400 animate-spin" />
             </main>
         )
     }
 
     if (submitted) {
         return (
-            <main className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950 pt-32 pb-20">
+            <main className="min-h-screen bg-gradient-to-b from-emerald-900 to-slate-950 pt-32 pb-20">
                 <div className="container mx-auto px-6">
                     <div className="max-w-md mx-auto text-center">
-                        <div className="w-20 h-20 bg-amber-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
                             <CheckCircle size={40} className="text-white" />
                         </div>
                         <h1 className="text-3xl font-bold text-white mb-4">Thank You! ⭐</h1>
@@ -116,7 +116,7 @@ export default function ReviewPage() {
                         </p>
                         <button
                             onClick={() => router.push('/')}
-                            className="px-8 py-4 bg-white text-slate-900 rounded-2xl font-bold"
+                            className="px-8 py-4 bg-white text-emerald-900 rounded-2xl font-bold"
                         >
                             Back to Home
                         </button>
@@ -127,13 +127,13 @@ export default function ReviewPage() {
     }
 
     return (
-        <main className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950 pt-32 pb-20">
+        <main className="min-h-screen bg-gradient-to-b from-emerald-900 to-slate-950 pt-32 pb-20">
             <div className="container mx-auto px-6">
                 <div className="max-w-2xl mx-auto">
                     {/* Header */}
                     <div className="text-center mb-12">
                         <h1 className="text-4xl font-bold text-white mb-4">
-                            Rate Your <span className="text-amber-400">Experience</span>
+                            Rate Your <span className="text-emerald-400">Experience</span>
                         </h1>
                         <p className="text-white/70">
                             Your feedback helps us improve and helps other travelers make informed decisions.
@@ -145,11 +145,11 @@ export default function ReviewPage() {
                         <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 mb-8">
                             <h3 className="text-white font-bold mb-4">Your Trip</h3>
                             <div className="flex items-center gap-3 mb-3">
-                                <MapPin size={18} className="text-amber-400" />
+                                <MapPin size={18} className="text-emerald-400" />
                                 <span className="text-white/80">{booking.pickupLocation?.address?.split(',')[0]}</span>
                             </div>
                             <div className="flex items-center gap-3 mb-3">
-                                <Navigation size={18} className="text-amber-400" />
+                                <Navigation size={18} className="text-emerald-400" />
                                 <span className="text-white/80">{booking.dropoffLocation?.address?.split(',')[0]}</span>
                             </div>
                             <div className="flex items-center gap-4 text-white/60 text-sm">
@@ -164,7 +164,7 @@ export default function ReviewPage() {
                         <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Star Rating */}
                             <div>
-                                <label className="block text-sm font-bold text-slate-900 mb-3">
+                                <label className="block text-sm font-bold text-emerald-900 mb-3">
                                     How would you rate your experience?
                                 </label>
                                 <div className="flex gap-2 justify-center">
@@ -198,7 +198,7 @@ export default function ReviewPage() {
 
                             {/* Name */}
                             <div>
-                                <label className="block text-sm font-bold text-slate-900 mb-2">
+                                <label className="block text-sm font-bold text-emerald-900 mb-2">
                                     Your Name *
                                 </label>
                                 <input
@@ -206,14 +206,14 @@ export default function ReviewPage() {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="John Doe"
-                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:border-amber-500"
+                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500"
                                     required
                                 />
                             </div>
 
                             {/* Email */}
                             <div>
-                                <label className="block text-sm font-bold text-slate-900 mb-2">
+                                <label className="block text-sm font-bold text-emerald-900 mb-2">
                                     Your Email (optional)
                                 </label>
                                 <input
@@ -221,14 +221,14 @@ export default function ReviewPage() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="john@example.com"
-                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:border-amber-500"
+                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500"
                                 />
                                 <p className="text-xs text-slate-500 mt-1">We'll send you a thank you note!</p>
                             </div>
 
                             {/* Comment */}
                             <div>
-                                <label className="block text-sm font-bold text-slate-900 mb-2">
+                                <label className="block text-sm font-bold text-emerald-900 mb-2">
                                     Tell us about your experience *
                                 </label>
                                 <textarea
@@ -237,7 +237,7 @@ export default function ReviewPage() {
                                     placeholder="The driver was punctual и friendly. The car was clean and comfortable. Would definitely recommend!"
                                     rows={4}
                                     maxLength={500}
-                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:border-amber-500 resize-none"
+                                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:border-emerald-500 resize-none"
                                     required
                                 />
                                 <p className="text-xs text-slate-500 mt-1 text-right">{comment.length}/500</p>
@@ -254,7 +254,7 @@ export default function ReviewPage() {
                             <button
                                 type="submit"
                                 disabled={submitting}
-                                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition-colors disabled:opacity-50"
+                                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-emerald-900 text-white rounded-2xl font-bold hover:bg-emerald-800 transition-colors disabled:opacity-50"
                             >
                                 {submitting ? (
                                     <Loader2 className="w-5 h-5 animate-spin" />

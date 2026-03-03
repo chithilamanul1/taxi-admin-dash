@@ -3,160 +3,145 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Star, Shield, Zap, MapPin, Users, Award } from 'lucide-react'
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 
-const heroMedia = [
-    { type: 'video', src: 'https://www.pexels.com/download/video/14932551/', alt: 'Sri Lanka Aerial Video' },
-    { type: 'image', src: 'https://images.pexels.com/photos/1005417/pexels-photo-1005417.jpeg', alt: 'Sri Lanka Train' },
-    { type: 'video', src: 'https://www.pexels.com/download/video/2187246/', alt: 'Sri Lanka Coast Video' }
-]
-
-const HeroFeatures = [
-    { label: 'Luxury Service', icon: Shield, desc: 'all kinds of premium vehicles as your needs' },
-    { label: 'Language Friendly', icon: Users, desc: 'English speaking drivers' },
-    { label: 'Affordable Rates', icon: Award, desc: 'No hidden charges' }
+const heroImages = [
+    { src: '/Hero/elephants.jpg', alt: 'Sri Lanka Elephants' },
+    { src: 'https://images.unsplash.com/photo-1586861635167-e52a3a1e262c?auto=format&fit=crop&q=80&w=1920', alt: 'Ahangama Coastline' },
+    { src: '/Hero/izanuradapura.jpg', alt: 'Anuradhapura' },
+    { src: '/Hero/monkey.jpg', alt: 'Wildlife' },
+    { src: '/Hero/sigiriya.jpg', alt: 'Sigiriya Lion Rock' },
+    { src: '/Hero/tower.jpg', alt: 'Lotus Tower Colombo' },
+    { src: '/Hero/view.jpg', alt: 'Scenic Views' },
 ]
 
 const Hero = ({ onBookClick }) => {
     const [currentSlide, setCurrentSlide] = useState(0)
     const [isLoaded, setIsLoaded] = useState(false);
 
+    // Auto-advance slideshow
     useEffect(() => {
         setIsLoaded(true);
         const timer = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % heroMedia.length)
+            setCurrentSlide((prev) => (prev + 1) % heroImages.length)
         }, 6000)
         return () => clearInterval(timer)
     }, [])
 
-    const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroMedia.length)
-    const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroMedia.length) % heroMedia.length)
+    const goToSlide = (index) => setCurrentSlide(index)
+    const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length)
+    const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroImages.length)
 
     return (
-        <section className="relative min-h-[95vh] flex items-center justify-center pt-32 pb-32 overflow-hidden bg-white">
+        <section className="relative h-[85vh] md:h-[90vh] min-h-[750px] md:min-h-[850px] flex flex-col items-start md:items-center justify-start md:justify-center pt-32 md:pt-36 pb-32 md:pb-48 overflow-hidden bg-emerald-950 transition-colors border-b border-black">
             {/* Background Slideshow */}
             <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-black/40 z-10"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/60 z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/95 via-emerald-900/70 to-black/30 pointer-events-none z-10"></div>
 
-                {heroMedia.map((media, index) => {
+                {/* 
+                  PERFORMANCE OPTIMIZATION: 
+                  - We only render the first image eagerly.
+                  - Subsequent images only render when they become the current slide.
+                  - This prevents the browser from downloading 7 high-res images on initial pageload.
+                */}
+                {heroImages.map((image, index) => {
                     const isVisible = index === currentSlide;
+                    const shouldRender = index === 0 || isVisible;
+
+                    if (!shouldRender) return null;
+
                     return (
                         <div
                             key={index}
-                            className={`absolute inset-0 w-full h-full transition-all duration-[2500ms] ease-in-out ${isVisible ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-105 z-0'}`}
+                            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
                         >
-                            {media.type === 'image' ? (
-                                <Image
-                                    src={media.src}
-                                    alt={media.alt}
-                                    fill
-                                    priority={index === 0}
-                                    className="object-cover"
-                                    sizes="100vw"
-                                />
-                            ) : (
-                                <video
-                                    src={media.src}
-                                    autoPlay
-                                    muted
-                                    loop
-                                    playsInline
-                                    className="object-cover w-full h-full"
-                                    aria-label="Sri Lanka airport taxi service promotional video"
-                                >
-                                    <track kind="captions" srcLang="en" label="English" default />
-                                </video>
-                            )}
+                            <Image
+                                src={image.src}
+                                alt={image.alt}
+                                fill
+                                priority={index === 0}
+                                fetchPriority={index === 0 ? "high" : "auto"}
+                                loading={index === 0 ? "eager" : "lazy"}
+                                sizes="100vw"
+                                className="object-cover"
+                                quality={index === 0 ? 75 : 60}
+                            />
                         </div>
                     );
                 })}
             </div>
 
-            {/* Content Container */}
-            <div className="container mx-auto px-6 relative z-20">
-                <div className="flex flex-col lg:flex-row items-center gap-16">
+            {/* Slideshow Navigation */}
+            <div className="absolute bottom-32 right-10 z-20 flex items-center gap-4 hidden md:flex">
+                <button
+                    onClick={prevSlide}
+                    className="p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+                    aria-label="Previous slide"
+                >
+                    <ChevronLeft size={24} />
+                </button>
+                <button
+                    onClick={nextSlide}
+                    className="p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+                    aria-label="Next slide"
+                >
+                    <ChevronRight size={24} />
+                </button>
+            </div>
 
-                    {/* Left: Premium Typography */}
-                    <div className="flex-1 space-y-10 text-center lg:text-left">
-                        <div className="space-y-6">
-                            <div className="inline-flex items-center gap-3 bg-black/40 backdrop-blur-xl border border-white/20 px-6 py-2 rounded-full shadow-xl">
-                                <Star size={14} className="text-[#FFDA00] fill-[#FFDA00]" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Elite Sri Lanka Travels</span>
-                            </div>
+            {/* Content */}
+            <div className="container mx-auto px-6 relative z-10 text-left md:text-center">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-900/80 backdrop-blur-md border border-emerald-400/30 text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-4 animate-slide-up opacity-0 [animation-delay:0.2s] [animation-fill-mode:forwards] shadow-lg md:mx-auto">
+                    <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    Sri Lanka's #1 Luxury Provider
+                </div>
 
-                            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black leading-tight tracking-tighter text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">
-                                Your Premium <br />
-                                <span
-                                    className="text-[#FFDA00] drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] italic"
-                                    style={{ fontFamily: 'var(--font-playfair), serif' }}
-                                >
-                                    Journey
-                                </span> Awaits
-                            </h1>
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 leading-[1.1] text-white animate-slide-up opacity-0 [animation-delay:0.4s] [animation-fill-mode:forwards] tracking-tight max-w-4xl md:mx-auto">
+                    The Smart Way <br />to <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-200">Explore</span> Sri Lanka
+                </h1>
 
-                            <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto lg:mx-0 font-semibold leading-relaxed drop-shadow-md">
-                                Experience the gold standard of transportation in Sri Lanka. From VIP airport arrivals to bespoke island tours.
-                            </p>
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 pt-4">
-                            <button
-                                onClick={onBookClick}
-                                className="group relative px-8 py-4 bg-[#FFDA00] text-black font-black uppercase tracking-widest text-xs rounded-full transition-all hover:bg-black hover:text-white hover:scale-105 active:scale-95 shadow-2xl"
-                            >
-                                <span className="flex items-center gap-2">
-                                    Instant Booking <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                                </span>
-                            </button>
-
-                            <Link
-                                href="/tour-packages"
-                                className="px-10 py-5 bg-white/60 backdrop-blur-md border border-white/40 text-slate-900 font-black uppercase tracking-widest text-sm rounded-full hover:bg-white transition-all shadow-lg"
-                            >
-                                Explore Tours
-                            </Link>
-                        </div>
+                {/* Sri Lanka Info Text */}
+                <div className="max-w-2xl mb-6 md:mb-8 animate-slide-up opacity-0 [animation-delay:0.5s] [animation-fill-mode:forwards] md:mx-auto">
+                    <p className="text-base md:text-xl text-white/90 leading-relaxed mb-4 md:mb-6 font-medium text-shadow-sm">
+                        Reliable airport transfers and curated luxury tours.
+                        Professional service tailored to your journey.
+                    </p>
+                    <div className="flex flex-col gap-2 p-5 bg-emerald-950/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg max-w-xl md:mx-auto md:text-left">
+                        <p className="text-sm text-white/80 leading-relaxed">
+                            🇱🇰 <strong className="text-emerald-300">Premium Fleet & Service:</strong>
+                        </p>
+                        <ul className="text-xs md:text-sm text-white/70 space-y-1 ml-1">
+                            <li className="flex items-center gap-2">✓ Modern Air-Conditioned Vehicles</li>
+                            <li className="flex items-center gap-2">✓ English-Speaking Chauffeurs</li>
+                            <li className="flex items-center gap-2">✓ Fixed Prices (No Hidden Charges)</li>
+                        </ul>
                     </div>
+                </div>
 
-                    {/* Right: Glass Panel */}
-                    <div className="lg:w-[450px] relative group hidden lg:block">
-                        <div className="absolute inset-0 bg-[#FFDA00]/20 blur-[100px] rounded-full group-hover:bg-[#FFDA00]/30 transition-all duration-1000"></div>
-
-                        <div className="bg-black/40 backdrop-blur-2xl border border-white/10 rounded-[3rem] p-10 space-y-10 shadow-2xl">
-                            <div className="space-y-1">
-                                <p className="text-[10px] font-black text-[#FFDA00] uppercase tracking-[0.4em]">Available 24/7</p>
-                                <h2 className="text-3xl font-black text-white tracking-tighter uppercase">Premier Fleet</h2>
-                            </div>
-
-                            <div className="space-y-6">
-                                {HeroFeatures.map((item, idx) => (
-                                    <div key={idx} className="flex items-center gap-5 group/item bg-white/5 p-4 rounded-3xl border border-white/10 hover:bg-white/10 transition-all">
-                                        <div className="w-14 h-14 bg-[#FFDA00] rounded-2xl flex items-center justify-center shadow-lg">
-                                            <item.icon size={24} className="text-black" />
-                                        </div>
-                                        <div>
-                                            <h4 className="text-sm font-black text-white uppercase tracking-wider">{item.label}</h4>
-                                            <p className="text-[10px] text-white/50 font-bold uppercase tracking-widest mt-0.5">{item.desc}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
+                <div className="flex flex-wrap items-center justify-start md:justify-center gap-4 animate-slide-up opacity-0 [animation-delay:0.8s] [animation-fill-mode:forwards] pb-8 md:pb-0">
+                    <button
+                        onClick={onBookClick}
+                        className="group w-full sm:w-auto px-8 py-4 bg-emerald-700 text-white rounded-xl font-bold text-lg hover:bg-emerald-600 transition-all shadow-xl shadow-emerald-900/20 flex items-center justify-center gap-2 min-w-[200px]"
+                    >
+                        Plan Your Trip
+                        <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                    <Link
+                        href="/offers"
+                        className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md text-white rounded-xl font-bold text-lg transition-all border border-white/20 hover:bg-white/20 text-center min-w-[200px]"
+                    >
+                        See Offers
+                    </Link>
                 </div>
             </div>
 
-            {/* Slide Navigation */}
-            <div className="absolute bottom-10 right-10 z-30 flex items-center gap-4">
-                <div className="flex gap-2 bg-black/20 backdrop-blur-md p-3 rounded-full border border-white/10">
-                    {heroMedia.map((_, i) => (
-                        <div
-                            key={i}
-                            className={`h-2 rounded-full transition-all duration-500 hover:bg-[#FFDA00]/60 cursor-pointer ${currentSlide === i ? 'bg-[#FFDA00] w-8' : 'bg-white/50 w-2'}`}
-                            onClick={() => setCurrentSlide(i)}
-                        />
-                    ))}
+            {/* Vertical Text Ornament */}
+            <div className="absolute top-1/2 -translate-y-1/2 left-8 hidden 2xl:block opacity-30 select-none">
+                <div className="text-[10px] font-bold tracking-[0.5em] uppercase [writing-mode:vertical-rl] text-white h-64 border-r border-white/30 pr-4">
+                    EST. 2024 • COLOMBO • SRI LANKA
                 </div>
             </div>
         </section>
