@@ -628,7 +628,18 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         />
 
                                         <div className="flex flex-col items-center border-l border-slate-900/10 dark:border-white/10 px-2 min-w-[70px] sm:min-w-[100px] justify-center">
-                                            {/* Waiting Hour Removed */}
+                                            <div className="flex items-center gap-1">
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: Math.max(0, (w.waitingTime || 0) - 1) } : w)); }}
+                                                    className="w-6 h-6 flex items-center justify-center rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-white text-xs font-bold hover:bg-slate-200"
+                                                >−</button>
+                                                <span className="text-xs font-black text-slate-900 dark:text-white w-6 text-center">{wp.waitingTime || 0}h</span>
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: (w.waitingTime || 0) + 1 } : w)); }}
+                                                    className="w-6 h-6 flex items-center justify-center rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-white text-xs font-bold hover:bg-slate-200"
+                                                >+</button>
+                                            </div>
+                                            <span className="text-[8px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Wait</span>
                                         </div>
 
                                         <button
@@ -682,16 +693,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </>
                                 )}
 
-                                {/* Swap Button Visual - Floating between inputs */}
-                                <div className="relative h-0 z-30 flex justify-end pr-6 pointer-events-none">
-                                    <button
-                                        onClick={swapLocations}
-                                        className="w-8 h-8 -translate-y-1/2 pointer-events-auto bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-white/10 rounded-full flex items-center justify-center hover:scale-110 active:rotate-180 transition-all text-emerald-900 dark:text-white shadow-sm"
-                                        aria-label="Swap pickup and dropoff locations"
-                                    >
-                                        <ArrowRightLeft size={14} />
-                                    </button>
-                                </div>
+
 
                                 {/* Dropoff Input */}
                                 <LocationInput

@@ -634,8 +634,19 @@ const Prices = ({ initialDestination }) => {
                                         >
                                             <div className="flex justify-between items-start mb-6">
                                                 <div className="w-full text-center">
-                                                    <h3 className="font-black text-black dark:text-white text-3xl md:text-4xl leading-tight pb-1 uppercase tracking-tight">{v.name}</h3>
-                                                    <p className="text-sm text-gray-400 dark:text-slate-500 font-bold">{v.model}</p>
+                                                    {(() => {
+                                                        const match = v.name.match(/^(.+?)\s*\((.+)\)$/);
+                                                        if (match) {
+                                                            return (
+                                                                <>
+                                                                    <h3 className="font-black text-black dark:text-white text-3xl md:text-4xl leading-tight uppercase tracking-tight">{match[1].trim()}</h3>
+                                                                    <span className="inline-block mt-1 px-3 py-0.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold rounded-full uppercase tracking-wide">{match[2]}</span>
+                                                                </>
+                                                            );
+                                                        }
+                                                        return <h3 className="font-black text-black dark:text-white text-3xl md:text-4xl leading-tight pb-1 uppercase tracking-tight">{v.name}</h3>;
+                                                    })()}
+                                                    <p className="text-sm text-gray-400 dark:text-slate-500 font-bold mt-1">{v.model}</p>
                                                 </div>
                                             </div>
 

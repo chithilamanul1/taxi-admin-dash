@@ -108,7 +108,20 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
 
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between items-start">
-                                            <h4 className="font-bold text-slate-900 dark:text-white truncate">{vehicle.name}</h4>
+                                            <div>
+                                                {(() => {
+                                                    const match = vehicle.name.match(/^(.+?)\s*\((.+)\)$/);
+                                                    if (match) {
+                                                        return (
+                                                            <>
+                                                                <h4 className="font-bold text-slate-900 dark:text-white truncate">{match[1].trim()}</h4>
+                                                                <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">{match[2]}</span>
+                                                            </>
+                                                        );
+                                                    }
+                                                    return <h4 className="font-bold text-slate-900 dark:text-white truncate">{vehicle.name}</h4>;
+                                                })()}
+                                            </div>
                                             {isSelected && <CheckCircle2 size={18} className="text-black shrink-0" />}
                                         </div>
                                         <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-white/40 mt-1">
@@ -117,6 +130,9 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                             </div>
                                             <div className="flex items-center gap-1">
                                                 <Briefcase size={12} className="text-black" /> {vehicle.luggage}
+                                            </div>
+                                            <div className="flex items-center gap-1">
+                                                <Briefcase size={10} className="text-black" /> {vehicle.handLuggage || 0} Hand
                                             </div>
                                         </div>
                                     </div>
@@ -171,12 +187,12 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                     <div className="flex flex-col items-center gap-1 p-3 bg-slate-50 dark:bg-white/5 rounded-2xl">
                                         <Briefcase size={16} className="text-black" />
                                         <span className="text-sm font-black text-black dark:text-white">{detailVehicle.luggage}</span>
-                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Large Bags</span>
+                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Luggage</span>
                                     </div>
                                     <div className="flex flex-col items-center gap-1 p-3 bg-slate-50 dark:bg-white/5 rounded-2xl">
-                                        <Wind size={16} className="text-black" />
-                                        <span className="text-sm font-black text-black dark:text-white">Yes</span>
-                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Air Con</span>
+                                        <Briefcase size={14} className="text-black" />
+                                        <span className="text-sm font-black text-black dark:text-white">{detailVehicle.handLuggage || 0}</span>
+                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Hand Bags</span>
                                     </div>
                                 </div>
 
