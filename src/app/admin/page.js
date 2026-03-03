@@ -433,7 +433,7 @@ export default function AdminDashboard() {
     }
 
     return (
-        <div className="flex h-screen bg-gradient-to-br from-slate-100 to-slate-200">
+        <div className="flex h-screen bg-slate-100">
             {/* Mobile Overlay */}
             {sidebarOpen && (
                 <div
@@ -443,7 +443,7 @@ export default function AdminDashboard() {
             )}
 
             {/* Sidebar - Premium Gradient Design */}
-            <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 bg-gradient-to-b from-emerald-900 via-emerald-950 to-slate-900 text-white transition-all duration-300 ${sidebarOpen && 'md:w-64'} ${!sidebarOpen && 'md:w-20'} w-64 flex flex-col shadow-2xl`}>
+            <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 bg-slate-950 text-white transition-all duration-300 ${sidebarOpen && 'md:w-64'} ${!sidebarOpen && 'md:w-20'} w-64 flex flex-col shadow-2xl border-r border-white/5`}>
                 <button
                     onClick={() => setSidebarOpen(false)}
                     className="md:hidden absolute top-4 right-4 text-white/80 hover:text-white p-2 hover:bg-white/10 rounded-lg transition-all"
@@ -451,50 +451,50 @@ export default function AdminDashboard() {
                     <X size={20} />
                 </button>
                 {/* Logo Area with Glass Effect */}
-                <div className="p-5 flex items-center gap-3 border-b border-white/10 bg-white/5 backdrop-blur-sm">
-                    <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                <div className="p-5 flex items-center gap-3 border-b border-white/5">
+                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/10">
                         <Car size={20} className="text-white" />
                     </div>
                     <div className={`${!sidebarOpen && 'md:hidden'}`}>
-                        <h1 className="font-bold text-lg leading-tight">Admin Panel</h1>
-                        <p className="text-[10px] text-emerald-300/70 uppercase tracking-widest">Control Center</p>
+                        <h1 className="font-bold text-lg leading-tight tracking-tight">Admin Panel</h1>
+                        <p className="text-[10px] text-slate-400 uppercase tracking-widest">Airport Taxis</p>
                     </div>
                 </div>
                 <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-                    <button onClick={() => { setCurrentView('dashboard'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'dashboard' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('dashboard'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'dashboard' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <Activity size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Dashboard</span>
                     </button>
-                    <button onClick={() => { setCurrentView('pricing'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'pricing' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('pricing'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'pricing' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <DollarSign size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Pricing</span>
                     </button>
-                    <button onClick={() => { setCurrentView('revenue'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'revenue' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('revenue'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'revenue' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <DollarSign size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Revenue</span>
                     </button>
-                    <button onClick={() => { setCurrentView('rates'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'rates' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('rates'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'rates' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <MapPin size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Destination Rates</span>
                     </button>
-                    <button onClick={() => { setCurrentView('chat'); setSidebarOpen(false); }} className={`relative flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'chat' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('chat'); setSidebarOpen(false); }} className={`relative flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'chat' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <MessageCircle size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Live Chat</span>
                         <span className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
                     </button>
-                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('Multi-Day Packages'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' && tourCategoryFilter === 'Multi-Day Packages' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('Multi-Day Packages'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'tours' && tourCategoryFilter === 'Multi-Day Packages' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <Compass size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Tour Packages</span>
                     </button>
-                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('Day Trips'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' && tourCategoryFilter === 'Day Trips' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('Day Trips'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'tours' && tourCategoryFilter === 'Day Trips' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <MapIcon size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Day Trips</span>
                     </button>
                     <button onClick={() => {
                         setCurrentView('bookings');
                         setSidebarOpen(false);
-                        setUnreadCount(0); // Clear badge when viewing bookings
-                    }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 relative ${currentView === 'bookings' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        setUnreadCount(0);
+                    }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 relative ${currentView === 'bookings' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <Users size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Bookings</span>
                         {unreadCount > 0 && (
@@ -503,39 +503,39 @@ export default function AdminDashboard() {
                             </span>
                         )}
                     </button>
-                    <button onClick={() => { setCurrentView('drivers'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'drivers' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('drivers'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'drivers' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <Car size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Drivers</span>
                     </button>
-                    <button onClick={() => { setCurrentView('live-map'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'live-map' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('live-map'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'live-map' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <MapPin size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Live Map</span>
                     </button>
-                    <button onClick={() => { setCurrentView('blog'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'blog' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('blog'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'blog' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <FileText size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Blog</span>
                     </button>
-                    <button onClick={() => { setCurrentView('team'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'team' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('team'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'team' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <Users size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Team</span>
                     </button>
-                    <button onClick={() => { setCurrentView('communications'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'communications' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('communications'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'communications' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <Mail size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Email</span>
                     </button>
-                    <button onClick={() => { setCurrentView('support'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'support' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('support'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'support' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <LifeBuoy size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Support</span>
                     </button>
-                    <button onClick={() => { setCurrentView('coupons'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'coupons' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('coupons'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'coupons' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <Percent size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Coupons</span>
                     </button>
-                    <button onClick={() => { setCurrentView('reviews'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'reviews' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('reviews'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'reviews' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <Activity size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Reviews</span>
                     </button>
-                    <button onClick={() => { setCurrentView('invoices'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'invoices' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('invoices'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-lg transition-all duration-150 ${currentView === 'invoices' ? 'bg-white text-slate-900 font-bold' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`}>
                         <FileText size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Invoices</span>
                     </button>
@@ -629,7 +629,7 @@ export default function AdminDashboard() {
                             )}
                         </div>
 
-                        <div className="w-10 h-10 overflow-hidden bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-500/30">
+                        <div className="w-10 h-10 overflow-hidden bg-slate-800 rounded-xl flex items-center justify-center text-white font-bold border border-slate-700">
                             {session?.user?.image ? (
                                 <img src={session.user.image} alt="Admin" className="w-full h-full object-cover" />
                             ) : (
@@ -658,7 +658,7 @@ export default function AdminDashboard() {
                                     <h2 className="text-3xl font-bold text-slate-800">Dashboard Overview</h2>
                                     <p className="text-slate-500 mt-1">Welcome back! Here's what's happening today.</p>
                                 </div>
-                                <button className="px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-500/30 flex items-center gap-2">
+                                <button className="px-4 py-2 bg-black text-white rounded-lg font-bold hover:bg-slate-800 transition-colors flex items-center gap-2 text-sm">
                                     <Activity size={16} />
                                     Refresh
                                 </button>
