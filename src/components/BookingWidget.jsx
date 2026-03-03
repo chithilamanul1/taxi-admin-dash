@@ -642,8 +642,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 ))}
 
 
-                                {/* Add Waypoint Search */}
-                                {true && (
+                                {/* Add Waypoint Search - supports up to 4 stops */}
+                                {waypoints.length < 4 && (
                                     <>
                                         {/* "Add Stop" Button - Aligned with icons */}
                                         {waypointSearches.length === 0 && (
@@ -653,7 +653,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     aria-label="Add Stop"
                                                     className="text-emerald-700 dark:text-emerald-400 text-xs font-bold flex items-center gap-1 hover:bg-emerald-50 dark:hover:bg-white/5 py-1.5 px-3 rounded-lg transition-colors"
                                                 >
-                                                    <Plus size={14} /> Add Stop
+                                                    <Plus size={14} /> Add Stop ({waypoints.length}/4)
                                                 </button>
                                             </div>
                                         )}

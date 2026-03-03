@@ -778,6 +778,24 @@ export default function AdminDashboard() {
                                         </button>
                                         <button
                                             onClick={async () => {
+                                                if (!confirm('This will update all vehicle DETAILS (name, capacity, luggage, image) to the correct values. Pricing rates will NOT be changed. Continue?')) return;
+                                                setIsLoading(true);
+                                                const res = await fetch('/api/admin/sync-vehicle-meta', { method: 'POST' });
+                                                const data = await res.json();
+                                                if (data.success) {
+                                                    alert(data.message);
+                                                    fetchData();
+                                                } else {
+                                                    alert(data.error || 'Sync failed');
+                                                }
+                                                setIsLoading(false);
+                                            }}
+                                            className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200 font-bold"
+                                        >
+                                            Fix Vehicle Details
+                                        </button>
+                                        <button
+                                            onClick={async () => {
                                                 if (!confirm('This will RESET ALL pricing for ALL vehicles to the system DEFAULTS. Are you sure?')) return;
                                                 setIsLoading(true);
                                                 const res = await fetch('/api/admin/sync-pricing', { method: 'POST' });
