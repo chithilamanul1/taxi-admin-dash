@@ -37,30 +37,30 @@ export default function SpecialOffersSection() {
     return (
         <section id="offers" className="py-20 px-6 relative">
             <div className="max-w-7xl mx-auto">
-                <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-900 to-emerald-950 shadow-2xl">
+                <div className="relative rounded-[3rem] overflow-hidden bg-black shadow-2xl">
 
                     {/* Background Effects */}
-                    <div className="absolute inset-0 opacity-20">
-                        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-300/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+                    <div className="absolute inset-0 opacity-10">
+                        <div className="absolute top-0 right-0 w-96 h-96 bg-white/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
                     </div>
 
                     <div className="relative z-10 grid lg:grid-cols-2 gap-12 p-8 md:p-16 items-center">
                         <div>
-                            <div className="inline-flex items-center gap-2 bg-emerald-800/50 border border-emerald-700/50 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6">
-                                <Sparkles size={14} className="text-emerald-300" />
-                                <span className="text-xs font-bold text-emerald-100 uppercase tracking-wider">Exclusive Deals</span>
+                            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6">
+                                <Sparkles size={14} className="text-amber-400" />
+                                <span className="text-xs font-bold text-white uppercase tracking-wider">Exclusive Deals</span>
                             </div>
                             <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">
                                 Save on Your <br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-200">Next Journey</span>
+                                <span className="text-[#FFDA00]">Next Journey</span>
                             </h2>
-                            <p className="text-emerald-100/70 text-lg mb-8 max-w-md">
+                            <p className="text-white/60 text-lg mb-8 max-w-md">
                                 Unlock special discounts on airport transfers and tour packages. Limited time offers available now.
                             </p>
                             <Link
                                 href="/offers"
-                                className="inline-flex items-center gap-3 bg-white text-emerald-900 px-8 py-4 rounded-xl font-bold hover:bg-emerald-50 transition-all transform hover:scale-105 shadow-lg group"
+                                className="inline-flex items-center gap-3 bg-[#FFDA00] text-black px-8 py-4 rounded-xl font-bold hover:bg-white transition-all transform hover:scale-105 shadow-lg group"
                             >
                                 View All Offers
                                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
@@ -120,8 +120,8 @@ export default function SpecialOffersSection() {
 
                                             {/* Divider */}
                                             <div className="border-t-2 border-dashed border-slate-100 mb-6 relative">
-                                                <div className="absolute left-0 top-1/2 -translate-y-1/2 -ml-8 w-4 h-4 bg-emerald-900 rounded-full"></div>
-                                                <div className="absolute right-0 top-1/2 -translate-y-1/2 -mr-8 w-4 h-4 bg-emerald-900 rounded-full"></div>
+                                                <div className="absolute left-0 top-1/2 -translate-y-1/2 -ml-8 w-4 h-4 bg-black rounded-full"></div>
+                                                <div className="absolute right-0 top-1/2 -translate-y-1/2 -mr-8 w-4 h-4 bg-black rounded-full"></div>
                                             </div>
 
                                             {/* Footer: Code & Copy */}
@@ -138,7 +138,7 @@ export default function SpecialOffersSection() {
                                                         setCopiedCode(textToCopy);
                                                         setTimeout(() => setCopiedCode(null), 2000);
                                                     }}
-                                                    className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-sm ${copiedCode === coupon.code ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-white hover:bg-amber-600'}`}
+                                                    className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-sm ${copiedCode === coupon.code ? 'bg-black text-white' : 'bg-amber-500 text-white hover:bg-amber-600'}`}
                                                 >
                                                     {copiedCode === coupon.code ? <Check size={14} /> : <Copy size={14} />}
                                                     {copiedCode === coupon.code ? 'Copied' : 'Copy'}

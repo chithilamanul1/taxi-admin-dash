@@ -68,24 +68,24 @@ export default function BookingActions({ booking }) {
 
     return (
         <>
-            <div className="flex flex-wrap gap-4 pt-6 border-t border-gray-100 justify-center">
+            <div className="flex flex-wrap gap-4 pt-8 border-t border-white/5 justify-center">
                 <button
                     onClick={handleDownloadPDF}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-bold transition-colors"
+                    className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-none text-xs font-black uppercase tracking-widest border border-white/10 transition-all"
                 >
-                    <Download size={16} /> Download PDF
+                    <Download size={16} /> Download Invoice
                 </button>
                 <button
                     onClick={handleEmailReceipt}
                     disabled={emailLoading}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-bold transition-colors disabled:opacity-50"
+                    className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-none text-xs font-black uppercase tracking-widest border border-white/10 transition-all disabled:opacity-50"
                 >
                     {emailLoading ? <Loader2 size={16} className="animate-spin" /> : <Mail size={16} />}
-                    Email Receipt
+                    Send to Email
                 </button>
                 <button
                     onClick={() => setTicketOpen(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-sm font-bold transition-colors"
+                    className="flex items-center gap-2 px-6 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-none text-xs font-black uppercase tracking-widest border border-red-500/20 transition-all"
                 >
                     <MessageSquare size={16} /> Report Issue
                 </button>
@@ -93,30 +93,30 @@ export default function BookingActions({ booking }) {
 
             {/* Ticket Modal */}
             {ticketOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 animate-fade-in-up">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+                    <div className="bg-[#1a1a1a] rounded-none shadow-2xl w-full max-w-md p-8 animate-fade-in-up border-2 border-red-500/30">
+                        <div className="flex justify-between items-center mb-8">
+                            <h3 className="text-xl font-black text-white uppercase tracking-tighter flex items-center gap-2">
                                 <AlertTriangle className="text-red-500" size={24} /> Report an Issue
                             </h3>
-                            <button onClick={() => setTicketOpen(false)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
+                            <button onClick={() => setTicketOpen(false)} className="text-white/40 hover:text-white"><X size={20} /></button>
                         </div>
 
-                        <form onSubmit={handleSubmitTicket} className="space-y-4">
+                        <form onSubmit={handleSubmitTicket} className="space-y-6">
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Subject</label>
+                                <label className="block text-[10px] font-black text-[#FFDA00] uppercase tracking-widest mb-2">Subject</label>
                                 <input
                                     required
-                                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
-                                    placeholder="e.g. Driver Late, Lost Item"
+                                    className="w-full bg-black border border-white/10 rounded-none px-4 py-3 text-white text-sm focus:outline-none focus:border-[#22C55E] placeholder:text-white/20"
+                                    placeholder="e.g. Driver Late, Vehicle Change"
                                     value={ticketForm.subject}
                                     onChange={e => setTicketForm({ ...ticketForm, subject: e.target.value })}
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Priority</label>
+                                <label className="block text-[10px] font-black text-[#FFDA00] uppercase tracking-widest mb-2">Priority Level</label>
                                 <select
-                                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-black border border-white/10 rounded-none px-4 py-3 text-white text-sm focus:outline-none focus:border-[#22C55E]"
                                     value={ticketForm.priority}
                                     onChange={e => setTicketForm({ ...ticketForm, priority: e.target.value })}
                                 >
@@ -126,12 +126,12 @@ export default function BookingActions({ booking }) {
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Message</label>
+                                <label className="block text-[10px] font-black text-[#FFDA00] uppercase tracking-widest mb-2">Detailed Message</label>
                                 <textarea
                                     required
                                     rows={4}
-                                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
-                                    placeholder="Describe your issue..."
+                                    className="w-full bg-black border border-white/10 rounded-none px-4 py-3 text-white text-sm focus:outline-none focus:border-[#22C55E] placeholder:text-white/20"
+                                    placeholder="Please describe exactly what happened..."
                                     value={ticketForm.message}
                                     onChange={e => setTicketForm({ ...ticketForm, message: e.target.value })}
                                 />
@@ -139,9 +139,9 @@ export default function BookingActions({ booking }) {
                             <button
                                 type="submit"
                                 disabled={ticketLoading}
-                                className="w-full bg-emerald-900 text-white rounded-xl py-3 font-bold hover:bg-emerald-800 transition-colors disabled:opacity-50 flex justify-center items-center gap-2"
+                                className="w-full bg-red-600 text-white rounded-none py-4 font-black text-sm uppercase tracking-widest hover:bg-red-700 transition-all disabled:opacity-50 flex justify-center items-center gap-2 shadow-lg shadow-red-600/10"
                             >
-                                {ticketLoading && <Loader2 size={16} className="animate-spin" />} Submit Ticket
+                                {ticketLoading && <Loader2 size={16} className="animate-spin" />} Submit Support Ticket
                             </button>
                         </form>
                     </div>

@@ -108,7 +108,7 @@ const AdminDashboard = () => {
         return [
             { title: 'Total Revenue', value: `LKR ${totalRevenue.toLocaleString()}`, icon: DollarSign, color: 'text-green-500' },
             { title: 'Active Rides', value: activeRides.toString(), icon: Car, color: 'text-blue-500' },
-            { title: 'Online Drivers', value: onlineDrivers.toString(), icon: Users, color: 'text-emerald-600' },
+            { title: 'Online Drivers', value: onlineDrivers.toString(), icon: Users, color: 'text-slate-600' },
             { title: 'New Bookings', value: pendingBookings.toString(), icon: Bell, color: 'text-red-500' },
         ];
     }, [bookings]);
@@ -125,7 +125,7 @@ const AdminDashboard = () => {
     return (
         <div className="flex h-screen bg-slate-100 dark:bg-slate-950 transition-colors">
             {/* Sidebar */}
-            <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 bg-emerald-900 dark:bg-slate-900 text-white transition-all duration-300 ${sidebarOpen && 'md:w-64'} ${!sidebarOpen && 'md:w-20'} w-64 flex flex-col`}>
+            <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 bg-slate-900 dark:bg-slate-900 text-white transition-all duration-300 ${sidebarOpen && 'md:w-64'} ${!sidebarOpen && 'md:w-20'} w-64 flex flex-col`}>
                 {/* Close button for mobile */}
                 <button
                     onClick={() => setSidebarOpen(false)}
@@ -137,7 +137,7 @@ const AdminDashboard = () => {
                     <h1 className={`font-bold text-xl ${!sidebarOpen && 'md:hidden'}`}>Admin Panel</h1>
                 </div>
                 <nav className="flex-1 p-4 space-y-2">
-                    <button onClick={() => setCurrentView('dashboard')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'dashboard' ? 'bg-emerald-600 text-emerald-900' : 'hover:bg-white/10'}`}>
+                    <button onClick={() => setCurrentView('dashboard')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'dashboard' ? 'bg-slate-600 text-slate-900' : 'hover:bg-white/10'}`}>
                         <Activity size={20} />
                         <span className={`${!sidebarOpen && 'hidden'}`}>Dashboard</span>
                     </button>
@@ -145,11 +145,11 @@ const AdminDashboard = () => {
                         <MapPin size={20} />
                         <span className={`${!sidebarOpen && 'hidden'}`}>Live Map</span>
                     </button>
-                    <button onClick={() => setCurrentView('drivers')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'drivers' ? 'bg-emerald-600 text-emerald-900' : 'hover:bg-white/10'}`}>
+                    <button onClick={() => setCurrentView('drivers')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'drivers' ? 'bg-slate-600 text-slate-900' : 'hover:bg-white/10'}`}>
                         <Car size={20} />
                         <span className={`${!sidebarOpen && 'hidden'}`}>Drivers</span>
                     </button>
-                    <button onClick={() => setCurrentView('pricing')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'pricing' ? 'bg-emerald-600 text-emerald-900' : 'hover:bg-white/10'}`}>
+                    <button onClick={() => setCurrentView('pricing')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'pricing' ? 'bg-slate-600 text-slate-900' : 'hover:bg-white/10'}`}>
                         <DollarSign size={20} />
                         <span className={`${!sidebarOpen && 'hidden'}`}>Pricing</span>
                     </button>
@@ -158,7 +158,7 @@ const AdminDashboard = () => {
                             setCurrentView('bookings');
                             setLastViewedBookings(new Date());
                         }}
-                        className={`flex items-center justify-between p-3 w-full rounded transition-colors ${currentView === 'bookings' ? 'bg-emerald-600 text-emerald-900' : 'hover:bg-white/10'}`}
+                        className={`flex items-center justify-between p-3 w-full rounded transition-colors ${currentView === 'bookings' ? 'bg-slate-600 text-slate-900' : 'hover:bg-white/10'}`}
                     >
                         <div className="flex items-center gap-3">
                             <Users size={20} />
@@ -170,15 +170,15 @@ const AdminDashboard = () => {
                             </span>
                         )}
                     </button>
-                    <button onClick={() => setCurrentView('tours')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'tours' ? 'bg-emerald-600 text-emerald-900' : 'hover:bg-white/10'}`}>
+                    <button onClick={() => setCurrentView('tours')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'tours' ? 'bg-slate-600 text-slate-900' : 'hover:bg-white/10'}`}>
                         <MapPin size={20} />
                         <span className={`${!sidebarOpen && 'hidden'}`}>Tours</span>
                     </button>
-                    <button onClick={() => setCurrentView('gateway')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'gateway' ? 'bg-emerald-600 text-emerald-900' : 'hover:bg-white/10'}`}>
+                    <button onClick={() => setCurrentView('gateway')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'gateway' ? 'bg-slate-600 text-slate-900' : 'hover:bg-white/10'}`}>
                         <Activity size={20} />
                         <span className={`${!sidebarOpen && 'hidden'}`}>Gateway</span>
                     </button>
-                    <button onClick={() => setCurrentView('support')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'support' ? 'bg-emerald-600 text-emerald-900' : 'hover:bg-white/10'}`}>
+                    <button onClick={() => setCurrentView('support')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'support' ? 'bg-slate-600 text-slate-900' : 'hover:bg-white/10'}`}>
                         <MessageSquare size={20} />
                         <span className={`${!sidebarOpen && 'hidden'}`}>Support</span>
                     </button>
@@ -189,12 +189,12 @@ const AdminDashboard = () => {
             <div className="flex-1 overflow-auto">
                 <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm p-4 flex justify-between items-center border-b border-white/5 sticky top-0 z-40">
                     <div className="flex items-center gap-4">
-                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-emerald-900 dark:text-emerald-400 font-bold hover:bg-emerald-50 dark:hover:bg-white/5 p-2 rounded-lg transition-colors">
+                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-slate-900 dark:text-amber-400 font-bold hover:bg-slate-50 dark:hover:bg-white/5 p-2 rounded-lg transition-colors">
                             ☰
                         </button>
                         <div className="flex flex-col">
                             <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Location</span>
-                            <span className="text-sm font-black text-emerald-900 dark:text-white capitalize flex items-center gap-2">
+                            <span className="text-sm font-black text-slate-900 dark:text-white capitalize flex items-center gap-2">
                                 Admin <span className="text-slate-300">/</span> {currentView}
                             </span>
                         </div>
@@ -202,23 +202,23 @@ const AdminDashboard = () => {
 
                     <div className="flex items-center gap-6">
                         <div className="hidden md:flex flex-col items-end">
-                            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
+                            <span className="text-xs font-bold text-slate-600 dark:text-amber-400 uppercase tracking-widest">
                                 {currentTime.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                             </span>
-                            <span className="text-lg font-black text-emerald-900 dark:text-white tabular-nums leading-none">
+                            <span className="text-lg font-black text-slate-900 dark:text-white tabular-nums leading-none">
                                 {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                             </span>
                         </div>
                         <div className="h-8 w-px bg-slate-200 dark:bg-slate-800 hidden md:block"></div>
-                        <Bell className="text-slate-500 cursor-pointer hover:text-emerald-900 transition-colors" />
-                        <div className="w-10 h-10 bg-gradient-to-br from-emerald-800 to-emerald-950 rounded-xl text-white flex items-center justify-center font-bold shadow-lg shadow-emerald-900/20 text-sm">A</div>
+                        <Bell className="text-slate-500 cursor-pointer hover:text-slate-900 transition-colors" />
+                        <div className="w-10 h-10 bg-gradient-to-br from-slate-800 to-emerald-950 rounded-xl text-white flex items-center justify-center font-bold shadow-lg shadow-slate-900/20 text-sm">A</div>
                     </div>
                 </header>
 
                 <main className="p-8">
                     {currentView === 'dashboard' && (
                         <>
-                            <h2 className="text-2xl font-bold text-emerald-900 dark:text-white mb-6">Dashboard Overview</h2>
+                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Dashboard Overview</h2>
 
                             {/* Stats Grid */}
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -227,7 +227,7 @@ const AdminDashboard = () => {
                                         <div className="flex items-center justify-between">
                                             <div>
                                                 <p className="text-sm text-slate-500 dark:text-slate-400">{stat.title}</p>
-                                                <p className="text-2xl font-bold text-emerald-900 dark:text-white mt-1">{stat.value}</p>
+                                                <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">{stat.value}</p>
                                             </div>
                                             <stat.icon className={`${stat.color} opacity-80`} size={32} />
                                         </div>
@@ -239,7 +239,7 @@ const AdminDashboard = () => {
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                                 {/* Bookings Table */}
                                 <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-xl shadow-sm p-6 border border-white/5">
-                                    <h3 className="text-lg font-bold text-emerald-900 dark:text-white mb-4">Recent Bookings</h3>
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Recent Bookings</h3>
                                     <div className="overflow-x-auto">
                                         <table className="w-full">
                                             <thead>
@@ -259,8 +259,8 @@ const AdminDashboard = () => {
                                                     </tr>
                                                 ) : (
                                                     bookings.slice(0, 5).map((booking) => (
-                                                        <tr key={booking._id} className="border-b dark:border-white/5 last:border-0 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors text-emerald-900 dark:text-white">
-                                                            <td className="py-4 font-medium text-emerald-900 dark:text-emerald-400">#{booking._id.slice(-6)}</td>
+                                                        <tr key={booking._id} className="border-b dark:border-white/5 last:border-0 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors text-slate-900 dark:text-white">
+                                                            <td className="py-4 font-medium text-slate-900 dark:text-amber-400">#{booking._id.slice(-6)}</td>
                                                             <td className="py-4 capitalize">{booking.vehicleType}</td>
                                                             <td className="py-4 text-slate-500 dark:text-slate-400">
                                                                 <div className="max-w-[150px] truncate" title={booking.pickupLocation?.address}>{booking.pickupLocation?.address?.split(',')[0]}</div>
@@ -289,11 +289,11 @@ const AdminDashboard = () => {
                                 </div>
 
                                 {/* Live Map Stub */}
-                                <div className="bg-emerald-900 text-white rounded-xl shadow-sm p-6 flex flex-col justify-center items-center text-center">
-                                    <MapPin size={48} className="mb-4 text-emerald-600 animate-bounce" />
+                                <div className="bg-slate-900 text-white rounded-xl shadow-sm p-6 flex flex-col justify-center items-center text-center">
+                                    <MapPin size={48} className="mb-4 text-slate-600 animate-bounce" />
                                     <h3 className="text-lg font-bold">God's Eye Map</h3>
                                     <p className="text-white/60 text-sm mt-2">Real-time driver tracking will be rendered here via Socket.io.</p>
-                                    <button className="mt-6 px-4 py-2 bg-emerald-600 text-emerald-900 font-bold rounded-lg hover:brightness-110 transition-all">
+                                    <button className="mt-6 px-4 py-2 bg-slate-600 text-slate-900 font-bold rounded-lg hover:brightness-110 transition-all">
                                         Launch Map View
                                     </button>
                                 </div>
@@ -303,7 +303,7 @@ const AdminDashboard = () => {
 
                     {currentView === 'bookings' && (
                         <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-8 border border-white/5">
-                            <h3 className="text-lg font-bold text-emerald-900 dark:text-white mb-4">All Bookings</h3>
+                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">All Bookings</h3>
                             <div className="overflow-x-auto">
                                 <table className="w-full">
                                     <thead>
@@ -321,8 +321,8 @@ const AdminDashboard = () => {
                                     </thead>
                                     <tbody className="text-sm">
                                         {bookings.map((booking) => (
-                                            <tr key={booking._id} className="border-b dark:border-white/5 last:border-0 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors text-emerald-900 dark:text-white">
-                                                <td className="py-4 font-medium text-emerald-900 dark:text-emerald-400">#{booking._id.slice(-6)}</td>
+                                            <tr key={booking._id} className="border-b dark:border-white/5 last:border-0 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors text-slate-900 dark:text-white">
+                                                <td className="py-4 font-medium text-slate-900 dark:text-amber-400">#{booking._id.slice(-6)}</td>
                                                 <td className="py-4">
                                                     {booking.customer ? 'Reg. User' : (booking.guestPhone || 'Guest')}
                                                 </td>
@@ -356,7 +356,7 @@ const AdminDashboard = () => {
                                                                 if (!confirm(`Mark Rs ${(booking.totalPrice - (booking.paidAmount || 0)).toLocaleString()} as PAID in CASH?`)) return;
                                                                 alert('Feature Pending: API update required to settle balance.');
                                                             }}
-                                                            className="text-xs bg-emerald-900 text-white px-3 py-1.5 rounded hover:bg-emerald-800 block mb-1 w-full"
+                                                            className="text-xs bg-slate-900 text-white px-3 py-1.5 rounded hover:bg-slate-800 block mb-1 w-full"
                                                         >
                                                             Settle Cash
                                                         </button>
@@ -365,7 +365,7 @@ const AdminDashboard = () => {
                                                     {(booking.status === 'pending' || booking.status === 'paid') && !booking.assignedDriver ? (
                                                         <button
                                                             onClick={() => setBookingToAssign(booking)}
-                                                            className="text-xs border border-emerald-600 text-emerald-600 px-3 py-1.5 rounded hover:bg-emerald-50 block w-full font-bold"
+                                                            className="text-xs border border-slate-600 text-slate-600 px-3 py-1.5 rounded hover:bg-slate-50 block w-full font-bold"
                                                         >
                                                             Assign Driver
                                                         </button>
@@ -385,20 +385,20 @@ const AdminDashboard = () => {
 
                     {currentView === 'pricing' && (
                         <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-8 border border-white/5">
-                            <h2 className="text-2xl font-bold text-emerald-900 dark:text-white mb-6">Pricing Configuration</h2>
+                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Pricing Configuration</h2>
                             <p className="text-gray-500 dark:text-slate-400 mb-6">Manage vehicle rates and tiers dynamically across different service categories.</p>
 
                             {isLoading ? <p>Loading...</p> : (
                                 <div className="grid gap-6">
                                     {vehiclePricing.map((v) => (
-                                        <div key={v._id} className="border dark:border-white/5 p-4 rounded-xl hover:border-emerald-600 transition-colors">
+                                        <div key={v._id} className="border dark:border-white/5 p-4 rounded-xl hover:border-slate-600 transition-colors">
                                             <div className="flex justify-between items-start mb-4">
                                                 <div className="flex items-center gap-4">
                                                     <img src={v.image} alt={v.name} className="w-16 h-10 object-contain bg-slate-50 dark:bg-white/5 rounded" />
                                                     <div>
-                                                        <h3 className="font-bold text-lg text-emerald-900 dark:text-white flex items-center gap-2">
+                                                        <h3 className="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
                                                             {v.name}
-                                                            <span className="text-[10px] px-2 py-0.5 bg-emerald-900 dark:bg-emerald-600 text-white rounded-full uppercase tracking-tighter">
+                                                            <span className="text-[10px] px-2 py-0.5 bg-slate-900 dark:bg-slate-600 text-white rounded-full uppercase tracking-tighter">
                                                                 {v.category || 'Legacy'}
                                                             </span>
                                                         </h3>
@@ -443,8 +443,8 @@ const AdminDashboard = () => {
 
                     {currentView === 'support' && (
                         <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-8 border border-white/5 h-[calc(100vh-140px)] flex flex-col">
-                            <h2 className="text-2xl font-bold text-emerald-900 dark:text-white mb-6 flex items-center gap-2">
-                                <MessageSquare className="text-emerald-600" /> Support Tickets
+                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                                <MessageSquare className="text-slate-600" /> Support Tickets
                             </h2>
 
                             <AdminSupportController
@@ -473,7 +473,7 @@ const AdminDashboard = () => {
                     {editingVehicle && (
                         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-white/5">
-                                <h2 className="text-xl font-bold text-emerald-900 dark:text-white mb-4">Edit Configuration: {editingVehicle.name}</h2>
+                                <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Edit Configuration: {editingVehicle.name}</h2>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                     <div>
@@ -481,7 +481,7 @@ const AdminDashboard = () => {
                                         <input
                                             value={editForm.name || ''}
                                             onChange={(e) => handleFormChange(e, 'name')}
-                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-slate-900 dark:text-white outline-none focus:ring-1 focus:ring-slate-600"
                                         />
                                     </div>
                                     <div>
@@ -501,7 +501,7 @@ const AdminDashboard = () => {
                                             type="number"
                                             value={editForm.capacity || ''}
                                             onChange={(e) => handleFormChange(e, 'capacity')}
-                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-slate-900 dark:text-white outline-none focus:ring-1 focus:ring-slate-600"
                                         />
                                     </div>
                                     <div>
@@ -510,7 +510,7 @@ const AdminDashboard = () => {
                                             type="number"
                                             value={editForm.luggage || ''}
                                             onChange={(e) => handleFormChange(e, 'luggage')}
-                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-slate-900 dark:text-white outline-none focus:ring-1 focus:ring-slate-600"
                                         />
                                     </div>
                                     <div>
@@ -519,7 +519,7 @@ const AdminDashboard = () => {
                                             type="number"
                                             value={editForm.handLuggage || ''}
                                             onChange={(e) => handleFormChange(e, 'handLuggage')}
-                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                            className="w-full p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded mt-1 text-slate-900 dark:text-white outline-none focus:ring-1 focus:ring-slate-600"
                                         />
                                     </div>
                                     <div className="md:col-span-2">
@@ -532,7 +532,7 @@ const AdminDashboard = () => {
                                                 type="text"
                                                 value={editForm.image || ''}
                                                 onChange={(e) => handleFormChange(e, 'image')}
-                                                className="flex-1 p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-emerald-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-600"
+                                                className="flex-1 p-2 bg-white dark:bg-slate-800 border dark:border-white/10 rounded text-slate-900 dark:text-white outline-none focus:ring-1 focus:ring-slate-600"
                                                 placeholder="/vehicles/example.png"
                                             />
                                         </div>
@@ -549,7 +549,7 @@ const AdminDashboard = () => {
                                                 newTiers.push({ min: 0, max: 0, type: 'per_km', rate: 0, price: 0 });
                                                 setEditForm({ ...editForm, tiers: newTiers });
                                             }}
-                                            className="text-sm bg-emerald-100 text-emerald-700 font-bold px-3 py-1 rounded hover:bg-emerald-200"
+                                            className="text-sm bg-slate-100 text-slate-700 font-bold px-3 py-1 rounded hover:bg-amber-200"
                                         >
                                             + Add Tier
                                         </button>
@@ -588,14 +588,14 @@ const AdminDashboard = () => {
                                                     </select>
                                                 </div>
                                                 <div className="w-[25%] px-2">
-                                                    <label className="text-xs font-bold text-emerald-600 block mb-1 text-center">
+                                                    <label className="text-xs font-bold text-slate-600 block mb-1 text-center">
                                                         {tier.type === 'flat' ? 'Price (LKR)' : 'Rate (LKR)'}
                                                     </label>
                                                     <input
                                                         type="number"
                                                         value={tier.type === 'flat' ? (tier.price || '') : (tier.rate || '')}
                                                         onChange={(e) => handleFormChange(e, tier.type === 'flat' ? 'price' : 'rate', i)}
-                                                        className="w-full p-1 font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded text-sm text-center"
+                                                        className="w-full p-1 font-bold text-slate-700 bg-slate-50 border border-amber-200 rounded text-sm text-center"
                                                     />
                                                 </div>
                                                 <div className="w-[5%] flex justify-end">
@@ -623,7 +623,7 @@ const AdminDashboard = () => {
                                     </button>
                                     <button
                                         onClick={handleSavePricing}
-                                        className="px-6 py-2 bg-emerald-600 text-emerald-900 font-bold rounded shadow hover:bg-yellow-400"
+                                        className="px-6 py-2 bg-slate-600 text-slate-900 font-bold rounded shadow hover:bg-yellow-400"
                                     >
                                         Save Changes
                                     </button>
@@ -701,7 +701,7 @@ function AdminSupportController({ onAssignDriver }) {
         finally { setSending(false); }
     };
 
-    if (loading) return <div className="p-10"><div className="animate-spin w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full mx-auto"></div></div>;
+    if (loading) return <div className="p-10"><div className="animate-spin w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full mx-auto"></div></div>;
 
     return (
         <div className="flex flex-1 gap-6 overflow-hidden">
@@ -711,10 +711,10 @@ function AdminSupportController({ onAssignDriver }) {
                     <div
                         key={ticket._id}
                         onClick={() => setActiveTicket(ticket)}
-                        className={`p-4 border-b dark:border-white/5 cursor-pointer hover:bg-white dark:hover:bg-white/10 transition-colors ${activeTicket?._id === ticket._id ? 'bg-white dark:bg-white/10 border-l-4 border-l-emerald-600' : ''}`}
+                        className={`p-4 border-b dark:border-white/5 cursor-pointer hover:bg-white dark:hover:bg-white/10 transition-colors ${activeTicket?._id === ticket._id ? 'bg-white dark:bg-white/10 border-l-4 border-l-slate-600' : ''}`}
                     >
                         <div className="flex justify-between mb-1">
-                            <span className="font-bold text-emerald-900 dark:text-white truncate pr-2">{ticket.subject}</span>
+                            <span className="font-bold text-slate-900 dark:text-white truncate pr-2">{ticket.subject}</span>
                             <span className={`text-[10px] px-2 py-0.5 rounded uppercase font-bold ${ticket.status === 'open' ? 'bg-red-100 text-red-700' :
                                 ticket.status === 'pending_user' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'
                                 }`}>
@@ -734,7 +734,7 @@ function AdminSupportController({ onAssignDriver }) {
                 {activeTicket ? (
                     <>
                         <div className="p-4 border-b dark:border-white/10 bg-white dark:bg-slate-900">
-                            <h3 className="font-bold text-lg text-emerald-900 dark:text-white">{activeTicket.subject}</h3>
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-white">{activeTicket.subject}</h3>
                             <div className="flex gap-4 text-xs text-slate-500">
                                 <span>User: {activeTicket.customer?.email}</span>
                                 <span>ID: {activeTicket._id}</span>
@@ -745,7 +745,7 @@ function AdminSupportController({ onAssignDriver }) {
                                 Dashboard state management for assignments should be centralized. */}
                             <button
                                 onClick={() => setActiveTicket(null)}
-                                className="px-6 py-2 rounded-lg font-bold bg-emerald-900 text-white hover:bg-emerald-800 transition-colors shadow-lg shadow-emerald-900/20"
+                                className="px-6 py-2 rounded-lg font-bold bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/20"
                             >
                                 <CheckCircle size={18} className="inline mr-2" />
                                 Done
@@ -756,7 +756,7 @@ function AdminSupportController({ onAssignDriver }) {
                             {activeTicket.messages.map((msg, i) => (
                                 <div key={i} className={`flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`max-w-[80%] p-3 rounded-2xl ${msg.sender === 'admin'
-                                        ? 'bg-emerald-600 text-white rounded-tr-none'
+                                        ? 'bg-slate-600 text-white rounded-tr-none'
                                         : 'bg-white dark:bg-slate-800 border dark:border-white/10 text-slate-700 dark:text-slate-300 rounded-tl-none shadow-sm'
                                         }`}>
                                         <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
@@ -774,13 +774,13 @@ function AdminSupportController({ onAssignDriver }) {
                                 <input
                                     value={reply}
                                     onChange={e => setReply(e.target.value)}
-                                    className="flex-1 p-3 bg-slate-100 dark:bg-slate-800 border-none rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all dark:text-white"
+                                    className="flex-1 p-3 bg-slate-100 dark:bg-slate-800 border-none rounded-xl outline-none focus:ring-2 focus:ring-amber-500 transition-all dark:text-white"
                                     placeholder="Type a reply..."
                                 />
                                 <button
                                     type="submit"
                                     disabled={sending}
-                                    className="p-3 bg-emerald-900 text-white rounded-xl hover:bg-emerald-800 disabled:opacity-50"
+                                    className="p-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 disabled:opacity-50"
                                 >
                                     <Send size={20} />
                                 </button>

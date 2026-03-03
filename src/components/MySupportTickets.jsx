@@ -96,22 +96,22 @@ export default function MySupportTickets() {
         }
     };
 
-    if (loading) return <div className="p-8 text-center text-emerald-900"><Loader2 className="animate-spin mx-auto mb-2" /> Loading support...</div>;
+    if (loading) return <div className="p-8 text-center text-slate-900"><Loader2 className="animate-spin mx-auto mb-2" /> Loading support...</div>;
 
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 min-h-[500px] flex flex-col overflow-hidden">
             {/* Header */}
             <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                 <div>
-                    <h2 className="text-xl font-bold text-emerald-900 flex items-center gap-2">
-                        <MessageSquare className="text-emerald-600" /> Support Center
+                    <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <MessageSquare className="text-slate-600" /> Support Center
                     </h2>
                     <p className="text-xs text-slate-500 mt-1">Direct line to our support team.</p>
                 </div>
                 {view === 'list' && (
                     <button
                         onClick={() => setView('create')}
-                        className="flex items-center gap-2 px-4 py-2 bg-emerald-900 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-emerald-800 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors"
                     >
                         <Plus size={16} /> New Ticket
                     </button>
@@ -119,7 +119,7 @@ export default function MySupportTickets() {
                 {view !== 'list' && (
                     <button
                         onClick={() => setView('list')}
-                        className="text-slate-500 hover:text-emerald-900 font-bold text-sm"
+                        className="text-slate-500 hover:text-slate-900 font-bold text-sm"
                     >
                         Close
                     </button>
@@ -134,17 +134,17 @@ export default function MySupportTickets() {
                             <div className="text-center py-10 text-slate-400">
                                 <MessageSquare size={48} className="mx-auto mb-4 opacity-20" />
                                 <p>No support tickets yet.</p>
-                                <button onClick={() => setView('create')} className="text-emerald-600 font-bold mt-2">Start a conversation</button>
+                                <button onClick={() => setView('create')} className="text-slate-600 font-bold mt-2">Start a conversation</button>
                             </div>
                         ) : (
                             tickets.map(ticket => (
                                 <div
                                     key={ticket._id}
                                     onClick={() => { setActiveTicket(ticket); setView('chat'); }}
-                                    className="bg-white p-4 rounded-xl border border-slate-100 hover:border-emerald-200 hover:shadow-md transition-all cursor-pointer group"
+                                    className="bg-white p-4 rounded-xl border border-slate-100 hover:border-amber-200 hover:shadow-md transition-all cursor-pointer group"
                                 >
                                     <div className="flex justify-between items-start mb-2">
-                                        <h3 className="font-bold text-emerald-900 group-hover:text-emerald-600 transition-colors">{ticket.subject}</h3>
+                                        <h3 className="font-bold text-slate-900 group-hover:text-slate-600 transition-colors">{ticket.subject}</h3>
                                         <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wide ${ticket.status === 'open' ? 'bg-blue-100 text-blue-700' :
                                             ticket.status === 'answered' ? 'bg-yellow-100 text-yellow-700' :
                                                 'bg-green-100 text-green-700'
@@ -171,7 +171,7 @@ export default function MySupportTickets() {
                                 <input
                                     value={subject}
                                     onChange={e => setSubject(e.target.value)}
-                                    className="w-full p-4 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 transition-all font-bold text-emerald-900"
+                                    className="w-full p-4 rounded-xl border border-slate-200 outline-none focus:border-amber-500 transition-all font-bold text-slate-900"
                                     placeholder="Briefly describe your issue..."
                                     required
                                 />
@@ -181,7 +181,7 @@ export default function MySupportTickets() {
                                 <textarea
                                     value={initialMessage}
                                     onChange={e => setInitialMessage(e.target.value)}
-                                    className="w-full p-4 rounded-xl border border-slate-200 outline-none focus:border-emerald-500 transition-all h-40 resize-none text-slate-700"
+                                    className="w-full p-4 rounded-xl border border-slate-200 outline-none focus:border-amber-500 transition-all h-40 resize-none text-slate-700"
                                     placeholder="How can we help you?"
                                     required
                                 />
@@ -189,7 +189,7 @@ export default function MySupportTickets() {
                             <button
                                 type="submit"
                                 disabled={creating}
-                                className="w-full py-4 bg-emerald-900 text-white rounded-xl font-bold uppercase tracking-widest hover:bg-emerald-800 transition-colors disabled:opacity-50"
+                                className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors disabled:opacity-50"
                             >
                                 {creating ? 'Creating...' : 'Submit Ticket'}
                             </button>
@@ -203,8 +203,8 @@ export default function MySupportTickets() {
                             {activeTicket.messages.map((msg, i) => (
                                 <div key={i} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`max-w-[80%] p-4 rounded-2xl ${msg.sender === 'user'
-                                        ? 'bg-emerald-600 text-white rounded-tr-none'
-                                        : 'bg-white border border-slate-200 text-emerald-900 rounded-tl-none shadow-sm'
+                                        ? 'bg-slate-600 text-white rounded-tr-none'
+                                        : 'bg-white border border-slate-200 text-slate-900 rounded-tl-none shadow-sm'
                                         }`}>
                                         <div className="flex items-center gap-2 mb-1 opacity-70">
                                             {msg.sender === 'admin' && <Shield size={12} />}
@@ -213,7 +213,7 @@ export default function MySupportTickets() {
                                             </span>
                                         </div>
                                         <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.message}</p>
-                                        <p className={`text-[10px] mt-2 text-right ${msg.sender === 'user' ? 'text-emerald-200' : 'text-slate-400'}`}>
+                                        <p className={`text-[10px] mt-2 text-right ${msg.sender === 'user' ? 'text-amber-200' : 'text-slate-400'}`}>
                                             {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </p>
                                     </div>
@@ -226,13 +226,13 @@ export default function MySupportTickets() {
                                 <input
                                     value={reply}
                                     onChange={e => setReply(e.target.value)}
-                                    className="flex-1 p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-emerald-500 transition-colors"
+                                    className="flex-1 p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-amber-500 transition-colors"
                                     placeholder="Type your reply..."
                                 />
                                 <button
                                     type="submit"
                                     disabled={sending || !reply.trim()}
-                                    className="p-3 bg-emerald-900 text-white rounded-xl hover:bg-emerald-800 disabled:opacity-50 transition-colors"
+                                    className="p-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 disabled:opacity-50 transition-colors"
                                 >
                                     {sending ? <Loader2 className="animate-spin" size={20} /> : <Send size={20} />}
                                 </button>

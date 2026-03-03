@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Users, Briefcase, CheckCircle2, Lock, Car, Loader2, Info, Wind } from 'lucide-react';
+import { X, Users, Briefcase, CheckCircle2, Lock, Car, Loader2, Info, Wind, ShoppingBag } from 'lucide-react';
 
 const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelect, passengerCount, isLoading }) => {
     const [detailVehicle, setDetailVehicle] = React.useState(null);
@@ -10,17 +10,17 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
     // Smart Capacity Logic
     const isSuitable = (vehicle) => {
         const totalPax = (passengerCount.adults || 0) + (passengerCount.children || 0);
-        const totalBags = passengerCount.bags || 0;
+        const totalBags = (passengerCount.luggage || 0);
+        const totalHandBags = (passengerCount.handLuggage || 0);
 
         const vehiclePax = vehicle.capacity || 4;
         const vehicleLargeBags = vehicle.luggage || 0;
         const vehicleSmallBags = vehicle.handLuggage || 0;
-        const spareSeats = Math.max(0, vehiclePax - totalPax);
-        const extraBagCapacity = spareSeats * 2;
-        const maxBagUnits = vehicleLargeBags + (vehicleSmallBags * 0.5) + extraBagCapacity;
 
-        if (totalPax > vehiclePax) return { suitable: false, reason: "Too many passengers" };
-        if (totalBags > maxBagUnits) return { suitable: false, reason: "Luggage limit exceeded" };
+        if (totalPax > vehiclePax) return { suitable: false, reason: `Max ${vehiclePax} Pax` };
+        if (totalBags > vehicleLargeBags) return { suitable: false, reason: `Max ${vehicleLargeBags} Luggage` };
+        if (totalHandBags > vehicleSmallBags) return { suitable: false, reason: `Max ${vehicleSmallBags} Hand Luggage` };
+
         return { suitable: true };
     };
 
@@ -55,7 +55,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                         </div>
                     ) : vehicles.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-20 text-center px-6">
-                            <div className="w-16 h-16 bg-emerald-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-4 text-emerald-600">
+                            <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mb-4 text-amber-600">
                                 <Car size={32} />
                             </div>
                             <h4 className="font-bold text-slate-900 dark:text-white mb-2">No Vehicles Available</h4>
@@ -102,7 +102,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                                     }`}
                                             />
                                         ) : (
-                                            <Car className="text-emerald-900/20 dark:text-white/20" />
+                                            <Car className="text-slate-200 dark:text-white/20" />
                                         )}
                                     </div>
 
@@ -113,10 +113,13 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                         </div>
                                         <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-white/40 mt-1">
                                             <div className="flex items-center gap-1">
-                                                <Users size={12} className="text-black" /> 1-{vehicle.capacity} Passengers
+                                                <Users size={12} className="text-black" /> 1-{vehicle.capacity}
                                             </div>
                                             <div className="flex items-center gap-1">
                                                 <Briefcase size={12} className="text-black" /> {vehicle.luggage}
+                                            </div>
+                                            <div className="flex items-center gap-1">
+                                                <ShoppingBag size={12} className="text-black" /> {vehicle.handLuggage}
                                             </div>
                                         </div>
                                     </div>
@@ -143,7 +146,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                 {/* More Details Modal */}
                 {detailVehicle && (
                     <div className="absolute inset-0 z-[110] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in" onClick={() => setDetailVehicle(null)}>
-                        <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-2xl border-t sm:border border-emerald-900/10 dark:border-white/10 flex flex-col animate-scale-in relative max-h-[85vh] sm:max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+                        <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-2xl border-t sm:border border-slate-100 dark:border-white/10 flex flex-col animate-scale-in relative max-h-[85vh] sm:max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
 
                             {/* Header - Fixed */}
                             <div className="p-6 pb-2 shrink-0 flex justify-between items-start relative">
@@ -162,21 +165,26 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                     <img src={detailVehicle.image} alt={detailVehicle.name} className="w-full h-full object-contain" />
                                 </div>
 
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div className="flex flex-col items-center gap-1 p-3 bg-slate-50 dark:bg-white/5 rounded-2xl">
+                                <div className="grid grid-cols-4 gap-2">
+                                    <div className="flex flex-col items-center gap-1 p-2 bg-slate-50 dark:bg-white/5 rounded-2xl">
                                         <Users size={16} className="text-black" />
                                         <span className="text-sm font-black text-black dark:text-white">1-{detailVehicle.capacity}</span>
-                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Passengers</span>
+                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Pax</span>
                                     </div>
-                                    <div className="flex flex-col items-center gap-1 p-3 bg-slate-50 dark:bg-white/5 rounded-2xl">
+                                    <div className="flex flex-col items-center gap-1 p-2 bg-slate-50 dark:bg-white/5 rounded-2xl">
                                         <Briefcase size={16} className="text-black" />
                                         <span className="text-sm font-black text-black dark:text-white">{detailVehicle.luggage}</span>
-                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Large Bags</span>
+                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Luggage</span>
                                     </div>
-                                    <div className="flex flex-col items-center gap-1 p-3 bg-slate-50 dark:bg-white/5 rounded-2xl">
+                                    <div className="flex flex-col items-center gap-1 p-2 bg-slate-50 dark:bg-white/5 rounded-2xl">
+                                        <ShoppingBag size={16} className="text-black" />
+                                        <span className="text-sm font-black text-black dark:text-white">{detailVehicle.handLuggage}</span>
+                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Hand Baggage</span>
+                                    </div>
+                                    <div className="flex flex-col items-center gap-1 p-2 bg-slate-50 dark:bg-white/5 rounded-2xl">
                                         <Wind size={16} className="text-black" />
                                         <span className="text-sm font-black text-black dark:text-white">Yes</span>
-                                        <span className="text-[8px] font-bold text-slate-400 uppercase">Air Con</span>
+                                        <span className="text-[8px] font-bold text-slate-400 uppercase">A/C</span>
                                     </div>
                                 </div>
 

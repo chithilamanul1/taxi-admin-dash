@@ -103,12 +103,12 @@ export default function AdminTourManager() {
         return (
             <div className="bg-white dark:bg-slate-900 rounded-xl shadow-lg p-6 border border-white/10">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold text-emerald-900 dark:text-white">
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
                         {formData._id ? 'Edit Tour' : 'Create New Tour'}
                     </h2>
                     <div className="flex gap-2">
                         <button onClick={() => setIsEditing(false)} className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-100 dark:border-white/10 dark:hover:bg-white/5 text-slate-600 dark:text-slate-300 font-bold">Cancel</button>
-                        <button onClick={handleSave} className="px-6 py-2 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700 shadow-lg">Save Tour</button>
+                        <button onClick={handleSave} className="px-6 py-2 rounded-lg bg-slate-600 text-white font-bold hover:bg-slate-700 shadow-lg">Save Tour</button>
                     </div>
                 </div>
 
@@ -121,7 +121,7 @@ export default function AdminTourManager() {
                                 <input
                                     value={formData.title}
                                     onChange={e => updateField('title', e.target.value)}
-                                    className="w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10 font-bold outline-none focus:border-emerald-500"
+                                    className="w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10 font-bold outline-none focus:border-amber-500"
                                     placeholder="e.g. 7 Day Island Paradise"
                                 />
                             </div>
@@ -130,7 +130,7 @@ export default function AdminTourManager() {
                                 <input
                                     value={formData.slug}
                                     onChange={e => updateField('slug', e.target.value)}
-                                    className="w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10 outline-none focus:border-emerald-500 text-sm font-mono"
+                                    className="w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10 outline-none focus:border-amber-500 text-sm font-mono"
                                     placeholder="e.g. 7-day-island-paradise"
                                 />
                             </div>
@@ -141,7 +141,7 @@ export default function AdminTourManager() {
                             <textarea
                                 value={formData.description}
                                 onChange={e => updateField('description', e.target.value)}
-                                className="w-full p-3 h-40 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10 outline-none focus:border-emerald-500"
+                                className="w-full p-3 h-40 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10 outline-none focus:border-amber-500"
                                 placeholder="Full tour description..."
                             />
                         </div>
@@ -149,7 +149,7 @@ export default function AdminTourManager() {
                         {/* Itinerary Builder */}
                         <div className="border-t border-slate-200 dark:border-white/10 pt-6">
                             <div className="flex justify-between items-center mb-4">
-                                <h3 className="font-bold text-lg text-emerald-900 dark:text-white flex items-center gap-2">
+                                <h3 className="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
                                     <List size={20} /> Itinerary
                                 </h3>
                                 <button
@@ -158,7 +158,7 @@ export default function AdminTourManager() {
                                         newItin.push({ day: newItin.length + 1, title: '', description: '', activities: [] });
                                         updateField('itinerary', newItin);
                                     }}
-                                    className="text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-bold hover:bg-emerald-200"
+                                    className="text-xs bg-slate-100 text-slate-700 px-3 py-1 rounded-full font-bold hover:bg-amber-200"
                                 >+ Add Day</button>
                             </div>
 
@@ -270,7 +270,7 @@ export default function AdminTourManager() {
                         <div className="bg-slate-50 dark:bg-white/5 p-4 rounded-xl border border-slate-100 dark:border-white/10">
                             <h3 className="font-bold text-sm uppercase text-slate-500 mb-4">Pricing (From)</h3>
                             <div className="flex gap-2">
-                                <span className="bg-emerald-100 text-emerald-800 px-3 py-2 rounded font-bold text-sm flex items-center">{formData.price?.currency || 'USD'}</span>
+                                <span className="bg-slate-100 text-slate-800 px-3 py-2 rounded font-bold text-sm flex items-center">{formData.price?.currency || 'USD'}</span>
                                 <input
                                     type="number"
                                     value={formData.price?.amount}
@@ -344,10 +344,10 @@ export default function AdminTourManager() {
     return (
         <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-8 border border-white/5">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-emerald-900 dark:text-white">Tour Management</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Tour Management</h2>
                 <button
                     onClick={handleCreateNew}
-                    className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20"
+                    className="flex items-center gap-2 bg-slate-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-slate-700 transition-all shadow-lg shadow-slate-600/20"
                 >
                     <Plus size={18} /> New Tour
                 </button>
@@ -355,7 +355,7 @@ export default function AdminTourManager() {
 
             {isLoading ? (
                 <div className="text-center py-20">
-                    <div className="animate-spin w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+                    <div className="animate-spin w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full mx-auto mb-4"></div>
                     <p className="text-slate-400">Loading tours...</p>
                 </div>
             ) : tours.length === 0 ? (
@@ -381,7 +381,7 @@ export default function AdminTourManager() {
                                     </span>
                                     {tour.isFeatured && <span className="text-[10px] text-yellow-600 font-bold flex items-center"><CheckCircle size={10} className="mr-0.5" /> Featured</span>}
                                 </div>
-                                <h3 className="font-bold text-emerald-900 dark:text-white text-lg">{tour.title}</h3>
+                                <h3 className="font-bold text-slate-900 dark:text-white text-lg">{tour.title}</h3>
                                 <div className="flex gap-4 text-xs text-slate-500 mt-1">
                                     <span className="flex items-center gap-1"><Clock size={12} /> {tour.duration.days}D / {tour.duration.nights}N</span>
                                     <span className="flex items-center gap-1"><DollarSign size={12} /> {tour.price.currency} {tour.price.amount.toLocaleString()}</span>

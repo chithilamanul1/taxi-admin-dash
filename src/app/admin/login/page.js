@@ -62,14 +62,14 @@ function LoginForm() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-[#0a0f18] p-4 font-['Inter',sans-serif]">
-            <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-[2rem] border border-emerald-900/10 dark:border-white/5 shadow-2xl overflow-hidden">
+            <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-900/10 dark:border-white/5 shadow-2xl overflow-hidden">
                 <div className="p-8 md:p-10">
                     <div className="mb-10 text-center">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 mb-4">
-                            <LogIn className="text-emerald-600 dark:text-emerald-400" size={32} />
+                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-900/20 mb-4">
+                            <LogIn className="text-slate-600 dark:text-amber-400" size={32} />
                         </div>
-                        <h1 className="text-3xl font-black text-emerald-900 dark:text-white tracking-tight italic">
-                            ADMIN<span className="text-emerald-600">PORTAL</span>
+                        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight italic">
+                            ADMIN<span className="text-slate-600">PORTAL</span>
                         </h1>
                         <p className="text-slate-500 dark:text-slate-400 font-medium mt-1">Sign in to manage bookings</p>
                     </div>
@@ -83,30 +83,30 @@ function LoginForm() {
 
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="space-y-2">
-                            <label className="text-xs font-black uppercase tracking-widest text-emerald-900/40 dark:text-white/40 ml-1">Email Address</label>
+                            <label className="text-xs font-black uppercase tracking-widest text-slate-900/40 dark:text-white/40 ml-1">Email Address</label>
                             <div className="relative group">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-600 transition-colors" size={18} />
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-slate-600 transition-colors" size={18} />
                                 <input
                                     type="email"
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-2xl pl-12 pr-4 py-4 focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 outline-none transition-all font-bold text-emerald-900 dark:text-white"
+                                    className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-2xl pl-12 pr-4 py-4 focus:ring-2 focus:ring-slate-600/20 focus:border-slate-600 outline-none transition-all font-bold text-slate-900 dark:text-white"
                                     placeholder="admin@airporttaxis.lk"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-xs font-black uppercase tracking-widest text-emerald-900/40 dark:text-white/40 ml-1">Password</label>
+                            <label className="text-xs font-black uppercase tracking-widest text-slate-900/40 dark:text-white/40 ml-1">Password</label>
                             <div className="relative group">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-600 transition-colors" size={18} />
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-slate-600 transition-colors" size={18} />
                                 <input
                                     type="password"
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-2xl pl-12 pr-4 py-4 focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600 outline-none transition-all font-bold text-emerald-900 dark:text-white"
+                                    className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-2xl pl-12 pr-4 py-4 focus:ring-2 focus:ring-slate-600/20 focus:border-slate-600 outline-none transition-all font-bold text-slate-900 dark:text-white"
                                     placeholder="••••••••"
                                 />
                             </div>
@@ -115,7 +115,7 @@ function LoginForm() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full h-14 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-2xl transition-all shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 group hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                            className="w-full h-14 bg-slate-600 hover:bg-amber-500 text-white font-black rounded-2xl transition-all shadow-lg shadow-slate-600/20 flex items-center justify-center gap-2 group hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
                         >
                             {loading ? <Loader2 className="animate-spin" size={20} /> : <span>SIGN IN NOW</span>}
                         </button>
@@ -132,7 +132,7 @@ function LoginForm() {
                         <button
                             type="button"
                             onClick={handleGoogleSignIn}
-                            className="w-full h-14 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 hover:border-emerald-600 dark:hover:border-emerald-400 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all group hover:bg-slate-50 dark:hover:bg-slate-700/50 text-emerald-900 dark:text-white"
+                            className="w-full h-14 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 hover:border-slate-600 dark:hover:border-amber-400 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all group hover:bg-slate-50 dark:hover:bg-slate-700/50 text-slate-900 dark:text-white"
                         >
                             <svg className="w-5 h-5" viewBox="0 0 24 24">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
@@ -146,7 +146,7 @@ function LoginForm() {
 
                     <div className="mt-8 text-center">
                         <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">
-                            Secure Authentication System <span className="text-emerald-600 block sm:inline mt-1 sm:mt-0">v2.0 • Phase 2</span>
+                            Secure Authentication System <span className="text-slate-600 block sm:inline mt-1 sm:mt-0">v2.0 • Phase 2</span>
                         </p>
                     </div>
                 </div>
@@ -160,7 +160,7 @@ export default function AdminLogin() {
         <Suspense fallback={
             <div className="flex min-h-screen items-center justify-center bg-[#0a0f18]">
                 <div className="text-center">
-                    <Loader2 className="animate-spin text-emerald-600 mb-4 mx-auto" size={48} />
+                    <Loader2 className="animate-spin text-slate-600 mb-4 mx-auto" size={48} />
                     <p className="text-slate-400 font-bold tracking-widest">LOADING PORTAL...</p>
                 </div>
             </div>

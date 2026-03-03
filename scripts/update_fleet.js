@@ -127,6 +127,19 @@ const vehicles = [
         baseKm: 0
     },
     {
+        type: 'kdh-flat',
+        name: 'KDH Flatroof Van',
+        image: '/vehicles/toyota highroof.png', // Reusing highroof image if flat is missing, or update if user provides
+        tiers: [{ min: 0, max: 999, type: 'per_km', price: 0, rate: 125 }],
+        features: ['Air Conditioned', 'Dual AC', 'Flat Roof'],
+        capacity: 6,
+        luggage: 6,
+        handLuggage: 6,
+        basePrice: 22000,
+        perKmRate: 125,
+        baseKm: 0
+    },
+    {
         type: 'mini-bus',
         name: 'Bus (Coaster)',
         image: '/vehicles/costerbus.png',

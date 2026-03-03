@@ -196,7 +196,7 @@ import { CurrencyProvider } from '../context/CurrencyContext'
 
 // ... existing imports
 
-import { Inter, Montserrat } from 'next/font/google'
+import { Inter, Montserrat, Playfair_Display } from 'next/font/google'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -210,9 +210,15 @@ const montserrat = Montserrat({
     display: 'swap',
 })
 
+const playfair = Playfair_Display({
+    subsets: ['latin'],
+    variable: '--font-playfair',
+    display: 'swap',
+})
+
 export default function RootLayout({ children }) {
     return (
-        <html lang="en" suppressHydrationWarning className={`${inter.variable} ${montserrat.variable}`}>
+        <html lang="en" suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} ${playfair.variable}`}>
             <head>
                 <link rel="preconnect" href="https://ipapi.co" />
                 <link rel="dns-prefetch" href="https://ipapi.co" />
@@ -226,7 +232,7 @@ export default function RootLayout({ children }) {
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             </head>
-            <body className="font-sans antialiased selection:bg-emerald-600 selection:text-white transition-colors duration-300">
+            <body className="font-sans antialiased selection:bg-[#FFDA00] selection:text-black transition-colors duration-300">
                 <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
 
                     <AuthProvider>

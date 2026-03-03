@@ -506,7 +506,7 @@ export async function sendBookingConfirmation(booking) {
             </tr>
             <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Luggage Count</td>
-                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.passengerCount?.bags || 0}</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.passengerCount?.luggage || 0}</td>
             </tr>
             ${booking.nameBoard?.enabled ? `
             <tr>

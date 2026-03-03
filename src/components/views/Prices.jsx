@@ -11,189 +11,92 @@ import { destinations as staticDestinations } from '@/lib/destinations'
 const VEHICLE_PRICING = {
     'mini-car': {
         name: 'MINI CAR',
-        model: '',
         image: '/vehicles/minicar.png',
-        specs: {
-            luggage: 2,
-            handLuggage: 2,
-            ac: true
-        },
+        specs: { luggage: 2, handLuggage: 2, ac: true },
         maxPassengers: 2,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 3500 },
-            { min: 20, max: 40, type: 'flat', price: 4000 },
-            { min: 40, max: 130, type: 'per_km', rate: 102 },
-            { min: 130, max: Infinity, type: 'per_km', rate: 102 }
+            { min: 40, max: Infinity, type: 'per_km', rate: 102 }
         ]
     },
     'sedan': {
         name: 'SEDAN',
-        model: '',
         image: '/vehicles/sedancar.png',
-        specs: {
-            luggage: 3,
-            handLuggage: 3,
-            ac: true
-        },
+        specs: { luggage: 3, handLuggage: 3, ac: true },
         maxPassengers: 3,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 4500 },
-            { min: 20, max: 40, type: 'flat', price: 6000 },
-            { min: 40, max: 50, type: 'per_km', rate: 150 },
-            { min: 50, max: 100, type: 'per_km', rate: 130 },
-            { min: 100, max: 140, type: 'per_km', rate: 120 },
-            { min: 140, max: 200, type: 'per_km', rate: 115 },
-            { min: 200, max: Infinity, type: 'per_km', rate: 110 }
+            { min: 50, max: Infinity, type: 'per_km', rate: 110 }
+        ]
+    },
+    'suv': {
+        name: 'SUV',
+        image: '/vehicles/Hondavezel.png',
+        specs: { luggage: 3, handLuggage: 3, ac: true },
+        maxPassengers: 3,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6500 },
+            { min: 40, max: Infinity, type: 'per_km', rate: 135 }
         ]
     },
     'mini-van-every': {
         name: 'MINI VAN (Every)',
-        model: '',
         image: '/vehicles/susukievery.png',
-        specs: {
-            luggage: 3,
-            handLuggage: 3,
-            ac: true
-        },
+        specs: { luggage: 3, handLuggage: 3, ac: true },
         maxPassengers: 3,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 4500 },
-            { min: 20, max: 40, type: 'flat', price: 6000 },
-            { min: 40, max: 50, type: 'per_km', rate: 150 },
-            { min: 50, max: 100, type: 'per_km', rate: 130 },
-            { min: 100, max: 140, type: 'per_km', rate: 120 },
-            { min: 140, max: 200, type: 'per_km', rate: 115 },
-            { min: 200, max: Infinity, type: 'per_km', rate: 110 }
+            { min: 50, max: Infinity, type: 'per_km', rate: 110 }
         ]
     },
-    'mini-van-05': {
+    'mini-van-4seat': {
         name: 'MINI VAN (4 Seat)',
-        model: '',
         image: '/vehicles/minivan5seat.png',
-        specs: {
-            luggage: 4,
-            handLuggage: 4,
-            ac: true
-        },
+        specs: { luggage: 4, handLuggage: 4, ac: true },
         maxPassengers: 4,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 6000 },
-            { min: 20, max: 40, type: 'flat', price: 8500 },
-            { min: 40, max: 100, type: 'per_km', rate: 200 },
-            { min: 100, max: 140, type: 'per_km', rate: 160 },
-            { min: 140, max: 200, type: 'per_km', rate: 130 },
-            { min: 200, max: Infinity, type: 'per_km', rate: 120 }
+            { min: 50, max: Infinity, type: 'per_km', rate: 120 }
         ]
     },
-    'suv': {
-        name: 'SUV / VEZEL',
-        model: '',
-        image: '/vehicles/Hondavezel.png',
-        specs: {
-            luggage: 3,
-            handLuggage: 3,
-            ac: true
-        },
-        maxPassengers: 3,
+    'van-flat-roof': {
+        name: 'VAN (KDH Flat Roof)',
+        image: '/vehicles/kdh-flat.png',
+        specs: { luggage: 7, handLuggage: 7, ac: true },
+        maxPassengers: 6,
         tiers: [
-            { min: 0, max: 20, type: 'flat', price: 6500 },
-            { min: 20, max: 40, type: 'flat', price: 9500 },
-            { min: 40, max: 100, type: 'per_km', rate: 150 },
-            { min: 100, max: 140, type: 'per_km', rate: 145 },
-            { min: 140, max: 200, type: 'per_km', rate: 140 },
-            { min: 200, max: Infinity, type: 'per_km', rate: 135 }
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 40, max: Infinity, type: 'per_km', rate: 120 }
         ]
     },
-    'kdh-van': {
-        name: 'VAN (KDH)',
-        model: '',
+    'mini-bus-kdh': {
+        name: 'MINI BUS (KDH High Roof)',
         image: '/vehicles/toyota-highroof.png',
-        specs: {
-            luggage: 8,
-            handLuggage: 6,
-            ac: true
-        },
+        specs: { luggage: 8, handLuggage: 6, ac: true },
         maxPassengers: 8,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 6000 },
-            { min: 20, max: 40, type: 'flat', price: 8500 },
-            { min: 40, max: 100, type: 'per_km', rate: 200 },
-            { min: 100, max: 140, type: 'per_km', rate: 160 },
-            { min: 140, max: 200, type: 'per_km', rate: 130 },
-            { min: 200, max: Infinity, type: 'per_km', rate: 120 }
+            { min: 40, max: Infinity, type: 'per_km', rate: 120 }
         ]
     },
-    'normal-kdh': {
-        name: 'VAN (KDH Flat Roof)',
-        model: '',
-        image: '/vehicles/kdh-flat.png',
-        maxPassengers: 6,
-        imageScale: 1.35,
-        specs: {
-            luggage: 7,
-            handLuggage: 7,
-            ac: true
-        },
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 6000 },
-            { min: 20, max: 40, type: 'flat', price: 8500 },
-            { min: 40, max: 100, type: 'per_km', rate: 200 },
-            { min: 100, max: 140, type: 'per_km', rate: 160 },
-            { min: 140, max: 200, type: 'per_km', rate: 130 },
-            { min: 200, max: Infinity, type: 'per_km', rate: 120 }
-        ]
-    },
-    'mini-bus': {
-        name: 'MINI BUS',
-        model: '',
+    'coaster-bus': {
+        name: 'COASTER BUS',
         image: '/vehicles/costerbus.png',
-        specs: {
-            luggage: 20,
-            handLuggage: 15,
-            ac: true
-        },
-        maxPassengers: 20,
+        specs: { luggage: 25, handLuggage: 15, ac: true },
+        maxPassengers: 25,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 7500 },
-            { min: 20, max: 40, type: 'flat', price: 12000 },
-            { min: 40, max: 100, type: 'per_km', rate: 220 },
-            { min: 100, max: 140, type: 'per_km', rate: 220 },
-            { min: 140, max: 200, type: 'per_km', rate: 175 },
-            { min: 200, max: Infinity, type: 'per_km', rate: 155 }
+            { min: 40, max: Infinity, type: 'per_km', rate: 155 }
         ]
     },
-    'bus': {
-        name: 'BUS (20+ SEATER)',
-        model: '',
+    'couch-bus': {
+        name: 'COUCH BUS',
         image: '/vehicles/coach-bus.png',
-        maxPassengers: 25,
-        imageScale: 1.0,
-        specs: { luggage: 20, handLuggage: 20, ac: true },
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 20000 },
-            { min: 20, max: 40, type: 'flat', price: 30000 },
-            { min: 40, max: 100, type: 'flat', price: 50000 },
-            { min: 100, max: 150, type: 'flat', price: 70000 },
-            { min: 150, max: 200, type: 'flat', price: 85000 },
-            { min: 200, max: 300, type: 'flat', price: 120000 },
-            { min: 300, max: Infinity, type: 'per_km', rate: 400 }
-        ]
-    },
-    'coach-bus': {
-        name: 'COACH BUS (40+ SEATER)',
-        model: '',
-        image: '/vehicles/coach-bus.png',
+        specs: { luggage: 45, handLuggage: 25, ac: true },
         maxPassengers: 45,
-        imageScale: 1.0,
-        specs: { luggage: 40, handLuggage: 40, ac: true },
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 25000 },
-            { min: 20, max: 40, type: 'flat', price: 45000 },
-            { min: 40, max: 100, type: 'flat', price: 60000 },
-            { min: 100, max: 150, type: 'flat', price: 85000 },
-            { min: 150, max: 200, type: 'flat', price: 95000 },
-            { min: 200, max: 300, type: 'flat', price: 135000 },
-            { min: 300, max: Infinity, type: 'per_km', rate: 450 }
+            { min: 40, max: Infinity, type: 'per_km', rate: 450 }
         ]
     }
 }
@@ -314,8 +217,8 @@ const Prices = ({ initialDestination }) => {
     return (
         <div className="pt-32 pb-20 max-w-6xl mx-auto px-6 dark:bg-slate-950 transition-colors">
             <div id="prices" className="py-12 text-center scroll-mt-32">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-emerald-900 dark:text-white mb-4">Price <span className="text-emerald-600 dark:text-emerald-400">Calculator</span></h1>
-                <p className="text-emerald-900/60 dark:text-white/60 max-w-2xl mx-auto">Select your pickup and destination points for an instant, transparent quote.</p>
+                <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4">Price <span className="text-slate-600 dark:text-amber-400">Calculator</span></h1>
+                <p className="text-slate-900/60 dark:text-white/60 max-w-2xl mx-auto">Select your pickup and destination points for an instant, transparent quote.</p>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-12 mt-8">
@@ -325,7 +228,7 @@ const Prices = ({ initialDestination }) => {
                     {/* Pickup Search */}
                     <div className="relative">
                         <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                            <MapPin size={16} className="text-emerald-600 dark:text-emerald-400" /> Pickup Point
+                            <MapPin size={16} className="text-slate-600 dark:text-amber-400" /> Pickup Point
                         </label>
                         <input
                             type="text"
@@ -335,7 +238,7 @@ const Prices = ({ initialDestination }) => {
                                 debouncedSearchPickup(e.target.value)
                             }}
                             placeholder="Start searching..."
-                            className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white placeholder:text-gray-400/50"
+                            className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-900/20 dark:focus:ring-amber-500/20 outline-none text-slate-900 dark:text-white placeholder:text-gray-400/50"
                         />
                         {pickupResults.length > 0 && (
                             <div className="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-gray-100 dark:border-white/10 overflow-hidden">
@@ -347,7 +250,7 @@ const Prices = ({ initialDestination }) => {
                                             setPickupSearch(r.name)
                                             setPickupResults([])
                                         }}
-                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-gray-50 dark:border-white/5 last:border-none flex items-center gap-3 text-emerald-900 dark:text-white"
+                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-gray-50 dark:border-white/5 last:border-none flex items-center gap-3 text-slate-900 dark:text-white"
                                     >
                                         <Navigation size={14} className="text-gray-400" />
                                         <span>{r.name}</span>
@@ -360,7 +263,7 @@ const Prices = ({ initialDestination }) => {
                     {/* Dropoff Search */}
                     <div className="relative">
                         <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                            <MapPin size={16} className="text-emerald-900 dark:text-emerald-400" /> Destination
+                            <MapPin size={16} className="text-slate-900 dark:text-amber-400" /> Destination
                         </label>
                         <input
                             type="text"
@@ -370,7 +273,7 @@ const Prices = ({ initialDestination }) => {
                                 debouncedSearchDropoff(e.target.value)
                             }}
                             placeholder="Where are you going?"
-                            className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white placeholder:text-gray-400/50"
+                            className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-900/20 dark:focus:ring-amber-500/20 outline-none text-slate-900 dark:text-white placeholder:text-gray-400/50"
                         />
                         {dropoffResults.length > 0 && (
                             <div className="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-gray-100 dark:border-white/10 overflow-hidden">
@@ -382,7 +285,7 @@ const Prices = ({ initialDestination }) => {
                                             setDropoffSearch(r.name)
                                             setDropoffResults([])
                                         }}
-                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-gray-50 dark:border-white/5 last:border-none flex items-center gap-3 text-emerald-900 dark:text-white"
+                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-gray-50 dark:border-white/5 last:border-none flex items-center gap-3 text-slate-900 dark:text-white"
                                     >
                                         <Navigation size={14} className="text-gray-400" />
                                         <span>{r.name}</span>
@@ -396,22 +299,22 @@ const Prices = ({ initialDestination }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                                <Users size={16} className="text-emerald-600 dark:text-emerald-400" /> Passengers
+                                <Users size={16} className="text-slate-600 dark:text-amber-400" /> Passengers
                             </label>
-                            <div className="flex items-center justify-between bg-slate-50 dark:bg-white/5 px-4 py-3 rounded-2xl border border-transparent hover:border-emerald-600/30 transition-all">
+                            <div className="flex items-center justify-between bg-slate-50 dark:bg-white/5 px-4 py-3 rounded-2xl border border-transparent hover:border-slate-600/30 transition-all">
                                 <span className="text-xs font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider mr-2">Count:</span>
                                 <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => setPassengers(Math.max(1, passengers - 1))}
-                                        className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-md text-emerald-900 dark:text-white font-bold hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white active:scale-95 transition-all text-xl"
+                                        className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-md text-slate-900 dark:text-white font-bold hover:bg-slate-600 dark:hover:bg-amber-500 hover:text-white active:scale-95 transition-all text-xl"
                                         aria-label="Decrease passengers"
                                     >
                                         -
                                     </button>
-                                    <span className="font-extrabold text-emerald-900 dark:text-white text-xl w-6 text-center">{passengers}</span>
+                                    <span className="font-extrabold text-slate-900 dark:text-white text-xl w-6 text-center">{passengers}</span>
                                     <button
                                         onClick={() => setPassengers(Math.min(15, passengers + 1))}
-                                        className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-md text-emerald-900 dark:text-white font-bold hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white active:scale-95 transition-all text-xl"
+                                        className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-md text-slate-900 dark:text-white font-bold hover:bg-slate-600 dark:hover:bg-amber-500 hover:text-white active:scale-95 transition-all text-xl"
                                         aria-label="Increase passengers"
                                     >
                                         +
@@ -421,14 +324,14 @@ const Prices = ({ initialDestination }) => {
                         </div>
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                                <ArrowRightLeft size={16} className="text-emerald-900 dark:text-emerald-400" /> Trip Type
+                                <ArrowRightLeft size={16} className="text-slate-900 dark:text-amber-400" /> Trip Type
                             </label>
                             <div className="flex bg-slate-50 dark:bg-white/5 p-1.5 rounded-2xl">
                                 {['one-way', 'round-trip'].map(t => (
                                     <button
                                         key={t}
                                         onClick={() => setTripType(t)}
-                                        className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${tripType === t ? 'bg-emerald-900 text-white shadow-md' : 'text-gray-400 hover:text-emerald-900'}`}
+                                        className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${tripType === t ? 'bg-slate-900 text-white shadow-md' : 'text-gray-400 hover:text-slate-900'}`}
                                     >
                                         {t === 'one-way' ? 'One Way' : 'Return'}
                                     </button>
@@ -441,26 +344,26 @@ const Prices = ({ initialDestination }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-emerald-600">✉️</span> Your Email
+                                <span className="text-slate-600">✉️</span> Your Email
                             </label>
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="name@example.com"
-                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white"
+                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-900/20 dark:focus:ring-amber-500/20 outline-none text-slate-900 dark:text-white"
                             />
                         </div>
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-emerald-600">📱</span> WhatsApp No.
+                                <span className="text-slate-600">📱</span> WhatsApp No.
                             </label>
                             <input
                                 type="tel"
                                 value={whatsapp}
                                 onChange={(e) => setWhatsapp(e.target.value)}
                                 placeholder="+1 66 77 88 99 ..."
-                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white"
+                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-900/20 dark:focus:ring-amber-500/20 outline-none text-slate-900 dark:text-white"
                             />
                         </div>
                     </div>
@@ -469,34 +372,34 @@ const Prices = ({ initialDestination }) => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-emerald-600">📅</span> Date
+                                <span className="text-slate-600">📅</span> Date
                             </label>
                             <input
                                 type="date"
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
-                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 outline-none"
+                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-900/20 outline-none"
                             />
                         </div>
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-emerald-600">⏰</span> Time
+                                <span className="text-slate-600">⏰</span> Time
                             </label>
                             <input
                                 type="time"
                                 value={time}
                                 onChange={(e) => setTime(e.target.value)}
-                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 outline-none"
+                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-900/20 outline-none"
                             />
                         </div>
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                                <span className="text-emerald-600 dark:text-emerald-400">💳</span> Payment
+                                <span className="text-slate-600 dark:text-amber-400">💳</span> Payment
                             </label>
                             <select
                                 value={paymentMethod}
                                 onChange={(e) => setPaymentMethod(e.target.value)}
-                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none cursor-pointer text-emerald-900 dark:text-white"
+                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-900/20 dark:focus:ring-amber-500/20 outline-none cursor-pointer text-slate-900 dark:text-white"
                             >
                                 <option value="cash" className="dark:bg-slate-900">Cash to Driver</option>
                                 <option value="card" className="dark:bg-slate-900">Card Payment</option>
@@ -505,19 +408,19 @@ const Prices = ({ initialDestination }) => {
                     </div>
 
                     {/* Airport Greeting (Board Show) Option */}
-                    <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:border-emerald-600/50 mb-8">
+                    <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:border-slate-600/50 mb-8">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-emerald-900/10 dark:bg-white/5 rounded-full flex items-center justify-center text-2xl">
+                            <div className="w-12 h-12 bg-slate-900/10 dark:bg-white/5 rounded-full flex items-center justify-center text-2xl">
                                 🛫
                             </div>
                             <div>
-                                <h4 className="text-emerald-900 dark:text-white font-bold text-lg">Airport Greeting (NAME BOARD)</h4>
+                                <h4 className="text-slate-900 dark:text-white font-bold text-lg">Airport Greeting (NAME BOARD)</h4>
                                 <p className="text-gray-500 dark:text-slate-400 text-xs max-w-xs">Our driver will wait for you at the arrival terminal hall with your name on a NAME BOARD.</p>
                             </div>
                         </div>
                         <div className="flex flex-col items-end gap-3">
                             <div className="flex flex-col items-end">
-                                <span className="text-emerald-600 font-bold text-lg">+ Rs 2,000.00</span>
+                                <span className="text-slate-600 font-bold text-lg">+ Rs 2,000.00</span>
                                 {rates?.USD && (
                                     <span className="text-xs text-gray-400 font-medium">
                                         (≈ ${(2000 * rates.USD).toFixed(2)} USD)
@@ -532,7 +435,7 @@ const Prices = ({ initialDestination }) => {
                                         checked={boardShow}
                                         onChange={(e) => setBoardShow(e.target.checked)}
                                     />
-                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-600"></div>
                                 </label>
                             </div>
 
@@ -546,7 +449,7 @@ const Prices = ({ initialDestination }) => {
                                             value={boardName}
                                             onChange={(e) => setBoardName(e.target.value)}
                                             placeholder="e.g. Mr. John Doe"
-                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
+                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-slate-900/20 outline-none"
                                         />
                                     </div>
                                     <div>
@@ -556,7 +459,7 @@ const Prices = ({ initialDestination }) => {
                                             value={flightNumber}
                                             onChange={(e) => setFlightNumber(e.target.value)}
                                             placeholder="e.g. UL 504"
-                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
+                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-slate-900/20 outline-none"
                                         />
                                     </div>
                                     <div className="grid grid-cols-2 gap-3">
@@ -566,7 +469,7 @@ const Prices = ({ initialDestination }) => {
                                                 type="date"
                                                 value={arrivalDate}
                                                 onChange={(e) => setArrivalDate(e.target.value)}
-                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
+                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-slate-900/20 outline-none"
                                             />
                                         </div>
                                         <div>
@@ -575,7 +478,7 @@ const Prices = ({ initialDestination }) => {
                                                 type="time"
                                                 value={arrivalTime}
                                                 onChange={(e) => setArrivalTime(e.target.value)}
-                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
+                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-slate-900/20 outline-none"
                                             />
                                         </div>
                                     </div>
@@ -591,7 +494,7 @@ const Prices = ({ initialDestination }) => {
                             {!isVehicleListExpanded && (
                                 <button
                                     onClick={() => setIsVehicleListExpanded(true)}
-                                    className="text-xs font-bold text-emerald-600 hover:text-emerald-900 transition-colors uppercase tracking-widest flex items-center gap-1"
+                                    className="text-xs font-bold text-slate-600 hover:text-slate-900 transition-colors uppercase tracking-widest flex items-center gap-1"
                                 >
                                     Change Vehicle <ArrowRightLeft size={12} />
                                 </button>
@@ -602,7 +505,7 @@ const Prices = ({ initialDestination }) => {
                         {!isVehicleListExpanded && (
                             <div
                                 onClick={() => setIsVehicleListExpanded(true)}
-                                className="relative w-full overflow-hidden rounded-2xl border-2 border-emerald-600 ring-2 ring-emerald-600/20 shadow-lg cursor-pointer group"
+                                className="relative w-full overflow-hidden rounded-2xl border-2 border-slate-600 ring-2 ring-slate-600/20 shadow-lg cursor-pointer group"
                             >
                                 <div className="aspect-[21/9] w-full relative">
                                     <img
@@ -612,26 +515,26 @@ const Prices = ({ initialDestination }) => {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/40 to-transparent"></div>
                                     <div className="absolute inset-0 p-6 flex flex-col justify-center text-white">
-                                        <div className="bg-emerald-600 text-emerald-900 text-xs font-bold px-3 py-1 rounded-full w-fit mb-2">SELECTED</div>
+                                        <div className="bg-slate-600 text-slate-900 text-xs font-bold px-3 py-1 rounded-full w-fit mb-2">SELECTED</div>
                                         <div className="font-bold text-2xl mb-1">{VEHICLE_PRICING[vehicle].name}</div>
                                         <div className="text-sm text-white/80 mb-2">{VEHICLE_PRICING[vehicle].model}</div>
                                         {VEHICLE_PRICING[vehicle].specs && (
                                             <div className="flex flex-col gap-1 mb-2 opacity-90">
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Users size={12} className="text-emerald-600" /> 1-{VEHICLE_PRICING[vehicle].maxPassengers} PASSENGERS
+                                                    <Users size={12} className="text-slate-600" /> 1-{VEHICLE_PRICING[vehicle].maxPassengers} PASSENGERS
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Briefcase size={12} className="text-emerald-600" /> {VEHICLE_PRICING[vehicle].specs.luggage} LUGGAGE
+                                                    <Briefcase size={12} className="text-slate-600" /> {VEHICLE_PRICING[vehicle].specs.luggage} LUGGAGE
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Briefcase size={12} className="text-emerald-600 scale-75" /> {VEHICLE_PRICING[vehicle].specs.handLuggage} HAND LUGGAGE
+                                                    <Briefcase size={12} className="text-slate-600 scale-75" /> {VEHICLE_PRICING[vehicle].specs.handLuggage} HAND LUGGAGE
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Wind size={12} className="text-emerald-600" /> AIR - CONDITIONING
+                                                    <Wind size={12} className="text-slate-600" /> AIR - CONDITIONING
                                                 </span>
                                             </div>
                                         )}
-                                        <div className="flex items-center gap-4 mt-1 text-xs font-bold text-emerald-600 uppercase tracking-widest">
+                                        <div className="flex items-center gap-4 mt-1 text-xs font-bold text-slate-600 uppercase tracking-widest">
                                             <span>Click to Change</span>
                                             <ArrowRightLeft size={14} />
                                         </div>
@@ -660,10 +563,10 @@ const Prices = ({ initialDestination }) => {
                                             disabled={isLocked}
                                             className={`relative w-full overflow-hidden rounded-[2.5rem] border-[3px] transition-all group text-left bg-white dark:bg-slate-800 p-8
                                                 ${vehicle === key
-                                                    ? 'border-emerald-700 shadow-2xl scale-[1.02]'
+                                                    ? 'border-slate-700 shadow-2xl scale-[1.02]'
                                                     : isLocked
                                                         ? 'border-gray-100 dark:border-white/5 opacity-60 cursor-not-allowed grayscale'
-                                                        : 'border-black dark:border-white/20 hover:border-emerald-700 shadow-lg hover:shadow-xl'
+                                                        : 'border-black dark:border-white/20 hover:border-slate-700 shadow-lg hover:shadow-xl'
                                                 }`}
                                         >
                                             <div className="flex justify-between items-start mb-6">
@@ -733,7 +636,7 @@ const Prices = ({ initialDestination }) => {
                                             <div
                                                 className={`w-full py-4 text-center rounded-2xl font-black text-xl uppercase tracking-widest transition-all shadow-xl
                                                     ${vehicle === key
-                                                        ? 'bg-emerald-900 text-white shadow-emerald-900/20'
+                                                        ? 'bg-slate-900 text-white shadow-slate-900/20'
                                                         : 'bg-red-600 text-white hover:bg-red-700 shadow-red-600/20'}`}
                                             >
                                                 {vehicle === key ? 'Selected ✓' : 'Select'}
@@ -755,8 +658,8 @@ const Prices = ({ initialDestination }) => {
                 </div>
 
                 {/* Right: Summary & Quote */}
-                <div ref={quoteRef} className="bg-emerald-900 rounded-[2.5rem] p-8 md:p-14 text-white shadow-3xl lg:sticky lg:top-28 flex flex-col h-fit">
-                    <h3 className="text-emerald-400 text-2xl font-bold mb-8 flex items-center gap-3">
+                <div ref={quoteRef} className="bg-slate-900 rounded-[2.5rem] p-8 md:p-14 text-white shadow-3xl lg:sticky lg:top-28 flex flex-col h-fit">
+                    <h3 className="text-amber-400 text-2xl font-bold mb-8 flex items-center gap-3">
                         Trip Quote
                     </h3>
 
@@ -838,14 +741,14 @@ const Prices = ({ initialDestination }) => {
                                 </div>
                                 <div className="bg-white/10 rounded-xl p-4 mb-8 text-xs text-white/80 space-y-2">
                                     <div className="flex items-start gap-2 font-bold text-white">
-                                        <Info size={14} className="text-emerald-400 flex-shrink-0 mt-0.5" />
+                                        <Info size={14} className="text-amber-400 flex-shrink-0 mt-0.5" />
                                         <p>IMPORTANT: We accept card payments (Visa/Mastercard).</p>
                                     </div>
                                 </div>
 
                                 <div className="mb-10 text-center">
                                     <p className="text-white/60 uppercase tracking-widest text-xs mb-2">Total</p>
-                                    <div className="text-4xl md:text-6xl font-extrabold text-emerald-400 leading-none pb-2 break-words">
+                                    <div className="text-4xl md:text-6xl font-extrabold text-amber-400 leading-none pb-2 break-words">
                                         {currentSymbol} {totalSelected.toLocaleString()}
                                     </div>
                                 </div>
@@ -958,7 +861,7 @@ const Prices = ({ initialDestination }) => {
                                             setLoading(false); // Reset loading state
                                         }
                                     }}
-                                    className="w-full bg-emerald-600 text-emerald-900 font-extrabold py-6 rounded-2xl text-xl hover:scale-[1.02] transition-all shadow-2xl disabled:opacity-50 disabled:grayscale"
+                                    className="w-full bg-slate-600 text-slate-900 font-extrabold py-6 rounded-2xl text-xl hover:scale-[1.02] transition-all shadow-2xl disabled:opacity-50 disabled:grayscale"
                                 >
                                     {loading ? <Loader2 className="animate-spin mx-auto" /> : 'Book This Trip Now'}
                                 </button>

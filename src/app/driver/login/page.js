@@ -40,12 +40,12 @@ export default function DriverLogin() {
     return (
         <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
             <div className="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden">
-                <div className="bg-emerald-900 p-8 text-center">
-                    <div className="w-20 h-20 bg-emerald-800 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <div className="bg-slate-900 p-8 text-center">
+                    <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                         <Car size={40} className="text-white" />
                     </div>
                     <h1 className="text-2xl font-bold text-white">Driver Portal</h1>
-                    <p className="text-emerald-300 text-sm mt-1">Airport Taxis Tours Sri Lanka</p>
+                    <p className="text-amber-300 text-sm mt-1">Airport Taxis Tours Sri Lanka</p>
                 </div>
 
                 <div className="p-8">
@@ -63,7 +63,7 @@ export default function DriverLogin() {
                                 <input
                                     type="tel"
                                     placeholder="0771234567"
-                                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 outline-none transition-all font-bold text-gray-800"
+                                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-slate-600 focus:ring-2 focus:ring-slate-600/20 outline-none transition-all font-bold text-gray-800"
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
                                     required
@@ -78,7 +78,7 @@ export default function DriverLogin() {
                                 <input
                                     type="password"
                                     placeholder="••••"
-                                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 outline-none transition-all font-bold text-gray-800"
+                                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-slate-600 focus:ring-2 focus:ring-slate-600/20 outline-none transition-all font-bold text-gray-800"
                                     value={pin}
                                     onChange={(e) => setPin(e.target.value)}
                                     required
@@ -90,7 +90,7 @@ export default function DriverLogin() {
                         <button
                             type="submit"
                             disabled={loading || !phone || !pin}
-                            className="w-full bg-emerald-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-emerald-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-slate-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-slate-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? <Loader2 size={24} className="animate-spin" /> : <>Login <ChevronRight /></>}
                         </button>
@@ -100,7 +100,7 @@ export default function DriverLogin() {
                         <p className="text-gray-600 mb-2 font-medium">Want to join our fleet?</p>
                         <button
                             onClick={() => router.push('/driver/register')}
-                            className="text-emerald-700 font-bold hover:text-emerald-900 hover:underline transition-colors"
+                            className="text-slate-700 font-bold hover:text-slate-900 hover:underline transition-colors"
                         >
                             Register as a Driver
                         </button>

@@ -2,10 +2,10 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 const COLORS = {
-    emerald: [6, 78, 59], // #064e3b
-    amber: [245, 158, 11], // #f59e0b
+    emerald: [34, 197, 94], // #22C55E (Electric Green)
+    amber: [255, 218, 0],  // #FFDA00 (Vibrant Yellow)
     slate: [71, 85, 105], // #475569
-    black: [15, 23, 42]   // #0f172a
+    black: [18, 18, 18]    // #121212 (Charcoal Black)
 };
 
 export const generateBookingPDF = (booking) => {
@@ -94,10 +94,11 @@ export const generateBookingPDF = (booking) => {
         head: [['Description', 'Trip Information']],
         body: [
             ['Transfer Type', booking.tripType?.toUpperCase().replace('-', ' ') || 'Airport Transfer'],
-            ['Pick-up', booking.pickupLocation?.address || 'N/A'],
-            ['Drop-off', booking.dropoffLocation?.address || 'N/A'],
-            ['Vehicle', booking.vehicleType?.toUpperCase() || 'Standard'],
-            ['Passengers', `${booking.passengerCount?.adults || 1} ADL, ${booking.passengerCount?.children || 0} CHL`],
+            ['Pick-up Location', booking.pickupLocation?.address || 'N/A'],
+            ['Drop-off Location', booking.dropoffLocation?.address || 'N/A'],
+            ['Vehicle Type', booking.vehicleType?.toUpperCase()?.replace('-', ' ') || 'STANDARD SEDAN'],
+            ['Capacity', `${booking.passengerCount?.adults || 1} Adults, ${booking.passengerCount?.children || 0} Children`],
+            ['Luggage', `${booking.passengerCount?.luggage || 0} Large Bags / ${booking.passengerCount?.handLuggage || 0} Hand Bags`],
             ['Date / Time', `${booking.scheduledDate} at ${booking.scheduledTime}`],
         ],
         theme: 'grid',

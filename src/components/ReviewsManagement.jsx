@@ -141,7 +141,7 @@ export default function ReviewsManagement() {
                     </button>
                     <button
                         onClick={() => setShowAddModal(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-slate-600 text-white rounded-xl font-bold hover:bg-slate-700 transition-colors"
                     >
                         <Plus size={16} />
                         Add Review
@@ -156,7 +156,7 @@ export default function ReviewsManagement() {
                         key={f}
                         onClick={() => setFilter(f)}
                         className={`px-4 py-2 rounded-xl text-sm font-bold capitalize transition-all ${filter === f
-                                ? 'bg-emerald-600 text-white'
+                                ? 'bg-slate-600 text-white'
                                 : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                             }`}
                     >
@@ -175,7 +175,7 @@ export default function ReviewsManagement() {
             ) : (
                 <div className="grid gap-4">
                     {filteredReviews.map((review) => (
-                        <div key={review._id} className={`bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border ${review.isApproved ? 'border-emerald-200 dark:border-emerald-900' : 'border-amber-200 dark:border-amber-900'
+                        <div key={review._id} className={`bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border ${review.isApproved ? 'border-amber-200 dark:border-slate-900' : 'border-amber-200 dark:border-amber-900'
                             }`}>
                             <div className="flex flex-wrap gap-4 justify-between">
                                 {/* Review Content */}
@@ -202,7 +202,7 @@ export default function ReviewsManagement() {
                                     {/* Route & Distance */}
                                     <div className="flex flex-wrap gap-3 mb-3">
                                         {review.route && (
-                                            <span className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-full text-xs font-medium">
+                                            <span className="inline-flex items-center gap-1 px-3 py-1 bg-slate-50 dark:bg-slate-900/30 text-slate-700 dark:text-amber-400 rounded-full text-xs font-medium">
                                                 <MapPin size={12} />
                                                 {review.route}
                                             </span>
@@ -217,8 +217,8 @@ export default function ReviewsManagement() {
 
                                     {/* Author */}
                                     <div className="flex items-center gap-2">
-                                        <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center">
-                                            <span className="text-sm font-bold text-emerald-600">
+                                        <div className="w-8 h-8 bg-slate-100 dark:bg-slate-900 rounded-full flex items-center justify-center">
+                                            <span className="text-sm font-bold text-slate-600">
                                                 {review.userName?.charAt(0)?.toUpperCase()}
                                             </span>
                                         </div>
@@ -240,7 +240,7 @@ export default function ReviewsManagement() {
                                     {!review.isApproved ? (
                                         <button
                                             onClick={() => handleApprove(review._id, true)}
-                                            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700"
+                                            className="flex items-center gap-2 px-4 py-2 bg-slate-600 text-white rounded-xl text-sm font-bold hover:bg-slate-700"
                                         >
                                             <CheckCircle size={16} />
                                             Approve
@@ -369,7 +369,7 @@ export default function ReviewsManagement() {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 px-4 py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700"
+                                    className="flex-1 px-4 py-3 bg-slate-600 text-white rounded-xl font-bold hover:bg-slate-700"
                                 >
                                     Add Review
                                 </button>

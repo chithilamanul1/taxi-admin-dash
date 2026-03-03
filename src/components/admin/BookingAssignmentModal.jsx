@@ -83,14 +83,14 @@ export default function BookingAssignmentModal({ booking, onClose, onAssignSucce
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
                 <div className="p-6 border-b dark:border-white/10 flex justify-between items-center">
-                    <h3 className="text-xl font-bold text-emerald-900 dark:text-white">Assign Driver</h3>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Assign Driver</h3>
                     <button onClick={onClose} className="p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full"><X size={20} /></button>
                 </div>
 
                 <div className="p-6 flex-1 overflow-y-auto">
-                    <div className="mb-4 bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl">
-                        <h4 className="font-bold text-emerald-900 dark:text-emerald-400 text-sm mb-1">Booking #{booking._id.slice(-6)}</h4>
-                        <p className="text-xs text-emerald-700 dark:text-emerald-300">
+                    <div className="mb-4 bg-slate-50 dark:bg-slate-900/20 p-4 rounded-xl">
+                        <h4 className="font-bold text-slate-900 dark:text-amber-400 text-sm mb-1">Booking #{booking._id.slice(-6)}</h4>
+                        <p className="text-xs text-slate-700 dark:text-amber-300">
                             {booking.pickupLocation?.address.split(',')[0]} ➝ {booking.dropoffLocation?.address.split(',')[0]}
                         </p>
                     </div>
@@ -98,7 +98,7 @@ export default function BookingAssignmentModal({ booking, onClose, onAssignSucce
                     <h4 className="font-bold text-slate-500 text-xs uppercase tracking-widest mb-3">Available Drivers</h4>
 
                     {loading ? (
-                        <div className="text-center py-8"><Loader2 className="animate-spin mx-auto text-emerald-500" /></div>
+                        <div className="text-center py-8"><Loader2 className="animate-spin mx-auto text-amber-500" /></div>
                     ) : drivers.length === 0 ? (
                         <p className="text-center text-slate-400 py-8">No verified drivers found.</p>
                     ) : (
@@ -110,8 +110,8 @@ export default function BookingAssignmentModal({ booking, onClose, onAssignSucce
                                         key={driver._id}
                                         onClick={() => hasFunds && setSelectedDriver(driver)}
                                         className={`p-3 rounded-xl border transition-all flex justify-between items-center ${!hasFunds ? 'opacity-50 cursor-not-allowed bg-slate-50' : 'cursor-pointer'} ${selectedDriver?._id === driver._id
-                                                ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 ring-1 ring-emerald-500'
-                                                : 'border-slate-200 dark:border-white/10 hover:border-emerald-300'
+                                                ? 'border-amber-500 bg-slate-50 dark:bg-slate-900/30 ring-1 ring-amber-500'
+                                                : 'border-slate-200 dark:border-white/10 hover:border-amber-300'
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">
@@ -122,7 +122,7 @@ export default function BookingAssignmentModal({ booking, onClose, onAssignSucce
                                                 <p className="font-bold text-slate-900 dark:text-white text-sm">{driver.name}</p>
                                                 <div className="flex items-center gap-2 text-xs text-slate-500">
                                                     <span>{driver.vehicleNumber}</span>
-                                                    <span className={`font-mono font-bold ${hasFunds ? 'text-emerald-600' : 'text-red-500'}`}>
+                                                    <span className={`font-mono font-bold ${hasFunds ? 'text-slate-600' : 'text-red-500'}`}>
                                                         Rs {(driver.walletBalance || 0).toLocaleString()}
                                                     </span>
                                                 </div>
@@ -133,7 +133,7 @@ export default function BookingAssignmentModal({ booking, onClose, onAssignSucce
                                                 {driver.status}
                                             </div>
                                             {!hasFunds && <span className="text-[9px] text-red-500 font-bold block mt-1">Low Balance</span>}
-                                            {selectedDriver?._id === driver._id && <Check size={16} className="text-emerald-600 ml-auto mt-1" />}
+                                            {selectedDriver?._id === driver._id && <Check size={16} className="text-slate-600 ml-auto mt-1" />}
                                         </div>
                                     </div>
                                 );
@@ -145,14 +145,14 @@ export default function BookingAssignmentModal({ booking, onClose, onAssignSucce
                 <div className="px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-t dark:border-white/10">
                     <div className="flex justify-between items-center mb-4 text-xs">
                         <span className="text-slate-500">Trip Value: <strong>Rs {booking.totalPrice?.toLocaleString()}</strong></span>
-                        <span className="text-emerald-600">Commission (10%): <strong>- Rs {commissionAmount.toLocaleString()}</strong></span>
+                        <span className="text-slate-600">Commission (10%): <strong>- Rs {commissionAmount.toLocaleString()}</strong></span>
                     </div>
                     <div className="flex gap-3">
                         <button onClick={onClose} className="flex-1 py-3 font-bold text-slate-500 hover:bg-slate-200 rounded-xl transition-colors">Cancel</button>
                         <button
                             onClick={handleAssign}
                             disabled={!selectedDriver || assigning}
-                            className="flex-[2] py-3 bg-emerald-900 text-white rounded-xl font-bold hover:bg-emerald-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
+                            className="flex-[2] py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
                         >
                             {assigning ? <Loader2 className="animate-spin" /> : <MessageCircle size={18} />}
                             {assigning ? 'Assigning...' : 'Assign & WhatsApp'}

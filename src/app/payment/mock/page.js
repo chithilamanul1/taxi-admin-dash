@@ -53,7 +53,7 @@ function MockPaymentContent() {
         <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
             <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
                 {/* Header */}
-                <div className="bg-emerald-900 p-6 text-white text-center">
+                <div className="bg-slate-900 p-6 text-white text-center">
                     <div className="text-xs uppercase tracking-wider opacity-70 mb-1">Mock Payment Gateway</div>
                     <div className="text-3xl font-bold">Rs {Number(amount).toLocaleString()}</div>
                     <div className="text-xs opacity-70 mt-1">Booking #{bookingId?.slice(-6)}</div>
@@ -74,7 +74,7 @@ function MockPaymentContent() {
                                 placeholder="4242 4242 4242 4242"
                                 value={cardNumber}
                                 onChange={(e) => setCardNumber(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
+                                className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-slate-600/20 focus:border-slate-600"
                             />
                         </div>
                     </div>
@@ -85,7 +85,7 @@ function MockPaymentContent() {
                             <input
                                 type="text"
                                 placeholder="MM/YY"
-                                className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-600/20"
+                                className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-slate-600/20"
                             />
                         </div>
                         <div>
@@ -93,7 +93,7 @@ function MockPaymentContent() {
                             <input
                                 type="text"
                                 placeholder="123"
-                                className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-emerald-600/20"
+                                className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-slate-600/20"
                             />
                         </div>
                     </div>
@@ -131,7 +131,7 @@ function MockPaymentContent() {
 export default function MockPaymentPage() {
     return (
         <Suspense fallback={<div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
-            <Loader2 className="animate-spin text-emerald-500" size={40} />
+            <Loader2 className="animate-spin text-amber-500" size={40} />
         </div>}>
             <MockPaymentContent />
         </Suspense>

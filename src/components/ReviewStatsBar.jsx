@@ -49,7 +49,7 @@ const ReviewStatsBar = () => {
     }, []);
 
     return (
-        <section className="bg-white dark:bg-slate-900 border-b border-emerald-900/5 dark:border-white/5 py-8">
+        <section className="bg-white dark:bg-slate-900 border-b border-slate-900/5 dark:border-white/5 py-8">
             <div className="container mx-auto px-6">
                 <div className="flex flex-col gap-6 w-full max-w-lg mx-auto">
 
@@ -58,7 +58,7 @@ const ReviewStatsBar = () => {
                         href="https://www.tripadvisor.com/Attraction_Review-g293962-d33986804-Reviews-Airport_Taxis_Pvt_Ltd_Sri_Lanka-Colombo_Western_Province.html"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 hover:border-emerald-500/30 transition-all group w-full"
+                        className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 hover:border-amber-500/30 transition-all group w-full"
                     >
                         <div className="flex items-center gap-4">
                             <div className="w-10 h-10 bg-[#00AA6C] rounded-full flex items-center justify-center text-white shrink-0">

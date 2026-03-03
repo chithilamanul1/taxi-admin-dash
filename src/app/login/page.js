@@ -17,19 +17,19 @@ function LoginContent() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-900 to-slate-900 p-6">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-900 p-6">
             <div className="w-full max-w-md">
                 {/* Logo */}
                 <div className="text-center mb-8">
                     <Link href="/" className="inline-block">
-                        <h1 className="text-3xl font-bold text-white">Airport <span className="text-emerald-600">Taxis</span></h1>
+                        <h1 className="text-3xl font-bold text-white">Airport <span className="text-slate-600">Taxis</span></h1>
                         <p className="text-white/60 text-sm mt-1">Sri Lanka's Premium Transfer Service</p>
                     </Link>
                 </div>
 
                 {/* Login Card */}
                 <div className="bg-white rounded-2xl shadow-2xl p-8">
-                    <h2 className="text-2xl font-bold text-emerald-900 text-center mb-2">Welcome Back</h2>
+                    <h2 className="text-2xl font-bold text-slate-900 text-center mb-2">Welcome Back</h2>
                     <p className="text-gray-500 text-center text-sm mb-8">Sign in to view your bookings and leave reviews</p>
 
                     {/* Google Sign In */}
@@ -59,14 +59,14 @@ function LoginContent() {
                     {/* Guest Option */}
                     <Link
                         href="/prices"
-                        className="block w-full text-center bg-emerald-600 text-emerald-900 px-6 py-4 rounded-xl font-bold hover:bg-yellow-400 transition-colors"
+                        className="block w-full text-center bg-slate-600 text-slate-900 px-6 py-4 rounded-xl font-bold hover:bg-yellow-400 transition-colors"
                     >
                         Continue as Guest
                     </Link>
 
                     <p className="text-center text-gray-400 text-xs mt-6">
                         By signing in, you agree to our{' '}
-                        <Link href="/terms" className="text-emerald-600 hover:underline">Terms of Service</Link>
+                        <Link href="/terms" className="text-slate-600 hover:underline">Terms of Service</Link>
                     </p>
                 </div>
 
@@ -83,7 +83,7 @@ function LoginContent() {
 
 export default function LoginPage() {
     return (
-        <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-emerald-900 text-white">Loading...</div>}>
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">Loading...</div>}>
             <LoginContent />
         </Suspense>
     )

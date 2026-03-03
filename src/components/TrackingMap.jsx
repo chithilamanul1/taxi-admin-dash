@@ -92,7 +92,7 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
 
     return (
         <div className="space-y-4">
-            <div className="w-full h-[400px] rounded-2xl overflow-hidden border border-emerald-900/10 shadow-lg relative">
+            <div className="w-full h-[400px] rounded-2xl overflow-hidden border border-slate-900/10 shadow-lg relative">
                 <GoogleMap
                     mapContainerStyle={{ width: '100%', height: '100%' }}
                     center={pickup?.lat ? { lat: pickup.lat, lng: pickup.lng } : { lat: 7.8731, lng: 80.7718 }}
@@ -118,7 +118,7 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
                     )}
                 </GoogleMap>
                 {!driverId && (
-                    <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-3 rounded-xl border border-emerald-900/10 text-sm text-center font-bold text-slate-500">
+                    <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-3 rounded-xl border border-slate-900/10 text-sm text-center font-bold text-slate-500">
                         Driver will appear on map once assigned.
                     </div>
                 )}
@@ -126,15 +126,15 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
 
             {/* Driver Info under Map */}
             {driverData && (
-                <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl flex items-center justify-between animate-fade-in">
+                <div className="bg-slate-50 border border-slate-100 p-4 rounded-xl flex items-center justify-between animate-fade-in">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-emerald-600 shadow-sm font-bold text-lg">
+                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-slate-600 shadow-sm font-bold text-lg">
                             {driverData.name?.charAt(0)}
                         </div>
                         <div>
-                            <p className="text-xs text-emerald-900/50 font-bold uppercase tracking-wider">Your Driver</p>
-                            <p className="text-emerald-900 font-bold text-lg">{driverData.name}</p>
-                            <p className="text-sm text-emerald-700">{driverData.vehicleNumber}</p>
+                            <p className="text-xs text-slate-900/50 font-bold uppercase tracking-wider">Your Driver</p>
+                            <p className="text-slate-900 font-bold text-lg">{driverData.name}</p>
+                            <p className="text-sm text-slate-700">{driverData.vehicleNumber}</p>
                         </div>
                     </div>
                     <span className="bg-green-500 text-white text-[10px] uppercase font-bold px-2 py-1 rounded animate-pulse">Live</span>

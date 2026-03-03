@@ -78,20 +78,20 @@ export default function HomeClient() {
             />
 
             <div id="calculator" className="py-32 relative">
-                <div className="absolute inset-0 bg-emerald-900/5 flex items-center justify-center opacity-30">
-                    <div className="w-[800px] h-[400px] border border-emerald-900/10 rounded-full blur-3xl"></div>
+                <div className="absolute inset-0 bg-[#FFDA00]/5 flex items-center justify-center opacity-30">
+                    <div className="w-[800px] h-[400px] border border-white/10 rounded-full blur-3xl"></div>
                 </div>
                 <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
                     <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 font-heading">
-                        Seamless <span className="text-[#22C55E]">Airport Transfers</span>
+                        Seamless <span className="text-[#FFDA00]">Airport Transfers</span>
                     </h2>
                     <p className="text-white/70 mb-10 text-lg">Predictable pricing, premium vehicles, and professional chauffeurs waiting for you.</p>
                     <button
                         onClick={() => setIsBookingOpen(true)}
-                        className="bg-[#22C55E] text-black px-12 py-5 rounded-sm font-bold text-lg hover:bg-white hover:text-black transition-all shadow-[0_0_20px_rgba(34,197,94,0.4)] inline-flex items-center gap-3 group"
+                        className="bg-[#FFDA00] text-black px-8 py-3.5 rounded-full font-bold text-base hover:bg-white hover:text-black transition-all shadow-xl inline-flex items-center gap-3 group"
                     >
                         Book Your Trip Now
-                        <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                     </button>
                 </div>
             </div>
@@ -103,7 +103,7 @@ export default function HomeClient() {
                     <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
                         <div className="max-w-2xl">
                             <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-white">
-                                Curated <span className="text-[#22C55E]">Destinations</span>
+                                Curated <span className="text-[#FFDA00]">Destinations</span>
                             </h2>
                             <p className="text-white/70 text-lg">Explore the most iconic locations in Sri Lanka with our specialized airport transfer services.</p>
                         </div>
@@ -116,7 +116,7 @@ export default function HomeClient() {
                         {flatRatesList.filter(r => r.id !== 'sampath_test').slice(0, 3).map((route, i) => (
                             <div
                                 key={i}
-                                className="group relative h-[450px] rounded-3xl overflow-hidden border border-emerald-900/10 block shadow-md hover:shadow-2xl transition-all duration-500 text-left w-full"
+                                className="group relative h-[450px] rounded-3xl overflow-hidden border border-white/10 block shadow-md hover:shadow-2xl transition-all duration-500 text-left w-full"
                             >
                                 <Image
                                     src={`${route.img}${route.img.includes('?') ? '&' : '?'}w=600&q=75`}
@@ -125,20 +125,20 @@ export default function HomeClient() {
                                     className="object-cover transition-transform duration-1000 group-hover:scale-110"
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-emerald-900 via-emerald-900/10 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/10 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
 
                                 <div className="absolute top-6 left-6 flex flex-col gap-2">
-                                    <span className="bg-emerald-900 border border-emerald-400/20 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest block w-fit shadow-lg">{route.badge}</span>
+                                    <span className="bg-black/80 border border-white/10 text-[#FFDA00] text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest block w-fit shadow-lg">{route.badge}</span>
                                     <Link
                                         href={`/destination/${route.id}`}
-                                        className="bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest w-fit hover:bg-white hover:text-emerald-900 transition-colors shadow-lg"
+                                        className="bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest w-fit hover:bg-[#FFDA00] hover:text-black transition-colors shadow-lg"
                                     >
                                         Full Details
                                     </Link>
                                 </div>
 
                                 <div className="absolute bottom-0 left-0 p-8 w-full">
-                                    <div className="flex items-center gap-2 text-emerald-400 mb-2">
+                                    <div className="flex items-center gap-2 text-[#FFDA00] mb-2">
                                         <MapPin size={14} />
                                         <span className="text-[10px] font-bold uppercase tracking-[0.2em]">{route.meta}</span>
                                     </div>
@@ -147,7 +147,7 @@ export default function HomeClient() {
                                             setSelectedExpressProduct(route);
                                             setIsExpressOpen(true);
                                         }}
-                                        className="text-2xl font-extrabold text-white mb-4 leading-tight cursor-pointer hover:text-emerald-400 transition-colors"
+                                        className="text-2xl font-extrabold text-white mb-4 leading-tight cursor-pointer hover:text-[#FFDA00] transition-colors"
                                     >
                                         {route.title}
                                     </h3>
@@ -161,7 +161,7 @@ export default function HomeClient() {
                                                 setSelectedExpressProduct(route);
                                                 setIsExpressOpen(true);
                                             }}
-                                            className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center group-hover:bg-white group-hover:text-emerald-900 transition-all font-bold shadow-lg"
+                                            className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center group-hover:bg-[#FFDA00] group-hover:text-black transition-all font-bold shadow-lg"
                                         >
                                             <ArrowRight size={22} />
                                         </button>
@@ -177,33 +177,34 @@ export default function HomeClient() {
             <GoogleReviews />
             <RecentPosts />
 
-            <section className="py-20 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+            <section className="py-20 bg-slate-900 border-t border-slate-800">
                 <div className="max-w-6xl mx-auto px-6">
-                    <div className="bg-emerald-900 rounded-3xl p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
+                    <div className="bg-slate-950 rounded-3xl p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10 border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
+                        <div className="absolute top-0 left-0 w-full h-1.5 bg-[#FFDA00]"></div>
                         <div className="absolute inset-0 opacity-10">
                             <Compass size={400} className="absolute -right-20 -bottom-20 text-white" />
                         </div>
 
                         <div className="relative z-10 max-w-xl text-center md:text-left">
                             <h2 className="text-3xl md:text-4xl font-black text-white mb-4">Are you a Driver?</h2>
-                            <p className="text-emerald-100 text-lg mb-8">
+                            <p className="text-white/60 text-lg mb-8">
                                 Join our exclusive fleet of professional chauffeurs. Get consistent bookings, fair rates, and become part of Sri Lanka's premium transport network.
                             </p>
                             <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                                <Link href="/driver/register" className="bg-white text-emerald-900 px-8 py-3 rounded-xl font-bold hover:bg-emerald-50 transition-colors inline-flex items-center gap-2">
+                                <Link href="/driver/register" className="bg-[#FFDA00] text-black px-8 py-3 rounded-xl font-bold hover:bg-white transition-all inline-flex items-center gap-2">
                                     Join Our Fleet <ArrowRight size={18} />
                                 </Link>
-                                <Link href="/driver/login" className="px-8 py-3 rounded-xl font-bold text-white border border-emerald-700 hover:bg-emerald-800 transition-colors">
+                                <Link href="/driver/login" className="px-8 py-3 rounded-xl font-bold text-white border border-white/10 hover:bg-white/5 transition-colors">
                                     Driver Login
                                 </Link>
                             </div>
                         </div>
 
-                        <div className="relative z-10 w-full md:w-1/3 aspect-video bg-emerald-800/50 rounded-xl border border-emerald-500/20 backdrop-blur-sm flex items-center justify-center p-6 text-center transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                            <div className="text-emerald-200">
-                                <Star size={48} className="mx-auto mb-2 text-amber-400" />
-                                <h3 className="font-bold text-white">Earn More</h3>
-                                <p className="text-xs mt-1">Accept rides, track earnings, and get paid weekly.</p>
+                        <div className="relative z-10 w-full md:w-1/3 aspect-video bg-white/5 rounded-3xl border border-white/10 backdrop-blur-sm flex items-center justify-center p-6 text-center transform rotate-3 hover:rotate-0 transition-transform duration-500 shadow-2xl">
+                            <div className="text-white/60">
+                                <Star size={48} className="mx-auto mb-2 text-[#FFDA00]" />
+                                <h3 className="font-bold text-white uppercase tracking-widest text-sm">Earn More</h3>
+                                <p className="text-[10px] mt-1 font-bold">Accept rides, track earnings, and weekly payouts.</p>
                             </div>
                         </div>
                     </div>
