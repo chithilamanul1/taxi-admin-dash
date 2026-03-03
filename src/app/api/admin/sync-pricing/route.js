@@ -85,13 +85,14 @@ const VEHICLE_DEFAULTS = {
             { min: 200, max: 9999, type: 'per_km', rate: 135 }
         ]
     },
-    'kdh-van': {
-        name: 'Van (KDH High Roof)',
-        image: '/vehicles/toyota-highroof.png',
-        capacity: 8,
-        luggage: 8,
-        handLuggage: 6,
+    'normal-kdh': {
+        name: 'Van (KDH Flat Roof)',
+        image: '/vehicles/van.png',
+        capacity: 6,
+        luggage: 7,
+        handLuggage: 7,
         features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        sortOrder: 6,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 6000 },
             { min: 20, max: 40, type: 'flat', price: 8500 },
@@ -101,13 +102,14 @@ const VEHICLE_DEFAULTS = {
             { min: 200, max: 9999, type: 'per_km', rate: 120 }
         ]
     },
-    'normal-kdh': {
-        name: 'Van (KDH Flat Roof)',
-        image: '/vehicles/van.png',
-        capacity: 6,
-        luggage: 7,
-        handLuggage: 7,
+    'kdh-van': {
+        name: 'Van (KDH High Roof)',
+        image: '/vehicles/toyota-highroof.png',
+        capacity: 8,
+        luggage: 8,
+        handLuggage: 6,
         features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        sortOrder: 7,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 6000 },
             { min: 20, max: 40, type: 'flat', price: 8500 },
@@ -124,6 +126,7 @@ const VEHICLE_DEFAULTS = {
         luggage: 8,
         handLuggage: 6,
         features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        sortOrder: 8,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 7500 },
             { min: 20, max: 40, type: 'flat', price: 12000 },
@@ -131,40 +134,6 @@ const VEHICLE_DEFAULTS = {
             { min: 100, max: 140, type: 'per_km', rate: 220 },
             { min: 140, max: 200, type: 'per_km', rate: 175 },
             { min: 200, max: 9999, type: 'per_km', rate: 155 }
-        ]
-    },
-    'bus': {
-        name: 'Bus (20+ Seater)',
-        image: '/vehicles/coach-bus.png',
-        capacity: 25,
-        luggage: 20,
-        handLuggage: 20,
-        features: ['Air Conditioning'],
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 20000 },
-            { min: 20, max: 40, type: 'flat', price: 30000 },
-            { min: 40, max: 100, type: 'flat', price: 50000 },
-            { min: 100, max: 150, type: 'flat', price: 70000 },
-            { min: 150, max: 200, type: 'flat', price: 85000 },
-            { min: 200, max: 300, type: 'flat', price: 120000 },
-            { min: 300, max: 9999, type: 'per_km', rate: 400 }
-        ]
-    },
-    'coach-bus': {
-        name: 'Coach Bus (40+ Seater)',
-        image: '/vehicles/coach-bus.png',
-        capacity: 45,
-        luggage: 40,
-        handLuggage: 40,
-        features: ['Air Conditioning'],
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 25000 },
-            { min: 20, max: 40, type: 'flat', price: 45000 },
-            { min: 40, max: 100, type: 'flat', price: 60000 },
-            { min: 100, max: 150, type: 'flat', price: 85000 },
-            { min: 150, max: 200, type: 'flat', price: 95000 },
-            { min: 200, max: 300, type: 'flat', price: 135000 },
-            { min: 300, max: 9999, type: 'per_km', rate: 450 }
         ]
     }
 };
@@ -226,9 +195,15 @@ export async function POST(req) {
             }
         }
 
+        // Deactivate bus and coach-bus records if they exist
+        const deactivated = await Pricing.updateMany(
+            { vehicleType: { $in: ['bus', 'coach-bus'] } },
+            { $set: { isActive: false } }
+        );
+
         return NextResponse.json({
             success: true,
-            message: `Sync complete: ${updatedCount} updated, ${createdCount} created.`
+            message: `Sync complete: ${updatedCount} updated, ${createdCount} created. ${deactivated.modifiedCount || 0} bus records deactivated.`
         });
     } catch (error) {
         console.error('Error syncing pricing:', error);

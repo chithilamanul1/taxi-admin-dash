@@ -11,10 +11,10 @@ export async function GET(req) {
         const { searchParams } = new URL(req.url);
         const category = searchParams.get('category');
 
-        const filter = {};
+        const filter = { isActive: { $ne: false } };
         if (category) filter.category = category;
 
-        const pricing = await Pricing.find(filter);
+        const pricing = await Pricing.find(filter).sort({ sortOrder: 1 });
 
         // Fetch global settings (e.g. nameBoardPrice)
         const PricingSetting = await import('../../../models/PricingSetting').then(mod => mod.default);

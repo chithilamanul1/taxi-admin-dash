@@ -104,25 +104,6 @@ const VEHICLE_PRICING = {
             { min: 200, max: Infinity, type: 'per_km', rate: 135 }
         ]
     },
-    'kdh-van': {
-        name: 'VAN (KDH)',
-        model: '',
-        image: '/vehicles/toyota-highroof.png',
-        specs: {
-            luggage: 8,
-            handLuggage: 6,
-            ac: true
-        },
-        maxPassengers: 8,
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 6000 },
-            { min: 20, max: 40, type: 'flat', price: 8500 },
-            { min: 40, max: 100, type: 'per_km', rate: 200 },
-            { min: 100, max: 140, type: 'per_km', rate: 160 },
-            { min: 140, max: 200, type: 'per_km', rate: 130 },
-            { min: 200, max: Infinity, type: 'per_km', rate: 120 }
-        ]
-    },
     'normal-kdh': {
         name: 'VAN (KDH Flat Roof)',
         model: '',
@@ -134,6 +115,25 @@ const VEHICLE_PRICING = {
             handLuggage: 7,
             ac: true
         },
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 20, max: 40, type: 'flat', price: 8500 },
+            { min: 40, max: 100, type: 'per_km', rate: 200 },
+            { min: 100, max: 140, type: 'per_km', rate: 160 },
+            { min: 140, max: 200, type: 'per_km', rate: 130 },
+            { min: 200, max: Infinity, type: 'per_km', rate: 120 }
+        ]
+    },
+    'kdh-van': {
+        name: 'VAN (KDH High Roof)',
+        model: '',
+        image: '/vehicles/toyota-highroof.png',
+        specs: {
+            luggage: 8,
+            handLuggage: 6,
+            ac: true
+        },
+        maxPassengers: 8,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 6000 },
             { min: 20, max: 40, type: 'flat', price: 8500 },
@@ -160,40 +160,6 @@ const VEHICLE_PRICING = {
             { min: 100, max: 140, type: 'per_km', rate: 220 },
             { min: 140, max: 200, type: 'per_km', rate: 175 },
             { min: 200, max: Infinity, type: 'per_km', rate: 155 }
-        ]
-    },
-    'bus': {
-        name: 'BUS (20+ SEATER)',
-        model: '',
-        image: '/vehicles/coach-bus.png',
-        maxPassengers: 25,
-        imageScale: 1.0,
-        specs: { luggage: 20, handLuggage: 20, ac: true },
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 20000 },
-            { min: 20, max: 40, type: 'flat', price: 30000 },
-            { min: 40, max: 100, type: 'flat', price: 50000 },
-            { min: 100, max: 150, type: 'flat', price: 70000 },
-            { min: 150, max: 200, type: 'flat', price: 85000 },
-            { min: 200, max: 300, type: 'flat', price: 120000 },
-            { min: 300, max: Infinity, type: 'per_km', rate: 400 }
-        ]
-    },
-    'coach-bus': {
-        name: 'COACH BUS (40+ SEATER)',
-        model: '',
-        image: '/vehicles/coach-bus.png',
-        maxPassengers: 45,
-        imageScale: 1.0,
-        specs: { luggage: 40, handLuggage: 40, ac: true },
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 25000 },
-            { min: 20, max: 40, type: 'flat', price: 45000 },
-            { min: 40, max: 100, type: 'flat', price: 60000 },
-            { min: 100, max: 150, type: 'flat', price: 85000 },
-            { min: 150, max: 200, type: 'flat', price: 95000 },
-            { min: 200, max: 300, type: 'flat', price: 135000 },
-            { min: 300, max: Infinity, type: 'per_km', rate: 450 }
         ]
     }
 }
