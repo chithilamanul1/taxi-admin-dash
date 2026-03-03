@@ -10,20 +10,40 @@ import { destinations as staticDestinations } from '@/lib/destinations'
 // Tiered Pricing Configuration (in LKR - Sri Lankan Rupees)
 const VEHICLE_PRICING = {
     'mini-car': {
-        name: 'MINI CAR',
+        name: 'Mini Car',
         image: '/vehicles/minicar.png',
         specs: { luggage: 2, handLuggage: 2, ac: true },
-        maxPassengers: 2,
+        maxPassengers: 3,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 3500 },
             { min: 40, max: Infinity, type: 'per_km', rate: 102 }
         ]
     },
     'sedan': {
-        name: 'SEDAN',
+        name: 'Sedan',
         image: '/vehicles/sedancar.png',
-        specs: { luggage: 3, handLuggage: 3, ac: true },
-        maxPassengers: 3,
+        specs: { luggage: 3, handLuggage: 2, ac: true },
+        maxPassengers: 4,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 4500 },
+            { min: 50, max: Infinity, type: 'per_km', rate: 110 }
+        ]
+    },
+    'vezel': {
+        name: 'Honda Vezel',
+        image: '/vehicles/Hondavezel.png',
+        specs: { luggage: 3, handLuggage: 2, ac: true },
+        maxPassengers: 4,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 5500 },
+            { min: 40, max: Infinity, type: 'per_km', rate: 135 }
+        ]
+    },
+    'mini-van-every': {
+        name: 'Mini Van',
+        image: '/vehicles/susukievery.png',
+        specs: { luggage: 4, handLuggage: 2, ac: true },
+        maxPassengers: 4,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 4500 },
             { min: 50, max: Infinity, type: 'per_km', rate: 110 }
@@ -32,74 +52,54 @@ const VEHICLE_PRICING = {
     'suv': {
         name: 'SUV',
         image: '/vehicles/Hondavezel.png',
-        specs: { luggage: 3, handLuggage: 3, ac: true },
-        maxPassengers: 3,
+        specs: { luggage: 4, handLuggage: 2, ac: true },
+        maxPassengers: 4,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 6500 },
             { min: 40, max: Infinity, type: 'per_km', rate: 135 }
         ]
     },
-    'mini-van-every': {
-        name: 'MINI VAN (Every)',
-        image: '/vehicles/susukievery.png',
-        specs: { luggage: 3, handLuggage: 3, ac: true },
-        maxPassengers: 3,
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 4500 },
-            { min: 50, max: Infinity, type: 'per_km', rate: 110 }
-        ]
-    },
-    'mini-van-4seat': {
-        name: 'MINI VAN (4 Seat)',
-        image: '/vehicles/minivan5seat.png',
-        specs: { luggage: 4, handLuggage: 4, ac: true },
-        maxPassengers: 4,
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 6000 },
-            { min: 50, max: Infinity, type: 'per_km', rate: 120 }
-        ]
-    },
-    'van-flat-roof': {
-        name: 'VAN (KDH Flat Roof)',
+    'normal-kdh': {
+        name: 'Normal Van',
         image: '/vehicles/kdh-flat.png',
-        specs: { luggage: 7, handLuggage: 7, ac: true },
-        maxPassengers: 6,
+        specs: { luggage: 6, handLuggage: 2, ac: true },
+        maxPassengers: 9,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 6000 },
             { min: 40, max: Infinity, type: 'per_km', rate: 120 }
         ]
     },
-    'mini-bus-kdh': {
-        name: 'MINI BUS (KDH High Roof)',
+    'kdh-van': {
+        name: 'KDH High Roof Van',
         image: '/vehicles/toyota-highroof.png',
-        specs: { luggage: 8, handLuggage: 6, ac: true },
-        maxPassengers: 8,
+        specs: { luggage: 8, handLuggage: 2, ac: true },
+        maxPassengers: 9,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 6000 },
             { min: 40, max: Infinity, type: 'per_km', rate: 120 }
         ]
     },
-    'coaster-bus': {
-        name: 'COASTER BUS',
+    'mini-bus': {
+        name: 'Mini Bus',
         image: '/vehicles/costerbus.png',
-        specs: { luggage: 25, handLuggage: 15, ac: true },
-        maxPassengers: 25,
+        specs: { luggage: 15, handLuggage: 2, ac: true },
+        maxPassengers: 20,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 7500 },
             { min: 40, max: Infinity, type: 'per_km', rate: 155 }
         ]
     },
-    'couch-bus': {
-        name: 'COUCH BUS',
+    'coach-bus': {
+        name: 'Luxury Coach Bus',
         image: '/vehicles/coach-bus.png',
-        specs: { luggage: 45, handLuggage: 25, ac: true },
+        specs: { luggage: 40, handLuggage: 10, ac: true },
         maxPassengers: 45,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 25000 },
             { min: 40, max: Infinity, type: 'per_km', rate: 450 }
         ]
     }
-}
+};
 
 // Local pricing calculation removed in favor of centralized pricing-util
 
