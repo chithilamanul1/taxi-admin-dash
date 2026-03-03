@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X } from 'lucide-react'
+import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X } from 'lucide-react'
 
 import Image from 'next/image'
 import ToursWidget from './ToursWidget'
@@ -813,7 +813,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 {filteredCoupons.length > 0 && isCouponOpen && (
                                     <div className="lg:col-span-2 space-y-3 animate-fade-in">
                                         <div className="flex items-center gap-2 px-1">
-                                            <Tag size={12} className="text-emerald-600" />
+                                            <ShoppingBag size={14} className="text-slate-500" />
                                             <span className="text-[10px] font-bold text-emerald-900/50 uppercase tracking-widest">Available Offers</span>
                                         </div>
                                         <div className="flex overflow-x-auto pb-4 gap-4 no-scrollbar snap-x touch-pan-x">
@@ -1076,42 +1076,42 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         </div>
                     </div>
                 )}
+
+                {/* Booking Modal */}
+                <BookingModal
+                    isOpen={showModal}
+                    onClose={() => setShowModal(false)}
+                    initialData={bookingInitialData}
+                    pricingCategory={pricingCategory}
+                />
+
+                {/* Smart Offer Nudge */}
+                <SmartOfferNudge
+                    offer={appliedOffers.find(o => !dismissedOfferIds.includes(o._id)) || null}
+                    onClose={() => {
+                        const visibleOffer = appliedOffers.find(o => !dismissedOfferIds.includes(o._id));
+                        if (visibleOffer) {
+                            setDismissedOfferIds(prev => [...prev, visibleOffer._id]);
+                        }
+                    }}
+                />
+
+                {/* Vehicle Selection Drawer */}
+                <VehicleSelectionDrawer
+                    isOpen={isVehicleDrawerOpen}
+                    onClose={() => setIsVehicleDrawerOpen(false)}
+                    vehicles={Object.values(vehiclePricing)}
+                    selectedId={vehicle}
+                    onSelect={(vType) => {
+                        setVehicle(vType);
+                        setIsManualVehicle(true);
+                    }}
+                    passengerCount={passengerCount}
+                    isLoading={isLoadingPricing}
+                />
             </div>
-
-            {/* Booking Modal */}
-            <BookingModal
-                isOpen={showModal}
-                onClose={() => setShowModal(false)}
-                initialData={bookingInitialData}
-                pricingCategory={pricingCategory}
-            />
-
-            {/* Smart Offer Nudge - Show first non-dismissed offer */}
-            <SmartOfferNudge
-                offer={appliedOffers.find(o => !dismissedOfferIds.includes(o._id)) || null}
-                onClose={() => {
-                    const visibleOffer = appliedOffers.find(o => !dismissedOfferIds.includes(o._id));
-                    if (visibleOffer) {
-                        setDismissedOfferIds(prev => [...prev, visibleOffer._id]);
-                    }
-                }}
-            />
-
-            {/* Vehicle Selection Drawer */}
-            <VehicleSelectionDrawer
-                isOpen={isVehicleDrawerOpen}
-                onClose={() => setIsVehicleDrawerOpen(false)}
-                vehicles={Object.values(vehiclePricing)}
-                selectedId={vehicle}
-                onSelect={(vType) => {
-                    setVehicle(vType);
-                    setIsManualVehicle(true);
-                }}
-                passengerCount={passengerCount}
-                isLoading={isLoadingPricing}
-            />
         </div>
     );
-}
+};
 
-export default BookingWidget
+export default BookingWidget;

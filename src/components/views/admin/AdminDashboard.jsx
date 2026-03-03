@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react';
-import { MapPin, Users, Calendar, Settings, DollarSign, LogOut, Search, Activity, Bell, MessageSquare, Send, Shield, CheckCircle, Clock, Car } from 'lucide-react';
+import { MapPin, Users, Calendar, Settings, DollarSign, LogOut, Search, BarChart2, Bell, MessageSquare, Send, Shield, CheckCircle, Clock, Car } from 'lucide-react';
 import DriversFleetView from '../../components/DriversFleetView';
 import BookingAssignmentModal from '../../components/admin/BookingAssignmentModal';
 import AdminTourManager from './AdminTourManager';
@@ -138,7 +138,7 @@ const AdminDashboard = () => {
                 </div>
                 <nav className="flex-1 p-4 space-y-2">
                     <button onClick={() => setCurrentView('dashboard')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'dashboard' ? 'bg-slate-600 text-slate-900' : 'hover:bg-white/10'}`}>
-                        <Activity size={20} />
+                        <BarChart2 size={20} />
                         <span className={`${!sidebarOpen && 'hidden'}`}>Dashboard</span>
                     </button>
                     <button className="flex items-center gap-3 p-3 w-full hover:bg-white/10 rounded transition-colors">
@@ -175,7 +175,7 @@ const AdminDashboard = () => {
                         <span className={`${!sidebarOpen && 'hidden'}`}>Tours</span>
                     </button>
                     <button onClick={() => setCurrentView('gateway')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'gateway' ? 'bg-slate-600 text-slate-900' : 'hover:bg-white/10'}`}>
-                        <Activity size={20} />
+                        <BarChart2 size={20} />
                         <span className={`${!sidebarOpen && 'hidden'}`}>Gateway</span>
                     </button>
                     <button onClick={() => setCurrentView('support')} className={`flex items-center gap-3 p-3 w-full rounded transition-colors ${currentView === 'support' ? 'bg-slate-600 text-slate-900' : 'hover:bg-white/10'}`}>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { Car, MapPin, Clock, Phone, LogOut, CheckCircle, XCircle, Navigation, Calendar, User, Loader2, Wifi, WifiOff, Radio, Signpost, Mail, CreditCard, Banknote, ShieldCheck } from 'lucide-react';
+import { Car, MapPin, Clock, Phone, LogOut, CheckCircle, XCircle, Navigation, Calendar, User, Loader2, Wifi, WifiOff, Radio, Signpost, Mail, CreditCard, Banknote, ShieldCheck, ShoppingBag, Users } from 'lucide-react';
 import { GoogleMap, useJsApiLoader, Marker, DirectionsRenderer } from '@react-google-maps/api';
 
 export default function DriverDashboard() {
@@ -527,7 +527,7 @@ export default function DriverDashboard() {
                                             {booking.passengerCount && (
                                                 <div className="flex items-center gap-3 text-[10px] text-gray-500 font-bold uppercase">
                                                     <span className="flex items-center gap-1"><Users size={10} /> {booking.passengerCount.adults + booking.passengerCount.children} Pax</span>
-                                                    <span className="flex items-center gap-1"><Briefcase size={10} /> {booking.passengerCount.luggage} Bag</span>
+                                                    <span className="flex items-center gap-1"><ShoppingBag size={10} /> {booking.passengerCount.luggage} Bag</span>
                                                 </div>
                                             )}
                                         </div>

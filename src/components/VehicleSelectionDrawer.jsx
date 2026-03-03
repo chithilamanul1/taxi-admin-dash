@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Users, Briefcase, CheckCircle2, Lock, Car, Loader2, Info, Wind, ShoppingBag } from 'lucide-react';
+import { X, Users, ShoppingBag, Info, CheckCircle2, Loader2, Car, Wind, Lock } from 'lucide-react';
 
 const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelect, passengerCount, isLoading }) => {
     const [detailVehicle, setDetailVehicle] = React.useState(null);
@@ -116,7 +116,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                                 <Users size={12} className="text-black" /> 1-{vehicle.capacity}
                                             </div>
                                             <div className="flex items-center gap-1">
-                                                <Briefcase size={12} className="text-black" /> {vehicle.luggage}
+                                                <ShoppingBag size={12} className="text-black" /> {vehicle.luggage}
                                             </div>
                                             <div className="flex items-center gap-1">
                                                 <ShoppingBag size={12} className="text-black" /> {vehicle.handLuggage}
@@ -172,7 +172,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                         <span className="text-[8px] font-bold text-slate-400 uppercase">Pax</span>
                                     </div>
                                     <div className="flex flex-col items-center gap-1 p-2 bg-slate-50 dark:bg-white/5 rounded-2xl">
-                                        <Briefcase size={16} className="text-black" />
+                                        <ShoppingBag size={16} className="text-black" />
                                         <span className="text-sm font-black text-black dark:text-white">{detailVehicle.luggage}</span>
                                         <span className="text-[8px] font-bold text-slate-400 uppercase">Luggage</span>
                                     </div>

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Footer from '../../components/Footer';
-import { Tag, ArrowRight, Loader2, Zap, Users, Briefcase, Calendar } from 'lucide-react';
+import { Tag, ArrowRight, Loader2, Zap, Users, ShoppingBag, Calendar } from 'lucide-react';
 import Link from 'next/link';
 
 export default function OffersPage() {
@@ -131,7 +131,7 @@ export default function OffersPage() {
                     </div>
                     <div className="space-y-3">
                         <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center mx-auto text-slate-600">
-                            <Briefcase size={24} />
+                            <ShoppingBag size={24} />
                         </div>
                         <h4 className="font-black text-slate-900 uppercase text-sm tracking-widest">Ample Space</h4>
                         <p className="text-xs text-slate-500 font-medium">Our vans guarantee enough space for all your belongings.</p>

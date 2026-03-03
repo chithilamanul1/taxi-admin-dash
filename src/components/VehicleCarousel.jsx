@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Users, Briefcase, Info, Lock, Wind, Backpack } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Users, ShoppingBag, Wind, Zap, Shield, Star, Gauge, Info } from 'lucide-react';
 import VehicleDetailModal from './VehicleDetailModal';
 
 const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => {
@@ -92,7 +92,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                             {!suitable && (
                                 <div className="absolute inset-0 z-10 bg-white/60 backdrop-blur-[1px] rounded-2xl flex flex-col items-center justify-center p-4 text-center">
                                     <div className="bg-red-50 p-3 rounded-full mb-2">
-                                        <Lock size={20} className="text-red-500" />
+                                        <Shield size={20} className="text-red-500" />
                                     </div>
                                     <p className="text-xs font-bold text-red-600 uppercase tracking-widest">{reason}</p>
                                     <p className="text-[10px] text-red-400 font-medium mt-1">Upgrade vehicle</p>
@@ -137,11 +137,11 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                         <span>{vehicle.minCapacity || 1} - {vehicle.capacity} Passengers</span>
                                     </div>
                                     <div className="flex items-center gap-3 text-xs font-medium text-slate-600 dark:text-slate-400">
-                                        <Briefcase size={14} className="text-slate-600 shrink-0" />
+                                        <ShoppingBag size={14} className="text-slate-600 shrink-0" />
                                         <span>{vehicle.luggage || 0} Luggages</span>
                                     </div>
                                     <div className="flex items-center gap-3 text-xs font-medium text-slate-600 dark:text-slate-400">
-                                        <Backpack size={14} className="text-slate-600 shrink-0" />
+                                        <ShoppingBag size={14} className="text-slate-600 shrink-0" />
                                         <span>{vehicle.handLuggage || 0} Hand Baggages</span>
                                     </div>
                                     {vehicle.hasAC !== false && (

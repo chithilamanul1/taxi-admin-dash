@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Users, Briefcase, Info, CheckCircle2 } from 'lucide-react';
+import { X, Users, ShoppingBag, Info, CheckCircle2 } from 'lucide-react';
 
 const VehicleDetailModal = ({ isOpen, onClose, vehicle }) => {
     if (!isOpen || !vehicle) return null;
@@ -48,14 +48,14 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle }) => {
                             </div>
                         </div>
                         <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2">
-                            <Briefcase size={20} className="text-slate-600" />
+                            <ShoppingBag className="w-5 h-5 text-emerald-600 shrink-0" />
                             <div className="text-center">
                                 <p className="text-lg font-bold text-slate-900">{vehicle.luggage}</p>
                                 <p className="text-[10px] text-slate-900/40 uppercase font-bold">Large Bags</p>
                             </div>
                         </div>
                         <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2">
-                            <Briefcase size={16} className="text-slate-600/70" />
+                            <ShoppingBag className="w-4 h-4 text-slate-400" />
                             <div className="text-center">
                                 <p className="text-lg font-bold text-slate-900">{vehicle.handLuggage || 0}</p>
                                 <p className="text-[10px] text-slate-900/40 uppercase font-bold">Small Bags</p>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSession, signIn } from 'next-auth/react';
-import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag, Info, AlertCircle } from 'lucide-react';
+import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, ShoppingBag, Info, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -705,7 +705,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                                         <div className="flex items-center gap-2 p-2 bg-white rounded-xl border border-black/10 shadow-sm">
                                                             <div className="w-6 h-6 bg-slate-50 rounded-lg flex items-center justify-center text-black shrink-0">
-                                                                <Briefcase size={12} />
+                                                                <ShoppingBag size={12} />
                                                             </div>
                                                             <div className="min-w-0">
                                                                 <p className="text-[7px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Bags</p>
@@ -775,7 +775,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         {[
                                             { id: 'adults', label: 'Adults', icon: Users },
                                             { id: 'children', label: 'Children', icon: User },
-                                            { id: 'luggage', label: 'Check-in Luggage', icon: Briefcase },
+                                            { id: 'luggage', label: 'Check-in Luggage', icon: ShoppingBag },
                                             { id: 'handLuggage', label: 'Hand Luggage', icon: ShoppingBag }
                                         ].map((field) => (
                                             <div key={field.id} className="bg-white border border-slate-200 p-3 md:p-4 rounded-xl flex items-center justify-between">
@@ -829,14 +829,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </div>
                                     </div>
 
-                                    {isOverCapacity && (
-                                        <div className="p-3 bg-red-50 border border-red-100 rounded-2xl flex items-start gap-3 animate-pulse">
-                                            <div className="pt-0.5 text-red-600"><Briefcase size={14} /></div>
-                                            <p className="text-[10px] font-bold text-red-900 leading-tight uppercase tracking-widest">
-                                                Capacity Exceeded: {totalPassengers} Pax (Max {selectedVehicle.capacity})
-                                            </p>
-                                        </div>
-                                    )}
+                                    <div className="p-3 bg-red-50 border border-red-100 rounded-2xl flex items-start gap-3 animate-pulse">
+                                        <div className="pt-0.5 text-red-600"><ShoppingBag size={14} /></div>
+                                        <p className="text-[10px] font-bold text-red-900 leading-tight uppercase tracking-widest">
+                                            Capacity Exceeded: {totalPassengers} Pax (Max {selectedVehicle.capacity})
+                                        </p>
+                                    </div>
 
                                     <div className="pt-2">
                                         <button

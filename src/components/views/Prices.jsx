@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Lock, Briefcase, Wind, Zap } from 'lucide-react'
+import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Lock, ShoppingBag, Wind, Zap, Mail, Phone, Calendar, Clock, CreditCard } from 'lucide-react'
 import { debounce } from '@/lib/utils'
 import { useCurrency } from '@/context/CurrencyContext'
 import { calculateBasePrice } from '@/lib/pricing-util'
@@ -344,7 +344,7 @@ const Prices = ({ initialDestination }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-slate-600">✉️</span> Your Email
+                                <Mail size={16} className="text-slate-600" /> Your Email
                             </label>
                             <input
                                 type="email"
@@ -356,7 +356,7 @@ const Prices = ({ initialDestination }) => {
                         </div>
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-slate-600">📱</span> WhatsApp No.
+                                <Phone size={16} className="text-slate-600" /> WhatsApp No.
                             </label>
                             <input
                                 type="tel"
@@ -372,7 +372,7 @@ const Prices = ({ initialDestination }) => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-slate-600">📅</span> Date
+                                <Calendar size={16} className="text-slate-600" /> Date
                             </label>
                             <input
                                 type="date"
@@ -383,7 +383,7 @@ const Prices = ({ initialDestination }) => {
                         </div>
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-slate-600">⏰</span> Time
+                                <Clock size={16} className="text-slate-600" /> Time
                             </label>
                             <input
                                 type="time"
@@ -394,7 +394,7 @@ const Prices = ({ initialDestination }) => {
                         </div>
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                                <span className="text-slate-600 dark:text-amber-400">💳</span> Payment
+                                <CreditCard size={16} className="text-slate-600 dark:text-amber-400" /> Payment
                             </label>
                             <select
                                 value={paymentMethod}
@@ -519,15 +519,15 @@ const Prices = ({ initialDestination }) => {
                                         <div className="font-bold text-2xl mb-1">{VEHICLE_PRICING[vehicle].name}</div>
                                         <div className="text-sm text-white/80 mb-2">{VEHICLE_PRICING[vehicle].model}</div>
                                         {VEHICLE_PRICING[vehicle].specs && (
-                                            <div className="flex flex-col gap-1 mb-2 opacity-90">
+                                            <div className="flex flex-wrap gap-4 mt-4">
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
                                                     <Users size={12} className="text-slate-600" /> 1-{VEHICLE_PRICING[vehicle].maxPassengers} PASSENGERS
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Briefcase size={12} className="text-slate-600" /> {VEHICLE_PRICING[vehicle].specs.luggage} LUGGAGE
+                                                    <ShoppingBag size={12} className="text-slate-600" /> {VEHICLE_PRICING[vehicle].specs.luggage} LUGGAGE
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Briefcase size={12} className="text-slate-600 scale-75" /> {VEHICLE_PRICING[vehicle].specs.handLuggage} HAND LUGGAGE
+                                                    <ShoppingBag size={12} className="text-slate-600 scale-75" /> {VEHICLE_PRICING[vehicle].specs.handLuggage} HAND LUGGAGE
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
                                                     <Wind size={12} className="text-slate-600" /> AIR - CONDITIONING
@@ -536,7 +536,7 @@ const Prices = ({ initialDestination }) => {
                                         )}
                                         <div className="flex items-center gap-4 mt-1 text-xs font-bold text-slate-600 uppercase tracking-widest">
                                             <span>Click to Change</span>
-                                            <ArrowRightLeft size={14} />
+                                            <MapPin size={14} />
                                         </div>
                                     </div>
                                 </div>
@@ -593,11 +593,11 @@ const Prices = ({ initialDestination }) => {
                                                 {v.specs && (
                                                     <>
                                                         <div className="flex items-center gap-4 text-base font-bold text-gray-700 dark:text-slate-300">
-                                                            <Briefcase size={20} className="text-slate-400" />
+                                                            <ShoppingBag size={20} className="text-slate-400" />
                                                             <span>{v.specs.luggage} Luggages</span>
                                                         </div>
                                                         <div className="flex items-center gap-4 text-base font-bold text-gray-700 dark:text-slate-300">
-                                                            <Briefcase size={18} className="text-slate-400" />
+                                                            <ShoppingBag size={18} className="text-slate-400" />
                                                             <span>{v.specs.handLuggage} Hand Baggages</span>
                                                         </div>
                                                         {v.specs.ac && (
