@@ -187,7 +187,7 @@ export const destinations = [
         name: "Anuradhapura",
         price: 95,
         badge: "Ancient Capital",
-        img: "https://images.unsplash.com/photo-1586861635167-e52a3a1e262c?auto=format&fit=crop&q=80&w=1000",
+        img: "/Hero/izanuradapura.jpg",
         meta: "Sacred City",
         description: "Anuradhapura is one of the ancient capitals of Sri Lanka, famous for its well-preserved ruins of ancient Lankan civilization.",
         distance: "170 km",

@@ -103,7 +103,7 @@ const VEHICLE_DEFAULTS = {
     },
     'normal-kdh': {
         name: 'Van (KDH Flat Roof)',
-        image: '/vehicles/kdh-flat.png',
+        image: '/vehicles/van.png',
         capacity: 6,
         luggage: 7,
         handLuggage: 7,
@@ -120,9 +120,9 @@ const VEHICLE_DEFAULTS = {
     'mini-bus': {
         name: 'Mini Bus',
         image: '/vehicles/costerbus.png',
-        capacity: 20,
-        luggage: 20,
-        handLuggage: 15,
+        capacity: 8,
+        luggage: 8,
+        handLuggage: 6,
         features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 7500 },

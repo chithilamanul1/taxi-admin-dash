@@ -126,7 +126,7 @@ const VEHICLE_PRICING = {
     'normal-kdh': {
         name: 'VAN (KDH Flat Roof)',
         model: '',
-        image: '/vehicles/kdh-flat.png',
+        image: '/vehicles/van.png',
         maxPassengers: 6,
         imageScale: 1.35,
         specs: {
@@ -148,11 +148,11 @@ const VEHICLE_PRICING = {
         model: '',
         image: '/vehicles/costerbus.png',
         specs: {
-            luggage: 20,
-            handLuggage: 15,
+            luggage: 8,
+            handLuggage: 6,
             ac: true
         },
-        maxPassengers: 20,
+        maxPassengers: 8,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 7500 },
             { min: 20, max: 40, type: 'flat', price: 12000 },
