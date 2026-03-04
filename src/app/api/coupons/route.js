@@ -22,7 +22,11 @@ export async function GET(req) {
         query.value = { $exists: true, $ne: null };
 
         if (isPublic) {
-            query.expiryDate = { $gt: new Date() };
+            query.$or = [
+                { expiryDate: { $gt: new Date() } },
+                { expiryDate: { $eq: null } },
+                { expiryDate: { $exists: false } }
+            ];
         }
 
         const coupons = await Coupon.find(query).sort({ createdAt: -1 });

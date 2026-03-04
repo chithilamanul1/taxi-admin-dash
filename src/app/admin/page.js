@@ -482,11 +482,11 @@ export default function AdminDashboard() {
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Live Chat</span>
                         <span className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
                     </button>
-                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('Multi-Day Packages'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' && tourCategoryFilter === 'Multi-Day Packages' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('tour-package'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' && tourCategoryFilter === 'tour-package' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Compass size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Tour Packages</span>
                     </button>
-                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('Day Trips'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' && tourCategoryFilter === 'Day Trips' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('day-trip'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' && tourCategoryFilter === 'day-trip' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <MapIcon size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Day Trips</span>
                     </button>
@@ -1522,15 +1522,15 @@ export default function AdminDashboard() {
                                             className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
                                         >
                                             <option value="All">All Categories</option>
-                                            <option value="Day Trips">Day Trips</option>
-                                            <option value="Safari">Safari</option>
-                                            <option value="Multi-Day Packages">Multi-Day Packages</option>
+                                            <option value="day-trip">Day Trips</option>
+                                            <option value="safari">Safari</option>
+                                            <option value="tour-package">Multi-Day Packages</option>
                                         </select>
                                         <button
                                             onClick={() => {
                                                 setTourForm({
                                                     title: '',
-                                                    category: 'Day Trips',
+                                                    category: 'day-trip',
                                                     price: '',
                                                     priceType: 'per person',
                                                     duration: '',
@@ -1627,10 +1627,12 @@ export default function AdminDashboard() {
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                                                         <select
                                                             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none bg-white"
-                                                            value={tourForm.category || 'Day Trips'}
+                                                            value={tourForm.category || 'day-trip'}
                                                             onChange={e => setTourForm({ ...tourForm, category: e.target.value })}
                                                         >
-                                                            {['Day Trips', 'Safari', 'Multi-Day Packages'].map(c => <option key={c} value={c}>{c}</option>)}
+                                                            <option value="day-trip">Day Trips</option>
+                                                            <option value="safari">Safari</option>
+                                                            <option value="tour-package">Multi-Day Packages</option>
                                                         </select>
                                                     </div>
                                                     <div>

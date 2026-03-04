@@ -86,7 +86,26 @@ const VEHICLE_PRICING = {
         ]
     },
     'suv': {
-        name: 'SUV / VEZEL',
+        name: 'SUV',
+        model: '',
+        image: '/vehicles/Hondavezel.png',
+        specs: {
+            luggage: 3,
+            handLuggage: 3,
+            ac: true
+        },
+        maxPassengers: 3,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6500 },
+            { min: 20, max: 40, type: 'flat', price: 9500 },
+            { min: 40, max: 100, type: 'per_km', rate: 150 },
+            { min: 100, max: 140, type: 'per_km', rate: 145 },
+            { min: 140, max: 200, type: 'per_km', rate: 140 },
+            { min: 200, max: Infinity, type: 'per_km', rate: 135 }
+        ]
+    },
+    'vezel': {
+        name: 'HONDA VEZEL',
         model: '',
         image: '/vehicles/Hondavezel.png',
         specs: {
@@ -125,7 +144,7 @@ const VEHICLE_PRICING = {
         ]
     },
     'kdh-van': {
-        name: 'VAN (KDH High Roof)',
+        name: 'MINI BUS (KDH High Roof)',
         model: '',
         image: '/vehicles/toyota-highroof.png',
         specs: {
@@ -144,7 +163,7 @@ const VEHICLE_PRICING = {
         ]
     },
     'mini-bus': {
-        name: 'MINI BUS',
+        name: 'COASTER BUS',
         model: '',
         image: '/vehicles/costerbus.png',
         specs: {
@@ -160,6 +179,25 @@ const VEHICLE_PRICING = {
             { min: 100, max: 140, type: 'per_km', rate: 220 },
             { min: 140, max: 200, type: 'per_km', rate: 175 },
             { min: 200, max: Infinity, type: 'per_km', rate: 155 }
+        ]
+    },
+    'coach-bus': {
+        name: 'COACH BUS',
+        model: '',
+        image: '/vehicles/coach-bus.png',
+        specs: {
+            luggage: 30,
+            handLuggage: 20,
+            ac: true
+        },
+        maxPassengers: 40,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 15000 },
+            { min: 20, max: 40, type: 'flat', price: 20000 },
+            { min: 40, max: 100, type: 'per_km', rate: 300 },
+            { min: 100, max: 140, type: 'per_km', rate: 300 },
+            { min: 140, max: 200, type: 'per_km', rate: 250 },
+            { min: 200, max: Infinity, type: 'per_km', rate: 220 }
         ]
     }
 }

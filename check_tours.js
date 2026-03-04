@@ -1,17 +1,16 @@
-import dbConnect from './src/lib/db.js';
-import Tour from './src/models/Tour.js';
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 async function checkTours() {
-    try {
-        await dbConnect();
-        const tours = await Tour.find({});
-        console.log(`Found ${tours.length} tours.`);
-        tours.forEach(t => console.log(`- ${t.title} (${t.category}) [Active: ${t.isActive}]`));
-        process.exit(0);
-    } catch (err) {
-        console.error(err);
-        process.exit(1);
+    await mongoose.connect(process.env.MONGODB_URI);
+    const db = mongoose.connection.db;
+    const tours = await db.collection('tours').find({}).toArray();
+    console.log("Total tours:", tours.length);
+    const categories = tours.map(t => t.category);
+    console.log("Categories:", Array.from(new Set(categories)));
+    if (tours.length > 0) {
+        console.log("First tour:", JSON.stringify(tours[0], null, 2));
     }
+    mongoose.disconnect();
 }
-
 checkTours();

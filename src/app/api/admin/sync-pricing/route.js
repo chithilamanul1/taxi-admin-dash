@@ -70,12 +70,30 @@ const VEHICLE_DEFAULTS = {
         ]
     },
     'suv': {
-        name: 'SUV / Vezel',
+        name: 'SUV',
         image: '/vehicles/Hondavezel.png',
         capacity: 3,
         luggage: 3,
         handLuggage: 3,
         features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        sortOrder: 5,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6500 },
+            { min: 20, max: 40, type: 'flat', price: 9500 },
+            { min: 40, max: 100, type: 'per_km', rate: 150 },
+            { min: 100, max: 140, type: 'per_km', rate: 145 },
+            { min: 140, max: 200, type: 'per_km', rate: 140 },
+            { min: 200, max: 9999, type: 'per_km', rate: 135 }
+        ]
+    },
+    'vezel': {
+        name: 'Honda Vezel',
+        image: '/vehicles/Hondavezel.png',
+        capacity: 3,
+        luggage: 3,
+        handLuggage: 3,
+        features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        sortOrder: 6,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 6500 },
             { min: 20, max: 40, type: 'flat', price: 9500 },
@@ -92,23 +110,6 @@ const VEHICLE_DEFAULTS = {
         luggage: 7,
         handLuggage: 7,
         features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
-        sortOrder: 6,
-        tiers: [
-            { min: 0, max: 20, type: 'flat', price: 6000 },
-            { min: 20, max: 40, type: 'flat', price: 8500 },
-            { min: 40, max: 100, type: 'per_km', rate: 200 },
-            { min: 100, max: 140, type: 'per_km', rate: 160 },
-            { min: 140, max: 200, type: 'per_km', rate: 130 },
-            { min: 200, max: 9999, type: 'per_km', rate: 120 }
-        ]
-    },
-    'kdh-van': {
-        name: 'Van (KDH High Roof)',
-        image: '/vehicles/toyota-highroof.png',
-        capacity: 8,
-        luggage: 8,
-        handLuggage: 6,
-        features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
         sortOrder: 7,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 6000 },
@@ -119,14 +120,31 @@ const VEHICLE_DEFAULTS = {
             { min: 200, max: 9999, type: 'per_km', rate: 120 }
         ]
     },
-    'mini-bus': {
-        name: 'Mini Bus',
-        image: '/vehicles/costerbus.png',
+    'kdh-van': {
+        name: 'Mini Bus (KDH High Roof)',
+        image: '/vehicles/toyota-highroof.png',
         capacity: 8,
         luggage: 8,
         handLuggage: 6,
         features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
         sortOrder: 8,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 6000 },
+            { min: 20, max: 40, type: 'flat', price: 8500 },
+            { min: 40, max: 100, type: 'per_km', rate: 200 },
+            { min: 100, max: 140, type: 'per_km', rate: 160 },
+            { min: 140, max: 200, type: 'per_km', rate: 130 },
+            { min: 200, max: 9999, type: 'per_km', rate: 120 }
+        ]
+    },
+    'mini-bus': {
+        name: 'Coaster Bus',
+        image: '/vehicles/costerbus.png',
+        capacity: 8,
+        luggage: 8,
+        handLuggage: 6,
+        features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        sortOrder: 9,
         tiers: [
             { min: 0, max: 20, type: 'flat', price: 7500 },
             { min: 20, max: 40, type: 'flat', price: 12000 },
@@ -134,6 +152,23 @@ const VEHICLE_DEFAULTS = {
             { min: 100, max: 140, type: 'per_km', rate: 220 },
             { min: 140, max: 200, type: 'per_km', rate: 175 },
             { min: 200, max: 9999, type: 'per_km', rate: 155 }
+        ]
+    },
+    'coach-bus': {
+        name: 'Coach Bus',
+        image: '/vehicles/coach-bus.png',
+        capacity: 40,
+        luggage: 30,
+        handLuggage: 20,
+        features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
+        sortOrder: 10,
+        tiers: [
+            { min: 0, max: 20, type: 'flat', price: 15000 },
+            { min: 20, max: 40, type: 'flat', price: 20000 },
+            { min: 40, max: 100, type: 'per_km', rate: 300 },
+            { min: 100, max: 140, type: 'per_km', rate: 300 },
+            { min: 140, max: 200, type: 'per_km', rate: 250 },
+            { min: 200, max: 9999, type: 'per_km', rate: 220 }
         ]
     }
 };
@@ -195,9 +230,15 @@ export async function POST(req) {
             }
         }
 
-        // Deactivate bus and coach-bus records if they exist
+        // Reactivate coach-bus if deactivated previously
+        await Pricing.updateMany(
+            { vehicleType: 'coach-bus' },
+            { $set: { isActive: true } }
+        );
+
+        // Deactivate old 'bus' records
         const deactivated = await Pricing.updateMany(
-            { vehicleType: { $in: ['bus', 'coach-bus'] } },
+            { vehicleType: 'bus' },
             { $set: { isActive: false } }
         );
 
