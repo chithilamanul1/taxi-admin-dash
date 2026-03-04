@@ -122,19 +122,7 @@ const Hero = ({ onBookClick }) => {
                 </div>
 
                 <div className="flex flex-wrap items-center justify-start md:justify-center gap-4 animate-slide-up opacity-0 [animation-delay:0.8s] [animation-fill-mode:forwards] pb-8 md:pb-0">
-                    <button
-                        onClick={onBookClick}
-                        className="group w-full sm:w-auto px-8 py-4 bg-emerald-700 text-white rounded-xl font-bold text-lg hover:bg-emerald-600 transition-all shadow-xl shadow-emerald-900/20 flex items-center justify-center gap-2 min-w-[200px]"
-                    >
-                        Plan Your Trip
-                        <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-                    </button>
-                    <Link
-                        href="/offers"
-                        className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md text-white rounded-xl font-bold text-lg transition-all border border-white/20 hover:bg-white/20 text-center min-w-[200px]"
-                    >
-                        See Offers
-                    </Link>
+                    {/* Buttons removed per user request for a cleaner hero section */}
                 </div>
             </div>
 

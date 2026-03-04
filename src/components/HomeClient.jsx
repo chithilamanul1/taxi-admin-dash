@@ -115,7 +115,7 @@ export default function HomeClient() {
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {destinations.slice(0, 12).map((route, i) => (
+                        {destinations.slice(0, 14).map((route, i) => (
                             <button
                                 key={i}
                                 onClick={() => {
@@ -128,19 +128,19 @@ export default function HomeClient() {
                                     });
                                     setIsBookingOpen(true);
                                 }}
-                                className="group p-6 rounded-[2rem] bg-white dark:bg-slate-900 border border-amber-900/10 dark:border-white/10 shadow-sm hover:shadow-2xl hover:border-amber-500/50 hover:-translate-y-1 transition-all duration-300 text-left flex flex-col justify-between h-40"
+                                className="group p-4 sm:p-6 rounded-[2rem] bg-white dark:bg-slate-900 border border-amber-900/10 dark:border-white/10 shadow-sm hover:shadow-2xl hover:border-amber-500/50 hover:-translate-y-1 transition-all duration-300 text-left flex flex-col justify-between h-40 sm:h-44"
                             >
                                 <div>
                                     <div className="flex items-center gap-2 text-amber-600 dark:text-amber-500 mb-2">
                                         <MapPin size={14} className="fill-current/20" />
-                                        <span className="text-[10px] font-black uppercase tracking-widest">{route.meta}</span>
+                                        <span className="text-[10px] font-black uppercase tracking-widest truncate">{route.meta}</span>
                                     </div>
-                                    <h3 className="text-2xl font-black text-slate-900 dark:text-white leading-tight group-hover:text-amber-600 transition-colors">
+                                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight group-hover:text-amber-600 transition-colors line-clamp-2">
                                         {route.name || route.title.replace('Airport to ', '')}
                                     </h3>
                                 </div>
                                 <div className="flex items-center justify-between mt-4">
-                                    <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Instant Quote</span>
+                                    <span className="hidden sm:inline text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Instant Quote</span>
                                     <div className="w-8 h-8 rounded-full bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400 group-hover:bg-amber-500 group-hover:text-white transition-all">
                                         <ArrowRight size={18} className="transform group-hover:translate-x-0.5 transition-transform" />
                                     </div>

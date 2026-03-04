@@ -696,18 +696,25 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
 
                                 {/* Dropoff Input */}
-                                <LocationInput
-                                    placeholder="Drop-off Location"
-                                    value={dropoffSearch}
-                                    icon={MapPin}
-                                    zIndex={100}
-                                    disabled={activeTab === 'drop'}
-                                    onChange={(val) => setDropoffSearch(val)}
-                                    onSelect={(loc) => {
-                                        setDropoff({ name: loc.address, lat: loc.lat, lon: loc.lon });
-                                        setDropoffSearch(loc.address);
-                                    }}
-                                />
+                                <div className="relative">
+                                    {/* Uber-style vertical connecting line */}
+                                    <div className="absolute left-[22px] top-[-36px] bottom-[28px] w-[2px] bg-slate-200 dark:bg-slate-700 z-0">
+                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 z-10"></div>
+                                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 z-10"></div>
+                                    </div>
+                                    <LocationInput
+                                        placeholder="Drop-off Location"
+                                        value={dropoffSearch}
+                                        icon={MapPin}
+                                        zIndex={100}
+                                        disabled={activeTab === 'drop'}
+                                        onChange={(val) => setDropoffSearch(val)}
+                                        onSelect={(loc) => {
+                                            setDropoff({ name: loc.address, lat: loc.lat, lon: loc.lon });
+                                            setDropoffSearch(loc.address);
+                                        }}
+                                    />
+                                </div>
                             </div>
 
                             {/* Extra Options Grid - Stack on LG, Grid on XL */}
@@ -719,7 +726,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         className={`h-16 px-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-black bg-slate-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-black dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-slate-900 dark:border-white/10 text-slate-900/60 dark:text-white/60 hover:border-black'}`}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <Signpost size={20} className={hasNameBoard ? 'text-emerald-600' : 'text-slate-400'} />
+                                            <div className="w-6 h-6 shrink-0 text-amber-600">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
+                                                    <circle cx="12" cy="7" r="2.5" />
+                                                    <path d="M12 9.5v5" />
+                                                    <path d="M9 13v7" />
+                                                    <path d="M15 13v7" />
+                                                    <rect x="7" y="10" width="10" height="5" rx="1" fill="white" stroke="currentColor" />
+                                                </svg>
+                                            </div>
                                             <div className="text-left">
                                                 <span className="text-xs font-bold block uppercase tracking-tight text-slate-700">Name Board</span>
                                                 <span className="text-[10px] font-medium text-slate-400">Driver waits with name sign</span>
@@ -917,8 +932,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             </div>
 
                             {/* Vehicle Selection - Unified for Desktop & Mobile */}
-                            <div className="mt-4">
-                                <label className="text-[10px] font-bold text-emerald-900 dark:text-white uppercase tracking-widest mb-2 block pl-1">Selected Vehicle</label>
+                            <div className="">
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
                                     className="w-full h-20 px-4 flex items-center justify-between bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 rounded-2xl hover:border-emerald-600 dark:hover:border-emerald-500 hover:shadow-md transition-all group"
