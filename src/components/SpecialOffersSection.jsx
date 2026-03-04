@@ -84,10 +84,10 @@ export default function SpecialOffersSection() {
                                         }
                                         window.location.href = `/?${params.toString()}#booking`;
                                     }}
-                                    className="snap-center w-[280px] md:w-[320px] bg-white rounded-3xl p-6 shadow-xl hover:translate-y-[-4px] transition-transform cursor-pointer group/card flex-shrink-0 relative overflow-hidden"
+                                    className="snap-center w-[280px] md:w-[320px] bg-emerald-900/80 border border-white/10 backdrop-blur-sm rounded-3xl p-6 shadow-xl hover:translate-y-[-4px] transition-transform cursor-pointer group/card flex-shrink-0 relative overflow-hidden"
                                 >
                                     {/* Decorative Background Blob */}
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
 
                                     <div className="relative z-10">
                                         {/* Header: Icon & Location Badge */}
@@ -105,29 +105,29 @@ export default function SpecialOffersSection() {
 
                                         {/* Discount Amount */}
                                         <div className="mb-2">
-                                            <h3 className="text-5xl font-black text-slate-900 tracking-tight leading-none">
+                                            <h3 className="text-5xl font-black text-white tracking-tight leading-none">
                                                 {coupon.discountType === 'percentage' ? `${coupon.value}%` : `$${coupon.value}`}
-                                                <span className="text-xl ml-1 text-slate-400 font-bold">{coupon.discountType === 'percentage' ? 'OFF' : 'Rs OFF'}</span>
+                                                <span className="text-xl ml-1 text-white/50 font-bold">{coupon.discountType === 'percentage' ? 'OFF' : 'Rs OFF'}</span>
                                             </h3>
-                                            <p className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mt-1 ml-1">Discount</p>
+                                            <p className="text-xs font-black text-white/40 uppercase tracking-[0.2em] mt-1 ml-1">Discount</p>
                                         </div>
 
                                         {/* Description */}
-                                        <p className="text-sm font-bold text-slate-600 mb-6 leading-relaxed">
+                                        <p className="text-sm font-bold text-white/60 mb-6 leading-relaxed">
                                             {coupon.description || `Valid for rides to/from ${coupon.applicableLocations?.[0] || 'selected locations'}`}
                                         </p>
 
                                         {/* Divider */}
-                                        <div className="border-t-2 border-dashed border-slate-100 mb-6 relative">
-                                            <div className="absolute left-0 top-1/2 -translate-y-1/2 -ml-8 w-4 h-4 bg-emerald-900 rounded-full"></div>
-                                            <div className="absolute right-0 top-1/2 -translate-y-1/2 -mr-8 w-4 h-4 bg-emerald-900 rounded-full"></div>
+                                        <div className="border-t-2 border-dashed border-white/10 mb-6 relative">
+                                            <div className="absolute left-0 top-1/2 -translate-y-1/2 -ml-8 w-4 h-4 bg-emerald-950 rounded-full"></div>
+                                            <div className="absolute right-0 top-1/2 -translate-y-1/2 -mr-8 w-4 h-4 bg-emerald-950 rounded-full"></div>
                                         </div>
 
                                         {/* Footer: Code & Copy */}
-                                        <div className="bg-slate-50 rounded-2xl p-2 pl-4 flex items-center justify-between border border-slate-100 group-hover/card:border-amber-200 transition-colors">
+                                        <div className="bg-black/30 rounded-2xl p-2 pl-4 flex items-center justify-between border border-white/10 group-hover/card:border-amber-500/30 transition-colors">
                                             <div>
-                                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Use Code</p>
-                                                <p className="text-lg font-black text-amber-600 font-mono tracking-tight">{coupon.code}</p>
+                                                <p className="text-[9px] font-bold text-white/40 uppercase tracking-wider mb-0.5">Use Code</p>
+                                                <p className="text-lg font-black text-amber-400 font-mono tracking-tight">{coupon.code}</p>
                                             </div>
                                             <button
                                                 onClick={(e) => {
@@ -146,7 +146,7 @@ export default function SpecialOffersSection() {
 
                                         {/* Valid Until */}
                                         {coupon.expiryDate && (
-                                            <div className="mt-4 flex items-center gap-2 text-[10px] font-bold text-slate-400 justify-center">
+                                            <div className="mt-4 flex items-center gap-2 text-[10px] font-bold text-white/30 justify-center">
                                                 <Calendar size={12} />
                                                 <span>Valid until {new Date(coupon.expiryDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                                             </div>
