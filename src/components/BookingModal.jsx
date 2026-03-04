@@ -309,6 +309,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             }
             if (initialData.couponCode) {
                 setCouponInput(initialData.couponCode);
+                // Automatically validate the coupon if it's passed in
+                handleApplyCoupon(initialData.couponCode, initialData.pickup || formData.pickup, initialData.dropoff || formData.dropoff);
             }
         }
     }, [isOpen, initialData]);
@@ -893,8 +895,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 type="button"
                                                 onClick={() => changeCurrency(c.code)}
                                                 className={`p-3 rounded-2xl border transition-all flex flex-col gap-1.5 text-left cursor-pointer relative overflow-hidden group/card ${currency === c.code
-                                                        ? 'bg-amber-400 border-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.3)] scale-[1.02]'
-                                                        : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
+                                                    ? 'bg-amber-400 border-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.3)] scale-[1.02]'
+                                                    : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
                                                     }`}
                                             >
                                                 <div className="flex items-center justify-between relative z-10 w-full text-[10px] font-black uppercase tracking-widest">

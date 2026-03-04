@@ -124,7 +124,8 @@ export default function HomeClient() {
                                         pickupCoords: { lat: 7.1804, lon: 79.8837 },
                                         dropoff: route.fullAddress || route.title.replace('Airport to ', ''),
                                         dropoffCoords: route.coords || null,
-                                        tripType: 'one-way'
+                                        tripType: 'one-way',
+                                        couponCode: 'SAVE10'
                                     });
                                     setIsBookingOpen(true);
                                 }}
