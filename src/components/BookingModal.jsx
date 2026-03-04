@@ -886,32 +886,37 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         <div className="h-px flex-1 bg-white/10"></div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-3">
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                                         {convertToAllCurrencies(totalPrice / (rates?.[currency] || 1)).map((c) => (
                                             <button
                                                 key={c.code}
                                                 type="button"
                                                 onClick={() => changeCurrency(c.code)}
-                                                className={`p-3 rounded-2xl border-2 transition-all flex flex-col gap-1 text-left cursor-pointer group/card relative overflow-hidden ${currency === c.code
-                                                    ? 'bg-amber-500 border-amber-600 shadow-xl scale-[1.02]'
-                                                    : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
+                                                className={`p-3 rounded-2xl border transition-all flex flex-col gap-1.5 text-left cursor-pointer relative overflow-hidden group/card ${currency === c.code
+                                                        ? 'bg-amber-400 border-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.3)] scale-[1.02]'
+                                                        : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
                                                     }`}
                                             >
-                                                <div className="flex items-center justify-between relative z-10">
-                                                    <span className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 ${currency === c.code ? 'text-amber-900' : 'text-white/40'}`}>
-                                                        <div className="w-5 h-5 rounded-full overflow-hidden border border-white/20 bg-white p-0.5 shadow-sm">
+                                                <div className="flex items-center justify-between relative z-10 w-full text-[10px] font-black uppercase tracking-widest">
+                                                    <div className={`flex items-center gap-2 ${currency === c.code ? 'text-amber-950' : 'text-slate-300'}`}>
+                                                        <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-black/10 shadow-sm bg-white p-0.5">
                                                             <img src={c.flag} alt={c.code} className="w-full h-full object-cover rounded-full" />
-                                                        </div> {c.code}
-                                                    </span>
+                                                        </div>
+                                                        {c.code}
+                                                    </div>
                                                     {currency === c.code && (
-                                                        <span className="text-[8px] font-black bg-amber-900/20 text-amber-900 px-1.5 py-0.5 rounded-full uppercase tracking-tighter">Selected</span>
+                                                        <span className="text-[7px] font-black bg-amber-950/10 text-amber-950 px-2 py-0.5 rounded-full tracking-widest leading-none">Selected</span>
                                                     )}
                                                 </div>
-                                                <div className={`text-base md:text-lg font-black relative z-10 ${currency === c.code ? 'text-white' : 'text-slate-200'}`}>
-                                                    <span className={`text-[10px] font-bold mr-1 ${currency === c.code ? 'text-white/70' : 'opacity-40'}`}>{c.symbol}</span>
-                                                    {c.value.toLocaleString()}
+                                                <div className={`text-lg md:text-xl font-black relative z-10 tracking-tight flex items-baseline gap-1 mt-1 ${currency === c.code ? 'text-amber-950' : 'text-white'}`}>
+                                                    <span className={`text-[10px] md:text-xs font-bold ${currency === c.code ? 'text-amber-950/60' : 'opacity-40'}`}>
+                                                        {c.symbol}
+                                                    </span>
+                                                    <span>{c.value.toLocaleString()}</span>
                                                 </div>
-                                                {currency === c.code && <div className="absolute top-0 right-0 w-16 h-16 bg-white/20 rounded-full blur-2xl -mr-8 -mt-8"></div>}
+                                                {currency === c.code && (
+                                                    <div className="absolute top-0 right-0 w-16 h-16 bg-white/40 rounded-full blur-2xl -mr-8 -mt-8 pointer-events-none"></div>
+                                                )}
                                             </button>
                                         ))}
                                     </div>
