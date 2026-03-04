@@ -124,10 +124,10 @@ export default function SpecialOffersSection() {
                                         </div>
 
                                         {/* Footer: Code & Copy */}
-                                        <div className="bg-black/30 rounded-2xl p-2 pl-4 flex items-center justify-between border border-white/10 group-hover/card:border-amber-500/30 transition-colors">
+                                        <div className="bg-white rounded-2xl p-2 pl-4 flex items-center justify-between border border-white/20 shadow-inner group-hover/card:border-amber-500/50 transition-colors">
                                             <div>
-                                                <p className="text-[9px] font-bold text-white/40 uppercase tracking-wider mb-0.5">Use Code</p>
-                                                <p className="text-lg font-black text-amber-400 font-mono tracking-tight">{coupon.code}</p>
+                                                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Use Code</p>
+                                                <p className="text-lg font-black text-amber-600 font-mono tracking-tight">{coupon.code}</p>
                                             </div>
                                             <button
                                                 onClick={(e) => {
