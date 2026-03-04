@@ -24,6 +24,7 @@ export default function HomeClient() {
     const [marketingOffer, setMarketingOffer] = useState(null);
     const [isExpressOpen, setIsExpressOpen] = useState(false);
     const [selectedExpressProduct, setSelectedExpressProduct] = useState(null);
+    const [bookingInitialData, setBookingInitialData] = useState({});
 
     useEffect(() => {
         const checkMarketing = async () => {
@@ -62,6 +63,7 @@ export default function HomeClient() {
             <BookingModal
                 isOpen={isBookingOpen}
                 onClose={() => setIsBookingOpen(false)}
+                initialData={bookingInitialData}
             />
 
             {marketingOffer && (
@@ -112,62 +114,35 @@ export default function HomeClient() {
                         </Link>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {flatRatesList.filter(r => r.id !== 'sampath_test').slice(0, 3).map((route, i) => (
-                            <div
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {flatRatesList.filter(r => r.id !== 'sampath_test').slice(0, 12).map((route, i) => (
+                            <button
                                 key={i}
-                                className="group relative h-[450px] rounded-3xl overflow-hidden border border-emerald-900/10 block shadow-md hover:shadow-2xl transition-all duration-500 text-left w-full"
+                                onClick={() => {
+                                    setBookingInitialData({
+                                        pickup: 'Bandaranaike International Airport (CMB)',
+                                        pickupCoords: { lat: 7.1804, lon: 79.8837 },
+                                        dropoff: route.title.replace('Airport to ', ''),
+                                        tripType: 'one-way'
+                                    });
+                                    setIsBookingOpen(true);
+                                }}
+                                className="group p-6 rounded-3xl bg-white dark:bg-slate-900 border border-emerald-900/10 dark:border-white/10 shadow-sm hover:shadow-xl hover:border-emerald-500/50 transition-all duration-300 text-left flex flex-col justify-between h-32"
                             >
-                                <Image
-                                    src={`${route.img}${route.img.includes('?') ? '&' : '?'}w=600&q=75`}
-                                    alt={route.title}
-                                    fill
-                                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-emerald-900 via-emerald-900/10 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-
-                                <div className="absolute top-6 left-6 flex flex-col gap-2">
-                                    <span className="bg-emerald-900 border border-emerald-400/20 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest block w-fit shadow-lg">{route.badge}</span>
-                                    <Link
-                                        href={`/destination/${route.id}`}
-                                        className="bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest w-fit hover:bg-white hover:text-emerald-900 transition-colors shadow-lg"
-                                    >
-                                        Full Details
-                                    </Link>
-                                </div>
-
-                                <div className="absolute bottom-0 left-0 p-8 w-full">
-                                    <div className="flex items-center gap-2 text-emerald-400 mb-2">
-                                        <MapPin size={14} />
-                                        <span className="text-[10px] font-bold uppercase tracking-[0.2em]">{route.meta}</span>
+                                <div>
+                                    <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 mb-1">
+                                        <MapPin size={12} />
+                                        <span className="text-[9px] font-bold uppercase tracking-widest">{route.meta}</span>
                                     </div>
-                                    <h3
-                                        onClick={() => {
-                                            setSelectedExpressProduct(route);
-                                            setIsExpressOpen(true);
-                                        }}
-                                        className="text-2xl font-extrabold text-white mb-4 leading-tight cursor-pointer hover:text-emerald-400 transition-colors"
-                                    >
-                                        {route.title}
+                                    <h3 className="text-lg font-black text-emerald-900 dark:text-white leading-tight group-hover:text-emerald-600 transition-colors">
+                                        {route.title.replace('Airport to ', '')}
                                     </h3>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-col">
-                                            <span className="text-[8px] text-white/60 uppercase font-bold tracking-widest">Starting From</span>
-                                            <span className="text-2xl font-black text-white">${route.price}</span>
-                                        </div>
-                                        <button
-                                            onClick={() => {
-                                                setSelectedExpressProduct(route);
-                                                setIsExpressOpen(true);
-                                            }}
-                                            className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center group-hover:bg-white group-hover:text-emerald-900 transition-all font-bold shadow-lg"
-                                        >
-                                            <ArrowRight size={22} />
-                                        </button>
-                                    </div>
                                 </div>
-                            </div>
+                                <div className="flex items-center justify-between mt-2">
+                                    <span className="text-[10px] font-bold text-emerald-900/40 dark:text-white/40 uppercase tracking-tighter">Instant Quote</span>
+                                    <ArrowRight size={16} className="text-emerald-500 transform group-hover:translate-x-1 transition-transform" />
+                                </div>
+                            </button>
                         ))}
                     </div>
                 </div>
