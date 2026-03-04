@@ -18,7 +18,9 @@ export const destinations = [
         distance: "150 km",
         time: "2.5 hours",
         highlights: ["Whale Watching", "Coconut Tree Hill", "Secret Beach", "Surfing"],
-        pricing: { "Mini Car": 59, "Sedan": 65, "Mini Van": 75, "KDH Van": 85 }
+        pricing: { "Mini Car": 59, "Sedan": 65, "Mini Van": 75, "KDH Van": 85 },
+        coords: { lat: 5.9483, lon: 80.4716 },
+        fullAddress: "Mirissa, Sri Lanka"
     },
     {
         id: 'ahangama',
@@ -39,7 +41,9 @@ export const destinations = [
         distance: "160 km",
         time: "2.5 hours",
         highlights: ["Surfing", "Stilt Fishermen", "Yoga Retreats", "Koggala Lake"],
-        pricing: { "Mini Car": 58, "Sedan": 64, "Mini Van": 75, "KDH Van": 85 }
+        pricing: { "Mini Car": 58, "Sedan": 64, "Mini Van": 75, "KDH Van": 85 },
+        coords: { lat: 5.9723, lon: 80.3644 },
+        fullAddress: "Ahangama, Sri Lanka"
     },
     {
         id: 'sigiriya',
@@ -60,7 +64,9 @@ export const destinations = [
         distance: "150 km",
         time: "3.5 hours",
         highlights: ["Sigiriya Lion Rock", "Pidurangala Rock", "Minneriya National Park", "Village Tour"],
-        pricing: { "Mini Car": 90, "Sedan": 100, "Mini Van": 115, "KDH Van": 130 }
+        pricing: { "Mini Car": 90, "Sedan": 100, "Mini Van": 115, "KDH Van": 130 },
+        coords: { lat: 7.9570, lon: 80.7603 },
+        fullAddress: "Sigiriya, Sri Lanka"
     },
     {
         id: 'ella',
@@ -81,7 +87,9 @@ export const destinations = [
         distance: "210 km",
         time: "5 hours",
         highlights: ["Nine Arch Bridge", "Teas Estates", "Waterfalls", "Hiking"],
-        pricing: { "Mini Car": 110, "Sedan": 120, "Mini Van": 140, "KDH Van": 155 }
+        pricing: { "Mini Car": 110, "Sedan": 120, "Mini Van": 140, "KDH Van": 155 },
+        coords: { lat: 6.8724, lon: 81.0466 },
+        fullAddress: "Ella, Sri Lanka"
     },
     {
         id: 'kandy',
@@ -102,7 +110,9 @@ export const destinations = [
         distance: "103 km",
         time: "3 hours",
         highlights: ["Temple of the Tooth", "Kandy Lake", "Botanical Gardens", "Cultural Dance"],
-        pricing: { "Mini Car": 65, "Sedan": 70, "Mini Van": 85, "KDH Van": 95 }
+        pricing: { "Mini Car": 65, "Sedan": 70, "Mini Van": 85, "KDH Van": 95 },
+        coords: { lat: 7.2906, lon: 80.6337 },
+        fullAddress: "Kandy, Sri Lanka"
     },
     {
         id: 'galle',
@@ -123,7 +133,9 @@ export const destinations = [
         distance: "145 km",
         time: "2 hours",
         highlights: ["Galle Fort", "Lighthouse", "Dutch Museum", "Unawatuna Beach"],
-        pricing: { "Mini Car": 55, "Sedan": 60, "Mini Van": 75, "KDH Van": 85 }
+        pricing: { "Mini Car": 55, "Sedan": 60, "Mini Van": 75, "KDH Van": 85 },
+        coords: { lat: 6.0535, lon: 80.2210 },
+        fullAddress: "Galle, Sri Lanka"
     },
     {
         id: 'arugambay',
@@ -137,7 +149,9 @@ export const destinations = [
         distance: "320 km",
         time: "6.5 hours",
         highlights: ["Surfing Points", "Elephant Rock", "Kumana National Park", "Lagoon Safari"],
-        pricing: { "Mini Car": 180, "Sedan": 195, "Mini Van": 210, "KDH Van": 230 }
+        pricing: { "Mini Car": 180, "Sedan": 195, "Mini Van": 210, "KDH Van": 230 },
+        coords: { lat: 6.8400, lon: 81.8290 },
+        fullAddress: "Arugam Bay, Sri Lanka"
     },
     {
         id: 'bentota',
@@ -151,7 +165,9 @@ export const destinations = [
         distance: "100 km",
         time: "1.5 hours",
         highlights: ["River Safari", "Brief Garden", "Water Sports", "Turtle Hatchery"],
-        pricing: { "Mini Car": 45, "Sedan": 50, "Mini Van": 65, "KDH Van": 75 }
+        pricing: { "Mini Car": 45, "Sedan": 50, "Mini Van": 65, "KDH Van": 75 },
+        coords: { lat: 6.4239, lon: 79.9942 },
+        fullAddress: "Bentota, Sri Lanka"
     },
     {
         id: 'hikkaduwa',
@@ -165,7 +181,9 @@ export const destinations = [
         distance: "135 km",
         time: "2 hours",
         highlights: ["Coral Reef Snorkeling", "Turtle Hatchery", "Surfing", "Nightlife"],
-        pricing: { "Mini Car": 50, "Sedan": 55, "Mini Van": 70, "KDH Van": 80 }
+        pricing: { "Mini Car": 50, "Sedan": 55, "Mini Van": 70, "KDH Van": 80 },
+        coords: { lat: 6.1395, lon: 80.1058 },
+        fullAddress: "Hikkaduwa, Sri Lanka"
     },
     {
         id: 'unawatuna',
@@ -179,7 +197,9 @@ export const destinations = [
         distance: "150 km",
         time: "2.5 hours",
         highlights: ["Jungle Beach", "Japanese Peace Pagoda", "Beach Parties", "Diving"],
-        pricing: { "Mini Car": 58, "Sedan": 65, "Mini Van": 78, "KDH Van": 88 }
+        pricing: { "Mini Car": 58, "Sedan": 65, "Mini Van": 78, "KDH Van": 88 },
+        coords: { lat: 6.0125, lon: 80.2483 },
+        fullAddress: "Unawatuna, Sri Lanka"
     },
     {
         id: 'anuradhapura',
@@ -193,7 +213,9 @@ export const destinations = [
         distance: "170 km",
         time: "3.5 hours",
         highlights: ["Sri Maha Bodhi", "Ruwanwelisaya", "Isurumuniya", "Mihintale"],
-        pricing: { "Mini Car": 95, "Sedan": 105, "Mini Van": 120, "KDH Van": 135 }
+        pricing: { "Mini Car": 95, "Sedan": 105, "Mini Van": 120, "KDH Van": 135 },
+        coords: { lat: 8.3122, lon: 80.4131 },
+        fullAddress: "Anuradhapura, Sri Lanka"
     },
     {
         id: 'nuwaraeliya',
@@ -207,7 +229,9 @@ export const destinations = [
         distance: "160 km",
         time: "4.5 hours",
         highlights: ["Tea Plantations", "Gregory Lake", "Horton Plains", "Victoria Park"],
-        pricing: { "Mini Car": 105, "Sedan": 115, "Mini Van": 130, "KDH Van": 145 }
+        pricing: { "Mini Car": 105, "Sedan": 115, "Mini Van": 130, "KDH Van": 145 },
+        coords: { lat: 6.9497, lon: 80.7891 },
+        fullAddress: "Nuwara Eliya, Sri Lanka"
     },
     {
         id: 'yala',
@@ -221,7 +245,9 @@ export const destinations = [
         distance: "245 km",
         time: "4 hours",
         highlights: ["Safari Game Drive", "Sithulpawwa Rock", "Camping", "Bird Watching"],
-        pricing: { "Mini Car": 135, "Sedan": 145, "Mini Van": 160, "KDH Van": 175 }
+        pricing: { "Mini Car": 135, "Sedan": 145, "Mini Van": 160, "KDH Van": 175 },
+        coords: { lat: 6.3686, lon: 81.5204 },
+        fullAddress: "Yala, Sri Lanka"
     },
     {
         id: 'trincomalee',
@@ -235,7 +261,9 @@ export const destinations = [
         distance: "235 km",
         time: "5 hours",
         highlights: ["Nilaveli Beach", "Pigeon Island", "Koneswaram Temple", "Marble Beach"],
-        pricing: { "Mini Car": 160, "Sedan": 170, "Mini Van": 190, "KDH Van": 210 }
+        pricing: { "Mini Car": 160, "Sedan": 170, "Mini Van": 190, "KDH Van": 210 },
+        coords: { lat: 8.5873, lon: 81.2152 },
+        fullAddress: "Trincomalee, Sri Lanka"
     },
     {
         id: 'pasikudah',
@@ -249,7 +277,9 @@ export const destinations = [
         distance: "265 km",
         time: "5.5 hours",
         highlights: ["Pasikudah Beach", "Kalkudah Beach", "Luxury Resorts", "Water Sports"],
-        pricing: { "Mini Car": 175, "Sedan": 185, "Mini Van": 200, "KDH Van": 220 }
+        pricing: { "Mini Car": 175, "Sedan": 185, "Mini Van": 200, "KDH Van": 220 },
+        coords: { lat: 7.9220, lon: 81.5645 },
+        fullAddress: "Pasikudah, Sri Lanka"
     },
     {
         id: 'tangalle',
@@ -263,7 +293,9 @@ export const destinations = [
         distance: "200 km",
         time: "3 hours",
         highlights: ["Goyambokka Beach", "Turtle Watch", "Mulkirigala Temple", "Lagoon Kayaking"],
-        pricing: { "Mini Car": 130, "Sedan": 140, "Mini Van": 160, "KDH Van": 175 }
+        pricing: { "Mini Car": 130, "Sedan": 140, "Mini Van": 160, "KDH Van": 175 },
+        coords: { lat: 6.0244, lon: 80.7937 },
+        fullAddress: "Tangalle, Sri Lanka"
     },
     {
         id: 'wilpattu',
@@ -277,6 +309,8 @@ export const destinations = [
         distance: "140 km",
         time: "3 hours",
         highlights: ["Safari", "Leopards & Bears", "Camping", "Nature Trails"],
-        pricing: { "Mini Car": 95, "Sedan": 105, "Mini Van": 120, "KDH Van": 135 }
+        pricing: { "Mini Car": 95, "Sedan": 105, "Mini Van": 120, "KDH Van": 135 },
+        coords: { lat: 8.3514, lon: 80.0035 },
+        fullAddress: "Wilpattu, Sri Lanka"
     }
 ];

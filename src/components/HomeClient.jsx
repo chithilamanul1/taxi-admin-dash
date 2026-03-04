@@ -10,7 +10,7 @@ import Features from './Features'
 import BookingModal from './BookingModal'
 import BookingWidget from './BookingWidget'
 import ReviewStatsBar from './ReviewStatsBar'
-import { flatRatesList } from '@/data/flatRates'
+import { destinations } from '@/lib/destinations'
 
 // Dynamic imports for components below the fold
 const GoogleReviews = dynamic(() => import('./GoogleReviews'), { ssr: false })
@@ -115,32 +115,35 @@ export default function HomeClient() {
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {flatRatesList.filter(r => r.id !== 'sampath_test').slice(0, 12).map((route, i) => (
+                        {destinations.slice(0, 12).map((route, i) => (
                             <button
                                 key={i}
                                 onClick={() => {
                                     setBookingInitialData({
                                         pickup: 'Bandaranaike International Airport (CMB)',
                                         pickupCoords: { lat: 7.1804, lon: 79.8837 },
-                                        dropoff: route.title.replace('Airport to ', ''),
+                                        dropoff: route.fullAddress || route.title.replace('Airport to ', ''),
+                                        dropoffCoords: route.coords || null,
                                         tripType: 'one-way'
                                     });
                                     setIsBookingOpen(true);
                                 }}
-                                className="group p-6 rounded-3xl bg-white dark:bg-slate-900 border border-emerald-900/10 dark:border-white/10 shadow-sm hover:shadow-xl hover:border-emerald-500/50 transition-all duration-300 text-left flex flex-col justify-between h-32"
+                                className="group p-6 rounded-[2rem] bg-white dark:bg-slate-900 border border-amber-900/10 dark:border-white/10 shadow-sm hover:shadow-2xl hover:border-amber-500/50 hover:-translate-y-1 transition-all duration-300 text-left flex flex-col justify-between h-40"
                             >
                                 <div>
-                                    <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 mb-1">
-                                        <MapPin size={12} />
-                                        <span className="text-[9px] font-bold uppercase tracking-widest">{route.meta}</span>
+                                    <div className="flex items-center gap-2 text-amber-600 dark:text-amber-500 mb-2">
+                                        <MapPin size={14} className="fill-current/20" />
+                                        <span className="text-[10px] font-black uppercase tracking-widest">{route.meta}</span>
                                     </div>
-                                    <h3 className="text-lg font-black text-emerald-900 dark:text-white leading-tight group-hover:text-emerald-600 transition-colors">
-                                        {route.title.replace('Airport to ', '')}
+                                    <h3 className="text-2xl font-black text-slate-900 dark:text-white leading-tight group-hover:text-amber-600 transition-colors">
+                                        {route.name || route.title.replace('Airport to ', '')}
                                     </h3>
                                 </div>
-                                <div className="flex items-center justify-between mt-2">
-                                    <span className="text-[10px] font-bold text-emerald-900/40 dark:text-white/40 uppercase tracking-tighter">Instant Quote</span>
-                                    <ArrowRight size={16} className="text-emerald-500 transform group-hover:translate-x-1 transition-transform" />
+                                <div className="flex items-center justify-between mt-4">
+                                    <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Instant Quote</span>
+                                    <div className="w-8 h-8 rounded-full bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400 group-hover:bg-amber-500 group-hover:text-white transition-all">
+                                        <ArrowRight size={18} className="transform group-hover:translate-x-0.5 transition-transform" />
+                                    </div>
                                 </div>
                             </button>
                         ))}
