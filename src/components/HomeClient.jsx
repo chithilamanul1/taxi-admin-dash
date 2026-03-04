@@ -115,7 +115,7 @@ export default function HomeClient() {
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {destinations.slice(0, 14).map((route, i) => (
+                        {destinations.slice(0, 16).map((route, i) => (
                             <button
                                 key={i}
                                 onClick={() => {

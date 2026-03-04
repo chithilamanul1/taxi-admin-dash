@@ -18,6 +18,9 @@ const STEPS = [
     { id: 2, title: 'Checkout & Pay', icon: CreditCard },
 ];
 
+// Strip 'KDH' from vehicle display names (DB IDs/records remain untouched)
+const displayVehicleName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
+
 
 export default function BookingModal({ isOpen, onClose, initialData = {}, pricingCategory = 'airport-transfer' }) {
     const { data: session } = useSession();
@@ -687,7 +690,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             <div className="inline-flex bg-slate-100 backdrop-blur-sm text-black text-[8px] md:text-[9px] font-black px-2.5 py-0.5 rounded-lg mb-2 uppercase items-center gap-1 shadow-sm border border-black/10">
                                                                 <Zap size={10} fill="currentColor" /> Premium A/C
                                                             </div>
-                                                            <h4 className="text-lg md:text-2xl font-black text-black uppercase tracking-tight leading-tight mb-1">{v.name}</h4>
+                                                            <h4 className="text-lg md:text-2xl font-black text-black uppercase tracking-tight leading-tight mb-1">{displayVehicleName(v.name)}</h4>
                                                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Professional Service</p>
                                                         </div>
                                                     </div>
@@ -1218,7 +1221,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     </div>
                                                     <div className="text-right">
                                                         <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-1">Vehicle</p>
-                                                        <p className="text-[11px] font-black text-slate-300 uppercase tracking-widest">{selectedVehicle?.name}</p>
+                                                        <p className="text-[11px] font-black text-slate-300 uppercase tracking-widest">{displayVehicleName(selectedVehicle?.name)}</p>
                                                     </div>
                                                 </div>
                                             </div>

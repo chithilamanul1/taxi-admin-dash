@@ -1,6 +1,9 @@
 import React from 'react';
 import { X, Users, Briefcase, CheckCircle2, Lock, Car, Loader2, Info, Wind } from 'lucide-react';
 
+// Strip the word 'KDH' from display names only (keeps DB IDs intact)
+const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
+
 const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelect, passengerCount, isLoading }) => {
     const [detailVehicle, setDetailVehicle] = React.useState(null);
 
@@ -110,7 +113,8 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                         <div className="flex justify-between items-start">
                                             <div>
                                                 {(() => {
-                                                    const match = vehicle.name.match(/^(.+?)\s*\((.+)\)$/);
+                                                    const cleanName = displayName(vehicle.name);
+                                                    const match = cleanName.match(/^(.+?)\s*\((.+)\)$/);
                                                     if (match) {
                                                         return (
                                                             <>
@@ -119,7 +123,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                                             </>
                                                         );
                                                     }
-                                                    return <h4 className="font-bold text-slate-900 dark:text-white truncate">{vehicle.name}</h4>;
+                                                    return <h4 className="font-bold text-slate-900 dark:text-white truncate">{cleanName}</h4>;
                                                 })()}
                                             </div>
                                             {isSelected && <CheckCircle2 size={18} className="text-black shrink-0" />}
@@ -163,7 +167,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
 
                             {/* Header - Fixed */}
                             <div className="p-6 pb-2 shrink-0 flex justify-between items-start relative">
-                                <h4 className="text-lg font-black text-black dark:text-white uppercase tracking-tight pr-8">{detailVehicle.name}</h4>
+                                <h4 className="text-lg font-black text-black dark:text-white uppercase tracking-tight pr-8">{displayName(detailVehicle.name)}</h4>
                                 <button
                                     onClick={() => setDetailVehicle(null)}
                                     className="p-2.5 bg-slate-100 dark:bg-white/10 rounded-full text-slate-500 dark:text-white/60 hover:bg-red-50 hover:text-red-600 transition-all shadow-sm"
