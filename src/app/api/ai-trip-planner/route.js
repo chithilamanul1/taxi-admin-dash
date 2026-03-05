@@ -15,7 +15,7 @@ export async function POST(req) {
             }, { status: 500 });
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
         const fullPrompt = `
             Plan a detailed Sri Lankan tour itinerary based on the following:
