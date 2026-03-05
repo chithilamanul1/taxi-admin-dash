@@ -33,26 +33,8 @@ export default function MobileAppSection() {
                                 We're building the ultimate travel companion for your Sri Lankan adventures. Get instant bookings, real-time driver tracking, and exclusive app-only deals.
                             </p>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto lg:mx-0">
-                                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm flex items-center gap-4 group hover:bg-white/10 transition-all cursor-not-allowed">
-                                    <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-white">
-                                        <Apple size={24} />
-                                    </div>
-                                    <div className="text-left">
-                                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Soon on</p>
-                                        <p className="text-base font-black text-white">App Store</p>
-                                    </div>
-                                </div>
-
-                                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm flex items-center gap-4 group hover:bg-white/10 transition-all cursor-not-allowed">
-                                    <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-white">
-                                        <Play size={24} />
-                                    </div>
-                                    <div className="text-left">
-                                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Soon on</p>
-                                        <p className="text-base font-black text-white">Google Play</p>
-                                    </div>
-                                </div>
+                            <div className="mt-8 flex justify-center lg:justify-start">
+                                <img src="/store_buttons.png" alt="Download on App Store and Google Play" className="h-28 object-contain" />
                             </div>
 
                             {/* App Features Preview */}
@@ -80,11 +62,11 @@ export default function MobileAppSection() {
                                 {/* App Screen Content (Mockup Carousel) */}
                                 <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-slate-950">
                                     <div className="absolute inset-0 transition-opacity duration-1000 opacity-100">
-                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent z-10"></div>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/80 to-slate-800/50 z-10 hidden"></div>
                                         <img
-                                            src="/Hero/hero_art_1.png"
-                                            alt="App Preview"
-                                            className="w-full h-full object-cover opacity-40 animate-pulse"
+                                            src="/logo_app.png"
+                                            alt="App Logo"
+                                            className="w-full h-full object-contain p-6 relative z-0"
                                         />
                                     </div>
 
