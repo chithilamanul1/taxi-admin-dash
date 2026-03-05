@@ -16,9 +16,6 @@ const Footer = () => {
                     {/* Brand Section */}
                     <div className="lg:col-span-2 space-y-8">
                         <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10">
-                                <Image src="/logo.png" alt="Logo" width={32} height={32} className="object-contain" />
-                            </div>
                             <div className="flex flex-col">
                                 <span className="text-2xl font-black tracking-tighter">
                                     AIRPORT <span className="text-amber-400">TAXIS</span>

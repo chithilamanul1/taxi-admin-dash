@@ -114,13 +114,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         const input = (codeToApply || '').trim();
         if (!input) return;
 
-        // Validation: Must be from Airport
-        // Note: We allow adding it, but it wont apply in price calc if not from airport. 
-        // Better UX: Warn here if not from airport.
-        if (!contextPickup.toLowerCase().includes('airport')) {
-            if (!codeToApply) alert('Coupons are only valid for trips starting from the Airport.');
-            // We still proceed to validate code exists, but user knows it won't apply yet.
-            // Or we strict block? Let's strict block for clarity.
+        // Initial valid check - we rely on API now for specific route validation
+        if (!contextPickup) {
             return false;
         }
 
@@ -201,20 +196,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
             let total = baseTotal + surcharges + paymentSurcharge; // Total in current currency context (mixed if rates missing, resolved below)
 
-            // Coupon Logic (Stacking Rules & Auto-Discounts)
-            const isAirportPickup = initialData.isAirportPickup || formData.pickup?.toLowerCase().includes('airport') || formData.dropoff?.toLowerCase().includes('airport');
-
             let couponDiscountAmount = 0;
             if (verifiedCoupons && verifiedCoupons.length > 0) {
-                // If it's an airport transfer OR the coupon isn't restricted to airport, apply it
                 verifiedCoupons.forEach(coupon => {
-                    if (!coupon.airportOnly || isAirportPickup) { // Apply if not airportOnly OR if it is airport pickup
-                        const couponVal = Number(coupon.value) || 0;
-                        if (coupon.discountType === 'percentage') {
-                            couponDiscountAmount += total * (couponVal / 100);
-                        } else {
-                            couponDiscountAmount += couponVal;
-                        }
+                    const couponVal = Number(coupon.value) || 0;
+                    if (coupon.discountType === 'percentage') {
+                        couponDiscountAmount += total * (couponVal / 100);
+                    } else {
+                        couponDiscountAmount += couponVal;
                     }
                 });
             }
@@ -1102,27 +1091,33 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         />
                                                     </div>
 
-                                                    <div className="space-y-4 p-5 bg-white rounded-2xl border-2 border-slate-200">
-                                                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2 flex items-center gap-2">
-                                                            <Zap size={14} className="text-black" />
-                                                            Final Flight Arrival Confirmation
-                                                        </label>
-                                                        <CustomDateTimePicker
-                                                            date={formData.flightArrivalDate}
-                                                            time={formData.flightArrivalTime}
-                                                            onChange={(d, t) => setFormData({ ...formData, flightArrivalDate: d, flightArrivalTime: t })}
-                                                        />
-                                                    </div>
                                                 </>
                                             )}
 
-                                            <div className="space-y-4">
-                                                <label className="text-[10px] font-bold text-slate-900/40 uppercase tracking-widest pl-2">Pick-up Logistics</label>
-                                                <CustomDateTimePicker
-                                                    date={formData.date}
-                                                    time={formData.time}
-                                                    onChange={(d, t) => setFormData({ ...formData, date: d, time: t })}
-                                                />
+                                            <div className="space-y-4 pt-4 border-t border-slate-100">
+                                                <label className="text-[10px] font-bold text-slate-900/40 uppercase tracking-widest pl-2">
+                                                    {isAirportService ? "Flight Arrival & Pick-up Time" : "Pick-up Date & Time"}
+                                                </label>
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <input
+                                                        type="date"
+                                                        value={formData.date || ''}
+                                                        onChange={(e) => {
+                                                            const d = e.target.value;
+                                                            setFormData({ ...formData, date: d, flightArrivalDate: isAirportService ? d : formData.flightArrivalDate });
+                                                        }}
+                                                        className="w-full h-14 bg-white border-2 border-black px-4 rounded-2xl outline-none focus:ring-4 focus:ring-slate-900/10 transition-all font-bold text-slate-900 text-sm shadow-sm"
+                                                    />
+                                                    <input
+                                                        type="time"
+                                                        value={formData.time || ''}
+                                                        onChange={(e) => {
+                                                            const t = e.target.value;
+                                                            setFormData({ ...formData, time: t, flightArrivalTime: isAirportService ? t : formData.flightArrivalTime });
+                                                        }}
+                                                        className="w-full h-14 bg-white border-2 border-black px-4 rounded-2xl outline-none focus:ring-4 focus:ring-slate-900/10 transition-all font-bold text-slate-900 text-sm shadow-sm"
+                                                    />
+                                                </div>
                                             </div>
 
                                             <div className="space-y-4 pt-4 border-t border-slate-100">

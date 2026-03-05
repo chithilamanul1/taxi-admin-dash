@@ -167,7 +167,7 @@ const getPrintFriendlyTemplate = (content, title = 'Booking Details') => `
                 <table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
                         <td width="60%">
-                            <img src="${BASE_URL}/logo.png" alt="Airport Taxis" style="width: 120px; height: auto;">
+                            <h2 style="margin: 0; color: #064e3b; font-size: 24px; font-weight: 800; letter-spacing: 1px;">AIRPORT TAXIS</h2>
                         </td>
                         <td width="40%" style="text-align: right; vertical-align: bottom;">
                             <p style="margin: 0; font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;">Booking Receipt</p>
@@ -306,6 +306,7 @@ export async function sendBookingConfirmation(booking) {
             ${components.infoCard('📍', 'Pickup Location', pickupShort)}
             ${components.infoCard('🏁', 'Drop-off Location', dropoffShort)}
             ${components.infoCard('📅', 'Date & Time', `${booking.scheduledDate || 'Immediate'} ${booking.scheduledTime ? `at ${booking.scheduledTime}` : ''}`)}
+            ${(booking.flightNumber && booking.flightNumber !== 'N/A') ? components.infoCard('✈️', 'Flight Details', `${booking.flightNumber} - Arr: ${booking.flightArrivalDate || booking.scheduledDate} ${booking.flightArrivalTime || booking.scheduledTime}`) : ''}
             ${components.infoCard('🚗', 'Vehicle', booking.vehicleType || 'Standard')}
             ${components.infoCard('📏', 'Distance', `${booking.distanceKm || 0} km`)}
             ${booking.waypoints && booking.waypoints.length > 0 ? `
@@ -481,8 +482,8 @@ export async function sendBookingConfirmation(booking) {
                 <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.scheduledTime || ''}</td>
             </tr>
              <tr>
-                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Flight Number</td>
-                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.flightNumber || '-'}</td>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Flight Details</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${(booking.flightNumber && booking.flightNumber !== 'N/A') ? `${booking.flightNumber} - Arr: ${booking.flightArrivalDate || booking.scheduledDate} ${booking.flightArrivalTime || booking.scheduledTime}` : '-'}</td>
             </tr>
             <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Return Date</td>

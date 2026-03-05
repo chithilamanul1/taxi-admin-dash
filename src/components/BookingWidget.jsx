@@ -423,16 +423,17 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 return valB - valA;
             });
 
-            // 2. Only take the TOP 1 best offer that isn't already applied manually
-            if (sortedDynamic.length > 0) {
-                const bestOffer = sortedDynamic[0];
-                const alreadyApplied = existingManual.some(m => m.name === bestOffer.name);
-                if (!alreadyApplied) {
-                    finalDynamic.push(bestOffer);
-                }
+            // 2. Clear dynamic offers if manual coupon is present
+            if (existingManual.length > 0) {
+                return [...existingManual];
             }
 
-            return [...existingManual, ...finalDynamic];
+            // 3. Only take the TOP 1 best offer that isn't already applied manually
+            if (sortedDynamic.length > 0) {
+                finalDynamic.push(sortedDynamic[0]);
+            }
+
+            return [...finalDynamic];
         });
     }, [dropoff, dropoffSearch, pickup, pickupSearch, availableCoupons, activeOffers, distance, pricingSettings]);
 

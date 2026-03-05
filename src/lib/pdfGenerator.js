@@ -13,18 +13,13 @@ export const generateBookingPDF = (booking) => {
     const isCash = booking.paymentMethod === 'cash';
     const accentColor = COLORS.emerald;
 
-    // -- Helper: Add Logo --
-    // We try to add the logo. If it fails (e.g. path issues in some environments), we fallback to text.
-    try {
-        doc.addImage('/invoice_logo.png', 'PNG', 15, 10, 35, 35);
-    } catch (e) {
-        doc.setFontSize(22);
-        doc.setTextColor(...COLORS.emerald);
-        doc.setFont(undefined, 'bold');
-        doc.text("AIRPORT TAXIS", 15, 25);
-        doc.setFontSize(8);
-        doc.text("PVT (LTD)", 15, 30);
-    }
+    // -- Helper: Add Text Logo Only --
+    doc.setFontSize(22);
+    doc.setTextColor(...COLORS.emerald);
+    doc.setFont(undefined, 'bold');
+    doc.text("AIRPORT TAXIS", 15, 25);
+    doc.setFontSize(8);
+    doc.text("PVT (LTD)", 15, 30);
 
     // -- Header Details (Top Right) --
     doc.setFontSize(24);
@@ -89,17 +84,25 @@ export const generateBookingPDF = (booking) => {
     doc.text(booking.paymentStatus?.toUpperCase() || 'PENDING', badgeX + 27.5, badgeY + 12, { align: 'center' });
 
     // -- Journey Table --
+    const journeyBody = [
+        ['Transfer Type', booking.tripType?.toUpperCase().replace('-', ' ') || 'Airport Transfer'],
+        ['Pick-up', booking.pickupLocation?.address || 'N/A'],
+        ['Drop-off', booking.dropoffLocation?.address || 'N/A'],
+        ['Vehicle', booking.vehicleType?.toUpperCase() || 'Standard'],
+        ['Passengers', `${booking.passengerCount?.adults || 1} ADL, ${booking.passengerCount?.children || 0} CHL`],
+        ['Date / Time', `${booking.scheduledDate} at ${booking.scheduledTime}`],
+    ];
+
+    if (booking.flightNumber && booking.flightNumber !== 'N/A') {
+        const fdate = booking.flightArrivalDate || booking.scheduledDate;
+        const ftime = booking.flightArrivalTime || booking.scheduledTime;
+        journeyBody.push(['Flight Details', `${booking.flightNumber} - Arrival: ${fdate} at ${ftime}`]);
+    }
+
     autoTable(doc, {
         startY: 90,
         head: [['Description', 'Trip Information']],
-        body: [
-            ['Transfer Type', booking.tripType?.toUpperCase().replace('-', ' ') || 'Airport Transfer'],
-            ['Pick-up', booking.pickupLocation?.address || 'N/A'],
-            ['Drop-off', booking.dropoffLocation?.address || 'N/A'],
-            ['Vehicle', booking.vehicleType?.toUpperCase() || 'Standard'],
-            ['Passengers', `${booking.passengerCount?.adults || 1} ADL, ${booking.passengerCount?.children || 0} CHL`],
-            ['Date / Time', `${booking.scheduledDate} at ${booking.scheduledTime}`],
-        ],
+        body: journeyBody,
         theme: 'grid',
         styles: {
             fontSize: 9,

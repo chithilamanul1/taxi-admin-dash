@@ -12,7 +12,7 @@ export async function POST(req) {
             return NextResponse.json({ valid: false, message: 'Invalid coupon code' });
         }
 
-        if (coupon.usageLimit && coupon.usageCount >= coupon.usageLimit) {
+        if (coupon.usageLimit && (coupon.usedCount || 0) >= coupon.usageLimit) {
             return NextResponse.json({ valid: false, message: 'Coupon usage limit reached' });
         }
 
