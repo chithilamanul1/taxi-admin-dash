@@ -11,8 +11,8 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const distKm = Math.ceil(Number(distanceKm) || 0);
     let baseTotal = 0;
 
-    const isFromAirport = pickup?.toLowerCase().includes('airport') || pickup?.toLowerCase().includes('katunayake') || pickup?.toLowerCase().includes('cmb');
-    const isToAirport = dropoff?.toLowerCase().includes('airport') || dropoff?.toLowerCase().includes('katunayake') || dropoff?.toLowerCase().includes('cmb');
+    const isFromAirport = pickup?.toLowerCase().includes('airport') || pickup?.toLowerCase().includes('cmb');
+    const isToAirport = dropoff?.toLowerCase().includes('airport') || dropoff?.toLowerCase().includes('cmb');
 
     // Helper for robust location matching
     const findMatchingDestination = (address, destinationsList) => {
@@ -62,7 +62,8 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
 
     // Check for Location-Specific Per-KM Rate Override
     // Allow overrides across all categories if a specific destination name is matched in the address
-    const matchedOverride = findMatchingDestination(pickup, dynamicDestinations) || findMatchingDestination(dropoff, dynamicDestinations);
+    // skip this for airport transfers/rides as per user request
+    const matchedOverride = (!isAirportRide) ? (findMatchingDestination(pickup, dynamicDestinations) || findMatchingDestination(dropoff, dynamicDestinations)) : null;
 
     const vehicleType = vehicleData.vehicleType;
     const vehicleSlug = vehicleData.vehicleSlug || vehicleType; // Use vehicleSlug if available, fallback to vehicleType

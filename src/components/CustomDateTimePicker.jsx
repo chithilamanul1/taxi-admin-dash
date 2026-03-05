@@ -136,9 +136,6 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                     <button onClick={() => setView('date')} className={`p-2 rounded-full ${view === 'date' ? 'bg-white/10 text-white' : 'text-white/40 hover:bg-white/5'}`}>
                         <Calendar size={20} />
                     </button>
-                    <button onClick={() => setView('time')} className={`p-2 rounded-full ${view === 'time' ? 'bg-white/10 text-white' : 'text-white/40 hover:bg-white/5'}`}>
-                        <Clock size={20} />
-                    </button>
                 </div>
             </div>
 
