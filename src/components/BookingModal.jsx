@@ -9,8 +9,6 @@ import Link from 'next/link';
 import { useCurrency } from '../context/CurrencyContext';
 import { calculateBasePrice, calculateSurcharges, calculatePaymentFees } from '../lib/pricing-util';
 import LocationInput from './LocationInput';
-import CustomDateTimePicker from './CustomDateTimePicker';
-import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 
 const STEPS = [
@@ -86,7 +84,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         tripType: initialData.tripType || 'one-way',
         passengerCount: initialData.passengerCount || { adults: 1, children: 0, luggage: 0, handLuggage: 0 },
         // waitingHours removed
-        hasNameBoard: initialData.hasNameBoard || false,
+        hasNameBoard: (initialData.hasNameBoard === true || initialData.hasNameBoard === false) ? initialData.hasNameBoard : null,
         nameBoardText: initialData.nameBoardText || '',
         couponCode: initialData.couponCode || '',
         date: initialData.date || '',
@@ -744,11 +742,32 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         placeholder="e.g. EK 654"
                                                     />
                                                 </div>
-                                                <CustomDateTimePicker
-                                                    date={formData.flightArrivalDate}
-                                                    time={formData.flightArrivalTime}
-                                                    onChange={(d, t) => setFormData({ ...formData, flightArrivalDate: d, flightArrivalTime: t, arrivalDate: d, arrivalTime: t })}
-                                                />
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div className="space-y-1">
+                                                        <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest pl-2">Select Date</label>
+                                                        <input
+                                                            type="date"
+                                                            value={formData.flightArrivalDate || ''}
+                                                            onChange={e => {
+                                                                const d = e.target.value;
+                                                                setFormData(prev => ({ ...prev, flightArrivalDate: d, arrivalDate: d, date: isAirportService ? d : prev.date }));
+                                                            }}
+                                                            className="w-full h-12 bg-slate-50 border border-slate-200 px-4 rounded-xl outline-none focus:border-black transition-all font-bold text-xs text-slate-900 shadow-inner"
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest pl-2">Select Time</label>
+                                                        <input
+                                                            type="time"
+                                                            value={formData.flightArrivalTime || ''}
+                                                            onChange={e => {
+                                                                const t = e.target.value;
+                                                                setFormData(prev => ({ ...prev, flightArrivalTime: t, arrivalTime: t, time: isAirportService ? t : prev.time }));
+                                                            }}
+                                                            className="w-full h-12 bg-slate-50 border border-slate-200 px-4 rounded-xl outline-none focus:border-black transition-all font-bold text-xs text-slate-900 shadow-inner"
+                                                        />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     )}
@@ -821,22 +840,28 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </div>
                                     )}
 
-                                    <div className="pt-2">
-                                        <button
-                                            onClick={() => setFormData({ ...formData, hasNameBoard: !formData.hasNameBoard })}
-                                            className={`w-full p-4 rounded-xl border-2 transition-all flex items-center justify-between ${formData.hasNameBoard ? 'border-black bg-slate-100 text-black shadow-sm' : 'bg-white border-black/10 text-black/60 hover:bg-slate-50'}`}
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                <Signpost size={18} className={formData.hasNameBoard ? 'text-black' : ''} />
-                                                <div className="text-left">
-                                                    <span className="text-[10px] md:text-xs font-bold block uppercase tracking-tight">Name Board</span>
-                                                    <span className="text-[8px] font-medium opacity-60">Driver waits with name sign</span>
+                                    <div className="pt-2 space-y-4">
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2">Need a Name Board? (Driver waits with sign)</label>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <button
+                                                onClick={() => setFormData({ ...formData, hasNameBoard: true })}
+                                                className={`p-4 rounded-xl border-2 transition-all flex items-center justify-between ${formData.hasNameBoard === true ? 'border-black bg-slate-900 text-white shadow-lg scale-[1.02]' : 'bg-white border-slate-200 text-slate-400 hover:border-slate-300'}`}
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <Check size={18} />
+                                                    <span className="text-[10px] md:text-xs font-black uppercase tracking-tight">Yes, Please</span>
                                                 </div>
-                                            </div>
-                                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${formData.hasNameBoard ? 'border-black bg-black' : 'border-black/20'}`}>
-                                                {formData.hasNameBoard && <Check size={12} className="text-white" />}
-                                            </div>
-                                        </button>
+                                            </button>
+                                            <button
+                                                onClick={() => setFormData({ ...formData, hasNameBoard: false, nameBoardText: '' })}
+                                                className={`p-4 rounded-xl border-2 transition-all flex items-center justify-between ${formData.hasNameBoard === false ? 'border-black bg-slate-900 text-white shadow-lg scale-[1.02]' : 'bg-white border-slate-200 text-slate-400 hover:border-slate-300'}`}
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <X size={18} />
+                                                    <span className="text-[10px] md:text-xs font-black uppercase tracking-tight">No, Thanks</span>
+                                                </div>
+                                            </button>
+                                        </div>
                                     </div>
 
                                     {formData.hasNameBoard && (
@@ -1099,24 +1124,30 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     {isAirportService ? "Flight Arrival & Pick-up Time" : "Pick-up Date & Time"}
                                                 </label>
                                                 <div className="grid grid-cols-2 gap-4">
-                                                    <input
-                                                        type="date"
-                                                        value={formData.date || ''}
-                                                        onChange={(e) => {
-                                                            const d = e.target.value;
-                                                            setFormData({ ...formData, date: d, flightArrivalDate: isAirportService ? d : formData.flightArrivalDate });
-                                                        }}
-                                                        className="w-full h-14 bg-white border-2 border-black px-4 rounded-2xl outline-none focus:ring-4 focus:ring-slate-900/10 transition-all font-bold text-slate-900 text-sm shadow-sm"
-                                                    />
-                                                    <input
-                                                        type="time"
-                                                        value={formData.time || ''}
-                                                        onChange={(e) => {
-                                                            const t = e.target.value;
-                                                            setFormData({ ...formData, time: t, flightArrivalTime: isAirportService ? t : formData.flightArrivalTime });
-                                                        }}
-                                                        className="w-full h-14 bg-white border-2 border-black px-4 rounded-2xl outline-none focus:ring-4 focus:ring-slate-900/10 transition-all font-bold text-slate-900 text-sm shadow-sm"
-                                                    />
+                                                    <div className="space-y-1">
+                                                        <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest pl-2">Date</label>
+                                                        <input
+                                                            type="date"
+                                                            value={formData.date || ''}
+                                                            onChange={(e) => {
+                                                                const d = e.target.value;
+                                                                setFormData({ ...formData, date: d, flightArrivalDate: isAirportService ? d : formData.flightArrivalDate });
+                                                            }}
+                                                            className="w-full h-14 bg-white border-2 border-black px-4 rounded-2xl outline-none focus:ring-4 focus:ring-slate-900/10 transition-all font-bold text-slate-900 text-sm shadow-sm"
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest pl-2">Time</label>
+                                                        <input
+                                                            type="time"
+                                                            value={formData.time || ''}
+                                                            onChange={(e) => {
+                                                                const t = e.target.value;
+                                                                setFormData({ ...formData, time: t, flightArrivalTime: isAirportService ? t : formData.flightArrivalTime });
+                                                            }}
+                                                            className="w-full h-14 bg-white border-2 border-black px-4 rounded-2xl outline-none focus:ring-4 focus:ring-slate-900/10 transition-all font-bold text-slate-900 text-sm shadow-sm"
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -1308,7 +1339,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                         {step < 2 ? (
                             <button
                                 onClick={() => setStep(step + 1)}
-                                disabled={(step === 1 && (!formData.pickup || !formData.dropoff || isOverCapacity))}
+                                disabled={(step === 1 && (!formData.pickup || !formData.dropoff || isOverCapacity || formData.hasNameBoard === null))}
                                 className="group flex items-center justify-center gap-2 md:gap-3 px-8 md:px-12 py-3 md:py-4 bg-black text-white rounded-xl md:rounded-2xl text-xs md:text-sm font-black uppercase tracking-widest hover:bg-slate-800 transition-all disabled:opacity-30 shadow-lg w-full md:w-auto min-w-[140px]"
                             >
                                 Continue To Checkout <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform md:block hidden" />

@@ -40,15 +40,15 @@ export default function Navbar() {
     const needsSolidBg = isScrolled || !isTransparentPage
 
     return (
-        <nav className={`fixed w-full z-50 transition-all duration-500 ${needsSolidBg ? 'py-4 bg-white dark:bg-slate-950 border-b border-emerald-900/10 dark:border-slate-800 shadow-md' : 'py-6 bg-transparent'}`}>
+        <nav className={`fixed w-full z-50 transition-all duration-500 py-4 bg-white border-b border-slate-100 shadow-sm`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <Link href="/" className="flex items-center gap-3 group">
                     {/* Logo Removed */}
                     <div className="flex flex-col">
-                        <span className={`font-extrabold text-xl tracking-tighter leading-none ${needsSolidBg ? 'text-emerald-900 dark:text-white' : 'text-white'}`}>
-                            AIRPORT <span className="text-emerald-600 dark:text-emerald-400">TAXIS</span>
+                        <span className="font-extrabold text-xl tracking-tighter leading-none text-slate-900">
+                            AIRPORT <span className="text-amber-500">TAXIS</span>
                         </span>
-                        <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${needsSolidBg ? 'text-emerald-600 dark:text-emerald-400' : 'text-white/60'}`}>Pvt (Ltd)</span>
+                        <span className={`text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400`}>Pvt (Ltd)</span>
                     </div>
                 </Link>
 
@@ -56,7 +56,7 @@ export default function Navbar() {
                 <div className="hidden lg:flex items-center gap-4 xl:gap-6">
                     <Link
                         href="/"
-                        className={`text-sm font-bold uppercase tracking-widest hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${pathname === '/' ? 'text-emerald-900 dark:text-white' : (needsSolidBg ? 'text-emerald-900/70 dark:text-slate-300' : 'text-white/80')}`}
+                        className={`text-sm font-bold uppercase tracking-widest hover:text-amber-500 transition-colors ${pathname === '/' ? 'text-emerald-900 dark:text-white' : (needsSolidBg ? 'text-white/70 dark:text-slate-300' : 'text-white/80')}`}
                     >
                         Home
                     </Link>
@@ -64,12 +64,12 @@ export default function Navbar() {
                     {/* Tour Packages Dropdown */}
                     <div className="relative group">
                         <button
-                            className={`flex items-center gap-1 text-sm font-bold uppercase tracking-widest hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${pathname.includes('tour') || pathname.includes('day-trips') ? 'text-emerald-900 dark:text-white' : (needsSolidBg ? 'text-emerald-900/70 dark:text-slate-300' : 'text-white/80')}`}
+                            className={`flex items-center gap-1 text-sm font-bold uppercase tracking-widest hover:text-amber-500 transition-colors ${pathname.includes('tour') || pathname.includes('day-trips') ? 'text-emerald-900 dark:text-white' : (needsSolidBg ? 'text-white/70 dark:text-slate-300' : 'text-white/80')}`}
                         >
                             Tour Packages
                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
                         </button>
-                        <div className="absolute top-full left-0 mt-3 w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-emerald-900/10 dark:border-slate-800 flex flex-col">
+                        <div className="absolute top-full left-0 mt-3 w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-white/10 dark:border-slate-800 flex flex-col">
                             {[
                                 { label: 'Day Tours', href: '/day-trips' },
                                 { label: 'City Tours', href: '/tours' },
@@ -79,7 +79,7 @@ export default function Navbar() {
                                 <Link
                                     key={sub.label}
                                     href={sub.href}
-                                    className="text-left px-5 py-2.5 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors text-sm font-bold text-emerald-900/80 dark:text-white/80 hover:text-emerald-900 dark:hover:text-white"
+                                    className="text-left px-5 py-2.5 hover:bg-amber-900/10 dark:hover:bg-white/10 transition-colors text-sm font-bold text-white/80 dark:text-white/80 hover:text-emerald-900 dark:hover:text-white"
                                 >
                                     {sub.label}
                                 </Link>
@@ -100,7 +100,7 @@ export default function Navbar() {
                         <Link
                             key={item.id}
                             href={item.href}
-                            className={`text-sm font-bold uppercase tracking-widest hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${pathname === item.href ? 'text-emerald-900 dark:text-white' : (needsSolidBg ? 'text-emerald-900/70 dark:text-slate-300' : 'text-white/80')}`}
+                            className={`text-sm font-bold uppercase tracking-widest hover:text-amber-500 transition-colors ${pathname === item.href ? 'text-slate-950' : 'text-slate-600'}`}
                         >
                             {item.label}
                         </Link>
@@ -109,29 +109,29 @@ export default function Navbar() {
                     {/* Currency Selector */}
                     <div className="relative group">
                         <button
-                            className={`flex items-center gap-2 text-sm font-bold transition-colors px-4 py-2 rounded-xl border ${needsSolidBg ? 'text-emerald-900 border-emerald-900/10 bg-emerald-900/5' : 'text-white border-white/20 bg-emerald-900/40 backdrop-blur-sm'}`}
+                            className={`flex items-center gap-2 text-sm font-bold transition-colors px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-900`}
                             aria-label="Select currency"
                         >
-                            <Globe size={14} className="text-emerald-400" />
+                            <Globe size={14} className="text-amber-500" />
                             <span>{currency}</span>
                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
                         </button>
-                        <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border-2 border-emerald-600/20 dark:border-emerald-500/30 overflow-hidden">
-                            <div className="px-5 py-2 mb-1 border-b border-emerald-900/5 dark:border-white/5 bg-emerald-50 dark:bg-emerald-900/20">
-                                <span className="text-[10px] font-black text-emerald-900/40 dark:text-emerald-400/40 uppercase tracking-widest">Select Currency</span>
+                        <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border-2 border-emerald-600/20 dark:border-amber-500/30 overflow-hidden">
+                            <div className="px-5 py-2 mb-1 border-b border-emerald-900/5 dark:border-white/5 bg-amber-900/10 dark:bg-white/10">
+                                <span className="text-[10px] font-black text-emerald-900/40 dark:text-amber-500/40 uppercase tracking-widest">Select Currency</span>
                             </div>
                             {SUPPORTED_CURRENCIES.map(c => (
                                 <button
                                     key={c.code}
                                     onClick={() => changeCurrency(c.code)}
-                                    className={`w-full text-left px-5 py-3 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 transition-all text-sm font-bold flex items-center gap-4 ${currency === c.code ? 'text-white bg-emerald-700 shadow-inner' : 'text-slate-700 dark:text-slate-200'}`}
+                                    className={`w-full text-left px-5 py-3 hover:bg-amber-600 hover:text-white dark:hover:bg-amber-600 transition-all text-sm font-bold flex items-center gap-4 ${currency === c.code ? 'text-white bg-emerald-700 shadow-inner' : 'text-slate-700 dark:text-slate-200'}`}
                                 >
-                                    <div className="w-9 h-9 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center overflow-hidden shadow-md border-2 border-emerald-500/20">
+                                    <div className="w-9 h-9 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center overflow-hidden shadow-md border-2 border-amber-500/20">
                                         <img src={c.flag} alt={c.name} className="w-full h-full object-cover scale-150" />
                                     </div>
                                     <div className="flex flex-col">
                                         <span className="leading-tight text-sm">{c.name}</span>
-                                        <span className={`text-[10px] uppercase tracking-widest font-black ${currency === c.code ? 'text-emerald-200' : 'text-emerald-600/40'}`}>{c.code}</span>
+                                        <span className={`text-[10px] uppercase tracking-widest font-black ${currency === c.code ? 'text-emerald-200' : 'text-amber-500/40'}`}>{c.code}</span>
                                     </div>
                                 </button>
                             ))}
@@ -144,21 +144,21 @@ export default function Navbar() {
                         session ? (
                             <div className="relative group">
                                 <button
-                                    className="relative w-10 h-10 rounded-full border border-emerald-900/10 bg-emerald-50 p-0.5 overflow-hidden"
+                                    className="relative w-10 h-10 rounded-full border border-white/10 bg-amber-900/10 p-0.5 overflow-hidden"
                                     aria-label="User profile"
                                 >
                                     {session.user?.image ? (
                                         <img src={session.user.image} alt={session.user.name} className="w-full h-full rounded-full object-cover" />
                                     ) : (
-                                        <div className="w-full h-full bg-emerald-600 text-white flex items-center justify-center font-bold">{session.user?.name?.charAt(0)}</div>
+                                        <div className="w-full h-full bg-amber-600 text-white flex items-center justify-center font-bold">{session.user?.name?.charAt(0)}</div>
                                     )}
                                 </button>
-                                <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-emerald-900/10 dark:border-slate-800">
+                                <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-white/10 dark:border-slate-800">
                                     <div className="px-5 py-2 mb-2 border-b border-emerald-900/5 dark:border-white/5">
                                         <p className="font-bold text-emerald-900 dark:text-white text-sm">{session.user?.name}</p>
                                         <p className="text-[10px] text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Verified User</p>
                                     </div>
-                                    <Link href="/my-bookings" className="flex items-center gap-3 px-5 py-3 text-emerald-900/70 dark:text-slate-300 hover:text-emerald-900 dark:hover:text-white hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-sm font-bold transition-all">
+                                    <Link href="/my-bookings" className="flex items-center gap-3 px-5 py-3 text-white/70 dark:text-slate-300 hover:text-emerald-900 dark:hover:text-white hover:bg-amber-900/10 dark:hover:bg-white/10 text-sm font-bold transition-all">
                                         <Calendar size={16} className="text-emerald-600 dark:text-emerald-400" /> My Bookings
                                     </Link>
                                     <button onClick={() => signOut()} className="flex items-center gap-3 px-5 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 text-sm font-bold transition-all w-full text-left">
@@ -169,7 +169,7 @@ export default function Navbar() {
                         ) : (
                             <button
                                 onClick={() => signIn('google')}
-                                className={`w-10 h-10 flex items-center justify-center rounded-full transition-all border ${needsSolidBg ? 'bg-white border-emerald-900/10 shadow-sm hover:shadow-md' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
+                                className={`w-10 h-10 flex items-center justify-center rounded-full transition-all border ${needsSolidBg ? 'bg-white border-white/10 shadow-sm hover:shadow-md' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
                                 aria-label="Sign in with Google"
                             >
                                 <svg className="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -190,7 +190,7 @@ export default function Navbar() {
 
                 {/* Mobile Menu Toggle */}
                 <button
-                    className={`lg:hidden w-10 h-10 flex items-center justify-center rounded-xl border transition-all ${needsSolidBg ? 'bg-emerald-900 text-white border-emerald-900 shadow-md' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
+                    className={`lg:hidden w-10 h-10 flex items-center justify-center rounded-xl border transition-all bg-slate-900 text-white border-slate-900 shadow-md`}
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
                     aria-expanded={isMobileMenuOpen}
@@ -201,16 +201,16 @@ export default function Navbar() {
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-slate-950 border-t border-emerald-900/10 dark:border-slate-800 shadow-2xl max-h-[85vh] overflow-y-auto animate-slide-up">
+                <div className="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-slate-950 border-t border-white/10 dark:border-slate-800 shadow-2xl max-h-[85vh] overflow-y-auto animate-slide-up">
                     <div className="p-6 space-y-6">
                         {/* User Profile Section - Mobile */}
                         {session && (
-                            <div className="flex items-center gap-4 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border border-emerald-100 dark:border-emerald-800">
+                            <div className="flex items-center gap-4 p-4 bg-amber-900/10 dark:bg-white/10 rounded-2xl border border-emerald-100 dark:border-emerald-800">
                                 <div className="w-14 h-14 rounded-full border-2 border-emerald-600 overflow-hidden shrink-0">
                                     {session.user?.image ? (
                                         <img src={session.user.image} alt={session.user.name} className="w-full h-full object-cover" />
                                     ) : (
-                                        <div className="w-full h-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xl">{session.user?.name?.charAt(0)}</div>
+                                        <div className="w-full h-full bg-amber-600 text-white flex items-center justify-center font-bold text-xl">{session.user?.name?.charAt(0)}</div>
                                     )}
                                 </div>
                                 <div className="flex-1 min-w-0">
@@ -224,7 +224,7 @@ export default function Navbar() {
                         {session && (
                             <Link
                                 href="/my-bookings"
-                                className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-emerald-900/10 dark:border-slate-800 text-emerald-900 dark:text-white font-bold shadow-sm"
+                                className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-white/10 dark:border-slate-800 text-emerald-900 dark:text-white font-bold shadow-sm"
                             >
                                 <Calendar size={20} className="text-emerald-600" />
                                 <span>My Bookings</span>
@@ -251,7 +251,7 @@ export default function Navbar() {
                                 <Link
                                     key={item.id}
                                     href={item.href}
-                                    className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-emerald-900/10 dark:border-slate-800 text-emerald-900 dark:text-white font-bold shadow-sm hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all"
+                                    className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-white/10 dark:border-slate-800 text-emerald-900 dark:text-white font-bold shadow-sm hover:bg-amber-900/10 dark:hover:bg-white/10 transition-all"
                                 >
                                     <span className="text-xl">{item.icon}</span>
                                     <span>{item.label}</span>
@@ -259,14 +259,14 @@ export default function Navbar() {
                             ))}
                         </div>
 
-                        <div className="pt-6 border-t border-emerald-900/10 dark:border-slate-800">
+                        <div className="pt-6 border-t border-white/10 dark:border-slate-800">
                             <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest px-2 mb-4">Currency Selector</p>
                             <div className="grid grid-cols-4 gap-2">
                                 {SUPPORTED_CURRENCIES.map(c => (
                                     <button
                                         key={c.code}
                                         onClick={() => changeCurrency(c.code)}
-                                        className={`flex flex-col items-center justify-center gap-1 py-3 rounded-xl border transition-all text-xs font-bold ${currency === c.code ? 'bg-emerald-600 text-white border-emerald-600 shadow-md transform scale-105' : 'text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 border-slate-100 dark:border-slate-800'}`}
+                                        className={`flex flex-col items-center justify-center gap-1 py-3 rounded-xl border transition-all text-xs font-bold ${currency === c.code ? 'bg-amber-600 text-white border-emerald-600 shadow-md transform scale-105' : 'text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 border-slate-100 dark:border-slate-800'}`}
                                     >
                                         <div className="w-6 h-6 rounded-full overflow-hidden border border-white/20">
                                             <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />

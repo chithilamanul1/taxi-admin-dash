@@ -6,7 +6,7 @@
 import { destinations } from './destinations.js';
 
 export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '', dynamicDestinations = []) => {
-    if (!vehicleData || !distanceKm || distanceKm <= 0) return 0;
+    if (!vehicleData || !distanceKm || distanceKm <= 0) return { price: 0, isOverride: false };
 
     const distKm = Math.ceil(Number(distanceKm) || 0);
     let baseTotal = 0;
@@ -60,8 +60,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     let distancePrice = 0;
     let overrideApplied = false;
 
-    // Check for Location-Specific Per-KM Rate Override
-    // Allow overrides across all categories if a specific destination name is matched in the address
+    // Check for Location-Specific Pricing or Per-KM Overrides
     // skip this for airport transfers/rides as per user request
     const matchedOverride = (!isAirportRide) ? (findMatchingDestination(pickup, dynamicDestinations) || findMatchingDestination(dropoff, dynamicDestinations)) : null;
 
@@ -69,61 +68,80 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const vehicleSlug = vehicleData.vehicleSlug || vehicleType; // Use vehicleSlug if available, fallback to vehicleType
 
     if (matchedOverride) {
-        // Ensure we have a plain object for tiers regardless of source (Mongoose Map vs POJO)
-        let vTiersMap = {};
-        if (matchedOverride.vehicleTiers) {
-            if (typeof matchedOverride.vehicleTiers.get === 'function') {
-                // It's a Mongoose Map
-                vTiersMap = Object.fromEntries(matchedOverride.vehicleTiers);
+        // 1. Check for Fixed Pricing (Precedence)
+        let vPricing = {};
+        if (matchedOverride.pricing) {
+            if (typeof matchedOverride.pricing.get === 'function') {
+                vPricing = Object.fromEntries(matchedOverride.pricing);
             } else {
-                // It's a plain object
-                vTiersMap = matchedOverride.vehicleTiers;
+                vPricing = matchedOverride.pricing;
             }
         }
 
-        const vTiers = vTiersMap[vehicleSlug] || vTiersMap[vehicleType];
-
-        if (Array.isArray(vTiers) && vTiers.length > 0) {
-            // Robust tier search
-            const matchingTier = vTiers.find(t => {
-                const min = Number(t.minKm || t.min || 0);
-                const max = Number(t.maxKm || t.max || Infinity);
-                const isMatch = distKm >= min && distKm <= max;
-                return isMatch;
-            });
-
-            if (matchingTier) {
-                const val = Number(matchingTier.value || matchingTier.price || matchingTier.rate || 0);
-                if (matchingTier.type === 'flat') {
-                    distancePrice = val;
-                } else {
-                    distancePrice = (distKm * val);
-                }
-                overrideApplied = true;
-            }
+        const fixedPrice = vPricing[vehicleSlug] || vPricing[vehicleType] || matchedOverride.price || 0;
+        if (fixedPrice > 0) {
+            distancePrice = Number(fixedPrice);
+            overrideApplied = true;
         }
 
-        // 2. Fallback to Per-KM Overrides
+        // 2. Check for Tiered Rates
         if (!overrideApplied) {
-            let vOverrides = {};
-            if (matchedOverride.vehicleRateOverrides) {
-                if (typeof matchedOverride.vehicleRateOverrides.get === 'function') {
-                    vOverrides = Object.fromEntries(matchedOverride.vehicleRateOverrides);
+            // Ensure we have a plain object for tiers regardless of source (Mongoose Map vs POJO)
+            let vTiersMap = {};
+            if (matchedOverride.vehicleTiers) {
+                if (typeof matchedOverride.vehicleTiers.get === 'function') {
+                    // It's a Mongoose Map
+                    vTiersMap = Object.fromEntries(matchedOverride.vehicleTiers);
                 } else {
-                    vOverrides = matchedOverride.vehicleRateOverrides;
+                    // It's a plain object
+                    vTiersMap = matchedOverride.vehicleTiers;
                 }
             }
 
-            const vehicleSpecificRate = Number(vOverrides[vehicleSlug] || vOverrides[vehicleType] || 0);
+            const vTiers = vTiersMap[vehicleSlug] || vTiersMap[vehicleType];
 
-            if (vehicleSpecificRate > 0) {
-                distancePrice = (distKm * vehicleSpecificRate);
-                overrideApplied = true;
+            if (Array.isArray(vTiers) && vTiers.length > 0) {
+                // Robust tier search
+                const matchingTier = vTiers.find(t => {
+                    const min = Number(t.minKm || t.min || 0);
+                    const max = Number(t.maxKm || t.max || Infinity);
+                    const isMatch = distKm >= min && distKm <= max;
+                    return isMatch;
+                });
+
+                if (matchingTier) {
+                    const val = Number(matchingTier.value || matchingTier.price || matchingTier.rate || 0);
+                    if (matchingTier.type === 'flat') {
+                        distancePrice = val;
+                    } else {
+                        distancePrice = (distKm * val);
+                    }
+                    overrideApplied = true;
+                }
             }
-            else if (matchedOverride.perKmRateOverride > 0) {
-                const perKmRate = Number(matchedOverride.perKmRateOverride);
-                distancePrice = (distKm * perKmRate);
-                overrideApplied = true;
+
+            // 2. Fallback to Per-KM Overrides
+            if (!overrideApplied) {
+                let vOverrides = {};
+                if (matchedOverride.vehicleRateOverrides) {
+                    if (typeof matchedOverride.vehicleRateOverrides.get === 'function') {
+                        vOverrides = Object.fromEntries(matchedOverride.vehicleRateOverrides);
+                    } else {
+                        vOverrides = matchedOverride.vehicleRateOverrides;
+                    }
+                }
+
+                const vehicleSpecificRate = Number(vOverrides[vehicleSlug] || vOverrides[vehicleType] || 0);
+
+                if (vehicleSpecificRate > 0) {
+                    distancePrice = (distKm * vehicleSpecificRate);
+                    overrideApplied = true;
+                }
+                else if (matchedOverride.perKmRateOverride > 0) {
+                    const perKmRate = Number(matchedOverride.perKmRateOverride);
+                    distancePrice = (distKm * perKmRate);
+                    overrideApplied = true;
+                }
             }
         }
     }

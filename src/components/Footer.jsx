@@ -7,7 +7,7 @@ import { Phone, Mail, MapPin, Instagram, Twitter, Facebook, ArrowUpRight } from 
 
 const Footer = () => {
     return (
-        <footer className="bg-emerald-950 pt-32 pb-12 relative overflow-hidden text-white">
+        <footer className="bg-slate-950 pt-32 pb-12 relative overflow-hidden text-white">
             {/* Background elements */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
 
@@ -18,9 +18,9 @@ const Footer = () => {
                         <div className="flex items-center gap-3">
                             <div className="flex flex-col">
                                 <span className="text-2xl font-black tracking-tighter">
-                                    AIRPORT <span className="text-amber-400">TAXIS</span>
+                                    AIRPORT <span className="text-amber-500">TAXIS</span>
                                 </span>
-                                <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest opacity-80">Pvt (Ltd)</span>
+                                <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest opacity-80">Pvt (Ltd)</span>
                             </div>
                         </div>
                         <p className="text-white/80 max-w-md leading-relaxed">
@@ -49,7 +49,7 @@ const Footer = () => {
                     {/* Links */}
                     <div className="grid grid-cols-2 gap-8 lg:col-span-1">
                         <div className="space-y-6">
-                            <h4 className="text-sm font-bold uppercase tracking-widest text-amber-400">Explore</h4>
+                            <h4 className="text-sm font-bold uppercase tracking-widest text-amber-500">Explore</h4>
                             <ul className="space-y-4 text-white/60 text-sm font-medium">
                                 <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
                                 <li><Link href="/day-trips" className="hover:text-white transition-colors">Day Trips</Link></li>
@@ -58,7 +58,7 @@ const Footer = () => {
                             </ul>
                         </div>
                         <div className="space-y-6">
-                            <h4 className="text-sm font-bold uppercase tracking-widest text-amber-400">Legal</h4>
+                            <h4 className="text-sm font-bold uppercase tracking-widest text-amber-500">Legal</h4>
                             <ul className="space-y-4 text-white/60 text-sm font-medium">
                                 <li><Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
                                 <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Use</Link></li>
@@ -69,18 +69,18 @@ const Footer = () => {
 
                     {/* Contact */}
                     <div className="space-y-6">
-                        <h4 className="text-sm font-bold uppercase tracking-widest text-amber-400">Get in Touch</h4>
+                        <h4 className="text-sm font-bold uppercase tracking-widest text-amber-500">Get in Touch</h4>
                         <ul className="space-y-4 text-white/60 text-sm font-medium">
                             <li className="flex gap-4">
-                                <MapPin size={18} className="text-amber-400 shrink-0" />
+                                <MapPin size={18} className="text-amber-500 shrink-0" />
                                 <span>118/5 St. Joseph Street, Grandpass, Colombo 14</span>
                             </li>
                             <li className="flex gap-4">
-                                <Phone size={18} className="text-amber-400 shrink-0" />
+                                <Phone size={18} className="text-amber-500 shrink-0" />
                                 <a href="tel:+94722885885" className="hover:text-white">+94 722 885 885</a>
                             </li>
                             <li className="flex gap-4">
-                                <Mail size={18} className="text-amber-400 shrink-0" />
+                                <Mail size={18} className="text-amber-500 shrink-0" />
                                 <a href="mailto:info@airporttaxis.lk" className="hover:text-white">info@airporttaxis.lk</a>
                             </li>
                         </ul>
@@ -100,7 +100,7 @@ const Footer = () => {
             </div>
 
             {/* Bottom Glow */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-emerald-900/10 rounded-full blur-[100px] pointer-events-none"></div>
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-amber-900/10 rounded-full blur-[100px] pointer-events-none"></div>
         </footer>
     )
 }

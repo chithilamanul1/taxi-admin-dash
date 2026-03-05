@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-    Sparkles, MapPin, Calendar, Users, ArrowRight, Loader2,
+    Wand2, MapPin, Calendar, Users, ArrowRight, Loader2,
     CheckCircle, MessageCircle, Navigation, Info, Clock,
     ChevronRight, Mountain, Landmark, Waves, Camera
 } from 'lucide-react';
@@ -80,7 +80,7 @@ export default function TripPlannerClient() {
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                         <div>
                             <div className="flex items-center gap-2 text-amber-500 mb-2">
-                                <Sparkles size={20} className="fill-amber-500" />
+                                <Wand2 size={20} className="fill-amber-500" />
                                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">AI-Generated Masterpiece</span>
                             </div>
                             <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight leading-none mb-4">
@@ -199,7 +199,7 @@ export default function TripPlannerClient() {
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 text-amber-600 rounded-full mb-6">
-                        <Sparkles size={16} className="fill-amber-500/20" />
+                        <Wand2 size={16} className="fill-amber-500/20" />
                         <span className="text-[10px] font-black uppercase tracking-widest">Next-Gen Travel Planning</span>
                     </div>
                     <h1 className="text-5xl md:text-7xl font-black text-slate-900 mb-6 tracking-tight leading-[0.9]">
@@ -297,7 +297,7 @@ export default function TripPlannerClient() {
                                     </>
                                 ) : (
                                     <>
-                                        Generate My Trip <Sparkles className="fill-white" />
+                                        Generate My Trip <Wand2 className="fill-white" />
                                         <div className="absolute inset-0 bg-amber-500 translate-y-full group-hover:translate-y-0 transition-transform -z-10 bg-opacity-10"></div>
                                     </>
                                 )}

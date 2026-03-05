@@ -29,10 +29,10 @@ const Hero = ({ onBookClick }) => {
     const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroImages.length)
 
     return (
-        <section className="relative h-[85vh] md:h-[90vh] min-h-[600px] md:min-h-[850px] flex flex-col items-start md:items-center justify-start md:justify-center pt-20 md:pt-36 pb-12 md:pb-24 overflow-hidden bg-emerald-950 transition-colors border-b border-black">
+        <section className="relative h-[85vh] md:h-[90vh] min-h-[600px] md:min-h-[850px] flex flex-col items-start md:items-center justify-start md:justify-center pt-20 md:pt-36 pb-12 md:pb-24 overflow-hidden bg-slate-950 transition-colors border-b border-black">
             {/* Background Slideshow */}
             <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/95 via-emerald-900/70 to-black/30 pointer-events-none z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-900/70 to-black/30 pointer-events-none z-10"></div>
 
                 {/* 
                   PERFORMANCE OPTIMIZATION: 
@@ -87,16 +87,16 @@ const Hero = ({ onBookClick }) => {
 
             {/* Content */}
             <div className="container mx-auto px-6 relative z-10 text-left md:text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-900/80 backdrop-blur-md border border-emerald-400/30 text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-4 animate-slide-up opacity-0 [animation-delay:0.2s] [animation-fill-mode:forwards] shadow-lg md:mx-auto">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/80 backdrop-blur-md border border-amber-500/30 text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-4 animate-slide-up opacity-0 [animation-delay:0.2s] [animation-fill-mode:forwards] shadow-lg md:mx-auto">
                     <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                     </span>
                     Sri Lanka's #1 Luxury Provider v2.1
                 </div>
 
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 leading-[1.1] text-white animate-slide-up opacity-0 [animation-delay:0.4s] [animation-fill-mode:forwards] tracking-tight max-w-4xl md:mx-auto">
-                    The Smart Way <br />to <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-200">Explore</span> Sri Lanka
+                    The Smart Way <br />to <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-200">Explore</span> Sri Lanka
                 </h1>
 
                 {/* Sri Lanka Info Text */}
@@ -105,9 +105,9 @@ const Hero = ({ onBookClick }) => {
                         Reliable airport transfers and curated luxury tours.
                         Professional service tailored to your journey.
                     </p>
-                    <div className="flex flex-col gap-2 p-5 bg-emerald-950/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg max-w-xl md:mx-auto md:text-left">
+                    <div className="flex flex-col gap-2 p-5 bg-slate-900/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg max-w-xl md:mx-auto md:text-left">
                         <p className="text-sm text-white/80 leading-relaxed">
-                            🇱🇰 <strong className="text-emerald-300">Premium Fleet & Service:</strong>
+                            🇱🇰 <strong className="text-amber-300">Premium Fleet & Service:</strong>
                         </p>
                         <ul className="text-xs md:text-sm text-white/70 space-y-1 ml-1">
                             <li className="flex items-center gap-2">✓ Modern Air-Conditioned Vehicles</li>

@@ -81,17 +81,17 @@ export default function HomeClient() {
             />
 
             <div id="calculator" className="py-32 relative">
-                <div className="absolute inset-0 bg-emerald-900/5 flex items-center justify-center opacity-30">
-                    <div className="w-[800px] h-[400px] border border-emerald-900/10 rounded-full blur-3xl"></div>
+                <div className="absolute inset-0 bg-slate-900/5 flex items-center justify-center opacity-30">
+                    <div className="w-[800px] h-[400px] border border-amber-900/10 rounded-full blur-3xl"></div>
                 </div>
                 <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-                    <h2 className="text-4xl md:text-5xl font-extrabold text-emerald-900 dark:text-white mb-6 font-heading">
-                        Seamless <span className="text-emerald-600 dark:text-emerald-400">Airport Transfers</span>
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-6 font-heading">
+                        Seamless <span className="text-amber-600 dark:text-amber-400">Airport Transfers</span>
                     </h2>
-                    <p className="text-emerald-900/60 dark:text-white/60 mb-10 text-lg">Predictable pricing, premium vehicles, and professional chauffeurs waiting for you.</p>
+                    <p className="text-slate-900/60 dark:text-white/60 mb-10 text-lg">Predictable pricing, premium vehicles, and professional chauffeurs waiting for you.</p>
                     <button
                         onClick={() => setIsBookingOpen(true)}
-                        className="bg-emerald-900 text-white px-12 py-5 rounded-2xl font-bold text-lg hover:bg-emerald-800 transition-all shadow-xl inline-flex items-center gap-3 group"
+                        className="bg-slate-900 text-white px-12 py-5 rounded-2xl font-bold text-lg hover:bg-slate-800 transition-all shadow-xl inline-flex items-center gap-3 group"
                     >
                         Book Your Trip Now
                         <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
@@ -106,11 +106,11 @@ export default function HomeClient() {
                     <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
                         <div className="max-w-2xl">
                             <h2 className="text-4xl md:text-5xl font-extrabold mb-6 dark:text-white">
-                                Curated <span className="text-emerald-600 dark:text-emerald-400">Destinations</span>
+                                Curated <span className="text-amber-600 dark:text-amber-400">Destinations</span>
                             </h2>
-                            <p className="text-emerald-900/60 dark:text-white/60 text-lg">Explore the most iconic locations in Sri Lanka with our specialized airport transfer services.</p>
+                            <p className="text-slate-900/60 dark:text-white/60 text-lg">Explore the most iconic locations in Sri Lanka with our specialized airport transfer services.</p>
                         </div>
-                        <Link href="/prices" className="flex items-center gap-2 text-emerald-600 font-bold uppercase tracking-widest text-sm hover:gap-4 transition-all">
+                        <Link href="/prices" className="flex items-center gap-2 text-amber-600 font-bold uppercase tracking-widest text-sm hover:gap-4 transition-all">
                             View All Rates <ArrowRight size={18} />
                         </Link>
                     </div>
@@ -160,28 +160,28 @@ export default function HomeClient() {
 
             <section className="py-20 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
                 <div className="max-w-6xl mx-auto px-6">
-                    <div className="bg-emerald-900 rounded-3xl p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
+                    <div className="bg-slate-950 rounded-3xl p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
                         <div className="absolute inset-0 opacity-10">
                             <Compass size={400} className="absolute -right-20 -bottom-20 text-white" />
                         </div>
 
                         <div className="relative z-10 max-w-xl text-center md:text-left">
                             <h2 className="text-3xl md:text-4xl font-black text-white mb-4">Are you a Driver?</h2>
-                            <p className="text-emerald-100 text-lg mb-8">
+                            <p className="text-amber-100 text-lg mb-8">
                                 Join our exclusive fleet of professional chauffeurs. Get consistent bookings, fair rates, and become part of Sri Lanka's premium transport network.
                             </p>
                             <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                                <Link href="/driver/register" className="bg-white text-emerald-900 px-8 py-3 rounded-xl font-bold hover:bg-emerald-50 transition-colors inline-flex items-center gap-2">
+                                <Link href="/driver/register" className="bg-white text-slate-900 px-8 py-3 rounded-xl font-bold hover:bg-amber-50 transition-colors inline-flex items-center gap-2">
                                     Join Our Fleet <ArrowRight size={18} />
                                 </Link>
-                                <Link href="/driver/login" className="px-8 py-3 rounded-xl font-bold text-white border border-emerald-700 hover:bg-emerald-800 transition-colors">
+                                <Link href="/driver/login" className="px-8 py-3 rounded-xl font-bold text-white border border-slate-700 hover:bg-slate-800 transition-colors">
                                     Driver Login
                                 </Link>
                             </div>
                         </div>
 
-                        <div className="relative z-10 w-full md:w-1/3 aspect-video bg-emerald-800/50 rounded-xl border border-emerald-500/20 backdrop-blur-sm flex items-center justify-center p-6 text-center transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                            <div className="text-emerald-200">
+                        <div className="relative z-10 w-full md:w-1/3 aspect-video bg-amber-900/20 rounded-xl border border-amber-500/20 backdrop-blur-sm flex items-center justify-center p-6 text-center transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                            <div className="text-amber-200">
                                 <Star size={48} className="mx-auto mb-2 text-amber-400" />
                                 <h3 className="font-bold text-white">Earn More</h3>
                                 <p className="text-xs mt-1">Accept rides, track earnings, and get paid weekly.</p>
