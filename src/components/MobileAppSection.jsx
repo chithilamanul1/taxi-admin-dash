@@ -74,18 +74,39 @@ export default function MobileAppSection() {
 
                         {/* Visual Representation (Phone Mockup Aesthetic) */}
                         <div className="w-full lg:w-2/5 relative">
-                            <div className="relative z-10 w-full aspect-[4/5] rounded-[2.5rem] bg-gradient-to-br from-emerald-500/20 to-slate-900 border border-white/10 p-6 flex items-center justify-center shadow-2xl relative overflow-hidden group">
+                            <div className="relative z-10 w-full aspect-[4/5] rounded-[2.5rem] bg-slate-900 border border-white/10 p-2 flex items-center justify-center shadow-2xl relative overflow-hidden group">
                                 <div className="absolute inset-0 bg-emerald-500/5 blur-3xl group-hover:bg-emerald-500/10 transition-all"></div>
 
-                                <div className="text-center relative z-20">
-                                    <div className="w-24 h-24 bg-white/10 rounded-[2rem] flex items-center justify-center mx-auto mb-6 backdrop-blur-3xl border border-white/20">
-                                        <Smartphone size={40} className="text-emerald-400 animate-pulse" />
+                                {/* App Screen Content (Mockup Carousel) */}
+                                <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-slate-950">
+                                    <div className="absolute inset-0 transition-opacity duration-1000 opacity-100">
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent z-10"></div>
+                                        <img
+                                            src="/Hero/sigiriya_illust.jpg"
+                                            alt="App Preview"
+                                            className="w-full h-full object-cover opacity-40 animate-pulse"
+                                        />
                                     </div>
-                                    <h3 className="text-2xl font-black text-white mb-2 tracking-tight">App Under Design</h3>
-                                    <p className="text-slate-400 text-sm font-medium">Launching Q3 2026</p>
+
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center z-20">
+                                        <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-3xl border border-white/20">
+                                            <Smartphone size={32} className="text-emerald-400" />
+                                        </div>
+                                        <h3 className="text-xl font-black text-white mb-2 tracking-tight">Experience Sri Lanka</h3>
+                                        <p className="text-slate-400 text-xs font-medium max-w-[200px]">Coming soon to your favorite app store</p>
+                                    </div>
+
+                                    {/* Floating UI Elements over image */}
+                                    <div className="absolute top-6 left-6 right-6 h-8 bg-white/5 rounded-full border border-white/10 backdrop-blur-md flex items-center px-4 justify-between z-30">
+                                        <div className="w-8 h-1 bg-white/20 rounded-full"></div>
+                                        <div className="flex gap-1">
+                                            <div className="w-1 h-1 bg-emerald-500 rounded-full"></div>
+                                            <div className="w-1 h-1 bg-amber-500 rounded-full"></div>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                {/* Floating UI Elements */}
+                                {/* Floating UI Elements outside screen */}
                                 <div className="absolute top-10 right-10 w-16 h-16 bg-white/5 rounded-2xl animate-float blur-sm"></div>
                                 <div className="absolute bottom-10 left-10 w-24 h-24 bg-emerald-500/5 rounded-full animate-pulse blur-xl"></div>
                             </div>
