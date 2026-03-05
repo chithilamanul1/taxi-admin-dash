@@ -33,7 +33,7 @@ const Hero = ({ onBookClick }) => {
     const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroImages.length)
 
     return (
-        <section className="relative h-[85vh] md:h-[90vh] min-h-[750px] md:min-h-[850px] flex flex-col items-start md:items-center justify-start md:justify-center pt-32 md:pt-36 pb-16 md:pb-24 overflow-hidden bg-emerald-950 transition-colors border-b border-black">
+        <section className="relative h-[85vh] md:h-[90vh] min-h-[600px] md:min-h-[850px] flex flex-col items-start md:items-center justify-start md:justify-center pt-20 md:pt-36 pb-12 md:pb-24 overflow-hidden bg-emerald-950 transition-colors border-b border-black">
             {/* Background Slideshow */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/95 via-emerald-900/70 to-black/30 pointer-events-none z-10"></div>

@@ -36,7 +36,7 @@ export default function SpecialOffersSection() {
 
     return (
         <section id="offers" className="py-0 relative">
-            <div className="relative overflow-hidden bg-gradient-to-br from-emerald-900 to-emerald-950 shadow-2xl">
+            <section className="relative py-16 md:py-32 overflow-hidden bg-gradient-to-br from-emerald-900 to-emerald-950 shadow-2xl">
 
                 {/* Background Effects */}
                 <div className="absolute inset-0 opacity-20">
@@ -157,7 +157,7 @@ export default function SpecialOffersSection() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </section>
     );
 }

@@ -16,6 +16,7 @@ import { destinations } from '@/lib/destinations'
 const GoogleReviews = dynamic(() => import('./GoogleReviews'), { ssr: false })
 const RecentPosts = dynamic(() => import('./RecentPosts'), { ssr: false })
 const SpecialOffersSection = dynamic(() => import('./SpecialOffersSection'), { ssr: false })
+const MobileAppSection = dynamic(() => import('./MobileAppSection'), { ssr: false })
 const MarketingPopup = dynamic(() => import('./MarketingPopup'), { ssr: false })
 const ExpressCheckoutModal = dynamic(() => import('./ExpressCheckoutModal'), { ssr: false })
 
@@ -100,7 +101,7 @@ export default function HomeClient() {
 
             <SpecialOffersSection />
 
-            <section className="py-32 px-6">
+            <section className="py-12 md:py-32 px-6">
                 <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
                         <div className="max-w-2xl">
@@ -153,6 +154,7 @@ export default function HomeClient() {
             </section >
 
             <ReviewStatsBar />
+            <MobileAppSection />
             <GoogleReviews />
             <RecentPosts />
 

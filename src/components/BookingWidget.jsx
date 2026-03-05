@@ -55,8 +55,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     })
 
     const [distance, setDistance] = useState(null)
-    const [vehicle, setVehicle] = useState('mini-car')
-    const [waitingHours, setWaitingHours] = useState(0)
+    const SpecialOffersSection = dynamic(() => import('./SpecialOffersSection'), { ssr: false })
+    const MobileAppSection = dynamic(() => import('./MobileAppSection'), { ssr: false })
+    const MarketingPopup = dynamic(() => import('./MarketingPopup'), { ssr: false })
     const [hasNameBoard, setHasNameBoard] = useState(false)
     const [couponCode, setCouponCode] = useState('')
     const [isManualVehicle, setIsManualVehicle] = useState(false)
@@ -537,7 +538,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             </div>
 
             {/* Widget Main Content */}
-            <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-5 lg:p-8 shadow-2xl border-2 border-black dark:border-slate-700 animate-slide-up relative z-10">
+            <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-5 lg:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 animate-slide-up relative z-10">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
@@ -565,7 +566,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex items-center gap-2 w-full sm:w-auto">
                                     {/* Currency Selector */}
                                     <div className="relative group z-[110]">
-                                        <button className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-900 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-black text-slate-700 dark:text-slate-300 hover:border-black transition-all shadow-sm">
+                                        <button className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-black text-slate-700 dark:text-slate-300 hover:border-black transition-all shadow-sm">
                                             <div className="w-5 h-5 rounded-full overflow-hidden border border-white/20">
                                                 <img src={SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag} alt={currency} className="w-full h-full object-cover scale-150" />
                                             </div>
@@ -590,7 +591,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                     </div>
 
-                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-white text-xs font-black hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-black px-6 py-3 rounded-xl border border-black justify-center whitespace-nowrap shadow-sm hover:shadow-md">
+                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-white text-xs font-black hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-black px-6 py-3 rounded-xl border border-slate-900 justify-center whitespace-nowrap shadow-sm hover:shadow-md">
                                         {isLocating ? <Loader2 size={16} className="animate-spin text-white" /> : <Zap size={16} className="fill-white text-white" />}
                                         <span className="hidden sm:inline">Auto Detect</span>
                                         <span className="sm:hidden">GPS</span>
@@ -616,7 +617,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 {/* Waypoints List */}
                                 {waypoints.map((wp, idx) => (
-                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-emerald-900/20 rounded-2xl border border-slate-900 dark:border-emerald-800/50 p-1 flex items-center overflow-hidden">
+                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-emerald-900/20 rounded-2xl border border-slate-200 dark:border-emerald-800/50 p-1 flex items-center overflow-hidden">
                                         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-900/40 dark:text-emerald-400/40 pointer-events-none z-10">
                                             <Navigation size={18} />
                                         </div>
@@ -723,7 +724,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <button
                                         onClick={() => setHasNameBoard(!hasNameBoard)}
                                         aria-pressed={hasNameBoard}
-                                        className={`h-16 px-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-black bg-slate-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-black dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-slate-900 dark:border-white/10 text-slate-900/60 dark:text-white/60 hover:border-black'}`}
+                                        className={`h-16 px-4 rounded-2xl border transition-all flex items-center justify-between group ${hasNameBoard ? 'border-amber-500 bg-slate-50 dark:bg-emerald-900/30 dark:border-emerald-500/50 text-black dark:text-emerald-50' : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900/60 dark:text-white/60 hover:border-black'}`}
                                     >
                                         <div className="flex items-center gap-3">
                                             <div className="w-6 h-6 shrink-0 text-amber-600">
@@ -784,7 +785,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 placeholder="ENTER COUPON CODE"
                                                 value={couponCode}
                                                 onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                                className="w-full h-full pl-14 pr-24 rounded-2xl bg-white dark:bg-white/5 border-2 border-black dark:border-slate-700 text-base font-black outline-none focus:ring-4 focus:ring-black/10 transition-all uppercase text-slate-900 dark:text-white placeholder:text-slate-900/30 dark:placeholder:text-white/30 tracking-widest"
+                                                className="w-full h-full pl-14 pr-24 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-slate-700 text-base font-black outline-none focus:ring-4 focus:ring-black/10 transition-all uppercase text-slate-900 dark:text-white placeholder:text-slate-900/30 dark:placeholder:text-white/30 tracking-widest"
                                                 aria-label="Coupon code"
                                             />
                                             <button
