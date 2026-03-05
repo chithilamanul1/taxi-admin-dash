@@ -1,8 +1,7 @@
 'use client';
 
-import { Smartphone, Download, ShieldCheck, Zap, Star, Apple, Play } from 'lucide-react';
-
-export default function MobileAppSection() {
+import { Smartphone, Download, ShieldCheck, Zap, Star } from 'lucide-react';
+import { FaApple, FaGooglePlay } from 'react-icons/fa'; export default function MobileAppSection() {
     return (
         <section className="py-24 px-6 relative overflow-hidden">
             {/* Background Decor */}
@@ -33,8 +32,21 @@ export default function MobileAppSection() {
                                 We're building the ultimate travel companion for your Sri Lankan adventures. Get instant bookings, real-time driver tracking, and exclusive app-only deals.
                             </p>
 
-                            <div className="mt-8 flex justify-center lg:justify-start">
-                                <img src="/store_buttons.png" alt="Download on App Store and Google Play" className="h-28 object-contain" />
+                            <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center lg:justify-start">
+                                <button className="flex items-center justify-center gap-3 bg-white text-slate-900 px-6 py-3.5 rounded-2xl hover:bg-slate-100 transition-transform hover:scale-105 shadow-xl group border border-transparent">
+                                    <FaApple size={36} className="text-slate-900 group-hover:drop-shadow-md transition-all" />
+                                    <div className="text-left font-sans">
+                                        <div className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-0.5">Download on the</div>
+                                        <div className="text-xl leading-none font-black text-slate-900 tracking-tight">App Store</div>
+                                    </div>
+                                </button>
+                                <button className="flex items-center justify-center gap-3 bg-slate-900 text-white px-6 py-3.5 rounded-2xl border-2 border-slate-700 hover:border-emerald-500 hover:bg-slate-800 transition-all hover:scale-105 shadow-xl group">
+                                    <FaGooglePlay size={32} className="text-emerald-400 group-hover:drop-shadow-[0_0_8px_rgba(52,211,153,0.8)] transition-all" />
+                                    <div className="text-left font-sans">
+                                        <div className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-0.5">Get it on</div>
+                                        <div className="text-xl leading-none font-black text-white tracking-tight">Google Play</div>
+                                    </div>
+                                </button>
                             </div>
 
                             {/* App Features Preview */}
@@ -62,11 +74,11 @@ export default function MobileAppSection() {
                                 {/* App Screen Content (Mockup Carousel) */}
                                 <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-slate-950">
                                     <div className="absolute inset-0 transition-opacity duration-1000 opacity-100">
-                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/80 to-slate-800/50 z-10 hidden"></div>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent z-10"></div>
                                         <img
-                                            src="/logo_app.png"
-                                            alt="App Logo"
-                                            className="w-full h-full object-contain p-6 relative z-0"
+                                            src="/Hero/katunayake_art.jpg"
+                                            alt="App Preview"
+                                            className="w-full h-full object-cover opacity-60 mix-blend-screen"
                                         />
                                     </div>
 
