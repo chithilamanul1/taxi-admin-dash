@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const heroImages = [
-    { src: '/Hero/hero_sigiriya.jpg', alt: 'Airport Taxi Sigiriya Illustration' },
-    { src: '/Hero/hero_mirissa.jpg', alt: 'Airport Taxi Mirissa Illustration' },
+    { src: '/Hero/hero_art_1.png', alt: 'Airport Taxi Sigiriya Illustration' },
+    { src: '/Hero/hero_art_2.png', alt: 'Airport Taxi Mirissa Illustration' },
 ]
 
 const Hero = ({ onBookClick }) => {
@@ -91,7 +91,7 @@ const Hero = ({ onBookClick }) => {
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                     </span>
-                    Sri Lanka's #1 Luxury Provider
+                    Sri Lanka's #1 Luxury Provider v2.1
                 </div>
 
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 leading-[1.1] text-white animate-slide-up opacity-0 [animation-delay:0.4s] [animation-fill-mode:forwards] tracking-tight max-w-4xl md:mx-auto">
