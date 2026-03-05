@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X } from 'lucide-react'
 
 import Image from 'next/image'
@@ -13,6 +14,10 @@ import VehicleCarousel from './VehicleCarousel'
 import LocationInput from './LocationInput'
 import SmartOfferNudge from './SmartOfferNudge'
 import TripMap from './TripMap'
+
+const SpecialOffersSection = dynamic(() => import('./SpecialOffersSection'), { ssr: false })
+const MobileAppSection = dynamic(() => import('./MobileAppSection'), { ssr: false })
+const MarketingPopup = dynamic(() => import('./MarketingPopup'), { ssr: false })
 
 
 import { calculateBasePrice, calculateSurcharges } from '@/lib/pricing-util';
@@ -55,9 +60,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     })
 
     const [distance, setDistance] = useState(null)
-    const SpecialOffersSection = dynamic(() => import('./SpecialOffersSection'), { ssr: false })
-    const MobileAppSection = dynamic(() => import('./MobileAppSection'), { ssr: false })
-    const MarketingPopup = dynamic(() => import('./MarketingPopup'), { ssr: false })
+    const [vehicle, setVehicle] = useState('mini-car')
+    const [waitingHours, setWaitingHours] = useState(0)
     const [hasNameBoard, setHasNameBoard] = useState(false)
     const [couponCode, setCouponCode] = useState('')
     const [isManualVehicle, setIsManualVehicle] = useState(false)
