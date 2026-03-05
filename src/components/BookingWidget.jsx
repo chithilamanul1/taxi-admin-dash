@@ -15,10 +15,6 @@ import LocationInput from './LocationInput'
 import SmartOfferNudge from './SmartOfferNudge'
 import TripMap from './TripMap'
 
-const SpecialOffersSection = dynamic(() => import('./SpecialOffersSection'), { ssr: false })
-const MobileAppSection = dynamic(() => import('./MobileAppSection'), { ssr: false })
-const MarketingPopup = dynamic(() => import('./MarketingPopup'), { ssr: false })
-
 
 import { calculateBasePrice, calculateSurcharges } from '@/lib/pricing-util';
 

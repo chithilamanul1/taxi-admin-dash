@@ -6,13 +6,8 @@ import Link from 'next/link'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const heroImages = [
-    { src: '/Hero/elephants.jpg', alt: 'Sri Lanka Elephants' },
-    { src: '/Hero/view.jpg', alt: 'Scenic Sri Lanka Coastline' },
-    { src: '/Hero/izanuradapura.jpg', alt: 'Anuradhapura' },
-    { src: '/Hero/monkey.jpg', alt: 'Wildlife' },
-    { src: '/Hero/sigiriya.jpg', alt: 'Sigiriya Lion Rock' },
-    { src: '/Hero/tower.jpg', alt: 'Lotus Tower Colombo' },
-    { src: '/Hero/view.jpg', alt: 'Scenic Views' },
+    { src: '/Hero/sigiriya_illust.jpg', alt: 'Sigiriya Lion Rock Illustration' },
+    { src: '/Hero/mirissa_illust.jpg', alt: 'Mirissa Beach Illustration' },
 ]
 
 const Hero = ({ onBookClick }) => {
