@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const heroImages = [
-    { src: '/Hero/sigiriya_illust.jpg', alt: 'Sigiriya Lion Rock Illustration' },
-    { src: '/Hero/mirissa_illust.jpg', alt: 'Mirissa Beach Illustration' },
+    { src: '/Hero/hero_sigiriya.jpg', alt: 'Airport Taxi Sigiriya Illustration' },
+    { src: '/Hero/hero_mirissa.jpg', alt: 'Airport Taxi Mirissa Illustration' },
 ]
 
 const Hero = ({ onBookClick }) => {

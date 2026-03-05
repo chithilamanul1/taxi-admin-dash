@@ -82,7 +82,7 @@ export default function MobileAppSection() {
                                     <div className="absolute inset-0 transition-opacity duration-1000 opacity-100">
                                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent z-10"></div>
                                         <img
-                                            src="/Hero/sigiriya_illust.jpg"
+                                            src="/Hero/hero_sigiriya.jpg"
                                             alt="App Preview"
                                             className="w-full h-full object-cover opacity-40 animate-pulse"
                                         />
