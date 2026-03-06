@@ -7,8 +7,10 @@ import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const heroImages = [
     { src: '/Hero/katunayake_art.jpg', alt: 'Airport Taxi Katunayake Illustration' },
-    { src: '/Hero/sigiriya_art.jpg', alt: 'Airport Taxi Sigiriya Illustration' },
+    { src: '/Hero/sigiriya_art.jpg', alt: 'Airport Taxi Sigiriya Tours' },
+    { src: '/Hero/arugam_surf.jpg', alt: 'Arugam Bay Surfing Transfers' },
     { src: '/Hero/mirissa_art.jpg', alt: 'Airport Taxi Mirissa Illustration' },
+    { src: '/Hero/sigiriya_tour.jpg', alt: 'Sigiriya Lion Rock Experience' },
 ]
 
 const Hero = ({ onBookClick }) => {
