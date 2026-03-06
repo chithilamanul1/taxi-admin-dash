@@ -16,7 +16,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         if (!name) return false;
         const n = name.toLowerCase();
         // Match specific airport names or CMB code, but NOT just "Airport Road" or cities like "Seeduwa"
-        return (n.includes('bandaranaike') || n.includes('cmb') || (n.includes('airport') && !n.includes('road') && !n.includes('seeduwa') && !n.includes('katunayake city')));
+        return (n.includes('bandaranaike') || n.includes('cmb') || (n.includes('airport')));
     };
 
     const isFromAirport = isAirport(pickup);

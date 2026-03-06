@@ -6,11 +6,10 @@ import Link from 'next/link'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const heroImages = [
-    { src: '/Hero/katunayake_art.jpg', alt: 'Airport Taxi Katunayake Illustration' },
-    { src: '/Hero/sigiriya_art.jpg', alt: 'Airport Taxi Sigiriya Tours' },
-    { src: '/Hero/arugam_surf.jpg', alt: 'Arugam Bay Surfing Transfers' },
-    { src: '/Hero/mirissa_art.jpg', alt: 'Airport Taxi Mirissa Illustration' },
-    { src: '/Hero/sigiriya_tour.jpg', alt: 'Sigiriya Lion Rock Experience' },
+    { src: '/Hero/safari_tour.png', alt: 'Sri Lanka Elephant Safari' },
+    { src: '/Hero/arugam_beach.png', alt: 'Arugam Bay Beach Transfers' },
+    { src: '/Hero/airport_city.jpg', alt: 'Premium Airport Transfers' },
+    { src: '/Hero/island_relax.png', alt: 'Sri Lanka Island Discovery' },
 ]
 
 const Hero = ({ onBookClick }) => {
