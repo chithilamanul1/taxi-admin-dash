@@ -37,15 +37,15 @@ export default async function BookingStatusPage({ params }) {
 
     return (
         <div className="min-h-screen bg-slate-50 pt-32 pb-20 px-4">
-            <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-950/5">
-                <div className="bg-amber-600 p-8 text-center text-white relative overflow-hidden">
-                    <div className="absolute inset-0 bg-slate-950/10 pattern-grid-lg opacity-20"></div>
+            <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-emerald-900/5">
+                <div className="bg-emerald-600 p-8 text-center text-white relative overflow-hidden">
+                    <div className="absolute inset-0 bg-emerald-900/10 pattern-grid-lg opacity-20"></div>
                     <div className="relative z-10">
                         <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm animate-bounce-slow">
                             <CheckCircle size={32} className="text-white" />
                         </div>
                         <h1 className="text-3xl font-black uppercase tracking-tight mb-2">Booking Confirmed!</h1>
-                        <p className="text-amber-100 font-medium text-sm">Reference ID: <span className="font-mono bg-white/10 px-2 py-1 rounded select-all">{booking._id}</span></p>
+                        <p className="text-emerald-100 font-medium text-sm">Reference ID: <span className="font-mono bg-white/10 px-2 py-1 rounded select-all">{booking._id}</span></p>
                     </div>
                 </div>
 
@@ -53,42 +53,42 @@ export default async function BookingStatusPage({ params }) {
                     {/* Status Banner */}
                     {/* Status Banner */}
                     {!booking.driver ? (
-                        <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 flex gap-3 items-start">
-                            <div className="w-5 h-5 bg-amber-100 rounded-full flex items-center justify-center shrink-0 mt-0.5"><div className="w-2 h-2 bg-amber-500 rounded-full"></div></div>
+                        <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex gap-3 items-start">
+                            <div className="w-5 h-5 bg-emerald-100 rounded-full flex items-center justify-center shrink-0 mt-0.5"><div className="w-2 h-2 bg-emerald-500 rounded-full"></div></div>
                             <div>
-                                <p className="text-amber-900 font-bold text-sm">Processing Your Request</p>
-                                <p className="text-amber-700/80 text-xs mt-1">We have received your booking. A professional driver will be assigned shortly. You'll receive a WhatsApp notification once assigned.</p>
+                                <p className="text-emerald-900 font-bold text-sm">Processing Your Request</p>
+                                <p className="text-emerald-700/80 text-xs mt-1">We have received your booking. A professional driver will be assigned shortly. You'll receive a WhatsApp notification once assigned.</p>
                             </div>
                         </div>
                     ) : (
-                        <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 flex gap-3 items-start">
-                            <div className="w-5 h-5 bg-amber-100 rounded-full flex items-center justify-center shrink-0 mt-0.5"><div className="w-2 h-2 bg-amber-500 rounded-full"></div></div>
+                        <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex gap-3 items-start">
+                            <div className="w-5 h-5 bg-emerald-100 rounded-full flex items-center justify-center shrink-0 mt-0.5"><div className="w-2 h-2 bg-emerald-500 rounded-full"></div></div>
                             <div>
-                                <p className="text-slate-950 font-bold text-sm">Driver Assigned & Ready</p>
-                                <p className="text-amber-700/80 text-xs mt-1">Your journey is confirmed. {booking.driver.name} has been assigned to your trip.</p>
+                                <p className="text-emerald-900 font-bold text-sm">Driver Assigned & Ready</p>
+                                <p className="text-emerald-700/80 text-xs mt-1">Your journey is confirmed. {booking.driver.name} has been assigned to your trip.</p>
                             </div>
                         </div>
                     )}
 
                     {/* Driver Profile Section (Premium Look) */}
                     {booking.driver && (
-                        <div className="bg-white border border-slate-950/10 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform"></div>
+                        <div className="bg-white border border-emerald-900/10 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform"></div>
                             <div className="flex items-center gap-5 relative z-10">
-                                <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-amber-700 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg border-2 border-white">
+                                <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg border-2 border-white">
                                     {booking.driver.name?.[0]}
                                 </div>
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2">
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md">Verified Chauffeur</p>
-                                        <div className="flex items-center gap-1 text-amber-500">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Verified Chauffeur</p>
+                                        <div className="flex items-center gap-1 text-emerald-500">
                                             <Star size={10} fill="currentColor" />
                                             <span className="text-[10px] font-bold">{booking.driver.ratings || 5.0}</span>
                                         </div>
                                     </div>
-                                    <h3 className="text-xl font-black text-slate-950 leading-tight">{booking.driver.name}</h3>
+                                    <h3 className="text-xl font-black text-emerald-900 leading-tight">{booking.driver.name}</h3>
                                     <div className="flex items-center gap-3 text-xs text-slate-500 font-bold">
-                                        <span className="flex items-center gap-1"><CheckCircle size={12} className="text-amber-500" /> {booking.driver.totalRides || 0}+ Trips</span>
+                                        <span className="flex items-center gap-1"><CheckCircle size={12} className="text-emerald-500" /> {booking.driver.totalRides || 0}+ Trips</span>
                                         <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
                                         <span>English Speaking</span>
                                     </div>
@@ -97,7 +97,7 @@ export default async function BookingStatusPage({ params }) {
                             <div className="flex flex-col items-center md:items-end gap-3 relative z-10 w-full md:w-auto border-t md:border-t-0 pt-4 md:pt-0 mt-4 md:mt-0">
                                 <div className="flex flex-col items-center md:items-end">
                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Vehicle Plate</p>
-                                    <div className="bg-slate-900 text-white px-4 py-2 rounded-xl font-mono font-bold tracking-tighter text-lg shadow-xl shadow-slate-900/20 border border-slate-800">
+                                    <div className="bg-emerald-900 text-white px-4 py-2 rounded-xl font-mono font-bold tracking-tighter text-lg shadow-xl shadow-emerald-900/20 border border-slate-800">
                                         {booking.driver.vehicleNumber}
                                     </div>
                                 </div>
@@ -105,7 +105,7 @@ export default async function BookingStatusPage({ params }) {
                                     <a href={`tel:${booking.driver.phone}`} className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-slate-100 text-slate-700 p-3 rounded-xl font-bold text-sm hover:bg-slate-200 transition-all">
                                         <Phone size={16} />
                                     </a>
-                                    <a href={`https://wa.me/${booking.driver.phone.replace(/[^0-9]/g, '')}`} target="_blank" className="flex-[3] md:flex-none flex items-center justify-center gap-2 bg-amber-600 text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-amber-700 transition-all shadow-lg shadow-amber-500/20">
+                                    <a href={`https://wa.me/${booking.driver.phone.replace(/[^0-9]/g, '')}`} target="_blank" className="flex-[3] md:flex-none flex items-center justify-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-500/20">
                                         <MessageSquare size={16} />
                                         WhatsApp
                                     </a>
@@ -127,7 +127,7 @@ export default async function BookingStatusPage({ params }) {
                             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest pl-1">Journey Details</h3>
                             <div className="flex items-start gap-3 bg-slate-50 p-4 rounded-2xl">
                                 <div className="flex flex-col items-center gap-1 mt-1">
-                                    <div className="w-2 h-2 rounded-full bg-amber-500"></div>
+                                    <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
                                     <div className="w-0.5 h-8 bg-gray-200"></div>
                                     <div className="w-2 h-2 rounded-full bg-red-500"></div>
                                 </div>
@@ -154,7 +154,7 @@ export default async function BookingStatusPage({ params }) {
                         <div className="space-y-4">
                             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest pl-1">Schedule & Vehicle</h3>
                             <div className="flex items-center gap-3 border-b border-gray-100 pb-3">
-                                <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500"><Calendar size={16} /></div>
+                                <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center text-emerald-500"><Calendar size={16} /></div>
                                 <div>
                                     <p className="text-[10px] font-bold text-gray-400 uppercase">Date</p>
                                     <p className="font-bold text-gray-800 text-sm">{new Date(booking.scheduledDate).toLocaleDateString()}</p>
@@ -168,7 +168,7 @@ export default async function BookingStatusPage({ params }) {
                                 </div>
                             </div>
                             <div className="flex items-center gap-3 border-b border-gray-100 pb-3">
-                                <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-500"><Car size={16} /></div>
+                                <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-500"><Car size={16} /></div>
                                 <div>
                                     <p className="text-[10px] font-bold text-gray-400 uppercase">Vehicle</p>
                                     <p className="font-bold text-gray-800 text-sm uppercase">{booking.vehicleType?.replace('-', ' ') || 'Any'}</p>
@@ -178,9 +178,9 @@ export default async function BookingStatusPage({ params }) {
                     </div>
 
                     {/* Price */}
-                    <div className="bg-slate-900 rounded-2xl p-6 text-white flex justify-between items-center shadow-lg">
+                    <div className="bg-emerald-900 rounded-2xl p-6 text-white flex justify-between items-center shadow-lg">
                         <div>
-                            <p className="text-amber-400 font-bold text-xs uppercase tracking-widest mb-1">Total Amount</p>
+                            <p className="text-emerald-400 font-bold text-xs uppercase tracking-widest mb-1">Total Amount</p>
                             <p className="text-xs text-white/40">{booking.paymentMethod === 'card' ? 'Paid Online' : 'Pay to Driver'}</p>
                         </div>
                         <p className="text-3xl font-black">
@@ -192,7 +192,7 @@ export default async function BookingStatusPage({ params }) {
                     <BookingActions booking={booking} />
 
                     <div className="text-center pt-4 border-t border-gray-100">
-                        <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-amber-600 font-bold text-sm transition-colors group">
+                        <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-emerald-600 font-bold text-sm transition-colors group">
                             Return to Home
                         </Link>
                     </div>

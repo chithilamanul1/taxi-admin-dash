@@ -38,7 +38,7 @@ const MarketingPopup = () => {
 
             <div className="relative pointer-events-auto w-full max-w-sm bg-[#0a0a0a] rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 animate-fade-in-up">
                 {/* Background Decor */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-amber-200/20 blur-[60px] rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-200/20 blur-[60px] rounded-full -translate-y-1/2 translate-x-1/2"></div>
 
                 <button
                     onClick={handleClose}
@@ -49,8 +49,8 @@ const MarketingPopup = () => {
 
                 <div className="p-8 flex flex-col items-center text-center">
                     {/* Icon Box */}
-                    <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mb-6 rotate-3 shadow-lg shadow-amber-900/20">
-                        <span className="text-3xl font-black text-amber-600">%</span>
+                    <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6 rotate-3 shadow-lg shadow-emerald-900/20">
+                        <span className="text-3xl font-black text-emerald-600">%</span>
                     </div>
 
                     <h3 className="text-4xl font-black text-white mb-1">
@@ -62,8 +62,8 @@ const MarketingPopup = () => {
                     </p>
 
                     {/* Coupon Code Box */}
-                    <div className="w-full bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between group hover:border-amber-500/50 transition-all">
-                        <span className="font-mono text-amber-500 font-bold text-lg tracking-wider pl-4">
+                    <div className="w-full bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between group hover:border-emerald-500/50 transition-all">
+                        <span className="font-mono text-emerald-500 font-bold text-lg tracking-wider pl-4">
                             MIRISSA10
                         </span>
                         <button

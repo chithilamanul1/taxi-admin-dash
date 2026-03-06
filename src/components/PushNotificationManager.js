@@ -76,15 +76,15 @@ const PushNotificationManager = () => {
         <div className="p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
             <div className="flex items-center justify-between">
                 <div>
-                    <h3 className="font-bold text-slate-900 dark:text-white text-sm">Booking Alerts</h3>
+                    <h3 className="font-bold text-emerald-900 dark:text-white text-sm">Booking Alerts</h3>
                     <p className="text-xs text-slate-500 dark:text-slate-400">Receive notifications even when app is closed</p>
                 </div>
                 <button
                     onClick={isSubscribed ? () => { } : subscribeToPush}
                     disabled={isSubscribed || loading}
                     className={`px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition-all ${isSubscribed
-                            ? 'bg-amber-100 text-amber-700 cursor-default'
-                            : 'bg-slate-900 text-white hover:bg-slate-800'
+                            ? 'bg-emerald-100 text-emerald-700 cursor-default'
+                            : 'bg-emerald-900 text-white hover:bg-slate-800'
                         }`}
                 >
                     {loading ? <Loader2 size={14} className="animate-spin" /> : (isSubscribed ? <Bell size={14} /> : <BellOff size={14} />)}

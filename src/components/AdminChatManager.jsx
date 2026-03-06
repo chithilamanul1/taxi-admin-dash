@@ -164,12 +164,12 @@ export default function AdminChatManager() {
     })
 
     return (
-        <div className="flex flex-col md:flex-row h-[85vh] md:h-[730px] bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div className="flex flex-col md:flex-row h-[85vh] md:h-[730px] bg-white dark:bg-emerald-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 overflow-hidden">
             {/* Sidebar: Chat List */}
-            <div className={`w-full md:w-80 border-r-0 md:border-r border-slate-200 dark:border-slate-800 flex flex-col bg-slate-50/50 dark:bg-slate-950/20 ${selectedChatId ? 'hidden md:flex' : 'flex'}`}>
+            <div className={`w-full md:w-80 border-r-0 md:border-r border-slate-200 dark:border-slate-800 flex flex-col bg-slate-50/50 dark:bg-emerald-900/20 ${selectedChatId ? 'hidden md:flex' : 'flex'}`}>
                 <div className="p-6 border-b border-slate-200 dark:border-slate-800">
                     <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight mb-4 flex items-center gap-2">
-                        <MessageCircle className="text-amber-500" size={24} /> Live <span className="text-amber-600">Support</span>
+                        <MessageCircle className="text-emerald-500" size={24} /> Live <span className="text-emerald-600">Support</span>
                     </h2>
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
@@ -178,7 +178,7 @@ export default function AdminChatManager() {
                             placeholder="Search chats..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full h-10 bg-white dark:bg-slate-800 pl-10 pr-4 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-amber-500/20 border border-slate-200 dark:border-slate-700"
+                            className="w-full h-10 bg-white dark:bg-slate-800 pl-10 pr-4 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 border border-slate-200 dark:border-slate-700"
                         />
                     </div>
                 </div>
@@ -198,9 +198,9 @@ export default function AdminChatManager() {
                                     console.log('Selecting chat:', activeId);
                                     if (activeId) setSelectedChatId(activeId);
                                 }}
-                                className={`w-full p-4 flex gap-4 transition-all border-b border-slate-100 dark:border-slate-800/50 hover:bg-white dark:hover:bg-slate-800 ${isSelected ? 'bg-white dark:bg-slate-800 shadow-sm border-l-4 border-l-amber-500' : ''}`}
+                                className={`w-full p-4 flex gap-4 transition-all border-b border-slate-100 dark:border-slate-800/50 hover:bg-white dark:hover:bg-slate-800 ${isSelected ? 'bg-white dark:bg-slate-800 shadow-sm border-l-4 border-l-emerald-500' : ''}`}
                             >
-                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${isSelected ? 'bg-amber-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${isSelected ? 'bg-emerald-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
                                     <User size={20} />
                                 </div>
                                 <div className="flex-1 text-left min-w-0">
@@ -224,14 +224,14 @@ export default function AdminChatManager() {
             </div>
 
             {!process.env.NEXT_PUBLIC_PUSHER_KEY && (
-                <div className="absolute inset-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm z-[110] flex items-center justify-center p-8">
+                <div className="absolute inset-0 bg-white/80 dark:bg-emerald-900/80 backdrop-blur-sm z-[110] flex items-center justify-center p-8">
                     <div className="max-w-md bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-700 text-center">
-                        <div className="w-20 h-20 bg-amber-100 dark:bg-amber-900/30 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
-                            <Lock className="text-amber-600 dark:text-amber-400" size={32} />
+                        <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
+                            <Lock className="text-emerald-600 dark:text-emerald-400" size={32} />
                         </div>
                         <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight mb-4">Chat Disconnected</h3>
                         <p className="text-sm text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest leading-loose mb-8">
-                            Please configure <span className="text-amber-600">Pusher API Keys</span> in your <code className="bg-slate-100 dark:bg-slate-950 px-2 py-1 rounded-lg">.env</code> file.
+                            Please configure <span className="text-emerald-600">Pusher API Keys</span> in your <code className="bg-slate-100 dark:bg-emerald-900 px-2 py-1 rounded-lg">.env</code> file.
                         </p>
                         <div className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] border-t border-slate-100 dark:border-slate-800 pt-6">
                             Configuration Required
@@ -241,11 +241,11 @@ export default function AdminChatManager() {
             )}
 
             {/* Main: Chat View */}
-            <div className={`flex-1 flex flex-col bg-white dark:bg-slate-900 ${!selectedChatId ? 'hidden md:flex' : 'flex'}`}>
+            <div className={`flex-1 flex flex-col bg-white dark:bg-emerald-900 ${!selectedChatId ? 'hidden md:flex' : 'flex'}`}>
                 {selectedChatId ? (
                     <>
                         {/* Chat Header */}
-                        <div className="p-4 md:p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-950/20">
+                        <div className="p-4 md:p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-emerald-900/20">
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => setSelectedChatId(null)}
@@ -260,21 +260,21 @@ export default function AdminChatManager() {
                                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">ID: {selectedChatId}</p>
                                 </div>
                             </div>
-                            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-amber-100 dark:bg-slate-950/30 text-amber-600 dark:text-amber-400 rounded-lg text-[10px] font-black uppercase tracking-wider">
-                                <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></div>
+                            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg text-[10px] font-black uppercase tracking-wider">
+                                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
                                 Connected
                             </div>
                         </div>
 
                         {/* Messages Area */}
-                        <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-4 custom-scrollbar bg-slate-50/50 dark:bg-slate-950/20">
+                        <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-4 custom-scrollbar bg-slate-50/50 dark:bg-emerald-900/20">
                             {messages.map((msg) => (
                                 <div
                                     key={msg.id}
                                     className={`flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}`}
                                 >
                                     <div className={`max-w-[70%] p-4 rounded-2xl text-sm shadow-sm ${msg.sender === 'admin'
-                                        ? 'bg-amber-600 text-white rounded-tr-none'
+                                        ? 'bg-emerald-600 text-white rounded-tr-none'
                                         : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-none border border-slate-100 dark:border-slate-700'
                                         }`}>
                                         <p className="font-medium">{msg.text}</p>
@@ -295,12 +295,12 @@ export default function AdminChatManager() {
                                     value={inputText}
                                     onChange={(e) => setInputText(e.target.value)}
                                     placeholder="Type message to relay back..."
-                                    className="flex-1 h-12 md:h-14 bg-slate-100 dark:bg-slate-800 border-none px-4 md:px-6 rounded-2xl outline-none focus:ring-2 focus:ring-amber-500/20 text-xs md:text-sm font-medium pr-14 md:pr-16 shadow-inner transition-all"
+                                    className="flex-1 h-12 md:h-14 bg-slate-100 dark:bg-slate-800 border-none px-4 md:px-6 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500/20 text-xs md:text-sm font-medium pr-14 md:pr-16 shadow-inner transition-all"
                                 />
                                 <button
                                     type="submit"
                                     disabled={loading || !inputText.trim()}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-amber-600 text-white rounded-xl flex items-center justify-center hover:bg-amber-700 transition-colors disabled:opacity-50 shadow-lg shadow-amber-500/20"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center hover:bg-emerald-700 transition-colors disabled:opacity-50 shadow-lg shadow-emerald-500/20"
                                 >
                                     {loading ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
                                 </button>

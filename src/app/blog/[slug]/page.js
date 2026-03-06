@@ -44,7 +44,7 @@ export default async function SinglePostPage({ params }) {
     }
 
     return (
-        <article className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20 transition-colors">
+        <article className="min-h-screen bg-slate-50 dark:bg-emerald-900 pb-20 transition-colors">
             {/* Header with Image */}
             <div className="relative h-[60vh] md:h-[70vh] w-full">
                 <div className="absolute inset-0 bg-black/40 z-10" />
@@ -62,11 +62,11 @@ export default async function SinglePostPage({ params }) {
                     </h1>
                     <div className="flex flex-wrap gap-6 text-white/90 text-sm md:text-base">
                         <div className="flex items-center gap-2">
-                            <Calendar size={18} className="text-amber-600 dark:text-amber-400" />
+                            <Calendar size={18} className="text-emerald-600 dark:text-emerald-400" />
                             {new Date(post.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                         </div>
                         <div className="flex items-center gap-2">
-                            <User size={18} className="text-amber-600 dark:text-amber-400" />
+                            <User size={18} className="text-emerald-600 dark:text-emerald-400" />
                             By {post.author || 'Admin'}
                         </div>
                     </div>
@@ -75,8 +75,8 @@ export default async function SinglePostPage({ params }) {
 
             {/* Content */}
             <div className="container mx-auto px-4 -mt-10 relative z-30">
-                <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 md:p-12 max-w-4xl mx-auto border border-white/10">
-                    <div className="prose prose-lg prose-slate dark:prose-invert max-w-none prose-headings:text-slate-950 dark:prose-headings:text-white prose-a:text-amber-600 dark:prose-a:text-amber-400 prose-img:rounded-xl">
+                <div className="bg-white dark:bg-emerald-900 rounded-2xl shadow-xl p-8 md:p-12 max-w-4xl mx-auto border border-white/10">
+                    <div className="prose prose-lg prose-slate dark:prose-invert max-w-none prose-headings:text-emerald-900 dark:prose-headings:text-white prose-a:text-emerald-600 dark:prose-a:text-emerald-400 prose-img:rounded-xl">
                         <ReactMarkdown>{post.content}</ReactMarkdown>
                     </div>
 
@@ -84,7 +84,7 @@ export default async function SinglePostPage({ params }) {
                     {post.tags && post.tags.length > 0 && (
                         <div className="mt-12 pt-8 border-t border-slate-100 dark:border-white/5 flex flex-wrap gap-2">
                             {post.tags.map(tag => (
-                                <span key={tag} className="bg-slate-100 dark:bg-white/5 text-slate-950 dark:text-amber-400 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2">
+                                <span key={tag} className="bg-slate-100 dark:bg-white/5 text-emerald-900 dark:text-emerald-400 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2">
                                     <Tag size={14} /> {tag}
                                 </span>
                             ))}

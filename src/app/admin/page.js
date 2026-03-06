@@ -396,7 +396,7 @@ export default function AdminDashboard() {
         return [
             { title: 'Total Revenue', value: `LKR ${totalRevenue.toLocaleString()}`, icon: DollarSign, color: 'text-green-500' },
             { title: 'Active Rides', value: activeRides.toString(), icon: Car, color: 'text-blue-500' },
-            { title: 'Online Drivers', value: onlineDrivers.toString(), icon: Users, color: 'text-amber-600' },
+            { title: 'Online Drivers', value: onlineDrivers.toString(), icon: Users, color: 'text-emerald-600' },
             { title: 'Pending Bookings', value: pendingBookings.toString(), icon: Bell, color: 'text-red-500' },
         ]
     }, [bookings, drivers])
@@ -443,7 +443,7 @@ export default function AdminDashboard() {
             )}
 
             {/* Sidebar - Premium Gradient Design */}
-            <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900 text-white transition-all duration-300 ${sidebarOpen && 'md:w-64'} ${!sidebarOpen && 'md:w-20'} w-64 flex flex-col shadow-2xl`}>
+            <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 bg-gradient-to-b from-emerald-900 via-emerald-900 to-emerald-900 text-white transition-all duration-300 ${sidebarOpen && 'md:w-64'} ${!sidebarOpen && 'md:w-20'} w-64 flex flex-col shadow-2xl`}>
                 <button
                     onClick={() => setSidebarOpen(false)}
                     className="md:hidden absolute top-4 right-4 text-white/80 hover:text-white p-2 hover:bg-white/10 rounded-lg transition-all"
@@ -452,41 +452,41 @@ export default function AdminDashboard() {
                 </button>
                 {/* Logo Area with Glass Effect */}
                 <div className="p-5 flex items-center gap-3 border-b border-white/10 bg-white/5 backdrop-blur-sm">
-                    <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/30">
+                    <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
                         <Car size={20} className="text-white" />
                     </div>
                     <div className={`${!sidebarOpen && 'md:hidden'}`}>
                         <h1 className="font-bold text-lg leading-tight">Admin Panel</h1>
-                        <p className="text-[10px] text-amber-300/70 uppercase tracking-widest">Control Center</p>
+                        <p className="text-[10px] text-emerald-300/70 uppercase tracking-widest">Control Center</p>
                     </div>
                 </div>
                 <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-                    <button onClick={() => { setCurrentView('dashboard'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'dashboard' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('dashboard'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'dashboard' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Activity size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Dashboard</span>
                     </button>
-                    <button onClick={() => { setCurrentView('pricing'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'pricing' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('pricing'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'pricing' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <DollarSign size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Pricing</span>
                     </button>
-                    <button onClick={() => { setCurrentView('revenue'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'revenue' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('revenue'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'revenue' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <DollarSign size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Revenue</span>
                     </button>
-                    <button onClick={() => { setCurrentView('rates'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'rates' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('rates'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'rates' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <MapPin size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Destination Rates</span>
                     </button>
-                    <button onClick={() => { setCurrentView('chat'); setSidebarOpen(false); }} className={`relative flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'chat' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('chat'); setSidebarOpen(false); }} className={`relative flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'chat' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <MessageCircle size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Live Chat</span>
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-amber-400 rounded-full animate-pulse"></span>
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
                     </button>
-                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('tour-package'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' && tourCategoryFilter === 'tour-package' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('tour-package'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' && tourCategoryFilter === 'tour-package' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Compass size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Tour Packages</span>
                     </button>
-                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('day-trip'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' && tourCategoryFilter === 'day-trip' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('tours'); setTourCategoryFilter('day-trip'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'tours' && tourCategoryFilter === 'day-trip' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <MapIcon size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Day Trips</span>
                     </button>
@@ -494,7 +494,7 @@ export default function AdminDashboard() {
                         setCurrentView('bookings');
                         setSidebarOpen(false);
                         setUnreadCount(0); // Clear badge when viewing bookings
-                    }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 relative ${currentView === 'bookings' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 relative ${currentView === 'bookings' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Users size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Bookings</span>
                         {unreadCount > 0 && (
@@ -503,39 +503,39 @@ export default function AdminDashboard() {
                             </span>
                         )}
                     </button>
-                    <button onClick={() => { setCurrentView('drivers'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'drivers' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('drivers'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'drivers' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Car size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Drivers</span>
                     </button>
-                    <button onClick={() => { setCurrentView('live-map'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'live-map' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('live-map'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'live-map' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <MapPin size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Live Map</span>
                     </button>
-                    <button onClick={() => { setCurrentView('blog'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'blog' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('blog'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'blog' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <FileText size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Blog</span>
                     </button>
-                    <button onClick={() => { setCurrentView('team'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'team' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('team'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'team' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Users size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Team</span>
                     </button>
-                    <button onClick={() => { setCurrentView('communications'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'communications' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('communications'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'communications' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Mail size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Email</span>
                     </button>
-                    <button onClick={() => { setCurrentView('support'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'support' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('support'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'support' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <LifeBuoy size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Support</span>
                     </button>
-                    <button onClick={() => { setCurrentView('coupons'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'coupons' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('coupons'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'coupons' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Percent size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Coupons</span>
                     </button>
-                    <button onClick={() => { setCurrentView('reviews'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'reviews' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('reviews'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'reviews' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Activity size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Reviews</span>
                     </button>
-                    <button onClick={() => { setCurrentView('invoices'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'invoices' ? 'bg-white text-slate-950 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                    <button onClick={() => { setCurrentView('invoices'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'invoices' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <FileText size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Invoices</span>
                     </button>
@@ -578,9 +578,9 @@ export default function AdminDashboard() {
                                     setNotificationsEnabled(!notificationsEnabled);
                                 }
                             }}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${notificationsEnabled ? 'bg-amber-100 text-amber-700 border border-amber-200' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${notificationsEnabled ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}
                         >
-                            <div className={`w-1.5 h-1.5 rounded-full ${notificationsEnabled ? 'bg-amber-500 animate-pulse' : 'bg-slate-400'}`}></div>
+                            <div className={`w-1.5 h-1.5 rounded-full ${notificationsEnabled ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`}></div>
                             Alerts: {notificationsEnabled ? 'ON' : 'OFF'}
                         </button>
                         <div className="relative">
@@ -601,7 +601,7 @@ export default function AdminDashboard() {
                                 <div className="absolute top-12 right-0 w-80 bg-white rounded-xl shadow-2xl border border-slate-100 z-50 overflow-hidden animate-fade-in-up">
                                     <div className="p-3 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                                         <h3 className="font-bold text-sm text-slate-700">Notifications</h3>
-                                        <button onClick={markAllNotificationsRead} className="text-xs text-amber-600 hover:underline">Mark all read</button>
+                                        <button onClick={markAllNotificationsRead} className="text-xs text-emerald-600 hover:underline">Mark all read</button>
                                     </div>
                                     <div className="max-h-80 overflow-y-auto">
                                         {notifications.length === 0 ? (
@@ -611,10 +611,10 @@ export default function AdminDashboard() {
                                                 <div
                                                     key={notification._id}
                                                     onClick={() => !notification.isRead && markNotificationRead(notification._id)}
-                                                    className={`p-3 border-b border-slate-50 hover:bg-slate-50 transition-colors cursor-pointer ${!notification.isRead ? 'bg-amber-50/50' : ''}`}
+                                                    className={`p-3 border-b border-slate-50 hover:bg-slate-50 transition-colors cursor-pointer ${!notification.isRead ? 'bg-emerald-50/50' : ''}`}
                                                 >
                                                     <div className="flex gap-3">
-                                                        <div className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${!notification.isRead ? 'bg-amber-500' : 'bg-gray-300'}`}></div>
+                                                        <div className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${!notification.isRead ? 'bg-emerald-500' : 'bg-gray-300'}`}></div>
                                                         <div>
                                                             <p className={`text-sm ${!notification.isRead ? 'font-semibold text-slate-800' : 'text-slate-600'}`}>{notification.title}</p>
                                                             <p className="text-xs text-slate-500 mt-1">{notification.message}</p>
@@ -629,7 +629,7 @@ export default function AdminDashboard() {
                             )}
                         </div>
 
-                        <div className="w-10 h-10 overflow-hidden bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-amber-500/30">
+                        <div className="w-10 h-10 overflow-hidden bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-500/30">
                             {session?.user?.image ? (
                                 <img src={session.user.image} alt="Admin" className="w-full h-full object-cover" />
                             ) : (
@@ -658,7 +658,7 @@ export default function AdminDashboard() {
                                     <h2 className="text-3xl font-bold text-slate-800">Dashboard Overview</h2>
                                     <p className="text-slate-500 mt-1">Welcome back! Here's what's happening today.</p>
                                 </div>
-                                <button className="px-4 py-2 bg-amber-600 text-white rounded-xl font-bold hover:bg-amber-700 transition-colors shadow-lg shadow-amber-500/30 flex items-center gap-2">
+                                <button className="px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-500/30 flex items-center gap-2">
                                     <Activity size={16} />
                                     Refresh
                                 </button>
@@ -672,7 +672,7 @@ export default function AdminDashboard() {
                             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                                 <div className="px-8 py-5 border-b border-slate-100 flex items-center justify-between">
                                     <h3 className="text-xl font-bold text-slate-800">Recent Bookings</h3>
-                                    <button onClick={() => setCurrentView('bookings')} className="text-sm text-amber-600 hover:text-amber-700 font-medium">
+                                    <button onClick={() => setCurrentView('bookings')} className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
                                         View All →
                                     </button>
                                 </div>
@@ -697,7 +697,7 @@ export default function AdminDashboard() {
                                             ) : (
                                                 bookings.slice(0, 5).map((booking) => (
                                                     <tr key={booking._id} className="border-b last:border-0 hover:bg-slate-50 transition-colors">
-                                                        <td className="py-4 font-medium text-slate-950">#{booking._id.slice(-6)}</td>
+                                                        <td className="py-4 font-medium text-emerald-900">#{booking._id.slice(-6)}</td>
                                                         <td className="py-4">
                                                             <div className="font-medium">{booking.customerName || 'Guest'}</div>
                                                             <div className="text-xs text-gray-400">{booking.guestPhone}</div>
@@ -765,14 +765,14 @@ export default function AdminDashboard() {
                         <div className="space-y-6">
                             <div className="bg-white rounded-xl shadow-sm p-6">
                                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                                    <h2 className="text-2xl font-bold text-slate-950">Vehicle Pricing & Tiers</h2>
+                                    <h2 className="text-2xl font-bold text-emerald-900">Vehicle Pricing & Tiers</h2>
                                     <div className="flex flex-wrap gap-2">
                                         <button
                                             onClick={() => {
                                                 setEditForm({})
                                                 setEditingVehicle('NEW')
                                             }}
-                                            className="bg-slate-950 text-white px-4 py-2 rounded-lg font-bold hover:bg-slate-950/90 text-sm flex items-center gap-2 shadow-lg shadow-slate-950/20 transition-all hover:scale-105"
+                                            className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
                                         >
                                             <Car size={16} /> Add New Vehicle
                                         </button>
@@ -816,9 +816,9 @@ export default function AdminDashboard() {
                                 </div>
 
                                 {/* Global Discount Configuration */}
-                                <div className="bg-amber-50 rounded-xl p-6 mb-6 border border-slate-950/10">
+                                <div className="bg-emerald-50 rounded-xl p-6 mb-6 border border-emerald-900/10">
                                     <div className="flex items-center justify-between mb-4">
-                                        <h3 className="font-bold text-slate-950 flex items-center gap-2">
+                                        <h3 className="font-bold text-emerald-900 flex items-center gap-2">
                                             <Percent size={18} /> Global Long-Distance Discount
                                         </h3>
                                         <button
@@ -832,47 +832,47 @@ export default function AdminDashboard() {
                                                 if (data.success) alert('Settings saved successfully!');
                                                 else alert('Failed to save settings.');
                                             }}
-                                            className="text-xs bg-slate-950 text-white px-3 py-1.5 rounded-lg hover:bg-slate-950/90 font-bold shadow-md shadow-slate-950/10 transition-all hover:scale-105"
+                                            className="text-xs bg-emerald-900 text-white px-3 py-1.5 rounded-lg hover:bg-emerald-900/90 font-bold shadow-md shadow-emerald-900/10 transition-all hover:scale-105"
                                         >
                                             Save Configuration
                                         </button>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <div>
-                                            <label className="block text-xs font-bold text-slate-950 uppercase tracking-wider mb-1">
+                                            <label className="block text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">
                                                 Distance Threshold (km)
                                             </label>
                                             <input
                                                 type="number"
                                                 value={pricingSettings.longDistanceThreshold}
                                                 onChange={e => setPricingSettings({ ...pricingSettings, longDistanceThreshold: Number(e.target.value) })}
-                                                className="w-full bg-white border border-slate-950/10 rounded-lg px-3 py-2 text-sm font-bold text-slate-950 outline-none focus:ring-2 focus:ring-amber-500/20"
+                                                className="w-full bg-white border border-emerald-900/10 rounded-lg px-3 py-2 text-sm font-bold text-emerald-900 outline-none focus:ring-2 focus:ring-emerald-500/20"
                                             />
-                                            <p className="text-[10px] text-slate-950/60 mt-1">Minimum distance to automatically trigger discount.</p>
+                                            <p className="text-[10px] text-emerald-900/60 mt-1">Minimum distance to automatically trigger discount.</p>
                                         </div>
                                         <div>
-                                            <label className="block text-xs font-bold text-slate-950 uppercase tracking-wider mb-1">
+                                            <label className="block text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">
                                                 Discount Percentage (%)
                                             </label>
                                             <input
                                                 type="number"
                                                 value={pricingSettings.longDistanceDiscountPercentage}
                                                 onChange={e => setPricingSettings({ ...pricingSettings, longDistanceDiscountPercentage: Number(e.target.value) })}
-                                                className="w-full bg-white border border-slate-950/10 rounded-lg px-3 py-2 text-sm font-bold text-slate-950 outline-none focus:ring-2 focus:ring-amber-500/20"
+                                                className="w-full bg-white border border-emerald-900/10 rounded-lg px-3 py-2 text-sm font-bold text-emerald-900 outline-none focus:ring-2 focus:ring-emerald-500/20"
                                             />
-                                            <p className="text-[10px] text-slate-950/60 mt-1">Percentage deducted from the total fare.</p>
+                                            <p className="text-[10px] text-emerald-900/60 mt-1">Percentage deducted from the total fare.</p>
                                         </div>
                                         <div>
-                                            <label className="block text-xs font-bold text-slate-950 uppercase tracking-wider mb-1">
+                                            <label className="block text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">
                                                 Name Board Price (LKR)
                                             </label>
                                             <input
                                                 type="number"
                                                 value={pricingSettings.nameBoardPrice || 2000}
                                                 onChange={e => setPricingSettings({ ...pricingSettings, nameBoardPrice: Number(e.target.value) })}
-                                                className="w-full bg-white border border-slate-950/10 rounded-lg px-3 py-2 text-sm font-bold text-slate-950 outline-none focus:ring-2 focus:ring-amber-500/20"
+                                                className="w-full bg-white border border-emerald-900/10 rounded-lg px-3 py-2 text-sm font-bold text-emerald-900 outline-none focus:ring-2 focus:ring-emerald-500/20"
                                             />
-                                            <p className="text-[10px] text-slate-950/60 mt-1">Fee for airport pickup name sign service.</p>
+                                            <p className="text-[10px] text-emerald-900/60 mt-1">Fee for airport pickup name sign service.</p>
                                         </div>
                                         <div className="flex items-center pt-4">
                                             <label className="flex items-center gap-2 cursor-pointer select-none">
@@ -880,9 +880,9 @@ export default function AdminDashboard() {
                                                     type="checkbox"
                                                     checked={pricingSettings.isActive}
                                                     onChange={e => setPricingSettings({ ...pricingSettings, isActive: e.target.checked })}
-                                                    className="w-5 h-5 text-amber-600 rounded focus:ring-amber-500 border-gray-300 cursor-pointer"
+                                                    className="w-5 h-5 text-emerald-600 rounded focus:ring-emerald-500 border-gray-300 cursor-pointer"
                                                 />
-                                                <span className="text-sm font-medium text-slate-950">Enable Automated Discount</span>
+                                                <span className="text-sm font-medium text-emerald-900">Enable Automated Discount</span>
                                             </label>
                                         </div>
                                     </div>
@@ -898,7 +898,7 @@ export default function AdminDashboard() {
                                         <button
                                             key={cat.id}
                                             onClick={() => setPricingCategory(cat.id)}
-                                            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${pricingCategory === cat.id ? 'bg-slate-950 text-white shadow-sm' : 'text-gray-500 hover:text-slate-950'}`}
+                                            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${pricingCategory === cat.id ? 'bg-emerald-900 text-white shadow-sm' : 'text-gray-500 hover:text-emerald-900'}`}
                                         >
                                             {cat.label}
                                         </button>
@@ -908,14 +908,14 @@ export default function AdminDashboard() {
                                 {editingVehicle === 'NEW' && (
                                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
                                         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fade-in-up">
-                                            <h3 className="text-xl font-bold text-slate-950 mb-4">Add New Vehicle</h3>
+                                            <h3 className="text-xl font-bold text-emerald-900 mb-4">Add New Vehicle</h3>
                                             <div className="space-y-4">
                                                 <div>
                                                     <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Name</label>
                                                     <input
                                                         type="text"
                                                         placeholder="e.g. Luxury Sedan"
-                                                        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-600/20 focus:border-transparent outline-none transition-all"
+                                                        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 focus:border-transparent outline-none transition-all"
                                                         value={editForm.name || ''}
                                                         onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                                                     />
@@ -925,7 +925,7 @@ export default function AdminDashboard() {
                                                     <input
                                                         type="text"
                                                         placeholder="e.g. luxury-sedan"
-                                                        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-600/20 focus:border-transparent outline-none transition-all"
+                                                        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 focus:border-transparent outline-none transition-all"
                                                         value={editForm.vehicleType || ''}
                                                         onChange={(e) => setEditForm({ ...editForm, vehicleType: e.target.value })}
                                                     />
@@ -936,7 +936,7 @@ export default function AdminDashboard() {
                                                         <input
                                                             type="text"
                                                             placeholder="e.g. 3"
-                                                            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-600/20 focus:border-transparent outline-none transition-all"
+                                                            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 focus:border-transparent outline-none transition-all"
                                                             value={editForm.capacity || ''}
                                                             onChange={(e) => setEditForm({ ...editForm, capacity: Number(e.target.value) })}
                                                         />
@@ -946,7 +946,7 @@ export default function AdminDashboard() {
                                                         <input
                                                             type="text"
                                                             placeholder="e.g. 2"
-                                                            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-600/20 focus:border-transparent outline-none transition-all"
+                                                            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 focus:border-transparent outline-none transition-all"
                                                             value={editForm.luggage || ''}
                                                             onChange={(e) => setEditForm({ ...editForm, luggage: Number(e.target.value) })}
                                                         />
@@ -982,7 +982,7 @@ export default function AdminDashboard() {
                                                                 alert(data.error || 'Failed to create');
                                                             }
                                                         }}
-                                                        className="px-6 py-2 bg-slate-950 text-white rounded-lg font-bold hover:bg-slate-950/90"
+                                                        className="px-6 py-2 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-900/90"
                                                     >
                                                         Create {pricingCategory.replace('-', ' ')} Rate
                                                     </button>
@@ -994,14 +994,14 @@ export default function AdminDashboard() {
 
                                 {isLoading ? (
                                     <div className="flex items-center justify-center py-12">
-                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-950"></div>
+                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div>
                                     </div>
                                 ) : (
                                     <div className="space-y-6">
                                         {vehiclePricing.map((vehicle) => (
                                             <div
                                                 key={vehicle._id || vehicle.vehicleType}
-                                                className="border-2 rounded-xl p-6 hover:border-slate-950/20 transition-all"
+                                                className="border-2 rounded-xl p-6 hover:border-emerald-900/20 transition-all"
                                             >
                                                 <div className="flex items-center justify-between mb-4">
                                                     <div className="flex items-center gap-4">
@@ -1014,7 +1014,7 @@ export default function AdminDashboard() {
                                                             />
                                                         </div>
                                                         <div>
-                                                            <h3 className="font-bold text-slate-950 text-lg">{vehicle.name}</h3>
+                                                            <h3 className="font-bold text-emerald-900 text-lg">{vehicle.name}</h3>
                                                             {pricingCategory === 'tours' ? (
                                                                 <p className="text-xs text-gray-400">Tour Package Rate</p>
                                                             ) : (
@@ -1042,7 +1042,7 @@ export default function AdminDashboard() {
                                                                 })
                                                             }
                                                         }}
-                                                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${editingVehicle === vehicle.vehicleType ? 'bg-red-100 text-red-600' : 'bg-amber-600 text-slate-950 hover:bg-amber-600/80'}`}
+                                                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${editingVehicle === vehicle.vehicleType ? 'bg-red-100 text-red-600' : 'bg-emerald-600 text-emerald-900 hover:bg-emerald-600/80'}`}
                                                     >
                                                         {editingVehicle === vehicle.vehicleType ? 'Cancel' : 'Edit Rates'}
                                                     </button>
@@ -1098,14 +1098,14 @@ export default function AdminDashboard() {
 
                                                         <div className="border rounded-xl overflow-hidden mb-6">
                                                             <div className="bg-slate-50 px-4 py-3 border-b border-slate-200 flex justify-between items-center">
-                                                                <h4 className="font-bold text-slate-950">Configured Pricing Tiers</h4>
+                                                                <h4 className="font-bold text-emerald-900">Configured Pricing Tiers</h4>
                                                                 <button
                                                                     onClick={() => {
                                                                         const newTiers = [...(editForm.tiers || [])];
                                                                         newTiers.push({ min: 0, max: 0, type: 'per_km', price: 0, rate: 0 });
                                                                         setEditForm({ ...editForm, tiers: newTiers });
                                                                     }}
-                                                                    className="text-xs bg-slate-950 text-white px-3 py-1.5 rounded-lg hover:bg-slate-950/90 font-bold shadow-md shadow-slate-950/10 transition-all hover:scale-105"
+                                                                    className="text-xs bg-emerald-900 text-white px-3 py-1.5 rounded-lg hover:bg-emerald-900/90 font-bold shadow-md shadow-emerald-900/10 transition-all hover:scale-105"
                                                                 >
                                                                     + Add New Tier
                                                                 </button>
@@ -1115,11 +1115,11 @@ export default function AdminDashboard() {
                                                                 <table className="w-full text-sm">
                                                                     <thead className="bg-slate-50">
                                                                         <tr>
-                                                                            <th className="px-4 py-3 text-left font-semibold text-slate-950 w-24">Min KM</th>
-                                                                            <th className="px-4 py-3 text-left font-semibold text-slate-950 w-24">Max KM</th>
-                                                                            <th className="px-4 py-3 text-left font-semibold text-slate-950 w-32">Type</th>
-                                                                            <th className="px-4 py-3 text-left font-semibold text-slate-950 w-32">Flat (Rs)</th>
-                                                                            <th className="px-4 py-3 text-left font-semibold text-slate-950 w-32">Rate (Rs/km)</th>
+                                                                            <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-24">Min KM</th>
+                                                                            <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-24">Max KM</th>
+                                                                            <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Type</th>
+                                                                            <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Flat (Rs)</th>
+                                                                            <th className="px-4 py-3 text-left font-semibold text-emerald-900 w-32">Rate (Rs/km)</th>
                                                                             <th className="px-4 py-3 w-10"></th>
                                                                         </tr>
                                                                     </thead>
@@ -1131,21 +1131,21 @@ export default function AdminDashboard() {
                                                                                         const newTiers = [...editForm.tiers]
                                                                                         newTiers[idx] = { ...newTiers[idx], min: Number(e.target.value) }
                                                                                         setEditForm({ ...editForm, tiers: newTiers })
-                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-amber-600 outline-none text-center" />
+                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none text-center" />
                                                                                 </td>
                                                                                 <td className="px-2 py-2">
                                                                                     <input type="number" value={tier.max} onChange={(e) => {
                                                                                         const newTiers = [...editForm.tiers]
                                                                                         newTiers[idx] = { ...newTiers[idx], max: Number(e.target.value) }
                                                                                         setEditForm({ ...editForm, tiers: newTiers })
-                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-amber-600 outline-none text-center" />
+                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none text-center" />
                                                                                 </td>
                                                                                 <td className="px-2 py-2">
                                                                                     <select value={tier.type} onChange={(e) => {
                                                                                         const newTiers = [...editForm.tiers]
                                                                                         newTiers[idx] = { ...newTiers[idx], type: e.target.value }
                                                                                         setEditForm({ ...editForm, tiers: newTiers })
-                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-amber-600 outline-none bg-white">
+                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none bg-white">
                                                                                         <option value="flat">Flat</option>
                                                                                         <option value="per_km">Per KM</option>
                                                                                     </select>
@@ -1155,14 +1155,14 @@ export default function AdminDashboard() {
                                                                                         const newTiers = [...editForm.tiers]
                                                                                         newTiers[idx] = { ...newTiers[idx], price: Number(e.target.value) }
                                                                                         setEditForm({ ...editForm, tiers: newTiers })
-                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-amber-600 outline-none disabled:opacity-50 disabled:bg-slate-100 text-right" disabled={tier.type !== 'flat'} />
+                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none disabled:opacity-50 disabled:bg-slate-100 text-right" disabled={tier.type !== 'flat'} />
                                                                                 </td>
                                                                                 <td className="px-2 py-2">
                                                                                     <input type="number" value={tier.rate || 0} onChange={(e) => {
                                                                                         const newTiers = [...editForm.tiers]
                                                                                         newTiers[idx] = { ...newTiers[idx], rate: Number(e.target.value) }
                                                                                         setEditForm({ ...editForm, tiers: newTiers })
-                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-amber-600 outline-none disabled:opacity-50 disabled:bg-slate-100 text-right" disabled={tier.type !== 'per_km'} />
+                                                                                    }} className="w-full px-2 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-emerald-600 outline-none disabled:opacity-50 disabled:bg-slate-100 text-right" disabled={tier.type !== 'per_km'} />
                                                                                 </td>
                                                                                 <td className="px-2 py-2 text-center">
                                                                                     <button onClick={() => {
@@ -1178,9 +1178,9 @@ export default function AdminDashboard() {
                                                         </div>
 
                                                         {/* Waiting Charges Management */}
-                                                        <div className="p-4 bg-amber-50 rounded-xl border border-slate-950/10 space-y-4">
+                                                        <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-900/10 space-y-4">
                                                             <div className="flex items-center justify-between">
-                                                                <h4 className="text-sm font-bold text-slate-950 uppercase tracking-widest flex items-center gap-2">
+                                                                <h4 className="text-sm font-bold text-emerald-900 uppercase tracking-widest flex items-center gap-2">
                                                                     <Clock size={16} /> Tiered Waiting Charges
                                                                 </h4>
                                                                 <button
@@ -1188,17 +1188,17 @@ export default function AdminDashboard() {
                                                                         const current = editForm.waitingCharges || []
                                                                         setEditForm({ ...editForm, waitingCharges: [...current, 1000] })
                                                                     }}
-                                                                    className="text-[10px] bg-white border border-slate-950/10 px-3 py-1 rounded-lg font-bold text-slate-950 hover:bg-amber-100 transition-colors"
+                                                                    className="text-[10px] bg-white border border-emerald-900/10 px-3 py-1 rounded-lg font-bold text-emerald-900 hover:bg-emerald-100 transition-colors"
                                                                 >
                                                                     + Add Hour
                                                                 </button>
                                                             </div>
                                                             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
                                                                 {(editForm.waitingCharges || []).map((charge, idx) => (
-                                                                    <div key={idx} className="bg-white p-2 rounded-lg border border-slate-950/10 relative group">
-                                                                        <label className="block text-[8px] font-bold text-slate-950/40 uppercase mb-1">{idx + 1} Hour{idx > 0 && 's'}</label>
+                                                                    <div key={idx} className="bg-white p-2 rounded-lg border border-emerald-900/10 relative group">
+                                                                        <label className="block text-[8px] font-bold text-emerald-900/40 uppercase mb-1">{idx + 1} Hour{idx > 0 && 's'}</label>
                                                                         <div className="flex items-center gap-1">
-                                                                            <span className="text-[10px] font-bold text-slate-950">Rs</span>
+                                                                            <span className="text-[10px] font-bold text-emerald-900">Rs</span>
                                                                             <input
                                                                                 type="number"
                                                                                 value={charge}
@@ -1207,7 +1207,7 @@ export default function AdminDashboard() {
                                                                                     newCharges[idx] = Number(e.target.value)
                                                                                     setEditForm({ ...editForm, waitingCharges: newCharges })
                                                                                 }}
-                                                                                className="w-full bg-transparent outline-none font-bold text-xs text-slate-950"
+                                                                                className="w-full bg-transparent outline-none font-bold text-xs text-emerald-900"
                                                                             />
                                                                         </div>
                                                                         <button
@@ -1223,7 +1223,7 @@ export default function AdminDashboard() {
                                                                 ))}
                                                             </div>
                                                             {(!editForm.waitingCharges || editForm.waitingCharges.length === 0) && (
-                                                                <p className="text-[10px] text-slate-950/40 italic">No custom waiting charges defined. Will use default hourly rate.</p>
+                                                                <p className="text-[10px] text-emerald-900/40 italic">No custom waiting charges defined. Will use default hourly rate.</p>
                                                             )}
                                                         </div>
 
@@ -1300,7 +1300,7 @@ export default function AdminDashboard() {
                                                                         alert('Error: ' + (err.error || 'Failed to save'));
                                                                     }
                                                                 }}
-                                                                className="text-sm bg-slate-950 text-white px-6 py-2 rounded-lg hover:bg-slate-950/90 font-bold shadow-lg shadow-slate-950/20 transition-all hover:scale-105"
+                                                                className="text-sm bg-emerald-900 text-white px-6 py-2 rounded-lg hover:bg-emerald-900/90 font-bold shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
                                                             >
                                                                 Save {pricingCategory.replace('-', ' ')} Rates
                                                             </button>
@@ -1325,7 +1325,7 @@ export default function AdminDashboard() {
                                                                                 {tier.type === 'flat' ? 'Flat Rate' : 'Per KM'}
                                                                             </span>
                                                                         </td>
-                                                                        <td className="px-4 py-2 text-right font-bold text-slate-950 bg-white">
+                                                                        <td className="px-4 py-2 text-right font-bold text-emerald-900 bg-white">
                                                                             {tier.type === 'flat' ? `LKR ${tier.price?.toLocaleString()}` : `LKR ${tier.rate}/km`}
                                                                         </td>
                                                                     </tr>
@@ -1343,16 +1343,16 @@ export default function AdminDashboard() {
                                 <div className="mt-12 bg-slate-50 rounded-2xl p-8 border-2 border-dashed border-slate-200">
                                     <div className="flex items-center justify-between mb-8">
                                         <div>
-                                            <h3 className="text-xl font-bold text-slate-950 flex items-center gap-2">
-                                                <LinkIcon size={20} className="text-amber-600" /> Shareable Flat Rate Links
+                                            <h3 className="text-xl font-bold text-emerald-900 flex items-center gap-2">
+                                                <LinkIcon size={20} className="text-emerald-600" /> Shareable Flat Rate Links
                                             </h3>
                                             <p className="text-slate-500 text-sm mt-1">Direct payment links for marketing and manual sharing.</p>
                                         </div>
                                     </div>
 
                                     {/* Quick Link Generator Form */}
-                                    <div className="mb-12 bg-white p-6 rounded-2xl border border-slate-950/10 shadow-sm">
-                                        <h4 className="text-sm font-bold text-slate-950 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <div className="mb-12 bg-white p-6 rounded-2xl border border-emerald-900/10 shadow-sm">
+                                        <h4 className="text-sm font-bold text-emerald-900 uppercase tracking-widest mb-4 flex items-center gap-2">
                                             <Plus size={16} /> Quick Link Generator
                                         </h4>
                                         <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
@@ -1363,7 +1363,7 @@ export default function AdminDashboard() {
                                                     placeholder="e.g. Airport to Galle"
                                                     value={newQuickLink.title}
                                                     onChange={(e) => setNewQuickLink({ ...newQuickLink, title: e.target.value })}
-                                                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-amber-600/20"
+                                                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20"
                                                 />
                                             </div>
                                             <div>
@@ -1371,7 +1371,7 @@ export default function AdminDashboard() {
                                                 <select
                                                     value={newQuickLink.currency || 'USD'}
                                                     onChange={(e) => setNewQuickLink({ ...newQuickLink, currency: e.target.value })}
-                                                    className="w-full px-4 py-[9px] bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-amber-600/20 font-bold"
+                                                    className="w-full px-4 py-[9px] bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20 font-bold"
                                                 >
                                                     <option value="USD">USD ($)</option>
                                                     <option value="GBP">GBP (£)</option>
@@ -1387,7 +1387,7 @@ export default function AdminDashboard() {
                                                     placeholder="59"
                                                     value={newQuickLink.price}
                                                     onChange={(e) => setNewQuickLink({ ...newQuickLink, price: e.target.value })}
-                                                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-amber-600/20 font-bold"
+                                                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20 font-bold"
                                                 />
                                             </div>
                                             <div>
@@ -1397,14 +1397,14 @@ export default function AdminDashboard() {
                                                     placeholder="airport-to-galle"
                                                     value={newQuickLink.slug}
                                                     onChange={(e) => setNewQuickLink({ ...newQuickLink, slug: e.target.value })}
-                                                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-amber-600/20"
+                                                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-600/20"
                                                 />
                                             </div>
                                             {/* Payment Mode Removed */}
                                             <button
                                                 onClick={handleSaveQuickLink}
                                                 disabled={isSavingQuickLink}
-                                                className="bg-slate-950 text-white h-[42px] px-6 rounded-xl font-bold text-sm hover:bg-amber-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 md:col-span-5"
+                                                className="bg-emerald-900 text-white h-[42px] px-6 rounded-xl font-bold text-sm hover:bg-emerald-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50 md:col-span-5"
                                             >
                                                 {isSavingQuickLink ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
                                                 Create Dynamic Link
@@ -1415,14 +1415,14 @@ export default function AdminDashboard() {
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                         {/* Dynamic Links from DB */}
                                         {quickLinks.map((rate) => (
-                                            <div key={rate._id} className="bg-slate-950 text-white p-6 rounded-2xl shadow-lg border border-amber-800 flex flex-col justify-between group hover:-translate-y-1 transition-all relative overflow-hidden">
+                                            <div key={rate._id} className="bg-emerald-900 text-white p-6 rounded-2xl shadow-lg border border-emerald-800 flex flex-col justify-between group hover:-translate-y-1 transition-all relative overflow-hidden">
                                                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/5 rounded-full blur-2xl"></div>
                                                 <div>
                                                     <div className="flex items-start justify-between mb-4">
                                                         <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-white font-black">
                                                             {rate.title.split(' ').pop().charAt(0)}
                                                         </div>
-                                                        <span className="text-[10px] font-bold text-amber-400 border border-amber-400/30 px-3 py-1 rounded-full uppercase tracking-widest">{rate.badge}</span>
+                                                        <span className="text-[10px] font-bold text-emerald-400 border border-emerald-400/30 px-3 py-1 rounded-full uppercase tracking-widest">{rate.badge}</span>
                                                     </div>
                                                     <h4 className="font-bold text-white mb-1">{rate.title}</h4>
                                                     <p className="text-2xl font-black text-white mb-4">
@@ -1438,14 +1438,14 @@ export default function AdminDashboard() {
                                                             navigator.clipboard.writeText(url);
                                                             alert('Link copied to clipboard!');
                                                         }}
-                                                        className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white text-slate-950 rounded-xl font-bold text-xs hover:bg-amber-50 transition-all"
+                                                        className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white text-emerald-900 rounded-xl font-bold text-xs hover:bg-emerald-50 transition-all"
                                                     >
                                                         <Copy size={14} /> Copy Link
                                                     </button>
                                                     <Link
                                                         href={`/checkout/${rate.slug}`}
                                                         target="_blank"
-                                                        className="w-10 h-10 flex items-center justify-center bg-white/10 text-white rounded-xl hover:bg-white hover:text-slate-950 transition-all"
+                                                        className="w-10 h-10 flex items-center justify-center bg-white/10 text-white rounded-xl hover:bg-white hover:text-emerald-900 transition-all"
                                                         title="Preview"
                                                     >
                                                         <ExternalLink size={16} />
@@ -1461,7 +1461,7 @@ export default function AdminDashboard() {
                                                 <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between gap-2">
                                                     <div className="flex flex-col">
                                                         <span className="text-[9px] text-white/40 uppercase font-bold tracking-tighter">SLUG: {rate.slug}</span>
-                                                        <span className="text-[9px] text-amber-400 font-bold uppercase">{rate.currency || 'USD'}</span>
+                                                        <span className="text-[9px] text-emerald-400 font-bold uppercase">{rate.currency || 'USD'}</span>
                                                     </div>
                                                     {/* Payment Mode Display Removed */}
                                                 </div>
@@ -1473,13 +1473,13 @@ export default function AdminDashboard() {
                                             <div key={rate.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-md transition-all">
                                                 <div>
                                                     <div className="flex items-start justify-between mb-4">
-                                                        <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600 font-black">
+                                                        <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 font-black">
                                                             {rate.title.split(' ').pop().charAt(0)}
                                                         </div>
-                                                        <span className="text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full">{rate.badge}</span>
+                                                        <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">{rate.badge}</span>
                                                     </div>
                                                     <h4 className="font-bold text-slate-800 mb-1">{rate.title}</h4>
-                                                    <p className="text-2xl font-black text-slate-950 mb-4">${rate.price}</p>
+                                                    <p className="text-2xl font-black text-emerald-900 mb-4">${rate.price}</p>
                                                 </div>
 
                                                 <div className="flex gap-2">
@@ -1489,14 +1489,14 @@ export default function AdminDashboard() {
                                                             navigator.clipboard.writeText(url);
                                                             alert('Link copied to clipboard!');
                                                         }}
-                                                        className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-slate-950 text-white rounded-xl font-bold text-xs hover:bg-amber-800 transition-all"
+                                                        className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-900 text-white rounded-xl font-bold text-xs hover:bg-emerald-800 transition-all"
                                                     >
                                                         <Copy size={14} /> Copy Link
                                                     </button>
                                                     <Link
                                                         href={`/checkout/${rate.id}`}
                                                         target="_blank"
-                                                        className="w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-400 rounded-xl hover:bg-amber-50 hover:text-amber-600 transition-all"
+                                                        className="w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-400 rounded-xl hover:bg-emerald-50 hover:text-emerald-600 transition-all"
                                                         title="Preview Link"
                                                     >
                                                         <ExternalLink size={16} />
@@ -1514,12 +1514,12 @@ export default function AdminDashboard() {
                         <div className="space-y-6">
                             <div className="bg-white rounded-xl shadow-sm p-6">
                                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                                    <h2 className="text-2xl font-bold text-slate-950">Manage Tour Packages</h2>
+                                    <h2 className="text-2xl font-bold text-emerald-900">Manage Tour Packages</h2>
                                     <div className="flex items-center gap-2">
                                         <select
                                             value={tourCategoryFilter}
                                             onChange={(e) => setTourCategoryFilter(e.target.value)}
-                                            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-600/20"
+                                            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
                                         >
                                             <option value="All">All Categories</option>
                                             <option value="day-trip">Day Trips</option>
@@ -1542,7 +1542,7 @@ export default function AdminDashboard() {
                                                 })
                                                 setEditingTour('NEW')
                                             }}
-                                            className="bg-slate-950 text-white px-4 py-2 rounded-lg font-bold hover:bg-slate-950/90 text-sm flex items-center gap-2 shadow-lg shadow-slate-950/20 transition-all hover:scale-105"
+                                            className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
                                         >
                                             <Compass size={16} /> Add New Tour
                                         </button>
@@ -1550,7 +1550,7 @@ export default function AdminDashboard() {
                                 </div>
 
                                 {isLoading ? (
-                                    <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-950"></div></div>
+                                    <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div></div>
                                 ) : (
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                         {tours
@@ -1564,12 +1564,12 @@ export default function AdminDashboard() {
                                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                             onError={(e) => e.target.src = 'https://placehold.co/600x400?text=No+Image'}
                                                         />
-                                                        <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded text-xs font-bold text-slate-950 shadow">
+                                                        <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded text-xs font-bold text-emerald-900 shadow">
                                                             {tour.category}
                                                         </div>
                                                     </div>
                                                     <div className="p-4">
-                                                        <h3 className="font-bold text-slate-950 text-lg mb-1">{tour.title}</h3>
+                                                        <h3 className="font-bold text-emerald-900 text-lg mb-1">{tour.title}</h3>
                                                         <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
                                                             <span className="flex items-center gap-1"><Clock size={12} /> {typeof tour.duration === 'object' ? `${tour.duration.days}D / ${tour.duration.nights}N` : tour.duration}</span>
                                                             <span className="flex items-center gap-1"><DollarSign size={12} /> {tour.price ? `From ${(typeof tour.price === 'object' ? tour.price.currency : '$')}${typeof tour.price === 'object' ? tour.price.amount : tour.price}` : 'Contact for price'}</span>
@@ -1580,7 +1580,7 @@ export default function AdminDashboard() {
                                                                     setTourForm(tour)
                                                                     setEditingTour(tour._id)
                                                                 }}
-                                                                className="px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg text-xs font-bold hover:bg-amber-100"
+                                                                className="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-bold hover:bg-emerald-100"
                                                             >
                                                                 Edit
                                                             </button>
@@ -1608,7 +1608,7 @@ export default function AdminDashboard() {
                                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
                                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 animate-fade-in-up">
                                         <div className="flex justify-between items-center mb-6 border-b pb-4">
-                                            <h3 className="text-xl font-bold text-slate-950">{editingTour === 'NEW' ? 'Create New Tour' : 'Edit Tour'}</h3>
+                                            <h3 className="text-xl font-bold text-emerald-900">{editingTour === 'NEW' ? 'Create New Tour' : 'Edit Tour'}</h3>
                                             <button onClick={() => setEditingTour(null)} className="text-gray-400 hover:text-gray-600"><X size={24} /></button>
                                         </div>
 
@@ -1617,7 +1617,7 @@ export default function AdminDashboard() {
                                                 <div>
                                                     <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
                                                     <input
-                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none"
+                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
                                                         value={tourForm.title || ''}
                                                         onChange={e => setTourForm({ ...tourForm, title: e.target.value })}
                                                     />
@@ -1626,7 +1626,7 @@ export default function AdminDashboard() {
                                                     <div>
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                                                         <select
-                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none bg-white"
+                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none bg-white"
                                                             value={tourForm.category || 'day-trip'}
                                                             onChange={e => setTourForm({ ...tourForm, category: e.target.value })}
                                                         >
@@ -1639,7 +1639,7 @@ export default function AdminDashboard() {
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Duration (Nights)</label>
                                                         <input
                                                             type="number"
-                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none"
+                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
                                                             placeholder="0"
                                                             value={tourForm.nights || ''}
                                                             onChange={e => setTourForm({ ...tourForm, nights: e.target.value })}
@@ -1649,7 +1649,7 @@ export default function AdminDashboard() {
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Duration (Days)</label>
                                                         <input
                                                             type="number"
-                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none"
+                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
                                                             placeholder="1"
                                                             value={tourForm.days || ''}
                                                             onChange={e => setTourForm({ ...tourForm, days: e.target.value })}
@@ -1661,7 +1661,7 @@ export default function AdminDashboard() {
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Price (USD)</label>
                                                         <input
                                                             type="number"
-                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none"
+                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
                                                             value={tourForm.priceAmount || tourForm.price?.amount || ''}
                                                             onChange={e => setTourForm({ ...tourForm, priceAmount: e.target.value })}
                                                         />
@@ -1669,7 +1669,7 @@ export default function AdminDashboard() {
                                                     <div>
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Price Type</label>
                                                         <input
-                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none"
+                                                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
                                                             placeholder="per person / group"
                                                             value={tourForm.priceType || ''}
                                                             onChange={e => setTourForm({ ...tourForm, priceType: e.target.value })}
@@ -1679,7 +1679,7 @@ export default function AdminDashboard() {
                                                 <div>
                                                     <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                                                     <textarea
-                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none h-32"
+                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none h-32"
                                                         value={tourForm.description || ''}
                                                         onChange={e => setTourForm({ ...tourForm, description: e.target.value })}
                                                     />
@@ -1719,7 +1719,7 @@ export default function AdminDashboard() {
                                                 <div>
                                                     <label className="block text-sm font-medium text-gray-700 mb-1">Destinations (comma separated)</label>
                                                     <textarea
-                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none h-20"
+                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none h-20"
                                                         value={Array.isArray(tourForm.destinations) ? tourForm.destinations.join(', ') : tourForm.destinations || ''}
                                                         onChange={e => setTourForm({ ...tourForm, destinations: e.target.value.split(',').map(s => s.trim()) })}
                                                         placeholder="Kandy, Nuwara Eliya, Ella"
@@ -1728,7 +1728,7 @@ export default function AdminDashboard() {
                                                 <div>
                                                     <label className="block text-sm font-medium text-gray-700 mb-1">Highlights (comma separated)</label>
                                                     <textarea
-                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none h-20"
+                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none h-20"
                                                         value={Array.isArray(tourForm.highlights) ? tourForm.highlights.join(', ') : tourForm.highlights || ''}
                                                         onChange={e => setTourForm({ ...tourForm, highlights: e.target.value.split(',').map(s => s.trim()) })}
                                                         placeholder="Temple of Tooth, Tea Factory, Nine Arch Bridge"
@@ -1788,7 +1788,7 @@ export default function AdminDashboard() {
                                                         alert('An error occurred while saving the tour.');
                                                     }
                                                 }}
-                                                className="px-6 py-2 bg-slate-950 text-white rounded-lg font-bold hover:bg-slate-950/90 shadow-lg"
+                                                className="px-6 py-2 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-900/90 shadow-lg"
                                             >
                                                 Save Tour
                                             </button>
@@ -1803,13 +1803,13 @@ export default function AdminDashboard() {
                         <div className="space-y-6">
                             <div className="bg-white rounded-xl shadow-sm p-6">
                                 <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-2xl font-bold text-slate-950">Blog Posts</h2>
+                                    <h2 className="text-2xl font-bold text-emerald-900">Blog Posts</h2>
                                     <button
                                         onClick={() => {
                                             setPostForm({})
                                             setEditingPost('NEW')
                                         }}
-                                        className="bg-slate-950 text-white px-4 py-2 rounded-lg font-bold hover:bg-slate-950/90 text-sm flex items-center gap-2 shadow-lg shadow-slate-950/20 transition-all hover:scale-105"
+                                        className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
                                     >
                                         <FileText size={16} /> Add New Post
                                     </button>
@@ -1817,7 +1817,7 @@ export default function AdminDashboard() {
 
                                 {/* Post List */}
                                 {isLoading ? (
-                                    <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-950"></div></div>
+                                    <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div></div>
                                 ) : (
                                     <div className="overflow-x-auto">
                                         <table className="w-full text-sm">
@@ -1833,7 +1833,7 @@ export default function AdminDashboard() {
                                             <tbody>
                                                 {blogPosts.map(post => (
                                                     <tr key={post._id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                                                        <td className="px-4 py-3 font-medium text-slate-950">{post.title}</td>
+                                                        <td className="px-4 py-3 font-medium text-emerald-900">{post.title}</td>
                                                         <td className="px-4 py-3 text-gray-500">{post.slug}</td>
                                                         <td className="px-4 py-3">
                                                             <span className={`px-2 py-1 rounded text-xs font-bold ${post.isPublished ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
@@ -1847,7 +1847,7 @@ export default function AdminDashboard() {
                                                                     setPostForm(post)
                                                                     setEditingPost(post._id)
                                                                 }}
-                                                                className="text-slate-950 hover:text-amber-600 font-medium"
+                                                                className="text-emerald-900 hover:text-emerald-600 font-medium"
                                                             >
                                                                 Edit
                                                             </button>
@@ -1868,7 +1868,7 @@ export default function AdminDashboard() {
                                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
                                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-6 h-[90vh] overflow-y-auto animate-fade-in-up">
                                         <div className="flex justify-between items-center mb-6">
-                                            <h3 className="text-xl font-bold text-slate-950">{editingPost === 'NEW' ? 'Create New Post' : 'Edit Post'}</h3>
+                                            <h3 className="text-xl font-bold text-emerald-900">{editingPost === 'NEW' ? 'Create New Post' : 'Edit Post'}</h3>
                                             <button onClick={() => setEditingPost(null)} className="text-gray-400 hover:text-gray-600"><X size={24} /></button>
                                         </div>
 
@@ -1879,7 +1879,7 @@ export default function AdminDashboard() {
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
                                                         <input
                                                             type="text"
-                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none"
+                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
                                                             value={postForm.title || ''}
                                                             onChange={(e) => setPostForm({ ...postForm, title: e.target.value })}
                                                             placeholder="Post Title"
@@ -1889,7 +1889,7 @@ export default function AdminDashboard() {
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Slug (auto-generated if empty)</label>
                                                         <input
                                                             type="text"
-                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none"
+                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none"
                                                             value={postForm.slug || ''}
                                                             onChange={(e) => setPostForm({ ...postForm, slug: e.target.value })}
                                                             placeholder="post-url-slug"
@@ -1898,7 +1898,7 @@ export default function AdminDashboard() {
                                                     <div>
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Content (HTML allowed)</label>
                                                         <textarea
-                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none h-64 font-mono text-sm"
+                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none h-64 font-mono text-sm"
                                                             value={postForm.content || ''}
                                                             onChange={(e) => setPostForm({ ...postForm, content: e.target.value })}
                                                             placeholder="<p>Write your content here...</p>"
@@ -1910,7 +1910,7 @@ export default function AdminDashboard() {
                                                     <div>
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                                                         <select
-                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none bg-white"
+                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none bg-white"
                                                             value={postForm.isPublished ? 'true' : 'false'}
                                                             onChange={(e) => setPostForm({ ...postForm, isPublished: e.target.value === 'true' })}
                                                         >
@@ -1957,7 +1957,7 @@ export default function AdminDashboard() {
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">SEO Title</label>
                                                         <input
                                                             type="text"
-                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none text-sm"
+                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
                                                             value={postForm.seo?.metaTitle || ''}
                                                             onChange={(e) => setPostForm({ ...postForm, seo: { ...postForm.seo, metaTitle: e.target.value } })}
                                                         />
@@ -1965,7 +1965,7 @@ export default function AdminDashboard() {
                                                     <div>
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
                                                         <textarea
-                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none text-sm h-24"
+                                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm h-24"
                                                             value={postForm.seo?.metaDescription || ''}
                                                             onChange={(e) => setPostForm({ ...postForm, seo: { ...postForm.seo, metaDescription: e.target.value } })}
                                                         />
@@ -2001,7 +2001,7 @@ export default function AdminDashboard() {
                                                             alert('Error: ' + data.error)
                                                         }
                                                     }}
-                                                    className="px-6 py-2 bg-slate-950 text-white rounded-lg font-bold hover:bg-slate-950/90 shadow-lg shadow-slate-950/20 transition-all hover:scale-105"
+                                                    className="px-6 py-2 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-900/90 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
                                                 >
                                                     {editingPost === 'NEW' ? 'Create Post' : 'Update Post'}
                                                 </button>
@@ -2017,20 +2017,20 @@ export default function AdminDashboard() {
                         <div className="space-y-6">
                             <div className="bg-white rounded-xl shadow-sm p-6">
                                 <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-2xl font-bold text-slate-950">Team Management</h2>
+                                    <h2 className="text-2xl font-bold text-emerald-900">Team Management</h2>
                                     <button
                                         onClick={() => {
                                             setTeamForm({ permissions: [] })
                                             setEditingTeam('NEW')
                                         }}
-                                        className="bg-slate-950 text-white px-4 py-2 rounded-lg font-bold hover:bg-slate-950/90 text-sm flex items-center gap-2 shadow-lg shadow-slate-950/20 transition-all hover:scale-105"
+                                        className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
                                     >
                                         <Users size={16} /> Add New Admin
                                     </button>
                                 </div>
 
                                 {isLoading ? (
-                                    <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-950"></div></div>
+                                    <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div></div>
                                 ) : (
                                     <div className="overflow-x-auto">
                                         <table className="w-full text-sm">
@@ -2046,7 +2046,7 @@ export default function AdminDashboard() {
                                             <tbody>
                                                 {teamMembers.map(member => (
                                                     <tr key={member._id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                                                        <td className="px-4 py-3 font-medium text-slate-950">{member.name}</td>
+                                                        <td className="px-4 py-3 font-medium text-emerald-900">{member.name}</td>
                                                         <td className="px-4 py-3 text-gray-500">{member.email}</td>
                                                         <td className="px-4 py-3 capitalize">{member.role}</td>
                                                         <td className="px-4 py-3">
@@ -2058,7 +2058,7 @@ export default function AdminDashboard() {
                                                             </div>
                                                         </td>
                                                         <td className="px-4 py-3 text-right">
-                                                            <button className="text-gray-400 hover:text-slate-950" title="Edit Permissions not implemented yet">•••</button>
+                                                            <button className="text-gray-400 hover:text-emerald-900" title="Edit Permissions not implemented yet">•••</button>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -2072,13 +2072,13 @@ export default function AdminDashboard() {
                             {editingTeam && (
                                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
                                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fade-in-up">
-                                        <h3 className="text-xl font-bold text-slate-950 mb-4">Add New Admin</h3>
+                                        <h3 className="text-xl font-bold text-emerald-900 mb-4">Add New Admin</h3>
                                         <div className="space-y-4">
                                             <div>
                                                 <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
                                                 <input
                                                     type="text"
-                                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-600/20"
+                                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
                                                     value={teamForm.name || ''}
                                                     onChange={(e) => setTeamForm({ ...teamForm, name: e.target.value })}
                                                 />
@@ -2087,7 +2087,7 @@ export default function AdminDashboard() {
                                                 <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                                                 <input
                                                     type="email"
-                                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-600/20"
+                                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
                                                     value={teamForm.email || ''}
                                                     onChange={(e) => setTeamForm({ ...teamForm, email: e.target.value })}
                                                 />
@@ -2096,7 +2096,7 @@ export default function AdminDashboard() {
                                                 <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                                                 <input
                                                     type="password"
-                                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-600/20"
+                                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
                                                     value={teamForm.password || ''}
                                                     onChange={(e) => setTeamForm({ ...teamForm, password: e.target.value })}
                                                 />
@@ -2117,9 +2117,9 @@ export default function AdminDashboard() {
                                                                         setTeamForm({ ...teamForm, permissions: [...current, perm] })
                                                                     }
                                                                 }}
-                                                                className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${isChecked ? 'bg-amber-50 border-amber-500' : 'bg-white border-slate-200 hover:border-amber-200'}`}
+                                                                className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${isChecked ? 'bg-emerald-50 border-emerald-500' : 'bg-white border-slate-200 hover:border-emerald-200'}`}
                                                             >
-                                                                <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-amber-600 border-amber-600' : 'bg-white border-slate-300'}`}>
+                                                                <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-emerald-600 border-emerald-600' : 'bg-white border-slate-300'}`}>
                                                                     {isChecked && <Check size={12} className="text-white" />}
                                                                 </div>
                                                                 <span className="capitalize text-sm font-medium text-slate-700">{perm.replace('_', ' ')}</span>
@@ -2153,7 +2153,7 @@ export default function AdminDashboard() {
                                                             alert(data.error)
                                                         }
                                                     }}
-                                                    className="px-6 py-2 bg-slate-950 text-white rounded-lg font-bold hover:bg-slate-950/90"
+                                                    className="px-6 py-2 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-900/90"
                                                 >
                                                     Create User
                                                 </button>
@@ -2169,8 +2169,8 @@ export default function AdminDashboard() {
                         <div className="bg-white rounded-xl shadow-sm p-6">
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                                 <div className="flex items-center gap-4">
-                                    <h2 className="text-2xl font-bold text-slate-950">All Bookings</h2>
-                                    <span className="text-xs font-bold text-amber-700 bg-amber-100 px-3 py-1 rounded-full">{filteredBookings.length} total</span>
+                                    <h2 className="text-2xl font-bold text-emerald-900">All Bookings</h2>
+                                    <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">{filteredBookings.length} total</span>
                                 </div>
                                 <div className="flex items-center gap-3 w-full sm:w-auto">
                                     <div className="relative w-full sm:w-80">
@@ -2179,7 +2179,7 @@ export default function AdminDashboard() {
                                             placeholder="Search by ID, Name, Phone..."
                                             value={bookingSearch}
                                             onChange={(e) => setBookingSearch(e.target.value)}
-                                            className="w-full sm:w-80 pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-600/20 shadow-sm"
+                                            className="w-full sm:w-80 pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600/20 shadow-sm"
                                         />
                                         <div className="absolute left-3 top-2.5 text-gray-400">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -2187,7 +2187,7 @@ export default function AdminDashboard() {
                                     </div>
                                     <button
                                         onClick={() => setShowManualBooking(true)}
-                                        className="bg-amber-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-amber-700 text-sm flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all whitespace-nowrap"
+                                        className="bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-700 text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all whitespace-nowrap"
                                     >
                                         <Plus size={16} /> Manual Booking
                                     </button>
@@ -2199,7 +2199,7 @@ export default function AdminDashboard() {
                                 <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
                                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-6 animate-fade-in-up overflow-y-auto max-h-[90vh]">
                                         <div className="flex items-center justify-between mb-6 border-b pb-4">
-                                            <h3 className="text-xl font-bold text-slate-950">Add Manual / Offline Trip</h3>
+                                            <h3 className="text-xl font-bold text-emerald-900">Add Manual / Offline Trip</h3>
                                             <button onClick={() => setShowManualBooking(false)} className="text-gray-400 hover:text-gray-600">
                                                 <X size={24} />
                                             </button>
@@ -2214,7 +2214,7 @@ export default function AdminDashboard() {
                                                             type="radio"
                                                             checked={manualBookingForm.type === 'transfer'}
                                                             onChange={() => setManualBookingForm({ ...manualBookingForm, type: 'transfer' })}
-                                                            className="text-amber-600 focus:ring-amber-500"
+                                                            className="text-emerald-600 focus:ring-emerald-500"
                                                         />
                                                         <span className="text-sm font-medium">Taxi Transfer</span>
                                                     </label>
@@ -2223,7 +2223,7 @@ export default function AdminDashboard() {
                                                             type="radio"
                                                             checked={manualBookingForm.type === 'day-trip'}
                                                             onChange={() => setManualBookingForm({ ...manualBookingForm, type: 'day-trip' })}
-                                                            className="text-amber-600 focus:ring-amber-500"
+                                                            className="text-emerald-600 focus:ring-emerald-500"
                                                         />
                                                         <span className="text-sm font-medium">Day Trip</span>
                                                     </label>
@@ -2232,7 +2232,7 @@ export default function AdminDashboard() {
                                                             type="radio"
                                                             checked={manualBookingForm.type === 'tour'}
                                                             onChange={() => setManualBookingForm({ ...manualBookingForm, type: 'tour' })}
-                                                            className="text-amber-600 focus:ring-amber-500"
+                                                            className="text-emerald-600 focus:ring-emerald-500"
                                                         />
                                                         <span className="text-sm font-medium">Tour Package</span>
                                                     </label>
@@ -2243,7 +2243,7 @@ export default function AdminDashboard() {
                                                 <div className="md:col-span-2">
                                                     <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Package / Day Trip Title</label>
                                                     <input
-                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none text-sm"
+                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
                                                         value={manualBookingForm.tourDetails?.tourTitle || ''}
                                                         onChange={e => setManualBookingForm({
                                                             ...manualBookingForm,
@@ -2257,7 +2257,7 @@ export default function AdminDashboard() {
                                             <div>
                                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Customer Name</label>
                                                 <input
-                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none text-sm"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
                                                     value={manualBookingForm.customerName}
                                                     onChange={e => setManualBookingForm({ ...manualBookingForm, customerName: e.target.value })}
                                                     placeholder="John Doe"
@@ -2266,7 +2266,7 @@ export default function AdminDashboard() {
                                             <div>
                                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Phone Number</label>
                                                 <input
-                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none text-sm"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
                                                     value={manualBookingForm.guestPhone}
                                                     onChange={e => setManualBookingForm({ ...manualBookingForm, guestPhone: e.target.value })}
                                                     placeholder="+94 77 XXX XXXX"
@@ -2275,7 +2275,7 @@ export default function AdminDashboard() {
                                             <div className="md:col-span-2">
                                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Pickup Location</label>
                                                 <input
-                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none text-sm"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
                                                     value={manualBookingForm.pickupLocation.address}
                                                     onChange={e => setManualBookingForm({ ...manualBookingForm, pickupLocation: { ...manualBookingForm.pickupLocation, address: e.target.value } })}
                                                     placeholder="Airport Terminal 1"
@@ -2284,7 +2284,7 @@ export default function AdminDashboard() {
                                             <div className="md:col-span-2">
                                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Dropoff Location</label>
                                                 <input
-                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none text-sm"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
                                                     value={manualBookingForm.dropoffLocation.address}
                                                     onChange={e => setManualBookingForm({ ...manualBookingForm, dropoffLocation: { ...manualBookingForm.dropoffLocation, address: e.target.value } })}
                                                     placeholder="Hotel Name / City"
@@ -2294,7 +2294,7 @@ export default function AdminDashboard() {
                                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Date</label>
                                                 <input
                                                     type="date"
-                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none text-sm"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
                                                     value={manualBookingForm.scheduledDate}
                                                     onChange={e => setManualBookingForm({ ...manualBookingForm, scheduledDate: e.target.value })}
                                                 />
@@ -2303,7 +2303,7 @@ export default function AdminDashboard() {
                                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Time</label>
                                                 <input
                                                     type="time"
-                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none text-sm"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
                                                     value={manualBookingForm.scheduledTime}
                                                     onChange={e => setManualBookingForm({ ...manualBookingForm, scheduledTime: e.target.value })}
                                                 />
@@ -2311,7 +2311,7 @@ export default function AdminDashboard() {
                                             <div>
                                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Vehicle Type</label>
                                                 <select
-                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none text-sm bg-white"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm bg-white"
                                                     value={manualBookingForm.vehicleType}
                                                     onChange={e => setManualBookingForm({ ...manualBookingForm, vehicleType: e.target.value })}
                                                 >
@@ -2326,7 +2326,7 @@ export default function AdminDashboard() {
                                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Distance (KM)</label>
                                                 <input
                                                     type="number"
-                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none text-sm"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
                                                     value={manualBookingForm.distanceKm}
                                                     onChange={e => setManualBookingForm({ ...manualBookingForm, distanceKm: e.target.value })}
                                                     placeholder="100"
@@ -2336,7 +2336,7 @@ export default function AdminDashboard() {
                                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Price (LKR)</label>
                                                 <input
                                                     type="number"
-                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none text-sm"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
                                                     value={manualBookingForm.totalPrice}
                                                     onChange={e => setManualBookingForm({ ...manualBookingForm, totalPrice: e.target.value })}
                                                     placeholder="15000"
@@ -2345,7 +2345,7 @@ export default function AdminDashboard() {
                                             <div>
                                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Payment Method</label>
                                                 <select
-                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-600/20 outline-none text-sm bg-white"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm bg-white"
                                                     value={manualBookingForm.paymentMethod}
                                                     onChange={e => setManualBookingForm({ ...manualBookingForm, paymentMethod: e.target.value })}
                                                 >
@@ -2386,7 +2386,7 @@ export default function AdminDashboard() {
                                                         setIsSavingManual(false)
                                                     }
                                                 }}
-                                                className="px-8 py-2 bg-amber-600 text-white rounded-lg font-bold hover:bg-amber-700 shadow-lg shadow-amber-500/30 flex items-center gap-2"
+                                                className="px-8 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 flex items-center gap-2"
                                             >
                                                 {isSavingManual ? <Loader2 size={18} className="animate-spin" /> : <Plus size={18} />}
                                                 Save Booking
@@ -2431,13 +2431,13 @@ export default function AdminDashboard() {
                                                         {booking._id?.slice(-8) || 'N/A'}
                                                     </td>
                                                     <td className="px-4 py-4">
-                                                        <div className="font-medium text-slate-950">{booking.customerName || booking.guestPhone || 'Guest'}</div>
+                                                        <div className="font-medium text-emerald-900">{booking.customerName || booking.guestPhone || 'Guest'}</div>
                                                         <div className="text-xs text-gray-400">{booking.guestPhone}</div>
                                                     </td>
                                                     <td className="px-4 py-4">
                                                         {booking.type === 'tour' && booking.tourDetails ? (
                                                             <div>
-                                                                <div className="font-bold text-slate-950">{booking.tourDetails.tourTitle}</div>
+                                                                <div className="font-bold text-emerald-900">{booking.tourDetails.tourTitle}</div>
                                                                 <div className="text-xs text-gray-500">ID: {booking.tourDetails.tourId || 'N/A'}</div>
                                                                 {booking.tourDetails.duration && (
                                                                     <div className="text-xs text-gray-400">{booking.tourDetails.duration}</div>
@@ -2461,7 +2461,7 @@ export default function AdminDashboard() {
                                                     <td className="px-4 py-4 capitalize">
                                                         {booking.vehicleType?.replace(/-/g, ' ') || 'N/A'}
                                                     </td>
-                                                    <td className="px-4 py-4 text-right font-bold text-slate-950">
+                                                    <td className="px-4 py-4 text-right font-bold text-emerald-900">
                                                         {formatPrice(booking)}
                                                     </td>
                                                     <td className="px-4 py-4">
@@ -2496,7 +2496,7 @@ export default function AdminDashboard() {
                                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
                                         <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white z-10">
                                             <div>
-                                                <h3 className="text-xl font-bold text-slate-950">Booking Details</h3>
+                                                <h3 className="text-xl font-bold text-emerald-900">Booking Details</h3>
                                                 <p className="text-sm text-gray-500">ID: {selectedBooking._id}</p>
                                             </div>
                                             <button
@@ -2510,7 +2510,7 @@ export default function AdminDashboard() {
                                         <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                                             {/* Customer Info */}
                                             <div className="bg-slate-50 p-6 rounded-xl space-y-4">
-                                                <h4 className="font-bold text-slate-950 flex items-center gap-2">
+                                                <h4 className="font-bold text-emerald-900 flex items-center gap-2">
                                                     <Users size={18} /> Customer Information
                                                 </h4>
                                                 <div className="space-y-3">
@@ -2520,7 +2520,7 @@ export default function AdminDashboard() {
                                                     </div>
                                                     <div>
                                                         <span className="text-xs text-gray-500 uppercase tracking-wider block">Phone</span>
-                                                        <a href={`tel:${selectedBooking.guestPhone}`} className="font-medium text-amber-600 hover:underline flex items-center gap-1">
+                                                        <a href={`tel:${selectedBooking.guestPhone}`} className="font-medium text-emerald-600 hover:underline flex items-center gap-1">
                                                             <Phone size={14} /> {selectedBooking.guestPhone || 'N/A'}
                                                         </a>
                                                     </div>
@@ -2535,7 +2535,7 @@ export default function AdminDashboard() {
 
                                             {/* Journey Info */}
                                             <div className="bg-slate-50 p-6 rounded-xl space-y-4">
-                                                <h4 className="font-bold text-slate-950 flex items-center gap-2">
+                                                <h4 className="font-bold text-emerald-900 flex items-center gap-2">
                                                     <Car size={18} /> Journey Details
                                                 </h4>
                                                 <div className="space-y-3">
@@ -2543,7 +2543,7 @@ export default function AdminDashboard() {
                                                         <span className="text-xs text-gray-500 uppercase tracking-wider block">{selectedBooking.type === 'tour' ? 'Tour Details' : 'Route'}</span>
                                                         {selectedBooking.type === 'tour' && selectedBooking.tourDetails ? (
                                                             <div className="mt-1 space-y-1">
-                                                                <div className="font-bold text-slate-950">{selectedBooking.tourDetails.tourTitle}</div>
+                                                                <div className="font-bold text-emerald-900">{selectedBooking.tourDetails.tourTitle}</div>
                                                                 <div className="text-sm text-gray-600 font-mono">ID: {selectedBooking.tourDetails.tourId}</div>
                                                                 <div className="text-sm text-gray-600 mb-2">Duration: {selectedBooking.tourDetails.duration}</div>
                                                                 {selectedBooking.pickupLocation?.address && selectedBooking.pickupLocation.address !== 'Tour Pickup (TBD)' && (
@@ -2580,7 +2580,7 @@ export default function AdminDashboard() {
 
                                             {/* Schedule Info */}
                                             <div className="bg-slate-50 p-6 rounded-xl space-y-4">
-                                                <h4 className="font-bold text-slate-950 flex items-center gap-2">
+                                                <h4 className="font-bold text-emerald-900 flex items-center gap-2">
                                                     <Calendar size={18} /> Schedule
                                                 </h4>
                                                 <div className="grid grid-cols-2 gap-4">
@@ -2601,20 +2601,20 @@ export default function AdminDashboard() {
 
                                             {/* Payment Info */}
                                             <div className="bg-slate-50 p-6 rounded-xl space-y-4">
-                                                <h4 className="font-bold text-slate-950 flex items-center gap-2">
+                                                <h4 className="font-bold text-emerald-900 flex items-center gap-2">
                                                     <CreditCard size={18} /> Payment & Status
                                                 </h4>
                                                 <div className="space-y-3">
                                                     <div className="space-y-1">
                                                         <div className="flex justify-between items-center">
                                                             <span className="text-xs text-gray-500 uppercase tracking-wider">Total Amount ({selectedBooking.currency || 'LKR'})</span>
-                                                            <span className="text-xl font-bold text-amber-600">{formatPrice(selectedBooking)}</span>
+                                                            <span className="text-xl font-bold text-emerald-600">{formatPrice(selectedBooking)}</span>
                                                         </div>
                                                         {selectedBooking.paymentType === 'partial' && (
                                                             <>
                                                                 <div className="flex justify-between items-center text-xs">
                                                                     <span className="text-gray-500">Paid (Online)</span>
-                                                                    <span className="font-bold text-amber-600">
+                                                                    <span className="font-bold text-emerald-600">
                                                                         Rs {(selectedBooking.displayPaidAmount || selectedBooking.paidAmount || 0).toLocaleString()}
                                                                     </span>
                                                                 </div>
@@ -2635,7 +2635,7 @@ export default function AdminDashboard() {
                                                         <div>
                                                             <span className="text-xs text-gray-500 uppercase tracking-wider block">Payment Status</span>
                                                             <select
-                                                                className={`mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-amber-600 font-bold uppercase ${selectedPaymentStatus === 'paid' ? 'text-green-700' : 'text-orange-700'}`}
+                                                                className={`mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-600 font-bold uppercase ${selectedPaymentStatus === 'paid' ? 'text-green-700' : 'text-orange-700'}`}
                                                                 value={selectedPaymentStatus}
                                                                 onChange={(e) => setSelectedPaymentStatus(e.target.value)}
                                                             >
@@ -2648,7 +2648,7 @@ export default function AdminDashboard() {
                                                     <div>
                                                         <span className="text-xs text-gray-500 uppercase tracking-wider block">Booking Status</span>
                                                         <select
-                                                            className="mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-amber-600"
+                                                            className="mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-600"
                                                             value={selectedStatus}
                                                             onChange={(e) => setSelectedStatus(e.target.value)}
                                                         >
@@ -2663,7 +2663,7 @@ export default function AdminDashboard() {
                                                     <div>
                                                         <span className="text-xs text-gray-500 uppercase tracking-wider block">Assign Driver</span>
                                                         <select
-                                                            className="mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-amber-600"
+                                                            className="mt-1 w-full bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-emerald-600"
                                                             value={selectedDriver}
                                                             onChange={(e) => {
                                                                 setSelectedDriver(e.target.value)
@@ -2727,7 +2727,7 @@ export default function AdminDashboard() {
                                                     }
                                                 }}
                                                 disabled={updatingStatus}
-                                                className="px-8 py-2.5 bg-slate-950 text-white rounded-lg font-bold hover:bg-amber-800 transition-all disabled:opacity-50 min-w-[140px] shadow-lg flex items-center justify-center gap-2"
+                                                className="px-8 py-2.5 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-800 transition-all disabled:opacity-50 min-w-[140px] shadow-lg flex items-center justify-center gap-2"
                                             >
                                                 {updatingStatus ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
                                                 {updatingStatus ? 'Saving...' : 'Save Changes'}
@@ -2741,15 +2741,15 @@ export default function AdminDashboard() {
 
                     {currentView === 'communications' && (
                         <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-sm p-8">
-                            <h2 className="text-2xl font-bold text-slate-950 mb-6 flex items-center gap-2">
-                                <Mail className="text-amber-600" /> Email Center
+                            <h2 className="text-2xl font-bold text-emerald-900 mb-6 flex items-center gap-2">
+                                <Mail className="text-emerald-600" /> Email Center
                             </h2>
 
                             <div className="space-y-6">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
                                     <select
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-600/20 bg-white"
+                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 bg-white"
                                         value={emailForm.recipientType}
                                         onChange={(e) => setEmailForm({ ...emailForm, recipientType: e.target.value })}
                                     >
@@ -2764,7 +2764,7 @@ export default function AdminDashboard() {
                                         <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                                         <input
                                             type="email"
-                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-600/20"
+                                            className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
                                             placeholder="customer@example.com"
                                             value={emailForm.customEmail || ''}
                                             onChange={(e) => setEmailForm({ ...emailForm, customEmail: e.target.value })}
@@ -2776,7 +2776,7 @@ export default function AdminDashboard() {
                                     <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
                                     <input
                                         type="text"
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-600/20"
+                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20"
                                         placeholder="Important Update..."
                                         value={emailForm.subject}
                                         onChange={(e) => setEmailForm({ ...emailForm, subject: e.target.value })}
@@ -2786,7 +2786,7 @@ export default function AdminDashboard() {
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
                                     <textarea
-                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-600/20 h-48"
+                                        className="w-full px-4 py-2 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-600/20 h-48"
                                         placeholder="Write your message here..."
                                         value={emailForm.message}
                                         onChange={(e) => setEmailForm({ ...emailForm, message: e.target.value })}
@@ -2818,7 +2818,7 @@ export default function AdminDashboard() {
                                             }
                                         }}
                                         disabled={sendingEmail}
-                                        className="bg-slate-950 text-white px-8 py-3 rounded-lg font-bold hover:bg-slate-950/90 flex items-center gap-2 disabled:opacity-50"
+                                        className="bg-emerald-900 text-white px-8 py-3 rounded-lg font-bold hover:bg-emerald-900/90 flex items-center gap-2 disabled:opacity-50"
                                     >
                                         {sendingEmail ? <Loader2 className="animate-spin" /> : <Mail size={18} />}
                                         {sendingEmail ? 'Sending...' : 'Send Email'}
@@ -2832,9 +2832,9 @@ export default function AdminDashboard() {
                         <div className="space-y-6">
                             {!selectedTicket ? (
                                 <div className="bg-white rounded-xl shadow-sm p-6">
-                                    <h2 className="text-2xl font-bold text-slate-950 mb-6">Support Tickets</h2>
+                                    <h2 className="text-2xl font-bold text-emerald-900 mb-6">Support Tickets</h2>
                                     {isLoading ? (
-                                        <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-950"></div></div>
+                                        <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-900"></div></div>
                                     ) : (
                                         <div className="space-y-2">
                                             {supportTickets.map(ticket => (
@@ -2846,7 +2846,7 @@ export default function AdminDashboard() {
                                                     <div className="flex items-center gap-4">
                                                         <div className={`w-3 h-3 rounded-full ${ticket.status === 'open' ? 'bg-green-500' : ticket.status === 'answered' ? 'bg-blue-500' : 'bg-gray-400'}`}></div>
                                                         <div>
-                                                            <h3 className="font-bold text-slate-950">{ticket.subject}</h3>
+                                                            <h3 className="font-bold text-emerald-900">{ticket.subject}</h3>
                                                             <p className="text-sm text-gray-500">{ticket.user?.name} ({ticket.user?.email})</p>
                                                         </div>
                                                     </div>
@@ -2864,14 +2864,14 @@ export default function AdminDashboard() {
                                 <div className="max-w-4xl mx-auto">
                                     <button
                                         onClick={() => setSelectedTicket(null)}
-                                        className="mb-4 text-gray-500 hover:text-slate-950 font-medium flex items-center gap-2"
+                                        className="mb-4 text-gray-500 hover:text-emerald-900 font-medium flex items-center gap-2"
                                     >
                                         ← Back to List
                                     </button>
 
                                     <div className="bg-white rounded-t-2xl shadow-sm p-6 border-b border-slate-100 flex justify-between items-start">
                                         <div>
-                                            <h2 className="text-xl font-bold text-slate-950 mb-1">{selectedTicket.subject}</h2>
+                                            <h2 className="text-xl font-bold text-emerald-900 mb-1">{selectedTicket.subject}</h2>
                                             <p className="text-sm text-gray-500">Customer: {selectedTicket.user?.name} ({selectedTicket.user?.email})</p>
                                         </div>
                                         <div className="flex gap-2">
@@ -2899,7 +2899,7 @@ export default function AdminDashboard() {
                                         {selectedTicket.messages.map((msg, idx) => (
                                             <div key={idx} className={`flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}`}>
                                                 <div className={`max-w-[80%] rounded-2xl p-4 ${msg.sender === 'admin'
-                                                    ? 'bg-slate-950 text-white rounded-tr-none'
+                                                    ? 'bg-emerald-900 text-white rounded-tr-none'
                                                     : 'bg-white text-gray-800 shadow-sm rounded-tl-none'
                                                     }`}>
                                                     <p className="whitespace-pre-wrap text-sm">{msg.message}</p>
@@ -2916,7 +2916,7 @@ export default function AdminDashboard() {
                                             <input
                                                 type="text"
                                                 placeholder="Type your reply..."
-                                                className="flex-1 px-4 py-3 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-amber-600/20"
+                                                className="flex-1 px-4 py-3 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-600/20"
                                                 value={adminReply}
                                                 onChange={e => setAdminReply(e.target.value)}
                                                 onKeyDown={async (e) => {
@@ -2962,7 +2962,7 @@ export default function AdminDashboard() {
                                                     finally { setSendingReply(false) }
                                                 }}
                                                 disabled={sendingReply || !adminReply.trim()}
-                                                className="bg-amber-600 text-slate-950 p-3 rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-50"
+                                                className="bg-emerald-600 text-emerald-900 p-3 rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-50"
                                             >
                                                 {sendingReply ? '...' : <div className="font-bold px-2">Send</div>}
                                             </button>
@@ -2984,14 +2984,14 @@ export default function AdminDashboard() {
                             </div>
 
                             {/* Create New Coupon Card */}
-                            <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 text-white shadow-xl shadow-amber-500/30">
+                            <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-xl shadow-emerald-500/30">
                                 <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
                                     <Percent size={20} />
                                     Create New Coupon
                                 </h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                                     <div>
-                                        <label className="block text-xs font-bold text-amber-100 mb-1 uppercase tracking-wider">Code</label>
+                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Code</label>
                                         <input
                                             placeholder="e.g. GALLE10"
                                             value={newCoupon.code}
@@ -3000,7 +3000,7 @@ export default function AdminDashboard() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-amber-100 mb-1 uppercase tracking-wider">Type</label>
+                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Type</label>
                                         <select
                                             value={newCoupon.discountType}
                                             onChange={e => setNewCoupon({ ...newCoupon, discountType: e.target.value })}
@@ -3011,7 +3011,7 @@ export default function AdminDashboard() {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-amber-100 mb-1 uppercase tracking-wider">Value</label>
+                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Value</label>
                                         <input
                                             type="number"
                                             placeholder="10"
@@ -3021,7 +3021,7 @@ export default function AdminDashboard() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-amber-100 mb-1 uppercase tracking-wider">Expiry</label>
+                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Expiry</label>
                                         <input
                                             type="date"
                                             value={newCoupon.expiryDate}
@@ -3030,7 +3030,7 @@ export default function AdminDashboard() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-amber-100 mb-1 uppercase tracking-wider">Location</label>
+                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Location</label>
                                         <input
                                             placeholder="e.g. Galle"
                                             value={newCoupon.locationsText || ''}
@@ -3042,7 +3042,7 @@ export default function AdminDashboard() {
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-4">
                                     <div className="lg:col-span-2">
-                                        <label className="block text-xs font-bold text-amber-100 mb-1 uppercase tracking-wider">Description</label>
+                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Description</label>
                                         <input
                                             placeholder="e.g. Get 10% off on your next trip to Galle"
                                             value={newCoupon.description}
@@ -3051,7 +3051,7 @@ export default function AdminDashboard() {
                                         />
                                     </div>
                                     <div className="lg:col-span-1">
-                                        <label className="block text-xs font-bold text-amber-100 mb-1 uppercase tracking-wider">Image URL</label>
+                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Image URL</label>
                                         <input
                                             placeholder="https://..."
                                             value={newCoupon.imageUrl}
@@ -3060,7 +3060,7 @@ export default function AdminDashboard() {
                                         />
                                     </div>
                                     <div className="lg:col-span-1">
-                                        <label className="block text-xs font-bold text-amber-100 mb-1 uppercase tracking-wider">Usage Limit</label>
+                                        <label className="block text-xs font-bold text-emerald-100 mb-1 uppercase tracking-wider">Usage Limit</label>
                                         <input
                                             type="number"
                                             placeholder="Unlimited"
@@ -3072,16 +3072,16 @@ export default function AdminDashboard() {
                                     <div className="lg:col-span-1 flex items-center gap-3 pt-4">
                                         <button
                                             onClick={() => setNewCoupon({ ...newCoupon, displayInWidget: !newCoupon.displayInWidget })}
-                                            className={`w-12 h-6 rounded-full transition-colors relative ${newCoupon.displayInWidget ? 'bg-amber-400' : 'bg-white/20'}`}
+                                            className={`w-12 h-6 rounded-full transition-colors relative ${newCoupon.displayInWidget ? 'bg-emerald-400' : 'bg-white/20'}`}
                                         >
                                             <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${newCoupon.displayInWidget ? 'left-7' : 'left-1'}`}></div>
                                         </button>
-                                        <span className="text-xs font-bold text-amber-100 uppercase tracking-wider">Display in Widget</span>
+                                        <span className="text-xs font-bold text-emerald-100 uppercase tracking-wider">Display in Widget</span>
                                     </div>
                                     <div className="flex items-end">
                                         <button
                                             onClick={handleAddCoupon}
-                                            className="w-full p-3 bg-white text-amber-600 font-bold rounded-xl hover:bg-amber-50 transition-all hover:scale-105 shadow-lg"
+                                            className="w-full p-3 bg-white text-emerald-600 font-bold rounded-xl hover:bg-emerald-50 transition-all hover:scale-105 shadow-lg"
                                         >
                                             + Create Coupon
                                         </button>
@@ -3092,15 +3092,15 @@ export default function AdminDashboard() {
                             {/* Coupons Grid */}
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                 {coupons.map(c => (
-                                    <div key={c._id} className="relative group bg-white rounded-2xl border-2 border-dashed border-slate-200 hover:border-amber-300 overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1">
+                                    <div key={c._id} className="relative group bg-white rounded-2xl border-2 border-dashed border-slate-200 hover:border-emerald-300 overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1">
                                         {/* Coupon Design */}
                                         <div className="p-6">
                                             <div className="flex items-start justify-between mb-4">
                                                 <div className="flex flex-col gap-1">
-                                                    <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/30">
+                                                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
                                                         <Percent className="text-white" size={20} />
                                                     </div>
-                                                    <span className={`text-[8px] font-black uppercase px-1.5 py-0.5 rounded-full self-start mt-1 ${c.applicableLocations?.length > 0 ? 'bg-amber-100 text-amber-600 border border-amber-200' : 'bg-blue-100 text-blue-600 border border-blue-200'}`}>
+                                                    <span className={`text-[8px] font-black uppercase px-1.5 py-0.5 rounded-full self-start mt-1 ${c.applicableLocations?.length > 0 ? 'bg-emerald-100 text-emerald-600 border border-emerald-200' : 'bg-blue-100 text-blue-600 border border-blue-200'}`}>
                                                         {c.applicableLocations?.length > 0 ? 'Location Specific' : 'Global Coupon'}
                                                     </span>
                                                 </div>
@@ -3137,17 +3137,17 @@ export default function AdminDashboard() {
                                             {/* Widget Display Link */}
                                             {c.displayInWidget && (
                                                 <div className="mb-3 flex items-center gap-1.5">
-                                                    <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
-                                                    <span className="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Visible in Widget</span>
+                                                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                                    <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Visible in Widget</span>
                                                 </div>
                                             )}
 
                                             {/* Code */}
                                             <div className="bg-slate-100 rounded-xl p-3 flex items-center justify-between mb-4">
-                                                <code className="font-mono font-bold text-amber-600 text-lg tracking-wider">{c.code}</code>
+                                                <code className="font-mono font-bold text-emerald-600 text-lg tracking-wider">{c.code}</code>
                                                 <button
                                                     onClick={() => navigator.clipboard.writeText(c.code)}
-                                                    className="text-xs text-slate-400 hover:text-amber-600"
+                                                    className="text-xs text-slate-400 hover:text-emerald-600"
                                                 >
                                                     Copy
                                                 </button>
@@ -3157,7 +3157,7 @@ export default function AdminDashboard() {
                                             <div className="space-y-2 text-sm">
                                                 {c.applicableLocations && c.applicableLocations.length > 0 && (
                                                     <div className="flex items-center gap-2 text-slate-600">
-                                                        <MapPin size={14} className="text-amber-500" />
+                                                        <MapPin size={14} className="text-emerald-500" />
                                                         <span>{c.applicableLocations.join(', ')}</span>
                                                     </div>
                                                 )}
@@ -3166,7 +3166,7 @@ export default function AdminDashboard() {
                                                     <span>{c.expiryDate ? `Expires ${new Date(c.expiryDate).toLocaleDateString()}` : 'No expiry'}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2 text-slate-500">
-                                                    <Percent size={14} className="text-amber-500" />
+                                                    <Percent size={14} className="text-emerald-500" />
                                                     <span>Used: <span className="font-bold text-slate-800">{c.usedCount || 0}</span> {c.usageLimit ? `/ ${c.usageLimit}` : '(Unlimited)'}</span>
                                                 </div>
                                             </div>

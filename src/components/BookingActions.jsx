@@ -107,7 +107,7 @@ export default function BookingActions({ booking }) {
                                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Subject</label>
                                 <input
                                     required
-                                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500"
+                                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
                                     placeholder="e.g. Driver Late, Lost Item"
                                     value={ticketForm.subject}
                                     onChange={e => setTicketForm({ ...ticketForm, subject: e.target.value })}
@@ -116,7 +116,7 @@ export default function BookingActions({ booking }) {
                             <div>
                                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Priority</label>
                                 <select
-                                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500"
+                                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
                                     value={ticketForm.priority}
                                     onChange={e => setTicketForm({ ...ticketForm, priority: e.target.value })}
                                 >
@@ -130,7 +130,7 @@ export default function BookingActions({ booking }) {
                                 <textarea
                                     required
                                     rows={4}
-                                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-amber-500"
+                                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
                                     placeholder="Describe your issue..."
                                     value={ticketForm.message}
                                     onChange={e => setTicketForm({ ...ticketForm, message: e.target.value })}
@@ -139,7 +139,7 @@ export default function BookingActions({ booking }) {
                             <button
                                 type="submit"
                                 disabled={ticketLoading}
-                                className="w-full bg-slate-950 text-white rounded-xl py-3 font-bold hover:bg-amber-800 transition-colors disabled:opacity-50 flex justify-center items-center gap-2"
+                                className="w-full bg-emerald-900 text-white rounded-xl py-3 font-bold hover:bg-emerald-800 transition-colors disabled:opacity-50 flex justify-center items-center gap-2"
                             >
                                 {ticketLoading && <Loader2 size={16} className="animate-spin" />} Submit Ticket
                             </button>

@@ -118,8 +118,8 @@ export default function CustomTripPage() {
         return (
             <div className="min-h-screen bg-white flex items-center justify-center p-4">
                 <div className="max-w-md w-full bg-slate-50 rounded-3xl p-8 text-center shadow-2xl">
-                    <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <CheckCircle size={40} className="text-amber-600" />
+                    <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <CheckCircle size={40} className="text-emerald-600" />
                     </div>
                     <h2 className="text-3xl font-black text-[#006064] mb-4">Request Sent!</h2>
                     <p className="text-slate-600 mb-8">
@@ -158,12 +158,12 @@ export default function CustomTripPage() {
                                 <div key={stop.id} className="relative group" style={{ zIndex: stops.length - index }}>
                                     <div className="flex items-start gap-4">
                                         <div className={`w-12 h-12 md:w-16 md:h-16 shrink-0 rounded-2xl flex items-center justify-center font-black text-base md:text-lg shadow-sm border-2 
-                                            ${index === 0 ? 'bg-amber-50 border-amber-100 text-amber-600' :
+                                            ${index === 0 ? 'bg-emerald-50 border-emerald-100 text-emerald-600' :
                                                 index === stops.length - 1 ? 'bg-rose-50 border-rose-100 text-rose-600' :
                                                     'bg-white border-slate-100 text-slate-400'}`}>
                                             {index === 0 ? (
                                                 <div className="flex flex-col items-center gap-0.5 md:gap-1">
-                                                    <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-amber-600 animate-pulse" />
+                                                    <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-emerald-600 animate-pulse" />
                                                     <span className="text-[8px] md:text-[10px] font-black uppercase tracking-tighter">Start</span>
                                                 </div>
                                             ) : index === stops.length - 1 ? (
@@ -203,8 +203,8 @@ export default function CustomTripPage() {
                                                 />
                                                 {/* Validation Warning - Relative positioning to avoid overlapping */}
                                                 {stop.address && (stop.lat === null || stop.lon === null) && (
-                                                    <div className="mt-2 text-[10px] sm:text-xs font-bold text-amber-600 flex items-center gap-1 bg-amber-50 px-2 py-1.5 rounded-lg border border-amber-200">
-                                                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                                    <div className="mt-2 text-[10px] sm:text-xs font-bold text-emerald-600 flex items-center gap-1 bg-emerald-50 px-2 py-1.5 rounded-lg border border-emerald-200">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                                         Please select a location from the list to calculate distance.
                                                     </div>
                                                 )}
@@ -262,16 +262,16 @@ export default function CustomTripPage() {
 
                         {/* Estimated Price Section */}
                         {routeStats.distanceKm > 0 && (
-                            <div className="mb-8 p-6 bg-slate-950 rounded-3xl text-white shadow-xl shadow-slate-950/20 relative overflow-hidden group">
+                            <div className="mb-8 p-6 bg-emerald-900 rounded-3xl text-white shadow-xl shadow-emerald-900/20 relative overflow-hidden group">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
                                 <div className="relative z-10">
-                                    <div className="flex items-center gap-2 text-amber-400 mb-2">
-                                        <Tag size={14} className="fill-amber-400/20" />
+                                    <div className="flex items-center gap-2 text-emerald-400 mb-2">
+                                        <Tag size={14} className="fill-emerald-400/20" />
                                         <span className="text-[10px] font-black uppercase tracking-[0.2em]">Estimated Rate</span>
                                     </div>
                                     <div className="flex items-baseline gap-2">
                                         <span className="text-4xl font-black">{convertedEstimate.symbol} {convertedEstimate.value.toLocaleString()}</span>
-                                        <span className="text-xs font-bold text-amber-400/60 uppercase">{currency}</span>
+                                        <span className="text-xs font-bold text-emerald-400/60 uppercase">{currency}</span>
                                     </div>
                                     <p className="text-[10px] text-white/40 mt-3 font-medium flex items-center gap-1.5 leading-relaxed italic">
                                         <Star size={10} fill="currentColor" /> Final price may vary based on vehicle availability and exact stops.
@@ -288,7 +288,7 @@ export default function CustomTripPage() {
                                     <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Your Name</label>
                                     <input
                                         required
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-slate-900"
+                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-emerald-900"
                                         placeholder="John Doe"
                                         value={formData.name}
                                         onChange={e => setFormData({ ...formData, name: e.target.value })}
@@ -298,7 +298,7 @@ export default function CustomTripPage() {
                                     <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Mobile / WhatsApp</label>
                                     <input
                                         required
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-slate-900"
+                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-emerald-900"
                                         placeholder="+94..."
                                         value={formData.phone}
                                         onChange={e => setFormData({ ...formData, phone: e.target.value })}
@@ -311,7 +311,7 @@ export default function CustomTripPage() {
                                 <input
                                     required
                                     type="email"
-                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-slate-900"
+                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-emerald-900"
                                     placeholder="john@example.com"
                                     value={formData.email}
                                     onChange={e => setFormData({ ...formData, email: e.target.value })}
@@ -324,7 +324,7 @@ export default function CustomTripPage() {
                                     <input
                                         required
                                         type="date"
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-slate-900"
+                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-emerald-900"
                                         value={formData.date}
                                         onChange={e => setFormData({ ...formData, date: e.target.value })}
                                     />
@@ -332,7 +332,7 @@ export default function CustomTripPage() {
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Group Size</label>
                                     <select
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-slate-900"
+                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-emerald-900"
                                         value={formData.passengers}
                                         onChange={e => setFormData({ ...formData, passengers: parseInt(e.target.value) })}
                                     >
@@ -346,7 +346,7 @@ export default function CustomTripPage() {
                             <div className="space-y-2">
                                 <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Preferred Vehicle</label>
                                 <select
-                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-slate-900"
+                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-emerald-900"
                                     value={formData.vehicleType}
                                     onChange={e => setFormData({ ...formData, vehicleType: e.target.value })}
                                 >
@@ -363,7 +363,7 @@ export default function CustomTripPage() {
                             <div className="space-y-2">
                                 <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Special Requirements</label>
                                 <textarea
-                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors min-h-[80px] text-slate-900"
+                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors min-h-[80px] text-emerald-900"
                                     placeholder="Extra luggage, child seats, etc..."
                                     value={formData.message}
                                     onChange={e => setFormData({ ...formData, message: e.target.value })}

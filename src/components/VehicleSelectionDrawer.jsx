@@ -36,7 +36,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
             />
 
             {/* Drawer Content */}
-            <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-t-[2rem] sm:rounded-[2rem] shadow-2xl overflow-hidden max-h-[85vh] animate-slide-up flex flex-col">
+            <div className="relative w-full max-w-lg bg-white dark:bg-emerald-900 rounded-t-[2rem] sm:rounded-[2rem] shadow-2xl overflow-hidden max-h-[85vh] animate-slide-up flex flex-col">
                 <div className="p-4 md:p-6 border-b border-slate-100 dark:border-white/10 flex justify-between items-center bg-white dark:bg-slate-800 shrink-0 z-10">
                     <div>
                         <h3 className="text-lg font-black text-black dark:text-white">Select Vehicle {vehicles.length > 0 && `(${vehicles.length})`}</h3>
@@ -54,14 +54,14 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 gap-4">
                             <Loader2 className="animate-spin text-black" size={32} />
-                            <p className="text-sm font-bold text-slate-900/40 dark:text-white/40 uppercase tracking-widest">Loading Vehicles...</p>
+                            <p className="text-sm font-bold text-emerald-900/40 dark:text-white/40 uppercase tracking-widest">Loading Vehicles...</p>
                         </div>
                     ) : vehicles.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-20 text-center px-6">
-                            <div className="w-16 h-16 bg-amber-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-4 text-amber-600">
+                            <div className="w-16 h-16 bg-emerald-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-4 text-emerald-600">
                                 <Car size={32} />
                             </div>
-                            <h4 className="font-bold text-slate-900 dark:text-white mb-2">No Vehicles Available</h4>
+                            <h4 className="font-bold text-emerald-900 dark:text-white mb-2">No Vehicles Available</h4>
                             <p className="text-xs text-slate-500 dark:text-white/60">We couldn't find any vehicles for this route. Please contact support or try again later.</p>
                         </div>
                     ) : (
@@ -80,12 +80,12 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                     }}
                                     className={`
                                         flex items-center gap-4 p-3 md:p-4 rounded-2xl border-2 transition-all relative overflow-hidden
-                                        ${isSelected ? 'border-black bg-white dark:bg-slate-800 ring-4 ring-slate-900/10 shadow-xl' : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-white/5 shadow-sm'}
+                                        ${isSelected ? 'border-black bg-white dark:bg-slate-800 ring-4 ring-emerald-900/10 shadow-xl' : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-white/5 shadow-sm'}
                                         ${!suitable ? 'opacity-60 grayscale-[0.8]' : 'active:scale-95 cursor-pointer hover:border-black'}
                                     `}
                                 >
                                     {/* AC Badge */}
-                                    <div className="absolute top-2 left-2 flex items-center gap-1 bg-slate-100 dark:bg-slate-900/50 text-black dark:text-slate-400 px-2 py-1 rounded-lg text-[8px] font-black z-10 uppercase tracking-tighter border border-slate-200 dark:border-slate-800">
+                                    <div className="absolute top-2 left-2 flex items-center gap-1 bg-slate-100 dark:bg-emerald-900/50 text-black dark:text-slate-400 px-2 py-1 rounded-lg text-[8px] font-black z-10 uppercase tracking-tighter border border-slate-200 dark:border-slate-800">
                                         <Wind size={8} className="animate-pulse" /> 100% A/C
                                     </div>
 
@@ -105,7 +105,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                                     }`}
                                             />
                                         ) : (
-                                            <Car className="text-slate-950/20 dark:text-white/20" />
+                                            <Car className="text-emerald-900/20 dark:text-white/20" />
                                         )}
                                     </div>
 
@@ -118,12 +118,12 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                                     if (match) {
                                                         return (
                                                             <>
-                                                                <h4 className="font-bold text-slate-900 dark:text-white truncate">{match[1].trim()}</h4>
-                                                                <span className="text-[9px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wide">{match[2]}</span>
+                                                                <h4 className="font-bold text-emerald-900 dark:text-white truncate">{match[1].trim()}</h4>
+                                                                <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">{match[2]}</span>
                                                             </>
                                                         );
                                                     }
-                                                    return <h4 className="font-bold text-slate-900 dark:text-white truncate">{cleanName}</h4>;
+                                                    return <h4 className="font-bold text-emerald-900 dark:text-white truncate">{cleanName}</h4>;
                                                 })()}
                                             </div>
                                             {isSelected && <CheckCircle2 size={18} className="text-black shrink-0" />}
@@ -162,8 +162,8 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
 
                 {/* More Details Modal */}
                 {detailVehicle && (
-                    <div className="absolute inset-0 z-[110] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in" onClick={() => setDetailVehicle(null)}>
-                        <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-2xl border-t sm:border border-slate-950/10 dark:border-white/10 flex flex-col animate-scale-in relative max-h-[85vh] sm:max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+                    <div className="absolute inset-0 z-[110] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-emerald-900/60 backdrop-blur-md animate-fade-in" onClick={() => setDetailVehicle(null)}>
+                        <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-2xl border-t sm:border border-emerald-900/10 dark:border-white/10 flex flex-col animate-scale-in relative max-h-[85vh] sm:max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
 
                             {/* Header - Fixed */}
                             <div className="p-6 pb-2 shrink-0 flex justify-between items-start relative">

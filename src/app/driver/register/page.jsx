@@ -115,22 +115,22 @@ export default function DriverRegister() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 selection:bg-amber-500 selection:text-black">
-            <div className="bg-slate-900 rounded-[2rem] border border-slate-800 shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col">
+        <div className="min-h-screen bg-emerald-900 flex items-center justify-center p-4 selection:bg-emerald-500 selection:text-black">
+            <div className="bg-emerald-900 rounded-[2rem] border border-slate-800 shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col">
                 {/* Header */}
                 <div className="p-8 pb-4 border-b border-slate-800">
-                    <h1 className="text-2xl font-black text-slate-100 uppercase tracking-tight mb-2">Driver <span className="text-amber-400">Registration</span></h1>
+                    <h1 className="text-2xl font-black text-slate-100 uppercase tracking-tight mb-2">Driver <span className="text-emerald-400">Registration</span></h1>
                     <p className="text-slate-400 text-sm">Join the elite fleet of Airport Taxis drivers.</p>
                 </div>
 
                 {/* Progress */}
-                <div className="px-8 py-6 bg-slate-900/50">
+                <div className="px-8 py-6 bg-emerald-900/50">
                     <div className="flex justify-between items-center relative">
                         <div className="absolute left-0 top-1/2 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
-                        <div className={`absolute left-0 top-1/2 h-1 bg-amber-500 -z-10 rounded-full transition-all duration-500`} style={{ width: `${((step - 1) / (STEPS.length - 1)) * 100}%` }}></div>
+                        <div className={`absolute left-0 top-1/2 h-1 bg-emerald-500 -z-10 rounded-full transition-all duration-500`} style={{ width: `${((step - 1) / (STEPS.length - 1)) * 100}%` }}></div>
                         {STEPS.map((s) => (
-                            <div key={s.id} className={`flex flex-col items-center gap-2 ${step >= s.id ? 'text-amber-400' : 'text-slate-600'}`}>
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center border-2 transition-all ${step >= s.id ? 'bg-slate-900 border-amber-500 shadow-[0_0_15px_rgba(251,191,36,0.2)]' : 'bg-slate-900 border-slate-700'}`}>
+                            <div key={s.id} className={`flex flex-col items-center gap-2 ${step >= s.id ? 'text-emerald-400' : 'text-slate-600'}`}>
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center border-2 transition-all ${step >= s.id ? 'bg-emerald-900 border-emerald-500 shadow-[0_0_15px_rgba(251,191,36,0.2)]' : 'bg-emerald-900 border-slate-700'}`}>
                                     <s.icon size={18} />
                                 </div>
                                 <span className="text-[10px] font-bold uppercase tracking-widest hidden md:block">{s.title}</span>
@@ -154,7 +154,7 @@ export default function DriverRegister() {
                     {step === 1 && (
                         <div className="space-y-6 animate-fade-in-up">
                             <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                                <User className="text-amber-400" size={20} /> Personal Information
+                                <User className="text-emerald-400" size={20} /> Personal Information
                             </h3>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <Input label="Full Name" name="name" value={formData.name} onChange={handleInputChange} placeholder="As per NIC" />
@@ -171,12 +171,12 @@ export default function DriverRegister() {
                     {step === 2 && (
                         <div className="space-y-6 animate-fade-in-up">
                             <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                                <Car className="text-amber-400" size={20} /> Vehicle Details
+                                <Car className="text-emerald-400" size={20} /> Vehicle Details
                             </h3>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Vehicle Type</label>
-                                    <select name="vehicleType" value={formData.vehicleType} onChange={handleInputChange} className="w-full h-12 bg-slate-800 border border-slate-700 px-4 rounded-xl outline-none focus:border-amber-400 text-slate-100 text-sm font-bold">
+                                    <select name="vehicleType" value={formData.vehicleType} onChange={handleInputChange} className="w-full h-12 bg-slate-800 border border-slate-700 px-4 rounded-xl outline-none focus:border-emerald-400 text-slate-100 text-sm font-bold">
                                         <option value="Mini Car">Mini Car (Alto/Kwid)</option>
                                         <option value="Car">Sedan (Axio/Prius)</option>
                                         <option value="Minivan">Minivan (KDH/Caravan)</option>
@@ -193,7 +193,7 @@ export default function DriverRegister() {
                     {step === 3 && (
                         <div className="space-y-6 animate-fade-in-up">
                             <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                                <ShieldCheck className="text-amber-400" size={20} /> Required Documents
+                                <ShieldCheck className="text-emerald-400" size={20} /> Required Documents
                             </h3>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <FileUpload label="Driver License (Front)" id="licenseFront" onChange={(e) => handleFileChange(e, 'licenseFront')} file={formData.documents.licenseFront} />
@@ -201,9 +201,9 @@ export default function DriverRegister() {
                                 <FileUpload label="NIC (Front)" id="nicFront" onChange={(e) => handleFileChange(e, 'nicFront')} file={formData.documents.nicFront} />
                                 <FileUpload label="NIC (Back)" id="nicBack" onChange={(e) => handleFileChange(e, 'nicBack')} file={formData.documents.nicBack} />
                             </div>
-                            <div className="bg-amber-900/20 border border-amber-500/20 p-4 rounded-xl flex gap-3 items-start">
-                                <div className="mt-1"><ShieldCheck size={16} className="text-amber-400" /></div>
-                                <p className="text-xs text-amber-200/80 leading-relaxed">
+                            <div className="bg-emerald-900/20 border border-emerald-500/20 p-4 rounded-xl flex gap-3 items-start">
+                                <div className="mt-1"><ShieldCheck size={16} className="text-emerald-400" /></div>
+                                <p className="text-xs text-emerald-200/80 leading-relaxed">
                                     Your data is encrypted and securely stored. Documents are used strictly for verification purposes by our admin team.
                                 </p>
                             </div>
@@ -213,7 +213,7 @@ export default function DriverRegister() {
                     {step === 4 && (
                         <div className="space-y-6 animate-fade-in-up">
                             <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                                <CreditCard className="text-amber-400" size={20} /> Bank Details
+                                <CreditCard className="text-emerald-400" size={20} /> Bank Details
                             </h3>
                             <p className="text-xs text-slate-500">Used for weekly payouts of card payments.</p>
                             <div className="grid md:grid-cols-2 gap-6">
@@ -228,15 +228,15 @@ export default function DriverRegister() {
                     {step === 5 && (
                         <div className="space-y-6 animate-fade-in-up">
                             <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                                <ShieldCheck className="text-amber-400" size={20} /> Initial Payment
+                                <ShieldCheck className="text-emerald-400" size={20} /> Initial Payment
                             </h3>
                             <div className="bg-slate-800 p-4 rounded-xl border border-slate-700">
                                 <p className="text-sm text-slate-400 mb-2 font-bold uppercase">Bank Transfer Details</p>
                                 <div className="space-y-1 text-slate-200 font-mono text-sm uppercase">
-                                    <p>Bank: <span className="text-amber-400">Sampath Bank</span></p>
-                                    <p>Account Name: <span className="text-amber-400">AIRPORT TAXIS PVT LTD</span></p>
-                                    <p>Account No: <span className="text-amber-400 text-lg font-black tracking-widest">1127 1403 9751</span></p>
-                                    <p>Branch: <span className="text-amber-400">Grandpass</span></p>
+                                    <p>Bank: <span className="text-emerald-400">Sampath Bank</span></p>
+                                    <p>Account Name: <span className="text-emerald-400">AIRPORT TAXIS PVT LTD</span></p>
+                                    <p>Account No: <span className="text-emerald-400 text-lg font-black tracking-widest">1127 1403 9751</span></p>
+                                    <p>Branch: <span className="text-emerald-400">Grandpass</span></p>
                                 </div>
                                 <p className="text-xs text-slate-500 mt-4">Please transfer a minimum of <span className="text-slate-300 font-bold">Rs 5,000</span> to activate your account.</p>
                             </div>
@@ -261,7 +261,7 @@ export default function DriverRegister() {
                     {step < 5 ? (
                         <button
                             onClick={() => setStep(step + 1)}
-                            className="flex items-center gap-2 px-8 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-sm font-black uppercase tracking-wider transition-colors shadow-lg shadow-amber-500/20"
+                            className="flex items-center gap-2 px-8 py-3 bg-emerald-500 hover:bg-emerald-400 text-emerald-900 rounded-xl text-sm font-black uppercase tracking-wider transition-colors shadow-lg shadow-emerald-500/20"
                         >
                             Next <ChevronRight size={16} />
                         </button>
@@ -269,7 +269,7 @@ export default function DriverRegister() {
                         <button
                             onClick={handleSubmit}
                             disabled={loading}
-                            className="flex items-center gap-2 px-8 py-3 bg-amber-500 hover:bg-amber-400 text-white rounded-xl text-sm font-black uppercase tracking-wider transition-colors shadow-lg shadow-amber-500/20 disabled:opacity-50"
+                            className="flex items-center gap-2 px-8 py-3 bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl text-sm font-black uppercase tracking-wider transition-colors shadow-lg shadow-emerald-500/20 disabled:opacity-50"
                         >
                             {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} />}
                             Submit Application
@@ -290,7 +290,7 @@ const Input = ({ label, name, value, onChange, placeholder, type = "text" }) => 
             name={name}
             value={value}
             onChange={onChange}
-            className="w-full h-12 bg-slate-800 border border-slate-700 px-4 rounded-xl outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 text-slate-100 text-sm font-bold placeholder:text-slate-600 transition-all"
+            className="w-full h-12 bg-slate-800 border border-slate-700 px-4 rounded-xl outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/20 text-slate-100 text-sm font-bold placeholder:text-slate-600 transition-all"
             placeholder={placeholder}
         />
     </div>
@@ -313,24 +313,24 @@ const FileUpload = ({ label, id, onChange, file }) => {
         <div className="space-y-2">
             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{label}</p>
             <input type="file" id={id} className="hidden" onChange={onChange} accept="image/*,.pdf" />
-            <label htmlFor={id} className={`w-full h-32 border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden ${file ? 'border-amber-500/50 bg-amber-500/5' : 'border-slate-700 bg-slate-800 hover:border-slate-600 hover:bg-slate-700/50'}`}>
+            <label htmlFor={id} className={`w-full h-32 border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden ${file ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-slate-700 bg-slate-800 hover:border-slate-600 hover:bg-slate-700/50'}`}>
                 {preview ? (
                     <div className="relative w-full h-full">
                         <img src={preview} alt="Preview" className="w-full h-full object-cover opacity-60" />
-                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-amber-500/10">
-                            <Check className="text-amber-400 mb-1" size={24} />
-                            <span className="text-[10px] font-black text-amber-400 uppercase bg-slate-900/80 px-2 py-0.5 rounded">Change File</span>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-emerald-500/10">
+                            <Check className="text-emerald-400 mb-1" size={24} />
+                            <span className="text-[10px] font-black text-emerald-400 uppercase bg-emerald-900/80 px-2 py-0.5 rounded">Change File</span>
                         </div>
                     </div>
                 ) : file ? (
                     <div className="text-center">
-                        <Check className="mx-auto text-amber-500 mb-2" size={24} />
-                        <span className="text-xs font-bold text-amber-400 block">{file.name.substring(0, 15)}...</span>
+                        <Check className="mx-auto text-emerald-500 mb-2" size={24} />
+                        <span className="text-xs font-bold text-emerald-400 block">{file.name.substring(0, 15)}...</span>
                         <span className="text-[10px] text-slate-500 uppercase mt-1 block">Click to change</span>
                     </div>
                 ) : (
                     <div className="text-center group">
-                        <Upload className="mx-auto text-slate-500 group-hover:text-amber-500 transition-colors mb-2" size={24} />
+                        <Upload className="mx-auto text-slate-500 group-hover:text-emerald-500 transition-colors mb-2" size={24} />
                         <span className="text-xs font-black text-slate-400 group-hover:text-slate-200 transition-colors uppercase tracking-tight">Upload File</span>
                     </div>
                 )}

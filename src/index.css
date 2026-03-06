@@ -6,20 +6,17 @@
 @tailwind utilities;
 
 :root {
-    --brand-primary: #020617;
-    /* slate-950 */
-    --brand-accent: #f59e0b;
-    /* amber-500 */
-    --brand-accent-light: #fbbf24;
-    /* amber-400 */
-    --bg-main: #f8fafc;
-    /* slate-50 */
+    --brand-primary: #064e3b;
+    /* emerald-900 */
+    --brand-accent: #10b981;
+    /* emerald-500 */
+    --brand-accent-light: #34d399;
+    /* emerald-400 */
+    --bg-main: #f9fafb;
     --bg-card: #ffffff;
-    --text-main: #0f172a;
-    /* slate-900 */
+    --text-main: #064e3b;
     --text-dim: #475569;
-    /* slate-600 */
-    --border-light: rgba(15, 23, 42, 0.08);
+    --border-light: rgba(6, 78, 59, 0.1);
 }
 
 body {
@@ -55,12 +52,12 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: 20px;
-    box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.1);
+    box-shadow: 0 10px 30px -10px rgba(6, 78, 59, 0.1);
     transition: all 0.3s ease;
 }
 
 .card-brand:hover {
-    box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.15);
+    box-shadow: 0 20px 40px -15px rgba(6, 78, 59, 0.2);
     border-color: var(--brand-accent);
 }
 
@@ -94,7 +91,7 @@ textarea {
 
 input:focus {
     border-color: var(--brand-accent) !important;
-    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1) !important;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1) !important;
     outline: none;
 }
 

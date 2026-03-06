@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 export default function PrivacyPolicyPage() {
     return (
-        <main className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-950 pt-32 pb-20">
+        <main className="min-h-screen bg-gradient-to-b from-emerald-900 to-emerald-900 pt-32 pb-20">
             <div className="container mx-auto px-6">
                 {/* Header */}
                 <div className="text-center mb-16">
@@ -15,7 +15,7 @@ export default function PrivacyPolicyPage() {
                         Legal Documentation
                     </div>
                     <h1 className="text-4xl md:text-6xl font-black text-white mb-4">
-                        Privacy <span className="text-amber-400">Policy</span>
+                        Privacy <span className="text-emerald-400">Policy</span>
                     </h1>
                     <p className="text-white/70 max-w-2xl mx-auto">
                         Last updated: January 2026
@@ -24,8 +24,8 @@ export default function PrivacyPolicyPage() {
 
                 {/* Content */}
                 <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
-                    <div className="bg-amber-50 p-8 border-b border-amber-100">
-                        <p className="text-slate-950 text-lg leading-relaxed">
+                    <div className="bg-emerald-50 p-8 border-b border-emerald-100">
+                        <p className="text-emerald-900 text-lg leading-relaxed">
                             <strong>AIRPORT TAXIS (PVT) LTD</strong> ("we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information.
                         </p>
                     </div>
@@ -34,10 +34,10 @@ export default function PrivacyPolicyPage() {
                         {/* Section 1 */}
                         <section>
                             <div className="flex items-center gap-3 mb-4">
-                                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                                    <Database size={20} className="text-amber-700" />
+                                <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                    <Database size={20} className="text-emerald-700" />
                                 </div>
-                                <h2 className="text-2xl font-bold text-slate-950">Information We Collect</h2>
+                                <h2 className="text-2xl font-bold text-emerald-900">Information We Collect</h2>
                             </div>
                             <div className="space-y-4 text-slate-600 leading-relaxed">
                                 <p><strong>Personal Information:</strong></p>
@@ -68,10 +68,10 @@ export default function PrivacyPolicyPage() {
                         {/* Section 2 */}
                         <section>
                             <div className="flex items-center gap-3 mb-4">
-                                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                                    <Eye size={20} className="text-amber-700" />
+                                <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                    <Eye size={20} className="text-emerald-700" />
                                 </div>
-                                <h2 className="text-2xl font-bold text-slate-950">How We Use Your Information</h2>
+                                <h2 className="text-2xl font-bold text-emerald-900">How We Use Your Information</h2>
                             </div>
                             <div className="space-y-3 text-slate-600 leading-relaxed">
                                 <ul className="list-disc pl-6 space-y-2">
@@ -89,10 +89,10 @@ export default function PrivacyPolicyPage() {
                         {/* Section 3 */}
                         <section>
                             <div className="flex items-center gap-3 mb-4">
-                                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                                    <Lock size={20} className="text-amber-700" />
+                                <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                    <Lock size={20} className="text-emerald-700" />
                                 </div>
-                                <h2 className="text-2xl font-bold text-slate-950">Data Security</h2>
+                                <h2 className="text-2xl font-bold text-emerald-900">Data Security</h2>
                             </div>
                             <div className="space-y-3 text-slate-600 leading-relaxed">
                                 <p>We implement industry-standard security measures:</p>
@@ -109,10 +109,10 @@ export default function PrivacyPolicyPage() {
                         {/* Section 4 */}
                         <section>
                             <div className="flex items-center gap-3 mb-4">
-                                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                                    <FileText size={20} className="text-amber-700" />
+                                <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                    <FileText size={20} className="text-emerald-700" />
                                 </div>
-                                <h2 className="text-2xl font-bold text-slate-950">Data Retention</h2>
+                                <h2 className="text-2xl font-bold text-emerald-900">Data Retention</h2>
                             </div>
                             <div className="space-y-3 text-slate-600 leading-relaxed">
                                 <p>We retain your information for the following periods:</p>
@@ -128,10 +128,10 @@ export default function PrivacyPolicyPage() {
                         {/* Section 5 */}
                         <section>
                             <div className="flex items-center gap-3 mb-4">
-                                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                                    <Shield size={20} className="text-amber-700" />
+                                <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                    <Shield size={20} className="text-emerald-700" />
                                 </div>
-                                <h2 className="text-2xl font-bold text-slate-950">Your Rights</h2>
+                                <h2 className="text-2xl font-bold text-emerald-900">Your Rights</h2>
                             </div>
                             <div className="space-y-3 text-slate-600 leading-relaxed">
                                 <p>You have the right to:</p>
@@ -142,17 +142,17 @@ export default function PrivacyPolicyPage() {
                                     <li>Opt-out of marketing communications</li>
                                     <li>Request a copy of your data</li>
                                 </ul>
-                                <p>To exercise these rights, contact us at <a href="mailto:info@airporttaxi.lk" className="text-amber-600 hover:underline">info@airporttaxi.lk</a></p>
+                                <p>To exercise these rights, contact us at <a href="mailto:info@airporttaxi.lk" className="text-emerald-600 hover:underline">info@airporttaxi.lk</a></p>
                             </div>
                         </section>
 
                         {/* Section 6 */}
                         <section>
                             <div className="flex items-center gap-3 mb-4">
-                                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                                    <span className="text-amber-700 font-black">6</span>
+                                <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                    <span className="text-emerald-700 font-black">6</span>
                                 </div>
-                                <h2 className="text-2xl font-bold text-slate-950">Third-Party Sharing</h2>
+                                <h2 className="text-2xl font-bold text-emerald-900">Third-Party Sharing</h2>
                             </div>
                             <div className="space-y-3 text-slate-600 leading-relaxed">
                                 <p>We do not sell your personal data. We may share information with:</p>
@@ -165,19 +165,19 @@ export default function PrivacyPolicyPage() {
                         </section>
 
                         {/* Contact */}
-                        <section className="bg-amber-50 rounded-2xl p-6">
-                            <h3 className="font-bold text-slate-950 text-lg mb-4">Contact Us About Privacy</h3>
+                        <section className="bg-emerald-50 rounded-2xl p-6">
+                            <h3 className="font-bold text-emerald-900 text-lg mb-4">Contact Us About Privacy</h3>
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3 text-slate-600">
-                                    <Mail size={18} className="text-amber-600" />
-                                    <a href="mailto:info@airporttaxi.lk" className="hover:text-amber-600">info@airporttaxi.lk</a>
+                                    <Mail size={18} className="text-emerald-600" />
+                                    <a href="mailto:info@airporttaxi.lk" className="hover:text-emerald-600">info@airporttaxi.lk</a>
                                 </div>
                                 <div className="flex items-center gap-3 text-slate-600">
-                                    <Phone size={18} className="text-amber-600" />
-                                    <a href="tel:+94722885885" className="hover:text-amber-600">+94 722 885 885</a>
+                                    <Phone size={18} className="text-emerald-600" />
+                                    <a href="tel:+94722885885" className="hover:text-emerald-600">+94 722 885 885</a>
                                 </div>
                                 <div className="flex items-start gap-3 text-slate-600">
-                                    <MapPin size={18} className="text-amber-600 shrink-0 mt-1" />
+                                    <MapPin size={18} className="text-emerald-600 shrink-0 mt-1" />
                                     <span>118/5 St. Joseph Street, Grandpass, Colombo 14</span>
                                 </div>
                             </div>
@@ -193,7 +193,7 @@ export default function PrivacyPolicyPage() {
                     <Link href="/refund-policy" className="px-6 py-3 bg-white/10 text-white rounded-xl font-medium hover:bg-white/20 transition-colors">
                         Refund Policy
                     </Link>
-                    <Link href="/" className="px-6 py-3 bg-white text-slate-950 rounded-xl font-bold hover:bg-amber-50 transition-colors">
+                    <Link href="/" className="px-6 py-3 bg-white text-emerald-900 rounded-xl font-bold hover:bg-emerald-50 transition-colors">
                         ← Back to Home
                     </Link>
                 </div>

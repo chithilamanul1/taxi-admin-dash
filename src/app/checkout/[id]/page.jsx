@@ -60,7 +60,7 @@ export default function CheckoutPage() {
         return (
             <div className="min-h-screen flex items-center justify-center bg-slate-50">
                 <div className="text-center space-y-4">
-                    <Loader2 className="animate-spin text-amber-600 mx-auto" size={48} />
+                    <Loader2 className="animate-spin text-emerald-600 mx-auto" size={48} />
                     <p className="text-slate-500 font-medium">Securing your booking session...</p>
                 </div>
             </div>
@@ -80,7 +80,7 @@ export default function CheckoutPage() {
                     </div>
                     <Link
                         href="/"
-                        className="flex items-center justify-center gap-2 w-full py-4 bg-slate-950 text-white rounded-2xl font-bold hover:bg-amber-800 transition-all"
+                        className="flex items-center justify-center gap-2 w-full py-4 bg-emerald-900 text-white rounded-2xl font-bold hover:bg-emerald-800 transition-all"
                     >
                         <ArrowLeft size={20} /> Back to Home
                     </Link>
@@ -93,8 +93,8 @@ export default function CheckoutPage() {
         <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center relative overflow-hidden p-6">
             {/* Background elements to make it look premium */}
             <div className="absolute top-0 left-0 w-full h-full opacity-5 hover:opacity-10 transition-opacity pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-amber-500 rounded-full blur-[120px]"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-slate-950 rounded-full blur-[120px]"></div>
+                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-emerald-500 rounded-full blur-[120px]"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-emerald-900 rounded-full blur-[120px]"></div>
             </div>
 
             {product.isBookingInvoice ? (
@@ -103,12 +103,12 @@ export default function CheckoutPage() {
                         <Link href="/" className="inline-block">
                             <img src="/logo.png" alt="Airport Taxis Sri Lanka" className="h-16 mx-auto mb-6" />
                         </Link>
-                        <h1 className="text-4xl font-black text-slate-950 uppercase">Secure Payment</h1>
+                        <h1 className="text-4xl font-black text-emerald-900 uppercase">Secure Payment</h1>
                         <p className="text-slate-500 mt-2">Complete payment for your invoice</p>
                     </div>
 
                     <div className="bg-white rounded-[2.5rem] p-8 shadow-2xl border border-slate-100 flex flex-col items-center">
-                        <div className="w-20 h-20 bg-amber-50 text-amber-600 rounded-3xl flex items-center justify-center mb-6">
+                        <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center mb-6">
                             <CreditCard size={40} />
                         </div>
 
@@ -117,12 +117,12 @@ export default function CheckoutPage() {
 
                         <div className="bg-slate-50 w-full rounded-2xl p-6 flex flex-col items-center mb-8 border border-slate-100">
                             <span className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Total Amount Due</span>
-                            <span className="text-5xl font-black text-slate-950">
+                            <span className="text-5xl font-black text-emerald-900">
                                 {getCurrencySymbol(product.currency)}
                                 {Number(product.price).toLocaleString(undefined, { minimumFractionDigits: product.currency === 'LKR' ? 0 : 2, maximumFractionDigits: 2 })}
                             </span>
                             {product.allowedPaymentMode === 'partial' && (
-                                <span className="mt-2 text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-100 uppercase tracking-widest">
+                                <span className="mt-2 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 uppercase tracking-widest">
                                     50% Deposit Requested
                                 </span>
                             )}
@@ -150,7 +150,7 @@ export default function CheckoutPage() {
                                     setPaymentProcessing(false);
                                 }
                             }}
-                            className="w-full py-5 bg-slate-950 hover:bg-amber-800 text-white font-black text-xl rounded-2xl flex items-center justify-center gap-3 transition-all disabled:opacity-70 shadow-xl shadow-slate-950/20"
+                            className="w-full py-5 bg-emerald-900 hover:bg-emerald-800 text-white font-black text-xl rounded-2xl flex items-center justify-center gap-3 transition-all disabled:opacity-70 shadow-xl shadow-emerald-900/20"
                         >
                             {paymentProcessing ? <Loader2 className="animate-spin" size={24} /> : <CreditCard size={24} />}
                             {paymentProcessing ? 'Processing Securely...' : `Pay ${getCurrencySymbol(product.currency)}${product.allowedPaymentMode === 'partial' ? (Number(product.price) * 0.5).toLocaleString() : Number(product.price).toLocaleString()} Now`}
@@ -158,8 +158,8 @@ export default function CheckoutPage() {
                     </div>
 
                     <div className="flex items-center justify-center gap-6 mt-8">
-                        <div className="flex items-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest"><CheckCircle size={16} className="text-amber-500" /> Bank Verified</div>
-                        <div className="flex items-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest"><CheckCircle size={16} className="text-amber-500" /> 256-bit SSL</div>
+                        <div className="flex items-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest"><CheckCircle size={16} className="text-emerald-500" /> Bank Verified</div>
+                        <div className="flex items-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest"><CheckCircle size={16} className="text-emerald-500" /> 256-bit SSL</div>
                     </div>
                 </div>
             ) : (
@@ -170,18 +170,18 @@ export default function CheckoutPage() {
                         </Link>
 
                         <div className="space-y-2">
-                            <h1 className="text-3xl md:text-5xl font-black text-slate-950 uppercase">Secure Payment</h1>
+                            <h1 className="text-3xl md:text-5xl font-black text-emerald-900 uppercase">Secure Payment</h1>
                             <p className="text-slate-500 font-medium max-w-lg mx-auto">Complete your booking for <strong>{product.title}</strong> securely via our bank-verified portal.</p>
                         </div>
 
                         <div className="bg-white p-8 rounded-[2.5rem] shadow-2xl border border-slate-100 max-w-sm mx-auto transform hover:scale-105 transition-transform duration-500">
                             <div className="flex flex-col items-center space-y-4">
-                                <div className="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600">
+                                <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
                                     <img src={product.img} alt={product.title} className="w-full h-full object-cover rounded-2xl" />
                                 </div>
                                 <div className="text-center">
                                     <h3 className="font-bold text-slate-800 text-xl">{product.title}</h3>
-                                    <span className="text-4xl font-black text-slate-950">
+                                    <span className="text-4xl font-black text-emerald-900">
                                         {getCurrencySymbol(product.currency)}
                                         {Number(product.price).toLocaleString()}
                                     </span>

@@ -316,20 +316,20 @@ const Prices = ({ initialDestination }) => {
     }, [pickup, dropoff])
 
     return (
-        <div className="pt-32 pb-20 max-w-6xl mx-auto px-6 dark:bg-slate-950 transition-colors">
+        <div className="pt-32 pb-20 max-w-6xl mx-auto px-6 dark:bg-emerald-900 transition-colors">
             <div id="prices" className="py-12 text-center scroll-mt-32">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-slate-950 dark:text-white mb-4">Price <span className="text-amber-600 dark:text-amber-400">Calculator</span></h1>
-                <p className="text-slate-950/60 dark:text-white/60 max-w-2xl mx-auto">Select your pickup and destination points for an instant, transparent quote.</p>
+                <h1 className="text-4xl md:text-5xl font-extrabold text-emerald-900 dark:text-white mb-4">Price <span className="text-emerald-600 dark:text-emerald-400">Calculator</span></h1>
+                <p className="text-emerald-900/60 dark:text-white/60 max-w-2xl mx-auto">Select your pickup and destination points for an instant, transparent quote.</p>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-12 mt-8">
                 {/* Left: Input Controls */}
-                <div className="space-y-8 bg-white dark:bg-slate-900 p-8 md:p-12 rounded-[2.5rem] shadow-xl border border-gray-100 dark:border-white/5">
+                <div className="space-y-8 bg-white dark:bg-emerald-900 p-8 md:p-12 rounded-[2.5rem] shadow-xl border border-gray-100 dark:border-white/5">
 
                     {/* Pickup Search */}
                     <div className="relative">
                         <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                            <MapPin size={16} className="text-amber-600 dark:text-amber-400" /> Pickup Point
+                            <MapPin size={16} className="text-emerald-600 dark:text-emerald-400" /> Pickup Point
                         </label>
                         <input
                             type="text"
@@ -339,7 +339,7 @@ const Prices = ({ initialDestination }) => {
                                 debouncedSearchPickup(e.target.value)
                             }}
                             placeholder="Start searching..."
-                            className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-950/20 dark:focus:ring-amber-500/20 outline-none text-slate-950 dark:text-white placeholder:text-gray-400/50"
+                            className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white placeholder:text-gray-400/50"
                         />
                         {pickupResults.length > 0 && (
                             <div className="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-gray-100 dark:border-white/10 overflow-hidden">
@@ -351,7 +351,7 @@ const Prices = ({ initialDestination }) => {
                                             setPickupSearch(r.name)
                                             setPickupResults([])
                                         }}
-                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-gray-50 dark:border-white/5 last:border-none flex items-center gap-3 text-slate-950 dark:text-white"
+                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-gray-50 dark:border-white/5 last:border-none flex items-center gap-3 text-emerald-900 dark:text-white"
                                     >
                                         <Navigation size={14} className="text-gray-400" />
                                         <span>{r.name}</span>
@@ -364,7 +364,7 @@ const Prices = ({ initialDestination }) => {
                     {/* Dropoff Search */}
                     <div className="relative">
                         <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                            <MapPin size={16} className="text-slate-950 dark:text-amber-400" /> Destination
+                            <MapPin size={16} className="text-emerald-900 dark:text-emerald-400" /> Destination
                         </label>
                         <input
                             type="text"
@@ -374,7 +374,7 @@ const Prices = ({ initialDestination }) => {
                                 debouncedSearchDropoff(e.target.value)
                             }}
                             placeholder="Where are you going?"
-                            className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-950/20 dark:focus:ring-amber-500/20 outline-none text-slate-950 dark:text-white placeholder:text-gray-400/50"
+                            className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white placeholder:text-gray-400/50"
                         />
                         {dropoffResults.length > 0 && (
                             <div className="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-gray-100 dark:border-white/10 overflow-hidden">
@@ -386,7 +386,7 @@ const Prices = ({ initialDestination }) => {
                                             setDropoffSearch(r.name)
                                             setDropoffResults([])
                                         }}
-                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-gray-50 dark:border-white/5 last:border-none flex items-center gap-3 text-slate-950 dark:text-white"
+                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-gray-50 dark:border-white/5 last:border-none flex items-center gap-3 text-emerald-900 dark:text-white"
                                     >
                                         <Navigation size={14} className="text-gray-400" />
                                         <span>{r.name}</span>
@@ -400,22 +400,22 @@ const Prices = ({ initialDestination }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                                <Users size={16} className="text-amber-600 dark:text-amber-400" /> Passengers
+                                <Users size={16} className="text-emerald-600 dark:text-emerald-400" /> Passengers
                             </label>
-                            <div className="flex items-center justify-between bg-slate-50 dark:bg-white/5 px-4 py-3 rounded-2xl border border-transparent hover:border-amber-600/30 transition-all">
+                            <div className="flex items-center justify-between bg-slate-50 dark:bg-white/5 px-4 py-3 rounded-2xl border border-transparent hover:border-emerald-600/30 transition-all">
                                 <span className="text-xs font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider mr-2">Count:</span>
                                 <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => setPassengers(Math.max(1, passengers - 1))}
-                                        className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-md text-slate-950 dark:text-white font-bold hover:bg-amber-600 dark:hover:bg-amber-500 hover:text-white active:scale-95 transition-all text-xl"
+                                        className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-md text-emerald-900 dark:text-white font-bold hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white active:scale-95 transition-all text-xl"
                                         aria-label="Decrease passengers"
                                     >
                                         -
                                     </button>
-                                    <span className="font-extrabold text-slate-950 dark:text-white text-xl w-6 text-center">{passengers}</span>
+                                    <span className="font-extrabold text-emerald-900 dark:text-white text-xl w-6 text-center">{passengers}</span>
                                     <button
                                         onClick={() => setPassengers(Math.min(15, passengers + 1))}
-                                        className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-md text-slate-950 dark:text-white font-bold hover:bg-amber-600 dark:hover:bg-amber-500 hover:text-white active:scale-95 transition-all text-xl"
+                                        className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-md text-emerald-900 dark:text-white font-bold hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white active:scale-95 transition-all text-xl"
                                         aria-label="Increase passengers"
                                     >
                                         +
@@ -425,14 +425,14 @@ const Prices = ({ initialDestination }) => {
                         </div>
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                                <ArrowRightLeft size={16} className="text-slate-950 dark:text-amber-400" /> Trip Type
+                                <ArrowRightLeft size={16} className="text-emerald-900 dark:text-emerald-400" /> Trip Type
                             </label>
                             <div className="flex bg-slate-50 dark:bg-white/5 p-1.5 rounded-2xl">
                                 {['one-way', 'round-trip'].map(t => (
                                     <button
                                         key={t}
                                         onClick={() => setTripType(t)}
-                                        className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${tripType === t ? 'bg-slate-950 text-white shadow-md' : 'text-gray-400 hover:text-slate-950'}`}
+                                        className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${tripType === t ? 'bg-emerald-900 text-white shadow-md' : 'text-gray-400 hover:text-emerald-900'}`}
                                     >
                                         {t === 'one-way' ? 'One Way' : 'Return'}
                                     </button>
@@ -445,26 +445,26 @@ const Prices = ({ initialDestination }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-amber-600">✉️</span> Your Email
+                                <span className="text-emerald-600">✉️</span> Your Email
                             </label>
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="name@example.com"
-                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-950/20 dark:focus:ring-amber-500/20 outline-none text-slate-950 dark:text-white"
+                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white"
                             />
                         </div>
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-amber-600">📱</span> WhatsApp No.
+                                <span className="text-emerald-600">📱</span> WhatsApp No.
                             </label>
                             <input
                                 type="tel"
                                 value={whatsapp}
                                 onChange={(e) => setWhatsapp(e.target.value)}
                                 placeholder="+1 66 77 88 99 ..."
-                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-950/20 dark:focus:ring-amber-500/20 outline-none text-slate-950 dark:text-white"
+                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white"
                             />
                         </div>
                     </div>
@@ -473,55 +473,55 @@ const Prices = ({ initialDestination }) => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-amber-600">📅</span> Date
+                                <span className="text-emerald-600">📅</span> Date
                             </label>
                             <input
                                 type="date"
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
-                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-950/20 outline-none"
+                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 outline-none"
                             />
                         </div>
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
-                                <span className="text-amber-600">⏰</span> Time
+                                <span className="text-emerald-600">⏰</span> Time
                             </label>
                             <input
                                 type="time"
                                 value={time}
                                 onChange={(e) => setTime(e.target.value)}
-                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-950/20 outline-none"
+                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 outline-none"
                             />
                         </div>
                         <div>
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                                <span className="text-amber-600 dark:text-amber-400">💳</span> Payment
+                                <span className="text-emerald-600 dark:text-emerald-400">💳</span> Payment
                             </label>
                             <select
                                 value={paymentMethod}
                                 onChange={(e) => setPaymentMethod(e.target.value)}
-                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-slate-950/20 dark:focus:ring-amber-500/20 outline-none cursor-pointer text-slate-950 dark:text-white"
+                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none cursor-pointer text-emerald-900 dark:text-white"
                             >
-                                <option value="cash" className="dark:bg-slate-900">Cash to Driver</option>
-                                <option value="card" className="dark:bg-slate-900">Card Payment</option>
+                                <option value="cash" className="dark:bg-emerald-900">Cash to Driver</option>
+                                <option value="card" className="dark:bg-emerald-900">Card Payment</option>
                             </select>
                         </div>
                     </div>
 
                     {/* Airport Greeting (Board Show) Option */}
-                    <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:border-amber-600/50 mb-8">
+                    <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:border-emerald-600/50 mb-8">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-slate-950/10 dark:bg-white/5 rounded-full flex items-center justify-center text-2xl">
+                            <div className="w-12 h-12 bg-emerald-900/10 dark:bg-white/5 rounded-full flex items-center justify-center text-2xl">
                                 🛫
                             </div>
                             <div>
-                                <h4 className="text-slate-950 dark:text-white font-bold text-lg">Airport Greeting (NAME BOARD)</h4>
+                                <h4 className="text-emerald-900 dark:text-white font-bold text-lg">Airport Greeting (NAME BOARD)</h4>
                                 <p className="text-gray-500 dark:text-slate-400 text-xs max-w-xs">Our driver will wait for you at the arrival terminal hall with your name on a NAME BOARD.</p>
                             </div>
                         </div>
                         <div className="flex flex-col items-end gap-3">
                             <div className="flex flex-col items-end">
-                                <span className="text-amber-600 font-bold text-lg">+ Rs 2,000.00</span>
+                                <span className="text-emerald-600 font-bold text-lg">+ Rs 2,000.00</span>
                                 {rates?.USD && (
                                     <span className="text-xs text-gray-400 font-medium">
                                         (≈ ${(2000 * rates.USD).toFixed(2)} USD)
@@ -536,7 +536,7 @@ const Prices = ({ initialDestination }) => {
                                         checked={boardShow}
                                         onChange={(e) => setBoardShow(e.target.checked)}
                                     />
-                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-600"></div>
+                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
                                 </label>
                             </div>
 
@@ -550,7 +550,7 @@ const Prices = ({ initialDestination }) => {
                                             value={boardName}
                                             onChange={(e) => setBoardName(e.target.value)}
                                             placeholder="e.g. Mr. John Doe"
-                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-slate-950/20 outline-none"
+                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
                                         />
                                     </div>
                                     <div>
@@ -560,7 +560,7 @@ const Prices = ({ initialDestination }) => {
                                             value={flightNumber}
                                             onChange={(e) => setFlightNumber(e.target.value)}
                                             placeholder="e.g. UL 504"
-                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-slate-950/20 outline-none"
+                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
                                         />
                                     </div>
                                     <div className="grid grid-cols-2 gap-3">
@@ -570,7 +570,7 @@ const Prices = ({ initialDestination }) => {
                                                 type="date"
                                                 value={arrivalDate}
                                                 onChange={(e) => setArrivalDate(e.target.value)}
-                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-slate-950/20 outline-none"
+                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
                                             />
                                         </div>
                                         <div>
@@ -579,7 +579,7 @@ const Prices = ({ initialDestination }) => {
                                                 type="time"
                                                 value={arrivalTime}
                                                 onChange={(e) => setArrivalTime(e.target.value)}
-                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-slate-950/20 outline-none"
+                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
                                             />
                                         </div>
                                     </div>
@@ -595,7 +595,7 @@ const Prices = ({ initialDestination }) => {
                             {!isVehicleListExpanded && (
                                 <button
                                     onClick={() => setIsVehicleListExpanded(true)}
-                                    className="text-xs font-bold text-amber-600 hover:text-slate-950 transition-colors uppercase tracking-widest flex items-center gap-1"
+                                    className="text-xs font-bold text-emerald-600 hover:text-emerald-900 transition-colors uppercase tracking-widest flex items-center gap-1"
                                 >
                                     Change Vehicle <ArrowRightLeft size={12} />
                                 </button>
@@ -606,7 +606,7 @@ const Prices = ({ initialDestination }) => {
                         {!isVehicleListExpanded && (
                             <div
                                 onClick={() => setIsVehicleListExpanded(true)}
-                                className="relative w-full overflow-hidden rounded-2xl border-2 border-amber-600 ring-2 ring-amber-600/20 shadow-lg cursor-pointer group"
+                                className="relative w-full overflow-hidden rounded-2xl border-2 border-emerald-600 ring-2 ring-emerald-600/20 shadow-lg cursor-pointer group"
                             >
                                 <div className="aspect-[21/9] w-full relative">
                                     <img
@@ -616,26 +616,26 @@ const Prices = ({ initialDestination }) => {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/40 to-transparent"></div>
                                     <div className="absolute inset-0 p-6 flex flex-col justify-center text-white">
-                                        <div className="bg-amber-600 text-slate-950 text-xs font-bold px-3 py-1 rounded-full w-fit mb-2">SELECTED</div>
+                                        <div className="bg-emerald-600 text-emerald-900 text-xs font-bold px-3 py-1 rounded-full w-fit mb-2">SELECTED</div>
                                         <div className="font-bold text-2xl mb-1">{VEHICLE_PRICING[vehicle].name}</div>
                                         <div className="text-sm text-white/80 mb-2">{VEHICLE_PRICING[vehicle].model}</div>
                                         {VEHICLE_PRICING[vehicle].specs && (
                                             <div className="flex flex-col gap-1 mb-2 opacity-90">
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Users size={12} className="text-amber-600" /> 1-{VEHICLE_PRICING[vehicle].maxPassengers} PASSENGERS
+                                                    <Users size={12} className="text-emerald-600" /> 1-{VEHICLE_PRICING[vehicle].maxPassengers} PASSENGERS
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Briefcase size={12} className="text-amber-600" /> {VEHICLE_PRICING[vehicle].specs.luggage} LUGGAGE
+                                                    <Briefcase size={12} className="text-emerald-600" /> {VEHICLE_PRICING[vehicle].specs.luggage} LUGGAGE
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Briefcase size={12} className="text-amber-600 scale-75" /> {VEHICLE_PRICING[vehicle].specs.handLuggage} HAND LUGGAGE
+                                                    <Briefcase size={12} className="text-emerald-600 scale-75" /> {VEHICLE_PRICING[vehicle].specs.handLuggage} HAND LUGGAGE
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Wind size={12} className="text-amber-600" /> AIR - CONDITIONING
+                                                    <Wind size={12} className="text-emerald-600" /> AIR - CONDITIONING
                                                 </span>
                                             </div>
                                         )}
-                                        <div className="flex items-center gap-4 mt-1 text-xs font-bold text-amber-600 uppercase tracking-widest">
+                                        <div className="flex items-center gap-4 mt-1 text-xs font-bold text-emerald-600 uppercase tracking-widest">
                                             <span>Click to Change</span>
                                             <ArrowRightLeft size={14} />
                                         </div>
@@ -664,10 +664,10 @@ const Prices = ({ initialDestination }) => {
                                             disabled={isLocked}
                                             className={`relative w-full overflow-hidden rounded-[2.5rem] border-[3px] transition-all group text-left bg-white dark:bg-slate-800 p-8
                                                 ${vehicle === key
-                                                    ? 'border-amber-700 shadow-2xl scale-[1.02]'
+                                                    ? 'border-emerald-700 shadow-2xl scale-[1.02]'
                                                     : isLocked
                                                         ? 'border-gray-100 dark:border-white/5 opacity-60 cursor-not-allowed grayscale'
-                                                        : 'border-black dark:border-white/20 hover:border-amber-700 shadow-lg hover:shadow-xl'
+                                                        : 'border-black dark:border-white/20 hover:border-emerald-700 shadow-lg hover:shadow-xl'
                                                 }`}
                                         >
                                             <div className="flex justify-between items-start mb-6">
@@ -678,7 +678,7 @@ const Prices = ({ initialDestination }) => {
                                                             return (
                                                                 <>
                                                                     <h3 className="font-black text-black dark:text-white text-3xl md:text-4xl leading-tight uppercase tracking-tight">{match[1].trim()}</h3>
-                                                                    <span className="inline-block mt-1 px-3 py-0.5 bg-amber-50 dark:bg-slate-950/30 text-amber-700 dark:text-amber-400 text-xs font-bold rounded-full uppercase tracking-wide">{match[2]}</span>
+                                                                    <span className="inline-block mt-1 px-3 py-0.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold rounded-full uppercase tracking-wide">{match[2]}</span>
                                                                 </>
                                                             );
                                                         }
@@ -748,7 +748,7 @@ const Prices = ({ initialDestination }) => {
                                             <div
                                                 className={`w-full py-4 text-center rounded-2xl font-black text-xl uppercase tracking-widest transition-all shadow-xl
                                                     ${vehicle === key
-                                                        ? 'bg-slate-950 text-white shadow-slate-950/20'
+                                                        ? 'bg-emerald-900 text-white shadow-emerald-900/20'
                                                         : 'bg-red-600 text-white hover:bg-red-700 shadow-red-600/20'}`}
                                             >
                                                 {vehicle === key ? 'Selected ✓' : 'Select'}
@@ -770,8 +770,8 @@ const Prices = ({ initialDestination }) => {
                 </div>
 
                 {/* Right: Summary & Quote */}
-                <div ref={quoteRef} className="bg-slate-950 rounded-[2.5rem] p-8 md:p-14 text-white shadow-3xl lg:sticky lg:top-28 flex flex-col h-fit">
-                    <h3 className="text-amber-400 text-2xl font-bold mb-8 flex items-center gap-3">
+                <div ref={quoteRef} className="bg-emerald-900 rounded-[2.5rem] p-8 md:p-14 text-white shadow-3xl lg:sticky lg:top-28 flex flex-col h-fit">
+                    <h3 className="text-emerald-400 text-2xl font-bold mb-8 flex items-center gap-3">
                         Trip Quote
                     </h3>
 
@@ -787,13 +787,13 @@ const Prices = ({ initialDestination }) => {
                             <>
                                 <div className="space-y-6 flex-grow">
                                     {/* Currency Indicator */}
-                                    <div className="flex items-center gap-2 text-amber-500 mb-2">
+                                    <div className="flex items-center gap-2 text-emerald-500 mb-2">
                                         <Zap size={14} fill="currentColor" className="animate-pulse" />
                                         <span className="text-[10px] font-black uppercase tracking-[0.2em]">{currency} ESTIMATE</span>
                                     </div>
 
                                     <div className="text-5xl md:text-7xl font-black leading-tight tracking-tighter flex items-center gap-3">
-                                        <span className="text-xl md:text-3xl font-bold text-amber-500">
+                                        <span className="text-xl md:text-3xl font-bold text-emerald-500">
                                             {currentSymbol}
                                         </span>
                                         <span className="text-white">
@@ -810,9 +810,9 @@ const Prices = ({ initialDestination }) => {
                                         </div>
 
                                         {/* Highway Toll Notice */}
-                                        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-3">
-                                            <Info size={16} className="text-amber-500 shrink-0 mt-0.5" />
-                                            <p className="text-[11px] font-bold text-amber-500/90 leading-relaxed uppercase tracking-wider">
+                                        <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-start gap-3">
+                                            <Info size={16} className="text-emerald-500 shrink-0 mt-0.5" />
+                                            <p className="text-[11px] font-bold text-emerald-500/90 leading-relaxed uppercase tracking-wider">
                                                 Note: Highway tolls must be paid by the customer during the journey.
                                             </p>
                                         </div>
@@ -824,7 +824,7 @@ const Prices = ({ initialDestination }) => {
                                                     type="button"
                                                     onClick={() => changeCurrency(c.code)}
                                                     className={`p-3 rounded-2xl border-2 transition-all flex flex-col gap-1 text-left cursor-pointer group/card ${currency === c.code
-                                                        ? 'bg-amber-500/10 border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
+                                                        ? 'bg-emerald-500/10 border-emerald-500 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
                                                         : 'bg-white/5 border-white/5 hover:border-white/20 hover:bg-white/10'
                                                         }`}
                                                 >
@@ -832,9 +832,9 @@ const Prices = ({ initialDestination }) => {
                                                         <span className="text-[10px] font-black text-white/40 uppercase tracking-widest flex items-center gap-1.5">
                                                             <span className="text-xs">{c.flag}</span> {c.code}
                                                         </span>
-                                                        {currency === c.code && <div className="w-1.5 h-1.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgb(245,158,11)]"></div>}
+                                                        {currency === c.code && <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgb(245,158,11)]"></div>}
                                                     </div>
-                                                    <div className={`text-sm md:text-base font-black ${currency === c.code ? 'text-amber-500' : 'text-white'}`}>
+                                                    <div className={`text-sm md:text-base font-black ${currency === c.code ? 'text-emerald-500' : 'text-white'}`}>
                                                         <span className="text-[10px] font-bold mr-1 opacity-60">{c.symbol}</span>
                                                         {c.value.toLocaleString()}
                                                     </div>
@@ -853,14 +853,14 @@ const Prices = ({ initialDestination }) => {
                                 </div>
                                 <div className="bg-white/10 rounded-xl p-4 mb-8 text-xs text-white/80 space-y-2">
                                     <div className="flex items-start gap-2 font-bold text-white">
-                                        <Info size={14} className="text-amber-400 flex-shrink-0 mt-0.5" />
+                                        <Info size={14} className="text-emerald-400 flex-shrink-0 mt-0.5" />
                                         <p>IMPORTANT: We accept card payments (Visa/Mastercard).</p>
                                     </div>
                                 </div>
 
                                 <div className="mb-10 text-center">
                                     <p className="text-white/60 uppercase tracking-widest text-xs mb-2">Total</p>
-                                    <div className="text-4xl md:text-6xl font-extrabold text-amber-400 leading-none pb-2 break-words">
+                                    <div className="text-4xl md:text-6xl font-extrabold text-emerald-400 leading-none pb-2 break-words">
                                         {currentSymbol} {totalSelected.toLocaleString()}
                                     </div>
                                 </div>
@@ -973,7 +973,7 @@ const Prices = ({ initialDestination }) => {
                                             setLoading(false); // Reset loading state
                                         }
                                     }}
-                                    className="w-full bg-amber-600 text-slate-950 font-extrabold py-6 rounded-2xl text-xl hover:scale-[1.02] transition-all shadow-2xl disabled:opacity-50 disabled:grayscale"
+                                    className="w-full bg-emerald-600 text-emerald-900 font-extrabold py-6 rounded-2xl text-xl hover:scale-[1.02] transition-all shadow-2xl disabled:opacity-50 disabled:grayscale"
                                 >
                                     {loading ? <Loader2 className="animate-spin mx-auto" /> : 'Book This Trip Now'}
                                 </button>

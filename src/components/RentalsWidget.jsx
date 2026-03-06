@@ -28,29 +28,29 @@ const RENTALS = [
 const RentalsWidget = () => {
     return (
         <div className="animate-fade-in text-center py-8">
-            <h3 className="text-2xl font-bold text-slate-950 mb-2">Rent a Vehicle</h3>
-            <p className="text-slate-950/60 mb-8 max-w-lg mx-auto">Choose from our wide range of premium vehicles for your personal travel needs.</p>
+            <h3 className="text-2xl font-bold text-emerald-900 mb-2">Rent a Vehicle</h3>
+            <p className="text-emerald-900/60 mb-8 max-w-lg mx-auto">Choose from our wide range of premium vehicles for your personal travel needs.</p>
 
             <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
                 {RENTALS.map((item) => (
-                    <div key={item.id} className="bg-amber-50/50 border border-slate-950/10 p-6 rounded-2xl hover:border-amber-600 hover:shadow-lg transition-all text-left">
-                        <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center mb-4 text-amber-600">
+                    <div key={item.id} className="bg-emerald-50/50 border border-emerald-900/10 p-6 rounded-2xl hover:border-emerald-600 hover:shadow-lg transition-all text-left">
+                        <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center mb-4 text-emerald-600">
                             <item.icon size={24} />
                         </div>
-                        <h4 className="text-lg font-bold text-slate-950">{item.title}</h4>
+                        <h4 className="text-lg font-bold text-emerald-900">{item.title}</h4>
                         <p className="text-sm text-gray-500 mb-4">{item.subtitle}</p>
 
                         <div className="space-y-2 mb-6">
                             {item.features.map((feat, i) => (
-                                <div key={i} className="flex items-center gap-2 text-sm text-slate-950/80">
-                                    <CheckCircle2 size={14} className="text-amber-600" /> {feat}
+                                <div key={i} className="flex items-center gap-2 text-sm text-emerald-900/80">
+                                    <CheckCircle2 size={14} className="text-emerald-600" /> {feat}
                                 </div>
                             ))}
                         </div>
 
                         <div className="flex items-center justify-between mt-auto">
-                            <span className="font-bold text-slate-950">{item.price}</span>
-                            <button className="px-4 py-2 bg-slate-950 text-white text-xs font-bold rounded-lg hover:bg-amber-800 transition-colors">
+                            <span className="font-bold text-emerald-900">{item.price}</span>
+                            <button className="px-4 py-2 bg-emerald-900 text-white text-xs font-bold rounded-lg hover:bg-emerald-800 transition-colors">
                                 Inquire
                             </button>
                         </div>
@@ -58,7 +58,7 @@ const RentalsWidget = () => {
                 ))}
             </div>
 
-            <div className="mt-8 p-4 bg-slate-950/10 rounded-xl inline-flex items-center gap-4 text-slate-950 font-bold text-sm">
+            <div className="mt-8 p-4 bg-emerald-900/10 rounded-xl inline-flex items-center gap-4 text-emerald-900 font-bold text-sm">
                 <Phone size={16} />
                 <span>Call for Custom Packages: +94 722 885 885</span>
             </div>

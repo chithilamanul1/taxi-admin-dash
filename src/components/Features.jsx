@@ -26,14 +26,14 @@ const features = [
 
 const Features = () => {
     return (
-        <section className="py-32 bg-slate-50 dark:bg-slate-900/40 relative overflow-hidden transition-colors">
+        <section className="py-32 bg-slate-50 dark:bg-emerald-900/40 relative overflow-hidden transition-colors">
             {/* Decoration */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[100px] -mr-64 -mt-64"></div>
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[100px] -mr-64 -mt-64"></div>
 
             <div className="container mx-auto px-6 relative z-10">
                 <div className="text-center mb-20 animate-slide-up">
-                    <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-slate-900 dark:text-white font-heading">
-                        Why Choose <span className="text-amber-600 dark:text-amber-400">Airport Taxis?</span>
+                    <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-emerald-900 dark:text-white font-heading">
+                        Why Choose <span className="text-emerald-600 dark:text-emerald-400">Airport Taxis?</span>
                     </h2>
                     <p className="text-slate-500 dark:text-white/80 max-w-2xl mx-auto text-lg">
                         Setting the standard for luxury transportation and tours in Sri Lanka since 2012.
@@ -44,13 +44,13 @@ const Features = () => {
                     {features.map((feature, idx) => (
                         <div
                             key={idx}
-                            className="group p-10 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-amber-500 shadow-sm hover:shadow-xl transition-all duration-500 animate-slide-up"
+                            className="group p-10 bg-white dark:bg-emerald-900 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-emerald-500 shadow-sm hover:shadow-xl transition-all duration-500 animate-slide-up"
                             style={{ animationDelay: `${idx * 0.1}s` }}
                         >
-                            <div className="w-16 h-16 bg-amber-50 dark:bg-white/5 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-amber-600 dark:group-hover:bg-amber-500 group-hover:text-white transition-all text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-white/5 shadow-sm">
+                            <div className="w-16 h-16 bg-emerald-50 dark:bg-white/5 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-emerald-600 dark:group-hover:bg-emerald-500 group-hover:text-white transition-all text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-white/5 shadow-sm">
                                 {feature.icon}
                             </div>
-                            <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors uppercase tracking-tight">{feature.title}</h3>
+                            <h3 className="text-xl font-bold mb-4 text-emerald-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors uppercase tracking-tight">{feature.title}</h3>
                             <p className="text-slate-500 dark:text-white/80 text-sm leading-relaxed">
                                 {feature.description}
                             </p>

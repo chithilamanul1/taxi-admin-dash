@@ -126,7 +126,7 @@ export default function ReviewsManagement() {
             {/* Header */}
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Reviews Management</h2>
+                    <h2 className="text-2xl font-bold text-emerald-900 dark:text-white">Reviews Management</h2>
                     <p className="text-slate-500 dark:text-slate-400">
                         {reviews.length} total • {reviews.filter(r => r.isApproved).length} approved
                     </p>
@@ -141,7 +141,7 @@ export default function ReviewsManagement() {
                     </button>
                     <button
                         onClick={() => setShowAddModal(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-xl font-bold hover:bg-amber-700 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-colors"
                     >
                         <Plus size={16} />
                         Add Review
@@ -156,7 +156,7 @@ export default function ReviewsManagement() {
                         key={f}
                         onClick={() => setFilter(f)}
                         className={`px-4 py-2 rounded-xl text-sm font-bold capitalize transition-all ${filter === f
-                                ? 'bg-amber-600 text-white'
+                                ? 'bg-emerald-600 text-white'
                                 : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                             }`}
                     >
@@ -175,7 +175,7 @@ export default function ReviewsManagement() {
             ) : (
                 <div className="grid gap-4">
                     {filteredReviews.map((review) => (
-                        <div key={review._id} className={`bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border ${review.isApproved ? 'border-amber-200 dark:border-slate-950' : 'border-amber-200 dark:border-amber-900'
+                        <div key={review._id} className={`bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border ${review.isApproved ? 'border-emerald-200 dark:border-emerald-900' : 'border-emerald-200 dark:border-emerald-900'
                             }`}>
                             <div className="flex flex-wrap gap-4 justify-between">
                                 {/* Review Content */}
@@ -187,7 +187,7 @@ export default function ReviewsManagement() {
                                                 key={star}
                                                 size={16}
                                                 className={star <= review.rating
-                                                    ? 'fill-amber-400 text-amber-400'
+                                                    ? 'fill-emerald-400 text-emerald-400'
                                                     : 'text-slate-300'
                                                 }
                                             />
@@ -202,7 +202,7 @@ export default function ReviewsManagement() {
                                     {/* Route & Distance */}
                                     <div className="flex flex-wrap gap-3 mb-3">
                                         {review.route && (
-                                            <span className="inline-flex items-center gap-1 px-3 py-1 bg-amber-50 dark:bg-slate-950/30 text-amber-700 dark:text-amber-400 rounded-full text-xs font-medium">
+                                            <span className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-full text-xs font-medium">
                                                 <MapPin size={12} />
                                                 {review.route}
                                             </span>
@@ -217,13 +217,13 @@ export default function ReviewsManagement() {
 
                                     {/* Author */}
                                     <div className="flex items-center gap-2">
-                                        <div className="w-8 h-8 bg-amber-100 dark:bg-slate-950 rounded-full flex items-center justify-center">
-                                            <span className="text-sm font-bold text-amber-600">
+                                        <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center">
+                                            <span className="text-sm font-bold text-emerald-600">
                                                 {review.userName?.charAt(0)?.toUpperCase()}
                                             </span>
                                         </div>
                                         <div>
-                                            <p className="text-sm font-bold text-slate-900 dark:text-white">{review.userName}</p>
+                                            <p className="text-sm font-bold text-emerald-900 dark:text-white">{review.userName}</p>
                                             <p className="text-xs text-slate-500">{new Date(review.createdAt).toLocaleDateString()}</p>
                                         </div>
                                         {review.isVerified && (
@@ -240,7 +240,7 @@ export default function ReviewsManagement() {
                                     {!review.isApproved ? (
                                         <button
                                             onClick={() => handleApprove(review._id, true)}
-                                            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-xl text-sm font-bold hover:bg-amber-700"
+                                            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700"
                                         >
                                             <CheckCircle size={16} />
                                             Approve
@@ -248,7 +248,7 @@ export default function ReviewsManagement() {
                                     ) : (
                                         <button
                                             onClick={() => handleApprove(review._id, false)}
-                                            className="flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-700 rounded-xl text-sm font-medium hover:bg-amber-200"
+                                            className="flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-xl text-sm font-medium hover:bg-emerald-200"
                                         >
                                             <XCircle size={16} />
                                             Unapprove
@@ -285,8 +285,8 @@ export default function ReviewsManagement() {
             {/* Add Review Modal */}
             {showAddModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto">
-                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Add New Review</h3>
+                    <div className="bg-white dark:bg-emerald-900 rounded-3xl p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto">
+                        <h3 className="text-xl font-bold text-emerald-900 dark:text-white mb-6">Add New Review</h3>
                         <form onSubmit={handleAddReview} className="space-y-4">
                             <div>
                                 <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Customer Name *</label>
@@ -294,7 +294,7 @@ export default function ReviewsManagement() {
                                     type="text"
                                     value={newReview.userName}
                                     onChange={(e) => setNewReview(prev => ({ ...prev, userName: e.target.value }))}
-                                    className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                                    className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-emerald-900 dark:text-white"
                                     required
                                 />
                             </div>
@@ -304,7 +304,7 @@ export default function ReviewsManagement() {
                                     type="email"
                                     value={newReview.userEmail}
                                     onChange={(e) => setNewReview(prev => ({ ...prev, userEmail: e.target.value }))}
-                                    className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                                    className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-emerald-900 dark:text-white"
                                 />
                             </div>
                             <div>
@@ -320,7 +320,7 @@ export default function ReviewsManagement() {
                                             <Star
                                                 size={32}
                                                 className={star <= newReview.rating
-                                                    ? 'fill-amber-400 text-amber-400'
+                                                    ? 'fill-emerald-400 text-emerald-400'
                                                     : 'text-slate-300'
                                                 }
                                             />
@@ -335,7 +335,7 @@ export default function ReviewsManagement() {
                                     value={newReview.route}
                                     onChange={(e) => setNewReview(prev => ({ ...prev, route: e.target.value }))}
                                     placeholder="e.g., Colombo → Sigiriya"
-                                    className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                                    className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-emerald-900 dark:text-white"
                                     required
                                 />
                             </div>
@@ -346,7 +346,7 @@ export default function ReviewsManagement() {
                                     value={newReview.distance}
                                     onChange={(e) => setNewReview(prev => ({ ...prev, distance: e.target.value }))}
                                     placeholder="e.g., 175"
-                                    className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                                    className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-emerald-900 dark:text-white"
                                 />
                             </div>
                             <div>
@@ -355,7 +355,7 @@ export default function ReviewsManagement() {
                                     value={newReview.comment}
                                     onChange={(e) => setNewReview(prev => ({ ...prev, comment: e.target.value }))}
                                     rows={4}
-                                    className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white resize-none"
+                                    className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-emerald-900 dark:text-white resize-none"
                                     required
                                 />
                             </div>
@@ -369,7 +369,7 @@ export default function ReviewsManagement() {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 px-4 py-3 bg-amber-600 text-white rounded-xl font-bold hover:bg-amber-700"
+                                    className="flex-1 px-4 py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700"
                                 >
                                     Add Review
                                 </button>

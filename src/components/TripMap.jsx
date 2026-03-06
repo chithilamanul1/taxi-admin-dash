@@ -207,8 +207,8 @@ export default function TripMap({ pickup, dropoff, waypoints, onRouteCalculated 
             {!mapInitialized && (
                 <div className="absolute inset-0 flex items-center justify-center bg-slate-50/50 backdrop-blur-[2px] z-10">
                     <div className="flex flex-col items-center gap-3">
-                        <div className="w-8 h-8 border-4 border-amber-600 border-t-transparent rounded-full animate-spin" />
-                        <p className="text-xs font-bold text-slate-950/40 uppercase tracking-widest">Loading Map...</p>
+                        <div className="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+                        <p className="text-xs font-bold text-emerald-900/40 uppercase tracking-widest">Loading Map...</p>
                     </div>
                 </div>
             )}

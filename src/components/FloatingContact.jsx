@@ -40,8 +40,8 @@ export default function FloatingContact() {
                         }}
                         className="group flex items-center gap-3"
                     >
-                        <span className="bg-amber-600 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg whitespace-nowrap uppercase tracking-wider">Live Chat</span>
-                        <div className="w-14 h-14 bg-amber-600 text-white rounded-2xl flex items-center justify-center shadow-xl hover:scale-110 transition-transform">
+                        <span className="bg-emerald-600 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg whitespace-nowrap uppercase tracking-wider">Live Chat</span>
+                        <div className="w-14 h-14 bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-xl hover:scale-110 transition-transform">
                             <MessageCircle size={24} />
                         </div>
                     </button>
@@ -63,7 +63,7 @@ export default function FloatingContact() {
                         className="group flex items-center gap-3"
                     >
                         <span className="bg-slate-700 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg whitespace-nowrap uppercase tracking-wider">Email Us</span>
-                        <div className="w-14 h-14 bg-white text-slate-950 rounded-2xl flex items-center justify-center shadow-xl hover:scale-110 transition-transform border border-slate-950/10">
+                        <div className="w-14 h-14 bg-white text-emerald-900 rounded-2xl flex items-center justify-center shadow-xl hover:scale-110 transition-transform border border-emerald-900/10">
                             <Mail size={24} />
                         </div>
                     </a>
@@ -81,13 +81,13 @@ export default function FloatingContact() {
             {/* Main Toggle */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center shadow-2xl transition-all duration-500 hover:scale-105 active:scale-95 z-[100] ${isOpen ? 'bg-white text-slate-950 rotate-90 border border-slate-950/10' : 'bg-slate-950 text-white shadow-[0_15px_40px_-10px_rgba(6,78,59,0.4)]'}`}
+                className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center shadow-2xl transition-all duration-500 hover:scale-105 active:scale-95 z-[100] ${isOpen ? 'bg-white text-emerald-900 rotate-90 border border-emerald-900/10' : 'bg-emerald-900 text-white shadow-[0_15px_40px_-10px_rgba(6,78,59,0.4)]'}`}
                 aria-label={isOpen ? "Close contact menu" : "Open contact menu"}
             >
                 {isOpen ? <X size={28} /> : (
                     <div className="relative">
                         <MessageCircle size={32} />
-                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-400 rounded-full border-2 border-slate-950 flex items-center justify-center">
+                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-400 rounded-full border-2 border-emerald-900 flex items-center justify-center">
                             <div className="w-1.5 h-1.5 bg-white rounded-full animate-ping"></div>
                         </span>
                     </div>

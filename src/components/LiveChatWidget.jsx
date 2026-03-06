@@ -175,18 +175,18 @@ export default function LiveChatWidget() {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-[90vw] md:w-[380px] h-[70vh] md:h-[500px] bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-800 z-[70] flex flex-col overflow-hidden animate-fade-in-up">
+        <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-[90vw] md:w-[380px] h-[70vh] md:h-[500px] bg-white dark:bg-emerald-900 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-800 z-[70] flex flex-col overflow-hidden animate-fade-in-up">
             {/* Header */}
-            <div className="bg-slate-950 p-5 flex justify-between items-center shrink-0">
+            <div className="bg-emerald-900 p-5 flex justify-between items-center shrink-0">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center animate-bounce">
-                        <User className="text-amber-400" size={20} />
+                        <User className="text-emerald-400" size={20} />
                     </div>
                     <div>
                         <h3 className="text-white font-bold text-sm">Live Support</h3>
                         <div className="flex items-center gap-1.5">
-                            <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></span>
-                            <span className="text-[10px] text-amber-300/80 font-medium uppercase tracking-wider">Online</span>
+                            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                            <span className="text-[10px] text-emerald-300/80 font-medium uppercase tracking-wider">Online</span>
                         </div>
                     </div>
                 </div>
@@ -204,11 +204,11 @@ export default function LiveChatWidget() {
             {status === 'authenticated' ? (
                 <>
                     {/* Messages Area */}
-                    <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-slate-50 dark:bg-slate-950/50">
+                    <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-slate-50 dark:bg-emerald-900/50">
                         {messages.length === 0 ? (
                             <div className="h-full flex flex-col items-center justify-center text-center opacity-50">
-                                <MessageCircle size={40} className="text-slate-950/20 mb-3" />
-                                <p className="text-xs font-bold text-slate-950/40 uppercase tracking-widest">How can we help you today?</p>
+                                <MessageCircle size={40} className="text-emerald-900/20 mb-3" />
+                                <p className="text-xs font-bold text-emerald-900/40 uppercase tracking-widest">How can we help you today?</p>
                             </div>
                         ) : (
                             messages.map((msg) => (
@@ -217,7 +217,7 @@ export default function LiveChatWidget() {
                                     className={`flex ${msg.sender === 'customer' ? 'justify-end' : 'justify-start'}`}
                                 >
                                     <div className={`max-w-[80%] p-3 rounded-2xl text-sm shadow-sm ${msg.sender === 'customer'
-                                        ? 'bg-amber-600 text-white rounded-tr-none'
+                                        ? 'bg-emerald-600 text-white rounded-tr-none'
                                         : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-none border border-slate-100 dark:border-slate-700'
                                         }`}>
                                         {msg.text}
@@ -229,19 +229,19 @@ export default function LiveChatWidget() {
                     </div>
 
                     {/* Input Area */}
-                    <form onSubmit={sendMessage} className="p-4 pb-8 md:pb-6 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 shrink-0">
+                    <form onSubmit={sendMessage} className="p-4 pb-8 md:pb-6 bg-white dark:bg-emerald-900 border-t border-slate-100 dark:border-slate-800 shrink-0">
                         <div className="relative flex items-center gap-2">
                             <input
                                 type="text"
                                 value={inputText}
                                 onChange={(e) => setInputText(e.target.value)}
                                 placeholder="Type your message..."
-                                className="flex-1 h-12 bg-slate-100 dark:bg-slate-800 border-none px-5 rounded-xl outline-none focus:ring-2 focus:ring-amber-500/20 text-sm font-medium pr-12 transition-all"
+                                className="flex-1 h-12 bg-slate-100 dark:bg-slate-800 border-none px-5 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500/20 text-sm font-medium pr-12 transition-all"
                             />
                             <button
                                 type="submit"
                                 disabled={loading || !inputText.trim()}
-                                className="absolute right-1 w-10 h-10 bg-amber-600 text-white rounded-lg flex items-center justify-center hover:bg-amber-700 transition-colors disabled:opacity-50"
+                                className="absolute right-1 w-10 h-10 bg-emerald-600 text-white rounded-lg flex items-center justify-center hover:bg-emerald-700 transition-colors disabled:opacity-50"
                             >
                                 {loading ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
                             </button>
@@ -252,17 +252,17 @@ export default function LiveChatWidget() {
                     </form>
                 </>
             ) : (
-                <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50 dark:bg-slate-900">
-                    <div className="w-16 h-16 bg-amber-100 dark:bg-slate-950/20 rounded-full flex items-center justify-center mb-6 animate-pulse">
-                        <Lock className="text-amber-600 dark:text-amber-400" size={32} />
+                <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50 dark:bg-emerald-900">
+                    <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/20 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                        <Lock className="text-emerald-600 dark:text-emerald-400" size={32} />
                     </div>
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Login Required</h3>
+                    <h3 className="text-lg font-bold text-emerald-900 dark:text-white mb-2">Login Required</h3>
                     <p className="text-sm text-slate-500 dark:text-slate-400 mb-8 max-w-[240px]">
                         Please sign in to start a live chat with our support team.
                     </p>
                     <button
                         onClick={() => signIn()}
-                        className="w-full py-3 bg-amber-600 text-white rounded-xl font-bold shadow-lg shadow-amber-600/20 hover:bg-amber-700 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                        className="w-full py-3 bg-emerald-600 text-white rounded-xl font-bold shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                     >
                         <User size={18} />
                         Sign In / Register

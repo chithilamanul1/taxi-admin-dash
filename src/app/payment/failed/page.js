@@ -12,11 +12,11 @@ function PaymentFailedContent() {
     const isCancelled = reason === 'cancelled';
 
     return (
-        <div className={`min-h-screen bg-gradient-to-br ${isCancelled ? 'from-amber-50 to-orange-100' : 'from-red-50 to-orange-100'} flex items-center justify-center p-4`}>
+        <div className={`min-h-screen bg-gradient-to-br ${isCancelled ? 'from-emerald-50 to-orange-100' : 'from-red-50 to-orange-100'} flex items-center justify-center p-4`}>
             <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 text-center">
-                <div className={`w-20 h-20 ${isCancelled ? 'bg-amber-100' : 'bg-red-100'} rounded-full flex items-center justify-center mx-auto mb-6`}>
+                <div className={`w-20 h-20 ${isCancelled ? 'bg-emerald-100' : 'bg-red-100'} rounded-full flex items-center justify-center mx-auto mb-6`}>
                     {isCancelled ? (
-                        <AlertCircle className="text-amber-500" size={48} />
+                        <AlertCircle className="text-emerald-500" size={48} />
                     ) : (
                         <XCircle className="text-red-500" size={48} />
                     )}
@@ -32,11 +32,11 @@ function PaymentFailedContent() {
                 </p>
 
                 {reason && (
-                    <div className={`mb-6 p-4 rounded-xl border text-left ${isCancelled ? 'bg-amber-50 border-amber-100' : 'bg-red-50 border-red-100'}`}>
-                        <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${isCancelled ? 'text-amber-500' : 'text-red-500'}`}>
+                    <div className={`mb-6 p-4 rounded-xl border text-left ${isCancelled ? 'bg-emerald-50 border-emerald-100' : 'bg-red-50 border-red-100'}`}>
+                        <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${isCancelled ? 'text-emerald-500' : 'text-red-500'}`}>
                             {isCancelled ? 'Status Update' : 'Error Details'}
                         </p>
-                        <p className={`text-sm font-bold capitalize ${isCancelled ? 'text-amber-900' : 'text-red-900'}`}>{reason.replace(/_/g, ' ')}</p>
+                        <p className={`text-sm font-bold capitalize ${isCancelled ? 'text-emerald-900' : 'text-red-900'}`}>{reason.replace(/_/g, ' ')}</p>
                     </div>
                 )}
 
@@ -50,7 +50,7 @@ function PaymentFailedContent() {
                             : ['Insufficient funds', 'Card declined by bank', 'Network timeout', 'Security verification failed']
                         ).map((item, i) => (
                             <li key={i} className="flex items-center gap-2 text-sm text-slate-600 font-medium">
-                                <div className={`w-1.5 h-1.5 rounded-full ${isCancelled ? 'bg-amber-400' : 'bg-red-400'}`}></div>
+                                <div className={`w-1.5 h-1.5 rounded-full ${isCancelled ? 'bg-emerald-400' : 'bg-red-400'}`}></div>
                                 {item}
                             </li>
                         ))}
@@ -87,7 +87,7 @@ function PaymentFailedContent() {
                             }
                         }}
                         id="retry-btn"
-                        className="flex items-center justify-center gap-2 w-full bg-amber-500 text-black py-4 rounded-xl font-black hover:bg-amber-400 transition-all shadow-lg active:scale-[0.98] group"
+                        className="flex items-center justify-center gap-2 w-full bg-emerald-500 text-black py-4 rounded-xl font-black hover:bg-emerald-400 transition-all shadow-lg active:scale-[0.98] group"
                     >
                         <RefreshCw id="retry-icon" size={20} className="group-hover:rotate-180 transition-transform duration-500" />
                         Try Again (Re-enter Details)
@@ -96,7 +96,7 @@ function PaymentFailedContent() {
                     <a
                         href="https://wa.me/94722885885"
                         target="_blank"
-                        className="flex items-center justify-center gap-2 w-full bg-slate-950 text-white py-4 rounded-xl font-bold hover:bg-amber-800 transition-all shadow-lg active:scale-[0.98]"
+                        className="flex items-center justify-center gap-2 w-full bg-emerald-900 text-white py-4 rounded-xl font-bold hover:bg-emerald-800 transition-all shadow-lg active:scale-[0.98]"
                     >
                         <Phone size={20} />
                         Talk to Support
@@ -112,7 +112,7 @@ function PaymentFailedContent() {
 
                     <a
                         href="tel:+94716885880"
-                        className="flex items-center justify-center gap-2 w-full text-slate-950 py-3 rounded-lg font-bold hover:underline"
+                        className="flex items-center justify-center gap-2 w-full text-emerald-900 py-3 rounded-lg font-bold hover:underline"
                     >
                         <Phone size={20} />
                         Call for Assistance

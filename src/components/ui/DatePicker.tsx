@@ -11,7 +11,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({ label, error, className 
         <div className="w-full space-y-1.5">
             {label && <label className="text-sm font-medium text-gray-300 ml-1">{label}</label>}
             <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 transition-colors group-focus-within:text-amber-600">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 transition-colors group-focus-within:text-emerald-600">
                     <CalendarIcon size={18} />
                 </div>
                 <input
@@ -20,7 +20,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({ label, error, className 
             w-full bg-white/5 border border-white/10 rounded-xl py-3 px-10
             text-white scheme-dark
             transition-all duration-200 outline-none
-            focus:border-amber-600/50 focus:ring-4 focus:ring-amber-600/5
+            focus:border-emerald-600/50 focus:ring-4 focus:ring-emerald-600/5
             ${error ? 'border-red-500/50' : ''}
             ${className}
           `}
