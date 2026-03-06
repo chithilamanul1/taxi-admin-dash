@@ -65,7 +65,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const vehicleType = vehicleData.vehicleType;
     const vehicleSlug = vehicleData.vehicleSlug || vehicleType; // Use vehicleSlug if available, fallback to vehicleType
 
-    if (matchedOverride) {
+    if (matchedOverride && !isAirportRide) {
         // 1. Check for Fixed Pricing (Precedence)
         let vPricing = {};
         if (matchedOverride.pricing) {

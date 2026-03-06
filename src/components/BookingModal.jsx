@@ -914,7 +914,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 type="button"
                                                 onClick={() => changeCurrency(c.code)}
                                                 className={`p-3 rounded-2xl border transition-all flex flex-col gap-1.5 text-left cursor-pointer relative overflow-hidden group/card ${currency === c.code
-                                                    ? 'bg-emerald-400 border-emerald-400 shadow-[0_0_15px_rgba(251,191,36,0.3)] scale-[1.02]'
+                                                    ? 'bg-emerald-400 border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)] scale-[1.02]'
                                                     : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
                                                     }`}
                                             >
