@@ -159,7 +159,7 @@ const getPrintFriendlyTemplate = (content, title = 'Booking Details') => `
         }
     </style>
 </head>
-<body style="margin: 0; padding: 20px; font-family: 'Arial', 'Helvetica', sans-serif; background-color: #ffffff; color: #1f2937; font-size: 12px; line-height: 1.3;">
+<body style="margin: 0; padding: 10px; font-family: 'Arial', 'Helvetica', sans-serif; background-color: #ffffff; color: #1f2937; font-size: 11px; line-height: 1.2;">
     <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 595px; margin: 0 auto; background-color: #ffffff;">
         <!-- Header -->
         <tr>
@@ -421,18 +421,18 @@ export async function sendBookingConfirmation(booking) {
 
     const ownerContent = `
         <!-- Booking ID Header -->
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 10px;">
             <tr>
-                <td style="background-color: #064e3b; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
+                <td style="background-color: #064e3b; color: #ffffff; padding: 10px 16px; font-size: 16px; font-weight: bold;">
                     NEW BOOKING #${bookingId}
                 </td>
             </tr>
         </table>
 
         <!-- Customer Details -->
-        <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
+        <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 15px;">
             <tr style="background-color: #f9fafb;">
-                <td colspan="2" style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
+                <td colspan="2" style="font-weight: bold; font-size: 11px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 6px 10px;">
                     CUSTOMER DETAILS
                 </td>
             </tr>
@@ -459,9 +459,9 @@ export async function sendBookingConfirmation(booking) {
         </table>
 
         <!-- Trip Details -->
-        <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
+        <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 15px;">
             <tr style="background-color: #f9fafb;">
-                <td colspan="2" style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
+                <td colspan="2" style="font-weight: bold; font-size: 11px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 6px 10px;">
                     TRIP DETAILS
                 </td>
             </tr>
@@ -526,9 +526,9 @@ export async function sendBookingConfirmation(booking) {
         </table>
 
         <!-- Payment Summary -->
-        <table width="100%" cellpadding="4" cellspacing="0" style="border: 2px solid #064e3b; margin-bottom: 20px;">
+        <table width="100%" cellpadding="4" cellspacing="0" style="border: 2px solid #064e3b; margin-bottom: 15px;">
             <tr style="background-color: #064e3b;">
-                <td colspan="2" style="font-weight: bold; font-size: 12px; color: #ffffff; padding: 10px;">
+                <td colspan="2" style="font-weight: bold; font-size: 11px; color: #ffffff; padding: 6px 10px;">
                     PAYMENT SUMMARY
                 </td>
             </tr>
@@ -552,24 +552,24 @@ export async function sendBookingConfirmation(booking) {
             </tr>
             ${booking.paymentType === 'partial' ? `
             <tr style="background-color: #fffbeb;">
-                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #92400e; font-size: 12px; font-weight: bold;">Amount Paid (50%)</td>
-                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 14px; color: #92400e;">
+                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #92400e; font-size: 11px; font-weight: bold;">Amount Paid (50%)</td>
+                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 13px; color: #92400e;">
                     ${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPaidAmount) ? booking.displayPaidAmount : (booking.paidAmount || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
                 </td>
             </tr>
             <tr style="background-color: #fef2f2;">
-                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #991b1b; font-size: 12px; font-weight: bold;">Balance Due (at Stop)</td>
-                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 14px; color: #991b1b;">
+                <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #991b1b; font-size: 11px; font-weight: bold;">Balance Due (at Stop)</td>
+                <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 13px; color: #991b1b;">
                     ${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayBalanceAmount) ? booking.displayBalanceAmount : (booking.balanceAmount || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
                 </td>
             </tr>
             ` : ''}
         </table>
         
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 10px;">
              <tr>
                 <td style="text-align: center;">
-                    <a href="https://wa.me/${booking.guestPhone?.replace(/[^0-9]/g, '')}" style="display: inline-block; background-color: #25D366; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">
+                    <a href="https://wa.me/${booking.guestPhone?.replace(/[^0-9]/g, '')}" style="display: inline-block; background-color: #25D366; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 13px;">
                         Connect via WhatsApp
                     </a>
                 </td>
@@ -586,7 +586,7 @@ export async function sendBookingConfirmation(booking) {
                 </td>
             </tr>
         </table>
-    `;
+`;
 
     try {
         const transporter = getTransporter();
@@ -594,8 +594,8 @@ export async function sendBookingConfirmation(booking) {
             await transporter.sendMail({
                 from: FROM_EMAIL,
                 to: OWNER_EMAIL,
-                subject: `NEW BOOKING #${bookingId} | ${booking.customerName || 'Guest'} | ${booking.scheduledDate || 'Today'}`,
-                html: getPrintFriendlyTemplate(ownerContent, `Booking #${bookingId}`)
+                subject: `NEW BOOKING #${bookingId} | ${booking.customerName || 'Guest'} | ${booking.scheduledDate || 'Today'} `,
+                html: getPrintFriendlyTemplate(ownerContent, `Booking #${bookingId} `)
             });
             console.log('[Email] Print-friendly booking notification sent to owner');
         } else {
@@ -615,7 +615,7 @@ export async function sendPaymentConfirmation(booking) {
     const bookingId = booking._id?.toString().slice(-8).toUpperCase();
 
     const content = `
-        <!-- Hero Section -->
+    < !--Hero Section-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
             <tr>
                 <td>
@@ -630,7 +630,7 @@ export async function sendPaymentConfirmation(booking) {
             </tr>
         </table>
 
-        <!-- Amount Card -->
+        <!--Amount Card-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, #3f2c06, #1f1608); border: 2px solid ${COLORS.gold}; border-radius: 16px; margin-bottom: 30px;">
             <tr>
                 <td style="padding: 30px; text-align: center;">
@@ -644,7 +644,7 @@ export async function sendPaymentConfirmation(booking) {
             </tr>
         </table>
 
-        <!-- Receipt Details -->
+        <!--Receipt Details-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
             ${components.infoCard('🧾', 'Transaction ID', booking.transactionId || bookingId)}
             ${components.infoCard('📋', 'Booking Reference', `#${bookingId}`)}
@@ -653,16 +653,16 @@ export async function sendPaymentConfirmation(booking) {
         </table>
 
         <!--Confirmation -->
-        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: rgba(34,197,94,0.1); border: 1px solid ${COLORS.success}; border-radius: 12px; margin-bottom: 20px;">
-            <tr>
-                <td style="padding: 20px; text-align: center;">
-                    <span style="color: ${COLORS.success}; font-size: 14px;">✅ Your booking is confirmed. Our driver will contact you before pickup.</span>
-                </td>
-            </tr>
-        </table>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: rgba(34,197,94,0.1); border: 1px solid ${COLORS.success}; border-radius: 12px; margin-bottom: 20px;">
+        <tr>
+            <td style="padding: 20px; text-align: center;">
+                <span style="color: ${COLORS.success}; font-size: 14px;">✅ Your booking is confirmed. Our driver will contact you before pickup.</span>
+            </td>
+        </tr>
+    </table>
 
         ${components.button('View Booking Details', `${BASE_URL}/my-bookings`)}
-    `;
+`;
 
     if (booking.customerEmail) {
         try {
@@ -688,7 +688,7 @@ export async function sendDriverAssigned(booking, driver) {
     const pickupShort = booking.pickupLocation?.address?.split(',')[0] || 'Pickup';
 
     const content = `
-        <!-- Hero Section -->
+    < !--Hero Section-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
             <tr>
                 <td>
@@ -703,7 +703,7 @@ export async function sendDriverAssigned(booking, driver) {
             </tr>
         </table>
 
-        <!-- Driver Card -->
+        <!--Driver Card-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, ${COLORS.primary}, #047857); border-radius: 16px; margin-bottom: 30px; overflow: hidden;">
             <tr>
                 <td style="padding: 30px; text-align: center;">
@@ -717,7 +717,7 @@ export async function sendDriverAssigned(booking, driver) {
             </tr>
         </table>
 
-        <!-- Driver Details -->
+        <!--Driver Details-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
             ${components.infoCard('📱', 'Phone Number', driver.phone || 'Will be shared soon')}
             ${components.infoCard('🚗', 'Vehicle', `${driver.vehicleMake || 'Toyota'} ${driver.vehicleModel || 'Prius'}`)}
@@ -727,29 +727,29 @@ export async function sendDriverAssigned(booking, driver) {
         </table>
 
         <!--Instructions -->
-        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: rgba(212,175,55,0.1); border: 1px solid ${COLORS.gold}; border-radius: 12px; margin-bottom: 20px;">
-            <tr>
-                <td style="padding: 20px;">
-                    <p style="margin: 0 0 10px; color: ${COLORS.goldLight}; font-size: 14px; font-weight: 600;">💡 Tips for a smooth pickup:</p>
-                    <p style="margin: 0 0 6px; color: ${COLORS.textMuted}; font-size: 13px;">• Driver will call you 15 minutes before arrival</p>
-                    <p style="margin: 0 0 6px; color: ${COLORS.textMuted}; font-size: 13px;">• Look for the vehicle number at the pickup point</p>
-                    <p style="margin: 0; color: ${COLORS.textMuted}; font-size: 13px;">• Keep your phone accessible for driver contact</p>
-                </td>
-            </tr>
-        </table>
-
-        ${components.button('Track My Ride', `${BASE_URL}/booking/${booking._id}`)}
-
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: rgba(212,175,55,0.1); border: 1px solid ${COLORS.gold}; border-radius: 12px; margin-bottom: 20px;">
         <tr>
-            <td style="text-align: center;">
-                <a href="tel:${driver.phone || '+94722885885'}" style="color: ${COLORS.primaryLight}; text-decoration: none; font-size: 14px; font-weight: 600;">
-                    📞 Call Driver Now
-                </a>
+            <td style="padding: 20px;">
+                <p style="margin: 0 0 10px; color: ${COLORS.goldLight}; font-size: 14px; font-weight: 600;">💡 Tips for a smooth pickup:</p>
+                <p style="margin: 0 0 6px; color: ${COLORS.textMuted}; font-size: 13px;">• Driver will call you 15 minutes before arrival</p>
+                <p style="margin: 0 0 6px; color: ${COLORS.textMuted}; font-size: 13px;">• Look for the vehicle number at the pickup point</p>
+                <p style="margin: 0; color: ${COLORS.textMuted}; font-size: 13px;">• Keep your phone accessible for driver contact</p>
             </td>
         </tr>
     </table>
-    `;
+
+        ${components.button('Track My Ride', `${BASE_URL}/booking/${booking._id}`)}
+
+<table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
+    <tr>
+        <td style="text-align: center;">
+            <a href="tel:${driver.phone || '+94722885885'}" style="color: ${COLORS.primaryLight}; text-decoration: none; font-size: 14px; font-weight: 600;">
+                📞 Call Driver Now
+            </a>
+        </td>
+    </tr>
+</table>
+`;
 
     if (booking.customerEmail) {
         try {
@@ -776,7 +776,7 @@ export async function sendTripReminder(booking) {
     const dropoffShort = booking.dropoffLocation?.address?.split(',')[0] || 'Dropoff';
 
     const content = `
-        <!-- Hero Section -->
+    < !--Hero Section-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
             <tr>
                 <td>
@@ -791,7 +791,7 @@ export async function sendTripReminder(booking) {
             </tr>
         </table>
 
-        <!-- Countdown Timer Visual -->
+        <!--Countdown Timer Visual-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, ${COLORS.warning}, #d97706); border-radius: 16px; margin-bottom: 30px;">
             <tr>
                 <td style="padding: 30px; text-align: center;">
@@ -802,7 +802,7 @@ export async function sendTripReminder(booking) {
             </tr>
         </table>
 
-        <!-- Trip Summary -->
+        <!--Trip Summary-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
             ${components.infoCard('📋', 'Booking ID', `#${bookingId}`)}
             ${components.infoCard('📍', 'Pickup', pickupShort)}
@@ -810,31 +810,31 @@ export async function sendTripReminder(booking) {
             ${components.infoCard('🚗', 'Vehicle', booking.vehicleType || 'Standard')}
         </table>
 
-        <!-- Checklist -->
-        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 12px; border: 1px solid ${COLORS.border}; margin-bottom: 20px;">
-            <tr>
-                <td style="padding: 20px;">
-                    <p style="margin: 0 0 15px; color: ${COLORS.text}; font-size: 16px; font-weight: 600;">✅ Pre-Trip Checklist</p>
-                    <p style="margin: 0 0 8px; color: ${COLORS.textMuted}; font-size: 14px;">☐ Passport/ID ready</p>
-                    <p style="margin: 0 0 8px; color: ${COLORS.textMuted}; font-size: 14px;">☐ Flight details confirmed</p>
-                    <p style="margin: 0 0 8px; color: ${COLORS.textMuted}; font-size: 14px;">☐ Phone charged for driver contact</p>
-                    <p style="margin: 0; color: ${COLORS.textMuted}; font-size: 14px;">☐ Luggage packed</p>
-                </td>
-            </tr>
-        </table>
-
-        ${components.button('View Booking Details', `${BASE_URL}/my-bookings`)}
-
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
+        <!--Checklist -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 12px; border: 1px solid ${COLORS.border}; margin-bottom: 20px;">
         <tr>
-            <td style="text-align: center;">
-                <p style="margin: 0; color: ${COLORS.textMuted}; font-size: 13px;">
-                    Need to make changes? <a href="https://wa.me/94722885885" style="color: ${COLORS.primaryLight}; text-decoration: none; font-weight: 600;">Contact us on WhatsApp</a>
-                </p>
+            <td style="padding: 20px;">
+                <p style="margin: 0 0 15px; color: ${COLORS.text}; font-size: 16px; font-weight: 600;">✅ Pre-Trip Checklist</p>
+                <p style="margin: 0 0 8px; color: ${COLORS.textMuted}; font-size: 14px;">☐ Passport/ID ready</p>
+                <p style="margin: 0 0 8px; color: ${COLORS.textMuted}; font-size: 14px;">☐ Flight details confirmed</p>
+                <p style="margin: 0 0 8px; color: ${COLORS.textMuted}; font-size: 14px;">☐ Phone charged for driver contact</p>
+                <p style="margin: 0; color: ${COLORS.textMuted}; font-size: 14px;">☐ Luggage packed</p>
             </td>
         </tr>
     </table>
-    `;
+
+        ${components.button('View Booking Details', `${BASE_URL}/my-bookings`)}
+
+<table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 20px;">
+    <tr>
+        <td style="text-align: center;">
+            <p style="margin: 0; color: ${COLORS.textMuted}; font-size: 13px;">
+                Need to make changes? <a href="https://wa.me/94722885885" style="color: ${COLORS.primaryLight}; text-decoration: none; font-weight: 600;">Contact us on WhatsApp</a>
+            </p>
+        </td>
+    </tr>
+</table>
+`;
 
     if (booking.customerEmail) {
         try {
@@ -860,7 +860,7 @@ export async function sendTripCompletedNotification(booking) {
     const dropoffShort = booking.dropoffLocation?.address?.split(',')[0] || 'Dropoff';
 
     const content = `
-        <!-- Hero Section -->
+    < !--Hero Section-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
             <tr>
                 <td>
@@ -875,7 +875,7 @@ export async function sendTripCompletedNotification(booking) {
             </tr>
         </table>
 
-        <!-- Trip Summary -->
+        <!--Trip Summary-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
             ${components.infoCard('📍', 'Route', `${pickupShort} → ${dropoffShort}`)}
             ${components.infoCard('📏', 'Distance Covered', `${booking.distanceKm || 0} km`)}
@@ -883,21 +883,21 @@ export async function sendTripCompletedNotification(booking) {
         </table>
 
         <!--Review CTA-- >
-        <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(217,119,6,0.1)); border: 1px solid ${COLORS.warning}; border-radius: 16px; margin-bottom: 30px;">
-            <tr>
-                <td style="padding: 30px; text-align: center;">
-                    <p style="margin: 0 0 10px; font-size: 30px;">⭐⭐⭐⭐⭐</p>
-                    <p style="margin: 0 0 8px; color: ${COLORS.text}; font-size: 18px; font-weight: 700;">How was your trip?</p>
-                    <p style="margin: 0 0 20px; color: ${COLORS.textMuted}; font-size: 14px;">Your feedback helps us improve and helps other travelers!</p>
-                    <a href="${BASE_URL}/review/${booking._id}" style="display: inline-block; background: linear-gradient(135deg, ${COLORS.warning}, #d97706); color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 14px;">
-                        Leave a Review
-                    </a>
-                </td>
-            </tr>
-        </table>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(217,119,6,0.1)); border: 1px solid ${COLORS.warning}; border-radius: 16px; margin-bottom: 30px;">
+        <tr>
+            <td style="padding: 30px; text-align: center;">
+                <p style="margin: 0 0 10px; font-size: 30px;">⭐⭐⭐⭐⭐</p>
+                <p style="margin: 0 0 8px; color: ${COLORS.text}; font-size: 18px; font-weight: 700;">How was your trip?</p>
+                <p style="margin: 0 0 20px; color: ${COLORS.textMuted}; font-size: 14px;">Your feedback helps us improve and helps other travelers!</p>
+                <a href="${BASE_URL}/review/${booking._id}" style="display: inline-block; background: linear-gradient(135deg, ${COLORS.warning}, #d97706); color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 14px;">
+                    Leave a Review
+                </a>
+            </td>
+        </tr>
+    </table>
 
         ${components.button('Book Another Trip', `${BASE_URL}`, false)}
-    `;
+`;
 
     if (booking.customerEmail) {
         try {
@@ -920,7 +920,7 @@ export async function sendTripCompletedNotification(booking) {
 // 6. REVIEW THANK YOU
 export async function sendReviewThankYou(review) {
     const content = `
-        <!-- Hero Section -->
+    < !--Hero Section-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
             <tr>
                 <td>
@@ -958,7 +958,7 @@ export async function sendReviewThankYou(review) {
         </table>
 
         ${components.button('Book Another Trip', `${BASE_URL}`)}
-    `;
+`;
 
     if (review.userEmail) {
         try {
@@ -983,18 +983,18 @@ export async function sendBookingCancelled(booking) {
     const bookingId = booking._id?.toString().slice(-8).toUpperCase();
 
     const content = `
-        < table width = "100%" cellpadding = "0" cellspacing = "0" style = "text-align: center; margin-bottom: 30px;" >
-            <tr>
-                <td>
-                    ${components.badge('❌ Booking Cancelled', 'warning')}
-                    <h2 style="color: ${COLORS.text}; margin: 20px 0 10px; font-size: 24px; font-weight: 700;">
-                        Booking Cancelled
-                    </h2>
-                    <p style="color: ${COLORS.textMuted}; margin: 0; font-size: 14px;">
-                        Your booking #${bookingId} has been cancelled.
-                    </p>
-                </td>
-            </tr>
+    < table width = "100%" cellpadding = "0" cellspacing = "0" style = "text-align: center; margin-bottom: 30px;" >
+        <tr>
+            <td>
+                ${components.badge('❌ Booking Cancelled', 'warning')}
+                <h2 style="color: ${COLORS.text}; margin: 20px 0 10px; font-size: 24px; font-weight: 700;">
+                    Booking Cancelled
+                </h2>
+                <p style="color: ${COLORS.textMuted}; margin: 0; font-size: 14px;">
+                    Your booking #${bookingId} has been cancelled.
+                </p>
+            </td>
+        </tr>
         </table >
 
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
@@ -1025,7 +1025,7 @@ export async function sendBookingCancelled(booking) {
                 </td>
             </tr>
         </table>
-    `;
+`;
 
     if (booking.customerEmail) {
         try {
@@ -1078,18 +1078,18 @@ export async function sendBookingStatusUpdate(booking, status) {
 // 10. LOGIN NOTIFICATION
 export async function sendLoginNotification(user) {
     const content = `
-        < table width = "100%" cellpadding = "0" cellspacing = "0" style = "text-align: center; margin-bottom: 30px;" >
-            <tr>
-                <td>
-                    <div style="font-size: 50px; margin-bottom: 15px;">🛡️</div>
-                    <h2 style="color: ${COLORS.text}; margin: 0 0 10px; font-size: 24px; font-weight: 700;">
-                        New Login Detected
-                    </h2>
-                    <p style="color: ${COLORS.textMuted}; margin: 0; font-size: 14px;">
-                        Hello ${user.name || 'User'}, we noticed a new login to your Airport Taxis account.
-                    </p>
-                </td>
-            </tr>
+    < table width = "100%" cellpadding = "0" cellspacing = "0" style = "text-align: center; margin-bottom: 30px;" >
+        <tr>
+            <td>
+                <div style="font-size: 50px; margin-bottom: 15px;">🛡️</div>
+                <h2 style="color: ${COLORS.text}; margin: 0 0 10px; font-size: 24px; font-weight: 700;">
+                    New Login Detected
+                </h2>
+                <p style="color: ${COLORS.textMuted}; margin: 0; font-size: 14px;">
+                    Hello ${user.name || 'User'}, we noticed a new login to your Airport Taxis account.
+                </p>
+            </td>
+        </tr>
         </table >
 
         <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
@@ -1103,7 +1103,7 @@ export async function sendLoginNotification(user) {
         </p>
 
         ${components.button('Manage My Account', `${BASE_URL}/profile`)}
-    `;
+`;
 
     if (user.email) {
         try {
@@ -1128,7 +1128,7 @@ export async function sendCustomTripInquiry(data) {
     const inquiryId = Math.random().toString(36).substring(7).toUpperCase();
 
     const ownerContent = `
-        < !--Inquiry Header-- >
+    < !--Inquiry Header-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
             <tr>
                 <td style="background-color: #064e3b; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
@@ -1222,7 +1222,7 @@ export async function sendCustomTripInquiry(data) {
                 </td>
             </tr>
         </table>
-    `;
+`;
 
     try {
         const resend = getResend();
@@ -1262,12 +1262,12 @@ export async function sendOwnerNotification(subject, details) {
 
     try {
         const content = `
-        < table width = "100%" cellpadding = "0" cellspacing = "0" style = "margin-bottom: 20px;" >
-            <tr>
-                <td style="background-color: ${COLORS.primary}; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
-                    SYSTEM ALERT: ${subject.toUpperCase()}
-                </td>
-            </tr>
+    < table width = "100%" cellpadding = "0" cellspacing = "0" style = "margin-bottom: 20px;" >
+        <tr>
+            <td style="background-color: ${COLORS.primary}; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
+                SYSTEM ALERT: ${subject.toUpperCase()}
+            </td>
+        </tr>
             </table >
             <table width="100%" cellpadding="10" cellspacing="0" style="border: 1px solid ${COLORS.border}; background-color: rgba(15, 23, 42, 0.5);">
                 ${Object.entries(details).map(([key, value]) => `
@@ -1279,7 +1279,7 @@ export async function sendOwnerNotification(subject, details) {
             </table>
             <br/>
             ${components.button('Open Admin Panel', `${BASE_URL}/admin`)}
-    `;
+`;
 
         await transporter.sendMail({
             from: FROM_EMAIL,
@@ -1300,7 +1300,7 @@ export async function sendManualInvoice(booking) {
     const bookingId = booking._id?.toString().slice(-8).toUpperCase();
 
     const content = `
-        <!-- Hero Section -->
+    < !--Hero Section-- >
         <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
             <tr>
                 <td>
@@ -1331,18 +1331,18 @@ export async function sendManualInvoice(booking) {
         </table>
 
         <!--Details Card-- >
-        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
-            ${components.infoCard('📍', 'Trip Route', `${booking.pickupLocation?.address?.split(',')[0] || 'Pickup'} to ${booking.dropoffLocation?.address?.split(',')[0] || 'Dropoff'}`)}
-            ${components.infoCard('📅', 'Date & Time', `${booking.scheduledDate || 'TBD'} ${booking.scheduledTime || ''}`)}
-            ${booking.notes ? components.infoCard('📝', 'Notes', booking.notes) : ''}
-        </table>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
+        ${components.infoCard('📍', 'Trip Route', `${booking.pickupLocation?.address?.split(',')[0] || 'Pickup'} to ${booking.dropoffLocation?.address?.split(',')[0] || 'Dropoff'}`)}
+        ${components.infoCard('📅', 'Date & Time', `${booking.scheduledDate || 'TBD'} ${booking.scheduledTime || ''}`)}
+        ${booking.notes ? components.infoCard('📝', 'Notes', booking.notes) : ''}
+    </table>
 
         ${components.button('Pay Securely Online', booking.paymentLink)}
 
-    <p style="text-align: center; color: ${COLORS.textMuted}; font-size: 12px; margin-top: 20px;">
-        Ref: #${bookingId} | Secured by Airport Taxis Sri Lanka
-    </p>
-    `;
+<p style="text-align: center; color: ${COLORS.textMuted}; font-size: 12px; margin-top: 20px;">
+    Ref: #${bookingId} | Secured by Airport Taxis Sri Lanka
+</p>
+`;
 
     if (booking.customerEmail) {
         try {
