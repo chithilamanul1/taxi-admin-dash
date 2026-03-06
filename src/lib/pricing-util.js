@@ -27,6 +27,37 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
 
     const tiers = (vehicleData.tiers || []).sort((a, b) => a.min - b.min);
 
+    // Helper for robust location matching
+    const findMatchingDestination = (address, destinationsList) => {
+        if (!address || !destinationsList || destinationsList.length === 0) return null;
+
+        const normalize = (str) => {
+            if (!str) return '';
+            return str.toLowerCase()
+                .replace(/sri lanka/g, '')
+                .replace(/[,.-]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+        };
+
+        const addrLower = normalize(address);
+
+        const matches = destinationsList.filter(d => {
+            const name = normalize(d.name);
+            const title = normalize(d.title);
+            if (!name && !title) return false;
+            return (name && addrLower.includes(name)) || (title && addrLower.includes(title));
+        });
+
+        if (matches.length === 0) return null;
+
+        return matches.sort((a, b) => {
+            const lenA = (a.name || a.title || '').length;
+            const lenB = (b.name || b.title || '').length;
+            return lenB - lenA;
+        })[0];
+    };
+
     // Calculate distance-based price
     let distancePrice = 0;
     let overrideApplied = false;
