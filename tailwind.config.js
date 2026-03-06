@@ -9,8 +9,25 @@ export default {
     theme: {
         extend: {
             colors: {
-                'navy': '#001C3D', // Custom Navy
+                'navy': '#111827', // Gray 900
+                'gold': '#f59e0b', // Amber 500
+                'gold-light': '#fbbf24', // Amber 400
+                'gold-dark': '#d97706', // Amber 600
                 'accent-blue': '#003366',
+                // Re-mapping Emerald to Amber for Global Theme Change (Taxi Yellow)
+                emerald: {
+                    50: '#fffbeb', // Amber 50
+                    100: '#fef3c7', // Amber 100
+                    200: '#fde68a', // Amber 200
+                    300: '#fcd34d', // Amber 300
+                    400: '#fbbf24', // Amber 400 (Main Yellow)
+                    500: '#f59e0b', // Amber 500
+                    600: '#d97706', // Amber 600
+                    700: '#b45309', // Amber 700
+                    800: '#92400e', // Amber 800
+                    900: '#111827', // Gray 900 (Replacing Dark Green with Black/Gray)
+                    950: '#030712', // Gray 950
+                },
             },
             fontFamily: {
                 'sans': ['Inter', 'sans-serif', 'Montserrat'],

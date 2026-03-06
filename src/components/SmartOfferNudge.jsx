@@ -14,7 +14,7 @@ const SmartOfferNudge = ({ offer, onClose }) => {
 
     return (
         <div className="fixed bottom-2 right-2 md:bottom-4 md:right-4 z-[60] animate-slide-up-fade max-w-[calc(100vw-24px)] group/nudge">
-            <div className="relative bg-gradient-to-br from-emerald-500 via-emerald-400 to-emerald-600 p-[1px] rounded-[2rem] shadow-[0_25px_60px_-15px_rgba(16,185,129,0.3)]">
+            <div className="relative bg-gradient-to-br from-emerald-500 via-emerald-500 to-orange-600 p-[1px] rounded-[2rem] shadow-[0_25px_60px_-15px_rgba(245,158,11,0.3)]">
                 <div className="bg-white/95 dark:bg-emerald-900/95 backdrop-blur-xl rounded-[1.95rem] p-5 flex items-start gap-4 relative overflow-hidden">
 
                     {/* Premium Background Pattern */}
@@ -27,7 +27,7 @@ const SmartOfferNudge = ({ offer, onClose }) => {
 
                     {/* Icon Container with Gradient */}
                     <div className="relative">
-                        <div className="bg-gradient-to-tr from-emerald-100 to-emerald-50 dark:from-emerald-900/40 dark:to-emerald-800/20 p-3 rounded-2xl text-emerald-600 dark:text-emerald-400 shrink-0 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] border border-emerald-500/10">
+                        <div className="bg-gradient-to-tr from-emerald-100 to-orange-50 dark:from-emerald-900/40 dark:to-orange-800/20 p-3 rounded-2xl text-emerald-600 dark:text-emerald-400 shrink-0 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] border border-emerald-500/10">
                             <Tag size={22} className="animate-pulse" />
                         </div>
                         <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white dark:border-emerald-900 shadow-sm animate-bounce"></div>
@@ -71,7 +71,7 @@ const SmartOfferNudge = ({ offer, onClose }) => {
                     </button>
 
                     {/* Minimal Progress Bar */}
-                    <div className="absolute bottom-0 left-0 h-[2.5px] bg-gradient-to-r from-emerald-500 to-emerald-400 w-full origin-left animate-timer-progress opacity-60"></div>
+                    <div className="absolute bottom-0 left-0 h-[2.5px] bg-gradient-to-r from-emerald-500 to-orange-400 w-full origin-left animate-timer-progress opacity-60"></div>
                 </div>
             </div>
         </div>

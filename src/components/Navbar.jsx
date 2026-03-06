@@ -150,7 +150,7 @@ export default function Navbar() {
                                     {session.user?.image ? (
                                         <img src={session.user.image} alt={session.user.name} className="w-full h-full rounded-full object-cover" />
                                     ) : (
-                                        <div className="w-full h-full bg-emerald-600 text-white flex items-center justify-center font-bold">{session.user?.name?.charAt(0)}</div>
+                                        <div className="w-full h-full bg-amber-600 text-white flex items-center justify-center font-bold">{session.user?.name?.charAt(0)}</div>
                                     )}
                                 </button>
                                 <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-white/10 dark:border-slate-800">
