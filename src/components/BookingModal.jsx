@@ -9,8 +9,8 @@ import Link from 'next/link';
 import { useCurrency } from '../context/CurrencyContext';
 import { calculateBasePrice, calculateSurcharges, calculatePaymentFees } from '../lib/pricing-util';
 import LocationInput from './LocationInput';
+import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
-
 const STEPS = [
     { id: 1, title: 'Route & Vehicle', icon: MapPin },
     { id: 2, title: 'Checkout & Pay', icon: CreditCard },
