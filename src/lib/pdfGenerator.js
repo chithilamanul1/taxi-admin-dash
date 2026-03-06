@@ -17,63 +17,63 @@ export const generateBookingPDF = (booking) => {
     doc.setFontSize(22);
     doc.setTextColor(...COLORS.emerald);
     doc.setFont(undefined, 'bold');
-    doc.text("AIRPORT TAXIS", 15, 25);
+    doc.text("AIRPORT TAXIS", 15, 20);
     doc.setFontSize(8);
-    doc.text("PVT (LTD)", 15, 30);
+    doc.text("PVT (LTD)", 15, 25);
 
     // -- Header Details (Top Right) --
     doc.setFontSize(24);
     doc.setTextColor(...COLORS.black);
     doc.setFont(undefined, 'bold');
-    doc.text(isCash ? "CASH RECEIPT" : "TAX INVOICE", 195, 25, { align: "right" });
+    doc.text(isCash ? "CASH RECEIPT" : "TAX INVOICE", 195, 20, { align: "right" });
 
     doc.setFontSize(10);
     doc.setTextColor(...COLORS.slate);
     doc.setFont(undefined, 'normal');
-    doc.text(`Ref: #${booking._id.slice(-8).toUpperCase()}`, 195, 32, { align: "right" });
-    doc.text(`Date: ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}`, 195, 37, { align: "right" });
+    doc.text(`Ref: #${booking._id.slice(-8).toUpperCase()}`, 195, 28, { align: "right" });
+    doc.text(`Date: ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}`, 195, 33, { align: "right" });
 
     // -- Letterhead / Business Info --
-    doc.setFontSize(9); // Reduced from 10
+    doc.setFontSize(9);
     doc.setTextColor(...COLORS.black);
     doc.setFont(undefined, 'bold');
-    doc.text("Airport Taxis Pvt (Ltd)", 90, 20); // Updated name & shifted right
+    doc.text("Airport Taxis Pvt (Ltd)", 15, 38);
     doc.setFont(undefined, 'normal');
     doc.setTextColor(...COLORS.slate);
-    doc.setFontSize(8); // Reduced from 10
-    doc.text("118/5 St. Joseph Street, Grandpass, Colombo 14", 90, 25);
-    doc.text("Hotline: +94 722 885 885 | 0719 885 885", 90, 30);
-    doc.text("Email: info@airporttaxis.lk | Web: www.airporttaxis.lk", 90, 35);
+    doc.setFontSize(8);
+    doc.text("118/5 St. Joseph Street, Grandpass, Colombo 14", 15, 43);
+    doc.text("Hotline: +94 722 885 885 | 0719 885 885", 15, 48);
+    doc.text("Email: info@airporttaxis.lk | Web: www.airporttaxis.lk", 15, 53);
 
     // -- Accent Line --
     doc.setDrawColor(...COLORS.emerald);
     doc.setLineWidth(1);
-    doc.line(15, 52, 195, 52);
+    doc.line(15, 62, 195, 62);
 
     // -- Recipient Section --
     doc.setFontSize(11);
     doc.setTextColor(...COLORS.emerald);
     doc.setFont(undefined, 'bold');
-    doc.text("BILL TO:", 15, 62);
+    doc.text("BILL TO:", 15, 72);
 
     doc.setTextColor(...COLORS.black);
     doc.setFontSize(13);
-    doc.text(booking.customerName || 'Valued Guest', 15, 69);
+    doc.text(booking.customerName || 'Valued Guest', 15, 79);
 
     doc.setFontSize(10);
     doc.setTextColor(...COLORS.slate);
     doc.setFont(undefined, 'normal');
-    doc.text(`Phone: ${booking.guestPhone || 'N/A'}`, 15, 75);
-    doc.text(`Email: ${booking.customerEmail || 'N/A'}`, 15, 80);
+    doc.text(`Phone: ${booking.guestPhone || 'N/A'}`, 15, 85);
+    doc.text(`Email: ${booking.customerEmail || 'N/A'}`, 15, 90);
 
     if (booking.billingDetails?.billingAddress) {
         const addr = `${booking.billingDetails.billingAddress}, ${booking.billingDetails.city || ''}, ${booking.billingDetails.country || ''}`;
-        doc.text(`Address: ${addr}`, 15, 85, { maxWidth: 100 });
+        doc.text(`Address: ${addr}`, 15, 95, { maxWidth: 100 });
     }
 
     // -- Trip Status Badge --
     const badgeX = 140;
-    const badgeY = 62;
+    const badgeY = 72;
     doc.setFillColor(...(booking.paymentStatus === 'paid' ? COLORS.emerald : [220, 38, 38]));
     doc.roundedRect(badgeX, badgeY, 55, 18, 3, 3, 'F');
     doc.setTextColor(255, 255, 255);
@@ -100,7 +100,7 @@ export const generateBookingPDF = (booking) => {
     }
 
     autoTable(doc, {
-        startY: 90,
+        startY: 105,
         head: [['Description', 'Trip Information']],
         body: journeyBody,
         theme: 'grid',
