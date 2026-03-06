@@ -123,7 +123,7 @@ const LocationInput = ({
 
     return (
         <div className={`relative group ${zIndex || 'z-20'}`} ref={wrapperRef}>
-            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-900/70 dark:text-emerald-400/70">
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-950/70 dark:text-amber-400/70">
                 <Icon size={22} />
             </div>
 
@@ -133,8 +133,8 @@ const LocationInput = ({
                 onFocus={() => { if (onFocus) onFocus(); if (suggestions.length > 0) setShowSuggestions(true); }}
                 disabled={disabled}
                 placeholder={googleLoaded ? placeholder : 'Loading maps...'}
-                className={`w-full pl-16 pr-14 h-16 rounded-2xl text-base sm:text-lg font-bold bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white outline-none focus:border-emerald-600 dark:focus:border-emerald-500 focus:ring-4 focus:ring-emerald-900/5 dark:focus:ring-emerald-500/10 placeholder:text-slate-500 dark:placeholder:text-white/40 truncate 
-                ${disabled ? 'cursor-not-allowed bg-slate-100 dark:bg-emerald-900/20 border-slate-300 dark:border-emerald-700' : 'bg-white dark:bg-emerald-900/20 border border-slate-200 dark:border-emerald-800/50 hover:border-emerald-600'}`}
+                className={`w-full pl-16 pr-14 h-16 rounded-2xl text-base sm:text-lg font-bold bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white outline-none focus:border-amber-600 dark:focus:border-amber-500 focus:ring-4 focus:ring-slate-950/5 dark:focus:ring-amber-500/10 placeholder:text-slate-500 dark:placeholder:text-white/40 truncate 
+                ${disabled ? 'cursor-not-allowed bg-slate-100 dark:bg-slate-950/20 border-slate-300 dark:border-amber-700' : 'bg-white dark:bg-slate-950/20 border border-slate-200 dark:border-amber-800/50 hover:border-amber-600'}`}
             />
 
             {/* Clear Button */}
@@ -151,21 +151,21 @@ const LocationInput = ({
             {/* Loading Indicator */}
             {loading && (
                 <div className="absolute right-12 top-1/2 -translate-y-1/2">
-                    <Loader2 size={16} className="animate-spin text-emerald-600" />
+                    <Loader2 size={16} className="animate-spin text-amber-600" />
                 </div>
             )}
 
             {/* Suggestions Dropdown */}
             {showSuggestions && suggestions.length > 0 && !disabled && (
-                <div className="absolute z-50 top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-emerald-900/10 dark:border-white/10 overflow-hidden max-h-64 overflow-y-auto">
+                <div className="absolute z-50 top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-950/10 dark:border-white/10 overflow-hidden max-h-64 overflow-y-auto">
                     {suggestions.map((item) => (
                         <button
                             key={item.place_id}
                             onClick={() => handleSelect(item)}
-                            className="w-full text-left px-6 py-4 hover:bg-emerald-50 dark:hover:bg-white/5 text-sm border-b border-emerald-900/5 dark:border-white/5 last:border-0 transition-colors group"
+                            className="w-full text-left px-6 py-4 hover:bg-amber-50 dark:hover:bg-white/5 text-sm border-b border-slate-950/5 dark:border-white/5 last:border-0 transition-colors group"
                             type="button"
                         >
-                            <span className="font-bold text-emerald-900 dark:text-white block truncate group-hover:text-emerald-700 dark:group-hover:text-emerald-400">
+                            <span className="font-bold text-slate-950 dark:text-white block truncate group-hover:text-amber-700 dark:group-hover:text-amber-400">
                                 {item.structured_formatting.main_text}
                             </span>
                             <span className="text-xs text-slate-500 dark:text-slate-400 block mt-0.5 truncate">

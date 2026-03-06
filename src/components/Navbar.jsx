@@ -56,7 +56,7 @@ export default function Navbar() {
                 <div className="hidden lg:flex items-center gap-4 xl:gap-6">
                     <Link
                         href="/"
-                        className={`text-sm font-bold uppercase tracking-widest hover:text-amber-500 transition-colors ${pathname === '/' ? 'text-emerald-900 dark:text-white' : (needsSolidBg ? 'text-white/70 dark:text-slate-300' : 'text-white/80')}`}
+                        className={`text-sm font-bold uppercase tracking-widest hover:text-amber-500 transition-colors ${pathname === '/' ? 'text-slate-950 dark:text-white' : (needsSolidBg ? 'text-white/70 dark:text-slate-300' : 'text-white/80')}`}
                     >
                         Home
                     </Link>
@@ -64,7 +64,7 @@ export default function Navbar() {
                     {/* Tour Packages Dropdown */}
                     <div className="relative group">
                         <button
-                            className={`flex items-center gap-1 text-sm font-bold uppercase tracking-widest hover:text-amber-500 transition-colors ${pathname.includes('tour') || pathname.includes('day-trips') ? 'text-emerald-900 dark:text-white' : (needsSolidBg ? 'text-white/70 dark:text-slate-300' : 'text-white/80')}`}
+                            className={`flex items-center gap-1 text-sm font-bold uppercase tracking-widest hover:text-amber-500 transition-colors ${pathname.includes('tour') || pathname.includes('day-trips') ? 'text-slate-950 dark:text-white' : (needsSolidBg ? 'text-white/70 dark:text-slate-300' : 'text-white/80')}`}
                         >
                             Tour Packages
                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
@@ -79,7 +79,7 @@ export default function Navbar() {
                                 <Link
                                     key={sub.label}
                                     href={sub.href}
-                                    className="text-left px-5 py-2.5 hover:bg-amber-900/10 dark:hover:bg-white/10 transition-colors text-sm font-bold text-white/80 dark:text-white/80 hover:text-emerald-900 dark:hover:text-white"
+                                    className="text-left px-5 py-2.5 hover:bg-amber-900/10 dark:hover:bg-white/10 transition-colors text-sm font-bold text-white/80 dark:text-white/80 hover:text-slate-950 dark:hover:text-white"
                                 >
                                     {sub.label}
                                 </Link>
@@ -116,22 +116,22 @@ export default function Navbar() {
                             <span>{currency}</span>
                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
                         </button>
-                        <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border-2 border-emerald-600/20 dark:border-amber-500/30 overflow-hidden">
-                            <div className="px-5 py-2 mb-1 border-b border-emerald-900/5 dark:border-white/5 bg-amber-900/10 dark:bg-white/10">
-                                <span className="text-[10px] font-black text-emerald-900/40 dark:text-amber-500/40 uppercase tracking-widest">Select Currency</span>
+                        <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border-2 border-amber-600/20 dark:border-amber-500/30 overflow-hidden">
+                            <div className="px-5 py-2 mb-1 border-b border-slate-950/5 dark:border-white/5 bg-amber-900/10 dark:bg-white/10">
+                                <span className="text-[10px] font-black text-slate-950/40 dark:text-amber-500/40 uppercase tracking-widest">Select Currency</span>
                             </div>
                             {SUPPORTED_CURRENCIES.map(c => (
                                 <button
                                     key={c.code}
                                     onClick={() => changeCurrency(c.code)}
-                                    className={`w-full text-left px-5 py-3 hover:bg-amber-600 hover:text-white dark:hover:bg-amber-600 transition-all text-sm font-bold flex items-center gap-4 ${currency === c.code ? 'text-white bg-emerald-700 shadow-inner' : 'text-slate-700 dark:text-slate-200'}`}
+                                    className={`w-full text-left px-5 py-3 hover:bg-amber-600 hover:text-white dark:hover:bg-amber-600 transition-all text-sm font-bold flex items-center gap-4 ${currency === c.code ? 'text-white bg-amber-700 shadow-inner' : 'text-slate-700 dark:text-slate-200'}`}
                                 >
                                     <div className="w-9 h-9 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center overflow-hidden shadow-md border-2 border-amber-500/20">
                                         <img src={c.flag} alt={c.name} className="w-full h-full object-cover scale-150" />
                                     </div>
                                     <div className="flex flex-col">
                                         <span className="leading-tight text-sm">{c.name}</span>
-                                        <span className={`text-[10px] uppercase tracking-widest font-black ${currency === c.code ? 'text-emerald-200' : 'text-amber-500/40'}`}>{c.code}</span>
+                                        <span className={`text-[10px] uppercase tracking-widest font-black ${currency === c.code ? 'text-amber-200' : 'text-amber-500/40'}`}>{c.code}</span>
                                     </div>
                                 </button>
                             ))}
@@ -154,12 +154,12 @@ export default function Navbar() {
                                     )}
                                 </button>
                                 <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-white/10 dark:border-slate-800">
-                                    <div className="px-5 py-2 mb-2 border-b border-emerald-900/5 dark:border-white/5">
-                                        <p className="font-bold text-emerald-900 dark:text-white text-sm">{session.user?.name}</p>
-                                        <p className="text-[10px] text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Verified User</p>
+                                    <div className="px-5 py-2 mb-2 border-b border-slate-950/5 dark:border-white/5">
+                                        <p className="font-bold text-slate-950 dark:text-white text-sm">{session.user?.name}</p>
+                                        <p className="text-[10px] text-amber-600 dark:text-amber-400 uppercase tracking-wider">Verified User</p>
                                     </div>
-                                    <Link href="/my-bookings" className="flex items-center gap-3 px-5 py-3 text-white/70 dark:text-slate-300 hover:text-emerald-900 dark:hover:text-white hover:bg-amber-900/10 dark:hover:bg-white/10 text-sm font-bold transition-all">
-                                        <Calendar size={16} className="text-emerald-600 dark:text-emerald-400" /> My Bookings
+                                    <Link href="/my-bookings" className="flex items-center gap-3 px-5 py-3 text-white/70 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-amber-900/10 dark:hover:bg-white/10 text-sm font-bold transition-all">
+                                        <Calendar size={16} className="text-amber-600 dark:text-amber-400" /> My Bookings
                                     </Link>
                                     <button onClick={() => signOut()} className="flex items-center gap-3 px-5 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 text-sm font-bold transition-all w-full text-left">
                                         <LogOut size={16} /> Sign Out
@@ -205,8 +205,8 @@ export default function Navbar() {
                     <div className="p-6 space-y-6">
                         {/* User Profile Section - Mobile */}
                         {session && (
-                            <div className="flex items-center gap-4 p-4 bg-amber-900/10 dark:bg-white/10 rounded-2xl border border-emerald-100 dark:border-emerald-800">
-                                <div className="w-14 h-14 rounded-full border-2 border-emerald-600 overflow-hidden shrink-0">
+                            <div className="flex items-center gap-4 p-4 bg-amber-900/10 dark:bg-white/10 rounded-2xl border border-amber-100 dark:border-amber-800">
+                                <div className="w-14 h-14 rounded-full border-2 border-amber-600 overflow-hidden shrink-0">
                                     {session.user?.image ? (
                                         <img src={session.user.image} alt={session.user.name} className="w-full h-full object-cover" />
                                     ) : (
@@ -214,8 +214,8 @@ export default function Navbar() {
                                     )}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="font-bold text-emerald-900 dark:text-white truncate">{session.user?.name}</p>
-                                    <p className="text-xs text-emerald-600 dark:text-emerald-400 truncate">{session.user?.email}</p>
+                                    <p className="font-bold text-slate-950 dark:text-white truncate">{session.user?.name}</p>
+                                    <p className="text-xs text-amber-600 dark:text-amber-400 truncate">{session.user?.email}</p>
                                 </div>
                             </div>
                         )}
@@ -224,11 +224,11 @@ export default function Navbar() {
                         {session && (
                             <Link
                                 href="/my-bookings"
-                                className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-white/10 dark:border-slate-800 text-emerald-900 dark:text-white font-bold shadow-sm"
+                                className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-white/10 dark:border-slate-800 text-slate-950 dark:text-white font-bold shadow-sm"
                             >
-                                <Calendar size={20} className="text-emerald-600" />
+                                <Calendar size={20} className="text-amber-600" />
                                 <span>My Bookings</span>
-                                <ChevronDown size={16} className="-rotate-90 ml-auto text-emerald-600" />
+                                <ChevronDown size={16} className="-rotate-90 ml-auto text-amber-600" />
                             </Link>
                         )}
 
@@ -251,7 +251,7 @@ export default function Navbar() {
                                 <Link
                                     key={item.id}
                                     href={item.href}
-                                    className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-white/10 dark:border-slate-800 text-emerald-900 dark:text-white font-bold shadow-sm hover:bg-amber-900/10 dark:hover:bg-white/10 transition-all"
+                                    className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-white/10 dark:border-slate-800 text-slate-950 dark:text-white font-bold shadow-sm hover:bg-amber-900/10 dark:hover:bg-white/10 transition-all"
                                 >
                                     <span className="text-xl">{item.icon}</span>
                                     <span>{item.label}</span>
@@ -260,13 +260,13 @@ export default function Navbar() {
                         </div>
 
                         <div className="pt-6 border-t border-white/10 dark:border-slate-800">
-                            <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest px-2 mb-4">Currency Selector</p>
+                            <p className="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest px-2 mb-4">Currency Selector</p>
                             <div className="grid grid-cols-4 gap-2">
                                 {SUPPORTED_CURRENCIES.map(c => (
                                     <button
                                         key={c.code}
                                         onClick={() => changeCurrency(c.code)}
-                                        className={`flex flex-col items-center justify-center gap-1 py-3 rounded-xl border transition-all text-xs font-bold ${currency === c.code ? 'bg-amber-600 text-white border-emerald-600 shadow-md transform scale-105' : 'text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 border-slate-100 dark:border-slate-800'}`}
+                                        className={`flex flex-col items-center justify-center gap-1 py-3 rounded-xl border transition-all text-xs font-bold ${currency === c.code ? 'bg-amber-600 text-white border-amber-600 shadow-md transform scale-105' : 'text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 border-slate-100 dark:border-slate-800'}`}
                                     >
                                         <div className="w-6 h-6 rounded-full overflow-hidden border border-white/20">
                                             <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
@@ -280,7 +280,7 @@ export default function Navbar() {
                         <div className="pt-6 space-y-4">
                             <a
                                 href="tel:+94722885885"
-                                className="flex items-center justify-center gap-3 w-full py-4 bg-emerald-900 text-white rounded-2xl font-bold shadow-lg"
+                                className="flex items-center justify-center gap-3 w-full py-4 bg-slate-950 text-white rounded-2xl font-bold shadow-lg"
                             >
                                 <Phone size={18} /> Call Specialist
                             </a>

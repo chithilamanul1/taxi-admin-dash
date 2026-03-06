@@ -60,16 +60,16 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                 <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
                 <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-2xl text-center animate-fade-in">
-                    <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <CheckCircle size={48} className="text-emerald-600" />
+                    <div className="w-20 h-20 bg-amber-100 dark:bg-slate-950/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <CheckCircle size={48} className="text-amber-600" />
                     </div>
-                    <h3 className="text-2xl font-bold text-emerald-900 dark:text-white mb-2">Booking Request Sent!</h3>
+                    <h3 className="text-2xl font-bold text-slate-950 dark:text-white mb-2">Booking Request Sent!</h3>
                     <p className="text-slate-600 dark:text-slate-400 mb-8">
                         Thank you for your interest in the <strong>{tourTitle}</strong>. We have received your details and will contact you shortly with a quote and availability.
                     </p>
                     <button
                         onClick={onClose}
-                        className="w-full py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-colors"
+                        className="w-full py-3 bg-amber-600 text-white rounded-xl font-bold hover:bg-amber-700 transition-colors"
                     >
                         Close
                     </button>
@@ -86,8 +86,8 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                 {/* Header */}
                 <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-white dark:bg-slate-900 relative z-10">
                     <div>
-                        <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider">Book Tour</span>
-                        <h3 className="text-xl font-bold text-emerald-900 dark:text-white line-clamp-1">{tourTitle}</h3>
+                        <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">Book Tour</span>
+                        <h3 className="text-xl font-bold text-slate-950 dark:text-white line-clamp-1">{tourTitle}</h3>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
                         <X size={20} className="text-slate-500" />
@@ -111,7 +111,7 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                                     <input
                                         type="text"
                                         required
-                                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium"
+                                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-amber-500 transition-all font-medium"
                                         placeholder="John Doe"
                                         value={formData.name}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -125,7 +125,7 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                                     <input
                                         type="tel"
                                         required
-                                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium"
+                                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-amber-500 transition-all font-medium"
                                         placeholder="+1 234 567 890"
                                         value={formData.phone}
                                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -141,7 +141,7 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                                 <input
                                     type="email"
                                     required
-                                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium"
+                                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-amber-500 transition-all font-medium"
                                     placeholder="john@example.com"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -157,7 +157,7 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                                     <input
                                         type="date"
                                         required
-                                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium"
+                                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-amber-500 transition-all font-medium"
                                         value={formData.date}
                                         onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                                     />
@@ -171,7 +171,7 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                                         <input
                                             type="number"
                                             min="1"
-                                            className="w-full pl-10 pr-2 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium text-sm"
+                                            className="w-full pl-10 pr-2 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-amber-500 transition-all font-medium text-sm"
                                             placeholder="Adults"
                                             value={formData.adults}
                                             onChange={(e) => setFormData({ ...formData, adults: parseInt(e.target.value) || 0 })}
@@ -179,7 +179,7 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                                         <input
                                             type="number"
                                             min="0"
-                                            className="w-full pl-2 pr-2 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium text-sm"
+                                            className="w-full pl-2 pr-2 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-amber-500 transition-all font-medium text-sm"
                                             placeholder="Kids"
                                             value={formData.children}
                                             onChange={(e) => setFormData({ ...formData, children: parseInt(e.target.value) || 0 })}
@@ -192,7 +192,7 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Special Requests / Questions</label>
                             <textarea
-                                className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium min-h-[100px]"
+                                className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-amber-500 transition-all font-medium min-h-[100px]"
                                 placeholder="Any specific requirements, dietary needs, or questions?"
                                 value={formData.specialRequests}
                                 onChange={(e) => setFormData({ ...formData, specialRequests: e.target.value })}
@@ -200,9 +200,9 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                         </div>
 
                         {price && (
-                            <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl flex justify-between items-center">
-                                <span className="text-sm font-bold text-emerald-900 dark:text-emerald-100 uppercase tracking-wider">Estimated Total</span>
-                                <span className="text-xl font-black text-emerald-900 dark:text-white">
+                            <div className="bg-amber-50 dark:bg-slate-950/20 p-4 rounded-xl flex justify-between items-center">
+                                <span className="text-sm font-bold text-slate-950 dark:text-amber-100 uppercase tracking-wider">Estimated Total</span>
+                                <span className="text-xl font-black text-slate-950 dark:text-white">
                                     {currency} {((formData.adults + formData.children) * price).toLocaleString()}
                                 </span>
                             </div>
@@ -211,7 +211,7 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full py-4 bg-emerald-900 text-white rounded-xl font-bold hover:bg-emerald-800 transition-all hover:scale-[1.02] shadow-lg flex items-center justify-center gap-2 mt-4"
+                            className="w-full py-4 bg-slate-950 text-white rounded-xl font-bold hover:bg-amber-800 transition-all hover:scale-[1.02] shadow-lg flex items-center justify-center gap-2 mt-4"
                         >
                             {isLoading ? (
                                 <>

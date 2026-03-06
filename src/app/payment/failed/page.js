@@ -96,7 +96,7 @@ function PaymentFailedContent() {
                     <a
                         href="https://wa.me/94722885885"
                         target="_blank"
-                        className="flex items-center justify-center gap-2 w-full bg-emerald-900 text-white py-4 rounded-xl font-bold hover:bg-emerald-800 transition-all shadow-lg active:scale-[0.98]"
+                        className="flex items-center justify-center gap-2 w-full bg-slate-950 text-white py-4 rounded-xl font-bold hover:bg-amber-800 transition-all shadow-lg active:scale-[0.98]"
                     >
                         <Phone size={20} />
                         Talk to Support
@@ -112,7 +112,7 @@ function PaymentFailedContent() {
 
                     <a
                         href="tel:+94716885880"
-                        className="flex items-center justify-center gap-2 w-full text-emerald-900 py-3 rounded-lg font-bold hover:underline"
+                        className="flex items-center justify-center gap-2 w-full text-slate-950 py-3 rounded-lg font-bold hover:underline"
                     >
                         <Phone size={20} />
                         Call for Assistance

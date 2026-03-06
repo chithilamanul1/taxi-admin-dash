@@ -72,7 +72,7 @@ export default function ReviewsSection() {
                         Customer Reviews
                     </div>
                     <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4">
-                        What Our <span className="text-emerald-600 dark:text-emerald-400">Travelers</span> Say
+                        What Our <span className="text-amber-600 dark:text-amber-400">Travelers</span> Say
                     </h2>
                     <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
                         Real experiences from real customers. See why travelers choose Airport Taxis.
@@ -104,7 +104,7 @@ export default function ReviewsSection() {
                     {/* Review Card */}
                     <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-8 md:p-12 relative">
                         {/* Quote Icon */}
-                        <div className="absolute top-6 right-6 text-emerald-100 dark:text-emerald-900/50">
+                        <div className="absolute top-6 right-6 text-amber-100 dark:text-slate-950/50">
                             <Quote size={60} />
                         </div>
 
@@ -130,7 +130,7 @@ export default function ReviewsSection() {
                         {/* Route & Distance Badge */}
                         {currentReview.route && (
                             <div className="flex flex-wrap gap-3 mb-6">
-                                <span className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-full text-sm font-medium">
+                                <span className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 dark:bg-slate-950/30 text-amber-700 dark:text-amber-400 rounded-full text-sm font-medium">
                                     <MapPin size={14} />
                                     {currentReview.route}
                                 </span>
@@ -145,7 +145,7 @@ export default function ReviewsSection() {
                         {/* Author */}
                         <div className="flex items-center gap-4">
                             {/* Avatar */}
-                            <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center overflow-hidden">
+                            <div className="w-14 h-14 rounded-full bg-amber-100 dark:bg-slate-950/30 flex items-center justify-center overflow-hidden">
                                 {currentReview.userImage ? (
                                     <img
                                         src={currentReview.userImage}
@@ -153,7 +153,7 @@ export default function ReviewsSection() {
                                         className="w-full h-full object-cover"
                                     />
                                 ) : (
-                                    <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                                    <span className="text-2xl font-bold text-amber-600 dark:text-amber-400">
                                         {currentReview.userName?.charAt(0)?.toUpperCase()}
                                     </span>
                                 )}
@@ -162,7 +162,7 @@ export default function ReviewsSection() {
                                 <div className="flex items-center gap-2">
                                     <h4 className="font-bold text-slate-900 dark:text-white">{currentReview.userName}</h4>
                                     {currentReview.isVerified && (
-                                        <span className="inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-full">
+                                        <span className="inline-flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-slate-950/30 px-2 py-1 rounded-full">
                                             <Verified size={12} /> Verified Trip
                                         </span>
                                     )}
@@ -185,7 +185,7 @@ export default function ReviewsSection() {
                                     key={idx}
                                     onClick={() => setCurrentIndex(idx)}
                                     className={`w-3 h-3 rounded-full transition-all ${idx === currentIndex
-                                        ? 'bg-emerald-600 w-8'
+                                        ? 'bg-amber-600 w-8'
                                         : 'bg-slate-300 hover:bg-slate-400'
                                         }`}
                                     aria-label={`Go to review ${idx + 1}`}
@@ -198,15 +198,15 @@ export default function ReviewsSection() {
                 {/* Stats */}
                 <div className="max-w-3xl mx-auto mt-16 grid grid-cols-3 gap-8 text-center">
                     <div>
-                        <div className="text-4xl font-black text-emerald-600 dark:text-emerald-400 mb-2">500+</div>
+                        <div className="text-4xl font-black text-amber-600 dark:text-amber-400 mb-2">500+</div>
                         <div className="text-slate-600 dark:text-slate-400 text-sm">Happy Customers</div>
                     </div>
                     <div>
-                        <div className="text-4xl font-black text-emerald-600 dark:text-emerald-400 mb-2">5.0</div>
+                        <div className="text-4xl font-black text-amber-600 dark:text-amber-400 mb-2">5.0</div>
                         <div className="text-slate-600 dark:text-slate-400 text-sm">Average Rating</div>
                     </div>
                     <div>
-                        <div className="text-4xl font-black text-emerald-600 dark:text-emerald-400 mb-2">98%</div>
+                        <div className="text-4xl font-black text-amber-600 dark:text-amber-400 mb-2">98%</div>
                         <div className="text-slate-600 dark:text-slate-400 text-sm">Would Recommend</div>
                     </div>
                 </div>

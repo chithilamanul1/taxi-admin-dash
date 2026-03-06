@@ -76,15 +76,15 @@ export default function MyBookingsPage() {
             <div className="max-w-5xl mx-auto">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                     <div>
-                        <h1 className="text-3xl font-black text-emerald-900 uppercase tracking-tight">My Bookings</h1>
+                        <h1 className="text-3xl font-black text-slate-950 uppercase tracking-tight">My Bookings</h1>
                         <p className="text-gray-500">Manage and track your journeys</p>
                     </div>
                     {session && (
-                        <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-sm border border-emerald-900/10">
-                            <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-700 font-bold">
+                        <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-950/10">
+                            <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-amber-700 font-bold">
                                 {session.user.name?.[0]}
                             </div>
-                            <span className="text-sm font-bold text-emerald-900">{session.user.name}</span>
+                            <span className="text-sm font-bold text-slate-950">{session.user.name}</span>
                         </div>
                     )}
                 </div>
@@ -93,13 +93,13 @@ export default function MyBookingsPage() {
                 <div className="flex gap-2 mb-8 border-b border-gray-200">
                     <button
                         onClick={() => setActiveTab('upcoming')}
-                        className={`px-6 py-3 font-bold text-sm uppercase tracking-widest border-b-2 transition-all ${activeTab === 'upcoming' ? 'border-emerald-600 text-emerald-900' : 'border-transparent text-gray-400 hover:text-emerald-900'}`}
+                        className={`px-6 py-3 font-bold text-sm uppercase tracking-widest border-b-2 transition-all ${activeTab === 'upcoming' ? 'border-amber-600 text-slate-950' : 'border-transparent text-gray-400 hover:text-slate-950'}`}
                     >
                         Upcoming ({activeBookings.length})
                     </button>
                     <button
                         onClick={() => setActiveTab('history')}
-                        className={`px-6 py-3 font-bold text-sm uppercase tracking-widest border-b-2 transition-all ${activeTab === 'history' ? 'border-emerald-600 text-emerald-900' : 'border-transparent text-gray-400 hover:text-emerald-900'}`}
+                        className={`px-6 py-3 font-bold text-sm uppercase tracking-widest border-b-2 transition-all ${activeTab === 'history' ? 'border-amber-600 text-slate-950' : 'border-transparent text-gray-400 hover:text-slate-950'}`}
                     >
                         History ({pastBookings.length})
                     </button>
@@ -107,12 +107,12 @@ export default function MyBookingsPage() {
 
                 {/* Content */}
                 {loading ? (
-                    <div className="py-20 flex justify-center"><Loader2 className="animate-spin text-emerald-600" size={32} /></div>
+                    <div className="py-20 flex justify-center"><Loader2 className="animate-spin text-amber-600" size={32} /></div>
                 ) : displayedBookings.length > 0 ? (
                     <div className="grid md:grid-cols-2 gap-6">
                         {displayedBookings.map(booking => (
                             <Link key={booking._id} href={`/booking/${booking._id}`} className="block group">
-                                <div className="bg-white rounded-2xl p-6 shadow-sm border border-emerald-900/5 group-hover:shadow-md group-hover:border-emerald-600/30 transition-all cursor-pointer h-full flex flex-col justify-between">
+                                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-950/5 group-hover:shadow-md group-hover:border-amber-600/30 transition-all cursor-pointer h-full flex flex-col justify-between">
                                     <div className="space-y-4">
                                         <div className="flex justify-between items-start">
                                             <div className="flex items-center gap-3">
@@ -130,7 +130,7 @@ export default function MyBookingsPage() {
                                         <div className="space-y-3">
                                             <div className="flex items-start gap-3">
                                                 <div className="flex flex-col items-center gap-1 mt-1">
-                                                    <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                                    <div className="w-2 h-2 rounded-full bg-amber-500"></div>
                                                     <div className="w-0.5 h-6 bg-gray-100"></div>
                                                     <div className="w-2 h-2 rounded-full bg-red-400"></div>
                                                 </div>
@@ -147,7 +147,7 @@ export default function MyBookingsPage() {
                                             <span className="flex items-center gap-1"><Calendar size={14} /> {booking.scheduledDate}</span>
                                             <span className="flex items-center gap-1"><Clock size={14} /> {booking.scheduledTime}</span>
                                         </div>
-                                        <ArrowRight size={16} className="text-emerald-600 group-hover:translate-x-1 transition-transform" />
+                                        <ArrowRight size={16} className="text-amber-600 group-hover:translate-x-1 transition-transform" />
                                     </div>
                                 </div>
                             </Link>
@@ -160,7 +160,7 @@ export default function MyBookingsPage() {
                         </div>
                         <h3 className="text-lg font-bold text-gray-900 mb-2">No bookings found</h3>
                         <p className="text-gray-500 mb-6 max-w-sm mx-auto">You haven't made any bookings in this category yet.</p>
-                        <Link href="/" className="inline-block bg-emerald-900 text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-emerald-800 transition-colors">
+                        <Link href="/" className="inline-block bg-slate-950 text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-amber-800 transition-colors">
                             Book a Ride
                         </Link>
                     </div>

@@ -60,9 +60,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     let distancePrice = 0;
     let overrideApplied = false;
 
-    // Check for Location-Specific Pricing or Per-KM Overrides
-    // skip this for airport transfers/rides as per user request
-    const matchedOverride = (!isAirportRide) ? (findMatchingDestination(pickup, dynamicDestinations) || findMatchingDestination(dropoff, dynamicDestinations)) : null;
+    const matchedOverride = findMatchingDestination(pickup, dynamicDestinations) || findMatchingDestination(dropoff, dynamicDestinations);
 
     const vehicleType = vehicleData.vehicleType;
     const vehicleSlug = vehicleData.vehicleSlug || vehicleType; // Use vehicleSlug if available, fallback to vehicleType

@@ -86,7 +86,7 @@ const RevenueStats = ({ bookings = [] }) => {
                 {/* Total Revenue */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all">
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center">
+                        <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center">
                             <DollarSign size={24} />
                         </div>
                         <div>
@@ -96,7 +96,7 @@ const RevenueStats = ({ bookings = [] }) => {
                             </h3>
                         </div>
                     </div>
-                    <div className="flex items-center gap-2 text-emerald-600 text-xs font-bold">
+                    <div className="flex items-center gap-2 text-amber-600 text-xs font-bold">
                         <TrendingUp size={14} />
                         <span>Income from {stats.completedTrips} trips</span>
                     </div>
@@ -148,13 +148,13 @@ const RevenueStats = ({ bookings = [] }) => {
             <div className="grid md:grid-cols-2 gap-6">
                 {/* Chart Section */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h4 className="text-sm font-bold text-slate-800 mb-6 font-mono tracking-tighter uppercase">Revenue Trend <span className="text-emerald-500">(Last 7 Days)</span></h4>
+                    <h4 className="text-sm font-bold text-slate-800 mb-6 font-mono tracking-tighter uppercase">Revenue Trend <span className="text-amber-500">(Last 7 Days)</span></h4>
                     <div className="h-48 flex items-end justify-between gap-2 px-2 border-b border-slate-100 pb-2">
                         {dailyData.map((val, i) => {
                             const height = (val / maxDaily) * 100;
 
                             // Color logic
-                            let barColor = 'bg-emerald-500';
+                            let barColor = 'bg-amber-500';
                             if (val === 0) barColor = 'bg-slate-100';
                             else if (val < 5000) barColor = 'bg-red-500';
                             else if (val < 15000) barColor = 'bg-yellow-400';
@@ -181,13 +181,13 @@ const RevenueStats = ({ bookings = [] }) => {
                 {/* Parameters Section */}
                 <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-2xl flex flex-col justify-center">
                     <div className="flex items-center gap-3 mb-6">
-                        <Calculator className="text-emerald-400" size={20} />
+                        <Calculator className="text-amber-400" size={20} />
                         <h4 className="font-bold">Calculation Strategy</h4>
                     </div>
                     <div className="grid grid-cols-2 gap-y-4 gap-x-8 text-sm">
                         <div>
                             <p className="text-slate-400 text-xs">Petrol Price</p>
-                            <p className="font-mono text-emerald-400">Rs. {FUEL_PRICE}/L</p>
+                            <p className="font-mono text-amber-400">Rs. {FUEL_PRICE}/L</p>
                         </div>
                         <div>
                             <p className="text-slate-400 text-xs">Avg. Sedan Eff.</p>
@@ -246,7 +246,7 @@ const RevenueStats = ({ bookings = [] }) => {
                                         <tr key={idx} className="hover:bg-slate-50">
                                             <td className="px-6 py-3 text-slate-600">{b.scheduledDate || 'N/A'}</td>
                                             <td className="px-6 py-3">
-                                                <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${isPackage ? 'bg-purple-100 text-purple-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                                                <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${isPackage ? 'bg-purple-100 text-purple-700' : 'bg-amber-100 text-amber-700'}`}>
                                                     {isTour ? 'Tour / Package' : isDayTrip ? 'Day Trip' : 'Transfer'}
                                                 </span>
                                             </td>
@@ -257,7 +257,7 @@ const RevenueStats = ({ bookings = [] }) => {
                                                 {isPackage && <div className="text-[10px] text-slate-400">Duration: {b.tourDetails?.duration}</div>}
                                             </td>
                                             <td className="px-6 py-3 font-mono">{dist} km</td>
-                                            <td className="px-6 py-3 font-bold text-emerald-600">Rs. {(b.totalPrice || 0).toLocaleString()}</td>
+                                            <td className="px-6 py-3 font-bold text-amber-600">Rs. {(b.totalPrice || 0).toLocaleString()}</td>
                                             <td className="px-6 py-3 text-orange-600">Rs. {cost.toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                             <td className="px-6 py-3 font-bold text-blue-600 bg-blue-50/50">Rs. {profit.toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
                                         </tr>

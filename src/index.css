@@ -6,16 +6,20 @@
 @tailwind utilities;
 
 :root {
-    --emerald-primary: #064e3b;
-    --emerald-mid: #059669;
-    --emerald-light: #10b981;
-    --gold: #fbbf24;
-    --gold-dim: #b45309;
-    --bg-main: #f9fafb;
+    --brand-primary: #020617;
+    /* slate-950 */
+    --brand-accent: #f59e0b;
+    /* amber-500 */
+    --brand-accent-light: #fbbf24;
+    /* amber-400 */
+    --bg-main: #f8fafc;
+    /* slate-50 */
     --bg-card: #ffffff;
-    --text-main: #064e3b;
+    --text-main: #0f172a;
+    /* slate-900 */
     --text-dim: #475569;
-    --border-light: rgba(6, 78, 59, 0.1);
+    /* slate-600 */
+    --border-light: rgba(15, 23, 42, 0.08);
 }
 
 body {
@@ -38,26 +42,26 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--emerald-primary);
+    background: var(--brand-primary);
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--gold);
+    background: var(--brand-accent);
 }
 
 /* Premium Styling */
-.card-emerald {
+.card-brand {
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: 20px;
-    box-shadow: 0 10px 30px -10px rgba(6, 78, 59, 0.1);
+    box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.1);
     transition: all 0.3s ease;
 }
 
-.card-emerald:hover {
-    box-shadow: 0 20px 40px -15px rgba(6, 78, 59, 0.2);
-    border-color: var(--emerald-mid);
+.card-brand:hover {
+    box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.15);
+    border-color: var(--brand-accent);
 }
 
 /* Typography Enhancements */
@@ -70,8 +74,8 @@ h4,
     font-weight: 700;
 }
 
-.text-gradient-emerald {
-    background: linear-gradient(135deg, var(--emerald-primary) 0%, var(--emerald-mid) 100%);
+.text-gradient-brand {
+    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-accent) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -89,8 +93,8 @@ textarea {
 }
 
 input:focus {
-    border-color: var(--emerald-mid) !important;
-    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1) !important;
+    border-color: var(--brand-accent) !important;
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1) !important;
     outline: none;
 }
 
@@ -127,7 +131,7 @@ input:focus {
 
 .react-datepicker__current-month,
 .react-datepicker__day-name {
-    color: var(--emerald-primary) !important;
+    color: var(--brand-accent) !important;
 }
 
 .react-datepicker__day {

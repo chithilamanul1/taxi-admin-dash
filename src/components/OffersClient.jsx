@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Percent, MapPin, Calendar, Tag, Copy, Check, Sparkles, Gift } from 'lucide-react';
+import { Percent, MapPin, Calendar, Tag, Copy, Check, Gift } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -34,22 +34,22 @@ export default function OffersClient() {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 pt-24 pb-20">
-            <div className="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-900 text-white py-20">
+            <div className="relative overflow-hidden bg-slate-950 text-white py-20">
                 <div className="absolute inset-0 opacity-20">
                     <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-10 right-10 w-48 h-48 bg-emerald-300/20 rounded-full blur-3xl"></div>
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-10 right-10 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl"></div>
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl"></div>
                 </div>
 
                 <div className="max-w-6xl mx-auto px-4 text-center relative z-10">
                     <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                        <Sparkles size={16} />
+                        <Tag size={16} />
                         <span className="text-sm font-bold">Exclusive Discounts</span>
                     </div>
                     <h1 className="text-4xl md:text-6xl font-black mb-4">
                         Special Offers & Deals
                     </h1>
-                    <p className="text-xl text-emerald-100 max-w-2xl mx-auto">
+                    <p className="text-xl text-slate-200 max-w-2xl mx-auto">
                         Save on your next taxi ride with our exclusive promotional codes.
                         Apply at checkout to enjoy instant discounts!
                     </p>
@@ -59,7 +59,7 @@ export default function OffersClient() {
             <div className="max-w-6xl mx-auto px-4 -mt-12 relative z-20">
                 {loading ? (
                     <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
-                        <div className="animate-spin w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+                        <div className="animate-spin w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full mx-auto mb-4"></div>
                         <p className="text-slate-500">Loading offers...</p>
                     </div>
                 ) : coupons.length === 0 ? (
@@ -79,17 +79,17 @@ export default function OffersClient() {
                                 key={coupon._id}
                                 className="group relative bg-white rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2"
                             >
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-50 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-50 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2"></div>
                                 <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-slate-100 rounded-full"></div>
                                 <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-slate-100 rounded-full"></div>
 
                                 <div className="p-6 relative z-10">
                                     <div className="flex items-start justify-between mb-6">
-                                        <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                                        <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/30">
                                             <Percent className="text-white" size={24} />
                                         </div>
                                         {coupon.applicableLocations && coupon.applicableLocations.length > 0 && (
-                                            <span className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full">
+                                            <span className="inline-flex items-center gap-1 px-3 py-1 bg-amber-50 text-amber-700 text-xs font-bold rounded-full">
                                                 <MapPin size={12} />
                                                 {coupon.applicableLocations[0]}
                                             </span>
@@ -117,15 +117,15 @@ export default function OffersClient() {
                                     <div className="flex items-center justify-between bg-slate-100 rounded-xl p-4">
                                         <div>
                                             <div className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">Use Code</div>
-                                            <code className="text-xl font-mono font-black text-emerald-600 tracking-wider">
+                                            <code className="text-xl font-mono font-black text-amber-600 tracking-wider">
                                                 {coupon.code}
                                             </code>
                                         </div>
                                         <button
                                             onClick={() => copyToClipboard(coupon.code)}
                                             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-all ${copiedCode === coupon.code
-                                                ? 'bg-emerald-500 text-white'
-                                                : 'bg-emerald-600 text-white hover:bg-emerald-700 hover:scale-105'
+                                                ? 'bg-amber-500 text-white'
+                                                : 'bg-slate-900 text-white hover:bg-slate-800 hover:scale-105'
                                                 }`}
                                         >
                                             {copiedCode === coupon.code ? (
@@ -163,7 +163,7 @@ export default function OffersClient() {
                             { step: 3, title: 'Apply at Checkout', desc: 'Paste the code in the coupon field to see your discount' }
                         ].map((item) => (
                             <div key={item.step} className="text-center">
-                                <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center text-white font-black text-xl mx-auto mb-4 shadow-lg shadow-emerald-500/30">
+                                <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center text-white font-black text-xl mx-auto mb-4 shadow-lg shadow-amber-500/30">
                                     {item.step}
                                 </div>
                                 <h3 className="font-bold text-slate-800 mb-2">{item.title}</h3>
@@ -173,6 +173,6 @@ export default function OffersClient() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

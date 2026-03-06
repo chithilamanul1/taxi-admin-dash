@@ -38,7 +38,7 @@ export default function BookingPage() {
                     {[1, 2, 3].map((s) => (
                         <div
                             key={s}
-                            className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${step >= s ? 'bg-emerald-600 text-black scale-110 shadow-[0_0_20px_rgba(5,150,105,0.3)]' : 'bg-slate-800 text-gray-500'
+                            className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${step >= s ? 'bg-amber-600 text-black scale-110 shadow-[0_0_20px_rgba(5,150,105,0.3)]' : 'bg-slate-800 text-gray-500'
                                 }`}
                         >
                             {step > s ? <CheckCircle2 size={24} /> : s}
@@ -81,7 +81,7 @@ export default function BookingPage() {
                                     />
                                 </div>
 
-                                <div className="bg-white/5 p-4 rounded-xl border border-dashed border-white/10 flex items-center justify-center gap-2 text-gray-400 hover:text-emerald-600 transition-colors cursor-pointer group">
+                                <div className="bg-white/5 p-4 rounded-xl border border-dashed border-white/10 flex items-center justify-center gap-2 text-gray-400 hover:text-amber-600 transition-colors cursor-pointer group">
                                     <Navigation size={18} className="group-hover:animate-pulse" />
                                     <span className="text-sm">Add a waypoint (Stopover)</span>
                                 </div>
@@ -117,7 +117,7 @@ export default function BookingPage() {
                                             className={`
                         p-6 rounded-2xl border transition-all cursor-pointer relative overflow-hidden group
                         ${formData.vehicle === vehicle.id
-                                                    ? 'border-emerald-600 bg-emerald-600/5 ring-1 ring-emerald-600 shadow-[0_0_30px_rgba(5,150,105,0.1)]'
+                                                    ? 'border-amber-600 bg-amber-600/5 ring-1 ring-amber-600 shadow-[0_0_30px_rgba(5,150,105,0.1)]'
                                                     : 'border-white/10 bg-white/5 hover:border-white/30'}
                       `}
                                         >
@@ -126,7 +126,7 @@ export default function BookingPage() {
                                                     <h4 className="font-bold text-lg">{vehicle.name}</h4>
                                                     <p className="text-sm text-gray-400">{vehicle.type}</p>
                                                 </div>
-                                                <Car size={24} className={formData.vehicle === vehicle.id ? 'text-emerald-600' : 'text-gray-600'} />
+                                                <Car size={24} className={formData.vehicle === vehicle.id ? 'text-amber-600' : 'text-gray-600'} />
                                             </div>
                                             <div className="flex justify-between items-end">
                                                 <div className="space-y-1">
@@ -170,11 +170,11 @@ export default function BookingPage() {
                                         </div>
                                         <div className="flex justify-between py-3 border-b border-white/5">
                                             <span className="text-gray-400 text-sm">Selected Ride</span>
-                                            <span className="font-medium text-emerald-600">{selectedVehicle?.name || 'N/A'}</span>
+                                            <span className="font-medium text-amber-600">{selectedVehicle?.name || 'N/A'}</span>
                                         </div>
                                         <div className="flex justify-between py-6">
                                             <span className="text-xl font-bold">Estimated Total</span>
-                                            <span className="text-3xl font-black text-emerald-600">LKR 12,500</span>
+                                            <span className="text-3xl font-black text-amber-600">LKR 12,500</span>
                                         </div>
                                     </div>
                                 </div>

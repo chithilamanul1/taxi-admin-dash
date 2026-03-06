@@ -61,29 +61,29 @@ function PaymentRedirectContent() {
                     </div>
                     <h1 className="text-xl font-bold text-slate-800 mb-2">Security Check Failed</h1>
                     <p className="text-slate-500 mb-6">{error}</p>
-                    <Link href="/" className="text-sm font-bold text-emerald-900 hover:underline">Return to Home</Link>
+                    <Link href="/" className="text-sm font-bold text-slate-950 hover:underline">Return to Home</Link>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-emerald-950 text-white relative overflow-hidden">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 text-white relative overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
 
             <div className="relative z-10 flex flex-col items-center">
-                <div className="w-24 h-24 rounded-full bg-emerald-900/50 border border-emerald-500/20 flex items-center justify-center mb-8 relative">
-                    <div className="absolute inset-0 rounded-full border-t-2 border-emerald-400 animate-spin"></div>
-                    <ShieldCheck size={40} className="text-emerald-400" />
+                <div className="w-24 h-24 rounded-full bg-slate-950/50 border border-amber-500/20 flex items-center justify-center mb-8 relative">
+                    <div className="absolute inset-0 rounded-full border-t-2 border-amber-400 animate-spin"></div>
+                    <ShieldCheck size={40} className="text-amber-400" />
                 </div>
 
                 <h1 className="text-3xl font-bold mb-3 tracking-tight">Securing Connection</h1>
-                <p className="text-emerald-400/60 font-medium text-sm uppercase tracking-widest mb-12">Redirecting to Sampath Bank IPG</p>
+                <p className="text-amber-400/60 font-medium text-sm uppercase tracking-widest mb-12">Redirecting to Sampath Bank IPG</p>
 
-                <div className="flex items-center gap-3 bg-emerald-900/50 px-6 py-3 rounded-xl border border-emerald-500/10 backdrop-blur-sm">
-                    <Lock size={16} className="text-emerald-400" />
-                    <span className="text-xs font-mono text-emerald-200/80">TLS 1.3 Encryption Active</span>
+                <div className="flex items-center gap-3 bg-slate-950/50 px-6 py-3 rounded-xl border border-amber-500/10 backdrop-blur-sm">
+                    <Lock size={16} className="text-amber-400" />
+                    <span className="text-xs font-mono text-amber-200/80">TLS 1.3 Encryption Active</span>
                 </div>
 
                 {/* Hidden Form for Auto-Submission */}
@@ -102,9 +102,9 @@ function PaymentRedirectContent() {
 export default function PaymentRedirectPage() {
     return (
         <Suspense fallback={
-            <div className="min-h-screen flex flex-col items-center justify-center bg-emerald-950 text-white relative overflow-hidden">
-                <div className="w-24 h-24 rounded-full bg-emerald-900/50 border border-emerald-500/20 flex items-center justify-center mb-8 relative">
-                    <div className="absolute inset-0 rounded-full border-t-2 border-emerald-400 animate-spin"></div>
+            <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 text-white relative overflow-hidden">
+                <div className="w-24 h-24 rounded-full bg-slate-950/50 border border-amber-500/20 flex items-center justify-center mb-8 relative">
+                    <div className="absolute inset-0 rounded-full border-t-2 border-amber-400 animate-spin"></div>
                 </div>
                 <h1 className="text-3xl font-bold mb-3 tracking-tight">Loading Payment</h1>
             </div>

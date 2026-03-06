@@ -529,7 +529,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             `}</style>
 
             {/* Modal Container */}
-            <div id="modal-container" className="bg-white w-full h-full sm:h-auto sm:max-h-[95vh] sm:rounded-[2rem] sm:border sm:border-emerald-900/10 shadow-2xl sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative">
+            <div id="modal-container" className="bg-white w-full h-full sm:h-auto sm:max-h-[95vh] sm:rounded-[2rem] sm:border sm:border-slate-950/10 shadow-2xl sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative">
                 {/* Coupon Verification Notification - Moved to Bottom */}
                 <AnimatePresence>
                     {couponLoading && (
@@ -873,9 +873,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
                             </div>
 
-                            <div className="p-6 md:p-8 bg-gradient-to-br from-emerald-900 to-emerald-950 rounded-[2.5rem] text-white flex flex-col shadow-2xl gap-8 relative overflow-hidden group">
+                            <div className="p-6 md:p-8 bg-gradient-to-br from-slate-950 to-slate-950 rounded-[2.5rem] text-white flex flex-col shadow-2xl gap-8 relative overflow-hidden group">
                                 {/* Decorative Background Glow */}
-                                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/10 rounded-full blur-[100px] -mr-32 -mt-32"></div>
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-600/10 rounded-full blur-[100px] -mr-32 -mt-32"></div>
 
                                 <div className="relative z-10 space-y-8">
                                     <div className="flex items-center gap-2 text-amber-500 mb-2">
@@ -894,7 +894,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
                                 <div className="text-left md:text-right bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
                                     <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Route Distance</div>
-                                    <div className="text-xl font-black text-white">{distance.toFixed(1)} <span className="text-sm font-bold text-emerald-400">KM</span></div>
+                                    <div className="text-xl font-black text-white">{distance.toFixed(1)} <span className="text-sm font-bold text-amber-400">KM</span></div>
                                 </div>
 
                                 {/* Multi-Currency Grid - Moved INSIDE dark box */}
@@ -957,7 +957,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 ))}
 
                                 {detailedBreakdown.discounts > 0 && (
-                                    <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-emerald-400 bg-white/10 p-1.5 rounded-lg">
+                                    <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-amber-400 bg-white/10 p-1.5 rounded-lg">
                                         <div className="flex items-center gap-2">
                                             <Tag size={12} />
                                             <span>
@@ -972,7 +972,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <div className="pt-2 border-t border-white/5">
                                         <div className="flex flex-wrap gap-2">
                                             {verifiedCoupons.map((c, idx) => (
-                                                <span key={idx} className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-tighter rounded-md flex items-center gap-1">
+                                                <span key={idx} className="px-2 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[8px] font-black uppercase tracking-tighter rounded-md flex items-center gap-1">
                                                     <Check size={8} strokeWidth={4} /> {c.code}
                                                 </span>
                                             ))}
@@ -982,9 +982,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             </div>
 
                             <div className="flex flex-col items-center justify-center gap-2 mt-4">
-                                <div className="flex items-center gap-1.5 text-emerald-800">
+                                <div className="flex items-center gap-1.5 text-amber-800">
                                     <ShieldCheck size={14} />
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-950">Taxes Included • Tolls Excluded</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-950">Taxes Included • Tolls Excluded</span>
                                 </div>
                                 <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest bg-white px-3 py-1 rounded-full border border-slate-200">
                                     Highway Ticket paid by customer at counter
@@ -1011,16 +1011,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <div className="w-10 h-10 rounded-xl bg-white border border-black/10 flex items-center justify-center text-black shadow-inner"><User size={20} /></div>
                                                 <div>
                                                     <p className="text-sm font-black text-black uppercase">Have an account?</p>
-                                                    <p className="text-[10px] font-bold text-emerald-900/60 uppercase tracking-widest">Auto-fill details & track bookings.</p>
+                                                    <p className="text-[10px] font-bold text-slate-950/60 uppercase tracking-widest">Auto-fill details & track bookings.</p>
                                                 </div>
                                             </div>
-                                            <button onClick={() => signIn()} className="px-5 py-2.5 bg-white border border-emerald-900/10 rounded-xl text-xs font-black text-emerald-900 hover:bg-emerald-900 hover:text-white transition-all shadow-sm">Log In</button>
+                                            <button onClick={() => signIn()} className="px-5 py-2.5 bg-white border border-slate-950/10 rounded-xl text-xs font-black text-slate-950 hover:bg-slate-950 hover:text-white transition-all shadow-sm">Log In</button>
                                         </div>
                                     )}
 
                                     {/* Passenger & Luggage Controls (Requested for Step 2) */}
                                     <div className="space-y-4">
-                                        <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">Adjust Passengers & Luggage</label>
+                                        <label className="text-[10px] font-bold text-slate-950/40 uppercase tracking-widest pl-2">Adjust Passengers & Luggage</label>
                                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                             {[
                                                 { id: 'adults', label: 'Adults' },
@@ -1039,9 +1039,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                     [field.id]: Math.max(0, (prev.passengerCount[field.id] || 0) - 1)
                                                                 }
                                                             }))}
-                                                            className="w-6 h-6 flex items-center justify-center bg-white border border-emerald-900/10 rounded-md text-emerald-600 font-bold hover:bg-emerald-50"
+                                                            className="w-6 h-6 flex items-center justify-center bg-white border border-slate-950/10 rounded-md text-amber-600 font-bold hover:bg-amber-50"
                                                         >-</button>
-                                                        <span className="font-bold text-xs text-emerald-900">{(formData.passengerCount[field.id] || 0)}</span>
+                                                        <span className="font-bold text-xs text-slate-950">{(formData.passengerCount[field.id] || 0)}</span>
                                                         <button
                                                             onClick={() => setFormData(prev => ({
                                                                 ...prev,
@@ -1050,7 +1050,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                     [field.id]: (prev.passengerCount[field.id] || 0) + 1
                                                                 }
                                                             }))}
-                                                            className="w-6 h-6 flex items-center justify-center bg-white border border-emerald-900/10 rounded-md text-emerald-600 font-bold hover:bg-emerald-50"
+                                                            className="w-6 h-6 flex items-center justify-center bg-white border border-slate-950/10 rounded-md text-amber-600 font-bold hover:bg-amber-50"
                                                         >+</button>
                                                     </div>
                                                 </div>
@@ -1086,7 +1086,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                 buttonClassName: '!h-14 !bg-slate-50 !border-r !border-slate-200 !px-4 !flex !items-center !justify-center !min-w-[70px]',
                                                                 flagClassName: '!w-8 !h-auto !shadow-sm',
                                                                 dropdownStyleProps: {
-                                                                    className: '!z-[20000] !min-w-[200px] !max-h-[300px] !rounded-2xl !border-2 !border-emerald-900/10 !shadow-2xl !bg-white'
+                                                                    className: '!z-[20000] !min-w-[200px] !max-h-[300px] !rounded-2xl !border-2 !border-slate-950/10 !shadow-2xl !bg-white'
                                                                 }
                                                             }}
                                                             className="w-full bg-white border-2 border-black rounded-2xl flex focus-within:ring-4 focus-within:ring-slate-900/10 transition-all overflow-visible shadow-sm"

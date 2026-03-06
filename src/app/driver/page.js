@@ -305,7 +305,7 @@ export default function DriverDashboard() {
     if (loading) {
         return (
             <div className="min-h-screen bg-slate-100 flex items-center justify-center">
-                <Loader2 className="animate-spin text-emerald-600" size={48} />
+                <Loader2 className="animate-spin text-amber-600" size={48} />
             </div>
         );
     }
@@ -317,20 +317,20 @@ export default function DriverDashboard() {
     return (
         <div className="min-h-screen bg-slate-100 pt-20">
             {/* Header */}
-            <div className="bg-emerald-900 text-white p-6">
+            <div className="bg-slate-950 text-white p-6">
                 <div className="max-w-4xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <div className={`w-14 h-14 ${isOnline ? 'bg-green-500' : 'bg-white/20'} rounded-full flex items-center justify-center text-2xl font-bold relative`}>
                             {driver.name?.charAt(0) || 'D'}
                             {isOnline && (
-                                <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-400 rounded-full border-2 border-emerald-900 flex items-center justify-center">
+                                <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-400 rounded-full border-2 border-slate-950 flex items-center justify-center">
                                     <Radio size={10} className="animate-pulse" />
                                 </span>
                             )}
                         </div>
                         <div>
                             <h1 className="text-xl font-bold">{driver.name}</h1>
-                            <p className="text-emerald-300 text-sm">{driver.vehicleNumber}</p>
+                            <p className="text-amber-300 text-sm">{driver.vehicleNumber}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -409,17 +409,17 @@ export default function DriverDashboard() {
                         <div className="flex justify-between items-start">
                             <div>
                                 <p className="text-sm text-gray-600 mb-1">Wallet Balance</p>
-                                <p className={`text-2xl font-mono font-bold ${(driver?.walletBalance || 0) < 5000 ? 'text-red-600' : 'text-emerald-900'}`}>
+                                <p className={`text-2xl font-mono font-bold ${(driver?.walletBalance || 0) < 5000 ? 'text-red-600' : 'text-slate-950'}`}>
                                     Rs {(driver?.walletBalance || 0).toLocaleString()}
                                 </p>
                             </div>
-                            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-700 font-bold">
+                            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center text-amber-700 font-bold">
                                 💰
                             </div>
                         </div>
                         <button
                             onClick={() => setShowTopupModal(true)}
-                            className="w-full mt-3 bg-emerald-900 text-white py-2 rounded-lg text-sm font-bold hover:bg-emerald-800 transition-colors"
+                            className="w-full mt-3 bg-slate-950 text-white py-2 rounded-lg text-sm font-bold hover:bg-amber-800 transition-colors"
                         >
                             + Top Up
                         </button>
@@ -432,7 +432,7 @@ export default function DriverDashboard() {
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
-                            className={`flex-1 py-3 rounded-xl font-bold text-sm uppercase tracking-widest transition-all ${activeTab === tab ? 'bg-emerald-900 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+                            className={`flex-1 py-3 rounded-xl font-bold text-sm uppercase tracking-widest transition-all ${activeTab === tab ? 'bg-slate-950 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
                         >
                             {tab} {tab === 'pending' && bookings.filter(b => b.status === 'arrived').length > 0 && <span className="ml-1 w-2 h-2 bg-blue-500 rounded-full animate-pulse inline-block" />}
                         </button>
@@ -451,7 +451,7 @@ export default function DriverDashboard() {
                             <div key={booking._id} className="bg-white rounded-xl p-5 shadow-sm">
                                 <div className="flex items-start justify-between mb-4">
                                     <div>
-                                        <p className="font-bold text-emerald-900">{booking.customerName || 'Guest'}</p>
+                                        <p className="font-bold text-slate-950">{booking.customerName || 'Guest'}</p>
                                         <p className="text-xs text-gray-500">#{booking._id.slice(-6).toUpperCase()}</p>
                                     </div>
                                     <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${booking.status === 'completed' ? 'bg-green-100 text-green-700' :
@@ -464,7 +464,7 @@ export default function DriverDashboard() {
 
                                 <div className="space-y-2 mb-4">
                                     <div className="flex items-center gap-2 text-sm">
-                                        <MapPin size={14} className="text-emerald-600" />
+                                        <MapPin size={14} className="text-amber-600" />
                                         <span className="text-gray-700">{booking.pickupLocation?.address}</span>
                                     </div>
                                     <div className="flex items-center gap-2 text-sm">
@@ -487,7 +487,7 @@ export default function DriverDashboard() {
                                     <div className="flex gap-2 mb-4">
                                         <a
                                             href={`tel:${booking.guestPhone}`}
-                                            className="flex-1 flex items-center justify-center gap-2 bg-emerald-50 text-emerald-700 py-3 rounded-xl font-bold text-sm border border-emerald-100 hover:bg-emerald-100 transition-colors"
+                                            className="flex-1 flex items-center justify-center gap-2 bg-amber-50 text-amber-700 py-3 rounded-xl font-bold text-sm border border-amber-100 hover:bg-amber-100 transition-colors"
                                         >
                                             <Phone size={16} />
                                             Call Guest
@@ -505,7 +505,7 @@ export default function DriverDashboard() {
 
                                 {booking.customerEmail && (
                                     <div className="flex items-center gap-2 text-xs text-gray-500 mb-4 px-2 py-1 bg-gray-50 rounded-lg">
-                                        <Mail size={12} className="text-emerald-600" />
+                                        <Mail size={12} className="text-amber-600" />
                                         <span>{booking.customerEmail}</span>
                                     </div>
                                 )}
@@ -515,13 +515,13 @@ export default function DriverDashboard() {
                                         <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Trip Logistics</p>
                                         <div className="space-y-2">
                                             <div className="flex items-center gap-2 text-xs text-gray-600">
-                                                <Navigation size={12} className="text-emerald-600" />
+                                                <Navigation size={12} className="text-amber-600" />
                                                 <span>{booking.distanceKm?.toFixed(1)} KM • {booking.duration}</span>
                                             </div>
                                             {booking.flightNumber && (
                                                 <div className="flex items-center gap-2 text-xs text-gray-600">
-                                                    <span className="text-emerald-600 text-[10px] font-black">✈️</span>
-                                                    <span>Flight: <strong className="text-emerald-900 font-black">{booking.flightNumber}</strong></span>
+                                                    <span className="text-amber-600 text-[10px] font-black">✈️</span>
+                                                    <span>Flight: <strong className="text-slate-950 font-black">{booking.flightNumber}</strong></span>
                                                 </div>
                                             )}
                                             {booking.passengerCount && (
@@ -542,7 +542,7 @@ export default function DriverDashboard() {
                                         <div className="space-y-1.5">
                                             <div className="flex justify-between items-center text-xs">
                                                 <span className="text-gray-500">Total Price</span>
-                                                <span className="font-black text-emerald-900">Rs {booking.totalPrice?.toLocaleString()}</span>
+                                                <span className="font-black text-slate-950">Rs {booking.totalPrice?.toLocaleString()}</span>
                                             </div>
                                             {booking.paidAmount > 0 && (
                                                 <div className="flex justify-between items-center text-xs">
@@ -596,7 +596,7 @@ export default function DriverDashboard() {
                                                 </GoogleMap>
                                             ) : (
                                                 <div className="w-full h-full flex flex-col items-center justify-center gap-3">
-                                                    <div className="w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center text-emerald-600">
+                                                    <div className="w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center text-amber-600">
                                                         <MapPin size={24} />
                                                     </div>
                                                     <button
@@ -604,7 +604,7 @@ export default function DriverDashboard() {
                                                             setSelectedBookingForMap(booking);
                                                             setDirections(null);
                                                         }}
-                                                        className="px-6 py-2 bg-emerald-900 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg"
+                                                        className="px-6 py-2 bg-slate-950 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg"
                                                     >
                                                         Show Map & Directions
                                                     </button>
@@ -638,7 +638,7 @@ export default function DriverDashboard() {
                                         {booking.status === 'ongoing' && (
                                             <button
                                                 onClick={() => updateBookingStatus(booking._id, 'completed')}
-                                                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-emerald-500/20"
+                                                className="w-full bg-amber-600 hover:bg-amber-700 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-amber-500/20"
                                             >
                                                 <CheckCircle size={20} />
                                                 COMPLETE TRIP
@@ -657,7 +657,7 @@ export default function DriverDashboard() {
                     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                         <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
                             <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-xl font-bold text-emerald-900">Top Up Wallet</h3>
+                                <h3 className="text-xl font-bold text-slate-950">Top Up Wallet</h3>
                                 <button onClick={() => setShowTopupModal(false)} className="p-2 hover:bg-gray-100 rounded-full"><XCircle size={24} className="text-gray-400" /></button>
                             </div>
 
@@ -666,13 +666,13 @@ export default function DriverDashboard() {
                             <div className="grid grid-cols-2 gap-3 mb-4">
                                 <button
                                     onClick={() => { setTopupAmount('5000'); setCustomAmount(''); }}
-                                    className={`py-3 rounded-xl font-bold border-2 transition-all ${topupAmount === '5000' ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 text-gray-500 hover:border-emerald-200'}`}
+                                    className={`py-3 rounded-xl font-bold border-2 transition-all ${topupAmount === '5000' ? 'border-amber-500 bg-amber-50 text-amber-700' : 'border-gray-200 text-gray-500 hover:border-amber-200'}`}
                                 >
                                     Rs 5,000
                                 </button>
                                 <button
                                     onClick={() => { setTopupAmount('10000'); setCustomAmount(''); }}
-                                    className={`py-3 rounded-xl font-bold border-2 transition-all ${topupAmount === '10000' ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 text-gray-500 hover:border-emerald-200'}`}
+                                    className={`py-3 rounded-xl font-bold border-2 transition-all ${topupAmount === '10000' ? 'border-amber-500 bg-amber-50 text-amber-700' : 'border-gray-200 text-gray-500 hover:border-amber-200'}`}
                                 >
                                     Rs 10,000
                                 </button>
@@ -681,12 +681,12 @@ export default function DriverDashboard() {
                             <div className="mb-6">
                                 <button
                                     onClick={() => setTopupAmount('custom')}
-                                    className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all mb-2 flex items-center gap-3 ${topupAmount === 'custom' ? 'border-emerald-500 bg-white ring-1 ring-emerald-500' : 'border-gray-200 bg-gray-50'}`}
+                                    className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all mb-2 flex items-center gap-3 ${topupAmount === 'custom' ? 'border-amber-500 bg-white ring-1 ring-amber-500' : 'border-gray-200 bg-gray-50'}`}
                                 >
-                                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${topupAmount === 'custom' ? 'border-emerald-500' : 'border-gray-400'}`}>
-                                        {topupAmount === 'custom' && <div className="w-2 h-2 rounded-full bg-emerald-500" />}
+                                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${topupAmount === 'custom' ? 'border-amber-500' : 'border-gray-400'}`}>
+                                        {topupAmount === 'custom' && <div className="w-2 h-2 rounded-full bg-amber-500" />}
                                     </div>
-                                    <span className={topupAmount === 'custom' ? 'text-emerald-900 font-bold' : 'text-gray-500'}>Custom Amount</span>
+                                    <span className={topupAmount === 'custom' ? 'text-slate-950 font-bold' : 'text-gray-500'}>Custom Amount</span>
                                 </button>
 
                                 {topupAmount === 'custom' && (
@@ -694,7 +694,7 @@ export default function DriverDashboard() {
                                         <input
                                             type="number"
                                             placeholder="Enter amount (Min 5000)"
-                                            className="w-full p-3 border-2 border-emerald-100 rounded-xl font-mono text-lg font-bold outline-none focus:border-emerald-500"
+                                            className="w-full p-3 border-2 border-amber-100 rounded-xl font-mono text-lg font-bold outline-none focus:border-amber-500"
                                             value={customAmount}
                                             onChange={(e) => setCustomAmount(e.target.value)}
                                             min="5000"
@@ -706,7 +706,7 @@ export default function DriverDashboard() {
                             <button
                                 onClick={handlePayment}
                                 disabled={isProcessingPayment}
-                                className="w-full py-4 bg-emerald-900 text-white rounded-xl font-bold text-lg hover:bg-emerald-800 transition-colors flex justify-center items-center gap-2 shadow-lg shadow-emerald-900/20"
+                                className="w-full py-4 bg-slate-950 text-white rounded-xl font-bold text-lg hover:bg-amber-800 transition-colors flex justify-center items-center gap-2 shadow-lg shadow-slate-950/20"
                             >
                                 {isProcessingPayment ? <Loader2 className="animate-spin" /> : 'Pay Securely'}
                             </button>

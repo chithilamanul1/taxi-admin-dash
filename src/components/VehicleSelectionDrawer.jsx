@@ -58,7 +58,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                         </div>
                     ) : vehicles.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-20 text-center px-6">
-                            <div className="w-16 h-16 bg-emerald-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-4 text-emerald-600">
+                            <div className="w-16 h-16 bg-amber-50 dark:bg-white/5 rounded-full flex items-center justify-center mb-4 text-amber-600">
                                 <Car size={32} />
                             </div>
                             <h4 className="font-bold text-slate-900 dark:text-white mb-2">No Vehicles Available</h4>
@@ -105,7 +105,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                                     }`}
                                             />
                                         ) : (
-                                            <Car className="text-emerald-900/20 dark:text-white/20" />
+                                            <Car className="text-slate-950/20 dark:text-white/20" />
                                         )}
                                     </div>
 
@@ -119,7 +119,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                                         return (
                                                             <>
                                                                 <h4 className="font-bold text-slate-900 dark:text-white truncate">{match[1].trim()}</h4>
-                                                                <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">{match[2]}</span>
+                                                                <span className="text-[9px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wide">{match[2]}</span>
                                                             </>
                                                         );
                                                     }
@@ -163,7 +163,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                 {/* More Details Modal */}
                 {detailVehicle && (
                     <div className="absolute inset-0 z-[110] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in" onClick={() => setDetailVehicle(null)}>
-                        <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-2xl border-t sm:border border-emerald-900/10 dark:border-white/10 flex flex-col animate-scale-in relative max-h-[85vh] sm:max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+                        <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-2xl border-t sm:border border-slate-950/10 dark:border-white/10 flex flex-col animate-scale-in relative max-h-[85vh] sm:max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
 
                             {/* Header - Fixed */}
                             <div className="p-6 pb-2 shrink-0 flex justify-between items-start relative">

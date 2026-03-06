@@ -32,14 +32,14 @@ const TripAdvisorWidget = () => {
         fetchStats();
     }, []);
     return (
-        <div className="bg-white dark:bg-slate-900 py-12 border-t border-emerald-900/5 dark:border-white/5">
+        <div className="bg-white dark:bg-slate-900 py-12 border-t border-slate-950/5 dark:border-white/5">
             <div className="container mx-auto px-6 text-center">
-                <h3 className="text-2xl font-bold text-emerald-900 dark:text-white mb-8">
-                    Review us on <span className="text-emerald-600">TripAdvisor</span>
+                <h3 className="text-2xl font-bold text-slate-950 dark:text-white mb-8">
+                    Review us on <span className="text-amber-600">TripAdvisor</span>
                 </h3>
 
                 <div className="flex justify-center">
-                    <div className={`bg-white p-6 rounded-2xl shadow-sm border border-emerald-900/10 inline-block pointer-events-auto transition-opacity duration-500 ${loading ? 'opacity-50' : 'opacity-100'}`}>
+                    <div className={`bg-white p-6 rounded-2xl shadow-sm border border-slate-950/10 inline-block pointer-events-auto transition-opacity duration-500 ${loading ? 'opacity-50' : 'opacity-100'}`}>
                         {/* Dynamic Custom Widget */}
                         <a
                             href="https://www.tripadvisor.com/Attraction_Review-g293962-d33986804-Reviews-Airport_Taxis_Pvt_Ltd_Sri_Lanka-Colombo_Western_Province.html"

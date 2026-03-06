@@ -185,7 +185,7 @@ export default function ToursAdmin() {
             <div className="max-w-7xl mx-auto">
                 <div className="flex items-center justify-between mb-8">
                     <div>
-                        <Link href="/admin" className="flex items-center gap-2 text-slate-500 hover:text-emerald-600 mb-2 transition-colors">
+                        <Link href="/admin" className="flex items-center gap-2 text-slate-500 hover:text-amber-600 mb-2 transition-colors">
                             <ArrowLeft size={16} /> Back to Dashboard
                         </Link>
                         <h1 className="text-3xl font-black text-slate-900 dark:text-white">Tour Packages</h1>
@@ -193,14 +193,14 @@ export default function ToursAdmin() {
                     </div>
                     <button
                         onClick={handleCreate}
-                        className="bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20"
+                        className="bg-amber-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-amber-700 transition-colors shadow-lg shadow-amber-600/20"
                     >
                         <Plus size={20} /> Add New Tour
                     </button>
                 </div>
 
                 {loading ? (
-                    <div className="flex justify-center py-20"><Loader2 className="animate-spin text-emerald-600" size={40} /></div>
+                    <div className="flex justify-center py-20"><Loader2 className="animate-spin text-amber-600" size={40} /></div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {tours.map(tour => (
@@ -223,7 +223,7 @@ export default function ToursAdmin() {
 
                                 <h3 className="font-bold text-slate-900 dark:text-white mb-1 line-clamp-1">{tour.title}</h3>
                                 <div className="flex items-center justify-between text-sm">
-                                    <span className="text-emerald-600 font-bold">
+                                    <span className="text-amber-600 font-bold">
                                         {tour.price?.currency || 'USD'} {tour.price?.amount || tour.price || 0}
                                     </span>
                                     <span className="text-slate-400">{tour.duration && typeof tour.duration === 'object' ? `${tour.duration.days}D / ${tour.duration.nights}N` : `${tour.duration || 0} Day(s)`}</span>
@@ -249,12 +249,12 @@ export default function ToursAdmin() {
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1">
                                         <label className="font-bold text-slate-600 dark:text-slate-400">Title</label>
-                                        <input required className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                        <input required className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 dark:text-white"
                                             value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} />
                                     </div>
                                     <div className="space-y-1">
                                         <label className="font-bold text-slate-600 dark:text-slate-400">Slug (URL path)</label>
-                                        <input required className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                        <input required className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 dark:text-white"
                                             value={formData.slug} onChange={e => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/ /g, '-') })} />
                                     </div>
                                 </div>
@@ -262,7 +262,7 @@ export default function ToursAdmin() {
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1">
                                         <label className="font-bold text-slate-600 dark:text-slate-400">Category</label>
-                                        <select className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                        <select className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 dark:text-white"
                                             value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}>
                                             <option value="day-trip">Day Trip</option>
                                             <option value="city-tour">City Tour</option>
@@ -272,7 +272,7 @@ export default function ToursAdmin() {
                                     </div>
                                     <div className="space-y-1">
                                         <label className="font-bold text-slate-600 dark:text-slate-400">Featured?</label>
-                                        <select className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                        <select className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 dark:text-white"
                                             value={formData.isFeatured} onChange={e => setFormData({ ...formData, isFeatured: e.target.value === 'true' })}>
                                             <option value="false">No</option>
                                             <option value="true">Yes (Top of list)</option>
@@ -284,12 +284,12 @@ export default function ToursAdmin() {
                                 <div className="grid grid-cols-4 gap-4">
                                     <div className="space-y-1">
                                         <label className="font-bold text-slate-600 dark:text-slate-400">Price</label>
-                                        <input type="number" required className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                        <input type="number" required className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 dark:text-white"
                                             value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
                                     </div>
                                     <div className="space-y-1">
                                         <label className="font-bold text-slate-600 dark:text-slate-400">Currency</label>
-                                        <select className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                        <select className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 dark:text-white"
                                             value={formData.currency} onChange={e => setFormData({ ...formData, currency: e.target.value })}>
                                             <option value="USD">USD</option>
                                             <option value="LKR">LKR</option>
@@ -297,12 +297,12 @@ export default function ToursAdmin() {
                                     </div>
                                     <div className="space-y-1">
                                         <label className="font-bold text-slate-600 dark:text-slate-400">Days</label>
-                                        <input type="number" required min="1" className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                        <input type="number" required min="1" className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 dark:text-white"
                                             value={formData.durationDays} onChange={e => setFormData({ ...formData, durationDays: e.target.value })} />
                                     </div>
                                     <div className="space-y-1">
                                         <label className="font-bold text-slate-600 dark:text-slate-400">Nights</label>
-                                        <input type="number" required min="0" className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                        <input type="number" required min="0" className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 dark:text-white"
                                             value={formData.durationNights} onChange={e => setFormData({ ...formData, durationNights: e.target.value })} />
                                     </div>
                                 </div>
@@ -320,7 +320,7 @@ export default function ToursAdmin() {
                                             )}
                                         </div>
                                         <div className="flex-1 space-y-2">
-                                            <label className="block w-full cursor-pointer bg-white dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 p-4 rounded-xl text-center hover:border-emerald-500 transition-colors">
+                                            <label className="block w-full cursor-pointer bg-white dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 p-4 rounded-xl text-center hover:border-amber-500 transition-colors">
                                                 <input type="file" className="hidden" accept="image/*" onChange={e => setImageFile(e.target.files[0])} />
                                                 <span className="text-xs font-bold text-slate-500">
                                                     {imageFile ? imageFile.name : 'Click to upload image'}
@@ -335,20 +335,20 @@ export default function ToursAdmin() {
 
                                 <div className="space-y-1">
                                     <label className="font-bold text-slate-600 dark:text-slate-400">Description</label>
-                                    <textarea required rows="3" className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                    <textarea required rows="3" className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 dark:text-white"
                                         value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
                                 </div>
 
                                 <div className="space-y-1">
                                     <label className="font-bold text-slate-600 dark:text-slate-400">Highlights (comma separated)</label>
-                                    <textarea rows="2" className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                    <textarea rows="2" className="w-full p-3 rounded-xl border bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-amber-500 dark:text-white"
                                         value={formData.highlights} onChange={e => setFormData({ ...formData, highlights: e.target.value })} />
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-1">
-                                        <label className="font-bold text-emerald-600">Inclusions (comma separated)</label>
-                                        <textarea rows="2" className="w-full p-3 rounded-xl border bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800 outline-none focus:ring-2 focus:ring-emerald-500 dark:text-white"
+                                        <label className="font-bold text-amber-600">Inclusions (comma separated)</label>
+                                        <textarea rows="2" className="w-full p-3 rounded-xl border bg-amber-50 dark:bg-slate-950/10 border-amber-200 dark:border-amber-800 outline-none focus:ring-2 focus:ring-amber-500 dark:text-white"
                                             value={formData.inclusions} onChange={e => setFormData({ ...formData, inclusions: e.target.value })} />
                                     </div>
                                     <div className="space-y-1">
@@ -396,7 +396,7 @@ export default function ToursAdmin() {
                                     </div>
                                 </div>
 
-                                <button type="submit" disabled={uploading} className="w-full bg-emerald-600 text-white font-bold py-4 rounded-xl hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20 mt-4 disabled:opacity-50 flex items-center justify-center gap-2">
+                                <button type="submit" disabled={uploading} className="w-full bg-amber-600 text-white font-bold py-4 rounded-xl hover:bg-amber-700 transition-colors shadow-lg shadow-amber-600/20 mt-4 disabled:opacity-50 flex items-center justify-center gap-2">
                                     {uploading && <Loader2 className="animate-spin" size={20} />}
                                     {editingTour ? (uploading ? 'Updating...' : 'Update Tour') : (uploading ? 'Creating...' : 'Create Tour')}
                                 </button>
