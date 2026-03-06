@@ -60,10 +60,25 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     let distancePrice = 0;
     let overrideApplied = false;
 
-    const matchedOverride = findMatchingDestination(pickup, dynamicDestinations) || findMatchingDestination(dropoff, dynamicDestinations);
+    const pickupOverride = findMatchingDestination(pickup, dynamicDestinations);
+    const dropoffOverride = findMatchingDestination(dropoff, dynamicDestinations);
+
+    // Helper to check if a destination has any valid pricing data
+    const hasPricingData = (d) => {
+        if (!d) return false;
+        if (d.price > 0) return true;
+        if (d.pricing && (Object.keys(d.pricing).length > 0 || (typeof d.pricing.get === 'function' && d.pricing.size > 0))) return true;
+        if (d.vehicleTiers && (Object.keys(d.vehicleTiers).length > 0 || (typeof d.vehicleTiers.get === 'function' && d.vehicleTiers.size > 0))) return true;
+        if (d.vehicleRateOverrides && (Object.keys(d.vehicleRateOverrides).length > 0 || (typeof d.vehicleRateOverrides.get === 'function' && d.vehicleRateOverrides.size > 0))) return true;
+        if (d.perKmRateOverride > 0) return true;
+        return false;
+    };
+
+    // Prefer the one that actually has pricing defined (usually the destination/dropoff)
+    const matchedOverride = hasPricingData(dropoffOverride) ? dropoffOverride : (hasPricingData(pickupOverride) ? pickupOverride : null);
 
     const vehicleType = vehicleData.vehicleType;
-    const vehicleSlug = vehicleData.vehicleSlug || vehicleType; // Use vehicleSlug if available, fallback to vehicleType
+    const vehicleSlug = vehicleData.vehicleSlug || vehicleType;
 
     if (matchedOverride && !isAirportRide) {
         // 1. Check for Fixed Pricing (Precedence)
