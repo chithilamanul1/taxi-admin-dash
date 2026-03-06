@@ -37,16 +37,16 @@ export const generateBookingPDF = (booking) => {
     doc.setFontSize(9); // Reduced from 10
     doc.setTextColor(...COLORS.black);
     doc.setFont(undefined, 'bold');
-    doc.text("Airport Taxis Pvt (Ltd)", 60, 20); // Updated name
+    doc.text("Airport Taxis Pvt (Ltd)", 90, 20); // Updated name & shifted right
     doc.setFont(undefined, 'normal');
     doc.setTextColor(...COLORS.slate);
     doc.setFontSize(8); // Reduced from 10
-    doc.text("118/5 St. Joseph Street, Grandpass, Colombo 14", 60, 25);
-    doc.text("Hotline: +94 722 885 885 | 0719 885 885", 60, 30);
-    doc.text("Email: info@airporttaxis.lk | Web: www.airporttaxis.lk", 60, 35);
+    doc.text("118/5 St. Joseph Street, Grandpass, Colombo 14", 90, 25);
+    doc.text("Hotline: +94 722 885 885 | 0719 885 885", 90, 30);
+    doc.text("Email: info@airporttaxis.lk | Web: www.airporttaxis.lk", 90, 35);
 
     // -- Accent Line --
-    doc.setDrawColor(...COLORS.amber);
+    doc.setDrawColor(...COLORS.emerald);
     doc.setLineWidth(1);
     doc.line(15, 52, 195, 52);
 
@@ -146,7 +146,7 @@ export const generateBookingPDF = (booking) => {
     if (booking.appliedCoupons && booking.appliedCoupons.length > 0) {
         booking.appliedCoupons.forEach(coupon => {
             doc.setFontSize(9);
-            doc.setTextColor(...COLORS.amber);
+            doc.setTextColor(...COLORS.emerald);
             doc.text(`Coupon (${coupon}):`, labelX, currentY);
             doc.text(`Applied`, valueX, currentY, { align: 'right' });
             currentY += 6;
