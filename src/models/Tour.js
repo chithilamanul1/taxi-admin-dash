@@ -39,6 +39,14 @@ const tourSchema = new mongoose.Schema({
     exclusions: { type: [String], default: [] },
     itinerary: [itinerarySchema],
 
+    // New detailed sections
+    experience: [{
+        heading: { type: String },
+        text: { type: String }
+    }],
+    notSuitableFor: { type: [String], default: [] },
+    notAllowed: { type: [String], default: [] },
+
     // Meta
     isFeatured: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
