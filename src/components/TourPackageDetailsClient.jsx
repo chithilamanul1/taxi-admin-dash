@@ -161,12 +161,43 @@ export default function TourPackageDetailsClient({ tour }) {
 
                             {/* Google Map Integration */}
                             <div className="w-full h-96 bg-slate-100 rounded-[2.5rem] border-4 border-white shadow-inner relative group overflow-hidden">
-                                <TripMap
-                                    pickup={tour.destinations?.[0] ? { name: tour.destinations[0] } : null}
-                                    dropoff={tour.destinations?.length > 1 ? { name: tour.destinations[tour.destinations.length - 1] } : null}
-                                    waypoints={tour.destinations?.slice(1, -1).map(d => ({ name: d })) || []}
-                                    onRouteCalculated={(data) => console.log('Route stats:', data)}
-                                />
+                                {(() => {
+                                    // Extract map points from itinerary
+                                    const points = [];
+                                    if (tour.itinerary && tour.itinerary.length > 0) {
+                                        tour.itinerary.forEach((item) => {
+                                            if (item.lat && item.lng) {
+                                                points.push({ lat: item.lat, lon: item.lng, name: item.location || item.title });
+                                            }
+                                        });
+                                    } else if (tour.experience && tour.experience.length > 0) {
+                                        tour.experience.forEach((item) => {
+                                            if (item.lat && item.lng) {
+                                                points.push({ lat: item.lat, lon: item.lng, name: item.heading });
+                                            }
+                                        });
+                                    }
+
+                                    const pickup = points[0] || null;
+                                    const dropoff = points.length > 1 ? points[points.length - 1] : null;
+                                    const waypoints = points.length > 2 ? points.slice(1, -1) : [];
+
+                                    return pickup ? (
+                                        <TripMap
+                                            pickup={pickup}
+                                            dropoff={dropoff}
+                                            waypoints={waypoints}
+                                            onRouteCalculated={(data) => console.log('Route stats:', data)}
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-slate-50">
+                                            <div className="w-16 h-16 bg-slate-100 rounded-3xl flex items-center justify-center">
+                                                <MapIcon className="text-slate-300" size={32} />
+                                            </div>
+                                            <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">No route data available</p>
+                                        </div>
+                                    );
+                                })()}
                             </div>
                         </section>
 

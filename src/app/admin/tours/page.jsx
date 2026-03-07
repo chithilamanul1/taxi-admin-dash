@@ -25,6 +25,7 @@ export default function ToursAdmin() {
         inclusions: '',
         exclusions: '',
         itinerary: [],
+        experience: [],
         isActive: true,
         isFeatured: false
     });
@@ -80,6 +81,7 @@ export default function ToursAdmin() {
             inclusions: tour.inclusions?.join(', ') || '',
             exclusions: tour.exclusions?.join(', ') || '',
             itinerary: tour.itinerary || [],
+            experience: tour.experience || [],
             isActive: tour.isActive,
             isFeatured: tour.isFeatured || false
         });
@@ -90,7 +92,7 @@ export default function ToursAdmin() {
         setEditingTour(null);
         setImageFile(null);
         setFormData({
-            title: '', category: 'day-trip', price: '', priceType: 'from', durationDays: 1, durationNights: 0, image: '', description: '', highlights: '', inclusions: '', exclusions: '', itinerary: [], isActive: true
+            title: '', category: 'day-trip', price: '', priceType: 'from', durationDays: 1, durationNights: 0, image: '', description: '', highlights: '', inclusions: '', exclusions: '', itinerary: [], experience: [], isActive: true
         });
         setShowModal(true);
     };
@@ -115,6 +117,23 @@ export default function ToursAdmin() {
     const handleRemoveItineraryDay = (index) => {
         const newItinerary = formData.itinerary.filter((_, i) => i !== index).map((day, i) => ({ ...day, day: i + 1 }));
         setFormData({ ...formData, itinerary: newItinerary });
+    };
+
+    const handleAddExperienceStep = () => {
+        setFormData({
+            ...formData,
+            experience: [...formData.experience, { heading: '', text: '' }]
+        });
+    };
+
+    const handleUpdateExperienceStep = (index, field, value) => {
+        const newExp = [...formData.experience];
+        newExp[index][field] = value;
+        setFormData({ ...formData, experience: newExp });
+    };
+
+    const handleRemoveExperienceStep = (index) => {
+        setFormData({ ...formData, experience: formData.experience.filter((_, i) => i !== index) });
     };
 
     const handleSubmit = async (e) => {
@@ -145,6 +164,8 @@ export default function ToursAdmin() {
                 highlights: formData.highlights.split(',').map(s => s.trim()).filter(Boolean),
                 inclusions: formData.inclusions.split(',').map(s => s.trim()).filter(Boolean),
                 exclusions: formData.exclusions.split(',').map(s => s.trim()).filter(Boolean),
+                itinerary: formData.itinerary,
+                experience: formData.experience,
                 isFeatured: formData.isFeatured
             };
 
@@ -389,6 +410,39 @@ export default function ToursAdmin() {
                                                         <label className="text-xs font-bold text-slate-500">Activities (comma separated)</label>
                                                         <input className="w-full p-2 text-sm rounded-lg border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:border-blue-500 dark:text-white"
                                                             value={day.activities?.join(', ') || ''} onChange={e => handleUpdateItineraryDay(index, 'activities', e.target.value)} placeholder="e.g. Climb Rock, Safari" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="border-t border-slate-200 dark:border-slate-800 pt-6 mt-6">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="font-bold text-slate-800 dark:text-white text-lg">Tour Experience (Day Trips)</h3>
+                                        <button type="button" onClick={handleAddExperienceStep} className="text-sm bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg flex items-center gap-1 hover:bg-blue-100 font-bold">
+                                            <Plus size={16} /> Add Step
+                                        </button>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        {formData.experience.map((step, index) => (
+                                            <div key={index} className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4 relative">
+                                                <button type="button" onClick={() => handleRemoveExperienceStep(index)} className="absolute top-4 right-4 text-slate-400 hover:text-red-500">
+                                                    <Trash2 size={16} />
+                                                </button>
+                                                <h4 className="font-black text-slate-700 dark:text-slate-300 mb-3">Step {index + 1}</h4>
+
+                                                <div className="space-y-3">
+                                                    <div>
+                                                        <label className="text-xs font-bold text-slate-500">Heading</label>
+                                                        <input className="w-full p-2 text-sm rounded-lg border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:border-blue-500 dark:text-white"
+                                                            value={step.heading} onChange={e => handleUpdateExperienceStep(index, 'heading', e.target.value)} placeholder="e.g. Visit Sigiriya" />
+                                                    </div>
+                                                    <div>
+                                                        <label className="text-xs font-bold text-slate-500">Text Content</label>
+                                                        <textarea rows="2" className="w-full p-2 text-sm rounded-lg border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 outline-none focus:border-blue-500 dark:text-white"
+                                                            value={step.text} onChange={e => handleUpdateExperienceStep(index, 'text', e.target.value)} />
                                                     </div>
                                                 </div>
                                             </div>
