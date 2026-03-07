@@ -1,0 +1,160 @@
+{
+  "title": "10 Days | 09 Nights Ramayana Trail Tour",
+  "slug": "10-days-09-nights-ramayana-trail-tour",
+  "fieldNames": [
+    "_id",
+    "slug",
+    "__v",
+    "category",
+    "createdAt",
+    "description",
+    "duration",
+    "exclusions",
+    "experience",
+    "inclusions",
+    "isActive",
+    "itinerary",
+    "notAllowed",
+    "notSuitableFor",
+    "price",
+    "title",
+    "updatedAt",
+    "destinations",
+    "excluded",
+    "included"
+  ],
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Airport - Negombo",
+      "description": "Transfer to hotel in Negombo. Overnight stay at Negombo.",
+      "_id": "69ac6c8ea2bc0effb026d5c2",
+      "lat": 7.205520799999999,
+      "lng": 79.8512562
+    },
+    {
+      "day": 2,
+      "title": "Negombo - Chilaw - Anuradhapura",
+      "description": "Visit Munneswaram & Manavari Hindu Temples. Overnight stay at Anuradhapura.",
+      "_id": "69ac6c8ea2bc0effb026d5c3",
+      "lat": 7.205520799999999,
+      "lng": 79.8512562
+    },
+    {
+      "day": 3,
+      "title": "Anuradhapura - Trincomalee",
+      "description": "Visit Anuradhapura Kingdom and Thirukoneswaram Hindu Temple. Overnight stay at Trincomalee.",
+      "_id": "69ac6c8ea2bc0effb026d5c4",
+      "lat": 8.331830499999999,
+      "lng": 80.4029017
+    },
+    {
+      "day": 4,
+      "title": "Trincomalee - Dambulla - Kandy",
+      "description": "Visit Dambulla Cave Temple and Temple of the Tooth. Overnight stay at Kandy.",
+      "_id": "69ac6c8ea2bc0effb026d5c5",
+      "lat": 7.874101700000001,
+      "lng": 80.6510856
+    },
+    {
+      "day": 5,
+      "title": "Kandy - Peradeniya - Pinnawala - Kandy",
+      "description": "Visit Botanical Garden and Elephant Orphanage. Overnight stay at Kandy.",
+      "_id": "69ac6c8ea2bc0effb026d5c6",
+      "lat": 7.2698653,
+      "lng": 80.59383299999999
+    },
+    {
+      "day": 6,
+      "title": "Kandy - Ramboda - Nuwara Eliya",
+      "description": "Visit Sri Bhaktha Hanuman Temple and Tea Factory. Overnight stay at Nuwara Eliya.",
+      "_id": "69ac6c8ea2bc0effb026d5c7",
+      "lat": 7.0565468,
+      "lng": 80.6938474
+    },
+    {
+      "day": 7,
+      "title": "Nuwara Eliya - Hakgala - Ella - Kataragama",
+      "description": "Visit Ashok Vatika, Sita Amman Temple and Divurumpola. Overnight stay at Kataragama.",
+      "_id": "69ac6c8ea2bc0effb026d5c8",
+      "lat": 6.4135463,
+      "lng": 81.33256790000002
+    },
+    {
+      "day": 8,
+      "title": "Kataragama - Ussangoda - Balapitiya - Colombo",
+      "description": "Visit Kataragama Temple, Ussangoda site and Galle Fort. Overnight stay at Galle.",
+      "_id": "69ac6c8ea2bc0effb026d5c9",
+      "lat": 6.9270786,
+      "lng": 79.861243
+    },
+    {
+      "day": 9,
+      "title": "Galle | Hikkaduwa - Balapitiya - Colombo",
+      "description": "Madu River Boat Ride and Kelaniya Vibhishana Temple. Overnight stay in Colombo.",
+      "_id": "69ac6c8ea2bc0effb026d5ca",
+      "lat": 6.9270786,
+      "lng": 79.861243
+    },
+    {
+      "day": 10,
+      "title": "Colombo - City Tour - Airport",
+      "description": "City tour in Colombo. Transfer to Airport.",
+      "_id": "69ac6c8ea2bc0effb026d5cb",
+      "lat": 6.9270786,
+      "lng": 79.861243
+    }
+  ],
+  "itineraryLength": 10,
+  "included": [
+    "Meeting at airport",
+    "Transportation",
+    "Accommodation",
+    "Assistance"
+  ],
+  "includedLength": 4,
+  "excluded": [
+    "International Air Fare",
+    "Peak period supplements",
+    "Entrance fees",
+    "Tips"
+  ],
+  "excludedLength": 4,
+  "experience": [],
+  "experienceLength": 0,
+  "description": null,
+  "notSuitableFor": [
+    "Back problems",
+    "Insect allergies",
+    "Kidney problems",
+    "Recent surgeries",
+    "Motion sickness",
+    "Animal allergies",
+    "Pregnant women",
+    "Wheelchair user"
+  ],
+  "notAllowed": [
+    "Explosive substances",
+    "Nudity",
+    "Fireworks",
+    "Alcohol and drugs",
+    "Drones",
+    "Glass object",
+    "Drinks in the vehicle",
+    "Making noise",
+    "Alcoholic drinks in the vehicle",
+    "Touching/Feeding animals"
+  ],
+  "inclusions": [
+    "Meeting at the airport upon arrival and assistance",
+    "Transportation by private AC vehicle",
+    "Professional chauffeur-guide service",
+    "Half Board accommodation (Breakfast & Dinner)",
+    "Two water bottles per day"
+  ],
+  "exclusions": [
+    "International flights",
+    "Entrance fees to temples",
+    "Lunch and personal expenses"
+  ]
+}

@@ -12,7 +12,7 @@ import TripMap from './TripMap';
 
 export default function TourDetailsClient({ tour }) {
     const [isBookingOpen, setIsBookingOpen] = useState(false);
-    const [activeDay, setActiveDay] = useState(1);
+    const [collapsedDay, setCollapsedDay] = useState<number | null>(null); // null = all expanded
     const [memberCount, setMemberCount] = useState({ adults: 2, children: 0 });
 
     // Extract map points for visualization
@@ -222,44 +222,47 @@ export default function TourDetailsClient({ tour }) {
                                 </h2>
                                 <div className="space-y-6 relative">
                                     <div className="absolute left-8 top-10 bottom-10 w-0.5 bg-slate-50 border-r border-slate-100 md:block hidden" />
-                                    {tour.itinerary.map((item, idx) => (
-                                        <div key={item.day} className="group relative">
-                                            <button
-                                                onClick={() => setActiveDay(activeDay === item.day ? null : item.day)}
-                                                className={`w-full flex items-center gap-8 p-8 rounded-[2rem] border transition-all duration-500 text-left ${activeDay === item.day ? 'bg-emerald-900 border-emerald-900 shadow-2xl scale-[1.02]' : 'bg-white border-slate-100 hover:border-emerald-200'}`}
-                                            >
-                                                <div className={`w-16 h-16 shrink-0 rounded-2xl flex flex-col items-center justify-center font-black shadow-lg transition-all duration-500 ${activeDay === item.day ? 'bg-emerald-500 text-white rotate-6' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-50 group-hover:text-emerald-600'}`}>
-                                                    <span className="text-[10px] uppercase tracking-tighter">Day</span>
-                                                    <span className="text-2xl -mt-1">{item.day}</span>
-                                                </div>
-                                                <div className="flex-1">
-                                                    <h3 className={`text-xl font-black tracking-tight ${activeDay === item.day ? 'text-white' : 'text-slate-800'}`}>
-                                                        {item.title}
-                                                    </h3>
-                                                    {item.location && <span className={`text-[10px] font-bold uppercase tracking-widest block mt-1 ${activeDay === item.day ? 'text-emerald-400' : 'text-slate-400'}`}>{item.location}</span>}
-                                                </div>
-                                                <div className={`transition-all duration-500 ${activeDay === item.day ? 'rotate-180 text-emerald-500' : 'text-slate-300'}`}>
-                                                    {activeDay === item.day ? <Minus size={24} /> : <Plus size={24} />}
-                                                </div>
-                                            </button>
-                                            <div className={`grid transition-all duration-500 ease-in-out ${activeDay === item.day ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0 overflow-hidden'}`}>
-                                                <div className="overflow-hidden">
-                                                    <div className="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 ml-0 md:ml-6">
-                                                        <p className="text-slate-700 leading-relaxed text-lg whitespace-pre-line font-bold mb-6">
-                                                            {item.description || item.desc}
-                                                        </p>
-                                                        {item.activities && (
-                                                            <div className="flex flex-wrap gap-2">
-                                                                {item.activities.map((act, i) => (
-                                                                    <span key={i} className="px-4 py-2 bg-white rounded-xl text-[10px] font-black text-slate-500 uppercase tracking-widest border border-slate-200">{act}</span>
-                                                                ))}
-                                                            </div>
-                                                        )}
+                                    {tour.itinerary.map((item, idx) => {
+                                        const isExpanded = collapsedDay !== item.day;
+                                        return (
+                                            <div key={item.day || idx} className="group relative">
+                                                <button
+                                                    onClick={() => setCollapsedDay(collapsedDay === item.day ? null : item.day)}
+                                                    className={`w-full flex items-center gap-8 p-8 rounded-[2rem] border transition-all duration-500 text-left ${isExpanded ? 'bg-emerald-900 border-emerald-900 shadow-2xl scale-[1.02]' : 'bg-white border-slate-100 hover:border-emerald-200'}`}
+                                                >
+                                                    <div className={`w-16 h-16 shrink-0 rounded-2xl flex flex-col items-center justify-center font-black shadow-lg transition-all duration-500 ${isExpanded ? 'bg-emerald-500 text-white rotate-6' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-50 group-hover:text-emerald-600'}`}>
+                                                        <span className="text-[10px] uppercase tracking-tighter">Day</span>
+                                                        <span className="text-2xl -mt-1">{item.day}</span>
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <h3 className={`text-xl font-black tracking-tight ${isExpanded ? 'text-white' : 'text-slate-800'}`}>
+                                                            {item.title}
+                                                        </h3>
+                                                        {item.location && <span className={`text-[10px] font-bold uppercase tracking-widest block mt-1 ${isExpanded ? 'text-emerald-400' : 'text-slate-400'}`}>{item.location}</span>}
+                                                    </div>
+                                                    <div className={`transition-all duration-500 ${isExpanded ? 'rotate-180 text-emerald-500' : 'text-slate-300'}`}>
+                                                        {isExpanded ? <Minus size={24} /> : <Plus size={24} />}
+                                                    </div>
+                                                </button>
+                                                <div className={`grid transition-all duration-500 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0 overflow-hidden'}`}>
+                                                    <div className="overflow-hidden">
+                                                        <div className="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 ml-0 md:ml-6">
+                                                            <p className="text-slate-700 leading-relaxed text-lg whitespace-pre-line font-bold mb-6">
+                                                                {item.description || item.desc}
+                                                            </p>
+                                                            {item.activities && (
+                                                                <div className="flex flex-wrap gap-2">
+                                                                    {item.activities.map((act, i) => (
+                                                                        <span key={i} className="px-4 py-2 bg-white rounded-xl text-[10px] font-black text-slate-500 uppercase tracking-widest border border-slate-200">{act}</span>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             </section>
                         )}
@@ -274,7 +277,7 @@ export default function TourDetailsClient({ tour }) {
                                     What's Included
                                 </h3>
                                 <ul className="space-y-4">
-                                    {(tour.includes || tour.inclusions)?.map((item: string, i: number) => (
+                                    {(tour.included || tour.includes || tour.inclusions || []).map((item: string, i: number) => (
                                         <li key={i} className="flex gap-4 text-slate-800 items-start">
                                             <div className="shrink-0 mt-1 w-6 h-6 bg-emerald-50 rounded-lg flex items-center justify-center border border-emerald-100">
                                                 <Check size={14} className="text-emerald-600" />
@@ -282,7 +285,7 @@ export default function TourDetailsClient({ tour }) {
                                             <span className="text-base font-black leading-tight tracking-tight">{item}</span>
                                         </li>
                                     ))}
-                                    {(!tour.includes && !tour.inclusions) && <li className="text-slate-400 text-xs italic">No inclusions specified</li>}
+                                    {(!tour.included && !tour.includes && !tour.inclusions) && <li className="text-slate-400 text-xs italic">No inclusions specified</li>}
                                 </ul>
                             </section>
                             <section className="bg-white rounded-[2rem] p-10 shadow-2xl shadow-slate-200/50 border-2 border-slate-100">
@@ -293,7 +296,7 @@ export default function TourDetailsClient({ tour }) {
                                     Not Included
                                 </h3>
                                 <ul className="space-y-4">
-                                    {(tour.excludes || tour.exclusions)?.map((item: string, i: number) => (
+                                    {(tour.excluded || tour.excludes || tour.exclusions || []).map((item: string, i: number) => (
                                         <li key={i} className="flex gap-4 text-slate-800 items-start">
                                             <div className="shrink-0 mt-1 w-6 h-6 bg-rose-50 rounded-lg flex items-center justify-center border border-rose-100">
                                                 <XCircle size={14} className="text-rose-600" />
@@ -301,7 +304,7 @@ export default function TourDetailsClient({ tour }) {
                                             <span className="text-base font-black leading-tight tracking-tight">{item}</span>
                                         </li>
                                     ))}
-                                    {(!tour.excludes && !tour.exclusions) && <li className="text-slate-400 text-xs italic">No exclusions specified</li>}
+                                    {(!tour.excluded && !tour.excludes && !tour.exclusions) && <li className="text-slate-400 text-xs italic">No exclusions specified</li>}
                                 </ul>
                             </section>
                         </div>
