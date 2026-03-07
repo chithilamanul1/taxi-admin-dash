@@ -106,8 +106,8 @@ export default function SpecialOffersSection() {
                                         {/* Discount Amount */}
                                         <div className="mb-2">
                                             <h3 className="text-5xl font-black text-slate-800 tracking-tight leading-none">
-                                                {coupon.discountType === 'percentage' ? `${coupon.value}%` : `$${coupon.value}`}
-                                                <span className="text-xl ml-1 text-slate-500 font-bold">{coupon.discountType === 'percentage' ? 'OFF' : 'Rs OFF'}</span>
+                                                {coupon.discountType === 'percentage' ? `${coupon.value}%` : `Rs ${coupon.value}`}
+                                                <span className="text-xl ml-1 text-slate-500 font-bold">OFF</span>
                                             </h3>
                                             <p className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mt-1 ml-1">Discount</p>
                                         </div>

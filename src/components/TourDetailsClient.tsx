@@ -226,39 +226,39 @@ export default function TourDetailsClient({ tour }) {
 
                         {/* Inclusions & Exclusions */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                            <section className="bg-white rounded-[3rem] p-10 shadow-xl shadow-slate-200/50 border border-slate-100">
-                                <h3 className="text-xl font-black text-emerald-900 mb-8 uppercase tracking-widest flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center">
-                                        <CheckCircle size={20} className="text-emerald-500" />
+                            <section className="bg-white rounded-[2rem] p-10 shadow-2xl shadow-slate-200/50 border-2 border-slate-100">
+                                <h3 className="text-2xl font-black text-emerald-900 mb-8 uppercase tracking-tighter flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200">
+                                        <CheckCircle size={24} className="text-white" />
                                     </div>
                                     What's Included
                                 </h3>
                                 <ul className="space-y-4">
                                     {(tour.includes || tour.inclusions)?.map((item: string, i: number) => (
-                                        <li key={i} className="flex gap-4 text-slate-700 items-start">
-                                            <div className="shrink-0 mt-1 w-5 h-5 bg-emerald-50 rounded flex items-center justify-center">
-                                                <Check size={12} className="text-emerald-500" />
+                                        <li key={i} className="flex gap-4 text-slate-800 items-start">
+                                            <div className="shrink-0 mt-1 w-6 h-6 bg-emerald-50 rounded-lg flex items-center justify-center border border-emerald-100">
+                                                <Check size={14} className="text-emerald-600" />
                                             </div>
-                                            <span className="text-sm font-bold leading-snug">{item}</span>
+                                            <span className="text-base font-black leading-tight tracking-tight">{item}</span>
                                         </li>
                                     ))}
                                     {(!tour.includes && !tour.inclusions) && <li className="text-slate-400 text-xs italic">No inclusions specified</li>}
                                 </ul>
                             </section>
-                            <section className="bg-white rounded-[3rem] p-10 shadow-xl shadow-slate-200/50 border border-slate-100">
-                                <h3 className="text-xl font-black text-emerald-900 mb-8 uppercase tracking-widest flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-rose-50 rounded-xl flex items-center justify-center">
-                                        <XCircle size={20} className="text-rose-500" />
+                            <section className="bg-white rounded-[2rem] p-10 shadow-2xl shadow-slate-200/50 border-2 border-slate-100">
+                                <h3 className="text-2xl font-black text-emerald-900 mb-8 uppercase tracking-tighter flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-200">
+                                        <XCircle size={24} className="text-white" />
                                     </div>
                                     Not Included
                                 </h3>
                                 <ul className="space-y-4">
                                     {(tour.excludes || tour.exclusions)?.map((item: string, i: number) => (
-                                        <li key={i} className="flex gap-4 text-slate-700 items-start">
-                                            <div className="shrink-0 mt-1 w-5 h-5 bg-rose-50 rounded flex items-center justify-center">
-                                                <XCircle size={12} className="text-rose-500" />
+                                        <li key={i} className="flex gap-4 text-slate-800 items-start">
+                                            <div className="shrink-0 mt-1 w-6 h-6 bg-rose-50 rounded-lg flex items-center justify-center border border-rose-100">
+                                                <XCircle size={14} className="text-rose-600" />
                                             </div>
-                                            <span className="text-sm font-bold leading-snug">{item}</span>
+                                            <span className="text-base font-black leading-tight tracking-tight">{item}</span>
                                         </li>
                                     ))}
                                     {(!tour.excludes && !tour.exclusions) && <li className="text-slate-400 text-xs italic">No exclusions specified</li>}
@@ -268,21 +268,21 @@ export default function TourDetailsClient({ tour }) {
 
                         {/* Experience / Timeline */}
                         {tour.experience && tour.experience.length > 0 && (
-                            <section className="bg-white rounded-[3rem] p-10 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100">
-                                <h2 className="text-3xl font-black text-emerald-900 mb-10 tracking-tight flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center">
-                                        <Navigation className="text-emerald-500" size={24} />
+                            <section className="bg-white rounded-[3rem] p-10 md:p-14 shadow-2xl shadow-slate-200/50 border-2 border-slate-100 relative overflow-hidden">
+                                <h2 className="text-4xl font-black text-emerald-900 mb-12 tracking-tighter flex items-center gap-6">
+                                    <div className="w-16 h-16 bg-emerald-500 rounded-3xl flex items-center justify-center shadow-xl shadow-emerald-200">
+                                        <Navigation className="text-white" size={32} />
                                     </div>
-                                    Experience
+                                    Your Experience
                                 </h2>
-                                <div className="space-y-0 relative ml-4">
-                                    <div className="absolute left-[11px] top-4 bottom-4 w-0.5 bg-slate-100 border-r-2 border-dashed border-slate-200 md:block hidden" />
+                                <div className="space-y-0 relative ml-6">
+                                    <div className="absolute left-[15px] top-6 bottom-6 w-1 bg-emerald-50 border-r-4 border-dashed border-emerald-100" />
                                     {tour.experience.map((exp: any, idx: number) => (
-                                        <div key={idx} className="relative pl-12 pb-10 last:pb-0">
-                                            <div className="absolute left-0 top-1 w-6 h-6 rounded-full border-4 border-white bg-emerald-500 shadow-md z-10" />
-                                            <div className="flex flex-col gap-1">
-                                                <h4 className="text-lg font-black text-emerald-900 uppercase tracking-tight">{exp.heading}</h4>
-                                                <p className="text-slate-600 font-bold text-sm leading-relaxed">{exp.text}</p>
+                                        <div key={idx} className="relative pl-16 pb-12 last:pb-0 group">
+                                            <div className="absolute left-0 top-1.5 w-8 h-8 rounded-full border-4 border-white bg-emerald-500 shadow-lg z-10 transition-transform group-hover:scale-125" />
+                                            <div className="flex flex-col gap-2">
+                                                <h4 className="text-xl font-black text-emerald-900 uppercase tracking-tighter leading-none">{exp.heading}</h4>
+                                                <p className="text-slate-600 font-bold text-base leading-relaxed max-w-2xl">{exp.text}</p>
                                             </div>
                                         </div>
                                     ))}
