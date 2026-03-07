@@ -4,6 +4,9 @@ const itinerarySchema = new mongoose.Schema({
     day: { type: Number, required: true },
     title: { type: String, required: true },
     description: { type: String },
+    location: { type: String }, // NEW: Location name for geocoding
+    lat: { type: Number }, // NEW: Latitude
+    lng: { type: Number }, // NEW: Longitude
     activities: { type: [String], default: [] }, // Array of strings for bullets
     overnightStay: { type: String }
 }, { _id: false });
@@ -42,7 +45,9 @@ const tourSchema = new mongoose.Schema({
     // New detailed sections
     experience: [{
         heading: { type: String },
-        text: { type: String }
+        text: { type: String },
+        lat: { type: Number }, // NEW: Latitude
+        lng: { type: Number }  // NEW: Longitude
     }],
     notSuitableFor: { type: [String], default: [] },
     notAllowed: { type: [String], default: [] },

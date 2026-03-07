@@ -15,6 +15,37 @@ export default function TourDetailsClient({ tour }) {
     const [activeDay, setActiveDay] = useState(1);
     const [memberCount, setMemberCount] = useState({ adults: 2, children: 0 });
 
+    // Extract map points for visualization
+    const getMapPoints = () => {
+        const points: { lat: number; lon: number; name: string }[] = [];
+
+        // Priority 1: Itinerary (Tour Packages)
+        if (tour.itinerary && tour.itinerary.length > 0) {
+            tour.itinerary.forEach((item: any) => {
+                if (item.lat && item.lng) {
+                    points.push({ lat: item.lat, lon: item.lng, name: item.location || item.title });
+                }
+            });
+        }
+
+        // Priority 2: Experience (Day Trips / Backup)
+        if (points.length === 0 && tour.experience && tour.experience.length > 0) {
+            tour.experience.forEach((item: any) => {
+                if (item.lat && item.lng) {
+                    points.push({ lat: item.lat, lon: item.lng, name: item.heading });
+                }
+            });
+        }
+
+        return points;
+    };
+
+    const mapPoints = getMapPoints();
+    const pickup = mapPoints[0] || null;
+    const dropoff = mapPoints.length > 1 ? mapPoints[mapPoints.length - 1] : null;
+    const waypoints = mapPoints.length > 2 ? mapPoints.slice(1, -1) : [];
+
+
     // Helper for icons mapping
     const getIcon = (name: string) => {
         const icons: { [key: string]: React.ReactNode } = {
@@ -162,12 +193,21 @@ export default function TourDetailsClient({ tour }) {
                             {/* Google Map Placeholder */}
                             {/* Google Map Integration */}
                             <div className="w-full h-96 bg-slate-100 rounded-[2.5rem] border-4 border-white shadow-inner relative group overflow-hidden">
-                                <TripMap
-                                    pickup={tour.destinations?.[0] ? { name: tour.destinations[0] } : null}
-                                    dropoff={tour.destinations?.length > 1 ? { name: tour.destinations[tour.destinations.length - 1] } : (tour.location ? { name: tour.location } : null)}
-                                    waypoints={tour.destinations?.slice(1, -1).map((d: string) => ({ name: d })) || []}
-                                    onRouteCalculated={(data: any) => console.log('Route stats:', data)}
-                                />
+                                {pickup ? (
+                                    <TripMap
+                                        pickup={pickup}
+                                        dropoff={dropoff}
+                                        waypoints={waypoints}
+                                        onRouteCalculated={(data: any) => console.log('Route stats:', data)}
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-slate-50">
+                                        <div className="w-16 h-16 bg-slate-100 rounded-3xl flex items-center justify-center">
+                                            <MapIcon className="text-slate-300" size={32} />
+                                        </div>
+                                        <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">No route data available</p>
+                                    </div>
+                                )}
                             </div>
                         </section>
 
