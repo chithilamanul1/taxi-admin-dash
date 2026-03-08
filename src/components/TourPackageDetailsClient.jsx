@@ -236,14 +236,21 @@ export default function TourPackageDetailsClient({ tour }) {
                                     What's Included
                                 </h3>
                                 <ul className="grid grid-cols-1 gap-4">
-                                    {tour.inclusions?.map((item, i) => (
-                                        <li key={i} className="flex gap-4 text-slate-800 items-start group">
-                                            <div className="shrink-0 mt-0.5 w-6 h-6 bg-slate-900 rounded flex items-center justify-center shadow-md transition-transform group-hover:scale-110">
-                                                <Check size={14} className="text-white" strokeWidth={3} />
-                                            </div>
-                                            <span className="text-base font-black leading-tight tracking-tight uppercase italic">{item}</span>
-                                        </li>
-                                    ))}
+                                    {(tour.included || tour.includes || tour.inclusions || [])
+                                        .filter(item => {
+                                            if (!item || typeof item !== 'string') return false;
+                                            const upper = item.toUpperCase();
+                                            if (upper.includes('ADULT') && upper.includes('X') && upper.includes('$')) return false;
+                                            return true;
+                                        })
+                                        .map((item, i) => (
+                                            <li key={i} className="flex gap-4 text-slate-800 items-start group">
+                                                <div className="shrink-0 mt-0.5 w-6 h-6 bg-slate-900 rounded flex items-center justify-center shadow-md transition-transform group-hover:scale-110">
+                                                    <Check size={14} className="text-white" strokeWidth={3} />
+                                                </div>
+                                                <span className="text-sm font-black leading-tight tracking-tight uppercase italic">{item}</span>
+                                            </li>
+                                        ))}
                                     {(!tour.inclusions || tour.inclusions.length === 0) && <li className="text-slate-400 text-xs italic">No inclusions specified</li>}
                                 </ul>
                             </section>
