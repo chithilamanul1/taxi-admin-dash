@@ -272,17 +272,18 @@ export default function TourDetailsClient({ tour }) {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                             <section className="bg-white rounded-[2rem] p-10 shadow-2xl shadow-slate-200/50 border-2 border-slate-100">
                                 <h3 className="text-2xl font-black text-emerald-900 mb-8 uppercase tracking-tighter flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200">
+                                    <div className="w-12 h-12 bg-yellow-500 rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-200">
                                         <CheckCircle size={24} className="text-white" />
                                     </div>
-                                    What's Included
+                                    WHAT'S INCLUDED
                                 </h3>
                                 <ul className="grid grid-cols-1 gap-4">
-                                    {(tour.included || tour.includes || tour.inclusions || [])
+                                    {((tour.inclusions?.length > 0 ? tour.inclusions : null) ||
+                                        (tour.included?.length > 0 ? tour.included : null) ||
+                                        (tour.includes?.length > 0 ? tour.includes : null) || [])
                                         .filter((item: string) => {
                                             if (!item || typeof item !== 'string') return false;
                                             const upper = item.toUpperCase();
-                                            // Filter out anything that looks like price calculation: "ADULT 1 X $74.62"
                                             if (upper.includes('ADULT') && upper.includes('X') && upper.includes('$')) return false;
                                             return true;
                                         })
@@ -294,7 +295,7 @@ export default function TourDetailsClient({ tour }) {
                                                 <span className="text-base font-black leading-tight tracking-tight uppercase italic">{item}</span>
                                             </li>
                                         ))}
-                                    {(!tour.included && !tour.includes && !tour.inclusions) && <li className="text-slate-400 text-xs italic">No inclusions specified</li>}
+                                    {(!tour.inclusions?.length && !tour.included?.length && !tour.includes?.length) && <li className="text-slate-400 text-xs italic">No inclusions specified</li>}
                                 </ul>
                             </section>
                             <section className="bg-white rounded-[2rem] p-10 shadow-2xl shadow-slate-200/50 border-2 border-slate-100">
@@ -302,18 +303,20 @@ export default function TourDetailsClient({ tour }) {
                                     <div className="w-12 h-12 bg-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-200">
                                         <XCircle size={24} className="text-white" />
                                     </div>
-                                    Not Included
+                                    NOT INCLUDED
                                 </h3>
                                 <ul className="grid grid-cols-1 gap-4">
-                                    {(tour.excluded || tour.excludes || tour.exclusions || []).map((item: string, i: number) => (
-                                        <li key={i} className="flex gap-4 text-slate-800 items-start group">
-                                            <div className="shrink-0 mt-0.5 w-6 h-6 bg-[#FACC15] rounded flex items-center justify-center shadow-md transition-transform group-hover:scale-110">
-                                                <X size={14} className="text-white" strokeWidth={3} />
-                                            </div>
-                                            <span className="text-base font-black leading-tight tracking-tight uppercase italic">{item}</span>
-                                        </li>
-                                    ))}
-                                    {(!tour.excluded && !tour.excludes && !tour.exclusions) && <li className="text-slate-400 text-xs italic">No exclusions specified</li>}
+                                    {((tour.exclusions?.length > 0 ? tour.exclusions : null) ||
+                                        (tour.excluded?.length > 0 ? tour.excluded : null) ||
+                                        (tour.excludes?.length > 0 ? tour.excludes : null) || []).map((item: string, i: number) => (
+                                            <li key={i} className="flex gap-4 text-slate-800 items-start group">
+                                                <div className="shrink-0 mt-0.5 w-6 h-6 bg-[#FACC15] rounded flex items-center justify-center shadow-md transition-transform group-hover:scale-110">
+                                                    <X size={14} className="text-white" strokeWidth={3} />
+                                                </div>
+                                                <span className="text-base font-black leading-tight tracking-tight uppercase italic">{item}</span>
+                                            </li>
+                                        ))}
+                                    {(!tour.exclusions?.length && !tour.excluded?.length && !tour.excludes?.length) && <li className="text-slate-400 text-xs italic">No exclusions specified</li>}
                                 </ul>
                             </section>
                         </div>

@@ -167,30 +167,51 @@ const ToursWidget = () => {
                                     </a>
                                 </div>
 
-                                {(selectedTour.inclusions?.length > 0 || selectedTour.exclusions?.length > 0) && (
-                                    <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6">
-                                        {selectedTour.inclusions?.length > 0 && (
-                                            <div className="mb-6">
-                                                <h4 className="text-sm font-black text-emerald-700 uppercase tracking-widest mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-emerald-500"></div> Included</h4>
-                                                <ul className="space-y-2">
-                                                    {selectedTour.inclusions.map((inc, i) => (
-                                                        <li key={i} className="text-sm text-slate-600 flex items-start gap-2"><span className="text-emerald-500 mt-0.5">✓</span> {inc}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
-                                        {selectedTour.exclusions?.length > 0 && (
-                                            <div>
-                                                <h4 className="text-sm font-black text-red-500 uppercase tracking-widest mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500"></div> Excluded</h4>
-                                                <ul className="space-y-2">
-                                                    {selectedTour.exclusions.map((exc, i) => (
-                                                        <li key={i} className="text-sm text-slate-500 flex items-start gap-2"><span className="text-red-400 mt-0.5">✕</span> {exc}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
+                                {(((selectedTour.inclusions?.length > 0 ? selectedTour.inclusions : null) ||
+                                    (selectedTour.included?.length > 0 ? selectedTour.included : null) ||
+                                    (selectedTour.includes?.length > 0 ? selectedTour.includes : null)) ||
+                                    ((selectedTour.exclusions?.length > 0 ? selectedTour.exclusions : null) ||
+                                        (selectedTour.excluded?.length > 0 ? selectedTour.excluded : null) ||
+                                        (selectedTour.excludes?.length > 0 ? selectedTour.excludes : null))) && (
+                                        <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6">
+                                            {((selectedTour.inclusions?.length > 0 ? selectedTour.inclusions : null) ||
+                                                (selectedTour.included?.length > 0 ? selectedTour.included : null) ||
+                                                (selectedTour.includes?.length > 0 ? selectedTour.includes : null)) && (
+                                                    <div className="mb-6">
+                                                        <h4 className="text-sm font-black text-emerald-700 uppercase tracking-widest mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-emerald-500"></div> Included</h4>
+                                                        <ul className="space-y-2">
+                                                            {((selectedTour.inclusions?.length > 0 ? selectedTour.inclusions : null) ||
+                                                                (selectedTour.included?.length > 0 ? selectedTour.included : null) ||
+                                                                (selectedTour.includes?.length > 0 ? selectedTour.includes : null))
+                                                                .filter(item => {
+                                                                    if (!item || typeof item !== 'string') return false;
+                                                                    const upper = item.toUpperCase();
+                                                                    if (upper.includes('ADULT') && upper.includes('X') && upper.includes('$')) return false;
+                                                                    return true;
+                                                                })
+                                                                .map((inc, i) => (
+                                                                    <li key={i} className="text-sm text-slate-600 flex items-start gap-2"><span className="text-emerald-500 mt-0.5">✓</span> {inc}</li>
+                                                                ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                            {((selectedTour.exclusions?.length > 0 ? selectedTour.exclusions : null) ||
+                                                (selectedTour.excluded?.length > 0 ? selectedTour.excluded : null) ||
+                                                (selectedTour.excludes?.length > 0 ? selectedTour.excludes : null)) && (
+                                                    <div>
+                                                        <h4 className="text-sm font-black text-red-500 uppercase tracking-widest mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500"></div> Excluded</h4>
+                                                        <ul className="space-y-2">
+                                                            {((selectedTour.exclusions?.length > 0 ? selectedTour.exclusions : null) ||
+                                                                (selectedTour.excluded?.length > 0 ? selectedTour.excluded : null) ||
+                                                                (selectedTour.excludes?.length > 0 ? selectedTour.excludes : null))
+                                                                .map((exc, i) => (
+                                                                    <li key={i} className="text-sm text-slate-500 flex items-start gap-2"><span className="text-red-400 mt-0.5">✕</span> {exc}</li>
+                                                                ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                        </div>
+                                    )}
                             </div>
                         </div>
                     </div>
