@@ -282,6 +282,63 @@ export default function AdminTourManager() {
                                             <button onClick={() => updateField('exclusions', formData.exclusions.filter((_, i) => i !== idx))}><X size={14} className="text-red-400" /></button>
                                         </div>
                                     ))}
+                                    {/* Experience Timeline Builder */}
+                                    <div className="border-t border-slate-200 dark:border-white/10 pt-6">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <h3 className="font-bold text-lg text-emerald-900 dark:text-white flex items-center gap-2">
+                                                <MapPin size={20} /> Experience Timeline
+                                            </h3>
+                                            <button
+                                                onClick={() => {
+                                                    const newExp = [...(formData.experience || [])];
+                                                    newExp.push({ heading: '', text: '' });
+                                                    updateField('experience', newExp);
+                                                }}
+                                                className="text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-bold hover:bg-emerald-200"
+                                            >+ Add Stop</button>
+                                        </div>
+
+                                        <div className="space-y-4">
+                                            {formData.experience?.map((exp, idx) => (
+                                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-white/5">
+                                                    <div className="flex gap-4 mb-2">
+                                                        <div className="flex-1">
+                                                            <label className="text-[10px] font-bold text-slate-400 uppercase">Heading (e.g. Galle Fort)</label>
+                                                            <input
+                                                                value={exp.heading}
+                                                                onChange={e => {
+                                                                    const newExp = [...formData.experience];
+                                                                    newExp[idx].heading = e.target.value;
+                                                                    updateField('experience', newExp);
+                                                                }}
+                                                                className="w-full p-2 rounded bg-white dark:bg-slate-800 font-bold border dark:border-white/10"
+                                                                placeholder="Stop Name"
+                                                            />
+                                                        </div>
+                                                        <button
+                                                            onClick={() => {
+                                                                const newExp = formData.experience.filter((_, i) => i !== idx);
+                                                                updateField('experience', newExp);
+                                                            }}
+                                                            className="text-red-400 hover:text-red-600 px-2"
+                                                        >
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                    </div>
+                                                    <textarea
+                                                        value={exp.text}
+                                                        onChange={e => {
+                                                            const newExp = [...formData.experience];
+                                                            newExp[idx].text = e.target.value;
+                                                            updateField('experience', newExp);
+                                                        }}
+                                                        className="w-full p-2 text-sm bg-white dark:bg-slate-800 rounded border dark:border-white/10 h-20"
+                                                        placeholder="What happens at this stop..."
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -332,6 +389,73 @@ export default function AdminTourManager() {
                                         id="featured"
                                     />
                                     <label htmlFor="featured" className="text-sm font-bold">Featured on Homepage</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="bg-slate-50 dark:bg-white/5 p-4 rounded-xl border border-slate-100 dark:border-white/10">
+                            <h3 className="font-bold text-sm uppercase text-slate-500 mb-4">Suitability & Restrictions</h3>
+                            <div className="space-y-6">
+                                <div>
+                                    <div className="flex justify-between items-center mb-2">
+                                        <label className="block text-xs font-bold uppercase">Not Suitable For</label>
+                                        <button
+                                            onClick={() => {
+                                                const newSuit = [...(formData.notSuitableFor || [])];
+                                                newSuit.push('');
+                                                updateField('notSuitableFor', newSuit);
+                                            }}
+                                            className="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold"
+                                        >+ Add</button>
+                                    </div>
+                                    <div className="space-y-2">
+                                        {(formData.notSuitableFor || []).map((item, idx) => (
+                                            <div key={idx} className="flex gap-2">
+                                                <input
+                                                    value={item}
+                                                    onChange={e => {
+                                                        const newSuit = [...formData.notSuitableFor];
+                                                        newSuit[idx] = e.target.value;
+                                                        updateField('notSuitableFor', newSuit);
+                                                    }}
+                                                    className="flex-1 p-2 rounded bg-white dark:bg-slate-800 border dark:border-white/10 text-[10px]"
+                                                    placeholder="e.g. Back problems"
+                                                />
+                                                <button onClick={() => updateField('notSuitableFor', formData.notSuitableFor.filter((_, i) => i !== idx))}><X size={14} className="text-red-400" /></button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="pt-4 border-t border-slate-200 dark:border-white/10">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <label className="block text-xs font-bold uppercase">Not Allowed</label>
+                                        <button
+                                            onClick={() => {
+                                                const newAllow = [...(formData.notAllowed || [])];
+                                                newAllow.push('');
+                                                updateField('notAllowed', newAllow);
+                                            }}
+                                            className="text-[10px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-bold"
+                                        >+ Add</button>
+                                    </div>
+                                    <div className="space-y-2">
+                                        {(formData.notAllowed || []).map((item, idx) => (
+                                            <div key={idx} className="flex gap-2">
+                                                <input
+                                                    value={item}
+                                                    onChange={e => {
+                                                        const newAllow = [...formData.notAllowed];
+                                                        newAllow[idx] = e.target.value;
+                                                        updateField('notAllowed', newAllow);
+                                                    }}
+                                                    className="flex-1 p-2 rounded bg-white dark:bg-slate-800 border dark:border-white/10 text-[10px]"
+                                                    placeholder="e.g. Pets"
+                                                />
+                                                <button onClick={() => updateField('notAllowed', formData.notAllowed.filter((_, i) => i !== idx))}><X size={14} className="text-red-400" /></button>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>

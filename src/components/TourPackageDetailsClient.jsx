@@ -196,6 +196,32 @@ export default function TourPackageDetailsClient({ tour }) {
                                     })}
                                 </div>
                             </div>
+
+                        {/* Experience Timeline (for Day Trips / Single Day focus) */}
+                        {tour.experience && tour.experience.length > 0 && (
+                            <section className="bg-white rounded-[3rem] p-10 md:p-12 shadow-2xl shadow-slate-200/50 border border-slate-100">
+                                <h2 className="text-3xl font-black text-emerald-900 mb-12 tracking-tight flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center">
+                                        <Navigation className="text-emerald-500" size={24} />
+                                    </div>
+                                    The Experience
+                                </h2>
+                                <div className="space-y-0 ml-4 border-l-2 border-dashed border-slate-200">
+                                    {tour.experience.map((item, idx) => (
+                                        <div key={idx} className="relative pb-12 pl-12 last:pb-0">
+                                            {/* Dot */}
+                                            <div className="absolute left-0 top-0 -translate-x-1/2 w-8 h-8 rounded-full bg-emerald-900 border-4 border-white shadow-lg flex items-center justify-center">
+                                                <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
+                                            </div>
+                                            {/* Content */}
+                                            <div className="space-y-2">
+                                                <h3 className="text-xl font-black text-emerald-900 uppercase tracking-tight">{item.heading}</h3>
+                                                <p className="text-slate-600 font-bold leading-relaxed">{item.text}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
                         )}
 
                         {/* Inclusions & Exclusions */}
@@ -239,6 +265,48 @@ export default function TourPackageDetailsClient({ tour }) {
                                 </ul>
                             </section>
                         </div>
+
+                        {/* Suitability & Restrictions */}
+                        {(tour.notSuitableFor?.length > 0 || tour.notAllowed?.length > 0) && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                {tour.notSuitableFor?.length > 0 && (
+                                    <section className="bg-slate-50 rounded-[2rem] p-10 border-2 border-white shadow-xl">
+                                        <h3 className="text-xl font-black text-emerald-900 mb-8 uppercase tracking-widest flex items-center gap-4">
+                                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                                                <AlertCircle size={20} className="text-amber-500" />
+                                            </div>
+                                            Not Suitable For
+                                        </h3>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            {tour.notSuitableFor.map((item, i) => (
+                                                <div key={i} className="flex items-center gap-3">
+                                                    <div className="w-2 h-2 rounded-full bg-amber-400 shrink-0"></div>
+                                                    <span className="text-sm font-bold text-slate-700">{item}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </section>
+                                )}
+                                {tour.notAllowed?.length > 0 && (
+                                    <section className="bg-rose-50/30 rounded-[2rem] p-10 border-2 border-rose-50 shadow-xl">
+                                        <h3 className="text-xl font-black text-emerald-900 mb-8 uppercase tracking-widest flex items-center gap-4">
+                                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                                                <XCircle size={20} className="text-rose-500" />
+                                            </div>
+                                            Not Allowed
+                                        </h3>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            {tour.notAllowed.map((item, i) => (
+                                                <div key={i} className="flex items-center gap-3">
+                                                    <div className="w-2 h-2 rounded-full bg-rose-400 shrink-0"></div>
+                                                    <span className="text-sm font-bold text-slate-700">{item}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </section>
+                                )}
+                            </div>
+                        )}
 
 
                     </div>
