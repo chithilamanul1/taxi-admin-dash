@@ -150,11 +150,37 @@ async function runSeed() {
                 }
 
                 console.log(`Upserting: ${tourData.title} (${tourData.slug})`);
+
+                // First, update by slug (the primary match)
                 await Tour.findOneAndUpdate(
                     { slug: tourData.slug },
                     { $set: tourData },
                     { upsert: true, new: true, runValidators: true }
                 );
+
+                // Second, if there are multiple records with exactly the same title but different slugs, update them too!
+                const updateResult = await Tour.updateMany(
+                    { title: tourData.title, slug: { $ne: tourData.slug } },
+                    {
+                        $set: {
+                            description: tourData.description,
+                            inclusions: tourData.inclusions,
+                            exclusions: tourData.exclusions,
+                            notSuitableFor: tourData.notSuitableFor,
+                            notAllowed: tourData.notAllowed,
+                            itinerary: tourData.itinerary,
+                            experience: tourData.experience,
+                            highlights: tourData.highlights,
+                            price: tourData.price,
+                            category: tourData.category,
+                            duration: tourData.duration
+                        }
+                    }
+                );
+
+                if (updateResult.modifiedCount > 0) {
+                    console.log(`  -> Also updated ${updateResult.modifiedCount} duplicate records for this tour.`);
+                }
             } catch (tourError) {
                 console.error(`FAILED to upsert tour: ${item.title}`);
                 console.error(`Error: ${tourError.message}`);
