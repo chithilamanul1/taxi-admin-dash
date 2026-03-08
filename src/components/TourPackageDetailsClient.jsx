@@ -6,7 +6,8 @@ import Link from 'next/link'
 import {
     Check, MessageCircle, MapPin, Clock, Calendar, ArrowLeft, Plus, Minus,
     ShieldCheck, User, Users, Hotel, CheckCircle, XCircle, AlertCircle, Info, Construction,
-    Ship, Heart, Utensils, Camera, Home, Leaf, Coffee, Waves, Sun, Bike, Shield, Mountain, Landmark, Map as MapIcon, Navigation
+    Ship, Heart, Utensils, Camera, Home, Leaf, Coffee, Waves, Sun, Bike, Shield, Mountain, Landmark, Map as MapIcon, Navigation,
+    Ban, TriangleAlert, X
 } from 'lucide-react'
 import TourBookingModal from './TourBookingModal'
 import TripMap from './TripMap'
@@ -196,6 +197,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                     })}
                                 </div>
                             </div>
+                        )}
 
                         {/* Experience Timeline (for Day Trips / Single Day focus) */}
                         {tour.experience && tour.experience.length > 0 && (
@@ -233,13 +235,13 @@ export default function TourPackageDetailsClient({ tour }) {
                                     </div>
                                     What's Included
                                 </h3>
-                                <ul className="space-y-4">
-                                    {(tour.inclusions || tour.included || tour.includes || []).map((item, i) => (
-                                        <li key={i} className="flex gap-4 text-slate-800 items-start">
-                                            <div className="shrink-0 mt-1 w-6 h-6 bg-emerald-50 rounded-lg flex items-center justify-center border border-emerald-100">
-                                                <Check size={14} className="text-emerald-600" />
+                                <ul className="grid grid-cols-1 gap-4">
+                                    {tour.inclusions?.map((item, i) => (
+                                        <li key={i} className="flex gap-4 text-slate-800 items-start group">
+                                            <div className="shrink-0 mt-0.5 w-6 h-6 bg-slate-900 rounded flex items-center justify-center shadow-md transition-transform group-hover:scale-110">
+                                                <Check size={14} className="text-white" strokeWidth={3} />
                                             </div>
-                                            <span className="text-base font-black leading-tight tracking-tight">{item}</span>
+                                            <span className="text-base font-black leading-tight tracking-tight uppercase italic">{item}</span>
                                         </li>
                                     ))}
                                     {(!tour.inclusions || tour.inclusions.length === 0) && <li className="text-slate-400 text-xs italic">No inclusions specified</li>}
@@ -252,13 +254,13 @@ export default function TourPackageDetailsClient({ tour }) {
                                     </div>
                                     Not Included
                                 </h3>
-                                <ul className="space-y-4">
-                                    {(tour.exclusions || tour.excluded || tour.excludes || []).map((item, i) => (
-                                        <li key={i} className="flex gap-4 text-slate-800 items-start">
-                                            <div className="shrink-0 mt-1 w-6 h-6 bg-rose-50 rounded-lg flex items-center justify-center border border-rose-100">
-                                                <XCircle size={14} className="text-rose-600" />
+                                <ul className="grid grid-cols-1 gap-4">
+                                    {tour.exclusions?.map((item, i) => (
+                                        <li key={i} className="flex gap-4 text-slate-800 items-start group">
+                                            <div className="shrink-0 mt-0.5 w-6 h-6 bg-[#FACC15] rounded flex items-center justify-center shadow-md transition-transform group-hover:scale-110">
+                                                <X size={14} className="text-white" strokeWidth={3} />
                                             </div>
-                                            <span className="text-base font-black leading-tight tracking-tight">{item}</span>
+                                            <span className="text-base font-black leading-tight tracking-tight uppercase italic">{item}</span>
                                         </li>
                                     ))}
                                     {(!tour.exclusions || tour.exclusions.length === 0) && <li className="text-slate-400 text-xs italic">No exclusions specified</li>}
@@ -266,40 +268,44 @@ export default function TourPackageDetailsClient({ tour }) {
                             </section>
                         </div>
 
-                        {/* Suitability & Restrictions */}
+                        {/* Suitability & Rules */}
                         {(tour.notSuitableFor?.length > 0 || tour.notAllowed?.length > 0) && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                            <div className="space-y-12">
                                 {tour.notSuitableFor?.length > 0 && (
-                                    <section className="bg-slate-50 rounded-[2rem] p-10 border-2 border-white shadow-xl">
-                                        <h3 className="text-xl font-black text-emerald-900 mb-8 uppercase tracking-widest flex items-center gap-4">
-                                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
-                                                <AlertCircle size={20} className="text-amber-500" />
+                                    <section className="bg-white rounded-[3rem] p-10 md:p-14 shadow-2xl shadow-slate-200/50 border border-slate-100">
+                                        <h3 className="text-2xl font-black text-emerald-900 mb-10 uppercase tracking-tighter flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center shadow-sm">
+                                                <Ban size={24} />
                                             </div>
-                                            Not Suitable For
+                                            Not Suitable For - [ People With ]
                                         </h3>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-12">
                                             {tour.notSuitableFor.map((item, i) => (
-                                                <div key={i} className="flex items-center gap-3">
-                                                    <div className="w-2 h-2 rounded-full bg-amber-400 shrink-0"></div>
-                                                    <span className="text-sm font-bold text-slate-700">{item}</span>
+                                                <div key={i} className="flex items-center gap-4 group">
+                                                    <div className="shrink-0 w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-200 transition-colors group-hover:bg-rose-50 group-hover:border-rose-200">
+                                                        <Ban size={16} className="text-slate-400 group-hover:text-rose-500" />
+                                                    </div>
+                                                    <span className="text-base font-black text-slate-700 uppercase italic tracking-tight">{item}</span>
                                                 </div>
                                             ))}
                                         </div>
                                     </section>
                                 )}
                                 {tour.notAllowed?.length > 0 && (
-                                    <section className="bg-rose-50/30 rounded-[2rem] p-10 border-2 border-rose-50 shadow-xl">
-                                        <h3 className="text-xl font-black text-emerald-900 mb-8 uppercase tracking-widest flex items-center gap-4">
-                                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
-                                                <XCircle size={20} className="text-rose-500" />
+                                    <section className="bg-white rounded-[3rem] p-10 md:p-14 shadow-2xl shadow-slate-200/50 border border-slate-100">
+                                        <h3 className="text-2xl font-black text-emerald-900 mb-10 uppercase tracking-tighter flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center shadow-sm">
+                                                <TriangleAlert size={24} />
                                             </div>
                                             Not Allowed
                                         </h3>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-12">
                                             {tour.notAllowed.map((item, i) => (
-                                                <div key={i} className="flex items-center gap-3">
-                                                    <div className="w-2 h-2 rounded-full bg-rose-400 shrink-0"></div>
-                                                    <span className="text-sm font-bold text-slate-700">{item}</span>
+                                                <div key={i} className="flex items-center gap-4 group">
+                                                    <div className="shrink-0 w-8 h-8 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-200 transition-colors group-hover:bg-amber-50 group-hover:border-amber-200">
+                                                        <TriangleAlert size={16} className="text-slate-400 group-hover:text-amber-500" />
+                                                    </div>
+                                                    <span className="text-base font-black text-slate-700 uppercase italic tracking-tight">{item}</span>
                                                 </div>
                                             ))}
                                         </div>
