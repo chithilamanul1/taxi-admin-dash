@@ -1845,7 +1845,7 @@ export default function AdminDashboard() {
                                                             <button
                                                                 onClick={() => {
                                                                     setPostForm(post)
-                                                                    setEditingPost(post._id)
+                                                                    setEditingPost(post.slug) // Store slug for URL
                                                                 }}
                                                                 className="text-emerald-900 hover:text-emerald-600 font-medium"
                                                             >
@@ -1982,7 +1982,7 @@ export default function AdminDashboard() {
                                                 </button>
                                                 <button
                                                     onClick={async () => {
-                                                        const url = editingPost === 'NEW' ? '/api/blog' : `/api/blog/${postForm.slug}`
+                                                        const url = editingPost === 'NEW' ? '/api/blog' : `/api/blog/${editingPost}`
                                                         const method = editingPost === 'NEW' ? 'POST' : 'PUT'
 
                                                         const res = await fetch(url, {

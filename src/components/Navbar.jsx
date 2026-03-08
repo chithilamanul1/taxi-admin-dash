@@ -54,10 +54,44 @@ export default function Navbar() {
 
                 {/* Desktop Nav */}
                 <div className="hidden lg:flex items-center gap-4 xl:gap-6">
+                    <Link
+                        href="/"
+                        className={`text-sm font-bold uppercase tracking-widest hover:text-emerald-500 transition-colors ${pathname === '/' ? 'text-emerald-950' : 'text-emerald-800/60'}`}
+                    >
+                        Home
+                    </Link>
+
+                    {/* Services Dropdown */}
+                    <div className="relative group">
+                        <button
+                            className={`flex items-center gap-1 text-sm font-bold uppercase tracking-widest hover:text-emerald-500 transition-colors ${['/prices', '/day-trips', '/tours', '/tour-packages'].some(p => pathname.includes(p)) ? 'text-emerald-950' : 'text-emerald-800/60'}`}
+                        >
+                            Services
+                            <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
+                        </button>
+                        <div className="absolute top-full left-0 mt-3 w-64 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-white/10 dark:border-slate-800 flex flex-col z-50">
+                            {[
+                                { label: 'Airport Drop & Pickup', href: '/prices' },
+                                { label: 'Day Tours', href: '/day-trips' },
+                                { label: 'City Tours', href: '/tours' },
+                                { label: 'Tour Packages', href: '/tour-packages' },
+                                { label: 'Rates', href: '/prices' }
+                            ].map(sub => (
+                                <Link
+                                    key={sub.label}
+                                    href={sub.href}
+                                    className="text-left px-5 py-2.5 hover:bg-emerald-900/10 dark:hover:bg-white/10 transition-colors text-sm font-bold text-emerald-900/80 dark:text-white/80 hover:text-emerald-950 dark:hover:text-white"
+                                >
+                                    {sub.label}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+
                     {[
-                        { label: 'Home', href: '/', id: 'nav-home' },
-                        { label: 'Services', href: '/services', id: 'nav-services' },
                         { label: 'Custom Trip', href: '/custom-trip', id: 'nav-custom-trip' },
+                        { label: 'Offers', href: '/offers', id: 'nav-offers' },
+                        { label: 'Reviews', href: '/reviews', id: 'nav-reviews' },
                         { label: 'Blog', href: '/blog', id: 'nav-blog' },
                         { label: 'AI Trip Planner', href: '/trip-planner', id: 'nav-ai-planner' },
                         { label: 'Contact', href: '/contact', id: 'nav-contact' },
@@ -200,20 +234,54 @@ export default function Navbar() {
                         <div className="grid grid-cols-2 gap-3">
                             {[
                                 { label: 'Home', href: '/', icon: '🏠', id: 'm-home' },
-                                { label: 'Services', href: '/services', icon: '🛠️', id: 'm-services' },
+                                {
+                                    label: 'Services',
+                                    icon: '🛠️',
+                                    id: 'm-services',
+                                    isDropdown: true,
+                                    items: [
+                                        { label: 'Airport Drop & Pickup', href: '/prices' },
+                                        { label: 'Day Tours', href: '/day-trips' },
+                                        { label: 'City Tours', href: '/tours' },
+                                        { label: 'Tour Packages', href: '/tour-packages' },
+                                        { label: 'Rates', href: '/prices' }
+                                    ]
+                                },
                                 { label: 'Custom Trip', href: '/custom-trip', icon: '✨', id: 'm-custom' },
+                                { label: 'Offers', href: '/offers', icon: '🎁', id: 'm-offers' },
+                                { label: 'Reviews', href: '/reviews', icon: '⭐', id: 'm-reviews' },
                                 { label: 'Blog', href: '/blog', icon: '📝', id: 'm-blog' },
                                 { label: 'AI Trip Planner', href: '/trip-planner', icon: '🤖', id: 'm-ai-planner' },
                                 { label: 'Contact', href: '/contact', icon: '📞', id: 'm-contact' }
                             ].map(item => (
-                                <Link
-                                    key={item.id}
-                                    href={item.href}
-                                    className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-emerald-900/10 dark:border-slate-800 text-emerald-950 dark:text-white font-bold shadow-sm hover:bg-emerald-900/10 dark:hover:bg-white/10 transition-all"
-                                >
-                                    <span className="text-xl">{item.icon}</span>
-                                    <span>{item.label}</span>
-                                </Link>
+                                item.isDropdown ? (
+                                    <div key={item.id} className="space-y-2">
+                                        <div className="flex items-center gap-3 p-4 bg-emerald-900/5 dark:bg-white/5 rounded-2xl text-emerald-950 dark:text-white font-bold">
+                                            <span className="text-xl">{item.icon}</span>
+                                            <span>{item.label}</span>
+                                        </div>
+                                        <div className="grid grid-cols-1 gap-2 pl-4">
+                                            {item.items.map(sub => (
+                                                <Link
+                                                    key={sub.label}
+                                                    href={sub.href}
+                                                    className="flex items-center gap-3 p-3 bg-white dark:bg-slate-900 rounded-xl border border-emerald-900/5 dark:border-slate-800 text-emerald-900/70 dark:text-white/70 text-sm font-bold"
+                                                >
+                                                    <span>{sub.label}</span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <Link
+                                        key={item.id}
+                                        href={item.href}
+                                        className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-emerald-900/10 dark:border-slate-800 text-emerald-950 dark:text-white font-bold shadow-sm hover:bg-emerald-900/10 dark:hover:bg-white/10 transition-all"
+                                    >
+                                        <span className="text-xl">{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </Link>
+                                )
                             ))}
                         </div>
 
