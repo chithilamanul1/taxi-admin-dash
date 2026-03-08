@@ -1,38 +1,40 @@
 const mongoose = require('mongoose');
-const MONGODB_URI = 'mongodb+srv://chithilamanul1_db_user:chithila123@taxiadmindash.l9tttdj.mongodb.net/?appName=taxiadmindash';
 
-const tourSchema = new mongoose.Schema({
-    title: String,
-    category: String,
-    itinerary: Array,
-    experience: Array,
-    inclusions: Array
-});
+const MONGO_URI = "mongodb+srv://chithilamanul1_db_user:chithila123@taxiadmindash.l9tttdj.mongodb.net/?appName=taxiadmindash";
 
-const Tour = mongoose.models.Tour || mongoose.model('Tour', tourSchema);
-
-async function audit() {
+async function auditTours() {
     try {
-        await mongoose.connect(MONGODB_URI);
-        const tours = await Tour.find({});
-        console.log(`Total Tours: ${tours.length}`);
+        await mongoose.connect(MONGO_URI);
+        const tours = await mongoose.connection.db.collection('tours').find({}).toArray();
+
+        console.log(`--- Total Tours: ${tours.length} ---`);
+        let emptyInclusions = 0;
+        let emptyExclusions = 0;
 
         tours.forEach(t => {
-            const itineraryCount = t.itinerary?.length || 0;
-            const experienceCount = t.experience?.length || 0;
-            const inclusionsCount = t.inclusions?.length || 0;
+            const hasInclusions = (t.inclusions?.length > 0 || t.included?.length > 0 || t.includes?.length > 0);
+            const hasExclusions = (t.exclusions?.length > 0 || t.excluded?.length > 0 || t.excludes?.length > 0);
 
-            // Check if text matches heading (low fidelity)
-            const lowFidelityExp = t.experience?.some(e => e.heading === e.text) || false;
-
-            console.log(`[${t.category}] ${t.title}: Itinerary(${itineraryCount}), Experience(${experienceCount}), Inclusions(${inclusionsCount}), LowFidelityExp: ${lowFidelityExp}`);
+            if (!hasInclusions) {
+                console.log(`[!] Missing Inclusions: ${t.title} (${t.slug})`);
+                emptyInclusions++;
+            }
+            if (!hasExclusions) {
+                console.log(`[!] Missing Exclusions: ${t.title} (${t.slug})`);
+                emptyExclusions++;
+            }
         });
 
-    } catch (err) {
-        console.error(err);
-    } finally {
-        await mongoose.connection.close();
+        console.log('\n--- AUDIT SUMMARY ---');
+        console.log(`Empty Inclusions: ${emptyInclusions}`);
+        console.log(`Empty Exclusions: ${emptyExclusions}`);
+        console.log(`Full Tours: ${tours.length - Math.max(emptyInclusions, emptyExclusions)}`);
+
+        process.exit(0);
+    } catch (e) {
+        console.error(e);
+        process.exit(1);
     }
 }
 
-audit();
+auditTours();

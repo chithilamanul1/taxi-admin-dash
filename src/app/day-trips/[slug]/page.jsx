@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation';
 import dbConnect from '@/lib/db';
 import Tour from '@/models/Tour';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 async function getTour(slug) {
     try {
         await dbConnect();
