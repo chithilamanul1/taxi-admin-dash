@@ -56,26 +56,43 @@ export default function Navbar() {
                 <div className="hidden lg:flex items-center gap-4 xl:gap-6">
                     <Link
                         href="/"
-                        className={`text-sm font-bold uppercase tracking-widest hover:text-emerald-500 transition-colors ${pathname === '/' ? 'text-emerald-950' : 'text-emerald-800/60'}`}
+                        className={`text-sm font-bold uppercase tracking-widest hover:text-emerald-500 transition-colors ${pathname === '/' ? 'text-emerald-950 font-black' : 'text-emerald-800/60'}`}
                     >
                         Home
                     </Link>
 
-                    {/* Services Dropdown */}
+                    {[
+                        { label: 'Airport Drop & Pickup', href: '/prices' },
+                        { label: 'Day Tours', href: '/day-trips' },
+                        { label: 'City Tours', href: '/tours' },
+                        { label: 'Tour Packages', href: '/tour-packages' },
+                        { label: 'Rates', href: '/prices' }
+                    ].map(item => (
+                        <Link
+                            key={item.label}
+                            href={item.href}
+                            className={`text-[11px] xl:text-xs font-bold uppercase tracking-widest hover:text-emerald-500 transition-colors ${pathname === item.href ? 'text-emerald-950 underline decoration-emerald-500 decoration-2 underline-offset-8' : 'text-emerald-800/60'}`}
+                        >
+                            {item.label}
+                        </Link>
+                    ))}
+
+                    {/* Secondary Navigation Dropdown */}
                     <div className="relative group">
                         <button
-                            className={`flex items-center gap-1 text-sm font-bold uppercase tracking-widest hover:text-emerald-500 transition-colors ${['/prices', '/day-trips', '/tours', '/tour-packages'].some(p => pathname.includes(p)) ? 'text-emerald-950' : 'text-emerald-800/60'}`}
+                            className={`flex items-center gap-1 text-[11px] xl:text-xs font-bold uppercase tracking-widest hover:text-emerald-500 transition-colors ${['/custom-trip', '/blog', '/trip-planner', '/contact'].some(p => pathname.includes(p)) ? 'text-emerald-950 underline decoration-emerald-500 decoration-2 underline-offset-8' : 'text-emerald-800/60'}`}
                         >
-                            Services
+                            More
                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
                         </button>
-                        <div className="absolute top-full left-0 mt-3 w-64 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-white/10 dark:border-slate-800 flex flex-col z-50">
+                        <div className="absolute top-full left-0 mt-3 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-white/10 dark:border-slate-800 flex flex-col z-50">
                             {[
-                                { label: 'Airport Drop & Pickup', href: '/prices' },
-                                { label: 'Day Tours', href: '/day-trips' },
-                                { label: 'City Tours', href: '/tours' },
-                                { label: 'Tour Packages', href: '/tour-packages' },
-                                { label: 'Rates', href: '/prices' }
+                                { label: 'Custom Trip', href: '/custom-trip' },
+                                { label: 'Blog', href: '/blog' },
+                                { label: 'AI Trip Planner', href: '/trip-planner' },
+                                { label: 'Contact', href: '/contact' },
+                                { label: 'Offers', href: '/offers' },
+                                { label: 'Reviews', href: '/reviews' }
                             ].map(sub => (
                                 <Link
                                     key={sub.label}
@@ -87,23 +104,6 @@ export default function Navbar() {
                             ))}
                         </div>
                     </div>
-
-                    {[
-                        { label: 'Custom Trip', href: '/custom-trip', id: 'nav-custom-trip' },
-                        { label: 'Offers', href: '/offers', id: 'nav-offers' },
-                        { label: 'Reviews', href: '/reviews', id: 'nav-reviews' },
-                        { label: 'Blog', href: '/blog', id: 'nav-blog' },
-                        { label: 'AI Trip Planner', href: '/trip-planner', id: 'nav-ai-planner' },
-                        { label: 'Contact', href: '/contact', id: 'nav-contact' },
-                    ].map(item => (
-                        <Link
-                            key={item.id}
-                            href={item.href}
-                            className={`text-sm font-bold uppercase tracking-widest hover:text-emerald-500 transition-colors ${pathname === item.href ? 'text-emerald-950 underline decoration-emerald-500 decoration-2 underline-offset-8' : 'text-emerald-800/60'}`}
-                        >
-                            {item.label}
-                        </Link>
-                    ))}
 
                     {/* Currency Selector */}
                     <div className="relative group">
@@ -234,25 +234,25 @@ export default function Navbar() {
                         <div className="grid grid-cols-2 gap-3">
                             {[
                                 { label: 'Home', href: '/', icon: '🏠', id: 'm-home' },
+                                { label: 'Airport Drop & Pickup', href: '/prices', icon: '✈️', id: 'm-drop' },
+                                { label: 'Day Tours', href: '/day-trips', icon: '🌴', id: 'm-day' },
+                                { label: 'City Tours', href: '/tours', icon: '🏙️', id: 'm-city' },
+                                { label: 'Tour Packages', href: '/tour-packages', icon: '🗺️', id: 'm-pkg' },
+                                { label: 'Rates', href: '/prices', icon: '💰', id: 'm-rates' },
                                 {
-                                    label: 'Services',
-                                    icon: '🛠️',
-                                    id: 'm-services',
+                                    label: 'More',
+                                    icon: '➕',
+                                    id: 'm-more',
                                     isDropdown: true,
                                     items: [
-                                        { label: 'Airport Drop & Pickup', href: '/prices' },
-                                        { label: 'Day Tours', href: '/day-trips' },
-                                        { label: 'City Tours', href: '/tours' },
-                                        { label: 'Tour Packages', href: '/tour-packages' },
-                                        { label: 'Rates', href: '/prices' }
+                                        { label: 'Custom Trip', href: '/custom-trip' },
+                                        { label: 'Offers', href: '/offers' },
+                                        { label: 'Reviews', href: '/reviews' },
+                                        { label: 'Blog', href: '/blog' },
+                                        { label: 'AI Trip Planner', href: '/trip-planner' },
+                                        { label: 'Contact', href: '/contact' }
                                     ]
-                                },
-                                { label: 'Custom Trip', href: '/custom-trip', icon: '✨', id: 'm-custom' },
-                                { label: 'Offers', href: '/offers', icon: '🎁', id: 'm-offers' },
-                                { label: 'Reviews', href: '/reviews', icon: '⭐', id: 'm-reviews' },
-                                { label: 'Blog', href: '/blog', icon: '📝', id: 'm-blog' },
-                                { label: 'AI Trip Planner', href: '/trip-planner', icon: '🤖', id: 'm-ai-planner' },
-                                { label: 'Contact', href: '/contact', icon: '📞', id: 'm-contact' }
+                                }
                             ].map(item => (
                                 item.isDropdown ? (
                                     <div key={item.id} className="space-y-2">

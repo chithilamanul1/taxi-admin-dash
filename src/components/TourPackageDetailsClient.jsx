@@ -198,6 +198,48 @@ export default function TourPackageDetailsClient({ tour }) {
                             </div>
                         )}
 
+                        {/* Inclusions & Exclusions */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                            <section className="bg-white rounded-[2rem] p-10 shadow-2xl shadow-slate-200/50 border-2 border-slate-100">
+                                <h3 className="text-2xl font-black text-emerald-900 mb-8 uppercase tracking-tighter flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200">
+                                        <CheckCircle size={24} className="text-white" />
+                                    </div>
+                                    What's Included
+                                </h3>
+                                <ul className="space-y-4">
+                                    {(tour.inclusions || tour.included || tour.includes || []).map((item, i) => (
+                                        <li key={i} className="flex gap-4 text-slate-800 items-start">
+                                            <div className="shrink-0 mt-1 w-6 h-6 bg-emerald-50 rounded-lg flex items-center justify-center border border-emerald-100">
+                                                <Check size={14} className="text-emerald-600" />
+                                            </div>
+                                            <span className="text-base font-black leading-tight tracking-tight">{item}</span>
+                                        </li>
+                                    ))}
+                                    {(!tour.inclusions || tour.inclusions.length === 0) && <li className="text-slate-400 text-xs italic">No inclusions specified</li>}
+                                </ul>
+                            </section>
+                            <section className="bg-white rounded-[2rem] p-10 shadow-2xl shadow-slate-200/50 border-2 border-slate-100">
+                                <h3 className="text-2xl font-black text-emerald-900 mb-8 uppercase tracking-tighter flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-200">
+                                        <XCircle size={24} className="text-white" />
+                                    </div>
+                                    Not Included
+                                </h3>
+                                <ul className="space-y-4">
+                                    {(tour.exclusions || tour.excluded || tour.excludes || []).map((item, i) => (
+                                        <li key={i} className="flex gap-4 text-slate-800 items-start">
+                                            <div className="shrink-0 mt-1 w-6 h-6 bg-rose-50 rounded-lg flex items-center justify-center border border-rose-100">
+                                                <XCircle size={14} className="text-rose-600" />
+                                            </div>
+                                            <span className="text-base font-black leading-tight tracking-tight">{item}</span>
+                                        </li>
+                                    ))}
+                                    {(!tour.exclusions || tour.exclusions.length === 0) && <li className="text-slate-400 text-xs italic">No exclusions specified</li>}
+                                </ul>
+                            </section>
+                        </div>
+
 
                     </div>
 

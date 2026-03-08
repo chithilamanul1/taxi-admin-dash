@@ -216,6 +216,75 @@ export default function AdminTourManager() {
                                 ))}
                             </div>
                         </div>
+
+                        {/* Inclusions & Exclusions */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-200 dark:border-white/10 pt-6">
+                            <div>
+                                <div className="flex justify-between items-center mb-4">
+                                    <h3 className="font-bold text-lg text-emerald-900 dark:text-white flex items-center gap-2">
+                                        <CheckCircle size={20} className="text-emerald-500" /> Inclusions
+                                    </h3>
+                                    <button
+                                        onClick={() => {
+                                            const newIncl = [...(formData.inclusions || [])];
+                                            newIncl.push('');
+                                            updateField('inclusions', newIncl);
+                                        }}
+                                        className="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-bold"
+                                    >+ Add Item</button>
+                                </div>
+                                <div className="space-y-2">
+                                    {formData.inclusions?.map((item, idx) => (
+                                        <div key={idx} className="flex gap-2">
+                                            <input
+                                                value={item}
+                                                onChange={e => {
+                                                    const newIncl = [...formData.inclusions];
+                                                    newIncl[idx] = e.target.value;
+                                                    updateField('inclusions', newIncl);
+                                                }}
+                                                className="flex-1 p-2 text-sm rounded bg-slate-50 dark:bg-slate-800 border dark:border-white/10"
+                                                placeholder="e.g. Airport Pickup"
+                                            />
+                                            <button onClick={() => updateField('inclusions', formData.inclusions.filter((_, i) => i !== idx))}><X size={14} className="text-red-400" /></button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className="flex justify-between items-center mb-4">
+                                    <h3 className="font-bold text-lg text-emerald-900 dark:text-white flex items-center gap-2">
+                                        <XCircle size={20} className="text-rose-500" /> Exclusions
+                                    </h3>
+                                    <button
+                                        onClick={() => {
+                                            const newExcl = [...(formData.exclusions || [])];
+                                            newExcl.push('');
+                                            updateField('exclusions', newExcl);
+                                        }}
+                                        className="text-[10px] bg-rose-100 text-rose-700 px-2 py-1 rounded-full font-bold"
+                                    >+ Add Item</button>
+                                </div>
+                                <div className="space-y-2">
+                                    {formData.exclusions?.map((item, idx) => (
+                                        <div key={idx} className="flex gap-2">
+                                            <input
+                                                value={item}
+                                                onChange={e => {
+                                                    const newExcl = [...formData.exclusions];
+                                                    newExcl[idx] = e.target.value;
+                                                    updateField('exclusions', newExcl);
+                                                }}
+                                                className="flex-1 p-2 text-sm rounded bg-slate-50 dark:bg-slate-800 border dark:border-white/10"
+                                                placeholder="e.g. Personal Expenses"
+                                            />
+                                            <button onClick={() => updateField('exclusions', formData.exclusions.filter((_, i) => i !== idx))}><X size={14} className="text-red-400" /></button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Right Column: Settings, Pricing, Images */}
