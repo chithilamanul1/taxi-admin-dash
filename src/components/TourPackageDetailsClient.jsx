@@ -146,104 +146,45 @@ export default function TourPackageDetailsClient({ tour }) {
                             </div>
                         </section>
 
-                        {/* Interactive Route Map */}
-                        <section className="bg-white rounded-[3rem] p-10 md:p-12 shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-8 opacity-5">
-                                <MapIcon size={120} />
-                            </div>
-                            <h2 className="text-3xl font-black text-emerald-900 mb-8 tracking-tight flex items-center gap-4">
-                                <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center">
-                                    <MapIcon className="text-emerald-500" size={24} />
-                                </div>
-                                Route Visualization
-                            </h2>
-                            <p className="text-slate-700 mb-8 text-lg font-bold">See your journey across Sri Lanka's most beautiful destinations.</p>
 
-                            {/* Google Map Integration */}
-                            <div className="w-full h-96 bg-slate-100 rounded-[2.5rem] border-4 border-white shadow-inner relative group overflow-hidden">
-                                {(() => {
-                                    // Extract map points from itinerary
-                                    const points = [];
-                                    if (tour.itinerary && tour.itinerary.length > 0) {
-                                        tour.itinerary.forEach((item) => {
-                                            if (item.lat && item.lng) {
-                                                points.push({ lat: item.lat, lon: item.lng, name: item.location || item.title });
-                                            }
-                                        });
-                                    } else if (tour.experience && tour.experience.length > 0) {
-                                        tour.experience.forEach((item) => {
-                                            if (item.lat && item.lng) {
-                                                points.push({ lat: item.lat, lon: item.lng, name: item.heading });
-                                            }
-                                        });
-                                    }
-
-                                    const pickup = points[0] || null;
-                                    const dropoff = points.length > 1 ? points[points.length - 1] : null;
-                                    const waypoints = points.length > 2 ? points.slice(1, -1) : [];
-
-                                    return pickup ? (
-                                        <TripMap
-                                            pickup={pickup}
-                                            dropoff={dropoff}
-                                            waypoints={waypoints}
-                                            onRouteCalculated={(data) => console.log('Route stats:', data)}
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-slate-50">
-                                            <div className="w-16 h-16 bg-slate-100 rounded-3xl flex items-center justify-center">
-                                                <MapIcon className="text-slate-300" size={32} />
-                                            </div>
-                                            <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">No route data available</p>
-                                        </div>
-                                    );
-                                })()}
-                            </div>
-                        </section>
 
                         {/* Itinerary */}
                         {tour.itinerary && tour.itinerary.length > 0 && (
-                            <section className="bg-white rounded-[3rem] p-10 md:p-12 shadow-2xl shadow-slate-200/50 border border-slate-100">
-                                <h2 className="text-3xl font-black text-emerald-900 mb-10 tracking-tight flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center">
-                                        <Calendar className="text-emerald-500" size={24} />
-                                    </div>
-                                    Detailed Itinerary
+                            <div className="mt-12 bg-white rounded-lg p-8 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] border border-slate-100">
+                                <h2 className="text-2xl font-bold text-[#4B5E73] mb-8 border-b border-slate-200 pb-4">
+                                    Itinerary
                                 </h2>
-                                <div className="space-y-6 relative">
-                                    <div className="absolute left-8 top-10 bottom-10 w-0.5 bg-slate-50 border-r border-slate-100 md:block hidden" />
+                                <div className="space-y-0">
                                     {tour.itinerary.map((item, idx) => {
                                         const isExpanded = collapsedDay !== item.day;
                                         return (
-                                            <div key={item.day || idx} className="group relative">
+                                            <div key={item.day || idx} className="group border-b border-[#FACC15]">
                                                 <button
                                                     onClick={() => setCollapsedDay(collapsedDay === item.day ? null : item.day)}
-                                                    className={`w-full flex items-center gap-8 p-8 rounded-[2rem] border transition-all duration-500 text-left ${isExpanded ? 'bg-emerald-900 border-emerald-900 shadow-2xl scale-[1.02]' : 'bg-white border-slate-100 hover:border-emerald-200'}`}
+                                                    className="w-full flex items-center justify-between py-5 transition-colors hover:bg-slate-50/50"
                                                 >
-                                                    <div className={`w-16 h-16 shrink-0 rounded-2xl flex flex-col items-center justify-center font-black shadow-lg transition-all duration-500 ${isExpanded ? 'bg-emerald-500 text-white rotate-6' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-50 group-hover:text-emerald-600'}`}>
-                                                        <span className="text-[10px] uppercase tracking-tighter">Day</span>
-                                                        <span className="text-2xl -mt-1">{item.day}</span>
-                                                    </div>
-                                                    <div className="flex-1">
-                                                        <h3 className={`text-xl font-black tracking-tight ${isExpanded ? 'text-white' : 'text-slate-800'}`}>
+                                                    <div className="flex items-center gap-6">
+                                                        <div className="bg-[#FACC15] text-slate-900 font-semibold px-4 py-1.5 text-sm whitespace-nowrap min-w-[80px] text-center shadow-sm">
+                                                            Day {item.day}
+                                                        </div>
+                                                        <h3 className="text-sm font-bold text-[#4B5E73] text-left">
                                                             {item.title}
                                                         </h3>
-                                                        {item.location && <span className={`text-[10px] font-bold uppercase tracking-widest block mt-1 ${isExpanded ? 'text-emerald-400' : 'text-slate-400'}`}>{item.location}</span>}
                                                     </div>
-                                                    <div className={`transition-all duration-500 ${isExpanded ? 'rotate-180 text-emerald-500' : 'text-slate-300'}`}>
-                                                        {isExpanded ? <Minus size={24} /> : <Plus size={24} />}
+                                                    <div className={`transition-transform duration-300 mr-2 ${isExpanded ? 'rotate-180 text-emerald-600' : 'text-slate-400'}`}>
+                                                        <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                        </svg>
                                                     </div>
                                                 </button>
-                                                <div className={`grid transition-all duration-500 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0 overflow-hidden'}`}>
+                                                <div className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0 overflow-hidden'}`}>
                                                     <div className="overflow-hidden">
-                                                        <div className="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 ml-0 md:ml-6">
-                                                            <p className="text-slate-700 leading-relaxed text-lg whitespace-pre-line font-bold mb-6">
-                                                                {item.description || item.desc}
-                                                            </p>
-                                                            {item.activities && (
-                                                                <div className="flex flex-wrap gap-2">
+                                                        <div className="p-6 bg-slate-50 mt-2 mb-4 text-sm text-slate-600 leading-relaxed max-w-3xl whitespace-pre-line border-l-2 border-[#FACC15]">
+                                                            {item.description || item.desc}
+                                                            {item.activities && item.activities.length > 0 && (
+                                                                <div className="mt-4 flex flex-wrap gap-2">
                                                                     {item.activities.map((act, i) => (
-                                                                        <span key={i} className="px-4 py-2 bg-white rounded-xl text-[10px] font-black text-slate-500 uppercase tracking-widest border border-slate-200">{act}</span>
+                                                                        <span key={i} className="px-3 py-1 bg-white rounded text-[10px] font-bold text-slate-500 uppercase tracking-widest border border-slate-200">{act}</span>
                                                                     ))}
                                                                 </div>
                                                             )}
@@ -254,48 +195,10 @@ export default function TourPackageDetailsClient({ tour }) {
                                         );
                                     })}
                                 </div>
-                            </section>
+                            </div>
                         )}
 
-                        {/* Inclusions & Exclusions */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                            <section className="bg-white rounded-[3rem] p-10 shadow-2xl shadow-emerald-900/5 border border-slate-50">
-                                <h3 className="text-xl font-black text-emerald-900 mb-8 uppercase tracking-widest flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center">
-                                        <CheckCircle size={20} className="text-emerald-500" />
-                                    </div>
-                                    What's Included
-                                </h3>
-                                <ul className="space-y-5">
-                                    {(tour.included || tour.includes || tour.inclusions || []).map((item, i) => (
-                                        <li key={i} className="flex gap-4 text-slate-700 group">
-                                            <div className="shrink-0 mt-1 w-5 h-5 bg-emerald-50 rounded flex items-center justify-center group-hover:bg-emerald-500 transition-colors">
-                                                <Check size={12} className="text-emerald-500 group-hover:text-white" />
-                                            </div>
-                                            <span className="text-sm font-bold leading-snug">{item}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </section>
-                            <section className="bg-white rounded-[3rem] p-10 shadow-2xl shadow-rose-900/5 border border-slate-50">
-                                <h3 className="text-xl font-black text-emerald-900 mb-8 uppercase tracking-widest flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-rose-50 rounded-xl flex items-center justify-center">
-                                        <XCircle size={20} className="text-rose-500" />
-                                    </div>
-                                    Not Included
-                                </h3>
-                                <ul className="space-y-5">
-                                    {(tour.excluded || tour.excludes || tour.exclusions || []).map((item, i) => (
-                                        <li key={i} className="flex gap-4 text-slate-700 group">
-                                            <div className="shrink-0 mt-1 w-5 h-5 bg-rose-50 rounded flex items-center justify-center group-hover:bg-rose-500 transition-colors">
-                                                <Plus size={12} className="text-rose-500 group-hover:text-white rotate-45" />
-                                            </div>
-                                            <span className="text-sm font-bold leading-snug">{item}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </section>
-                        </div>
+
                     </div>
 
                     {/* Right Column (4/12) - Sidebar */}

@@ -22,7 +22,7 @@ const PostSchema = new mongoose.Schema({
         type: String,
         maxlength: [200, 'Excerpt cannot be more than 200 characters']
     },
-    coverImage: {
+    imageUrl: {
         type: String,
         default: '/logo.png' // Default to logo if no image provided
     },
@@ -42,6 +42,9 @@ const PostSchema = new mongoose.Schema({
     author: {
         type: String,
         default: 'Admin'
+    },
+    authorId: {
+        type: String
     }
 }, {
     timestamps: true
