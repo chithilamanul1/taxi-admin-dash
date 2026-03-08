@@ -30,7 +30,7 @@ const TourSchema = new mongoose.Schema({
 
 const Tour = mongoose.models.Tour || mongoose.model('Tour', TourSchema);
 
-const MONGO_URI = "mongodb+srv://chithilamanul1_db_user:chithila123@taxiadmindash.l9tttdj.mongodb.net/?appName=taxiadmindash";
+const MONGO_URI = "mongodb+srv://chithilamanul1_db_user:[EMAIL_ADDRESS]/?appName=taxiadmindash";
 
 const standardInclusions = [
     "Airport meeting and assistance during the stay",
@@ -67,7 +67,7 @@ const standardNotAllowed = [
 
 async function seedTourPackages() {
     try {
-        await mongoose.connect(MONGO_URI);
+        await mongoose.connect(MONGO_URI, { dbName: 'taxiadmindash' });
         console.log('Connected to MongoDB');
 
         const tourPackages = [
