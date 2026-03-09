@@ -162,7 +162,10 @@ export default function TourPackagesClient() {
                                                     <div className="flex items-baseline gap-1">
                                                         <span className="text-xs font-black text-emerald-500 uppercase">{typeof tour.price === 'object' ? (tour.price?.currency || '$') : (tour.currency || '$')}</span>
                                                         <span className="text-3xl font-black text-emerald-900 leading-none">
-                                                            {typeof tour.price === 'object' ? (tour.price?.amount?.toLocaleString() || '0') : (tour.price?.toLocaleString() || '0')}
+                                                            {(() => {
+                                                                const amount = typeof tour.price === 'object' ? tour.price?.amount : tour.price;
+                                                                return amount && amount > 0 ? (amount.toLocaleString()) : "Request";
+                                                            })()}
                                                         </span>
                                                     </div>
                                                 </div>

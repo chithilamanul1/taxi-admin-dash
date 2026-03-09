@@ -356,7 +356,9 @@ export default function TourDetailsClient({ tour }) {
                                         <span className="text-[10px] font-black text-[#FACC15] uppercase tracking-widest block mb-2">Exclusive Web Rate</span>
                                         <div className="flex items-center justify-center gap-1 text-white">
                                             <span className="text-xl font-black">{priceCurrency}</span>
-                                            <span className="text-6xl font-black tracking-tighter">{priceAmount?.toLocaleString()}</span>
+                                            <span className="text-6xl font-black tracking-tighter">
+                                                {priceAmount && priceAmount > 0 ? priceAmount.toLocaleString() : "Contact Us"}
+                                            </span>
                                         </div>
                                         <span className="text-[10px] font-black text-white uppercase tracking-widest mt-2 block">All-Inclusive Price</span>
                                     </div>
