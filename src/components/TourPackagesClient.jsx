@@ -28,61 +28,51 @@ export default function TourPackagesClient() {
     }, [])
 
     return (
-        <main className="min-h-screen bg-white pt-32 pb-20 text-emerald-900">
+        <main className="min-h-screen bg-black pt-32 pb-20 text-white">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-16">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-900 text-xs font-bold uppercase tracking-widest mb-6">
-                        <Plane size={14} className="text-emerald-500" />
+                    <div className="inline-flex items-center gap-2 px-6 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-[0.3em] mb-8 italic">
+                        <Plane size={14} />
                         Multi-Day Adventures
                     </div>
-                    <h1 className="text-4xl md:text-6xl font-black text-emerald-900 mb-4">
-                        Tour <span className="text-emerald-500">Packages</span>
+                    <h1 className="text-5xl md:text-8xl font-black text-white mb-6 uppercase tracking-tighter italic leading-none">
+                        TOUR <span className="text-[#FACC15]">PACKAGES</span>
                     </h1>
-                    <p className="text-slate-500 max-w-2xl mx-auto text-lg leading-relaxed">
-                        Complete Sri Lanka tour packages with accommodation, transport, and guided experiences. Everything taken care of for an unforgettable journey.
+                    <p className="text-white/60 max-w-2xl mx-auto text-sm font-medium uppercase tracking-widest leading-relaxed">
+                        Complete Sri Lanka tour packages with premium accommodation,
+                        private transport, and expert guided experiences.
                     </p>
                 </div>
 
                 <div className="max-w-5xl mx-auto mb-16">
-                    <div className="bg-emerald-50/50 rounded-3xl p-8 border border-emerald-100 shadow-sm">
-                        <h3 className="text-emerald-900 font-black mb-6 text-center uppercase tracking-widest text-sm">All Tours Include:</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                            <div className="flex flex-col items-center gap-3 text-center">
-                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-emerald-100">
-                                    <Hotel size={20} className="text-emerald-500" />
+                    <div className="bg-white/5 border-2 border-[#FACC15]/20 p-10">
+                        <h3 className="text-[#FACC15] font-black mb-10 text-center uppercase tracking-[0.4em] text-[10px]">Premium All-Inclusive Features</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                            {[
+                                { Icon: Hotel, label: "Luxury Hotels" },
+                                { Icon: Car, label: "Private Vehicles" },
+                                { Icon: Utensils, label: "Daily Dining" },
+                                { Icon: Users, label: "Expert Guides" }
+                            ].map((item, i) => (
+                                <div key={i} className="flex flex-col items-center gap-4 text-center group">
+                                    <div className="w-16 h-16 bg-[#FACC15] flex items-center justify-center border-4 border-black group-hover:bg-white transition-colors">
+                                        <item.Icon size={28} className="text-black" />
+                                    </div>
+                                    <span className="text-[10px] font-black text-white/70 uppercase tracking-widest">{item.label}</span>
                                 </div>
-                                <span className="text-xs font-bold text-slate-600">Quality Hotels</span>
-                            </div>
-                            <div className="flex flex-col items-center gap-3 text-center">
-                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-emerald-100">
-                                    <Car size={20} className="text-emerald-500" />
-                                </div>
-                                <span className="text-xs font-bold text-slate-600">Private AC Vehicle</span>
-                            </div>
-                            <div className="flex flex-col items-center gap-3 text-center">
-                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-emerald-100">
-                                    <Utensils size={20} className="text-emerald-500" />
-                                </div>
-                                <span className="text-xs font-bold text-slate-600">Daily Breakfast</span>
-                            </div>
-                            <div className="flex flex-col items-center gap-3 text-center">
-                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-emerald-100">
-                                    <Users size={20} className="text-emerald-500" />
-                                </div>
-                                <span className="text-xs font-bold text-slate-600">Expert Driver-Guide</span>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-3 mb-16">
+                <div className="flex flex-wrap justify-center gap-4 mb-20">
                     {['All', 'City Tours', 'Safaris', 'Multi-Day'].map((cat) => (
                         <button
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
-                            className={`px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${activeCategory === cat
-                                ? 'bg-emerald-500 text-white shadow-xl shadow-emerald-200 scale-105'
-                                : 'bg-slate-50 text-slate-400 hover:bg-white hover:text-emerald-600 border border-slate-100'
+                            className={`px-10 py-4 text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 border-2 ${activeCategory === cat
+                                ? 'bg-[#FACC15] text-black border-[#FACC15] italic scale-105'
+                                : 'bg-transparent text-white/50 border-white/20 hover:border-[#FACC15] hover:text-white'
                                 }`}
                         >
                             {cat}
@@ -107,32 +97,32 @@ export default function TourPackagesClient() {
                                     return false;
                                 })
                                 .map((tour, index) => (
-                                    <div key={tour.slug || tour._id || index} className="bg-white rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200/50 hover:shadow-emerald-200/50 transition-all duration-500 hover:-translate-y-2 group flex flex-col h-full border border-slate-100">
+                                    <div key={tour.slug || tour._id || index} className="bg-white/5 overflow-hidden transition-all duration-500 hover:-translate-y-2 group flex flex-col h-full border-b-8 border-[#FACC15]">
                                         {/* Image Section */}
-                                        <div className="relative h-72 overflow-hidden shrink-0">
+                                        <div className="relative h-80 overflow-hidden shrink-0">
                                             {tour.image || tour.heroImage || (tour.images && tour.images.length > 0) ? (
                                                 <img
                                                     src={tour.image || tour.heroImage || tour.images?.[0]}
                                                     alt={tour.title}
-                                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
                                                 />
                                             ) : (
-                                                <div className="absolute inset-0 bg-slate-100 flex items-center justify-center text-slate-300">No Image</div>
+                                                <div className="absolute inset-0 bg-white/10 flex items-center justify-center text-white/20 uppercase font-black italic">No Image</div>
                                             )}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
                                             <div className="absolute top-6 left-6 flex flex-wrap gap-2">
-                                                {tour.tags?.slice(0, 2).map((tag, i) => (
-                                                    <span key={i} className="px-3 py-1 bg-white/95 backdrop-blur text-emerald-600 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
+                                                {tour.tags?.slice(0, 1).map((tag, i) => (
+                                                    <span key={i} className="px-4 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-widest italic">
                                                         {tag}
                                                     </span>
                                                 ))}
                                             </div>
 
-                                            <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
-                                                <div className="flex items-center gap-2 bg-white/95 backdrop-blur px-4 py-2 rounded-2xl shadow-lg text-emerald-900 border border-white/20">
-                                                    <Calendar size={14} className="text-emerald-500" />
-                                                    <span className="text-[10px] font-black uppercase tracking-widest">
+                                            <div className="absolute bottom-6 left-6 right-6">
+                                                <div className="inline-flex items-center gap-3 bg-black/80 backdrop-blur px-5 py-2.5 text-white border-l-4 border-[#FACC15]">
+                                                    <Calendar size={14} className="text-[#FACC15]" />
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">
                                                         {typeof tour.duration === 'object' && tour.duration ? `${tour.duration.days || '?'}D / ${tour.duration.nights || '?'}N` : (tour.duration || 'N/A')}
                                                     </span>
                                                 </div>
@@ -140,40 +130,40 @@ export default function TourPackagesClient() {
                                         </div>
 
                                         {/* Content Section */}
-                                        <div className="p-8 pb-10 flex flex-col flex-1">
-                                            <h3 className="text-2xl font-black text-emerald-900 mb-4 line-clamp-2 leading-[1.2]">
+                                        <div className="p-10 flex flex-col flex-1">
+                                            <h3 className="text-3xl font-black text-white mb-6 uppercase italic tracking-tighter leading-none group-hover:text-[#FACC15] transition-colors">
                                                 {tour.title}
                                             </h3>
 
-                                            <p className="text-slate-500 text-sm mb-8 line-clamp-3 leading-relaxed">
+                                            <p className="text-white/40 text-xs mb-8 line-clamp-3 leading-relaxed font-medium uppercase tracking-[0.05em]">
                                                 {tour.description}
                                             </p>
 
-                                            <div className="flex items-center gap-2 mb-8 flex-wrap">
-                                                <MapPin size={16} className="text-emerald-500" />
-                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest line-clamp-1">
+                                            <div className="flex items-center gap-3 mb-10 overflow-hidden text-[#FACC15]">
+                                                <MapPin size={16} className="shrink-0" />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap">
                                                     {Array.isArray(tour.destinations) ? tour.destinations.join(' • ') : 'Multiple Locations'}
                                                 </span>
                                             </div>
 
-                                            <div className="flex items-center justify-between mt-auto pt-8 border-t border-slate-50">
-                                                <div>
-                                                    <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest block mb-1">Price per person</span>
-                                                    <div className="flex items-baseline gap-1">
-                                                        <span className="text-xs font-black text-emerald-500 uppercase">{typeof tour.price === 'object' ? (tour.price?.currency || '$') : (tour.currency || '$')}</span>
-                                                        <span className="text-3xl font-black text-emerald-900 leading-none">
+                                            <div className="flex items-center justify-between mt-auto pt-10 border-t border-white/10">
+                                                <div className="flex flex-col">
+                                                    <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em] mb-2">Price From</span>
+                                                    <div className="flex items-baseline gap-2">
+                                                        <span className="text-xs font-black text-[#FACC15] uppercase">{typeof tour.price === 'object' ? (tour.price?.currency || 'USD') : (tour.currency || 'USD')}</span>
+                                                        <span className="text-4xl font-black text-white tracking-tighter italic">
                                                             {(() => {
                                                                 const amount = typeof tour.price === 'object' ? tour.price?.amount : tour.price;
-                                                                return amount && amount > 0 ? (amount.toLocaleString()) : "Request";
+                                                                return amount && amount > 0 ? (amount.toLocaleString()) : "REQ";
                                                             })()}
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <Link
                                                     href={`/tour-packages/${tour.slug}`}
-                                                    className="flex items-center justify-center w-14 h-14 bg-emerald-500 text-white rounded-[1.25rem] hover:bg-emerald-600 hover:scale-110 transition-all duration-300 shadow-xl shadow-emerald-200"
+                                                    className="w-16 h-16 bg-[#FACC15] text-black flex items-center justify-center hover:bg-white transition-all transform group-hover:rotate-45"
                                                 >
-                                                    <ArrowRight size={24} />
+                                                    <ArrowRight size={28} className="-rotate-45" />
                                                 </Link>
                                             </div>
                                         </div>
@@ -183,46 +173,38 @@ export default function TourPackagesClient() {
                     )}
                 </div>
 
-                <div className="max-w-4xl mx-auto mt-24 text-center">
-                    <div className="bg-emerald-900 rounded-[3rem] p-10 md:p-16 relative overflow-hidden shadow-2xl shadow-slate-400/20">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-500/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
-
-                        <div className="relative z-10">
-                            <h2 className="text-3xl md:text-5xl font-black text-white mb-6 leading-tight">
-                                Tailor-Made <span className="text-emerald-500">Journeys</span>
+                <div className="max-w-6xl mx-auto mt-32">
+                    <div className="bg-[#FACC15] p-16 md:p-24 relative overflow-hidden border-b-[20px] border-black">
+                        <div className="relative z-10 text-black">
+                            <h2 className="text-5xl md:text-8xl font-black mb-8 leading-none uppercase italic tracking-tighter">
+                                TAILOR-MADE <br /><span className="bg-black text-[#FACC15] px-4">JOURNEYS</span>
                             </h2>
-                            <p className="text-slate-400 mb-10 max-w-xl mx-auto text-lg leading-relaxed">
+                            <p className="text-black/70 mb-12 max-w-xl text-sm font-black uppercase tracking-[0.2em] leading-relaxed">
                                 Every traveler is unique. Tell us your interests and we'll craft a personalized itinerary that matches your pace, budget, and style.
                             </p>
                             <Link
                                 href="/contact"
-                                className="inline-flex items-center gap-3 px-10 py-5 bg-emerald-500 text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-emerald-900/20 hover:bg-emerald-600 hover:scale-105 transition-all duration-300"
+                                className="inline-flex items-center gap-4 px-12 py-6 bg-black text-[#FACC15] font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all italic shadow-2xl"
                             >
-                                Start Designing <ArrowRight size={18} />
+                                Start Designing <ArrowRight size={20} />
                             </Link>
                         </div>
                     </div>
                 </div>
 
-                <div className="max-w-5xl mx-auto mt-24">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                        <div className="bg-slate-50/50 rounded-3xl p-8 border border-slate-100 text-center">
-                            <div className="text-3xl font-black text-emerald-500 mb-2">500+</div>
-                            <div className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Happy Travelers</div>
-                        </div>
-                        <div className="bg-slate-50/50 rounded-3xl p-8 border border-slate-100 text-center">
-                            <div className="text-3xl font-black text-emerald-500 mb-2">5.0</div>
-                            <div className="text-slate-400 text-[10px] font-black uppercase tracking-widest">User Rating</div>
-                        </div>
-                        <div className="bg-slate-50/50 rounded-3xl p-8 border border-slate-100 text-center">
-                            <div className="text-3xl font-black text-emerald-500 mb-2">24/7</div>
-                            <div className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Local Support</div>
-                        </div>
-                        <div className="bg-slate-50/50 rounded-3xl p-8 border border-slate-100 text-center">
-                            <div className="text-3xl font-black text-emerald-500 mb-2">100%</div>
-                            <div className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Flexible</div>
-                        </div>
+                <div className="max-w-7xl mx-auto mt-32">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {[
+                            { val: "500+", lbl: "Happy Travelers" },
+                            { val: "5.0", lbl: "User Rating" },
+                            { val: "24/7", lbl: "Local Support" },
+                            { val: "100%", lbl: "Flexible" }
+                        ].map((stat, i) => (
+                            <div key={i} className="bg-white/5 p-12 text-center border-l-4 border-[#FACC15]">
+                                <div className="text-5xl font-black text-[#FACC15] mb-4 italic tracking-tighter">{stat.val}</div>
+                                <div className="text-white/40 text-[10px] font-black uppercase tracking-[0.4em]">{stat.lbl}</div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

@@ -30,10 +30,10 @@ const Hero = ({ onBookClick }) => {
     const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroImages.length)
 
     return (
-        <section className="relative h-[85vh] md:h-[90vh] min-h-[600px] md:min-h-[850px] flex flex-col items-start md:items-center justify-start md:justify-center pt-20 md:pt-36 pb-12 md:pb-24 overflow-hidden bg-emerald-900 transition-colors border-b border-black">
+        <section className="relative h-[85vh] md:h-[95vh] min-h-[600px] md:min-h-[850px] flex flex-col items-center justify-center pt-20 md:pt-36 pb-12 md:pb-24 overflow-hidden bg-black transition-colors border-b-[20px] border-[#FACC15]">
             {/* Background Slideshow */}
             <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/95 via-emerald-900/70 to-black/30 pointer-events-none z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-black/20 pointer-events-none z-10"></div>
 
                 {/* 
                   PERFORMANCE OPTIMIZATION: 
@@ -69,56 +69,58 @@ const Hero = ({ onBookClick }) => {
             </div>
 
             {/* Slideshow Navigation */}
-            <div className="absolute bottom-32 right-10 z-20 flex items-center gap-4 hidden md:flex">
+            <div className="absolute bottom-40 right-10 z-20 flex items-center gap-4 hidden md:flex">
                 <button
                     onClick={prevSlide}
-                    className="p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+                    className="w-14 h-14 bg-black/80 backdrop-blur-md text-[#FACC15] hover:bg-[#FACC15] hover:text-black transition-all border border-[#FACC15]/20 flex items-center justify-center"
                     aria-label="Previous slide"
                 >
-                    <ChevronLeft size={24} />
+                    <ChevronLeft size={28} />
                 </button>
                 <button
                     onClick={nextSlide}
-                    className="p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+                    className="w-14 h-14 bg-black/80 backdrop-blur-md text-[#FACC15] hover:bg-[#FACC15] hover:text-black transition-all border border-[#FACC15]/20 flex items-center justify-center"
                     aria-label="Next slide"
                 >
-                    <ChevronRight size={24} />
+                    <ChevronRight size={28} />
                 </button>
             </div>
 
             {/* Content */}
-            <div className="container mx-auto px-6 relative z-10 text-left md:text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-900/80 backdrop-blur-md border border-emerald-500/30 text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-4 animate-slide-up opacity-0 [animation-delay:0.2s] [animation-fill-mode:forwards] shadow-lg md:mx-auto">
+            <div className="container mx-auto px-6 relative z-10 text-center">
+                <div className="inline-flex items-center gap-3 px-6 py-2 bg-[#FACC15] text-black text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-8 animate-slide-up opacity-0 [animation-delay:0.2s] [animation-fill-mode:forwards] italic shadow-2xl mx-auto">
                     <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-30"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-black"></span>
                     </span>
-                    Sri Lanka's #1 Luxury Provider v2.1
+                    Luxury Transport • Colombo • Port
                 </div>
 
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 leading-[1.1] text-white animate-slide-up opacity-0 [animation-delay:0.4s] [animation-fill-mode:forwards] tracking-tight max-w-4xl md:mx-auto">
-                    The Smart Way <br />to <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-200">Explore</span> Sri Lanka
+                <h1 className="text-5xl md:text-8xl lg:text-9xl font-black mb-8 leading-[0.9] text-white animate-slide-up opacity-0 [animation-delay:0.4s] [animation-fill-mode:forwards] tracking-tighter max-w-5xl mx-auto uppercase italic">
+                    THE SMART <br />WAY TO <span className="text-[#FACC15]">EXPLORE</span>
                 </h1>
 
                 {/* Sri Lanka Info Text */}
-                <div className="max-w-2xl mb-6 md:mb-8 animate-slide-up opacity-0 [animation-delay:0.5s] [animation-fill-mode:forwards] md:mx-auto">
-                    <p className="text-base md:text-xl text-white/90 leading-relaxed mb-4 md:mb-6 font-medium text-shadow-sm">
-                        Reliable airport transfers and curated luxury tours.
-                        Professional service tailored to your journey.
+                <div className="max-w-3xl mb-12 animate-slide-up opacity-0 [animation-delay:0.5s] [animation-fill-mode:forwards] mx-auto">
+                    <p className="text-lg md:text-xl text-white/70 leading-relaxed mb-10 font-black uppercase tracking-widest italic">
+                        Premium airport transfers and curated luxury tours in Sri Lanka.
                     </p>
-                    <div className="flex flex-col gap-2 p-5 bg-emerald-900/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg max-w-xl md:mx-auto md:text-left">
-                        <p className="text-sm text-white/80 leading-relaxed">
-                            🇱🇰 <strong className="text-emerald-300">Premium Fleet & Service:</strong>
-                        </p>
-                        <ul className="text-xs md:text-sm text-white/70 space-y-1 ml-1">
-                            <li className="flex items-center gap-2">✓ Modern Air-Conditioned Vehicles</li>
-                            <li className="flex items-center gap-2">✓ English-Speaking Chauffeurs</li>
-                            <li className="flex items-center gap-2">✓ Fixed Prices (No Hidden Charges)</li>
-                        </ul>
+
+                    <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+                        <button
+                            onClick={onBookClick}
+                            className="w-full md:w-auto px-16 py-6 bg-[#FACC15] text-black font-black uppercase tracking-[0.2em] italic text-sm hover:bg-white transition-all shadow-2xl flex items-center justify-center gap-4 group"
+                        >
+                            BOOK NOW <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
+                        </button>
+                        <Link
+                            href="/tour-packages"
+                            className="w-full md:w-auto px-16 py-6 bg-transparent border-2 border-white/20 text-white font-black uppercase tracking-[0.2em] italic text-sm hover:border-[#FACC15] hover:text-[#FACC15] transition-all flex items-center justify-center"
+                        >
+                            BROWSE TOURS
+                        </Link>
                     </div>
                 </div>
-
-
             </div>
 
             {/* Vertical Text Ornament */}

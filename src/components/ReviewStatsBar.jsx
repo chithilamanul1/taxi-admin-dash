@@ -49,36 +49,36 @@ const ReviewStatsBar = () => {
     }, []);
 
     return (
-        <section className="bg-white dark:bg-emerald-900 border-b border-emerald-900/5 dark:border-white/5 py-8">
+        <section className="bg-black border-y border-white/10 py-16">
             <div className="container mx-auto px-6">
-                <div className="flex flex-col gap-6 w-full max-w-lg mx-auto">
+                <div className="flex flex-col gap-4 w-full max-w-lg mx-auto">
 
                     {/* TripAdvisor */}
                     <a
                         href="https://www.tripadvisor.com/Attraction_Review-g293962-d33986804-Reviews-Airport_Taxis_Pvt_Ltd_Sri_Lanka-Colombo_Western_Province.html"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 hover:border-emerald-500/30 transition-all group w-full"
+                        className="flex items-center justify-between p-6 bg-white/5 border-l-4 border-[#00AA6C] hover:bg-white/10 transition-all group w-full"
                     >
                         <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 bg-[#00AA6C] rounded-full flex items-center justify-center text-white shrink-0">
-                                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm10 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z" /><circle cx="7" cy="12" r="1" /><circle cx="17" cy="12" r="1" /></svg>
+                            <div className="w-12 h-12 bg-[#00AA6C] flex items-center justify-center text-white shrink-0">
+                                <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm10 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z" /><circle cx="7" cy="12" r="1" /><circle cx="17" cy="12" r="1" /></svg>
                             </div>
                             <div>
-                                <div className="font-bold text-slate-800 dark:text-white leading-tight">TripAdvisor</div>
-                                <div className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">Excellent</div>
+                                <div className="font-black text-white uppercase italic tracking-tighter leading-tight text-xl">TripAdvisor</div>
+                                <div className="text-[9px] text-white/30 font-black uppercase tracking-[0.3em]">EXCELLENT RATING</div>
                             </div>
                         </div>
                         <div className="flex flex-col items-end">
-                            <div className="flex items-center gap-1">
-                                <span className="text-lg font-black text-emerald-900 dark:text-white">{taStats.rating}</span>
+                            <div className="flex items-center gap-2">
+                                <span className="text-2xl font-black text-white italic tracking-tighter">{taStats.rating}</span>
                                 <div className="flex text-[#00AA6C]">
                                     {[...Array(5)].map((_, i) => (
-                                        <svg key={i} className="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
+                                        <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
                                     ))}
                                 </div>
                             </div>
-                            <span className="text-[10px] text-slate-400">18+ Reviews</span>
+                            <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">18+ REVIEWS</span>
                         </div>
                     </a>
 
@@ -87,10 +87,10 @@ const ReviewStatsBar = () => {
                         href="https://g.page/r/YOUR_GOOGLE_REVIEW_LINK"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 hover:border-blue-500/30 transition-all group w-full"
+                        className="flex items-center justify-between p-6 bg-white/5 border-l-4 border-[#4285F4] hover:bg-white/10 transition-all group w-full"
                     >
                         <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 bg-white rounded-full shadow-sm border border-slate-200 flex items-center justify-center shrink-0 p-2">
+                            <div className="w-12 h-12 bg-white flex items-center justify-center shrink-0 p-2.5">
                                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
                                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
                                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
@@ -99,20 +99,20 @@ const ReviewStatsBar = () => {
                                 </svg>
                             </div>
                             <div>
-                                <div className="font-bold text-slate-800 dark:text-white leading-tight">Google Reviews</div>
-                                <div className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">Top Rated</div>
+                                <div className="font-black text-white uppercase italic tracking-tighter leading-tight text-xl">Google Reviews</div>
+                                <div className="text-[9px] text-white/30 font-black uppercase tracking-[0.3em]">TOP RATED SERVICE</div>
                             </div>
                         </div>
                         <div className="flex flex-col items-end">
-                            <div className="flex items-center gap-1">
-                                <span className="text-lg font-black text-emerald-900 dark:text-white">{googleStats.rating}</span>
+                            <div className="flex items-center gap-2">
+                                <span className="text-2xl font-black text-white italic tracking-tighter">{googleStats.rating}</span>
                                 <div className="flex text-[#F4B400]">
                                     {[...Array(5)].map((_, i) => (
-                                        <svg key={i} className="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
+                                        <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-703L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
                                     ))}
                                 </div>
                             </div>
-                            <span className="text-[10px] text-slate-400">296+ Reviews</span>
+                            <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">296+ REVIEWS</span>
                         </div>
                     </a>
 

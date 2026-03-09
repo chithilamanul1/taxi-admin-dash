@@ -40,15 +40,14 @@ export default function Navbar() {
     const needsSolidBg = isScrolled || !isTransparentPage
 
     return (
-        <nav className={`fixed w-full z-50 transition-all duration-500 py-4 bg-white border-b border-slate-100 shadow-sm`}>
+        <nav className={`fixed w-full z-50 transition-all duration-500 py-4 bg-black border-b-4 border-[#FACC15] shadow-2xl`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <Link href="/" className="flex items-center gap-3 group">
-                    {/* Logo Removed */}
                     <div className="flex flex-col">
-                        <span className="font-extrabold text-xl tracking-tighter leading-none text-emerald-950">
-                            AIRPORT <span className="text-emerald-500">TAXIS</span>
+                        <span className="font-black text-2xl tracking-tighter leading-none text-white uppercase italic">
+                            AIRPORT <span className="text-[#FACC15]">TAXIS</span>
                         </span>
-                        <span className={`text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-900/40`}>Pvt (Ltd)</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#FACC15]/60">Sri Lanka</span>
                     </div>
                 </Link>
 
@@ -56,7 +55,7 @@ export default function Navbar() {
                 <div className="hidden lg:flex items-center gap-4 xl:gap-6">
                     <Link
                         href="/"
-                        className={`text-sm font-bold uppercase tracking-widest hover:text-emerald-500 transition-colors ${pathname === '/' ? 'text-emerald-950 font-black' : 'text-emerald-800/60'}`}
+                        className={`text-[10px] font-black uppercase tracking-widest hover:text-[#FACC15] transition-colors ${pathname === '/' ? 'text-[#FACC15]' : 'text-white/70'}`}
                     >
                         Home
                     </Link>
@@ -71,7 +70,7 @@ export default function Navbar() {
                         <Link
                             key={item.label}
                             href={item.href}
-                            className={`text-[11px] xl:text-xs font-bold uppercase tracking-widest hover:text-emerald-500 transition-colors ${pathname === item.href ? 'text-emerald-950 underline decoration-emerald-500 decoration-2 underline-offset-8' : 'text-emerald-800/60'}`}
+                            className={`text-[10px] font-black uppercase tracking-widest hover:text-[#FACC15] transition-colors ${pathname === item.href ? 'text-[#FACC15]' : 'text-white/70'}`}
                         >
                             {item.label}
                         </Link>
@@ -80,7 +79,7 @@ export default function Navbar() {
                     {/* Secondary Navigation Dropdown */}
                     <div className="relative group">
                         <button
-                            className={`flex items-center gap-1 text-[11px] xl:text-xs font-bold uppercase tracking-widest hover:text-emerald-500 transition-colors ${['/custom-trip', '/blog', '/trip-planner', '/contact'].some(p => pathname.includes(p)) ? 'text-emerald-950 underline decoration-emerald-500 decoration-2 underline-offset-8' : 'text-emerald-800/60'}`}
+                            className={`flex items-center gap-1 text-[10px] font-black uppercase tracking-widest hover:text-[#FACC15] transition-colors ${['/custom-trip', '/blog', '/trip-planner', '/contact'].some(p => pathname.includes(p)) ? 'text-[#FACC15]' : 'text-white/70'}`}
                         >
                             More
                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
@@ -108,29 +107,28 @@ export default function Navbar() {
                     {/* Currency Selector */}
                     <div className="relative group">
                         <button
-                            className={`flex items-center gap-2 text-sm font-bold transition-colors px-4 py-2 rounded-xl border border-emerald-900/10 bg-emerald-50/50 text-emerald-900`}
-                            aria-label="Select currency"
+                            className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-colors px-4 py-2 bg-[#FACC15] text-black border-2 border-black`}
                         >
-                            <Globe size={14} className="text-emerald-500" />
+                            <Globe size={14} />
                             <span>{currency}</span>
                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
                         </button>
-                        <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border-2 border-emerald-600/20 dark:border-emerald-500/30 overflow-hidden">
-                            <div className="px-5 py-2 mb-1 border-b border-white/5 bg-emerald-900/10 dark:bg-white/10">
-                                <span className="text-[10px] font-black text-emerald-950/40 dark:text-emerald-500/40 uppercase tracking-widest">Select Currency</span>
+                        <div className="absolute top-full right-0 mt-3 w-56 bg-black border-4 border-[#FACC15] py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all flex flex-col z-50">
+                            <div className="px-5 py-2 mb-1 border-b border-[#FACC15]/20 bg-white/5">
+                                <span className="text-[10px] font-black text-[#FACC15] uppercase tracking-widest">Select Currency</span>
                             </div>
                             {SUPPORTED_CURRENCIES.map(c => (
                                 <button
                                     key={c.code}
                                     onClick={() => changeCurrency(c.code)}
-                                    className={`w-full text-left px-5 py-3 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 transition-all text-sm font-bold flex items-center gap-4 ${currency === c.code ? 'text-white bg-emerald-700 shadow-inner' : 'text-emerald-700 dark:text-slate-200'}`}
+                                    className={`w-full text-left px-5 py-3 hover:bg-[#FACC15] hover:text-black transition-all text-[10px] font-black flex items-center gap-4 ${currency === c.code ? 'text-black bg-[#FACC15]' : 'text-white'}`}
                                 >
-                                    <div className="w-9 h-9 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center overflow-hidden shadow-md border-2 border-emerald-500/20">
-                                        <img src={c.flag} alt={c.name} className="w-full h-full object-cover scale-150" />
+                                    <div className="w-8 h-8 bg-white border border-black flex items-center justify-center overflow-hidden">
+                                        <img src={c.flag} alt={c.name} className="w-full h-full object-cover" />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="leading-tight text-sm">{c.name}</span>
-                                        <span className={`text-[10px] uppercase tracking-widest font-black ${currency === c.code ? 'text-emerald-200' : 'text-emerald-500/40'}`}>{c.code}</span>
+                                        <span className="leading-tight uppercase">{c.name}</span>
+                                        <span className={`text-[8px] uppercase tracking-widest font-black ${currency === c.code ? 'text-black/60' : 'text-[#FACC15]'}`}>{c.code}</span>
                                     </div>
                                 </button>
                             ))}
@@ -152,15 +150,15 @@ export default function Navbar() {
                                         <div className="w-full h-full bg-amber-600 text-white flex items-center justify-center font-bold">{session.user?.name?.charAt(0)}</div>
                                     )}
                                 </button>
-                                <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-white/10 dark:border-slate-800">
-                                    <div className="px-5 py-2 mb-2 border-b border-emerald-950/5 dark:border-white/5">
-                                        <p className="font-bold text-emerald-950 dark:text-white text-sm">{session.user?.name}</p>
-                                        <p className="text-[10px] text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Verified User</p>
+                                <div className="absolute top-full right-0 mt-3 w-56 bg-white border-4 border-black py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all flex flex-col z-50">
+                                    <div className="px-5 py-2 mb-2 border-b border-black/10">
+                                        <p className="font-black text-black text-xs uppercase tracking-tighter">{session.user?.name}</p>
+                                        <p className="text-[10px] text-[#FACC15] bg-black px-2 py-0.5 inline-block uppercase tracking-wider font-black mt-1">Verified User</p>
                                     </div>
-                                    <Link href="/my-bookings" className="flex items-center gap-3 px-5 py-3 text-emerald-900/70 dark:text-slate-300 hover:text-emerald-950 dark:hover:text-white hover:bg-emerald-900/10 dark:hover:bg-white/10 text-sm font-bold transition-all">
-                                        <Calendar size={16} className="text-emerald-600 dark:text-emerald-400" /> My Bookings
+                                    <Link href="/my-bookings" className="flex items-center gap-3 px-5 py-3 hover:bg-black hover:text-[#FACC15] text-[10px] font-black uppercase tracking-widest transition-all">
+                                        <Calendar size={16} /> My Bookings
                                     </Link>
-                                    <button onClick={() => signOut()} className="flex items-center gap-3 px-5 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 text-sm font-bold transition-all w-full text-left">
+                                    <button onClick={() => signOut()} className="flex items-center gap-3 px-5 py-3 text-red-600 hover:bg-red-50 text-[10px] font-black uppercase tracking-widest transition-all w-full text-left">
                                         <LogOut size={16} /> Sign Out
                                     </button>
                                 </div>
@@ -200,38 +198,9 @@ export default function Navbar() {
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-slate-950 border-t border-white/10 dark:border-slate-800 shadow-2xl max-h-[85vh] overflow-y-auto animate-slide-up">
-                    <div className="p-6 space-y-6">
-                        {/* User Profile Section - Mobile */}
-                        {session && (
-                            <div className="flex items-center gap-4 p-4 bg-emerald-900/10 dark:bg-white/10 rounded-2xl border border-emerald-100 dark:border-emerald-800">
-                                <div className="w-14 h-14 rounded-full border-2 border-emerald-600 overflow-hidden shrink-0">
-                                    {session.user?.image ? (
-                                        <img src={session.user.image} alt={session.user.name} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <div className="w-full h-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xl">{session.user?.name?.charAt(0)}</div>
-                                    )}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="font-bold text-emerald-950 dark:text-white truncate">{session.user?.name}</p>
-                                    <p className="text-xs text-emerald-600 dark:text-emerald-400 truncate">{session.user?.email}</p>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* My Bookings Link - Mobile */}
-                        {session && (
-                            <Link
-                                href="/my-bookings"
-                                className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-emerald-900/10 dark:border-slate-800 text-emerald-950 dark:text-white font-bold shadow-sm"
-                            >
-                                <Calendar size={20} className="text-emerald-600" />
-                                <span>My Bookings</span>
-                                <ChevronDown size={16} className="-rotate-90 ml-auto text-emerald-600" />
-                            </Link>
-                        )}
-
-                        <div className="grid grid-cols-2 gap-3">
+                <div className="lg:hidden absolute top-full left-0 w-full bg-black border-t-4 border-[#FACC15] shadow-2xl max-h-[85vh] overflow-y-auto animate-slide-up">
+                    <div className="p-6 space-y-4">
+                        <div className="grid grid-cols-1 gap-4">
                             {[
                                 { label: 'Home', href: '/', icon: '🏠', id: 'm-home' },
                                 { label: 'Airport Drop & Pickup', href: '/', icon: '✈️', id: 'm-drop' },
@@ -255,19 +224,18 @@ export default function Navbar() {
                                 }
                             ].map(item => (
                                 item.isDropdown ? (
-                                    <div key={item.id} className="space-y-2">
-                                        <div className="flex items-center gap-3 p-4 bg-emerald-900/5 dark:bg-white/5 rounded-2xl text-emerald-950 dark:text-white font-bold">
-                                            <span className="text-xl">{item.icon}</span>
-                                            <span>{item.label}</span>
+                                    <div key={item.id} className="space-y-3">
+                                        <div className="p-4 bg-white/5 border-l-4 border-[#FACC15] text-[#FACC15] font-black uppercase tracking-widest text-[10px]">
+                                            {item.label}
                                         </div>
-                                        <div className="grid grid-cols-1 gap-2 pl-4">
+                                        <div className="grid grid-cols-2 gap-2">
                                             {item.items.map(sub => (
                                                 <Link
                                                     key={sub.label}
                                                     href={sub.href}
-                                                    className="flex items-center gap-3 p-3 bg-white dark:bg-slate-900 rounded-xl border border-emerald-900/5 dark:border-slate-800 text-emerald-900/70 dark:text-white/70 text-sm font-bold"
+                                                    className="p-4 bg-white/10 hover:bg-[#FACC15] hover:text-black transition-all text-white font-black uppercase tracking-widest text-[10px] text-center"
                                                 >
-                                                    <span>{sub.label}</span>
+                                                    {sub.label}
                                                 </Link>
                                             ))}
                                         </div>
@@ -276,55 +244,22 @@ export default function Navbar() {
                                     <Link
                                         key={item.id}
                                         href={item.href}
-                                        className="flex items-center gap-3 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-emerald-900/10 dark:border-slate-800 text-emerald-950 dark:text-white font-bold shadow-sm hover:bg-emerald-900/10 dark:hover:bg-white/10 transition-all"
+                                        className="p-4 bg-white/5 border-l-4 border-[#FACC15] hover:bg-[#FACC15] hover:text-black transition-all text-white font-black uppercase tracking-widest text-[10px] flex items-center justify-between"
                                     >
-                                        <span className="text-xl">{item.icon}</span>
                                         <span>{item.label}</span>
+                                        <span className="text-lg">{item.icon}</span>
                                     </Link>
                                 )
                             ))}
                         </div>
 
-                        <div className="pt-6 border-t border-emerald-900/10 dark:border-slate-800">
-                            <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest px-2 mb-4">Currency Selector</p>
-                            <div className="grid grid-cols-4 gap-2">
-                                {SUPPORTED_CURRENCIES.map(c => (
-                                    <button
-                                        key={c.code}
-                                        onClick={() => changeCurrency(c.code)}
-                                        className={`flex flex-col items-center justify-center gap-1 py-3 rounded-xl border transition-all text-xs font-bold ${currency === c.code ? 'bg-emerald-600 text-white border-emerald-600 shadow-md transform scale-105' : 'text-emerald-500/60 dark:text-slate-400 bg-emerald-50/20 dark:bg-slate-900 border-emerald-100 dark:border-slate-800'}`}
-                                    >
-                                        <div className="w-6 h-6 rounded-full overflow-hidden border border-white/20">
-                                            <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
-                                        </div>
-                                        <span>{c.code}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="pt-6 space-y-4">
+                        <div className="pt-6 border-t border-white/10 space-y-4">
                             <a
-                                href="tel:+94722885885"
-                                className="flex items-center justify-center gap-3 w-full py-4 bg-emerald-900 text-white rounded-2xl font-bold shadow-lg shadow-emerald-900/20"
+                                href="tel:+94716885880"
+                                className="flex items-center justify-center gap-3 w-full py-5 bg-[#FACC15] text-black font-black uppercase tracking-widest text-xs"
                             >
                                 <Phone size={18} /> Call Specialist
                             </a>
-                            {session ? (
-                                <button onClick={() => signOut()} className="w-full py-4 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 text-red-600 dark:text-red-400 font-bold rounded-2xl hover:bg-red-100 dark:hover:bg-red-950/40 transition-all">
-                                    Sign Out
-                                </button>
-                            ) : (
-                                <button onClick={() => signIn('google')} className="flex items-center justify-center gap-3 w-full py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 font-bold rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
-                                    <svg className="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-                                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z" fill="#FBBC05" />
-                                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                                    </svg>
-                                    Sign In with Google
-                                </button>
-                            )}
                         </div>
                     </div>
                 </div>

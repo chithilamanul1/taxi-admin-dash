@@ -56,7 +56,7 @@ export default function HomeClient() {
     };
 
     return (
-        <div className="bg-white dark:bg-emerald-900 overflow-hidden transition-colors duration-300">
+        <div className="bg-black overflow-hidden transition-colors duration-300">
             <Hero onBookClick={() => setIsBookingOpen(true)} />
 
             <BookingWidget />
@@ -80,38 +80,35 @@ export default function HomeClient() {
                 product={selectedExpressProduct}
             />
 
-            <div id="calculator" className="py-32 relative">
-                <div className="absolute inset-0 bg-emerald-900/5 flex items-center justify-center opacity-30">
-                    <div className="w-[800px] h-[400px] border border-emerald-900/10 rounded-full blur-3xl"></div>
-                </div>
-                <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-                    <h2 className="text-4xl md:text-5xl font-extrabold text-emerald-900 dark:text-white mb-6 font-heading">
-                        Seamless <span className="text-emerald-600 dark:text-emerald-400">Airport Transfers</span>
+            <div id="calculator" className="py-40 relative border-t border-white/5">
+                <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
+                    <h2 className="text-5xl md:text-8xl font-black text-white mb-10 uppercase italic tracking-tighter leading-none">
+                        SEAMLESS <br /><span className="text-[#FACC15]">AIRPORT TRANSFERS</span>
                     </h2>
-                    <p className="text-emerald-900/60 dark:text-white/60 mb-10 text-lg">Predictable pricing, premium vehicles, and professional chauffeurs waiting for you.</p>
+                    <p className="text-white/40 mb-14 text-sm font-black uppercase tracking-[0.3em] max-w-2xl mx-auto">Predictable pricing, premium vehicles, and professional chauffeurs waiting for you.</p>
                     <button
                         onClick={() => setIsBookingOpen(true)}
-                        className="bg-emerald-900 text-white px-12 py-5 rounded-2xl font-bold text-lg hover:bg-slate-800 transition-all shadow-xl inline-flex items-center gap-3 group"
+                        className="bg-[#FACC15] text-black px-16 py-6 font-black text-sm uppercase tracking-widest hover:bg-white transition-all shadow-2xl inline-flex items-center gap-4 group italic"
                     >
-                        Book Your Trip Now
-                        <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
+                        BOOK YOUR TRIP NOW
+                        <ArrowRight size={22} className="group-hover:translate-x-2 transition-transform" />
                     </button>
                 </div>
             </div>
 
             <SpecialOffersSection />
 
-            <section className="py-12 md:py-32 px-6">
+            <section className="py-32 px-6 border-t border-white/5">
                 <div className="max-w-7xl mx-auto">
-                    <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
-                        <div className="max-w-2xl">
-                            <h2 className="text-4xl md:text-5xl font-extrabold mb-6 dark:text-white">
-                                Curated <span className="text-emerald-600 dark:text-emerald-400">Destinations</span>
+                    <div className="flex flex-col md:flex-row items-end justify-between mb-24 gap-10">
+                        <div className="max-w-3xl">
+                            <h2 className="text-5xl md:text-8xl font-black mb-8 text-white uppercase italic tracking-tighter leading-none">
+                                CURATED <span className="text-[#FACC15]">DESTINATIONS</span>
                             </h2>
-                            <p className="text-emerald-900/60 dark:text-white/60 text-lg">Explore the most iconic locations in Sri Lanka with our specialized airport transfer services.</p>
+                            <p className="text-white/40 text-sm font-black uppercase tracking-[0.2em] leading-relaxed">Explore the most iconic locations in Sri Lanka with our specialized airport transfer services.</p>
                         </div>
-                        <Link href="/prices" className="flex items-center gap-2 text-emerald-600 font-bold uppercase tracking-widest text-sm hover:gap-4 transition-all">
-                            View All Rates <ArrowRight size={18} />
+                        <Link href="/prices" className="flex items-center gap-4 text-[#FACC15] font-black uppercase tracking-[0.2em] text-[10px] hover:text-white transition-all italic underline decoration-2 underline-offset-8">
+                            VIEW ALL RATES <ArrowRight size={18} />
                         </Link>
                     </div>
 
@@ -130,21 +127,21 @@ export default function HomeClient() {
                                     });
                                     setIsBookingOpen(true);
                                 }}
-                                className="group p-4 sm:p-6 rounded-[2rem] bg-white dark:bg-emerald-900 border border-emerald-900/10 dark:border-white/10 shadow-sm hover:shadow-2xl hover:border-emerald-500/50 hover:-translate-y-1 transition-all duration-300 text-left flex flex-col justify-between h-40 sm:h-44"
+                                className="group p-8 bg-white/5 border-l-4 border-white/10 hover:border-[#FACC15] hover:bg-white/10 transition-all duration-300 text-left flex flex-col justify-between h-52"
                             >
                                 <div>
-                                    <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-500 mb-2">
-                                        <MapPin size={14} className="fill-current/20" />
-                                        <span className="text-[10px] font-black uppercase tracking-widest truncate">{route.meta}</span>
+                                    <div className="flex items-center gap-3 text-[#FACC15] mb-4">
+                                        <MapPin size={14} />
+                                        <span className="text-[9px] font-black uppercase tracking-[0.3em] truncate">{route.meta}</span>
                                     </div>
-                                    <h3 className="text-xl sm:text-2xl font-black text-emerald-900 dark:text-white leading-tight group-hover:text-emerald-600 transition-colors line-clamp-2">
+                                    <h3 className="text-2xl font-black text-white leading-tight uppercase italic tracking-tighter group-hover:text-[#FACC15] transition-colors line-clamp-2">
                                         {route.name || route.title.replace('Airport to ', '')}
                                     </h3>
                                 </div>
-                                <div className="flex items-center justify-between mt-4">
-                                    <span className="hidden sm:inline text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Instant Quote</span>
-                                    <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-all">
-                                        <ArrowRight size={18} className="transform group-hover:translate-x-0.5 transition-transform" />
+                                <div className="flex items-center justify-between mt-6">
+                                    <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">INSTANT QUOTE</span>
+                                    <div className="w-10 h-10 bg-[#FACC15]/10 text-[#FACC15] flex items-center justify-center group-hover:bg-[#FACC15] group-hover:text-black transition-all">
+                                        <ArrowRight size={20} className="transform group-hover:translate-x-1 transition-transform" />
                                     </div>
                                 </div>
                             </button>
@@ -158,34 +155,28 @@ export default function HomeClient() {
             <GoogleReviews />
             <RecentPosts />
 
-            <section className="py-20 bg-slate-50 dark:bg-emerald-900 border-t border-slate-200 dark:border-slate-800">
+            <section className="py-32 bg-black border-t border-white/10">
                 <div className="max-w-6xl mx-auto px-6">
-                    <div className="bg-emerald-900 rounded-3xl p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
-                        <div className="absolute inset-0 opacity-10">
-                            <Compass size={400} className="absolute -right-20 -bottom-20 text-white" />
-                        </div>
-
-                        <div className="relative z-10 max-w-xl text-center md:text-left">
-                            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">Are you a Driver?</h2>
-                            <p className="text-emerald-100 text-lg mb-8">
-                                Join our exclusive fleet of professional chauffeurs. Get consistent bookings, fair rates, and become part of Sri Lanka's premium transport network.
+                    <div className="bg-[#FACC15] p-16 md:p-20 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12 border-b-[20px] border-black">
+                        <div className="relative z-10 max-w-xl text-center md:text-left text-black">
+                            <h2 className="text-5xl md:text-7xl font-black mb-8 uppercase italic tracking-tighter leading-none">ARE YOU <br /><span className="bg-black text-[#FACC15] px-4">A DRIVER?</span></h2>
+                            <p className="text-black/70 text-sm font-black uppercase tracking-[0.2em] mb-12 leading-relaxed">
+                                Join our exclusive fleet of professional chauffeurs. Get consistent bookings, fair rates, and become part of Sri Lanka's premium network.
                             </p>
-                            <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                                <Link href="/driver/register" className="bg-white text-emerald-900 px-8 py-3 rounded-xl font-bold hover:bg-emerald-50 transition-colors inline-flex items-center gap-2">
-                                    Join Our Fleet <ArrowRight size={18} />
+                            <div className="flex flex-wrap gap-6 justify-center md:justify-start">
+                                <Link href="/driver/register" className="bg-black text-[#FACC15] px-12 py-5 font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all italic shadow-2xl">
+                                    JOIN OUR FLEET <ArrowRight size={20} />
                                 </Link>
-                                <Link href="/driver/login" className="px-8 py-3 rounded-xl font-bold text-white border border-slate-700 hover:bg-slate-800 transition-colors">
-                                    Driver Login
+                                <Link href="/driver/login" className="px-12 py-5 font-black uppercase tracking-widest text-xs text-black border-2 border-black/20 hover:border-black transition-all italic">
+                                    DRIVER LOGIN
                                 </Link>
                             </div>
                         </div>
 
-                        <div className="relative z-10 w-full md:w-1/3 aspect-video bg-emerald-900/20 rounded-xl border border-emerald-500/20 backdrop-blur-sm flex items-center justify-center p-6 text-center transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                            <div className="text-emerald-200">
-                                <Star size={48} className="mx-auto mb-2 text-emerald-400" />
-                                <h3 className="font-bold text-white">Earn More</h3>
-                                <p className="text-xs mt-1">Accept rides, track earnings, and get paid weekly.</p>
-                            </div>
+                        <div className="relative z-10 w-full md:w-1/3 aspect-square bg-black p-10 flex flex-col items-center justify-center text-center transform rotate-3 hover:rotate-0 transition-all duration-500 border-4 border-black">
+                            <Star size={64} className="mb-6 text-[#FACC15]" />
+                            <h3 className="text-4xl font-black text-white italic tracking-tighter uppercase mb-4">EARN MORE</h3>
+                            <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Accept rides, track earnings, and get paid weekly.</p>
                         </div>
                     </div>
                 </div>
