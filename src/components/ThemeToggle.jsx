@@ -13,17 +13,24 @@ const ThemeToggle = () => {
     }, [])
 
     if (!mounted) {
-        return <div className="w-10 h-10" /> // Placeholder to avoid hydration mismatch
+        return <div className="w-12 h-12" />
     }
+
+    const isDark = resolvedTheme === 'dark'
 
     return (
         <button
             type="button"
-            onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all border border-slate-200 dark:border-slate-700"
+            onClick={() => setTheme(isDark ? 'light' : 'dark')}
+            className="w-12 h-12 flex items-center justify-center bg-[#FACC15] text-black border-2 border-black hover:bg-black hover:text-[#FACC15] transition-all group relative overflow-hidden"
             aria-label="Toggle Theme"
         >
-            {resolvedTheme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            <div className={`transition-transform duration-500 ${isDark ? 'rotate-0' : 'rotate-180'}`}>
+                {isDark ? <Sun size={24} className="font-black" /> : <Moon size={24} className="font-black" />}
+            </div>
+
+            {/* Corner Accent */}
+            <div className="absolute top-0 right-0 w-2 h-2 bg-black opacity-20 transform rotate-45 translate-x-1 -translate-y-1"></div>
         </button>
     )
 }

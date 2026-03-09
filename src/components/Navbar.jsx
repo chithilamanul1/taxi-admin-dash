@@ -40,11 +40,11 @@ export default function Navbar() {
     const needsSolidBg = isScrolled || !isTransparentPage
 
     return (
-        <nav className={`fixed w-full z-50 transition-all duration-500 py-4 bg-black border-b-4 border-[#FACC15] shadow-2xl`}>
+        <nav className={`fixed w-full z-50 transition-all duration-500 py-4 bg-white dark:bg-black border-b-4 border-[#FACC15] shadow-2xl`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <Link href="/" className="flex items-center gap-3 group">
                     <div className="flex flex-col">
-                        <span className="font-black text-2xl tracking-tighter leading-none text-white uppercase italic">
+                        <span className="font-black text-2xl tracking-tighter leading-none text-black dark:text-white uppercase italic">
                             AIRPORT <span className="text-[#FACC15]">TAXIS</span>
                         </span>
                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#FACC15]/60">Sri Lanka</span>
@@ -55,7 +55,7 @@ export default function Navbar() {
                 <div className="hidden lg:flex items-center gap-4 xl:gap-6">
                     <Link
                         href="/"
-                        className={`text-[10px] font-black uppercase tracking-widest hover:text-[#FACC15] transition-colors ${pathname === '/' ? 'text-[#FACC15]' : 'text-white/70'}`}
+                        className={`text-[10px] font-black uppercase tracking-widest hover:text-[#FACC15] transition-colors ${pathname === '/' ? 'text-[#FACC15]' : 'text-black/70 dark:text-white/70'}`}
                     >
                         Home
                     </Link>
@@ -70,7 +70,7 @@ export default function Navbar() {
                         <Link
                             key={item.label}
                             href={item.href}
-                            className={`text-[10px] font-black uppercase tracking-widest hover:text-[#FACC15] transition-colors ${pathname === item.href ? 'text-[#FACC15]' : 'text-white/70'}`}
+                            className={`text-[10px] font-black uppercase tracking-widest hover:text-[#FACC15] transition-colors ${pathname === item.href ? 'text-[#FACC15]' : 'text-black/70 dark:text-white/70'}`}
                         >
                             {item.label}
                         </Link>
@@ -79,7 +79,7 @@ export default function Navbar() {
                     {/* Secondary Navigation Dropdown */}
                     <div className="relative group">
                         <button
-                            className={`flex items-center gap-1 text-[10px] font-black uppercase tracking-widest hover:text-[#FACC15] transition-colors ${['/custom-trip', '/blog', '/trip-planner', '/contact'].some(p => pathname.includes(p)) ? 'text-[#FACC15]' : 'text-white/70'}`}
+                            className={`flex items-center gap-1 text-[10px] font-black uppercase tracking-widest hover:text-[#FACC15] transition-colors ${['/custom-trip', '/blog', '/trip-planner', '/contact'].some(p => pathname.includes(p)) ? 'text-[#FACC15]' : 'text-black/70 dark:text-white/70'}`}
                         >
                             More
                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
@@ -113,15 +113,15 @@ export default function Navbar() {
                             <span>{currency}</span>
                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
                         </button>
-                        <div className="absolute top-full right-0 mt-3 w-56 bg-black border-4 border-[#FACC15] py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all flex flex-col z-50">
-                            <div className="px-5 py-2 mb-1 border-b border-[#FACC15]/20 bg-white/5">
+                        <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-black border-4 border-[#FACC15] py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all flex flex-col z-50">
+                            <div className="px-5 py-2 mb-1 border-b border-[#FACC15]/20 bg-black/5 dark:bg-white/5">
                                 <span className="text-[10px] font-black text-[#FACC15] uppercase tracking-widest">Select Currency</span>
                             </div>
                             {SUPPORTED_CURRENCIES.map(c => (
                                 <button
                                     key={c.code}
                                     onClick={() => changeCurrency(c.code)}
-                                    className={`w-full text-left px-5 py-3 hover:bg-[#FACC15] hover:text-black transition-all text-[10px] font-black flex items-center gap-4 ${currency === c.code ? 'text-black bg-[#FACC15]' : 'text-white'}`}
+                                    className={`w-full text-left px-5 py-3 hover:bg-[#FACC15] hover:text-black transition-all text-[10px] font-black flex items-center gap-4 ${currency === c.code ? 'text-black bg-[#FACC15]' : 'text-black dark:text-white'}`}
                                 >
                                     <div className="w-8 h-8 bg-white border border-black flex items-center justify-center overflow-hidden">
                                         <img src={c.flag} alt={c.name} className="w-full h-full object-cover" />
@@ -141,7 +141,7 @@ export default function Navbar() {
                         session ? (
                             <div className="relative group">
                                 <button
-                                    className="relative w-10 h-10 rounded-full border border-white/10 bg-emerald-900/10 p-0.5 overflow-hidden"
+                                    className="relative w-10 h-10 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-0.5 overflow-hidden"
                                     aria-label="User profile"
                                 >
                                     {session.user?.image ? (
@@ -150,15 +150,15 @@ export default function Navbar() {
                                         <div className="w-full h-full bg-amber-600 text-white flex items-center justify-center font-bold">{session.user?.name?.charAt(0)}</div>
                                     )}
                                 </button>
-                                <div className="absolute top-full right-0 mt-3 w-56 bg-white border-4 border-black py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all flex flex-col z-50">
-                                    <div className="px-5 py-2 mb-2 border-b border-black/10">
-                                        <p className="font-black text-black text-xs uppercase tracking-tighter">{session.user?.name}</p>
-                                        <p className="text-[10px] text-[#FACC15] bg-black px-2 py-0.5 inline-block uppercase tracking-wider font-black mt-1">Verified User</p>
+                                <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-black border-4 border-black dark:border-[#FACC15] py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all flex flex-col z-50">
+                                    <div className="px-5 py-2 mb-2 border-b border-black/10 dark:border-white/10">
+                                        <p className="font-black text-black dark:text-white text-xs uppercase tracking-tighter">{session.user?.name}</p>
+                                        <p className="text-[10px] text-[#FACC15] bg-black dark:bg-[#FACC15] dark:text-black px-2 py-0.5 inline-block uppercase tracking-wider font-black mt-1">Verified User</p>
                                     </div>
-                                    <Link href="/my-bookings" className="flex items-center gap-3 px-5 py-3 hover:bg-black hover:text-[#FACC15] text-[10px] font-black uppercase tracking-widest transition-all">
+                                    <Link href="/my-bookings" className="flex items-center gap-3 px-5 py-3 hover:bg-[#FACC15] hover:text-black text-[10px] font-black uppercase tracking-widest text-black/70 dark:text-white/70 transition-all">
                                         <Calendar size={16} /> My Bookings
                                     </Link>
-                                    <button onClick={() => signOut()} className="flex items-center gap-3 px-5 py-3 text-red-600 hover:bg-red-50 text-[10px] font-black uppercase tracking-widest transition-all w-full text-left">
+                                    <button onClick={() => signOut()} className="flex items-center gap-3 px-5 py-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 text-[10px] font-black uppercase tracking-widest transition-all w-full text-left">
                                         <LogOut size={16} /> Sign Out
                                     </button>
                                 </div>
@@ -187,7 +187,7 @@ export default function Navbar() {
 
                 {/* Mobile Menu Toggle */}
                 <button
-                    className={`lg:hidden w-10 h-10 flex items-center justify-center rounded-xl border transition-all bg-slate-900 text-white border-slate-900 shadow-md`}
+                    className={`lg:hidden w-10 h-10 flex items-center justify-center bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black border-2 border-black/10 transition-all`}
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
                     aria-expanded={isMobileMenuOpen}
@@ -198,7 +198,7 @@ export default function Navbar() {
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="lg:hidden absolute top-full left-0 w-full bg-black border-t-4 border-[#FACC15] shadow-2xl max-h-[85vh] overflow-y-auto animate-slide-up">
+                <div className="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-black border-t-4 border-[#FACC15] shadow-2xl max-h-[85vh] overflow-y-auto animate-slide-up">
                     <div className="p-6 space-y-4">
                         <div className="grid grid-cols-1 gap-4">
                             {[
@@ -225,7 +225,7 @@ export default function Navbar() {
                             ].map(item => (
                                 item.isDropdown ? (
                                     <div key={item.id} className="space-y-3">
-                                        <div className="p-4 bg-white/5 border-l-4 border-[#FACC15] text-[#FACC15] font-black uppercase tracking-widest text-[10px]">
+                                        <div className="p-4 bg-black/5 dark:bg-white/5 border-l-4 border-[#FACC15] text-[#FACC15] font-black uppercase tracking-widest text-[10px]">
                                             {item.label}
                                         </div>
                                         <div className="grid grid-cols-2 gap-2">
@@ -233,7 +233,7 @@ export default function Navbar() {
                                                 <Link
                                                     key={sub.label}
                                                     href={sub.href}
-                                                    className="p-4 bg-white/10 hover:bg-[#FACC15] hover:text-black transition-all text-white font-black uppercase tracking-widest text-[10px] text-center"
+                                                    className="p-4 bg-black/10 dark:bg-white/10 hover:bg-[#FACC15] hover:text-black transition-all text-black dark:text-white font-black uppercase tracking-widest text-[10px] text-center"
                                                 >
                                                     {sub.label}
                                                 </Link>
@@ -244,7 +244,7 @@ export default function Navbar() {
                                     <Link
                                         key={item.id}
                                         href={item.href}
-                                        className="p-4 bg-white/5 border-l-4 border-[#FACC15] hover:bg-[#FACC15] hover:text-black transition-all text-white font-black uppercase tracking-widest text-[10px] flex items-center justify-between"
+                                        className="p-4 bg-black/5 dark:bg-white/5 border-l-4 border-[#FACC15] hover:bg-[#FACC15] hover:text-black transition-all text-black dark:text-white font-black uppercase tracking-widest text-[10px] flex items-center justify-between"
                                     >
                                         <span>{item.label}</span>
                                         <span className="text-lg">{item.icon}</span>

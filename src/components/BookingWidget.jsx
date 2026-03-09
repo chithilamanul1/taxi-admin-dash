@@ -515,51 +515,55 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4">
             {/* Google Maps Loader (Conditional) */}
 
-            {/* Tab Navigation */}
-            <div className="flex flex-wrap bg-white dark:bg-emerald-900 p-1 rounded-2xl w-full mb-6 md:mb-8 gap-1.5 shadow-sm border border-slate-200 dark:border-slate-800" role="tablist">
-                {[
-                    { id: 'pickup', label: 'Airport Pickup', icon: MapPin },
-                    { id: 'drop', label: 'Airport Drop', icon: Navigation },
-                    { id: 'ride', label: 'Ride Now', icon: Zap },
-                    { id: 'tours', label: 'Tours', icon: Signpost }
-                ].map(tab => (
-                    <button
-                        key={tab.id}
-                        role="tab"
-                        aria-selected={activeTab === tab.id}
-                        aria-controls={`panel-${tab.id}`}
-                        id={`tab-${tab.id}`}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`flex-1 flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs md:text-sm font-bold transition-all min-w-[120px] ${activeTab === tab.id ? 'bg-black text-white shadow-md border-b-2 border-black ring-1 ring-black' : 'text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 border border-slate-200'}`}
-                    >
-                        <tab.icon size={16} />
-                        {tab.label}
-                    </button>
-                ))}
+            {/* Tab Navigation - Screenshot Matching Grid Layout */}
+            <div className="flex flex-wrap bg-white dark:bg-[#111] p-2 rounded-3xl w-fit mx-auto lg:mx-0 mb-8 gap-2 shadow-xl border border-slate-100 dark:border-white/5 transition-all" role="tablist">
+                <div className="grid grid-cols-2 gap-2 w-full sm:w-[500px]">
+                    {[
+                        { id: 'pickup', label: 'Airport Pickup', icon: MapPin },
+                        { id: 'drop', label: 'Airport Drop', icon: Navigation },
+                        { id: 'ride', label: 'Ride Now', icon: Zap },
+                        { id: 'tours', label: 'Tours', icon: Signpost }
+                    ].map(tab => (
+                        <button
+                            key={tab.id}
+                            role="tab"
+                            aria-selected={activeTab === tab.id}
+                            aria-controls={`panel-${tab.id}`}
+                            id={`tab-${tab.id}`}
+                            onClick={() => setActiveTab(tab.id)}
+                            className={`flex items-center justify-start gap-4 px-6 py-4 rounded-2xl text-sm font-black transition-all ${activeTab === tab.id
+                                ? 'bg-black dark:bg-yellow-400 text-white dark:text-black shadow-lg shadow-black/10 dark:shadow-yellow-400/10'
+                                : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 border border-slate-100 dark:border-white/5'
+                                }`}
+                        >
+                            <tab.icon size={20} className={activeTab === tab.id ? 'text-white dark:text-black' : 'text-slate-400 dark:text-slate-500'} />
+                            <span className="truncate">{tab.label}</span>
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {/* Widget Main Content */}
-            <div className="bg-white dark:bg-emerald-900 rounded-[2rem] p-5 lg:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 animate-slide-up relative z-10">
+            <div className="bg-white dark:bg-black rounded-[2.5rem] p-5 lg:p-10 shadow-2xl border border-slate-200 dark:border-white/10 animate-slide-up relative z-10 transition-colors">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
-                        {/* Section 1: Inputs */}
-                        <div className="space-y-6 min-w-0">
-                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                                <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 w-full sm:w-auto gap-1">
-                                    <button onClick={() => setTripType('one-way')} aria-label="One Way Trip" className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-bold transition-all ${tripType === 'one-way' ? 'bg-black text-white shadow-md' : 'text-slate-600 hover:text-emerald-900 dark:text-slate-400 dark:hover:text-white hover:bg-white/50'}`}>One Way</button>
+                        <div className="flex-1 text-center lg:text-left">
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8">
+                                <div className="flex bg-slate-100 dark:bg-white/5 p-1.5 rounded-2xl border border-slate-200 dark:border-white/5 w-full sm:w-auto gap-1">
+                                    <button onClick={() => setTripType('one-way')} aria-label="One Way Trip" className={`flex-1 sm:flex-none px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${tripType === 'one-way' ? 'bg-black dark:bg-yellow-400 text-white dark:text-black shadow-lg' : 'text-slate-500 dark:text-slate-400 hover:text-black dark:hover:text-white'}`}>One Way</button>
                                     <button
                                         onClick={() => (activeTab !== 'pickup' && activeTab !== 'drop') && setTripType('round-trip')}
                                         disabled={activeTab === 'pickup' || activeTab === 'drop'}
                                         aria-label="Round Trip"
-                                        className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-xs font-bold transition-all relative
-                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-black text-white shadow-md' : 'text-slate-600 hover:text-emerald-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100'}
+                                        className={`flex-1 sm:flex-none px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all relative
+                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-black dark:bg-yellow-400 text-white dark:text-black shadow-lg' : 'text-slate-500 dark:text-slate-400 hover:text-black dark:hover:text-white'}
                                             ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-40 cursor-not-allowed' : ''}
                                         `}
                                     >
                                         Round Trip
                                         {(activeTab === 'pickup' || activeTab === 'drop') && (
-                                            <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-500 rounded-full flex items-center justify-center text-[7px] text-white shadow-sm">🔒</span>
+                                            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-emerald-500 dark:bg-yellow-400 rounded-full flex items-center justify-center text-[8px] text-white dark:text-black shadow-sm">🔒</span>
                                         )}
                                     </button>
                                 </div>
@@ -567,22 +571,22 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex items-center gap-2 w-full sm:w-auto">
                                     {/* Currency Selector */}
                                     <div className="relative group z-[110]">
-                                        <button className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-black text-slate-700 dark:text-slate-300 hover:border-black transition-all shadow-sm">
-                                            <div className="w-5 h-5 rounded-full overflow-hidden border border-white/20">
+                                        <button className="flex items-center gap-2 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-4 py-3 text-xs font-black text-black dark:text-white hover:border-black dark:hover:border-yellow-400 transition-all shadow-sm">
+                                            <div className="w-5 h-5 rounded-full overflow-hidden border border-black/10 dark:border-white/20">
                                                 <img src={SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag} alt={currency} className="w-full h-full object-cover scale-150" />
                                             </div>
-                                            <span className="opacity-80 uppercase">{currency}</span>
+                                            <span className="uppercase">{currency}</span>
                                             <ChevronDown size={14} className="opacity-50" />
                                         </button>
-                                        <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
+                                        <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-[#111] rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
                                             <div className="py-2">
                                                 {SUPPORTED_CURRENCIES.map(c => (
                                                     <button
                                                         key={c.code}
                                                         onClick={() => changeCurrency(c.code)}
-                                                        className={`w-full text-left px-5 py-3 text-xs font-bold flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors ${currency === c.code ? 'text-black bg-slate-100 dark:bg-slate-700 border-l-2 border-black' : 'text-slate-600 dark:text-slate-400'}`}
+                                                        className={`w-full text-left px-5 py-3 text-xs font-black flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors ${currency === c.code ? 'text-black dark:text-yellow-400 bg-slate-50 dark:bg-white/5 border-l-4 border-black dark:border-yellow-400' : 'text-slate-500 dark:text-slate-400'}`}
                                                     >
-                                                        <div className="w-4 h-4 rounded-full overflow-hidden border border-white/20">
+                                                        <div className="w-4 h-4 rounded-full overflow-hidden border border-black/10 dark:border-white/20">
                                                             <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
                                                         </div>
                                                         <span>{c.code}</span>
@@ -592,8 +596,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                     </div>
 
-                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-white text-xs font-black hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-black px-6 py-3 rounded-xl border border-emerald-900 justify-center whitespace-nowrap shadow-sm hover:shadow-md">
-                                        {isLocating ? <Loader2 size={16} className="animate-spin text-white" /> : <Zap size={16} className="fill-white text-white" />}
+                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-white dark:text-black text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all flex items-center gap-2 bg-black dark:bg-yellow-400 px-6 py-3 rounded-2xl border border-transparent justify-center whitespace-nowrap shadow-lg">
+                                        {isLocating ? <Loader2 size={16} className="animate-spin" /> : <Zap size={16} className="fill-current" />}
                                         <span className="hidden sm:inline">Auto Detect</span>
                                         <span className="sm:hidden">GPS</span>
                                     </button>
@@ -618,38 +622,38 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 {/* Waypoints List */}
                                 {waypoints.map((wp, idx) => (
-                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-1 flex items-center overflow-hidden">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-900/40 dark:text-slate-400/40 pointer-events-none z-10">
+                                    <div key={idx} className="relative group animate-slide-up bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/10 p-1 flex items-center overflow-hidden">
+                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-black/20 dark:text-white/20 pointer-events-none z-10">
                                             <Navigation size={18} />
                                         </div>
                                         <input
                                             type="text"
                                             readOnly
                                             value={wp.name}
-                                            className="flex-1 min-w-0 pl-12 pr-4 h-12 bg-transparent border-none text-sm font-bold text-emerald-900 dark:text-white outline-none truncate"
+                                            className="flex-1 min-w-0 pl-12 pr-4 h-14 bg-transparent border-none text-sm font-black text-black dark:text-white outline-none truncate"
                                         />
 
-                                        <div className="flex flex-col items-center border-l border-emerald-900/10 dark:border-white/10 px-2 min-w-[70px] sm:min-w-[100px] justify-center">
-                                            <div className="flex items-center gap-1">
+                                        <div className="flex flex-col items-center border-l border-black/5 dark:border-white/10 px-3 min-w-[70px] sm:min-w-[100px] justify-center">
+                                            <div className="flex items-center gap-2">
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: Math.max(0, (w.waitingTime || 0) - 1) } : w)); }}
-                                                    className="w-6 h-6 flex items-center justify-center rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-white text-xs font-bold hover:bg-slate-200"
+                                                    className="w-7 h-7 flex items-center justify-center rounded-xl bg-white dark:bg-white/10 text-black dark:text-white text-xs font-black shadow-sm hover:bg-slate-100 transition-colors"
                                                 >−</button>
-                                                <span className="text-xs font-black text-emerald-900 dark:text-white w-6 text-center">{wp.waitingTime || 0}h</span>
+                                                <span className="text-sm font-black text-black dark:text-white w-6 text-center">{wp.waitingTime || 0}h</span>
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: (w.waitingTime || 0) + 1 } : w)); }}
-                                                    className="w-6 h-6 flex items-center justify-center rounded-full bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-white text-xs font-bold hover:bg-slate-200"
+                                                    className="w-7 h-7 flex items-center justify-center rounded-xl bg-black dark:bg-yellow-400 text-white dark:text-black text-xs font-black shadow-sm hover:bg-slate-800 transition-colors"
                                                 >+</button>
                                             </div>
-                                            <span className="text-[8px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Wait</span>
+                                            <span className="text-[9px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider mt-1">Wait Time</span>
                                         </div>
 
                                         <button
                                             onClick={() => setWaypoints(prev => prev.filter((_, i) => i !== idx))}
-                                            className="ml-2 mr-2 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                            className="ml-2 mr-3 p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all"
                                             aria-label="Remove stop"
                                         >
-                                            <X size={16} />
+                                            <X size={18} />
                                         </button>
                                     </div>
                                 ))}
@@ -700,9 +704,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 {/* Dropoff Input */}
                                 <div className="relative">
                                     {/* Uber-style vertical connecting line */}
-                                    <div className="absolute left-[22px] top-[-36px] bottom-[28px] w-[2px] bg-slate-200 dark:bg-slate-700 z-0">
-                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-emerald-900 z-10"></div>
-                                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-emerald-900 z-10"></div>
+                                    <div className="absolute left-[22px] top-[-36px] bottom-[28px] w-[2px] bg-slate-200 dark:bg-white/10 z-0">
+                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-slate-300 dark:border-white/20 bg-white dark:bg-black z-10"></div>
+                                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 border-2 border-slate-300 dark:border-white/20 bg-white dark:bg-black z-10"></div>
                                     </div>
                                     <LocationInput
                                         placeholder="Drop-off Location"
@@ -910,23 +914,23 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     { id: 'luggage', label: 'Luggage' },
                                     { id: 'handLuggage', label: 'Hand Luggage' }
                                 ].map(c => (
-                                    <div key={c.id} className="bg-white border border-slate-200 p-3 rounded-2xl flex flex-col items-center justify-center transition-colors shadow-sm">
-                                        <span className="text-[9px] font-black text-black uppercase tracking-widest mb-2 opacity-80">{c.label}</span>
-                                        <div className="flex items-center gap-3">
+                                    <div key={c.id} className="bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-4 rounded-2xl flex flex-col items-center justify-center transition-all shadow-sm">
+                                        <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3">{c.label}</span>
+                                        <div className="flex items-center gap-4">
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, (Number(p[c.id]) || 0) - 1) }))}
-                                                className="w-8 h-8 rounded-xl bg-white border border-black/10 flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-black shadow-sm"
+                                                className="w-8 h-8 rounded-xl bg-white dark:bg-white/10 border border-slate-300 dark:border-white/20 flex items-center justify-center hover:bg-slate-100 transition-all text-black dark:text-white"
                                                 aria-label={`Decrease ${c.label}`}
                                             >
-                                                <Minus size={12} strokeWidth={3} />
+                                                <Minus size={14} strokeWidth={3} />
                                             </button>
-                                            <span className="font-black text-lg text-black min-w-[12px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
+                                            <span className="font-black text-xl text-black dark:text-white min-w-[20px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))}
-                                                className="w-8 h-8 rounded-xl bg-black border border-black/10 flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-white shadow-sm"
+                                                className="w-8 h-8 rounded-xl bg-black dark:bg-yellow-400 border border-transparent flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-white dark:text-black shadow-md shadow-black/10 dark:shadow-yellow-400/10"
                                                 aria-label={`Increase ${c.label}`}
                                             >
-                                                <Plus size={12} strokeWidth={3} />
+                                                <Plus size={14} strokeWidth={3} />
                                             </button>
                                         </div>
                                     </div>
@@ -937,68 +941,64 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             <div className="">
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
-                                    className="w-full h-20 px-4 flex items-center justify-between bg-white dark:bg-white/5 border border-emerald-900/10 dark:border-white/10 rounded-2xl hover:border-emerald-600 dark:hover:border-emerald-500 hover:shadow-md transition-all group"
+                                    className="w-full h-24 px-6 flex items-center justify-between bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl hover:border-black dark:hover:border-yellow-400 hover:shadow-xl transition-all group overflow-hidden relative"
                                     aria-label="Select Vehicle"
                                 >
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-14 h-12 bg-slate-50 dark:bg-white/10 rounded-xl flex items-center justify-center p-1">
+                                    <div className="flex items-center gap-6">
+                                        <div className="w-16 h-14 bg-white dark:bg-white/10 rounded-2xl flex items-center justify-center p-1 shadow-sm border border-slate-100 dark:border-white/10">
                                             {vehiclePricing[vehicle]?.image ? (
                                                 <div className="relative w-full h-full">
                                                     <Image
                                                         src={vehiclePricing[vehicle].image}
                                                         alt={vehiclePricing[vehicle]?.name || "Vehicle"}
                                                         fill
-                                                        className="object-contain mix-blend-multiply dark:mix-blend-normal"
+                                                        className="object-contain"
                                                         sizes="64px"
                                                     />
                                                 </div>
                                             ) : (
-                                                <Car className="text-emerald-900/40 dark:text-white/40" />
+                                                <Car className="text-slate-400 dark:text-white/40" />
                                             )}
                                         </div>
                                         <div className="text-left">
-                                            <p className="font-bold text-base text-emerald-900 dark:text-white">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
-                                            <div className="flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300 font-medium">
-                                                <span>{vehiclePricing[vehicle]?.capacity || 4} Passengers</span>
-                                                <span className="w-1 h-1 bg-emerald-600/30 rounded-full"></span>
-                                                <span>{vehiclePricing[vehicle]?.luggage || 2} Lugg</span>
-                                                <span className="w-1 h-1 bg-emerald-600/30 rounded-full"></span>
-                                                <span>{vehiclePricing[vehicle]?.handLuggage || 2} Hand</span>
+                                            <p className="font-black text-lg text-black dark:text-white uppercase italic tracking-tight">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
+                                            <div className="flex items-center gap-3 text-[10px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-widest mt-1">
+                                                <span>{vehiclePricing[vehicle]?.capacity || 4} Pax</span>
+                                                <span className="w-1 h-1 bg-slate-300 dark:bg-white/20 rounded-full"></span>
+                                                <span>{vehiclePricing[vehicle]?.luggage || 2} Luggage</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="w-8 h-8 rounded-full bg-slate-100 text-black hover:bg-slate-200 transition-colors flex items-center justify-center">
-                                        <ChevronDown size={16} />
+                                    <div className="w-10 h-10 rounded-xl bg-black dark:bg-yellow-400 text-white dark:text-black flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        <ChevronDown size={20} />
                                     </div>
                                 </button>
                             </div>
                         </div>
 
                         {/* Section 2: Summary & Checkout */}
-                        <div className="bg-white border-2 border-slate-200 rounded-3xl p-6 shadow-xl flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-8 lg:gap-0">
+                        <div className="bg-slate-50 dark:bg-[#0a0a0a] border border-slate-200 dark:border-white/10 rounded-3xl p-6 lg:p-8 flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-8 lg:gap-0 transition-colors">
                             <div className="space-y-6 flex-1 flex flex-col">
                                 <div className="flex justify-between items-center">
-                                    <h2 className="text-xl font-bold text-emerald-900 tracking-tight">Trip Summary</h2>
+                                    <h2 className="text-xl font-black text-black dark:text-white uppercase italic tracking-tight">Trip Summary</h2>
 
-                                    {/* Currency Dropdown */}
+                                    {/* Quick Currency Selector */}
                                     <div className="relative group">
                                         <button
-                                            className="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-black text-white shadow-md hover:bg-slate-800 transition-colors"
+                                            className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl bg-black dark:bg-yellow-400 text-white dark:text-black shadow-lg transition-transform hover:scale-105 active:scale-95"
                                             aria-label="Select currency"
                                         >
-                                            <span className="font-black">{currency}</span>
+                                            <span>{currency}</span>
                                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
                                         </button>
-                                        <div className="absolute top-full right-0 mt-2 w-32 bg-white dark:bg-emerald-900 rounded-xl shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-emerald-900/10 dark:border-slate-800 z-50">
+                                        <div className="absolute top-full right-0 mt-3 w-32 bg-white dark:bg-[#111] rounded-2xl shadow-2xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-slate-100 dark:border-white/10 z-[120] overflow-hidden">
                                             {SUPPORTED_CURRENCIES.map(c => (
                                                 <button
                                                     key={c.code}
-                                                    onClick={() => {
-                                                        changeCurrency(c.code);
-                                                    }}
-                                                    className={`w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors text-xs font-bold flex items-center gap-2 ${currency === c.code ? 'bg-black text-white' : 'text-slate-500 dark:text-slate-400'}`}
+                                                    onClick={() => changeCurrency(c.code)}
+                                                    className={`w-full text-left px-4 py-3 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors text-xs font-black flex items-center gap-3 ${currency === c.code ? 'bg-slate-50 dark:bg-white/5 text-black dark:text-yellow-400' : 'text-slate-500 dark:text-slate-400'}`}
                                                 >
-                                                    <div className="w-4 h-4 rounded-full overflow-hidden border border-white/20">
+                                                    <div className="w-4 h-4 rounded-full overflow-hidden border border-black/10 dark:border-white/20">
                                                         <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
                                                     </div>
                                                     <span>{c.code}</span>
@@ -1008,44 +1008,42 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                 </div>
 
-                                {/* Map Container - Fixed Height Mobile, Flex Desktop */}
-                                <div className="h-64 lg:flex-1 w-full rounded-2xl overflow-hidden shadow-inner relative isolate min-h-[300px] lg:min-h-[300px] border border-black/10 flex-shrink-0 lg:flex-shrink">
+                                {/* Map Container - Refined styling for dual theme */}
+                                <div className="h-64 lg:flex-1 w-full rounded-[2rem] overflow-hidden shadow-2xl relative isolate min-h-[300px] lg:min-h-[300px] border border-black/5 dark:border-white/10 flex-shrink-0 lg:flex-shrink group transition-all duration-500 hover:border-black dark:hover:border-yellow-400">
                                     <TripMap pickup={pickup} dropoff={dropoff} waypoints={waypoints} onRouteCalculated={handleRouteCalculated} />
                                 </div>
 
                                 <div className="space-y-4">
-                                    <div className="flex justify-between items-center text-sm">
-                                        <span className="text-black font-bold">Est. Distance</span>
-                                        <span className="text-black font-black">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
+                                    <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
+                                        <span className="text-slate-500 dark:text-slate-400">Est. Distance</span>
+                                        <span className="text-black dark:text-white">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
                                     </div>
-                                    <div className="flex justify-between items-center text-sm">
-                                        <span className="text-black font-bold">Vehicle Type</span>
-                                        <span className="font-bold text-black bg-white/40 px-3 py-1 rounded-lg">
+                                    <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
+                                        <span className="text-slate-500 dark:text-slate-400">Vehicle Type</span>
+                                        <span className="text-black dark:text-yellow-400">
                                             {vehiclePricing[vehicle]?.name || 'Select Vehicle'}
                                         </span>
                                     </div>
 
                                     {/* Detailed Price Breakdown */}
-                                    <div className="pt-4 border-t border-black/5 space-y-3">
-                                        <div className="flex justify-between items-center text-xs">
-                                            <span className="text-black/60 font-bold uppercase tracking-tight">Trip Subtotal</span>
-                                            <span className="text-black font-extrabold">{convertPrice(total - (calculateSurcharges({ hasNameBoard }, vehiclePricing[vehicle]) || 0)).symbol} {convertPrice(total - (calculateSurcharges({ hasNameBoard }, vehiclePricing[vehicle]) || 0)).value.toLocaleString()}</span>
+                                    <div className="pt-6 border-t border-slate-200 dark:border-white/10 space-y-4">
+                                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.15em]">
+                                            <span className="text-slate-500 dark:text-slate-400">Trip Subtotal</span>
+                                            <span className="text-black dark:text-white font-black">{convertPrice(total - (calculateSurcharges({ hasNameBoard }, vehiclePricing[vehicle]) || 0)).symbol} {convertPrice(total - (calculateSurcharges({ hasNameBoard }, vehiclePricing[vehicle]) || 0)).value.toLocaleString()}</span>
                                         </div>
 
-                                        {/* Waiting Hour Surcharge Removed */}
-
                                         {hasNameBoard && nameBoardPrice > 0 && (
-                                            <div className="flex justify-between items-center text-xs">
-                                                <span className="text-black/60 font-bold uppercase tracking-tight">Name Board</span>
-                                                <span className="text-black font-extrabold">+{convertPrice(nameBoardPrice).symbol} {convertPrice(nameBoardPrice).value.toLocaleString()}</span>
+                                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400">
+                                                <span>Name Board Surcharge</span>
+                                                <span>+{convertPrice(nameBoardPrice).symbol} {convertPrice(nameBoardPrice).value.toLocaleString()}</span>
                                             </div>
                                         )}
 
                                         {discountAmount > 0 && (
-                                            <div className="flex justify-between items-center text-xs text-emerald-700 bg-emerald-50/50 p-2 rounded-lg border border-emerald-200/50">
-                                                <div className="flex items-center gap-1.5">
+                                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.15em] text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-400/10 p-3 rounded-xl border border-yellow-200 dark:border-yellow-400/20">
+                                                <div className="flex items-center gap-2">
                                                     <Tag size={12} className="shrink-0" />
-                                                    <span className="font-black uppercase tracking-tighter truncate max-w-[120px]">
+                                                    <span className="truncate max-w-[150px]">
                                                         {appliedOffers.length > 0 ? appliedOffers.map(o => o.name).join(', ') : 'Offer Applied'}
                                                     </span>
                                                 </div>
@@ -1056,31 +1054,34 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 </div>
                             </div>
 
-                            <div className="pt-6 border-t border-emerald-900/10 dark:border-white/10 flex-shrink-0">
+                            <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex-shrink-0">
                                 <div className="flex justify-between items-end mb-8">
                                     <div className="flex flex-col">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <Zap size={14} className="text-emerald-600 fill-emerald-500" />
-                                            <span className="text-[10px] font-black text-emerald-900/50 uppercase tracking-[0.2em]">Final Payable</span>
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                            <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.3em]">Total Payable</span>
                                         </div>
-                                        <span className="text-4xl font-black text-emerald-900">
-                                            {distance && finalTotal > 0 ? (
-                                                <>
-                                                    {convertPrice(finalTotal).symbol} {convertPrice(finalTotal).value.toLocaleString()}
-                                                </>
-                                            ) : (
-                                                <span className="text-emerald-900/20">---</span>
-                                            )}
-                                        </span>
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-4xl lg:text-5xl font-black text-black dark:text-white tracking-tighter">
+                                                {distance && finalTotal > 0 ? (
+                                                    <>
+                                                        <span className="text-lg align-top mr-1">{convertPrice(finalTotal).symbol}</span>
+                                                        {convertPrice(finalTotal).value.toLocaleString()}
+                                                    </>
+                                                ) : (
+                                                    <span className="text-slate-200 dark:text-white/10 italic">Rates</span>
+                                                )}
+                                            </span>
+                                        </div>
                                         {/* Secondary Currency Display */}
                                         {distance && finalTotal > 0 && (
-                                            <div className="text-sm font-bold text-black/60 mt-1">
+                                            <div className="text-[10px] font-black text-slate-400 dark:text-white/40 uppercase tracking-widest mt-2">
                                                 {(() => {
                                                     const secCode = currency === 'LKR' ? 'USD' : 'LKR';
                                                     const secRate = rates ? (rates[secCode] || 1) : 1;
                                                     const secValue = Math.ceil(finalTotal * secRate);
                                                     const secSymbol = SUPPORTED_CURRENCIES.find(c => c.code === secCode)?.symbol || secCode;
-                                                    return `approx. ${secSymbol} ${secValue.toLocaleString()}`;
+                                                    return `~ ${secSymbol} ${secValue.toLocaleString()}`;
                                                 })()}
                                             </div>
                                         )}
@@ -1090,11 +1091,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <button
                                     onClick={handleBook}
                                     disabled={!distance}
-                                    className="w-full py-5 bg-black dark:bg-emerald-600 text-white rounded-[2rem] font-bold text-lg hover:bg-emerald-900 dark:hover:bg-emerald-500 active:scale-[0.98] transition-all shadow-xl disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3 group"
+                                    className="w-full py-6 bg-black dark:bg-yellow-400 text-white dark:text-black rounded-[2rem] font-black text-lg uppercase tracking-widest hover:bg-slate-900 dark:hover:bg-yellow-500 active:scale-[0.98] transition-all shadow-2xl shadow-black/20 dark:shadow-yellow-400/20 disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3 group overflow-hidden relative"
                                 >
-                                    <ShieldCheck size={18} className="opacity-60" />
+                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                                    <ShieldCheck size={20} className="group-hover:rotate-12 transition-transform" />
                                     Secure Booking
-                                    <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+                                    <ArrowRight className="group-hover:translate-x-2 transition-transform" />
                                 </button>
                             </div>
                         </div>

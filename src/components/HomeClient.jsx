@@ -56,7 +56,7 @@ export default function HomeClient() {
     };
 
     return (
-        <div className="bg-black overflow-hidden transition-colors duration-300">
+        <div className="bg-white dark:bg-black overflow-hidden transition-colors duration-300">
             <Hero onBookClick={() => setIsBookingOpen(true)} />
 
             <BookingWidget />
@@ -80,15 +80,15 @@ export default function HomeClient() {
                 product={selectedExpressProduct}
             />
 
-            <div id="calculator" className="py-40 relative border-t border-white/5">
+            <div id="calculator" className="py-40 relative border-t border-black/5 dark:border-white/5">
                 <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
-                    <h2 className="text-5xl md:text-8xl font-black text-white mb-10 uppercase italic tracking-tighter leading-none">
+                    <h2 className="text-5xl md:text-8xl font-black text-black dark:text-white mb-10 uppercase italic tracking-tighter leading-none">
                         SEAMLESS <br /><span className="text-[#FACC15]">AIRPORT TRANSFERS</span>
                     </h2>
-                    <p className="text-white/40 mb-14 text-sm font-black uppercase tracking-[0.3em] max-w-2xl mx-auto">Predictable pricing, premium vehicles, and professional chauffeurs waiting for you.</p>
+                    <p className="text-black/40 dark:text-white/40 mb-14 text-sm font-black uppercase tracking-[0.3em] max-w-2xl mx-auto">Predictable pricing, premium vehicles, and professional chauffeurs waiting for you.</p>
                     <button
                         onClick={() => setIsBookingOpen(true)}
-                        className="bg-[#FACC15] text-black px-16 py-6 font-black text-sm uppercase tracking-widest hover:bg-white transition-all shadow-2xl inline-flex items-center gap-4 group italic"
+                        className="bg-[#FACC15] text-black px-16 py-6 font-black text-sm uppercase tracking-widest hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all shadow-2xl inline-flex items-center gap-4 group italic"
                     >
                         BOOK YOUR TRIP NOW
                         <ArrowRight size={22} className="group-hover:translate-x-2 transition-transform" />
@@ -98,21 +98,21 @@ export default function HomeClient() {
 
             <SpecialOffersSection />
 
-            <section className="py-32 px-6 border-t border-white/5">
+            <section className="py-32 px-6 border-t border-black/5 dark:border-white/5">
                 <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col md:flex-row items-end justify-between mb-24 gap-10">
                         <div className="max-w-3xl">
-                            <h2 className="text-5xl md:text-8xl font-black mb-8 text-white uppercase italic tracking-tighter leading-none">
+                            <h2 className="text-5xl md:text-8xl font-black mb-8 text-black dark:text-white uppercase italic tracking-tighter leading-none">
                                 CURATED <span className="text-[#FACC15]">DESTINATIONS</span>
                             </h2>
-                            <p className="text-white/40 text-sm font-black uppercase tracking-[0.2em] leading-relaxed">Explore the most iconic locations in Sri Lanka with our specialized airport transfer services.</p>
+                            <p className="text-black/40 dark:text-white/40 text-sm font-black uppercase tracking-[0.2em] leading-relaxed">Explore the most iconic locations in Sri Lanka with our specialized airport transfer services.</p>
                         </div>
-                        <Link href="/prices" className="flex items-center gap-4 text-[#FACC15] font-black uppercase tracking-[0.2em] text-[10px] hover:text-white transition-all italic underline decoration-2 underline-offset-8">
+                        <Link href="/prices" className="flex items-center gap-4 text-[#FACC15] font-black uppercase tracking-[0.2em] text-[10px] hover:text-black dark:hover:text-white transition-all italic underline decoration-2 underline-offset-8">
                             VIEW ALL RATES <ArrowRight size={18} />
                         </Link>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="flex overflow-x-auto md:grid md:grid-cols-4 gap-6 pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide">
                         {destinations.slice(0, 16).map((route, i) => (
                             <button
                                 key={i}
@@ -127,19 +127,19 @@ export default function HomeClient() {
                                     });
                                     setIsBookingOpen(true);
                                 }}
-                                className="group p-8 bg-white/5 border-l-4 border-white/10 hover:border-[#FACC15] hover:bg-white/10 transition-all duration-300 text-left flex flex-col justify-between h-52"
+                                className="group p-8 bg-black/5 dark:bg-white/5 border-l-4 border-black/10 dark:border-white/10 hover:border-[#FACC15] hover:bg-[#FACC15]/10 dark:hover:bg-white/10 transition-all duration-300 text-left flex flex-col justify-between h-52 shrink-0 w-[280px] md:w-auto snap-start"
                             >
                                 <div>
                                     <div className="flex items-center gap-3 text-[#FACC15] mb-4">
                                         <MapPin size={14} />
                                         <span className="text-[9px] font-black uppercase tracking-[0.3em] truncate">{route.meta}</span>
                                     </div>
-                                    <h3 className="text-2xl font-black text-white leading-tight uppercase italic tracking-tighter group-hover:text-[#FACC15] transition-colors line-clamp-2">
+                                    <h3 className="text-2xl font-black text-black dark:text-white leading-tight uppercase italic tracking-tighter group-hover:text-[#FACC15] transition-colors line-clamp-2">
                                         {route.name || route.title.replace('Airport to ', '')}
                                     </h3>
                                 </div>
                                 <div className="flex items-center justify-between mt-6">
-                                    <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">INSTANT QUOTE</span>
+                                    <span className="text-[9px] font-black text-black/20 dark:text-white/20 uppercase tracking-[0.3em]">INSTANT QUOTE</span>
                                     <div className="w-10 h-10 bg-[#FACC15]/10 text-[#FACC15] flex items-center justify-center group-hover:bg-[#FACC15] group-hover:text-black transition-all">
                                         <ArrowRight size={20} className="transform group-hover:translate-x-1 transition-transform" />
                                     </div>
@@ -155,7 +155,7 @@ export default function HomeClient() {
             <GoogleReviews />
             <RecentPosts />
 
-            <section className="py-32 bg-black border-t border-white/10">
+            <section className="py-32 bg-white dark:bg-black border-t border-black/10 dark:border-white/10 transition-colors">
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="bg-[#FACC15] p-16 md:p-20 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12 border-b-[20px] border-black">
                         <div className="relative z-10 max-w-xl text-center md:text-left text-black">

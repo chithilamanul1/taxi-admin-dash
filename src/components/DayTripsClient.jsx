@@ -38,24 +38,24 @@ export default function DayTripsClient() {
     const types = ['all', 'day-trip']
 
     return (
-        <main className="min-h-screen bg-black pt-32 pb-20 text-white">
+        <main className="min-h-screen bg-white dark:bg-black pt-32 pb-20 text-black dark:text-white transition-colors duration-300">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-3 px-6 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-[0.3em] mb-8 italic">
                         <MapPin size={14} />
                         SRI LANKA COLLECTION
                     </div>
-                    <h1 className="text-5xl md:text-8xl font-black text-white mb-6 uppercase tracking-tighter italic leading-none">
+                    <h1 className="text-5xl md:text-8xl font-black text-black dark:text-white mb-6 uppercase tracking-tighter italic leading-none">
                         DAY <span className="text-[#FACC15]">TRIPS</span>
                     </h1>
-                    <p className="text-white/60 max-w-2xl mx-auto text-sm font-medium uppercase tracking-widest leading-relaxed">
+                    <p className="text-black/60 dark:text-white/60 max-w-2xl mx-auto text-sm font-medium uppercase tracking-widest leading-relaxed">
                         Discover the best of Sri Lanka in a single day. Premier curated
                         experiences with private pickup from your doorstep.
                     </p>
                 </div>
 
                 <div className="max-w-4xl mx-auto mb-20">
-                    <div className="bg-white/5 border-2 border-[#FACC15]/20 p-8">
+                    <div className="bg-black/5 dark:bg-white/5 border-2 border-[#FACC15]/20 p-8">
                         <div className="flex flex-col md:flex-row gap-6">
                             <div className="flex-1 relative">
                                 <Search size={20} className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]" />
@@ -64,7 +64,7 @@ export default function DayTripsClient() {
                                     placeholder="SEARCH DESTINATIONS..."
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
-                                    className="w-full pl-16 pr-6 py-5 bg-black border-2 border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-[#FACC15] transition-all font-black uppercase tracking-widest text-xs italic"
+                                    className="w-full pl-16 pr-6 py-5 bg-white dark:bg-black border-2 border-black/10 dark:border-white/10 text-black dark:text-white placeholder:text-black/20 dark:placeholder:text-white/20 focus:outline-none focus:border-[#FACC15] transition-all font-black uppercase tracking-widest text-xs italic"
                                 />
                             </div>
                             <div className="flex gap-4 flex-wrap items-center">
@@ -75,7 +75,7 @@ export default function DayTripsClient() {
                                         className={`px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 border-2 italic
                                             ${filter === type
                                                 ? 'bg-[#FACC15] text-black border-[#FACC15] scale-105'
-                                                : 'bg-transparent text-white/50 border-white/10 hover:border-[#FACC15] hover:text-white'}`}
+                                                : 'bg-transparent text-black/50 dark:text-white/50 border-black/10 dark:border-white/10 hover:border-[#FACC15] hover:text-black dark:hover:text-white'}`}
                                     >
                                         {type === 'all' ? 'All' : type}
                                     </button>
@@ -86,7 +86,7 @@ export default function DayTripsClient() {
                 </div>
 
                 <div className="max-w-7xl mx-auto mb-8 flex justify-between items-center px-2">
-                    <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.4em]">
+                    <p className="text-black/20 dark:text-white/20 text-[10px] font-black uppercase tracking-[0.4em]">
                         {loading ? 'SEARCHING...' : `${filteredTrips.length} EXPERIENCES FOUND`}
                     </p>
                 </div>
@@ -98,7 +98,7 @@ export default function DayTripsClient() {
                 ) : (
                     <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-12">
                         {filteredTrips.map((trip) => (
-                            <div key={trip.slug || trip._id || trip.id} className="bg-white/5 overflow-hidden transition-all duration-500 hover:-translate-y-2 group flex flex-col h-full border-b-8 border-[#FACC15]">
+                            <div key={trip.slug || trip._id || trip.id} className="bg-black/5 dark:bg-white/5 overflow-hidden transition-all duration-500 hover:-translate-y-2 group flex flex-col h-full border-b-8 border-[#FACC15]">
                                 {/* Image Section */}
                                 <div className="relative h-80 overflow-hidden shrink-0">
                                     {trip.image || trip.heroImage || (trip.images && trip.images.length > 0) ? (
@@ -108,7 +108,7 @@ export default function DayTripsClient() {
                                             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
                                         />
                                     ) : (
-                                        <div className="absolute inset-0 bg-white/10 flex items-center justify-center text-white/20 uppercase font-black italic">No Image</div>
+                                        <div className="absolute inset-0 bg-black/10 dark:bg-white/10 flex items-center justify-center text-black/20 dark:text-white/20 uppercase font-black italic">No Image</div>
                                     )}
                                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
@@ -128,44 +128,44 @@ export default function DayTripsClient() {
 
                                 {/* Content Section */}
                                 <div className="p-10 flex flex-col flex-1">
-                                    <h3 className="text-3xl font-black text-white mb-6 uppercase italic tracking-tighter leading-none group-hover:text-[#FACC15] transition-colors">
+                                    <h3 className="text-3xl font-black text-black dark:text-white mb-6 uppercase italic tracking-tighter leading-none group-hover:text-[#FACC15] transition-colors">
                                         {trip.title}
                                     </h3>
 
-                                    <p className="text-white/40 text-xs mb-8 line-clamp-3 leading-relaxed font-medium uppercase tracking-[0.05em]">
+                                    <p className="text-black/40 dark:text-white/40 text-xs mb-8 line-clamp-3 leading-relaxed font-medium uppercase tracking-[0.05em]">
                                         {trip.description}
                                     </p>
 
-                                    <div className="grid grid-cols-2 gap-px bg-white/10 mb-10 border border-white/10">
-                                        <div className="flex items-center gap-3 p-4 bg-black/40">
+                                    <div className="grid grid-cols-2 gap-px bg-black/10 dark:bg-white/10 mb-10 border border-black/10 dark:border-white/10">
+                                        <div className="flex items-center gap-3 p-4 bg-white/40 dark:bg-black/40">
                                             <Clock size={16} className="text-[#FACC15]" />
-                                            <span className="text-[10px] font-black text-white/50 uppercase tracking-widest">
+                                            <span className="text-[10px] font-black text-black/50 dark:text-white/50 uppercase tracking-widest">
                                                 {typeof trip.duration === 'object' ? `${trip.duration.days}D` : '1 DAY'}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-3 p-4 bg-black/40">
+                                        <div className="flex items-center gap-3 p-4 bg-white/40 dark:bg-black/40">
                                             <MapPin size={16} className="text-[#FACC15]" />
-                                            <span className="text-[10px] font-black text-white/50 uppercase tracking-widest line-clamp-1">
+                                            <span className="text-[10px] font-black text-black/50 dark:text-white/50 uppercase tracking-widest line-clamp-1">
                                                 {trip.destinations?.length || 1} DEST.
                                             </span>
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center justify-between mt-auto pt-10 border-t border-white/10">
+                                    <div className="flex items-center justify-between mt-auto pt-10 border-t border-black/10 dark:border-white/10">
                                         <div className="flex flex-col">
-                                            <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em] mb-2">
+                                            <span className="text-[9px] font-black text-black/30 dark:text-white/30 uppercase tracking-[0.3em] mb-2">
                                                 {trip.price?.type === 'per-person' ? 'PER PERSON' : 'STARTING FROM'}
                                             </span>
                                             <div className="flex items-baseline gap-2">
                                                 <span className="text-xs font-black text-[#FACC15] uppercase">{trip.price?.currency || 'USD'}</span>
-                                                <span className="text-4xl font-black text-white tracking-tighter italic leading-none">
+                                                <span className="text-4xl font-black text-black dark:text-white tracking-tighter italic leading-none">
                                                     {trip.price?.amount?.toLocaleString() || '0'}
                                                 </span>
                                             </div>
                                         </div>
                                         <Link
                                             href={`/day-trips/${trip.slug}`}
-                                            className="w-16 h-16 bg-[#FACC15] text-black flex items-center justify-center hover:bg-white transition-all transform group-hover:rotate-45"
+                                            className="w-16 h-16 bg-[#FACC15] text-black flex items-center justify-center hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all transform group-hover:rotate-45"
                                         >
                                             <ArrowRight size={28} className="-rotate-45" />
                                         </Link>
@@ -177,11 +177,11 @@ export default function DayTripsClient() {
                 )}
 
                 {filteredTrips.length === 0 && !loading && (
-                    <div className="text-center py-32 bg-white/5 border-4 border-dashed border-white/10">
-                        <p className="text-white/20 font-black uppercase tracking-[0.4em] mb-12 italic">No experiences found for this selection</p>
+                    <div className="text-center py-32 bg-black/5 dark:bg-white/5 border-4 border-dashed border-black/10 dark:border-white/10">
+                        <p className="text-black/20 dark:text-white/20 font-black uppercase tracking-[0.4em] mb-12 italic">No experiences found for this selection</p>
                         <button
                             onClick={() => { setFilter('all'); setSearch(''); }}
-                            className="px-12 py-6 bg-[#FACC15] text-black font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all italic"
+                            className="px-12 py-6 bg-[#FACC15] text-black font-black uppercase tracking-widest text-xs hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all italic"
                         >
                             RESET DISCOVERY
                         </button>
