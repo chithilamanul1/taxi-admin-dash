@@ -51,7 +51,7 @@ export default async function BlogPage() {
                                 <article className="bg-white dark:bg-emerald-900 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col border border-emerald-900/10 dark:border-white/5 group-hover:border-emerald-600">
                                     <div className="relative h-56 overflow-hidden">
                                         <img
-                                            src={post.coverImage || '/logo.png'}
+                                            src={post.imageUrl || '/logo.png'}
                                             alt={post.title}
                                             className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                                         />

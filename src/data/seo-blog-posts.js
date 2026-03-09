@@ -50,7 +50,7 @@ At **Airport Taxis Tours**, we've refined the arrival experience to be as seamle
 
 **Ready to start your Sri Lankan adventure?** [Book your fixed-rate transfer now](/destination-rates)!
         `,
-        coverImage: "https://images.unsplash.com/photo-1596541223130-5d31a73fb6c6?q=80&w=1200&auto=format&fit=crop",
+        imageUrl: "https://images.unsplash.com/photo-1596541223130-5d31a73fb6c6?q=80&w=1200&auto=format&fit=crop",
         isPublished: true,
         tags: ["Travel Tips", "Airport Transfer", "Colombo", "Sri Lanka Guide"],
         seo: {
@@ -94,7 +94,7 @@ We offer specialized **Day Trip Packages** that include a private vehicle and a 
 
 [View our Day Trip Packages](/day-trips)
         `,
-        coverImage: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1200&auto=format&fit=crop",
+        imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1200&auto=format&fit=crop",
         isPublished: true,
         tags: ["Day Trips", "Sightseeing", "Itinerary", "Sigiriya", "Kandy"],
         seo: {
@@ -150,7 +150,7 @@ At **Airport Taxis Tours**, we exclusively offer **Fixed Price Quotes**.
 **Get an instant, transparent quote for your journey today!**  
 [Check Rates Now](/)
         `,
-        coverImage: "/hero.jpg",
+        imageUrl: "/hero.jpg",
         isPublished: true,
         tags: ["Pricing", "Guides", "Safety", "Travel Tips"],
         seo: {

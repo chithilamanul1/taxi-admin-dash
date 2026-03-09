@@ -58,7 +58,7 @@ export default function RecentPosts() {
                             >
                                 <div className="h-64 overflow-hidden relative">
                                     <img
-                                        src={post.coverImage || '/hero.jpg'}
+                                        src={post.imageUrl || '/hero.jpg'}
                                         alt={post.title}
                                         onError={(e) => { e.currentTarget.src = '/hero.jpg'; e.currentTarget.onerror = null; }}
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

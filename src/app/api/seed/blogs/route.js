@@ -31,7 +31,7 @@ export async function POST(request) {
                 slug: post.slug,
                 content: post.content,
                 excerpt: post.excerpt,
-                coverImage: post.coverImage,
+                imageUrl: post.imageUrl || post.coverImage,
                 isPublished: post.isPublished,
                 seo: post.seo,
                 tags: post.tags,

@@ -38,7 +38,7 @@ export default function AdminDashboard() {
     const [pricingCategory, setPricingCategory] = useState('airport-transfer')
     const [editingVehicle, setEditingVehicle] = useState(null)
     const [editForm, setEditForm] = useState({})
-    const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true })
+    const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true, nameBoardPrice: 2000, waitingHourRate: 1000 })
 
     // Tours State
     const [tours, setTours] = useState([])
@@ -873,6 +873,18 @@ export default function AdminDashboard() {
                                                 className="w-full bg-white border border-emerald-900/10 rounded-lg px-3 py-2 text-sm font-bold text-emerald-900 outline-none focus:ring-2 focus:ring-emerald-500/20"
                                             />
                                             <p className="text-[10px] text-emerald-900/60 mt-1">Fee for airport pickup name sign service.</p>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">
+                                                Wait Hour Rate (LKR)
+                                            </label>
+                                            <input
+                                                type="number"
+                                                value={pricingSettings.waitingHourRate || 1000}
+                                                onChange={e => setPricingSettings({ ...pricingSettings, waitingHourRate: Number(e.target.value) })}
+                                                className="w-full bg-white border border-emerald-900/10 rounded-lg px-3 py-2 text-sm font-bold text-emerald-900 outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                            />
+                                            <p className="text-[10px] text-emerald-900/60 mt-1">Standard hourly rate for additional waiting time.</p>
                                         </div>
                                         <div className="flex items-center pt-4">
                                             <label className="flex items-center gap-2 cursor-pointer select-none">

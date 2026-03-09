@@ -62,7 +62,7 @@ export default function Navbar() {
                     </Link>
 
                     {[
-                        { label: 'Airport Drop & Pickup', href: '#' },
+                        { label: 'Airport Drop & Pickup', href: '/' },
                         { label: 'Day Tours', href: '/day-trips' },
                         { label: 'City Tours', href: '/tours' },
                         { label: 'Tour Packages', href: '/tour-packages' },
@@ -234,7 +234,7 @@ export default function Navbar() {
                         <div className="grid grid-cols-2 gap-3">
                             {[
                                 { label: 'Home', href: '/', icon: '🏠', id: 'm-home' },
-                                { label: 'Airport Drop & Pickup', href: '/prices', icon: '✈️', id: 'm-drop' },
+                                { label: 'Airport Drop & Pickup', href: '/', icon: '✈️', id: 'm-drop' },
                                 { label: 'Day Tours', href: '/day-trips', icon: '🌴', id: 'm-day' },
                                 { label: 'City Tours', href: '/tours', icon: '🏙️', id: 'm-city' },
                                 { label: 'Tour Packages', href: '/tour-packages', icon: '🗺️', id: 'm-pkg' },

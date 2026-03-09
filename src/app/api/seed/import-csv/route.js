@@ -21,14 +21,14 @@ const parseDayTrips = (csvContent) => {
     for (let i = 1; i < lines.length; i++) {
         if (!lines[i]) continue;
 
-        // Simple CSV parser for quoted strings
-        const regex = /(".*?"|[^,]+)(?=\s*,|\s*$)/g;
-        const matches = lines[i].match(regex);
-        if (!matches) continue;
+        // Robust CSV splitter for quoted strings and empty fields
+        const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+        const matches = lines[i].split(regex);
+        if (!matches || matches.length < headers.length) continue;
 
         const row = {};
         matches.forEach((val, idx) => {
-            row[headers[idx]] = val.replace(/^"|"$/g, '');
+            row[headers[idx]] = (val || '').trim().replace(/^"|"$/g, '');
         });
 
         if (!row.Trip_Name) continue;
@@ -66,13 +66,13 @@ const parseTourPackages = (csvContent) => {
     for (let i = 1; i < lines.length; i++) {
         if (!lines[i]) continue;
 
-        const regex = /(".*?"|[^,]+)(?=\s*,|\s*$)/g;
-        const matches = lines[i].match(regex);
-        if (!matches) continue;
+        const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+        const matches = lines[i].split(regex);
+        if (!matches || matches.length < headers.length) continue;
 
         const row = {};
         matches.forEach((val, idx) => {
-            row[headers[idx]] = val.replace(/^"|"$/g, '');
+            row[headers[idx]] = (val || '').trim().replace(/^"|"$/g, '');
         });
 
         if (!row.Tour_Package_Title) continue;
@@ -84,7 +84,12 @@ const parseTourPackages = (csvContent) => {
             nights: durationMatch ? parseInt(durationMatch[2]) : 0
         };
 
-        const priceAmount = parseFloat((row.data2 || '0').replace('From $ ', '').replace('Per Person', '').trim());
+        let priceAmount = 0;
+        const priceStr = row.data2 || row.Price || '0';
+        const priceMatch = priceStr.match(/\$?\s*([\d,.]+)/);
+        if (priceMatch) {
+            priceAmount = parseFloat(priceMatch[1].replace(/,/g, ''));
+        }
 
         data.push({
             title: row.Tour_Package_Title,

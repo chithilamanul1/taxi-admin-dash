@@ -25,6 +25,10 @@ const PricingSettingSchema = new mongoose.Schema({
         type: Number,
         default: 2000
     },
+    waitingHourRate: {
+        type: Number,
+        default: 1000
+    },
     updatedBy: {
         type: String // Admin email or ID
     }

@@ -15,7 +15,8 @@ export async function GET(req) {
                 longDistanceThreshold: 175,
                 longDistanceDiscountPercentage: 10,
                 isActive: true,
-                nameBoardPrice: 2000
+                nameBoardPrice: 2000,
+                waitingHourRate: 1000
             });
         }
 
@@ -37,6 +38,7 @@ export async function PUT(req) {
                 longDistanceDiscountPercentage: Number(body.longDistanceDiscountPercentage),
                 isActive: body.isActive,
                 nameBoardPrice: Number(body.nameBoardPrice || 2000),
+                waitingHourRate: Number(body.waitingHourRate || 1000),
                 updatedBy: body.updatedBy || 'admin'
             },
             { new: true, upsert: true }
