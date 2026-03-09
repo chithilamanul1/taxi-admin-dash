@@ -17,10 +17,18 @@ interface VehiclePricing {
     tiers?: any[];
 }
 
+interface Stop {
+    id: number;
+    type: string;
+    address: string;
+    lat: number | null;
+    lon: number | null;
+}
+
 export default function CustomTripPage() {
     const router = useRouter();
     const { convertPrice, currency } = useCurrency();
-    const [stops, setStops] = useState<any[]>([
+    const [stops, setStops] = useState<Stop[]>([
         { id: 1, type: 'pickup', address: '', lat: null, lon: null },
         { id: 2, type: 'dropoff', address: '', lat: null, lon: null }
     ]);
@@ -233,7 +241,7 @@ export default function CustomTripPage() {
                         <TripMap
                             pickup={stops[0]}
                             dropoff={stops[stops.length - 1]}
-                            waypoints={stops.slice(1, stops.length - 1)}
+                            waypoints={stops.slice(1, -1)}
                             onRouteCalculated={setRouteStats}
                         />
                     </div>

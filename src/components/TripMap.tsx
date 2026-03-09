@@ -3,23 +3,43 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
 
+interface Point {
+    name?: string;
+    address?: string;
+    lat?: number | null;
+    lon?: number | null;
+}
+
+interface ResolvedPoint {
+    lat: number;
+    lng: number;
+    name?: string;
+}
+
+interface TripMapProps {
+    pickup: Point | null;
+    dropoff: Point | null;
+    waypoints?: Point[];
+    onRouteCalculated?: (stats: { distanceKm: number; durationMin: number }) => void;
+}
+
 /**
  * TripMap component that handles Google Maps route visualization.
  * Supports both direct coordinates (lat, lon) and geocoding place names.
  */
-export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalculated }) {
-    const mapRef = useRef(null);
-    const [directionsRenderer, setDirectionsRenderer] = useState(null);
-    const [directionsService, setDirectionsService] = useState(null);
-    const [geocoder, setGeocoder] = useState(null);
+export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalculated }: TripMapProps) {
+    const mapRef = useRef<HTMLDivElement>(null);
+    const [directionsRenderer, setDirectionsRenderer] = useState<google.maps.DirectionsRenderer | null>(null);
+    const [directionsService, setDirectionsService] = useState<google.maps.DirectionsService | null>(null);
+    const [geocoder, setGeocoder] = useState<google.maps.Geocoder | null>(null);
     const [mapInitialized, setMapInitialized] = useState(false);
     const [googleLoaded, setGoogleLoaded] = useState(false);
-    const [error, setError] = useState(null);
-    const markersRef = useRef([]);
+    const [error, setError] = useState<string | null>(null);
+    const markersRef = useRef<google.maps.Marker[]>([]);
 
-    const [resolvedPickup, setResolvedPickup] = useState(null);
-    const [resolvedDropoff, setResolvedDropoff] = useState(null);
-    const [resolvedWaypoints, setResolvedWaypoints] = useState([]);
+    const [resolvedPickup, setResolvedPickup] = useState<ResolvedPoint | null>(null);
+    const [resolvedDropoff, setResolvedDropoff] = useState<ResolvedPoint | null>(null);
+    const [resolvedWaypoints, setResolvedWaypoints] = useState<ResolvedPoint[]>([]);
 
     const clearMarkers = () => {
         markersRef.current.forEach(m => m.setMap(null));
@@ -79,26 +99,27 @@ export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalcul
     useEffect(() => {
         if (!mapInitialized || !geocoder) return;
 
-        const geocodePoint = async (point) => {
+        const geocodePoint = async (point: Point | null): Promise<ResolvedPoint | null> => {
             if (!point) return null;
             if (point.lat != null && point.lon != null) {
-                return { lat: parseFloat(point.lat), lng: parseFloat(point.lon), name: point.name };
+                return { lat: parseFloat(point.lat.toString()), lng: parseFloat(point.lon.toString()), name: point.name || point.address };
             }
-            if (!point.name) return null;
+            const searchValue = point.name || point.address;
+            if (!searchValue) return null;
 
             // Try to geocode the name
             return new Promise((resolve) => {
                 // Add "Sri Lanka" to the search for better accuracy
-                const searchQuery = point.name.toLowerCase().includes('sri lanka')
-                    ? point.name
-                    : `${point.name}, Sri Lanka`;
+                const searchQuery = searchValue.toLowerCase().includes('sri lanka')
+                    ? searchValue
+                    : `${searchValue}, Sri Lanka`;
 
                 geocoder.geocode({ address: searchQuery }, (results, status) => {
-                    if (status === 'OK' && results[0]) {
+                    if (status === 'OK' && results && results[0]) {
                         const loc = results[0].geometry.location;
-                        resolve({ lat: loc.lat(), lng: loc.lng(), name: point.name });
+                        resolve({ lat: loc.lat(), lng: loc.lng(), name: searchValue });
                     } else {
-                        console.warn(`TripMap: Geocoding failed for "${point.name}": ${status}`);
+                        console.warn(`TripMap: Geocoding failed for "${searchValue}": ${status}`);
                         resolve(null);
                     }
                 });
@@ -112,7 +133,7 @@ export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalcul
 
             setResolvedPickup(p);
             setResolvedDropoff(d);
-            setResolvedWaypoints(w.filter(item => item !== null));
+            setResolvedWaypoints(w.filter((item): item is ResolvedPoint => item !== null));
         };
 
         resolveAll();
@@ -189,7 +210,7 @@ export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalcul
         }
 
         // Adjust Viewport
-        if (pointsToDisplay > 0) {
+        if (pointsToDisplay > 0 && map) {
             map.fitBounds(bounds);
             if (pointsToDisplay === 1) map.setZoom(12);
         }
@@ -209,18 +230,20 @@ export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalcul
                     travelMode: window.google.maps.TravelMode.DRIVING,
                 },
                 (result, status) => {
-                    if (status === 'OK') {
+                    if (status === 'OK' && result) {
                         directionsRenderer.setDirections(result);
                         const route = result.routes[0];
                         let dist = 0, dur = 0;
                         route.legs.forEach(leg => {
-                            dist += leg.distance.value;
-                            dur += leg.duration.value;
+                            if (leg.distance && leg.duration) {
+                                dist += leg.distance.value;
+                                dur += leg.duration.value;
+                            }
                         });
                         if (onRouteCalculated) {
                             onRouteCalculated({
                                 distanceKm: Math.round(dist / 100) / 10,
-                                durationHrs: Math.round(dur / 360) / 10
+                                durationMin: Math.round(dur / 60)
                             });
                         }
                     } else {
