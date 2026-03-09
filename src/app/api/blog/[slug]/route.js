@@ -4,10 +4,19 @@ import Post from '../../../../models/Post';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../lib/auth';
 
+async function findPost(slug) {
+    const mongoose = require('mongoose');
+    const isId = mongoose.Types.ObjectId.isValid(slug);
+    if (isId) {
+        return await Post.findById(slug);
+    }
+    return await Post.findOne({ slug });
+}
+
 export async function GET(req, { params }) {
     try {
         await dbConnect();
-        const post = await Post.findOne({ slug: params.slug });
+        const post = await findPost(params.slug);
 
         if (!post) {
             return NextResponse.json({ success: false, error: 'Post not found' }, { status: 404 });
@@ -29,8 +38,13 @@ export async function PUT(req, { params }) {
         await dbConnect();
         const body = await req.json();
 
+        // Check if params.slug is an ID or a slug
+        const mongoose = require('mongoose');
+        const isId = mongoose.Types.ObjectId.isValid(params.slug);
+        const query = isId ? { _id: params.slug } : { slug: params.slug };
+
         const post = await Post.findOneAndUpdate(
-            { slug: params.slug },
+            query,
             body,
             { new: true, runValidators: true }
         );
@@ -53,7 +67,11 @@ export async function DELETE(req, { params }) {
         }
 
         await dbConnect();
-        const post = await Post.findOneAndDelete({ slug: params.slug });
+        const mongoose = require('mongoose');
+        const isId = mongoose.Types.ObjectId.isValid(params.slug);
+        const query = isId ? { _id: params.slug } : { slug: params.slug };
+
+        const post = await Post.findOneAndDelete(query);
 
         if (!post) {
             return NextResponse.json({ success: false, error: 'Post not found' }, { status: 404 });

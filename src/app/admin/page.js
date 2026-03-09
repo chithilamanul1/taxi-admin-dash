@@ -1845,7 +1845,7 @@ export default function AdminDashboard() {
                                                             <button
                                                                 onClick={() => {
                                                                     setPostForm(post)
-                                                                    setEditingPost(post.slug) // Store slug for URL
+                                                                    setEditingPost(post._id) // Store ID for URL instead of slug
                                                                 }}
                                                                 className="text-emerald-900 hover:text-emerald-600 font-medium"
                                                             >
