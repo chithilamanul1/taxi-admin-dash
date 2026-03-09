@@ -17,6 +17,52 @@ export default function TourPackageDetailsClient({ tour }) {
     const [memberCount, setMemberCount] = useState({ adults: 2, children: 0 })
     const [isModalOpen, setIsModalOpen] = useState(false)
 
+    // Extract map points for visualization
+    const getMapPoints = () => {
+        const points = [];
+
+        // Priority 1: Itinerary (Tour Packages)
+        if (tour.itinerary && tour.itinerary.length > 0) {
+            tour.itinerary.forEach((item) => {
+                const name = item.location || item.title;
+                if (name) {
+                    points.push({
+                        lat: item.lat,
+                        lon: item.lng,
+                        name: name
+                    });
+                }
+            });
+        }
+
+        // Priority 2: Experience (Backup)
+        if (points.length === 0 && tour.experience && tour.experience.length > 0) {
+            tour.experience.forEach((item) => {
+                if (item.heading) {
+                    points.push({
+                        lat: item.lat,
+                        lon: item.lng,
+                        name: item.heading
+                    });
+                }
+            });
+        }
+
+        // Priority 3: Destination list
+        if (points.length === 0 && Array.isArray(tour.destinations)) {
+            tour.destinations.forEach((dest) => {
+                points.push({ name: dest });
+            });
+        }
+
+        return points;
+    };
+
+    const mapPoints = getMapPoints();
+    const pickup = mapPoints[0] || null;
+    const dropoff = mapPoints.length > 1 ? mapPoints[mapPoints.length - 1] : null;
+    const waypoints = mapPoints.length > 2 ? mapPoints.slice(1, -1) : [];
+
     // Helper for icons mapping
     const getIcon = (name) => {
         const icons = {
@@ -67,177 +113,206 @@ export default function TourPackageDetailsClient({ tour }) {
     });
 
     return (
-        <main className="min-h-screen bg-white pb-20 text-emerald-900">
+        <main className="min-h-screen bg-[#F8F9FA] pb-20 text-slate-900 font-sans">
             {/* Navigation Bar */}
-            <div className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
-                <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-                    <Link href="/tour-packages" className="flex items-center gap-2 text-slate-500 hover:text-emerald-600 transition-colors font-black uppercase tracking-widest text-xs">
-                        <ArrowLeft size={18} /> Back to Packages
+            <div className="fixed top-0 left-0 w-full z-50 bg-black border-b-4 border-[#FACC15]">
+                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+                    <Link href="/tour-packages" className="flex items-center gap-2 text-white hover:text-[#FACC15] transition-colors font-black uppercase tracking-tighter text-sm">
+                        <ArrowLeft size={18} /> Back
                     </Link>
-                    <div className="hidden md:flex items-center gap-6">
-                        <span className="text-[10px] font-black text-slate-600 font-bold uppercase tracking-widest">You are viewing</span>
-                        <span className="text-sm font-black text-emerald-900 truncate max-w-[200px]">{tour.title}</span>
+                    <div className="hidden md:flex items-center gap-4">
+                        <span className="text-[10px] font-black text-[#FACC15] uppercase tracking-widest">Selected Package</span>
+                        <span className="text-sm font-black text-white truncate max-w-[300px] uppercase tracking-tighter">{tour.title}</span>
                     </div>
-                    <button onClick={() => setIsModalOpen(true)} className="px-6 py-2.5 bg-emerald-500 text-white rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-emerald-200 hover:bg-emerald-600 transition-all">
+                    <button onClick={() => setIsModalOpen(true)} className="px-6 h-10 bg-[#FACC15] text-black font-black uppercase tracking-widest text-xs hover:bg-white transition-all">
                         Book Now
                     </button>
                 </div>
             </div>
 
             {/* Hero Section */}
-            <div className="relative h-[70vh] w-full overflow-hidden pt-20">
-                <Image
-                    src={tour.image || tour.heroImage || tour.images?.[0]}
-                    alt={tour.title}
-                    fill
-                    className="object-cover"
-                    priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 w-full p-6 pb-20 md:p-12 md:pb-24 lg:p-20 lg:pb-32">
-                    <div className="max-w-7xl mx-auto">
-                        <div className="flex flex-wrap gap-3 mb-6">
-                            <span className="px-4 py-1.5 bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
-                                {tour.type || 'Premium Tour'}
-                            </span>
-                            <span className="px-4 py-1.5 bg-white/90 backdrop-blur text-emerald-900 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg flex items-center gap-2 border border-slate-100">
-                                <Clock size={14} className="text-emerald-500" /> {typeof tour.duration === 'object' ? `${tour.duration.days}D / ${tour.duration.nights}N` : tour.duration}
-                            </span>
+            <div className="relative h-[60vh] w-full overflow-hidden pt-16">
+                <div className="absolute inset-0">
+                    <Image
+                        src={tour.image || tour.heroImage || tour.images?.[0] || '/vehicles/placeholder.png'}
+                        alt={tour.title}
+                        fill
+                        className="object-cover grayscale-[20%]"
+                        priority
+                    />
+                    <div className="absolute inset-0 bg-black/40" />
+                </div>
+
+                <div className="absolute inset-0 flex flex-col justify-end p-6 pb-12 md:p-12 lg:p-20">
+                    <div className="max-w-7xl mx-auto w-full">
+                        <div className="inline-block bg-[#FACC15] text-black px-4 py-1 text-[10px] font-black uppercase tracking-widest mb-4">
+                            {tour.type || 'Premium Tour'}
                         </div>
-                        <h1 className="text-4xl md:text-6xl lg:text-8xl font-black text-emerald-900 mb-6 leading-[1.1] max-w-5xl tracking-tighter drop-shadow-sm">
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-none tracking-tighter uppercase">
                             {tour.title}
                         </h1>
-                        <div className="flex items-center gap-3 text-slate-700 font-black uppercase tracking-widest text-xs">
-                            <MapPin size={18} className="text-emerald-500" />
-                            <span>{Array.isArray(tour.destinations) ? tour.destinations.join(' • ') : 'Exploring Sri Lanka'}</span>
+                        <div className="flex flex-wrap items-center gap-6">
+                            <div className="flex items-center gap-3 text-white/90 font-black uppercase tracking-widest text-xs bg-black/50 backdrop-blur-sm p-3 border-l-4 border-[#FACC15]">
+                                <MapPin size={16} className="text-[#FACC15]" />
+                                <span>{Array.isArray(tour.destinations) ? tour.destinations.join(' / ') : 'Exploring Sri Lanka'}</span>
+                            </div>
+                            <div className="flex items-center gap-3 text-white/90 font-black uppercase tracking-widest text-xs bg-black/50 backdrop-blur-sm p-3 border-l-4 border-[#FACC15]">
+                                <Clock size={16} className="text-[#FACC15]" />
+                                <span>{typeof tour.duration === 'object' ? `${tour.duration.days}D / ${tour.duration.nights}N` : tour.duration}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-6 -mt-12 relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div className="max-w-7xl mx-auto px-6 -mt-8 relative z-10">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                     {/* Left Column (8/12) */}
-                    <div className="lg:col-span-8 space-y-16">
-                        {/* Quick Stats */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                            <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col items-center text-center gap-2">
-                                <Users size={24} className="text-emerald-500" />
-                                <span className="text-[10px] font-black text-slate-600 font-bold uppercase tracking-widest">Group Size</span>
-                                <span className="text-sm font-black text-emerald-900">Private Tour</span>
+                    <div className="lg:col-span-8 space-y-12">
+                        {/* Quick Stats bar */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 bg-black p-1 border-b-8 border-[#FACC15]">
+                            <div className="bg-white p-6 border-r border-slate-100 flex flex-col items-center text-center gap-2">
+                                <Users size={20} className="text-black" />
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Group</span>
+                                <span className="text-sm font-black text-black uppercase">Private Only</span>
                             </div>
-                            <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col items-center text-center gap-2">
-                                <Navigation size={24} className="text-emerald-500" />
-                                <span className="text-[10px] font-black text-slate-600 font-bold uppercase tracking-widest">Transport</span>
-                                <span className="text-sm font-black text-emerald-900">Private AC Car</span>
+                            <div className="bg-white p-6 border-r border-slate-100 flex flex-col items-center text-center gap-2">
+                                <Navigation size={20} className="text-black" />
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Transit</span>
+                                <span className="text-sm font-black text-black uppercase">Luxury AC</span>
                             </div>
-                            <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col items-center text-center gap-2">
-                                <Hotel size={24} className="text-emerald-500" />
-                                <span className="text-[10px] font-black text-slate-600 font-bold uppercase tracking-widest">Stay</span>
-                                <span className="text-sm font-black text-emerald-900">Quality Hotels</span>
+                            <div className="bg-white p-6 border-r border-slate-100 flex flex-col items-center text-center gap-2">
+                                <Hotel size={20} className="text-black" />
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Hotels</span>
+                                <span className="text-sm font-black text-black uppercase">3-5 Star</span>
                             </div>
-                            <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col items-center text-center gap-2">
-                                <ShieldCheck size={24} className="text-emerald-500" />
-                                <span className="text-[10px] font-black text-slate-600 font-bold uppercase tracking-widest">Secure</span>
-                                <span className="text-sm font-black text-emerald-900">Pay on Arrival</span>
+                            <div className="bg-white p-6 flex flex-col items-center text-center gap-2">
+                                <ShieldCheck size={20} className="text-[#FACC15]" fill="currentColor" />
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Trust</span>
+                                <span className="text-sm font-black text-black uppercase">Verified</span>
                             </div>
                         </div>
 
                         {/* Overview */}
-                        <section className="bg-white rounded-[3rem] p-10 md:p-12 shadow-2xl shadow-slate-200/50 border border-slate-100">
-                            <h2 className="text-3xl font-black text-emerald-900 mb-8 tracking-tight flex items-center gap-4">
-                                <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center">
-                                    <Info className="text-emerald-500" size={24} />
-                                </div>
-                                Tour Overview
-                            </h2>
-                            <div className="prose prose-slate max-w-none text-slate-800 leading-relaxed text-lg mb-10">
+                        <section className="bg-white border-2 border-black p-8 md:p-12">
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="w-2 h-8 bg-[#FACC15]"></div>
+                                <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
+                                    Package Overview
+                                </h2>
+                            </div>
+                            <div className="prose prose-slate max-w-none text-slate-800 leading-relaxed text-lg mb-10 font-medium">
                                 {tour.description}
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-slate-200 border border-slate-200">
                                 {tour.highlights?.map((h, i) => (
-                                    <div key={i} className="flex items-center gap-4 p-5 bg-slate-50 rounded-[1.5rem] border border-slate-100 group hover:border-emerald-200 transition-colors">
-                                        <div className="w-8 h-8 shrink-0 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-emerald-500 transition-colors">
-                                            <Check size={16} className="text-emerald-500 group-hover:text-white" />
-                                        </div>
-                                        <span className="font-bold text-slate-700 text-sm leading-snug">{h}</span>
+                                    <div key={i} className="flex items-center gap-4 p-5 bg-white group hover:bg-slate-50 transition-colors">
+                                        <Check size={18} className="text-[#FACC15] shrink-0" strokeWidth={4} />
+                                        <span className="font-black text-black text-sm uppercase tracking-tight">{h}</span>
                                     </div>
                                 ))}
                             </div>
                         </section>
 
+                        {/* Interactive Route Map */}
+                        <section className="bg-white border-2 border-black p-8 md:p-12">
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="w-2 h-8 bg-black"></div>
+                                <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
+                                    Journey Visualization
+                                </h2>
+                            </div>
 
+                            <div className="w-full h-[400px] bg-slate-100 border-4 border-black relative overflow-hidden mb-6">
+                                {pickup ? (
+                                    <TripMap
+                                        pickup={pickup}
+                                        dropoff={dropoff}
+                                        waypoints={waypoints}
+                                        onRouteCalculated={(data) => console.log('Route stats:', data)}
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-slate-50">
+                                        <MapIcon className="text-slate-300" size={48} />
+                                        <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">No route data available</p>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="p-4 bg-black text-[#FACC15] font-black uppercase tracking-widest text-[10px] inline-block">
+                                Interactive GPS Route Active
+                            </div>
+                        </section>
 
                         {/* Itinerary */}
                         {tour.itinerary && tour.itinerary.length > 0 && (
-                            <div className="mt-12 bg-white rounded-lg p-8 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] border border-slate-100">
-                                <h2 className="text-2xl font-bold text-[#4B5E73] mb-8 border-b border-slate-200 pb-4">
-                                    Itinerary
-                                </h2>
-                                <div className="space-y-0">
+                            <section className="bg-white border-2 border-black p-8 md:p-12">
+                                <div className="flex items-center gap-4 mb-10">
+                                    <div className="w-2 h-8 bg-[#FACC15]"></div>
+                                    <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
+                                        Full Itinerary
+                                    </h2>
+                                </div>
+                                <div className="space-y-4">
                                     {tour.itinerary.map((item, idx) => {
                                         const isExpanded = collapsedDay !== item.day;
                                         return (
-                                            <div key={item.day || idx} className="group border-b border-[#FACC15]">
+                                            <div key={item.day || idx} className="border-t-4 border-black first:border-t-0">
                                                 <button
                                                     onClick={() => setCollapsedDay(collapsedDay === item.day ? null : item.day)}
-                                                    className="w-full flex items-center justify-between py-5 transition-colors hover:bg-slate-50/50"
+                                                    className={`w-full flex items-center gap-6 py-8 px-4 transition-colors text-left ${isExpanded ? 'bg-slate-50' : 'bg-white hover:bg-slate-50'}`}
                                                 >
-                                                    <div className="flex items-center gap-6">
-                                                        <div className="bg-[#FACC15] text-slate-900 font-semibold px-4 py-1.5 text-sm whitespace-nowrap min-w-[80px] text-center shadow-sm">
-                                                            Day {item.day}
-                                                        </div>
-                                                        <h3 className="text-sm font-bold text-[#4B5E73] text-left">
+                                                    <div className={`w-12 h-12 shrink-0 flex flex-col items-center justify-center font-black transition-colors ${isExpanded ? 'bg-black text-[#FACC15]' : 'bg-[#FACC15] text-black'}`}>
+                                                        <span className="text-[8px] uppercase">DAY</span>
+                                                        <span className="text-xl -mt-1">{item.day}</span>
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <h3 className="text-xl font-black tracking-tighter text-black uppercase">
                                                             {item.title}
                                                         </h3>
+                                                        {item.location && <span className="text-[10px] font-black uppercase tracking-widest block mt-1 text-slate-500">{item.location}</span>}
                                                     </div>
-                                                    <div className={`transition-transform duration-300 mr-2 ${isExpanded ? 'rotate-180 text-emerald-600' : 'text-slate-400'}`}>
-                                                        <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                                        </svg>
+                                                    <div className="text-black">
+                                                        {isExpanded ? <Minus size={20} strokeWidth={3} /> : <Plus size={20} strokeWidth={3} />}
                                                     </div>
                                                 </button>
-                                                <div className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0 overflow-hidden'}`}>
-                                                    <div className="overflow-hidden">
-                                                        <div className="p-6 bg-slate-50 mt-2 mb-4 text-sm text-slate-600 leading-relaxed max-w-3xl whitespace-pre-line border-l-2 border-[#FACC15]">
+                                                <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-[1000px] opacity-100 border-b-4 border-black' : 'max-h-0 opacity-0'}`}>
+                                                    <div className="p-8 bg-white">
+                                                        <p className="text-slate-800 leading-relaxed text-base font-bold mb-6 whitespace-pre-line">
                                                             {item.description || item.desc}
-                                                            {item.activities && item.activities.length > 0 && (
-                                                                <div className="mt-4 flex flex-wrap gap-2">
-                                                                    {item.activities.map((act, i) => (
-                                                                        <span key={i} className="px-3 py-1 bg-white rounded text-[10px] font-bold text-slate-500 uppercase tracking-widest border border-slate-200">{act}</span>
-                                                                    ))}
-                                                                </div>
-                                                            )}
-                                                        </div>
+                                                        </p>
+                                                        {item.activities && item.activities.length > 0 && (
+                                                            <div className="flex flex-wrap gap-2">
+                                                                {item.activities.map((act, i) => (
+                                                                    <span key={i} className="px-3 py-1 bg-black text-[#FACC15] text-[10px] font-black uppercase tracking-widest border border-black">{act}</span>
+                                                                ))}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
                                         );
                                     })}
                                 </div>
-                            </div>
+                            </section>
                         )}
 
-                        {/* Experience Timeline (for Day Trips / Single Day focus) */}
+                        {/* Experience Timeline */}
                         {tour.experience && tour.experience.length > 0 && (
-                            <section className="bg-white rounded-[3rem] p-10 md:p-12 shadow-2xl shadow-slate-200/50 border border-slate-100">
-                                <h2 className="text-3xl font-black text-emerald-900 mb-12 tracking-tight flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center">
-                                        <Navigation className="text-emerald-500" size={24} />
-                                    </div>
-                                    The Experience
-                                </h2>
-                                <div className="space-y-0 ml-4 border-l-2 border-dashed border-slate-200">
-                                    {tour.experience.map((item, idx) => (
-                                        <div key={idx} className="relative pb-12 pl-12 last:pb-0">
-                                            {/* Dot */}
-                                            <div className="absolute left-0 top-0 -translate-x-1/2 w-8 h-8 rounded-full bg-emerald-900 border-4 border-white shadow-lg flex items-center justify-center">
-                                                <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
-                                            </div>
-                                            {/* Content */}
-                                            <div className="space-y-2">
-                                                <h3 className="text-xl font-black text-emerald-900 uppercase tracking-tight">{item.heading}</h3>
-                                                <p className="text-slate-600 font-bold leading-relaxed">{item.text}</p>
+                            <section className="bg-white border-2 border-black p-8 md:p-12">
+                                <div className="flex items-center gap-4 mb-12">
+                                    <div className="w-2 h-8 bg-black"></div>
+                                    <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
+                                        Your Experience
+                                    </h2>
+                                </div>
+                                <div className="space-y-0 relative ml-2">
+                                    <div className="absolute left-1 top-0 bottom-0 w-1 bg-black opacity-10" />
+                                    {tour.experience.map((exp, idx) => (
+                                        <div key={idx} className="relative pl-12 pb-12 last:pb-0">
+                                            <div className="absolute left-0 top-1.5 w-3 h-3 bg-black ring-4 ring-white" />
+                                            <div className="flex flex-col gap-2">
+                                                <h4 className="text-xl font-black text-black uppercase tracking-tighter">{exp.heading}</h4>
+                                                <p className="text-slate-600 font-bold text-base leading-relaxed max-w-2xl">{exp.text}</p>
                                             </div>
                                         </div>
                                     ))}
@@ -246,166 +321,94 @@ export default function TourPackageDetailsClient({ tour }) {
                         )}
 
                         {/* Inclusions & Exclusions */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                            <section className="bg-white rounded-[2rem] p-10 shadow-2xl shadow-slate-200/50 border-2 border-slate-100">
-                                <h3 className="text-2xl font-black text-emerald-900 mb-8 uppercase tracking-tighter flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-yellow-500 rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-200">
-                                        <CheckCircle size={24} className="text-white" />
-                                    </div>
-                                    WHAT'S INCLUDED
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-black border-4 border-black">
+                            <section className="bg-white p-10">
+                                <h3 className="text-2xl font-black text-black mb-8 uppercase tracking-tighter flex items-center gap-3">
+                                    <CheckCircle size={24} className="text-[#FACC15]" />
+                                    INCLUSIONS
                                 </h3>
-                                <ul className="grid grid-cols-1 gap-4">
+                                <ul className="space-y-4">
                                     {validInclusions.map((item, i) => (
-                                        <li key={i} className="flex gap-4 text-slate-800 items-start group">
-                                            <div className="shrink-0 mt-0.5 w-6 h-6 bg-slate-900 rounded flex items-center justify-center shadow-md transition-transform group-hover:scale-110">
-                                                <Check size={14} className="text-white" strokeWidth={3} />
-                                            </div>
-                                            <span className="text-sm font-black leading-tight tracking-tight uppercase italic">{item}</span>
+                                        <li key={i} className="flex gap-3 text-black items-start group">
+                                            <div className="shrink-0 mt-1 w-2 h-2 bg-black rounded-none"></div>
+                                            <span className="text-sm font-black uppercase tracking-tight">{item}</span>
                                         </li>
                                     ))}
                                     {validInclusions.length === 0 && <li className="text-slate-400 text-xs italic">No inclusions specified</li>}
                                 </ul>
                             </section>
-                            <section className="bg-white rounded-[2rem] p-10 shadow-2xl shadow-slate-200/50 border-2 border-slate-100">
-                                <h3 className="text-2xl font-black text-emerald-900 mb-8 uppercase tracking-tighter flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-200">
-                                        <XCircle size={24} className="text-white" />
-                                    </div>
-                                    NOT INCLUDED
+                            <section className="bg-white p-10 border-l-4 border-black">
+                                <h3 className="text-2xl font-black text-black mb-8 uppercase tracking-tighter flex items-center gap-3">
+                                    <XCircle size={24} className="text-red-500" />
+                                    EXCLUSIONS
                                 </h3>
-                                <ul className="grid grid-cols-1 gap-4">
+                                <ul className="space-y-4">
                                     {validExclusions.map((item, i) => (
-                                        <li key={i} className="flex gap-4 text-slate-800 items-start group">
-                                            <div className="shrink-0 mt-0.5 w-6 h-6 bg-[#FACC15] rounded flex items-center justify-center shadow-md transition-transform group-hover:scale-110">
-                                                <X size={14} className="text-white" strokeWidth={3} />
-                                            </div>
-                                            <span className="text-sm font-black leading-tight tracking-tight uppercase italic">{item}</span>
+                                        <li key={i} className="flex gap-3 text-slate-500 items-start group">
+                                            <div className="shrink-0 mt-1 w-2 h-2 bg-slate-300 rounded-none"></div>
+                                            <span className="text-sm font-black uppercase tracking-tight line-through opacity-70">{item}</span>
                                         </li>
                                     ))}
                                     {validExclusions.length === 0 && <li className="text-slate-400 text-xs italic">No exclusions specified</li>}
                                 </ul>
                             </section>
                         </div>
-
-                        {/* Suitability & Rules */}
-                        {(tour.notSuitableFor?.length > 0 || tour.notAllowed?.length > 0) && (
-                            <div className="space-y-12">
-                                {tour.notSuitableFor?.length > 0 && (
-                                    <section className="bg-white rounded-[3rem] p-10 md:p-14 shadow-2xl shadow-slate-200/50 border border-slate-100">
-                                        <h3 className="text-2xl font-black text-emerald-900 mb-10 uppercase tracking-tighter flex items-center gap-4">
-                                            <div className="w-12 h-12 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center shadow-sm">
-                                                <Ban size={24} />
-                                            </div>
-                                            Not Suitable For - [ People With ]
-                                        </h3>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-12">
-                                            {tour.notSuitableFor.map((item, i) => (
-                                                <div key={i} className="flex items-center gap-4 group">
-                                                    <div className="shrink-0 w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-200 transition-colors group-hover:bg-rose-50 group-hover:border-rose-200">
-                                                        <Ban size={16} className="text-slate-400 group-hover:text-rose-500" />
-                                                    </div>
-                                                    <span className="text-base font-black text-slate-700 uppercase italic tracking-tight">{item}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </section>
-                                )}
-                                {tour.notAllowed?.length > 0 && (
-                                    <section className="bg-white rounded-[3rem] p-10 md:p-14 shadow-2xl shadow-slate-200/50 border border-slate-100">
-                                        <h3 className="text-2xl font-black text-emerald-900 mb-10 uppercase tracking-tighter flex items-center gap-4">
-                                            <div className="w-12 h-12 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center shadow-sm">
-                                                <TriangleAlert size={24} />
-                                            </div>
-                                            Not Allowed
-                                        </h3>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-12">
-                                            {tour.notAllowed.map((item, i) => (
-                                                <div key={i} className="flex items-center gap-4 group">
-                                                    <div className="shrink-0 w-8 h-8 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-200 transition-colors group-hover:bg-amber-50 group-hover:border-amber-200">
-                                                        <TriangleAlert size={16} className="text-slate-400 group-hover:text-amber-500" />
-                                                    </div>
-                                                    <span className="text-base font-black text-slate-700 uppercase italic tracking-tight">{item}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </section>
-                                )}
-                            </div>
-                        )}
-
-
                     </div>
 
-                    {/* Right Column (4/12) - Sidebar */}
-                    <div className="lg:col-span-4 space-y-10">
-                        {/* Booking Widget */}
-                        <div className="sticky top-28 space-y-10">
-                            <div className="bg-white rounded-[3rem] p-10 shadow-2xl shadow-slate-200 border border-slate-100 relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl -mr-24 -mt-24"></div>
-
-                                <div className="mb-10 text-center">
-                                    <span className="text-[10px] font-black text-slate-600 font-bold uppercase tracking-widest block mb-1">Unbeatable Value</span>
-                                    <div className="flex items-center justify-center gap-1">
-                                        <span className="text-xl font-black text-emerald-500 uppercase">{priceCurrency}</span>
-                                        <span className="text-6xl font-black text-emerald-900 tracking-tighter">{priceAmount?.toLocaleString()}</span>
+                    {/* Right Column (Sidebar) */}
+                    <div className="lg:col-span-4 space-y-8">
+                        <div className="sticky top-24 space-y-8">
+                            <div className="bg-black text-white p-1 pt-0">
+                                <div className="bg-white p-8 border-b-8 border-[#FACC15]">
+                                    <div className="mb-8 text-center bg-black py-4 px-2">
+                                        <span className="text-[10px] font-black text-[#FACC15] uppercase tracking-widest block mb-2">Web Exclusive Deal</span>
+                                        <div className="flex items-center justify-center gap-1 text-white">
+                                            <span className="text-xl font-black">{priceCurrency}</span>
+                                            <span className="text-6xl font-black tracking-tighter">{priceAmount?.toLocaleString()}</span>
+                                        </div>
+                                        <span className="text-[10px] font-black text-white uppercase tracking-widest mt-2 block">Starting From Price</span>
                                     </div>
-                                    <span className="text-xs font-black text-slate-500 uppercase tracking-widest">per person</span>
-                                </div>
 
-                                <div className="space-y-6 mb-10">
-                                    <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-4">Adults</label>
-                                        <div className="flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                            <button onClick={() => setMemberCount(prev => ({ ...prev, adults: Math.max(1, prev.adults - 1) }))} className="w-12 h-12 flex items-center justify-center bg-white border border-slate-200 hover:border-emerald-400 rounded-xl transition-all shadow-sm"><Minus size={20} className="text-slate-400" /></button>
-                                            <span className="text-2xl font-black text-emerald-900">{memberCount.adults}</span>
-                                            <button onClick={() => setMemberCount(prev => ({ ...prev, adults: prev.adults + 1 }))} className="w-12 h-12 flex items-center justify-center bg-white border border-slate-200 hover:border-emerald-400 rounded-xl transition-all shadow-sm"><Plus size={20} className="text-slate-400" /></button>
+                                    <div className="space-y-4 mb-8">
+                                        <div className="flex items-center justify-between border-2 border-black p-2">
+                                            <span className="text-[10px] font-black uppercase tracking-widest px-4">Adults</span>
+                                            <div className="flex items-center bg-black p-1">
+                                                <button onClick={() => setMemberCount(prev => ({ ...prev, adults: Math.max(1, prev.adults - 1) }))} className="w-8 h-8 flex items-center justify-center text-white hover:text-[#FACC15]"><Minus size={16} /></button>
+                                                <span className="w-10 text-center font-black text-white">{memberCount.adults}</span>
+                                                <button onClick={() => setMemberCount(prev => ({ ...prev, adults: prev.adults + 1 }))} className="w-8 h-8 flex items-center justify-center text-white hover:text-[#FACC15]"><Plus size={16} /></button>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center justify-between border-2 border-black p-2">
+                                            <span className="text-[10px] font-black uppercase tracking-widest px-4">Children</span>
+                                            <div className="flex items-center bg-black p-1">
+                                                <button onClick={() => setMemberCount(prev => ({ ...prev, children: Math.max(0, prev.children - 1) }))} className="w-8 h-8 flex items-center justify-center text-white hover:text-[#FACC15]"><Minus size={16} /></button>
+                                                <span className="w-10 text-center font-black text-white">{memberCount.children}</span>
+                                                <button onClick={() => setMemberCount(prev => ({ ...prev, children: prev.children + 1 }))} className="w-8 h-8 flex items-center justify-center text-white hover:text-[#FACC15]"><Plus size={16} /></button>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="space-y-3">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-4">Children</label>
-                                        <div className="flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                            <button onClick={() => setMemberCount(prev => ({ ...prev, children: Math.max(0, prev.children - 1) }))} className="w-12 h-12 flex items-center justify-center bg-white border border-slate-200 hover:border-emerald-400 rounded-xl transition-all shadow-sm"><Minus size={20} className="text-slate-400" /></button>
-                                            <span className="text-2xl font-black text-emerald-900">{memberCount.children}</span>
-                                            <button onClick={() => setMemberCount(prev => ({ ...prev, children: prev.children + 1 }))} className="w-12 h-12 flex items-center justify-center bg-white border border-slate-200 hover:border-emerald-400 rounded-xl transition-all shadow-sm"><Plus size={20} className="text-slate-400" /></button>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div className="space-y-4">
-                                    <button onClick={() => setIsModalOpen(true)} className="w-full py-6 bg-emerald-500 hover:bg-emerald-600 text-white rounded-[1.5rem] font-black text-xl shadow-xl shadow-emerald-200 transition-all hover:scale-[1.02] flex items-center justify-center gap-3">
-                                        <Calendar size={24} /> Instant Booking
-                                    </button>
-                                    <a href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking "${tour.title}".`)}`} target="_blank" className="w-full py-6 bg-[#25D366] hover:bg-[#1fae54] text-white rounded-[1.5rem] font-black text-xl shadow-xl shadow-emerald-100 transition-all hover:scale-[1.02] flex items-center justify-center gap-3">
-                                        <MessageCircle size={24} /> WhatsApp Us
-                                    </a>
-                                </div>
-
-                                <div className="mt-8 pt-8 border-t border-slate-50 flex items-center justify-center gap-6">
-                                    <div className="flex flex-col items-center gap-1">
-                                        <ShieldCheck size={20} className="text-emerald-500" />
-                                        <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight">Secure Payments</span>
-                                    </div>
-                                    <div className="flex flex-col items-center gap-1">
-                                        <Users size={20} className="text-emerald-500" />
-                                        <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight">Private Transfers</span>
-                                    </div>
-                                    <div className="flex flex-col items-center gap-1">
-                                        <Shield size={20} className="text-indigo-500" />
-                                        <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest text-center leading-tight">Full Insurance</span>
+                                    <div className="space-y-4">
+                                        <button onClick={() => setIsModalOpen(true)} className="w-full h-16 bg-[#FACC15] text-black font-black uppercase tracking-widest text-lg hover:bg-black hover:text-white transition-all border-4 border-black">
+                                            Book Package
+                                        </button>
+                                        <a href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking the tour package "${tour.title}".`)}`} target="_blank" className="w-full h-16 bg-white text-black font-black uppercase tracking-widest text-lg border-4 border-black flex items-center justify-center gap-3 hover:bg-black hover:text-white transition-all">
+                                            <MessageCircle size={22} /> WhatsApp Inquiry
+                                        </a>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Trip Planner Meta Callout */}
-                            <div className="bg-emerald-900 rounded-[3rem] p-10 text-white relative overflow-hidden shadow-2xl">
-                                <div className="absolute bottom-0 right-0 p-4 opacity-10">
-                                    <Navigation size={100} />
+                            {/* Trust Seals */}
+                            <div className="bg-white border-2 border-black p-6 grid grid-cols-2 gap-4">
+                                <div className="flex flex-col items-center gap-2 text-center p-3 grayscale group-hover:grayscale-0 transition-all">
+                                    <ShieldCheck size={24} className="text-[#FACC15]" />
+                                    <span className="text-[8px] font-black text-black uppercase tracking-tight">Secured Tour</span>
                                 </div>
-                                <h4 className="text-xl font-black mb-4 tracking-tight">Need a custom plan?</h4>
-                                <p className="text-slate-400 text-sm mb-8 leading-relaxed font-medium">Use our AI Trip Planner to create a completely unique itinerary based on your interests.</p>
-                                <Link href="/trip-planner" className="flex items-center justify-center gap-2 py-4 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/10 font-black text-xs uppercase tracking-widest transition-colors">
-                                    Launch Planner <Plus size={16} />
-                                </Link>
+                                <div className="flex flex-col items-center gap-2 text-center p-3 grayscale group-hover:grayscale-0 transition-all">
+                                    <Users size={24} className="text-[#FACC15]" />
+                                    <span className="text-[8px] font-black text-black uppercase tracking-tight">Private Guide</span>
+                                </div>
                             </div>
                         </div>
                     </div>

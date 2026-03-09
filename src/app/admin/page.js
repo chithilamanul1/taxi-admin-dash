@@ -1707,7 +1707,7 @@ export default function AdminDashboard() {
                                                                         formData.append('folder', 'tours')
                                                                         const res = await fetch('/api/upload', { method: 'POST', body: formData })
                                                                         const data = await res.json()
-                                                                        if (data.url) setTourForm({ ...tourForm, image: data.url })
+                                                                        if (data.url || data.secure_url) setTourForm({ ...tourForm, image: data.url })
                                                                     }
                                                                 }}
                                                                 className="text-xs w-full"
@@ -1921,11 +1921,11 @@ export default function AdminDashboard() {
                                                     <div>
                                                         <label className="block text-sm font-medium text-gray-700 mb-1">Cover Image</label>
                                                         <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center hover:bg-slate-50 transition-colors">
-                                                            {postForm.coverImage ? (
+                                                            {postForm.imageUrl ? (
                                                                 <div className="relative">
-                                                                    <img src={postForm.coverImage} alt="Cover" className="w-full h-32 object-cover rounded mb-2" />
+                                                                    <img src={postForm.imageUrl} alt="Cover" className="w-full h-32 object-cover rounded mb-2" />
                                                                     <button
-                                                                        onClick={() => setPostForm({ ...postForm, coverImage: '' })}
+                                                                        onClick={() => setPostForm({ ...postForm, imageUrl: '' })}
                                                                         className="text-red-500 text-xs hover:underline"
                                                                     >
                                                                         Remove
@@ -1943,8 +1943,8 @@ export default function AdminDashboard() {
                                                                             formData.append('folder', 'blog')
                                                                             const res = await fetch('/api/upload', { method: 'POST', body: formData })
                                                                             const data = await res.json()
-                                                                            if (data.url) {
-                                                                                setPostForm({ ...postForm, coverImage: data.url })
+                                                                            if (data.url || data.secure_url) {
+                                                                                setPostForm({ ...postForm, imageUrl: data.url })
                                                                             }
                                                                         }
                                                                     }}

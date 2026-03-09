@@ -62,7 +62,7 @@ export default function Navbar() {
                     </Link>
 
                     {[
-                        { label: 'Airport Drop & Pickup', href: '/prices' },
+                        { label: 'Airport Drop & Pickup', href: '#' },
                         { label: 'Day Tours', href: '/day-trips' },
                         { label: 'City Tours', href: '/tours' },
                         { label: 'Tour Packages', href: '/tour-packages' },

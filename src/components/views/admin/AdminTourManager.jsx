@@ -192,6 +192,36 @@ export default function AdminTourManager() {
                                                     placeholder="e.g. Arrival in Colombo"
                                                 />
                                             </div>
+                                            <div className="w-24">
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase">Lat</label>
+                                                <input
+                                                    type="number"
+                                                    step="0.0001"
+                                                    value={day.lat || ''}
+                                                    onChange={e => {
+                                                        const newItin = [...formData.itinerary];
+                                                        newItin[idx].lat = parseFloat(e.target.value);
+                                                        updateField('itinerary', newItin);
+                                                    }}
+                                                    className="w-full p-2 rounded bg-white dark:bg-slate-800 text-[10px] border dark:border-white/10"
+                                                    placeholder="lat"
+                                                />
+                                            </div>
+                                            <div className="w-24">
+                                                <label className="text-[10px] font-bold text-slate-400 uppercase">Lng</label>
+                                                <input
+                                                    type="number"
+                                                    step="0.0001"
+                                                    value={day.lng || ''}
+                                                    onChange={e => {
+                                                        const newItin = [...formData.itinerary];
+                                                        newItin[idx].lng = parseFloat(e.target.value);
+                                                        updateField('itinerary', newItin);
+                                                    }}
+                                                    className="w-full p-2 rounded bg-white dark:bg-slate-800 text-[10px] border dark:border-white/10"
+                                                    placeholder="lng"
+                                                />
+                                            </div>
                                             <button
                                                 onClick={() => {
                                                     const newItin = formData.itinerary.filter((_, i) => i !== idx);
@@ -313,6 +343,36 @@ export default function AdminTourManager() {
                                                                 }}
                                                                 className="w-full p-2 rounded bg-white dark:bg-slate-800 font-bold border dark:border-white/10"
                                                                 placeholder="Stop Name"
+                                                            />
+                                                        </div>
+                                                        <div className="w-24">
+                                                            <label className="text-[10px] font-bold text-slate-400 uppercase">Lat</label>
+                                                            <input
+                                                                type="number"
+                                                                step="0.0001"
+                                                                value={exp.lat || ''}
+                                                                onChange={e => {
+                                                                    const newExp = [...formData.experience];
+                                                                    newExp[idx].lat = parseFloat(e.target.value);
+                                                                    updateField('experience', newExp);
+                                                                }}
+                                                                className="w-full p-2 rounded bg-white dark:bg-slate-800 text-[10px] border dark:border-white/10"
+                                                                placeholder="lat"
+                                                            />
+                                                        </div>
+                                                        <div className="w-24">
+                                                            <label className="text-[10px] font-bold text-slate-400 uppercase">Lng</label>
+                                                            <input
+                                                                type="number"
+                                                                step="0.0001"
+                                                                value={exp.lng || ''}
+                                                                onChange={e => {
+                                                                    const newExp = [...formData.experience];
+                                                                    newExp[idx].lng = parseFloat(e.target.value);
+                                                                    updateField('experience', newExp);
+                                                                }}
+                                                                className="w-full p-2 rounded bg-white dark:bg-slate-800 text-[10px] border dark:border-white/10"
+                                                                placeholder="lng"
                                                             />
                                                         </div>
                                                         <button
