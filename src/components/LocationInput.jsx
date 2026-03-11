@@ -135,8 +135,8 @@ const LocationInput = ({
                 disabled={disabled}
                 placeholder={googleLoaded ? placeholder : 'Loading maps...'}
                 className={`w-full pl-16 pr-14 h-16 rounded-none text-base sm:text-lg font-bold bg-white dark:bg-white/5 border-4 transition-all outline-none text-black dark:text-white uppercase tracking-widest italic
-                ${isFocused ? 'border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] -translate-y-1' : 'border-black/5 dark:border-white/10'}
-                ${disabled ? 'cursor-not-allowed opacity-50' : 'hover:border-black'}`}
+                ${isFocused && !disabled ? 'border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] -translate-y-1' : 'border-black/5 dark:border-white/10'}
+                ${disabled ? 'cursor-not-allowed opacity-75 bg-slate-50 dark:bg-white/5 grayscale-[0.5]' : 'hover:border-black'}`}
             />
 
             {/* Clear Button */}

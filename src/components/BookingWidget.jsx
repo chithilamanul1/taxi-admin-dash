@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
-import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X, ArrowRight } from 'lucide-react'
+import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X, ArrowRight, PlaneTakeoff, PlaneLanding } from 'lucide-react'
 
 import Image from 'next/image'
 import ToursWidget from './ToursWidget'
@@ -517,8 +517,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             <div className="flex bg-white dark:bg-[#111] p-1.5 md:p-2 rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-4 border-black transition-all" role="tablist">
                 <div className="grid grid-cols-4 w-full sm:w-auto">
                     {[
-                        { id: 'pickup', label: 'Pickup', icon: MapPin },
-                        { id: 'drop', label: 'Drop', icon: Navigation },
+                        { id: 'pickup', label: 'Airport Pickup', icon: PlaneTakeoff },
+                        { id: 'drop', label: 'Airport Drop', icon: PlaneLanding },
                         { id: 'ride', label: 'Ride', icon: Zap },
                         { id: 'tours', label: 'Tours', icon: Signpost }
                     ].map(tab => (
@@ -607,7 +607,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <LocationInput
                                     placeholder="Pick-up Location"
                                     value={pickupSearch}
-                                    icon={MapPin}
+                                    icon={activeTab === 'pickup' ? PlaneTakeoff : MapPin}
                                     disabled={activeTab === 'pickup'}
                                     onChange={(val) => setPickupSearch(val)}
                                     zIndex={100}
@@ -709,7 +709,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <LocationInput
                                         placeholder="Drop-off Location"
                                         value={dropoffSearch}
-                                        icon={MapPin}
+                                        icon={activeTab === 'drop' ? PlaneLanding : MapPin}
                                         zIndex={100}
                                         disabled={activeTab === 'drop'}
                                         onChange={(val) => setDropoffSearch(val)}
