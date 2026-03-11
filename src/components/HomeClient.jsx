@@ -128,7 +128,7 @@ export default function HomeClient() {
                                     });
                                     setIsBookingOpen(true);
                                 }}
-                                className="premium-box group p-8 hover:border-[#FACC15] hover:bg-[#FACC15]/5 transition-all duration-300 text-left flex flex-col justify-between h-64 shrink-0 w-[280px] md:w-auto snap-start"
+                                className="group p-8 bg-white dark:bg-black border-4 border-black dark:border-white/20 hover:border-[#FACC15] dark:hover:border-[#FACC15] transition-all duration-300 text-left flex flex-col justify-between h-64 shrink-0 w-[280px] md:w-auto snap-start shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(250,204,21,0.2)] hover:translate-y-[-4px]"
                             >
                                 <div>
                                     <div className="flex items-center gap-3 text-[#FACC15] mb-4">
@@ -140,8 +140,8 @@ export default function HomeClient() {
                                     </h3>
                                 </div>
                                 <div className="flex items-center justify-between mt-6">
-                                    <span className="text-[9px] font-black text-black/20 dark:text-white/20 uppercase tracking-[0.3em]">INSTANT QUOTE</span>
-                                    <div className="w-12 h-12 bg-[#FACC15] text-black rounded-full flex items-center justify-center group-hover:scale-110 transition-all shadow-lg">
+                                    <span className="text-[9px] font-black text-black/40 dark:text-white/40 uppercase tracking-[0.3em]">INSTANT QUOTE</span>
+                                    <div className="w-12 h-12 bg-[#FACC15] text-black border-2 border-black flex items-center justify-center group-hover:bg-black group-hover:text-[#FACC15] transition-all">
                                         <ArrowRight size={20} className="transform group-hover:translate-x-1 transition-transform" />
                                     </div>
                                 </div>
