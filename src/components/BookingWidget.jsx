@@ -1062,10 +1062,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         {isLoadingPricing ? (
                                             <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
                                         ) : (
-                                            <div className="flex items-center gap-4 justify-center w-full relative">
-                                                <span className="flex-1 text-center pl-8 text-2xl">BOOK NOW</span>
-                                                <div className="absolute right-6 w-12 h-12 bg-black rounded-none flex items-center justify-center text-[#FACC15] group-hover:scale-110 transition-transform">
-                                                    <ArrowRight size={24} strokeWidth={4} />
+                                            <div className="flex items-center justify-between w-full px-4 sm:px-6">
+                                                <div className="flex-1 text-center ml-8 sm:ml-12 text-[18px] sm:text-2xl">
+                                                    BOOK NOW
+                                                </div>
+                                                <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 bg-black rounded-none flex items-center justify-center text-[#FACC15] group-hover:scale-110 transition-transform">
+                                                    <ArrowRight size={20} className="sm:w-6 sm:h-6" strokeWidth={4} />
                                                 </div>
                                             </div>
                                         )}
