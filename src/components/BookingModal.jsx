@@ -567,11 +567,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 )}
 
                 {/* Progress Indicators */}
-                <div className="px-8 md:px-12 py-6 flex gap-4">
+                <div className="px-4 sm:px-8 md:px-12 py-4 md:py-6 flex gap-2 md:gap-4">
                     {STEPS.map((s) => (
-                        <div key={s.id} className="flex-1 flex flex-col gap-3">
-                            <div className={`h-3 rounded-full transition-all duration-1000 ${step >= s.id ? 'bg-[#FACC15] shadow-[0_0_20px_rgba(250,204,21,0.4)]' : 'bg-slate-100 dark:bg-white/5'}`}></div>
-                            <span className={`text-[9px] font-black uppercase tracking-widest text-center ${step >= s.id ? 'text-black dark:text-[#FACC15]' : 'text-slate-400'}`}>{s.title}</span>
+                        <div key={s.id} className="flex-1 flex flex-col gap-2 md:gap-3">
+                            <div className={`h-2 md:h-3 rounded-full transition-all duration-1000 ${step >= s.id ? 'bg-[#FACC15] shadow-[0_0_20px_rgba(250,204,21,0.4)]' : 'bg-slate-100 dark:bg-white/5'}`}></div>
+                            <span className={`text-[7px] md:text-[9px] font-black uppercase tracking-wider md:tracking-widest text-center ${step >= s.id ? 'text-black dark:text-[#FACC15]' : 'text-slate-400'}`}>{s.title}</span>
                         </div>
                     ))}
                 </div>
