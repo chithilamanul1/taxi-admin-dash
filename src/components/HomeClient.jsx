@@ -103,10 +103,10 @@ export default function HomeClient() {
                 <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col md:flex-row items-end justify-between mb-16 md:mb-24 gap-10">
                         <div className="max-w-3xl">
-                            <h2 className="text-5xl md:text-8xl font-black mb-8 text-black dark:text-white uppercase italic tracking-tighter leading-none">
+                            <h2 className="text-4xl sm:text-5xl md:text-8xl font-black mb-6 md:mb-8 text-black dark:text-white uppercase italic tracking-tighter leading-tight md:leading-none break-words">
                                 CURATED <span className="text-[#FACC15]">DESTINATIONS</span>
                             </h2>
-                            <p className="text-black/40 dark:text-white/40 text-sm font-black uppercase tracking-[0.2em] leading-relaxed">Explore the most iconic locations in Sri Lanka with our specialized airport transfer services.</p>
+                            <p className="text-black/40 dark:text-white/40 text-xs md:text-sm font-black uppercase tracking-[0.2em] leading-relaxed pr-4">Explore the most iconic locations in Sri Lanka with our specialized airport transfer services.</p>
                         </div>
                         <Link href="/prices" className="flex items-center gap-4 text-[#FACC15] font-black uppercase tracking-[0.2em] text-[10px] hover:text-black dark:hover:text-white transition-all italic underline decoration-2 underline-offset-8">
                             VIEW ALL RATES <ArrowRight size={18} />
