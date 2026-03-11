@@ -1102,7 +1102,24 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             <VehicleSelectionDrawer
                 isOpen={isVehicleDrawerOpen}
                 onClose={() => setIsVehicleDrawerOpen(false)}
-                vehicles={Object.values(vehiclePricing)}
+                vehicles={Object.values(vehiclePricing).map(v => {
+                    const priceInfo = calculatePrice(
+                        distance,
+                        v.vehicleType,
+                        tripType,
+                        vehiclePricing,
+                        waitingHours,
+                        hasNameBoard,
+                        nameBoardPrice,
+                        pickup.name,
+                        dropoff.name,
+                        destinations
+                    );
+                    return {
+                        ...v,
+                        calculatedTotal: priceInfo.total
+                    };
+                })}
                 selectedId={vehicle}
                 onSelect={(vType) => {
                     setVehicle(vType);

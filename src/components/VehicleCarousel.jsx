@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Users, Briefcase, Info, Lock, Wind, Backpack, Check, ArrowRight, Car } from 'lucide-react';
 import VehicleDetailModal from './VehicleDetailModal';
-
-const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => {
+import { useCurrency } from '../context/CurrencyContext';const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => {
     const scrollRef = useRef(null);
     const [detailVehicle, setDetailVehicle] = useState(null);
+    const { convertPrice } = useCurrency();
 
     const scroll = (direction) => {
         if (scrollRef.current) {
@@ -134,7 +134,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                 </div>
 
                                 {/* Vehicle Specs Grid - Premium Boxes */}
-                                <div className="grid grid-cols-2 gap-3 mb-10">
+                                <div className="grid grid-cols-2 gap-3 mb-6">
                                     {[
                                         { icon: Users, label: `${vehicle.minCapacity || 1}-${vehicle.capacity} PAX` },
                                         { icon: Briefcase, label: `${vehicle.luggage || 0} BAGS` },
@@ -142,26 +142,28 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                         ...(vehicle.hasAC !== false ? [{ icon: Wind, label: 'A/C' }] : [])
                                     ].map((spec, i) => (
                                         <div key={i} className="flex items-center gap-3 p-3 bg-black/5 dark:bg-white/5 rounded-none border-2 border-black transition-all">
-                                            <spec.icon size={14} className="text-black" strokeWidth={3} />
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-black">{spec.label}</span>
+                                            <spec.icon size={14} className="text-black dark:text-white" strokeWidth={3} />
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-black dark:text-white">{spec.label}</span>
                                         </div>
                                     ))}
                                 </div>
 
-                                <div className="flex justify-between items-center pt-8 border-t-4 border-black">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-[#FACC15] border-2 border-black flex items-center justify-center rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                            <Car size={20} strokeWidth={3} />
+                                {vehicle.calculatedTotal > 0 && (
+                                    <div className="mb-6 border-4 border-black bg-white dark:bg-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(250,204,21,0.2)] flex flex-col items-center justify-center p-4">
+                                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-black/50 dark:text-white/50 mb-1">TOTAL PRICE</div>
+                                        <div className="text-3xl font-black text-black dark:text-white uppercase tracking-tighter">
+                                            {convertPrice(vehicle.calculatedTotal).symbol} {convertPrice(vehicle.calculatedTotal).value.toLocaleString()}
                                         </div>
-                                        <span className="text-xs font-black uppercase tracking-[0.2em]">Ready to Book</span>
                                     </div>
-                                    <div className={`
-                                        w-12 h-12 rounded-none border-4 border-black flex items-center justify-center transition-all
-                                        ${isSelected ? 'bg-black text-[#FACC15] shadow-[6px_6px_0px_0px_rgba(250,204,21,0.3)]' : 'bg-black/5 text-black/20'}
-                                    `}>
-                                        <ArrowRight size={24} strokeWidth={4} className={isSelected ? 'translate-x-0' : '-translate-x-2 opacity-0'} />
-                                    </div>
-                                </div>
+                                )}
+
+                                <button
+                                    className={`w-full py-4 rounded-none border-4 border-black font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(250,204,21,0.2)] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${isSelected ? 'bg-[#FACC15] text-black border-black' : 'bg-black hover:bg-[#111] text-[#FACC15] dark:border-white/20 dark:hover:border-[#FACC15]'}`}
+                                    onClick={(e) => { e.stopPropagation(); suitable && onSelect(vehicle.vehicleType); }}
+                                >
+                                    {isSelected ? 'SELECTED' : 'SELECT'} 
+                                    <ArrowRight size={20} strokeWidth={4} />
+                                </button>
                             </div>
                         </div>
                     );
