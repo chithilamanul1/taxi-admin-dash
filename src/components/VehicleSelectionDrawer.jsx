@@ -21,8 +21,8 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                 onClick={onClose}
             />
 
-            {/* Drawer Content - Premium Box Style */}
-            <div className={`absolute bottom-0 left-0 right-0 max-h-[90vh] bg-white dark:bg-[#111] rounded-t-[3rem] shadow-[0_-20px_50px_rgba(0,0,0,0.3)] transform transition-transform duration-500 ease-out z-50 overflow-hidden flex flex-col border-t-8 border-[#FACC15] ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+            {/* Drawer Content - Boxy Style */}
+            <div className={`absolute bottom-0 left-0 right-0 max-h-[95vh] bg-white dark:bg-[#111] rounded-none shadow-[0_-20px_60px_rgba(0,0,0,0.5)] transform transition-transform duration-500 ease-out z-50 overflow-hidden flex flex-col border-t-[20px] border-black ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}>
                 {/* Header */}
                 <div className="p-6 md:p-8 pb-4 flex items-center justify-between border-b border-slate-100 dark:border-white/10 shrink-0">
                     <div>
@@ -31,10 +31,10 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                     </div>
                     <button 
                         onClick={onClose}
-                        className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xl"
+                        className="w-12 h-12 md:w-20 md:h-20 rounded-none bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:bg-red-600 hover:text-white transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-4 border-black"
                         aria-label="Close drawer"
                     >
-                        <X size={20} strokeWidth={3} />
+                        <X size={32} strokeWidth={4} />
                     </button>
                 </div>
 
@@ -54,14 +54,14 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                 passengerCount={passengerCount}
                             />
                             
-                            {/* Premium Feature Highlight */}
-                            <div className="premium-box p-10 bg-[#FACC15] border-none text-black">
+                            {/* Boxy Feature Highlight */}
+                            <div className="p-10 bg-black text-[#FACC15] rounded-none border-4 border-[#FACC15] shadow-[15px_15px_0px_0px_rgba(250,204,21,0.2)]">
                                 <h3 className="text-2xl font-black uppercase italic tracking-tight mb-4 flex items-center gap-3">
-                                    <ShieldCheck size={28} />
-                                    ALL-INCLUSIVE PRICING
+                                    <ShieldCheck size={28} strokeWidth={3} />
+                                    ALL-INCLUSIVE SERVICE
                                 </h3>
-                                <p className="text-sm font-bold uppercase tracking-widest leading-relaxed opacity-80">
-                                    No hidden fees. Your quote includes fuel, insurance, and professional English-speaking chauffeur service.
+                                <p className="text-xs font-black uppercase tracking-[0.2em] leading-relaxed opacity-80">
+                                    Fuel, Insurance, Chauffeur & Tax Included. No Hidden Surprises.
                                 </p>
                             </div>
                         </div>

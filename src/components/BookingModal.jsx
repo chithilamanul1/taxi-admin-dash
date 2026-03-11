@@ -971,19 +971,19 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         <div className="flex items-center gap-3">
                                             <Tag size={14} className="animate-bounce" />
                                             <span>
-                                                {appliedCoupons?.length > 0 ? `Code applied` : 'Special Discount'}
+                                                {detailedBreakdown.appliedCoupons?.length > 0 ? `Code applied` : 'Special Discount'}
                                             </span>
                                         </div>
                                         <span className="font-black italic">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
                                     </div>
                                 )}
 
-                                {appliedCoupons?.length > 0 && (
+                                {detailedBreakdown.appliedCoupons?.length > 0 && (
                                     <div className="pt-3 border-t border-slate-200 dark:border-white/10">
                                         <div className="flex flex-wrap gap-2">
-                                            {appliedCoupons.map((c, idx) => (
+                                            {detailedBreakdown.appliedCoupons.map((c, idx) => (
                                                 <span key={idx} className="px-3 py-1 bg-black dark:bg-yellow-400 text-white dark:text-black text-[9px] font-black uppercase tracking-widest rounded-lg flex items-center gap-2 shadow-sm">
-                                                    <Check size={10} strokeWidth={4} /> {c}
+                                                    <Check size={10} strokeWidth={4} /> {c.code || c}
                                                 </span>
                                             ))}
                                         </div>

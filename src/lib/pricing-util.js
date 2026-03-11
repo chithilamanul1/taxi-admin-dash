@@ -130,7 +130,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                         console.log(`[Pricing] Applied Tiered FLAT Rate: LKR ${distancePrice}`);
                     } else {
                         distancePrice = (distKm * val);
-                        console.log(`[Pricing] Applied Tiered PER-KM Rate (${val}/km): LKR ${distancePrice}`);
+// Log removed for privacy
                     }
                     overrideApplied = true;
                 }
@@ -152,13 +152,13 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                 if (vehicleSpecificRate > 0) {
                     distancePrice = (distKm * vehicleSpecificRate);
                     overrideApplied = true;
-                    console.log(`[Pricing] Applied Per-KM Override: LKR ${distancePrice}`);
+// Log removed for privacy
                 }
                 else if (matchedOverride.perKmRateOverride > 0) {
                     const perKmRate = Number(matchedOverride.perKmRateOverride);
                     distancePrice = (distKm * perKmRate);
                     overrideApplied = true;
-                    console.log(`[Pricing] Applied General Per-KM Override: LKR ${distancePrice}`);
+// Log removed for privacy
                 }
             }
         }
@@ -175,7 +175,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                 } else {
                     const rate = matchingTier.rate || matchingTier.price || 0;
                     distancePrice = (distKm * rate);
-                    console.log(`[Pricing] Applied Tiered PER-KM rate (${rate}/km): LKR ${distancePrice}`);
+// Log removed for privacy
                 }
             }
         }
@@ -191,7 +191,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
                 console.log(`[Pricing] Applied Base Price: LKR ${distancePrice}`);
             } else {
                 distancePrice = basePrice + ((distKm - baseKm) * perKmRate);
-                console.log(`[Pricing] Applied Standard Per-KM: LKR ${distancePrice}`);
+// Log removed for privacy
             }
         }
     }

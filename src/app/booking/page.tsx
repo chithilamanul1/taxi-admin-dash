@@ -130,8 +130,8 @@ export default function BookingPage() {
                                             </div>
                                             <div className="flex justify-between items-end">
                                                 <div className="space-y-1">
-                                                    <p className="text-xs text-gray-500 uppercase tracking-wider">Per KM Rate</p>
-                                                    <p className="text-xl font-bold text-white">LKR {vehicle.ratePerKm}</p>
+                                                    <p className="text-xs text-emerald-600 uppercase tracking-wider font-black">Ready to Book</p>
+                                                    <p className="text-xl font-bold text-white italic tracking-tighter">Premium Tier</p>
                                                 </div>
                                                 <div className="text-right">
                                                     <p className="text-xs text-gray-500 uppercase tracking-wider">Capacity</p>

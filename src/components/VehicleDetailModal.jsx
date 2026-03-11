@@ -1,13 +1,13 @@
 import React from 'react';
 import { X, Users, Briefcase, Info, CheckCircle2 } from 'lucide-react';
 
-const VehicleDetailModal = ({ isOpen, onClose, vehicle }) => {
+const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
     if (!isOpen || !vehicle) return null;
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
-                <div className="relative h-56 bg-emerald-50">
+            <div className="bg-white rounded-none w-full max-w-lg overflow-hidden shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] border-4 border-black animate-in zoom-in-95 duration-200">
+                <div className="relative h-56 bg-emerald-50 border-b-4 border-black">
                     <img
                         src={vehicle.image}
                         alt={vehicle.name}
@@ -15,11 +15,11 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle }) => {
                     />
                     <button
                         onClick={onClose}
-                        className="absolute top-4 right-4 w-10 h-10 bg-white/50 hover:bg-white rounded-full flex items-center justify-center backdrop-blur-md transition-all text-emerald-900"
+                        className="absolute top-4 right-4 w-12 h-12 bg-black text-[#FACC15] border-2 border-black rounded-none flex items-center justify-center hover:bg-[#FACC15] hover:text-black transition-all"
                     >
-                        <X size={20} />
+                        <X size={20} strokeWidth={3} />
                     </button>
-                    <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-xs font-bold text-emerald-900 border border-emerald-900/10">
+                    <div className="absolute bottom-4 left-4 bg-black text-[#FACC15] px-4 py-1.5 rounded-none text-xs font-black uppercase italic tracking-widest border-2 border-black">
                         {vehicle.name}
                     </div>
                 </div>
@@ -27,38 +27,36 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle }) => {
                 <div className="p-8">
                     <div className="flex justify-between items-start mb-6">
                         <div>
-                            <h3 className="text-2xl font-black text-emerald-900">{vehicle.name}</h3>
-                            <p className="text-emerald-900/60 font-medium">{vehicle.vehicleType}</p>
+                            <h3 className="text-3xl font-black text-black uppercase italic tracking-tighter leading-none">{vehicle.name}</h3>
+                            <p className="text-black/40 font-bold uppercase tracking-widest text-xs mt-2">{vehicle.vehicleType}</p>
                         </div>
                         <div className="text-right flex flex-col items-end">
-                            <p className="text-xs font-bold text-emerald-900/40 uppercase tracking-wider">Per Km</p>
-                            <p className="text-xl font-bold text-emerald-600 mb-1">LKR {vehicle.perKmRate}</p>
-                            <span className="flex items-center gap-1 text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">
-                                <CheckCircle2 size={10} /> Professional Driver
+                            <span className="flex items-center gap-2 text-[10px] bg-[#FACC15] text-black px-3 py-1.5 rounded-none border-2 border-black font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                <CheckCircle2 size={12} strokeWidth={3} /> 5★ SERVICE
                             </span>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-3 gap-4 mb-8">
-                        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2">
-                            <Users size={20} className="text-emerald-600" />
+                        <div className="bg-black/5 p-4 rounded-none border-2 border-black flex flex-col items-center gap-2">
+                            <Users size={20} className="text-black" strokeWidth={3} />
                             <div className="text-center">
-                                <p className="text-lg font-bold text-emerald-900">1-{vehicle.capacity}</p>
-                                <p className="text-[10px] text-emerald-900/40 uppercase font-bold">Passengers</p>
+                                <p className="text-lg font-black text-black">1-{vehicle.capacity}</p>
+                                <p className="text-[10px] text-black/40 uppercase font-black tracking-widest">PAX</p>
                             </div>
                         </div>
-                        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2">
-                            <Briefcase size={20} className="text-emerald-600" />
+                        <div className="bg-black/5 p-4 rounded-none border-2 border-black flex flex-col items-center gap-2">
+                            <Briefcase size={20} className="text-black" strokeWidth={3} />
                             <div className="text-center">
-                                <p className="text-lg font-bold text-emerald-900">{vehicle.luggage}</p>
-                                <p className="text-[10px] text-emerald-900/40 uppercase font-bold">Large Bags</p>
+                                <p className="text-lg font-black text-black">{vehicle.luggage}</p>
+                                <p className="text-[10px] text-black/40 uppercase font-black tracking-widest">BAGS</p>
                             </div>
                         </div>
-                        <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col items-center gap-2">
-                            <Briefcase size={16} className="text-emerald-600/70" />
+                        <div className="bg-black/5 p-4 rounded-none border-2 border-black flex flex-col items-center gap-2">
+                            <Briefcase size={16} className="text-black/60" strokeWidth={3} />
                             <div className="text-center">
-                                <p className="text-lg font-bold text-emerald-900">{vehicle.handLuggage || 0}</p>
-                                <p className="text-[10px] text-emerald-900/40 uppercase font-bold">Small Bags</p>
+                                <p className="text-lg font-black text-black">{vehicle.handLuggage || 0}</p>
+                                <p className="text-[10px] text-black/40 uppercase font-black tracking-widest">SMALL</p>
                             </div>
                         </div>
                     </div>
@@ -75,28 +73,28 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle }) => {
                         </div>
                     </div>
 
-                    <div className="flex gap-3 mt-8">
+                    <div className="flex gap-4 mt-8">
                         {onSelect ? (
                             <>
                                 <button
                                     onClick={onClose}
-                                    className="flex-1 py-4 bg-slate-100 text-slate-600 rounded-xl font-bold text-lg hover:bg-slate-200 transition-all"
+                                    className="flex-1 py-4 bg-black/5 text-black border-4 border-black rounded-none font-black text-sm uppercase tracking-widest hover:bg-black/10 transition-all"
                                 >
-                                    Close
+                                    CLOSE
                                 </button>
                                 <button
                                     onClick={() => { onSelect(vehicle.vehicleType); onClose(); }}
-                                    className="flex-[2] py-4 bg-emerald-900 text-white rounded-xl font-bold text-lg hover:bg-emerald-800 transition-all shadow-lg"
+                                    className="flex-[2] py-4 bg-[#FACC15] text-black border-4 border-black rounded-none font-black text-sm uppercase tracking-widest hover:translate-y-[-4px] transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
                                 >
-                                    Confirm & Select
+                                    CONFIRM SELECTION
                                 </button>
                             </>
                         ) : (
                             <button
                                 onClick={onClose}
-                                className="w-full py-4 bg-emerald-900 text-white rounded-xl font-bold text-lg hover:bg-emerald-800 transition-all shadow-lg shadow-emerald-900/20"
+                                className="w-full py-4 bg-black text-white border-4 border-black rounded-none font-black text-sm uppercase tracking-widest hover:bg-[#FACC15] hover:text-black transition-all"
                             >
-                                Close Details
+                                CLOSE DETAILS
                             </button>
                         )}
                     </div>

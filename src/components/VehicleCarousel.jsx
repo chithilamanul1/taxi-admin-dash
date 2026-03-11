@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Users, Briefcase, Info, Lock, Wind, Backpack, Check, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Users, Briefcase, Info, Lock, Wind, Backpack, Check, ArrowRight, Car } from 'lucide-react';
 import VehicleDetailModal from './VehicleDetailModal';
 
 const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => {
@@ -58,17 +58,17 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                 <div className="flex gap-3 md:gap-4 self-end md:self-auto">
                     <button
                         onClick={() => scroll('left')}
-                        className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:translate-x-[-4px] transition-all shadow-xl border border-white/10"
+                        className="w-12 h-12 md:w-16 md:h-16 rounded-none bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:translate-y-[-4px] transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] border-4 border-black"
                         aria-label="Scroll left"
                     >
-                        <ChevronLeft size={24} strokeWidth={3} className="w-5 h-5 md:w-6 md:h-6" />
+                        <ChevronLeft size={24} strokeWidth={4} className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
                     <button
                         onClick={() => scroll('right')}
-                        className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:translate-x-[4px] transition-all shadow-xl border border-white/10"
+                        className="w-12 h-12 md:w-16 md:h-16 rounded-none bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:translate-y-[-4px] transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] border-4 border-black"
                         aria-label="Scroll right"
                     >
-                        <ChevronRight size={24} strokeWidth={3} className="w-5 h-5 md:w-6 md:h-6" />
+                        <ChevronRight size={24} strokeWidth={4} className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
                 </div>
             </div>
@@ -86,19 +86,19 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                         <div
                             key={vehicle._id || vehicle.vehicleType}
                             className={`
-                                relative flex-shrink-0 w-[290px] md:w-[350px] snap-center rounded-[2.5rem] md:rounded-[3rem] border-4 transition-all duration-500 overflow-hidden group/card
-                                ${isSelected ? 'border-[#FACC15] bg-[#FACC15]/5 shadow-[0_30px_60px_rgba(250,204,21,0.2)]' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 shadow-xl hover:border-[#FACC15]/30'}
+                                relative flex-shrink-0 w-[290px] md:w-[350px] snap-center rounded-none border-4 transition-all duration-500 overflow-hidden group/card
+                                ${isSelected ? 'border-black bg-[#FACC15]/5 shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] -translate-y-2' : 'border-black bg-white dark:bg-white/5 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1'}
                                 ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
                             `}
                             onClick={() => suitable && onSelect(vehicle.vehicleType)}
                         >
                             {!suitable && (
                                 <div className="absolute inset-0 z-30 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center p-8 text-center">
-                                    <div className="w-16 h-16 bg-red-600 rounded-full mb-6 flex items-center justify-center shadow-2xl">
-                                        <Lock size={28} className="text-white" />
+                                    <div className="w-16 h-16 bg-red-600 rounded-none mb-6 flex items-center justify-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-4 border-black">
+                                        <Lock size={28} className="text-white" strokeWidth={3} />
                                     </div>
-                                    <p className="text-lg font-black text-white uppercase italic tracking-tighter leading-tight">{reason}</p>
-                                    <p className="text-[10px] text-[#FACC15] font-black mt-4 uppercase tracking-[0.3em]">Select Larger Vehicle</p>
+                                    <p className="text-xl font-black text-white uppercase italic tracking-tighter leading-tight">{reason}</p>
+                                    <p className="text-[10px] text-[#FACC15] font-black mt-4 uppercase tracking-[0.3em] bg-black px-4 py-2 border-2 border-black">SELECT LARGER VEHICLE</p>
                                 </div>
                             )}
 
@@ -108,28 +108,28 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                     alt={vehicle.name}
                                     width={240}
                                     height={150}
-                                    className="w-auto h-5/6 object-contain drop-shadow-2xl"
+                                    className="w-auto h-3/4 object-contain drop-shadow-[5px_5px_0px_rgba(0,0,0,0.2)]"
                                 />
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setDetailVehicle(vehicle); }}
-                                    className="absolute top-6 right-6 w-12 h-12 bg-white dark:bg-black rounded-xl shadow-xl text-black dark:text-[#FACC15] flex items-center justify-center hover:scale-110 transition-all z-20"
+                                    className="absolute top-6 right-6 w-12 h-12 bg-black text-[#FACC15] border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:bg-[#FACC15] hover:text-black transition-all z-20"
                                     aria-label={`View details for ${vehicle.name}`}
                                 >
-                                    <Info size={20} strokeWidth={3} />
+                                    <Info size={20} strokeWidth={4} />
                                 </button>
                             </div>
 
                             <div className="p-8">
-                                <div className="flex justify-between items-start mb-8 min-h-[64px]">
-                                    <h4 className="text-2xl font-black text-black dark:text-white uppercase italic tracking-tighter leading-tight">
+                                <div className="flex justify-between items-start mb-6 min-h-[64px]">
+                                    <h4 className="text-2xl font-black text-black dark:text-white uppercase italic tracking-tighter leading-none">
                                         {vehicle.name.split('(').map((part, i) => (
-                                            <span key={i} className={i > 0 ? "block text-sm opacity-40 not-italic font-black mt-2 tracking-widest" : "block"}>
+                                            <span key={i} className={i > 0 ? "block text-[10px] opacity-40 not-italic font-black mt-2 tracking-widest leading-none" : "block leading-none"}>
                                                 {i > 0 ? `(${part}` : part}
                                             </span>
                                         ))}
                                     </h4>
-                                    {suitable && <div className={`w-10 h-10 rounded-full border-4 flex items-center justify-center transition-all ${isSelected ? 'border-black bg-[#FACC15]' : 'border-slate-200 dark:border-white/10'}`}>
-                                        {isSelected && <Check size={20} strokeWidth={4} className="text-black" />}
+                                    {suitable && <div className={`w-8 h-8 rounded-none border-4 flex items-center justify-center transition-all ${isSelected ? 'border-black bg-[#FACC15] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'border-black/5'}`}>
+                                        {isSelected && <Check size={16} strokeWidth={5} className="text-black" />}
                                     </div>}
                                 </div>
 
@@ -141,23 +141,25 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                         { icon: Backpack, label: `${vehicle.handLuggage || 0} SMALL` },
                                         ...(vehicle.hasAC !== false ? [{ icon: Wind, label: 'A/C' }] : [])
                                     ].map((spec, i) => (
-                                        <div key={i} className="flex items-center gap-3 p-3 bg-black/5 dark:bg-white/5 rounded-xl border border-transparent group-hover/card:border-black/5 transition-all">
-                                            <spec.icon size={14} className="text-[#FACC15]" strokeWidth={3} />
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-black/60 dark:text-white/60">{spec.label}</span>
+                                        <div key={i} className="flex items-center gap-3 p-3 bg-black/5 dark:bg-white/5 rounded-none border-2 border-black transition-all">
+                                            <spec.icon size={14} className="text-black" strokeWidth={3} />
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-black">{spec.label}</span>
                                         </div>
                                     ))}
                                 </div>
 
-                                <div className="flex justify-between items-center pt-8 border-t-2 border-slate-100 dark:border-white/5">
-                                    <div>
-                                        <p className="text-[10px] uppercase font-black text-black/30 dark:text-white/30 tracking-[0.2em] mb-1">RATE PER KM</p>
-                                        <p className="text-3xl font-black text-black dark:text-white italic tracking-tighter">LKR {vehicle.perKmRate}</p>
+                                <div className="flex justify-between items-center pt-8 border-t-4 border-black">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-[#FACC15] border-2 border-black flex items-center justify-center rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                            <Car size={20} strokeWidth={3} />
+                                        </div>
+                                        <span className="text-xs font-black uppercase tracking-[0.2em]">Ready to Book</span>
                                     </div>
                                     <div className={`
-                                        w-12 h-12 rounded-xl flex items-center justify-center transition-all
-                                        ${isSelected ? 'bg-black text-[#FACC15]' : 'bg-slate-100 dark:bg-white/5 text-black/20 dark:text-white/20'}
+                                        w-12 h-12 rounded-none border-4 border-black flex items-center justify-center transition-all
+                                        ${isSelected ? 'bg-black text-[#FACC15] shadow-[6px_6px_0px_0px_rgba(250,204,21,0.3)]' : 'bg-black/5 text-black/20'}
                                     `}>
-                                        <ArrowRight size={24} strokeWidth={3} className={isSelected ? 'translate-x-0' : '-translate-x-2 opacity-0'} />
+                                        <ArrowRight size={24} strokeWidth={4} className={isSelected ? 'translate-x-0' : '-translate-x-2 opacity-0'} />
                                     </div>
                                 </div>
                             </div>
@@ -170,6 +172,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                 isOpen={!!detailVehicle}
                 vehicle={detailVehicle}
                 onClose={() => setDetailVehicle(null)}
+                onSelect={onSelect}
             />
         </div>
     );
