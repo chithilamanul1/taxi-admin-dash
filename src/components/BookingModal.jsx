@@ -1324,7 +1324,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-3 md:py-5 bg-emerald-600 dark:bg-yellow-400 text-white dark:text-black rounded-xl md:rounded-2xl text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-emerald-700 dark:hover:scale-105 transition-all disabled:opacity-30 shadow-[0_20px_50px_rgba(5,150,105,0.3)] dark:shadow-[0_20px_50px_rgba(250,204,21,0.2)] w-full md:w-auto md:min-w-[240px] italic active:scale-95"
                             >
                                 {loading ? <Loader2 className="animate-spin" size={16} /> : <Zap size={16} className="md:w-4 md:h-4" fill="currentColor" />}
-                                {loading ? 'Securing Spot...' : 'Confirm My Chauffeur'}
+                                {loading ? 'Securing Spot...' : 'Confirm My Order'}
                             </button>
                         )}
                     </div>
