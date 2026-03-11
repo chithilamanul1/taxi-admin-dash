@@ -174,12 +174,13 @@ export default function TourPackagesClient() {
                 </div>
 
                 <div className="max-w-6xl mx-auto mt-32">
-                    <div className="bg-[#FACC15] p-16 md:p-24 relative overflow-hidden border-b-[20px] border-black">
+                    <div className="bg-[#FACC15] p-8 md:p-16 lg:p-24 relative overflow-hidden border-b-[20px] border-black">
                         <div className="relative z-10 text-black">
-                            <h2 className="text-5xl md:text-8xl font-black mb-8 leading-none uppercase italic tracking-tighter">
-                                TAILOR-MADE <br /><span className="bg-black text-[#FACC15] px-4">JOURNEYS</span>
+                            <h2 className="text-4xl md:text-6xl lg:text-8xl font-black mb-6 md:mb-8 leading-none uppercase italic tracking-tighter">
+                                TAILOR-MADE <br className="hidden md:block" />
+                                <div className="mt-2 md:mt-0 inline-block"><span className="bg-black text-[#FACC15] px-4">JOURNEYS</span></div>
                             </h2>
-                            <p className="text-black/70 mb-12 max-w-xl text-sm font-black uppercase tracking-[0.2em] leading-relaxed">
+                            <p className="text-black/70 mb-8 md:mb-12 max-w-xl text-xs md:text-sm font-black uppercase tracking-[0.2em] leading-relaxed">
                                 Every traveler is unique. Tell us your interests and we'll craft a personalized itinerary that matches your pace, budget, and style.
                             </p>
                             <Link
@@ -192,7 +193,7 @@ export default function TourPackagesClient() {
                     </div>
                 </div>
 
-                <div className="max-w-7xl mx-auto mt-32">
+                <div className="max-w-7xl mx-auto mt-20 md:mt-32">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {[
                             { val: "500+", lbl: "Happy Travelers" },
@@ -200,9 +201,9 @@ export default function TourPackagesClient() {
                             { val: "24/7", lbl: "Local Support" },
                             { val: "100%", lbl: "Flexible" }
                         ].map((stat, i) => (
-                            <div key={i} className="bg-black/5 dark:bg-white/5 p-12 text-center border-l-4 border-[#FACC15]">
-                                <div className="text-5xl font-black text-[#FACC15] mb-4 italic tracking-tighter">{stat.val}</div>
-                                <div className="text-black/40 dark:text-white/40 text-[10px] font-black uppercase tracking-[0.4em]">{stat.lbl}</div>
+                            <div key={i} className="bg-black/5 dark:bg-white/5 p-6 md:p-8 lg:p-12 text-center border-l-4 border-[#FACC15] flex flex-col justify-center">
+                                <div className="text-3xl sm:text-4xl md:text-5xl font-black text-[#FACC15] mb-2 md:mb-4 italic tracking-tighter">{stat.val}</div>
+                                <div className="text-black/40 dark:text-white/40 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.4em] leading-tight break-words">{stat.lbl}</div>
                             </div>
                         ))}
                     </div>

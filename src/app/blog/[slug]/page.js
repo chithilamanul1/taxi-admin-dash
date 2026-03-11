@@ -11,7 +11,8 @@ async function getPost(slug) {
     if (!connectionString) return null;
     try {
         await dbConnect();
-        const post = await Post.findOne({ slug, isPublished: true });
+        const decodedSlug = decodeURIComponent(slug);
+        const post = await Post.findOne({ slug: decodedSlug, isPublished: true });
         return post;
     } catch (e) {
         console.error('Blog Post DB Error:', e);

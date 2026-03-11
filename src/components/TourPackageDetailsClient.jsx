@@ -93,6 +93,9 @@ export default function TourPackageDetailsClient({ tour }) {
     const priceAmount = typeof tour.price === 'object' ? tour.price.amount : tour.price;
     const priceCurrency = typeof tour.price === 'object' ? tour.price.currency : (tour.currency || 'USD');
 
+    // Dynamic price calculation
+    const totalPrice = (priceAmount * memberCount.adults) + (priceAmount * 0.5 * memberCount.children);
+
     // Clean array logic for inclusions & exclusions
     const rawInclusions = (tour.inclusions?.length > 0 ? tour.inclusions : null) ||
         (tour.included?.length > 0 ? tour.included : null) ||
@@ -138,10 +141,10 @@ export default function TourPackageDetailsClient({ tour }) {
             </div>
 
             {/* Immersive Hero Section */}
-            <div className="relative h-[75vh] w-full overflow-hidden">
+            <div className="relative h-[75vh] w-full overflow-hidden bg-slate-900 border-b-4 border-black">
                 <div className="absolute inset-0">
                     <Image
-                        src={tour.heroImage || tour.images?.[0] || tour.image || '/vehicles/placeholder.png'}
+                        src={tour.heroImage || tour.image || tour.images?.[0] || 'https://images.unsplash.com/photo-1544644181-1484b3fdfc63?q=80&w=1240&auto=format&fit=crop'}
                         alt={tour.title}
                         fill
                         className="object-cover transition-transform duration-[10s] hover:scale-110"
@@ -371,7 +374,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                         <div className="flex items-center justify-center gap-1 text-white">
                                             <span className="text-xl font-black">{priceCurrency}</span>
                                             <span className="text-6xl font-black tracking-tighter">
-                                                {priceAmount > 0 ? priceAmount.toLocaleString() : 'Price on Request'}
+                                                {totalPrice > 0 ? totalPrice.toLocaleString() : 'Price on Request'}
                                             </span>
                                         </div>
                                         <span className="text-[10px] font-black text-white uppercase tracking-widest mt-2 block">All-Inclusive Price</span>
@@ -441,7 +444,7 @@ export default function TourPackageDetailsClient({ tour }) {
                 tourTitle={tour.title}
                 tourId={tour.id || tour._id}
                 duration={typeof tour.duration === 'object' ? `${tour.duration.days}D / ${tour.duration.nights}N` : tour.duration}
-                price={priceAmount}
+                price={totalPrice}
                 currency={priceCurrency}
             />
         </main>
