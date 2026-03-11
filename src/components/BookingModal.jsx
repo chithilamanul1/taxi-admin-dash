@@ -548,26 +548,26 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 </AnimatePresence>
                 {/* Header - Hidden in Step 2 */}
                 {step !== 2 && (
-                    <div className="p-8 md:p-12 pb-6 flex items-center justify-between shrink-0 pt-12 sm:pt-8 bg-white dark:bg-black transition-colors duration-500">
-                        <div className="flex items-center gap-6 min-w-0">
-                            <div className="w-14 h-14 bg-[#FACC15] rounded-2xl flex items-center justify-center shadow-2xl shrink-0 group hover:rotate-6 transition-transform">
-                                <Zap size={32} className="text-black" strokeWidth={3} fill="currentColor" />
+                    <div className="p-4 sm:p-8 md:p-12 pb-4 flex items-center justify-between shrink-0 pt-6 sm:pt-8 bg-white dark:bg-black transition-colors duration-500">
+                        <div className="flex items-center gap-4 sm:gap-6 min-w-0">
+                            <div className="w-10 h-10 sm:w-14 sm:h-14 bg-[#FACC15] rounded-xl sm:rounded-2xl flex items-center justify-center shadow-2xl shrink-0 group hover:rotate-6 transition-transform">
+                                <Zap size={24} className="text-black sm:w-8 sm:h-8" strokeWidth={3} fill="currentColor" />
                             </div>
                             <div className="min-w-0">
-                                <h2 className="text-2xl md:text-4xl font-black tracking-tighter text-black dark:text-white leading-none truncate uppercase italic">
+                                <h2 className="text-xl sm:text-2xl md:text-4xl font-black tracking-tighter text-black dark:text-white leading-none truncate uppercase italic">
                                     SECURE <span className="text-[#FACC15]">BOOKING</span>
                                 </h2>
-                                <p className="text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] mt-3">Elite Tier Encryption</p>
+                                <p className="text-[8px] sm:text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] sm:tracking-[0.4em] mt-1 sm:mt-3">Elite Tier Encryption</p>
                             </div>
                         </div>
-                        <button onClick={onClose} className="w-14 h-14 bg-slate-100 dark:bg-white/10 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10 hover:bg-red-500 hover:text-white transition-all z-[101] group shadow-sm">
-                            <X size={28} strokeWidth={3} className="group-hover:rotate-90 transition-transform" />
+                        <button onClick={onClose} className="w-10 h-10 sm:w-14 sm:h-14 bg-slate-100 dark:bg-white/10 rounded-xl sm:rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10 hover:bg-red-500 hover:text-white transition-all z-[101] group shadow-sm">
+                            <X size={20} strokeWidth={3} className="sm:w-7 sm:h-7 group-hover:rotate-90 transition-transform" />
                         </button>
                     </div>
                 )}
 
                 {/* Progress Indicators */}
-                <div className="px-4 sm:px-8 md:px-12 py-4 md:py-6 flex gap-2 md:gap-4">
+                <div className="px-4 sm:px-8 md:px-12 py-2 md:py-6 flex gap-2 md:gap-4">
                     {STEPS.map((s) => (
                         <div key={s.id} className="flex-1 flex flex-col gap-2 md:gap-3">
                             <div className={`h-2 md:h-3 rounded-full transition-all duration-1000 ${step >= s.id ? 'bg-[#FACC15] shadow-[0_0_20px_rgba(250,204,21,0.4)]' : 'bg-slate-100 dark:bg-white/5'}`}></div>
@@ -1032,16 +1032,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     {/* Passenger & Luggage Summary/Adjust (Requested for Step 2) */}
                                     <div className="space-y-6">
                                         <h4 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-2">Adjust Logistics</h4>
-                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                                             {[
                                                 { id: 'adults', label: 'Adults', icon: Users },
                                                 { id: 'children', label: 'Children', icon: User },
                                                 { id: 'luggage', label: 'Luggage', icon: Briefcase },
                                                 { id: 'handLuggage', label: 'Hand', icon: ShoppingBag }
                                             ].map((field) => (
-                                                <div key={field.id} className="bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-5 rounded-[2rem] flex flex-col items-center justify-center gap-3 shadow-sm group">
-                                                    <span className="text-[8px] font-black uppercase tracking-widest text-slate-500/60 transition-colors group-hover:text-black dark:group-hover:text-yellow-400">{field.label}</span>
-                                                    <div className="flex items-center gap-4">
+                                                <div key={field.id} className="bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-3 md:p-5 rounded-2xl md:rounded-[2rem] flex flex-col items-center justify-center gap-2 md:gap-3 shadow-sm group">
+                                                    <span className="text-[7px] md:text-[8px] font-black uppercase tracking-widest text-slate-500/60 transition-colors group-hover:text-black dark:group-hover:text-yellow-400">{field.label}</span>
+                                                    <div className="flex items-center gap-2 md:gap-4">
                                                         <button
                                                             onClick={() => setFormData(prev => ({
                                                                 ...prev,
@@ -1050,9 +1050,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                     [field.id]: Math.max(0, (prev.passengerCount[field.id] || 0) - 1)
                                                                 }
                                                             }))}
-                                                            className="w-10 h-10 flex items-center justify-center bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 rounded-xl text-black dark:text-white font-black hover:bg-slate-100 dark:hover:bg-white/20 transition-all shadow-sm active:scale-90"
-                                                        ><Minus size={14} /></button>
-                                                        <span className="font-black text-base text-black dark:text-white w-4 text-center">{(formData.passengerCount[field.id] || 0)}</span>
+                                                            className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 rounded-lg md:rounded-xl text-black dark:text-white font-black hover:bg-slate-100 dark:hover:bg-white/20 transition-all shadow-sm active:scale-90"
+                                                        ><Minus size={12} className="md:w-[14px] md:h-[14px]" /></button>
+                                                        <span className="font-black text-sm md:text-base text-black dark:text-white w-3 md:w-4 text-center">{(formData.passengerCount[field.id] || 0)}</span>
                                                         <button
                                                             onClick={() => setFormData(prev => ({
                                                                 ...prev,
@@ -1061,8 +1061,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                     [field.id]: (prev.passengerCount[field.id] || 0) + 1
                                                                 }
                                                             }))}
-                                                            className="w-10 h-10 flex items-center justify-center bg-black dark:bg-yellow-400 border border-black dark:border-yellow-400 rounded-xl text-white dark:text-black font-black hover:scale-105 transition-all shadow-lg active:scale-90"
-                                                        ><Plus size={14} /></button>
+                                                            className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-black dark:bg-yellow-400 border border-black dark:border-yellow-400 rounded-lg md:rounded-xl text-white dark:text-black font-black hover:scale-105 transition-all shadow-lg active:scale-90"
+                                                        ><Plus size={12} className="md:w-[14px] md:h-[14px]"/></button>
                                                     </div>
                                                 </div>
                                             ))}
@@ -1297,13 +1297,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 </div>
 
                 {/* Modal Footer */}
-                <div className="p-6 md:p-10 pt-4 md:pt-6 border-t border-slate-100 dark:border-white/10 bg-white/80 dark:bg-black/80 backdrop-blur-3xl shrink-0 transition-colors">
-                    <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-4 md:gap-6">
+                <div className="p-4 md:p-10 pt-3 md:pt-6 border-t border-slate-100 dark:border-white/10 bg-white/80 dark:bg-black/80 backdrop-blur-3xl shrink-0 transition-colors">
+                    <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-2 md:gap-6">
                         <button
                             onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                            className="flex items-center justify-center gap-4 px-10 py-5 bg-white dark:bg-white/5 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-slate-50 dark:hover:bg-white/10 transition-all text-black dark:text-white border-2 border-slate-100 dark:border-white/10 shadow-sm w-full md:w-auto min-w-[180px] italic active:scale-95"
+                            className="flex items-center justify-center gap-2 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-white dark:bg-white/5 rounded-xl md:rounded-2xl text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-slate-50 dark:hover:bg-white/10 transition-all text-black dark:text-white border-2 border-slate-100 dark:border-white/10 shadow-sm w-full md:w-auto md:min-w-[180px] italic active:scale-95"
                         >
-                            <ChevronLeft size={18} /> {step === 1 ? 'Cancel Trip' : 'Return Back'}
+                            <ChevronLeft size={16} className="md:w-4 md:h-4" /> {step === 1 ? 'Cancel Trip' : 'Return Back'}
                         </button>
 
                         {step < 2 ? (
@@ -1313,17 +1313,17 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     if (modalContentRef.current) modalContentRef.current.scrollTop = 0;
                                 }}
                                 disabled={(step === 1 && (!formData.pickup || !formData.dropoff || isOverCapacity || formData.hasNameBoard === null))}
-                                className="group flex items-center justify-center gap-4 px-12 py-5 bg-black dark:bg-yellow-400 text-white dark:text-black rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-slate-800 dark:hover:scale-105 transition-all disabled:opacity-30 shadow-[0_15px_40px_rgba(0,0,0,0.3)] w-full md:w-auto min-w-[220px] italic active:scale-95"
+                                className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-3 md:py-5 bg-black dark:bg-yellow-400 text-white dark:text-black rounded-xl md:rounded-2xl text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-slate-800 dark:hover:scale-105 transition-all disabled:opacity-30 shadow-[0_15px_40px_rgba(0,0,0,0.3)] w-full md:w-auto md:min-w-[220px] italic active:scale-95"
                             >
-                                Review & Checkout <ChevronRight size={18} className="group-hover:translate-x-2 transition-transform" />
+                                Review & Checkout <ChevronRight size={16} className="md:w-4 md:h-4 group-hover:translate-x-2 transition-transform" />
                             </button>
                         ) : (
                             <button
                                 onClick={handleSubmit}
                                 disabled={loading || !formData.name || !formData.phone || (isAirportService && !formData.flightNumber)}
-                                className="group flex items-center justify-center gap-4 px-12 py-5 bg-emerald-600 dark:bg-yellow-400 text-white dark:text-black rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-emerald-700 dark:hover:scale-105 transition-all disabled:opacity-30 shadow-[0_20px_50px_rgba(5,150,105,0.3)] dark:shadow-[0_20px_50px_rgba(250,204,21,0.2)] w-full md:w-auto min-w-[240px] italic active:scale-95"
+                                className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-3 md:py-5 bg-emerald-600 dark:bg-yellow-400 text-white dark:text-black rounded-xl md:rounded-2xl text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-emerald-700 dark:hover:scale-105 transition-all disabled:opacity-30 shadow-[0_20px_50px_rgba(5,150,105,0.3)] dark:shadow-[0_20px_50px_rgba(250,204,21,0.2)] w-full md:w-auto md:min-w-[240px] italic active:scale-95"
                             >
-                                {loading ? <Loader2 className="animate-spin" size={18} /> : <Zap size={18} fill="currentColor" />}
+                                {loading ? <Loader2 className="animate-spin" size={16} /> : <Zap size={16} className="md:w-4 md:h-4" fill="currentColor" />}
                                 {loading ? 'Securing Spot...' : 'Confirm My Chauffeur'}
                             </button>
                         )}
