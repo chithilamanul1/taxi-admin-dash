@@ -7,11 +7,11 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
             <div className="bg-white rounded-none w-full max-w-lg overflow-hidden shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] border-4 border-black animate-in zoom-in-95 duration-200">
-                <div className="relative h-56 bg-emerald-50 border-b-4 border-black">
+                <div className="relative h-56 md:h-64 bg-slate-50 dark:bg-white/5 border-b-4 border-black p-8">
                     <img
                         src={vehicle.image}
                         alt={vehicle.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain drop-shadow-xl"
                     />
                     <button
                         onClick={onClose}
