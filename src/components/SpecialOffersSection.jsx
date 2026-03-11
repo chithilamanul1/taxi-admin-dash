@@ -14,7 +14,6 @@ export default function SpecialOffersSection() {
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) {
-                    // Filter out expired coupons
                     const activeCoupons = data.filter(c => {
                         if (!c.expiryDate) return true;
                         return new Date(c.expiryDate) > new Date();
@@ -36,42 +35,38 @@ export default function SpecialOffersSection() {
 
     return (
         <section id="offers" className="py-0 relative transition-colors duration-300">
-            <section className="relative py-16 md:py-32 overflow-hidden bg-white dark:bg-emerald-900 shadow-2xl transition-colors duration-300">
+            <section className="relative py-16 md:py-32 overflow-hidden bg-white dark:bg-[#0a0a0a] border-t-4 border-black transition-colors duration-300">
 
-                {/* Background Effects */}
-                <div className="absolute inset-0 opacity-20">
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-300/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
-                </div>
-
-                <div className="relative z-10 grid lg:grid-cols-2 gap-12 p-8 md:p-16 items-center">
+                <div className="relative z-10 grid lg:grid-cols-2 gap-12 p-8 md:p-16 items-center max-w-7xl mx-auto">
                     <div>
-                        <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6">
-                            <Tag size={14} className="text-emerald-500 dark:text-emerald-400" />
-                            <span className="text-xs font-bold text-emerald-700 dark:text-emerald-100 uppercase tracking-wider">Exclusive Deals</span>
+                        <div className="inline-flex items-center gap-2 bg-[#FACC15] border-4 border-black px-4 py-1.5 mb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                            <Tag size={14} className="text-black" strokeWidth={3} />
+                            <span className="text-xs font-black text-black uppercase tracking-[0.2em]">Exclusive Deals</span>
                         </div>
-                        <h2 className="text-4xl md:text-5xl font-black text-black dark:text-white mb-6 leading-tight">
-                            Save on Your <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-400 dark:from-emerald-400 dark:to-emerald-200">Next Journey</span>
+                        <h2 className="text-5xl md:text-7xl font-black text-black dark:text-white mb-8 leading-none uppercase italic tracking-tighter">
+                            SAVE ON YOUR <br />
+                            <span className="text-[#FACC15]">NEXT JOURNEY</span>
                         </h2>
-                        <p className="text-emerald-900/70 dark:text-emerald-100/70 text-lg mb-8 max-w-md">
+                        <p className="text-black/50 dark:text-white/50 font-black uppercase tracking-[0.1em] text-sm md:text-base mb-10 max-w-md">
                             Unlock special discounts on airport transfers and tour packages. Limited time offers available now.
                         </p>
                         <Link
                             href="/offers"
-                            className="inline-flex items-center gap-3 bg-emerald-600 dark:bg-white text-white dark:text-emerald-900 px-8 py-4 rounded-xl font-bold hover:bg-emerald-700 dark:hover:bg-emerald-50 transition-all transform hover:scale-105 shadow-lg group"
+                            className="inline-flex items-center gap-4 bg-[#FACC15] text-black px-10 py-5 rounded-none border-4 border-black font-black uppercase tracking-[0.2em] text-sm hover:translate-y-[-4px] active:translate-y-0 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all group"
                         >
-                            View All Offers
-                            <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                            VIEW ALL OFFERS
+                            <span className="w-10 h-10 bg-black text-[#FACC15] flex items-center justify-center group-hover:bg-[#FACC15] group-hover:text-black group-hover:border-2 group-hover:border-black transition-all">
+                                <ArrowRight size={20} strokeWidth={3} />
+                            </span>
                         </Link>
                     </div>
 
                     {/* Coupon Cards Preview - Slider */}
                     <div className="w-full overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar snap-x snap-mandatory">
-                        <div className="flex gap-4 md:gap-6 min-w-max">
+                        <div className="flex gap-6 min-w-max">
                             {loading ? (
                                 Array(3).fill(0).map((_, i) => (
-                                    <div key={i} className="w-[280px] h-40 bg-black/5 dark:bg-white/5 rounded-2xl animate-pulse"></div>
+                                    <div key={i} className="w-[280px] h-40 bg-black/5 dark:bg-white/5 rounded-none border-4 border-black animate-pulse"></div>
                                 ))
                             ) : coupons.map((coupon) => (
                                 <div
@@ -84,19 +79,16 @@ export default function SpecialOffersSection() {
                                         }
                                         window.location.href = `/?${params.toString()}#booking`;
                                     }}
-                                    className="snap-center w-[280px] md:w-[320px] bg-slate-50 dark:bg-white border border-slate-200 shadow-xl rounded-3xl p-6 hover:translate-y-[-4px] transition-transform cursor-pointer group/card flex-shrink-0 relative overflow-hidden"
+                                    className="snap-center w-[280px] md:w-[320px] bg-white dark:bg-[#111] border-4 border-black rounded-none p-6 hover:translate-y-[-4px] hover:border-[#FACC15] transition-all cursor-pointer group/card flex-shrink-0 relative overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(250,204,21,0.2)]"
                                 >
-                                    {/* Decorative Background Blob */}
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
-
                                     <div className="relative z-10">
                                         {/* Header: Icon & Location Badge */}
                                         <div className="flex justify-between items-start mb-6">
-                                            <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/30 text-white">
+                                            <div className="w-14 h-14 bg-[#FACC15] border-2 border-black flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-black">
                                                 <Percent size={28} strokeWidth={3} />
                                             </div>
                                             {coupon.applicableLocations && coupon.applicableLocations.length > 0 && (
-                                                <span className="inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border border-emerald-100 dark:border-emerald-800">
+                                                <span className="inline-flex items-center gap-1 bg-black text-[#FACC15] px-3 py-1 text-[10px] font-black uppercase tracking-wider border-2 border-black">
                                                     <MapPin size={10} />
                                                     {coupon.applicableLocations[0]}
                                                 </span>
@@ -105,29 +97,26 @@ export default function SpecialOffersSection() {
 
                                         {/* Discount Amount */}
                                         <div className="mb-2">
-                                            <h3 className="text-5xl font-black text-slate-800 tracking-tight leading-none">
+                                            <h3 className="text-5xl font-black text-black dark:text-white tracking-tighter leading-none uppercase italic">
                                                 {coupon.discountType === 'percentage' ? `${coupon.value}%` : `Rs ${coupon.value}`}
-                                                <span className="text-xl ml-1 text-slate-500 font-bold">OFF</span>
+                                                <span className="text-xl ml-1 text-black/40 dark:text-white/40 font-black not-italic">OFF</span>
                                             </h3>
-                                            <p className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mt-1 ml-1">Discount</p>
+                                            <p className="text-[10px] font-black text-black/30 dark:text-white/30 uppercase tracking-[0.3em] mt-2">Discount</p>
                                         </div>
 
                                         {/* Description */}
-                                        <p className="text-sm font-bold text-slate-600 mb-6 leading-relaxed">
+                                        <p className="text-sm font-bold text-black/60 dark:text-white/60 mb-6 leading-relaxed">
                                             {coupon.description || `Valid for rides to/from ${coupon.applicableLocations?.[0] || 'selected locations'}`}
                                         </p>
 
                                         {/* Divider */}
-                                        <div className="border-t-2 border-dashed border-slate-200 mb-6 relative">
-                                            <div className="absolute left-0 top-1/2 -translate-y-1/2 -ml-8 w-4 h-4 bg-white dark:bg-emerald-900 rounded-full"></div>
-                                            <div className="absolute right-0 top-1/2 -translate-y-1/2 -mr-8 w-4 h-4 bg-white dark:bg-emerald-900 rounded-full"></div>
-                                        </div>
+                                        <div className="border-t-4 border-dashed border-black/10 dark:border-white/10 mb-6"></div>
 
                                         {/* Footer: Code & Copy */}
-                                        <div className="bg-slate-50 rounded-2xl p-2 pl-4 flex items-center justify-between border border-slate-200 shadow-inner group-hover/card:border-emerald-500/50 transition-colors">
+                                        <div className="bg-black/5 dark:bg-white/5 p-3 flex items-center justify-between border-2 border-black group-hover/card:border-[#FACC15] transition-colors">
                                             <div>
-                                                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Use Code</p>
-                                                <p className="text-lg font-black text-emerald-600 font-mono tracking-tight">{coupon.code}</p>
+                                                <p className="text-[9px] font-black text-black/40 dark:text-white/40 uppercase tracking-[0.2em] mb-0.5">Use Code</p>
+                                                <p className="text-lg font-black text-black dark:text-[#FACC15] font-mono tracking-tight">{coupon.code}</p>
                                             </div>
                                             <button
                                                 onClick={(e) => {
@@ -137,16 +126,16 @@ export default function SpecialOffersSection() {
                                                     setCopiedCode(textToCopy);
                                                     setTimeout(() => setCopiedCode(null), 2000);
                                                 }}
-                                                className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-sm border border-transparent ${copiedCode === coupon.code ? 'bg-emerald-500 text-white' : 'bg-white text-slate-800 border-slate-200 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700'}`}
+                                                className={`px-4 py-2.5 font-black text-xs flex items-center gap-2 transition-all border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:shadow-none ${copiedCode === coupon.code ? 'bg-[#FACC15] text-black' : 'bg-white dark:bg-black text-black dark:text-white hover:bg-[#FACC15] hover:text-black'}`}
                                             >
                                                 {copiedCode === coupon.code ? <Check size={14} /> : <Copy size={14} />}
-                                                {copiedCode === coupon.code ? 'Copied' : 'Copy'}
+                                                {copiedCode === coupon.code ? 'COPIED' : 'COPY'}
                                             </button>
                                         </div>
 
                                         {/* Valid Until */}
                                         {coupon.expiryDate && (
-                                            <div className="mt-4 flex items-center gap-2 text-[10px] font-bold text-slate-400 justify-center">
+                                            <div className="mt-4 flex items-center gap-2 text-[10px] font-black text-black/30 dark:text-white/30 justify-center uppercase tracking-[0.2em]">
                                                 <Calendar size={12} />
                                                 <span>Valid until {new Date(coupon.expiryDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                                             </div>
