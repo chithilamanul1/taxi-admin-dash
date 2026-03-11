@@ -24,17 +24,17 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
             {/* Drawer Content - Premium Box Style */}
             <div className={`absolute bottom-0 left-0 right-0 max-h-[90vh] bg-white dark:bg-[#111] rounded-t-[3rem] shadow-[0_-20px_50px_rgba(0,0,0,0.3)] transform transition-transform duration-500 ease-out z-50 overflow-hidden flex flex-col border-t-8 border-[#FACC15] ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}>
                 {/* Header */}
-                <div className="p-8 pb-4 flex items-center justify-between border-b border-slate-100 dark:border-white/10 shrink-0">
+                <div className="p-6 md:p-8 pb-4 flex items-center justify-between border-b border-slate-100 dark:border-white/10 shrink-0">
                     <div>
-                        <div className="yellow-badge mb-4">Elite Fleet</div>
-                        <h2 className="text-3xl md:text-5xl font-black text-black dark:text-white uppercase italic tracking-tighter">SELECT YOUR <span className="text-[#FACC15]">RIDE</span></h2>
+                        <div className="yellow-badge mb-3 md:mb-4 scale-90 md:scale-100 origin-left">Elite Fleet</div>
+                        <h2 className="text-2xl md:text-5xl font-black text-black dark:text-white uppercase italic tracking-tighter">SELECT YOUR <span className="text-[#FACC15]">RIDE</span></h2>
                     </div>
                     <button 
                         onClick={onClose}
-                        className="w-16 h-16 rounded-2xl bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xl"
+                        className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xl"
                         aria-label="Close drawer"
                     >
-                        <X size={24} strokeWidth={3} />
+                        <X size={20} strokeWidth={3} />
                     </button>
                 </div>
 

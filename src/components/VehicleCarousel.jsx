@@ -45,30 +45,30 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
 
     return (
         <div className="relative group/carousel">
-            <div className="flex justify-between items-end mb-10 px-2">
-                <div>
-                    <div className="yellow-badge mb-4">FLEET</div>
-                    <h3 className="text-2xl font-black text-black dark:text-white flex items-center gap-4 uppercase italic tracking-tighter">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-8 md:mb-10 px-2 lg:px-0">
+                <div className="flex flex-col gap-4">
+                    <div className="yellow-badge w-fit scale-90 md:scale-100 origin-left">FLEET</div>
+                    <h3 className="text-xl md:text-2xl font-black text-black dark:text-white flex flex-wrap items-center gap-3 md:gap-4 uppercase italic tracking-tighter">
                         VEHICLE OPTIONS
-                        <span className="text-[10px] bg-black text-[#FACC15] px-4 py-1 rounded-full not-italic tracking-[0.2em]">
+                        <span className="text-[9px] md:text-[10px] bg-black dark:bg-yellow-400 text-yellow-400 dark:text-black px-3 md:px-4 py-1 rounded-full not-italic tracking-[0.2em] font-black">
                             {vehicles.length} MODELS
                         </span>
                     </h3>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-3 md:gap-4 self-end md:self-auto">
                     <button
                         onClick={() => scroll('left')}
-                        className="w-14 h-14 rounded-2xl bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:translate-x-[-4px] transition-all shadow-xl"
+                        className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:translate-x-[-4px] transition-all shadow-xl border border-white/10"
                         aria-label="Scroll left"
                     >
-                        <ChevronLeft size={24} strokeWidth={3} />
+                        <ChevronLeft size={24} strokeWidth={3} className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
                     <button
                         onClick={() => scroll('right')}
-                        className="w-14 h-14 rounded-2xl bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:translate-x-[4px] transition-all shadow-xl"
+                        className="w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:translate-x-[4px] transition-all shadow-xl border border-white/10"
                         aria-label="Scroll right"
                     >
-                        <ChevronRight size={24} strokeWidth={3} />
+                        <ChevronRight size={24} strokeWidth={3} className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
                 </div>
             </div>
@@ -86,7 +86,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                         <div
                             key={vehicle._id || vehicle.vehicleType}
                             className={`
-                                relative flex-shrink-0 w-[350px] snap-center rounded-[3rem] border-4 transition-all duration-500 overflow-hidden group/card
+                                relative flex-shrink-0 w-[290px] md:w-[350px] snap-center rounded-[2.5rem] md:rounded-[3rem] border-4 transition-all duration-500 overflow-hidden group/card
                                 ${isSelected ? 'border-[#FACC15] bg-[#FACC15]/5 shadow-[0_30px_60px_rgba(250,204,21,0.2)]' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 shadow-xl hover:border-[#FACC15]/30'}
                                 ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
                             `}
@@ -102,7 +102,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                 </div>
                             )}
 
-                            <div className="h-56 w-full p-8 bg-slate-50 dark:bg-black/20 relative flex items-center justify-center group-hover/card:scale-105 transition-transform duration-700">
+                            <div className="h-48 md:h-56 w-full p-6 md:p-8 bg-slate-50 dark:bg-black/20 relative flex items-center justify-center group-hover/card:scale-105 transition-transform duration-700">
                                 <img
                                     src={vehicle.image}
                                     alt={vehicle.name}

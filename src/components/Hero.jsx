@@ -30,7 +30,7 @@ const Hero = ({ onBookClick }) => {
     const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroImages.length)
 
     return (
-        <section className="relative h-[85vh] md:h-[95vh] min-h-[600px] md:min-h-[850px] flex flex-col items-center justify-center pt-20 md:pt-36 pb-12 md:pb-24 overflow-hidden bg-white dark:bg-black transition-colors border-b-[20px] border-[#FACC15]">
+        <section className="relative h-auto min-h-[100vh] flex flex-col items-center justify-center pt-32 md:pt-48 pb-20 md:pb-32 overflow-hidden bg-white dark:bg-black transition-colors border-b-[20px] border-[#FACC15]">
             {/* Background Slideshow */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/40 to-transparent dark:from-black dark:via-black/40 dark:to-black/10 pointer-events-none z-10"></div>
@@ -86,7 +86,7 @@ const Hero = ({ onBookClick }) => {
 
             {/* Content */}
             <div className="container mx-auto px-6 relative z-10 text-center">
-                <div className="yellow-badge mb-8 animate-slide-up opacity-0 [animation-delay:0.2s] [animation-fill-mode:forwards] mx-auto shadow-2xl">
+                <div className="yellow-badge mb-6 md:mb-8 animate-slide-up opacity-0 [animation-delay:0.2s] [animation-fill-mode:forwards] mx-auto shadow-2xl scale-90 md:scale-100">
                     <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-30"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-black"></span>
@@ -95,7 +95,7 @@ const Hero = ({ onBookClick }) => {
                 </div>
 
                 <div className="relative inline-block mb-12 animate-slide-up opacity-0 [animation-delay:0.4s] [animation-fill-mode:forwards]">
-                    <h1 className="text-5xl md:text-8xl lg:text-9xl font-black leading-[0.9] text-black dark:text-white tracking-tighter max-w-5xl mx-auto uppercase italic relative z-10">
+                    <h1 className="text-4xl md:text-8xl lg:text-9xl font-black leading-[1] md:leading-[0.9] text-black dark:text-white tracking-tighter max-w-5xl mx-auto uppercase italic relative z-10 transition-all">
                         THE SMART <br />WAY TO <span className="text-[#FACC15]">EXPLORE</span>
                     </h1>
                     {/* Decorative Shadow Box for Heading (Premium Look) */}
@@ -104,8 +104,8 @@ const Hero = ({ onBookClick }) => {
 
                 {/* Sri Lanka Info Text */}
                 <div className="max-w-3xl mb-12 animate-slide-up opacity-0 [animation-delay:0.5s] [animation-fill-mode:forwards] mx-auto">
-                    <div className="inline-block px-10 py-6 bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black mb-10 shadow-2xl skew-x-[-10deg]">
-                        <p className="text-lg md:text-2xl leading-relaxed font-black uppercase tracking-widest italic skew-x-[10deg]">
+                    <div className="inline-block px-6 py-4 md:px-10 md:py-6 bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black mb-10 shadow-2xl skew-x-[-10deg]">
+                        <p className="text-base md:text-2xl leading-relaxed font-black uppercase tracking-widest italic skew-x-[10deg]">
                             Premium airport transfers and curated luxury tours in Sri Lanka.
                         </p>
                     </div>
@@ -113,13 +113,13 @@ const Hero = ({ onBookClick }) => {
                     <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
                         <button
                             onClick={onBookClick}
-                            className="w-full md:w-auto px-16 py-6 bg-[#FACC15] text-black font-black uppercase tracking-[0.2em] italic text-sm hover:translate-y-[-4px] active:translate-y-0 transition-all shadow-[0_20px_50px_rgba(250,204,21,0.3)] flex items-center justify-center gap-4 group rounded-2xl"
+                            className="w-full md:w-auto px-10 md:px-16 py-5 md:py-6 bg-[#FACC15] text-black font-black uppercase tracking-[0.2em] italic text-xs md:text-sm hover:translate-y-[-4px] active:translate-y-0 transition-all shadow-[0_20px_50px_rgba(250,204,21,0.3)] flex items-center justify-center gap-4 group rounded-2xl"
                         >
                             BOOK NOW <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
                         </button>
                         <Link
                             href="/tour-packages"
-                            className="w-full md:w-auto px-16 py-6 bg-white dark:bg-black border-4 border-black dark:border-white text-black dark:text-white font-black uppercase tracking-[0.2em] italic text-sm hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all flex items-center justify-center rounded-2xl"
+                            className="w-full md:w-auto px-10 md:px-16 py-5 md:py-6 bg-white dark:bg-black border-4 border-black dark:border-white text-black dark:text-white font-black uppercase tracking-[0.2em] italic text-xs md:text-sm hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all flex items-center justify-center rounded-2xl"
                         >
                             BROWSE TOURS
                         </Link>
