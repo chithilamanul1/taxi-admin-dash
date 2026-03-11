@@ -99,7 +99,7 @@ const Hero = ({ onBookClick }) => {
                         THE SMART <br />WAY TO <span className="text-[#FACC15]">EXPLORE</span>
                     </h1>
                     {/* Decorative Shadow Box for Heading (Premium Look) */}
-                    <div className="absolute -inset-4 bg-black/5 dark:bg-white/5 -rotate-1 rounded-3xl -z-10 blur-xl"></div>
+                    <div className="absolute -inset-4 bg-[#FACC15]/20 dark:bg-white/5 -rotate-1 -z-10 border-2 border-black/10"></div>
                 </div>
 
                 {/* Sri Lanka Info Text */}
@@ -113,13 +113,13 @@ const Hero = ({ onBookClick }) => {
                     <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
                         <button
                             onClick={onBookClick}
-                            className="w-full md:w-auto px-10 md:px-16 py-5 md:py-6 bg-[#FACC15] text-black font-black uppercase tracking-[0.2em] italic text-xs md:text-sm hover:translate-y-[-4px] active:translate-y-0 transition-all shadow-[0_20px_50px_rgba(250,204,21,0.3)] flex items-center justify-center gap-4 group rounded-2xl"
+                            className="w-full md:w-auto px-10 md:px-16 py-5 md:py-6 bg-[#FACC15] text-black font-black uppercase tracking-[0.2em] italic text-xs md:text-sm hover:translate-y-[-4px] active:translate-y-0 transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center gap-4 group border-4 border-black"
                         >
                             BOOK NOW <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
                         </button>
                         <Link
                             href="/tour-packages"
-                            className="w-full md:w-auto px-10 md:px-16 py-5 md:py-6 bg-white dark:bg-black border-4 border-black dark:border-white text-black dark:text-white font-black uppercase tracking-[0.2em] italic text-xs md:text-sm hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all flex items-center justify-center rounded-2xl"
+                            className="w-full md:w-auto px-10 md:px-16 py-5 md:py-6 bg-white dark:bg-black border-4 border-black dark:border-white text-black dark:text-white font-black uppercase tracking-[0.2em] italic text-xs md:text-sm hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all flex items-center justify-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
                         >
                             BROWSE TOURS
                         </Link>

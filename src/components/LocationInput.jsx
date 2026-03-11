@@ -121,9 +121,9 @@ const LocationInput = ({
 
     return (
         <div className={`relative group ${zIndex || 'z-20'}`} ref={wrapperRef}>
-            {/* Icon - Prominent Yellow */}
+            {/* Icon - Boxy Style */}
             <div className={`absolute left-5 top-1/2 -translate-y-1/2 transition-colors z-10 ${isFocused ? 'text-black' : 'text-black/30'}`}>
-                <div className={`p-2 rounded-lg transition-all ${isFocused ? 'bg-[#FACC15]' : 'bg-black/5'}`}>
+                <div className={`p-2 rounded-none border-2 border-black transition-all ${isFocused ? 'bg-[#FACC15]' : 'bg-black/5'}`}>
                     <Icon size={20} strokeWidth={3} />
                 </div>
             </div>
@@ -134,9 +134,9 @@ const LocationInput = ({
                 onFocus={() => { if (onFocus) onFocus(); setIsFocused(true); }}
                 disabled={disabled}
                 placeholder={googleLoaded ? placeholder : 'Loading maps...'}
-                className={`w-full pl-16 pr-14 h-16 rounded-2xl text-base sm:text-lg font-bold bg-white dark:bg-white/5 border-4 transition-all outline-none text-black dark:text-white uppercase tracking-widest italic
-                ${isFocused ? 'border-[#FACC15] shadow-2xl scale-[1.01] -translate-y-1' : 'border-transparent'}
-                ${disabled ? 'cursor-not-allowed opacity-50' : 'hover:border-[#FACC15]/20'}`}
+                className={`w-full pl-16 pr-14 h-16 rounded-none text-base sm:text-lg font-bold bg-white dark:bg-white/5 border-4 transition-all outline-none text-black dark:text-white uppercase tracking-widest italic
+                ${isFocused ? 'border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] -translate-y-1' : 'border-black/5 dark:border-white/10'}
+                ${disabled ? 'cursor-not-allowed opacity-50' : 'hover:border-black'}`}
             />
 
             {/* Clear Button */}
@@ -150,9 +150,9 @@ const LocationInput = ({
                 </button>
             )}
 
-            {/* Suggestions Dropdown - Premium Box */}
+            {/* Suggestions Dropdown - Boxy Style */}
             {isFocused && (suggestions.length > 0 || isLoading) && (
-                <div className="absolute top-[110%] left-0 right-0 bg-white dark:bg-[#111] rounded-[2rem] shadow-2xl border-4 border-[#FACC15] p-4 z-[100] animate-fade-in overflow-hidden">
+                <div className="absolute top-[110%] left-0 right-0 bg-white dark:bg-[#111] rounded-none shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] border-4 border-black p-0 z-[100] animate-fade-in overflow-hidden">
                     <div className="max-h-[350px] overflow-y-auto custom-scrollbar">
                         {isLoading ? (
                             <div className="p-8 flex items-center justify-center">
@@ -163,10 +163,10 @@ const LocationInput = ({
                                 <button
                                     key={i}
                                     onMouseDown={() => handleSelect(s)}
-                                    className="w-full flex items-center gap-6 p-6 hover:bg-[#FACC15] group transition-all rounded-2xl text-left border-b border-slate-100 last:border-0"
+                                    className="w-full flex items-center gap-6 p-6 hover:bg-[#FACC15] group transition-all rounded-none text-left border-b-4 border-black last:border-0"
                                 >
-                                    <div className="w-10 h-10 bg-black/5 rounded-xl flex items-center justify-center group-hover:bg-black/10 transition-colors">
-                                        <MapPin size={18} className="text-black/50 group-hover:text-black" />
+                                    <div className="w-10 h-10 bg-black/5 rounded-none border-2 border-black flex items-center justify-center group-hover:bg-black/10 transition-colors">
+                                        <MapPin size={18} className="text-black group-hover:text-black" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <p className="font-black text-black text-sm uppercase italic tracking-wider truncate mb-1">

@@ -191,8 +191,8 @@ export default function DayTripsClient() {
                 <div className="max-w-6xl mx-auto mt-32">
                     <div className="bg-[#FACC15] p-16 md:p-24 relative overflow-hidden border-b-[20px] border-black">
                         <div className="relative z-10 text-black">
-                            <h2 className="text-5xl md:text-8xl font-black mb-8 leading-none uppercase italic tracking-tighter">
-                                CUSTOM <br /><span className="bg-black text-[#FACC15] px-4">ADVENTURES</span>
+                            <h2 className="text-4xl md:text-8xl font-black mb-8 leading-none uppercase italic tracking-tighter">
+                                CUSTOM <br /><span className="bg-black text-[#FACC15] px-2 md:px-4">ADVENTURES</span>
                             </h2>
                             <p className="text-black/70 mb-12 max-w-xl text-sm font-black uppercase tracking-[0.2em] leading-relaxed">
                                 Don't see what you're looking for? We specialize in creating custom day trips that fit your schedule and interests perfectly.
