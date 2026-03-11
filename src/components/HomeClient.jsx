@@ -19,6 +19,7 @@ const SpecialOffersSection = dynamic(() => import('./SpecialOffersSection'), { s
 const MobileAppSection = dynamic(() => import('./MobileAppSection'), { ssr: false })
 const MarketingPopup = dynamic(() => import('./MarketingPopup'), { ssr: false })
 const ExpressCheckoutModal = dynamic(() => import('./ExpressCheckoutModal'), { ssr: false })
+const FAQSection = dynamic(() => import('./FAQSection'), { ssr: false })
 
 export default function HomeClient() {
     const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -181,6 +182,8 @@ export default function HomeClient() {
                     </div>
                 </div>
             </section>
+
+            <FAQSection />
 
             <Features />
 
