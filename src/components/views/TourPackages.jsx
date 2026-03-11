@@ -26,82 +26,82 @@ const TourPackages = () => {
     }, [])
 
     return (
-        <div className="pb-20">
-            {/* Header */}
-            <div className="bg-emerald-900 py-16 md:py-24 text-center px-4">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Tour <span className="text-emerald-400">Packages</span></h1>
-                <p className="text-white/60 max-w-2xl mx-auto">Discover the beauty of Sri Lanka with our curated multi-day tour experiences and day trips.</p>
+        <div className="pb-20 bg-slate-50 dark:bg-black transition-colors duration-500">
+            {/* Header - Premium Look */}
+            <div className="bg-black py-20 md:py-32 text-center px-4 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-[#FACC15]/10 rounded-full blur-[120px] -mr-48 -mt-48"></div>
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#FACC15]/5 rounded-full blur-[120px] -ml-48 -mb-48"></div>
+                
+                <div className="relative z-10">
+                    <div className="inline-block px-6 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-[0.4em] italic rounded-full mb-8 shadow-xl">Elite Experiences</div>
+                    <h1 className="text-5xl md:text-8xl font-black text-white italic tracking-tighter uppercase mb-6">
+                        TOUR <span className="text-[#FACC15]">PACKAGES</span>
+                    </h1>
+                    <p className="text-white/40 max-w-2xl mx-auto font-bold uppercase tracking-widest text-xs leading-relaxed">Curated escapes through the teardrop of India. <br className="hidden md:block"/>Luxury, Comfort, and Culture combined.</p>
+                </div>
             </div>
 
             {/* Grid */}
-            <div className="max-w-7xl mx-auto px-4 md:px-6 -mt-10">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 -mt-16 relative z-20">
                 {loading ? (
-                    <div className="flex justify-center py-20">
-                        <Loader2 className="animate-spin text-emerald-500" size={48} />
+                    <div className="flex flex-col items-center justify-center py-32 gap-6">
+                        <div className="w-16 h-16 border-8 border-[#FACC15] border-t-transparent rounded-full animate-spin"></div>
+                        <p className="font-black text-black/40 uppercase tracking-widest italic">Gathering Best Experiences...</p>
                     </div>
                 ) : (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                         {tours.map((pkg) => (
-                            <div key={pkg._id || pkg.id} itemScope itemType="https://schema.org/Product" className="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 border border-slate-100 flex flex-col h-full">
+                            <div key={pkg._id || pkg.id} className="premium-box bg-white dark:bg-[#111] overflow-hidden group hover:scale-[1.02] transition-all duration-500 border-none flex flex-col h-full shadow-2xl">
                                 {/* Image */}
-                                <Link href={`/tour-packages/${pkg.slug || pkg.id}`} className="block h-56 overflow-hidden relative">
+                                <Link href={`/tour-packages/${pkg.slug || pkg.id}`} className="block h-64 overflow-hidden relative">
                                     <img
                                         src={pkg.heroImage || pkg.image || (pkg.images && pkg.images[0]) || '/placeholder.jpg'}
                                         alt={pkg.title}
-                                        itemProp="image"
                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                     />
-                                    <div className="absolute top-3 right-3 bg-emerald-900/90 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm shadow flex items-center gap-1">
-                                        <Clock size={10} /> {typeof pkg.duration === 'object' ? `${pkg.duration.days}D / ${pkg.duration.nights}N` : pkg.duration}
+                                    <div className="absolute bottom-4 left-4 bg-black/90 text-[#FACC15] text-[10px] font-black px-4 py-2 rounded-xl uppercase tracking-widest backdrop-blur-md shadow-2xl border border-white/10 flex items-center gap-2">
+                                        <Clock size={12} strokeWidth={3} /> {typeof pkg.duration === 'object' ? `${pkg.duration.days}D / ${pkg.duration.nights}N` : pkg.duration}
                                     </div>
                                     {pkg.isFeatured && (
-                                        <div className="absolute top-3 left-3 bg-yellow-400 text-emerald-900 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow">
-                                            Featured
+                                        <div className="absolute top-4 right-4 bg-[#FACC15] text-black text-[10px] font-extrabold px-4 py-2 rounded-xl uppercase tracking-widest shadow-xl italic">
+                                            Priority
                                         </div>
                                     )}
                                 </Link>
 
                                 {/* Content */}
-                                <div className="p-5 flex flex-col flex-grow">
-                                    <Link href={`/tour-packages/${pkg.slug || pkg.id}`} className="group-hover:text-emerald-700 transition-colors">
-                                        <h3 itemProp="name" className="text-lg font-bold text-emerald-900 mb-2 line-clamp-2 leading-tight h-12">{pkg.title}</h3>
+                                <div className="p-8 flex flex-col flex-grow">
+                                    <Link href={`/tour-packages/${pkg.slug || pkg.id}`}>
+                                        <h3 className="text-2xl font-black text-black dark:text-white uppercase italic tracking-tighter leading-none mb-4 group-hover:text-[#FACC15] transition-colors">{pkg.title}</h3>
                                     </Link>
 
-                                    <div className="flex flex-wrap gap-2 mb-4">
+                                    <div className="flex flex-wrap gap-2 mb-6">
                                         {pkg.destinations && pkg.destinations.slice(0, 3).map((dest, i) => (
-                                            <span key={i} className="text-[10px] font-medium bg-slate-50 text-slate-500 px-2 py-1 rounded border border-slate-100">
+                                            <span key={i} className="text-[9px] font-black bg-slate-50 dark:bg-white/5 text-slate-500 dark:text-slate-400 px-3 py-1.5 rounded-lg border border-slate-100 dark:border-white/10 uppercase tracking-widest">
                                                 {dest}
                                             </span>
                                         ))}
-                                        {pkg.destinations && pkg.destinations.length > 3 && (
-                                            <span className="text-[10px] font-medium bg-slate-50 text-slate-500 px-2 py-1 rounded border border-slate-100">+{pkg.destinations.length - 3}</span>
-                                        )}
                                     </div>
 
-                                    <div className="mt-auto pt-4 border-t border-gray-100 flex items-end justify-between">
-                                        <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                                            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">
-                                                {pkg.price?.type === 'per-person' ? 'Per Person' : 'From'}
+                                    <div className="mt-auto pt-6 border-t border-slate-100 dark:border-white/10 flex items-end justify-between">
+                                        <div>
+                                            <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] font-black mb-1">
+                                                Investment
                                             </p>
-                                            <div className="flex items-baseline gap-1">
-                                                <span className="text-sm font-bold text-emerald-600">
-                                                    <meta itemProp="priceCurrency" content={pkg.price?.currency || 'USD'} />
-                                                    <span itemProp="price" content={pkg.price?.amount || 0}>
-                                                        {pkg.price?.currency || 'USD'} {pkg.price?.amount?.toLocaleString() || '0'}
-                                                    </span>
+                                            <div className="flex items-baseline gap-2">
+                                                <span className="text-xs font-black text-slate-400 uppercase tracking-tighter">{pkg.price?.currency || 'USD'}</span>
+                                                <span className="text-3xl font-black text-black dark:text-white italic tracking-tighter">
+                                                    {pkg.price?.amount?.toLocaleString() || '0'}
                                                 </span>
                                             </div>
-                                            <link itemProp="availability" href="https://schema.org/InStock" />
                                         </div>
-                                        <div className="flex gap-2">
-                                            <Link
-                                                href={`/tour-packages/${pkg.slug || pkg.id}`}
-                                                className="bg-slate-100 text-emerald-900 p-2 rounded-lg hover:bg-slate-200 transition-colors"
-                                                title="View Details"
-                                            >
-                                                <ArrowRight size={18} />
-                                            </Link>
-                                        </div>
+                                        
+                                        <Link
+                                            href={`/tour-packages/${pkg.slug || pkg.id}`}
+                                            className="w-14 h-14 bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xl group/btn"
+                                        >
+                                            <ArrowRight size={24} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -110,12 +110,18 @@ const TourPackages = () => {
                 )}
             </div>
 
-            <div className="text-center mt-16 max-w-2xl mx-auto px-4">
-                <h3 className="text-2xl font-bold text-emerald-900 mb-3">Looking for something else?</h3>
-                <p className="text-gray-500 mb-8">We specialize in custom itineraries. Tell us your interests and we'll craft the perfect Sri Lankan adventure for you.</p>
-                <Link href="/contact" className="inline-block bg-emerald-600 text-white font-bold px-8 py-3 rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition-all hover:scale-105">
-                    Plan My Custom Tour
-                </Link>
+            <div className="text-center mt-32 max-w-4xl mx-auto px-6">
+                <div className="premium-box p-12 md:p-20 bg-black text-white border-none relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-64 h-64 bg-[#FACC15]/10 rounded-full blur-[100px] -ml-32 -mt-32"></div>
+                    <div className="relative z-10 space-y-8">
+                        <div className="yellow-badge mx-auto">Tailored For You</div>
+                        <h3 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter leading-none">CRAFT YOUR <span className="text-[#FACC15]">DREAM</span> ROUTE</h3>
+                        <p className="text-white/40 max-w-xl mx-auto font-bold uppercase tracking-widest text-xs leading-relaxed">Bespoke itineraries designed for travelers who refuse to settle for ordinary.</p>
+                        <Link href="/contact" className="inline-flex items-center gap-4 bg-[#FACC15] text-black font-black px-12 py-6 rounded-[2rem] hover:scale-105 active:scale-95 transition-all shadow-[0_20px_50px_rgba(250,204,21,0.3)] uppercase tracking-[0.2em] italic text-sm group">
+                            Start Planning <ArrowRight size={20} strokeWidth={3} className="group-hover:translate-x-2 transition-transform" />
+                        </Link>
+                    </div>
+                </div>
             </div>
         </div>
     )

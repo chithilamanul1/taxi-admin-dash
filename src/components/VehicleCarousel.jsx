@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Users, Briefcase, Info, Lock, Wind, Backpack } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Users, Briefcase, Info, Lock, Wind, Backpack, Check, ArrowRight } from 'lucide-react';
 import VehicleDetailModal from './VehicleDetailModal';
 
 const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => {
@@ -46,33 +46,37 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
     return (
         <div className="relative group/carousel">
             <div className="flex justify-between items-center mb-4 px-2">
-                <h3 className="text-lg font-bold text-emerald-900 flex items-center gap-2">
-                    Select Vehicle
-                    <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
-                        {vehicles.length} Options
-                    </span>
-                </h3>
-                <div className="flex gap-2">
+            <div className="flex justify-between items-end mb-10 px-2">
+                <div>
+                    <div className="yellow-badge mb-4">FLEET</div>
+                    <h3 className="text-2xl font-black text-black dark:text-white flex items-center gap-4 uppercase italic tracking-tighter">
+                        VEHICLE OPTIONS
+                        <span className="text-[10px] bg-black text-[#FACC15] px-4 py-1 rounded-full not-italic tracking-[0.2em]">
+                            {vehicles.length} MODELS
+                        </span>
+                    </h3>
+                </div>
+                <div className="flex gap-4">
                     <button
                         onClick={() => scroll('left')}
-                        className="p-2 rounded-full border border-emerald-900/10 hover:bg-emerald-50 text-emerald-900 transition-colors"
+                        className="w-14 h-14 rounded-2xl bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:translate-x-[-4px] transition-all shadow-xl"
                         aria-label="Scroll left"
                     >
-                        <ChevronLeft size={16} />
+                        <ChevronLeft size={24} strokeWidth={3} />
                     </button>
                     <button
                         onClick={() => scroll('right')}
-                        className="p-2 rounded-full border border-emerald-900/10 hover:bg-emerald-50 text-emerald-900 transition-colors"
+                        className="w-14 h-14 rounded-2xl bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:translate-x-[4px] transition-all shadow-xl"
                         aria-label="Scroll right"
                     >
-                        <ChevronRight size={16} />
+                        <ChevronRight size={24} strokeWidth={3} />
                     </button>
                 </div>
             </div>
 
             <div
                 ref={scrollRef}
-                className="flex gap-4 overflow-x-auto pb-6 px-0 snap-x snap-mandatory scrollbar-hide w-full"
+                className="flex gap-8 overflow-x-auto pb-12 px-2 snap-x snap-mandatory scrollbar-hide w-full"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {vehicles.map((vehicle) => {
@@ -83,85 +87,78 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                         <div
                             key={vehicle._id || vehicle.vehicleType}
                             className={`
-                                relative flex-shrink-0 w-[300px] snap-center rounded-2xl border-2 transition-all duration-300
-                                ${isSelected ? 'border-emerald-600 bg-emerald-600/5 shadow-xl ring-2 ring-emerald-600/20' : 'border-slate-100 dark:border-white/10 bg-white dark:bg-white/[0.03] shadow-sm hover:border-emerald-200 dark:hover:border-emerald-500/30'}
-                                ${!suitable ? 'opacity-70 grayscale-[0.5]' : 'cursor-pointer'}
+                                relative flex-shrink-0 w-[350px] snap-center rounded-[3rem] border-4 transition-all duration-500 overflow-hidden group/card
+                                ${isSelected ? 'border-[#FACC15] bg-[#FACC15]/5 shadow-[0_30px_60px_rgba(250,204,21,0.2)]' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/5 shadow-xl hover:border-[#FACC15]/30'}
+                                ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
                             `}
                             onClick={() => suitable && onSelect(vehicle.vehicleType)}
                         >
                             {!suitable && (
-                                <div className="absolute inset-0 z-10 bg-white/60 backdrop-blur-[1px] rounded-2xl flex flex-col items-center justify-center p-4 text-center">
-                                    <div className="bg-red-50 p-3 rounded-full mb-2">
-                                        <Lock size={20} className="text-red-500" />
+                                <div className="absolute inset-0 z-30 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center p-8 text-center">
+                                    <div className="w-16 h-16 bg-red-600 rounded-full mb-6 flex items-center justify-center shadow-2xl">
+                                        <Lock size={28} className="text-white" />
                                     </div>
-                                    <p className="text-xs font-bold text-red-600 uppercase tracking-widest">{reason}</p>
-                                    <p className="text-[10px] text-red-400 font-medium mt-1">Upgrade vehicle</p>
+                                    <p className="text-lg font-black text-white uppercase italic tracking-tighter leading-tight">{reason}</p>
+                                    <p className="text-[10px] text-[#FACC15] font-black mt-4 uppercase tracking-[0.3em]">Select Larger Vehicle</p>
                                 </div>
                             )}
 
-                            <div className="h-40 w-full p-4 bg-slate-50/50 rounded-t-2xl relative flex items-center justify-center">
+                            <div className="h-56 w-full p-8 bg-slate-50 dark:bg-black/20 relative flex items-center justify-center group-hover/card:scale-105 transition-transform duration-700">
                                 <img
                                     src={vehicle.image}
                                     alt={vehicle.name}
-                                    width={200}
-                                    height={120}
-                                    className="w-auto h-full object-contain mix-blend-multiply"
+                                    width={240}
+                                    height={150}
+                                    className="w-auto h-5/6 object-contain drop-shadow-2xl"
                                 />
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setDetailVehicle(vehicle); }}
-                                    className="absolute top-3 right-3 p-1.5 bg-white rounded-full shadow-sm text-emerald-900/40 hover:text-emerald-600 hover:scale-110 transition-all z-20"
+                                    className="absolute top-6 right-6 w-12 h-12 bg-white dark:bg-black rounded-xl shadow-xl text-black dark:text-[#FACC15] flex items-center justify-center hover:scale-110 transition-all z-20"
                                     aria-label={`View details for ${vehicle.name}`}
                                 >
-                                    <Info size={16} />
+                                    <Info size={20} strokeWidth={3} />
                                 </button>
                             </div>
 
-                            <div className="p-5">
-                                <div className="flex justify-between items-start mb-4 h-12">
-                                    <h4 className="font-black text-emerald-900 dark:text-white uppercase text-sm tracking-wide leading-tight">
+                            <div className="p-8">
+                                <div className="flex justify-between items-start mb-8 min-h-[64px]">
+                                    <h4 className="text-2xl font-black text-black dark:text-white uppercase italic tracking-tighter leading-tight">
                                         {vehicle.name.split('(').map((part, i) => (
-                                            <span key={i} className={i > 0 ? "block text-xs opacity-70 mt-0.5 normal-case" : "block"}>
+                                            <span key={i} className={i > 0 ? "block text-sm opacity-40 not-italic font-black mt-2 tracking-widest" : "block"}>
                                                 {i > 0 ? `(${part}` : part}
                                             </span>
                                         ))}
                                     </h4>
-                                    {suitable && <div className={`shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${isSelected ? 'border-emerald-600 bg-emerald-600' : 'border-slate-300 dark:border-slate-600'}`}>
-                                        {isSelected && <div className="w-2 h-2 bg-white rounded-full" />}
+                                    {suitable && <div className={`w-10 h-10 rounded-full border-4 flex items-center justify-center transition-all ${isSelected ? 'border-black bg-[#FACC15]' : 'border-slate-200 dark:border-white/10'}`}>
+                                        {isSelected && <Check size={20} strokeWidth={4} className="text-black" />}
                                     </div>}
                                 </div>
 
-                                {/* Vehicle Specs Grid */}
-                                <div className="space-y-2 mb-4">
-                                    <div className="flex items-center gap-3 text-xs font-medium text-slate-600 dark:text-slate-400">
-                                        <Users size={14} className="text-emerald-600 shrink-0" />
-                                        <span>{vehicle.minCapacity || 1} - {vehicle.capacity} Passengers</span>
-                                    </div>
-                                    <div className="flex items-center gap-3 text-xs font-medium text-slate-600 dark:text-slate-400">
-                                        <Briefcase size={14} className="text-emerald-600 shrink-0" />
-                                        <span>{vehicle.luggage || 0} Luggages</span>
-                                    </div>
-                                    <div className="flex items-center gap-3 text-xs font-medium text-slate-600 dark:text-slate-400">
-                                        <Backpack size={14} className="text-emerald-600 shrink-0" />
-                                        <span>{vehicle.handLuggage || 0} Hand Baggages</span>
-                                    </div>
-                                    {vehicle.hasAC !== false && (
-                                        <div className="flex items-center gap-3 text-xs font-medium text-slate-600 dark:text-slate-400">
-                                            <Wind size={14} className="text-emerald-600 shrink-0" />
-                                            <span>Air Conditioning</span>
+                                {/* Vehicle Specs Grid - Premium Boxes */}
+                                <div className="grid grid-cols-2 gap-3 mb-10">
+                                    {[
+                                        { icon: Users, label: `${vehicle.minCapacity || 1}-${vehicle.capacity} PAX` },
+                                        { icon: Briefcase, label: `${vehicle.luggage || 0} BAGS` },
+                                        { icon: Backpack, label: `${vehicle.handLuggage || 0} SMALL` },
+                                        ...(vehicle.hasAC !== false ? [{ icon: Wind, label: 'A/C' }] : [])
+                                    ].map((spec, i) => (
+                                        <div key={i} className="flex items-center gap-3 p-3 bg-black/5 dark:bg-white/5 rounded-xl border border-transparent group-hover/card:border-black/5 transition-all">
+                                            <spec.icon size={14} className="text-[#FACC15]" strokeWidth={3} />
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-black/60 dark:text-white/60">{spec.label}</span>
                                         </div>
-                                    )}
+                                    ))}
                                 </div>
 
-                                <div className="flex justify-between items-end border-t border-slate-100 dark:border-slate-700 pt-3">
+                                <div className="flex justify-between items-center pt-8 border-t-2 border-slate-100 dark:border-white/5">
                                     <div>
-                                        <p className="text-[10px] uppercase font-bold text-slate-400">Rate / Km</p>
-                                        <p className="text-lg font-black text-emerald-900 dark:text-emerald-400">LKR {vehicle.perKmRate}</p>
+                                        <p className="text-[10px] uppercase font-black text-black/30 dark:text-white/30 tracking-[0.2em] mb-1">RATE PER KM</p>
+                                        <p className="text-3xl font-black text-black dark:text-white italic tracking-tighter">LKR {vehicle.perKmRate}</p>
                                     </div>
                                     <div className={`
-                                        text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-wider
-                                        ${isSelected ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}
+                                        w-12 h-12 rounded-xl flex items-center justify-center transition-all
+                                        ${isSelected ? 'bg-black text-[#FACC15]' : 'bg-slate-100 dark:bg-white/5 text-black/20 dark:text-white/20'}
                                     `}>
-                                        {isSelected ? '✓ Selected' : 'Select'}
+                                        <ArrowRight size={24} strokeWidth={3} className={isSelected ? 'translate-x-0' : '-translate-x-2 opacity-0'} />
                                     </div>
                                 </div>
                             </div>

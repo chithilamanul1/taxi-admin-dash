@@ -80,7 +80,7 @@ export default function HomeClient() {
                 product={selectedExpressProduct}
             />
 
-            <div id="calculator" className="py-40 relative border-t border-black/5 dark:border-white/5">
+            <div id="calculator" className="py-20 md:py-40 relative border-t border-black/5 dark:border-white/5">
                 <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
                     <h2 className="text-5xl md:text-8xl font-black text-black dark:text-white mb-10 uppercase italic tracking-tighter leading-none">
                         SEAMLESS <br /><span className="text-[#FACC15]">AIRPORT TRANSFERS</span>
@@ -88,7 +88,7 @@ export default function HomeClient() {
                     <p className="text-black/40 dark:text-white/40 mb-14 text-sm font-black uppercase tracking-[0.3em] max-w-2xl mx-auto">Predictable pricing, premium vehicles, and professional chauffeurs waiting for you.</p>
                     <button
                         onClick={() => setIsBookingOpen(true)}
-                        className="bg-[#FACC15] text-black px-16 py-6 font-black text-sm uppercase tracking-widest hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all shadow-2xl inline-flex items-center gap-4 group italic"
+                        className="bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black px-16 py-6 font-black text-sm uppercase tracking-widest hover:translate-y-[-4px] transition-all shadow-2xl inline-flex items-center gap-4 group italic rounded-2xl"
                     >
                         BOOK YOUR TRIP NOW
                         <ArrowRight size={22} className="group-hover:translate-x-2 transition-transform" />
@@ -98,9 +98,9 @@ export default function HomeClient() {
 
             <SpecialOffersSection />
 
-            <section className="py-32 px-6 border-t border-black/5 dark:border-white/5">
+            <section className="py-20 md:py-32 px-6 border-t border-black/5 dark:border-white/5">
                 <div className="max-w-7xl mx-auto">
-                    <div className="flex flex-col md:flex-row items-end justify-between mb-24 gap-10">
+                    <div className="flex flex-col md:flex-row items-end justify-between mb-16 md:mb-24 gap-10">
                         <div className="max-w-3xl">
                             <h2 className="text-5xl md:text-8xl font-black mb-8 text-black dark:text-white uppercase italic tracking-tighter leading-none">
                                 CURATED <span className="text-[#FACC15]">DESTINATIONS</span>
@@ -112,7 +112,7 @@ export default function HomeClient() {
                         </Link>
                     </div>
 
-                    <div className="flex overflow-x-auto md:grid md:grid-cols-4 gap-6 pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide">
+                    <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide">
                         {destinations.slice(0, 16).map((route, i) => (
                             <button
                                 key={i}
@@ -127,7 +127,7 @@ export default function HomeClient() {
                                     });
                                     setIsBookingOpen(true);
                                 }}
-                                className="group p-8 bg-black/5 dark:bg-white/5 border-l-4 border-black/10 dark:border-white/10 hover:border-[#FACC15] hover:bg-[#FACC15]/10 dark:hover:bg-white/10 transition-all duration-300 text-left flex flex-col justify-between h-52 shrink-0 w-[280px] md:w-auto snap-start"
+                                className="premium-box group p-8 hover:border-[#FACC15] hover:bg-[#FACC15]/5 transition-all duration-300 text-left flex flex-col justify-between h-64 shrink-0 w-[280px] md:w-auto snap-start"
                             >
                                 <div>
                                     <div className="flex items-center gap-3 text-[#FACC15] mb-4">
@@ -140,7 +140,7 @@ export default function HomeClient() {
                                 </div>
                                 <div className="flex items-center justify-between mt-6">
                                     <span className="text-[9px] font-black text-black/20 dark:text-white/20 uppercase tracking-[0.3em]">INSTANT QUOTE</span>
-                                    <div className="w-10 h-10 bg-[#FACC15]/10 text-[#FACC15] flex items-center justify-center group-hover:bg-[#FACC15] group-hover:text-black transition-all">
+                                    <div className="w-12 h-12 bg-[#FACC15] text-black rounded-full flex items-center justify-center group-hover:scale-110 transition-all shadow-lg">
                                         <ArrowRight size={20} className="transform group-hover:translate-x-1 transition-transform" />
                                     </div>
                                 </div>
@@ -155,25 +155,25 @@ export default function HomeClient() {
             <GoogleReviews />
             <RecentPosts />
 
-            <section className="py-32 bg-white dark:bg-black border-t border-black/10 dark:border-white/10 transition-colors">
+            <section className="py-20 md:py-32 bg-white dark:bg-black border-t border-black/10 dark:border-white/10 transition-colors">
                 <div className="max-w-6xl mx-auto px-6">
-                    <div className="bg-[#FACC15] p-16 md:p-20 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12 border-b-[20px] border-black">
+                    <div className="bg-[#FACC15] p-10 md:p-20 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12 border-b-[20px] border-black rounded-[3rem]">
                         <div className="relative z-10 max-w-xl text-center md:text-left text-black">
                             <h2 className="text-5xl md:text-7xl font-black mb-8 uppercase italic tracking-tighter leading-none">ARE YOU <br /><span className="bg-black text-[#FACC15] px-4">A DRIVER?</span></h2>
                             <p className="text-black/70 text-sm font-black uppercase tracking-[0.2em] mb-12 leading-relaxed">
                                 Join our exclusive fleet of professional chauffeurs. Get consistent bookings, fair rates, and become part of Sri Lanka's premium network.
                             </p>
                             <div className="flex flex-wrap gap-6 justify-center md:justify-start">
-                                <Link href="/driver/register" className="bg-black text-[#FACC15] px-12 py-5 font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all italic shadow-2xl">
+                                <Link href="/driver/register" className="bg-black text-[#FACC15] px-12 py-5 font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all italic shadow-2xl rounded-xl">
                                     JOIN OUR FLEET <ArrowRight size={20} />
                                 </Link>
-                                <Link href="/driver/login" className="px-12 py-5 font-black uppercase tracking-widest text-xs text-black border-2 border-black/20 hover:border-black transition-all italic">
+                                <Link href="/driver/login" className="px-12 py-5 font-black uppercase tracking-widest text-xs text-black border-4 border-black/20 hover:border-black transition-all italic rounded-xl">
                                     DRIVER LOGIN
                                 </Link>
                             </div>
                         </div>
 
-                        <div className="relative z-10 w-full md:w-1/3 aspect-square bg-black p-10 flex flex-col items-center justify-center text-center transform rotate-3 hover:rotate-0 transition-all duration-500 border-4 border-black">
+                        <div className="relative z-10 w-full md:w-1/3 aspect-square bg-black p-10 flex flex-col items-center justify-center text-center transform rotate-3 hover:rotate-0 transition-all duration-500 border-4 border-black rounded-[2rem]">
                             <Star size={64} className="mb-6 text-[#FACC15]" />
                             <h3 className="text-4xl font-black text-white italic tracking-tighter uppercase mb-4">EARN MORE</h3>
                             <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Accept rides, track earnings, and get paid weekly.</p>
@@ -183,6 +183,7 @@ export default function HomeClient() {
             </section>
 
             <Features />
+
         </div >
     )
 }

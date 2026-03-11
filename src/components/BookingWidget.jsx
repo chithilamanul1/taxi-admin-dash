@@ -513,11 +513,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
     return (
         <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4">
-            {/* Google Maps Loader (Conditional) */}
-
-            {/* Tab Navigation - Screenshot Matching Grid Layout */}
-            <div className="flex flex-wrap bg-white dark:bg-[#111] p-2 rounded-3xl w-fit mx-auto lg:mx-0 mb-8 gap-2 shadow-xl border border-slate-100 dark:border-white/5 transition-all" role="tablist">
-                <div className="grid grid-cols-2 gap-2 w-full sm:w-[500px]">
+            {/* Tab Navigation - Premium Box Style */}
+            <div className="flex flex-wrap bg-white dark:bg-[#111] p-2 rounded-[2rem] w-fit mx-auto lg:mx-0 mb-8 gap-2 shadow-2xl border border-slate-200 dark:border-white/5 transition-all" role="tablist">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full sm:w-auto">
                     {[
                         { id: 'pickup', label: 'Airport Pickup', icon: MapPin },
                         { id: 'drop', label: 'Airport Drop', icon: Navigation },
@@ -531,20 +529,20 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             aria-controls={`panel-${tab.id}`}
                             id={`tab-${tab.id}`}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center justify-start gap-4 px-6 py-4 rounded-2xl text-sm font-black transition-all ${activeTab === tab.id
-                                ? 'bg-black dark:bg-yellow-400 text-white dark:text-black shadow-lg shadow-black/10 dark:shadow-yellow-400/10'
-                                : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 border border-slate-100 dark:border-white/5'
+                            className={`flex items-center justify-center sm:justify-start gap-3 px-4 sm:px-8 py-4 rounded-2xl text-xs font-black transition-all ${activeTab === tab.id
+                                ? 'bg-[#FACC15] text-black shadow-lg shadow-[#FACC15]/20'
+                                : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5'
                                 }`}
                         >
-                            <tab.icon size={20} className={activeTab === tab.id ? 'text-white dark:text-black' : 'text-slate-400 dark:text-slate-500'} />
-                            <span className="truncate">{tab.label}</span>
+                            <tab.icon size={18} className={activeTab === tab.id ? 'text-black' : 'text-slate-400'} />
+                            <span className="truncate uppercase tracking-wider">{tab.label}</span>
                         </button>
                     ))}
                 </div>
             </div>
 
-            {/* Widget Main Content */}
-            <div className="bg-white dark:bg-black rounded-[2.5rem] p-5 lg:p-10 shadow-2xl border border-slate-200 dark:border-white/10 animate-slide-up relative z-10 transition-colors">
+            {/* Widget Main Content - Premium Box */}
+            <div className="premium-box p-6 md:p-12 animate-slide-up relative z-10">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
@@ -1088,16 +1086,30 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                 </div>
 
-                                <button
-                                    onClick={handleBook}
-                                    disabled={!distance}
-                                    className="w-full py-6 bg-black dark:bg-yellow-400 text-white dark:text-black rounded-[2rem] font-black text-lg uppercase tracking-widest hover:bg-slate-900 dark:hover:bg-yellow-500 active:scale-[0.98] transition-all shadow-2xl shadow-black/20 dark:shadow-yellow-400/20 disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-3 group overflow-hidden relative"
-                                >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                                    <ShieldCheck size={20} className="group-hover:rotate-12 transition-transform" />
-                                    Secure Booking
-                                    <ArrowRight className="group-hover:translate-x-2 transition-transform" />
-                                </button>
+                                <div className="flex flex-col sm:flex-row gap-6 pt-6">
+                                    <button
+                                        onClick={handleBook}
+                                        disabled={!distance}
+                                        className="flex-1 bg-black text-white h-24 rounded-[2rem] font-black uppercase italic tracking-[0.2em] text-xl hover:bg-[#FACC15] hover:text-black transition-all shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center gap-6"
+                                    >
+                                        {isLoadingPricing ? (
+                                            <div className="w-8 h-8 border-4 border-[#FACC15] border-t-transparent rounded-full animate-spin"></div>
+                                        ) : (
+                                            <>
+                                                CHECK AVAILABILITY
+                                                <ArrowRight className="group-hover:translate-x-4 transition-transform" size={28} strokeWidth={3} />
+                                            </>
+                                        )}
+                                    </button>
+
+                                    <button
+                                        onClick={() => { setPickup(''); setDropoff(''); }}
+                                        className="bg-red-500/10 text-red-500 h-24 px-10 rounded-[2rem] font-black uppercase italic tracking-widest hover:bg-red-500 hover:text-white transition-all border-4 border-transparent hover:border-red-500/20"
+                                        title="Clear all fields"
+                                    >
+                                        RESET
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

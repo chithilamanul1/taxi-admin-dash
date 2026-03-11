@@ -29,7 +29,7 @@ const Features = () => {
         <section className="py-32 bg-white dark:bg-black relative overflow-hidden transition-colors border-t border-black/5 dark:border-white/5">
             <div className="container mx-auto px-6 relative z-10">
                 <div className="text-center mb-28 animate-slide-up">
-                    <div className="inline-flex items-center gap-3 px-6 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-[0.4em] mb-8 italic">
+                    <div className="yellow-badge mb-8 mx-auto">
                         The Standard
                     </div>
                     <h2 className="text-5xl md:text-8xl font-black mb-6 text-black dark:text-white uppercase italic tracking-tighter leading-none">
@@ -40,14 +40,14 @@ const Features = () => {
                     </p>
                 </div>
 
-                <div className="grid md:grid-cols-4 gap-4">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {features.map((feature, idx) => (
                         <div
                             key={idx}
-                            className="group p-12 bg-black/5 dark:bg-white/5 border-l-8 border-[#FACC15] hover:bg-[#FACC15] transition-all duration-500 animate-slide-up"
+                            className="stat-card group animate-slide-up"
                             style={{ animationDelay: `${idx * 0.1}s` }}
                         >
-                            <div className="w-16 h-16 bg-[#FACC15] text-black flex items-center justify-center mb-10 group-hover:bg-black group-hover:text-[#FACC15] transition-all">
+                            <div className="w-16 h-16 bg-[#FACC15] text-black flex items-center justify-center mb-10 group-hover:bg-black group-hover:text-[#FACC15] transition-all rounded-2xl">
                                 {feature.icon}
                             </div>
                             <h3 className="text-3xl font-black mb-6 text-black dark:text-white group-hover:text-black transition-colors uppercase italic tracking-tighter leading-none">{feature.title}</h3>

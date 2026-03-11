@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSession, signIn } from 'next-auth/react';
-import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag, Info, AlertCircle } from 'lucide-react';
+import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag, Info, AlertCircle, Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -548,26 +548,31 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 </AnimatePresence>
                 {/* Header - Hidden in Step 2 */}
                 {step !== 2 && (
-                    <div className="p-6 md:p-10 pb-4 md:pb-6 flex items-center justify-between shrink-0 pt-10 sm:pt-6">
-                        <div className="flex items-center gap-4 md:gap-6 min-w-0">
-                            <div className="w-10 h-10 md:w-14 md:h-14 bg-black dark:bg-yellow-400 rounded-2xl flex items-center justify-center shadow-lg shrink-0 transition-all">
-                                <Zap size={22} className="text-white dark:text-black md:w-[28px] md:h-[28px]" />
+                    <div className="p-8 md:p-12 pb-6 flex items-center justify-between shrink-0 pt-12 sm:pt-8 bg-white dark:bg-black transition-colors duration-500">
+                        <div className="flex items-center gap-6 min-w-0">
+                            <div className="w-14 h-14 bg-[#FACC15] rounded-2xl flex items-center justify-center shadow-2xl shrink-0 group hover:rotate-6 transition-transform">
+                                <Zap size={32} className="text-black" strokeWidth={3} fill="currentColor" />
                             </div>
                             <div className="min-w-0">
-                                <h2 className="text-xl md:text-3xl font-black tracking-tighter text-black dark:text-white leading-none truncate uppercase italic">Secure <span className="text-slate-400 dark:text-yellow-400">Booking</span></h2>
-                                <p className="text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mt-2">End-to-End Encrypted</p>
+                                <h2 className="text-2xl md:text-4xl font-black tracking-tighter text-black dark:text-white leading-none truncate uppercase italic">
+                                    SECURE <span className="text-[#FACC15]">BOOKING</span>
+                                </h2>
+                                <p className="text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] mt-3">Elite Tier Encryption</p>
                             </div>
                         </div>
-                        <button onClick={onClose} className="w-12 h-12 md:w-14 md:h-14 bg-slate-100 dark:bg-white/10 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10 hover:bg-red-50 dark:hover:bg-red-900/40 hover:text-red-600 transition-all z-[101]">
-                            <X size={24} />
+                        <button onClick={onClose} className="w-14 h-14 bg-slate-100 dark:bg-white/10 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10 hover:bg-red-500 hover:text-white transition-all z-[101] group shadow-sm">
+                            <X size={28} strokeWidth={3} className="group-hover:rotate-90 transition-transform" />
                         </button>
                     </div>
                 )}
 
                 {/* Progress Indicators */}
-                <div className="px-6 md:px-10 py-5 flex gap-3">
+                <div className="px-8 md:px-12 py-6 flex gap-4">
                     {STEPS.map((s) => (
-                        <div key={s.id} className={`h-2 flex-1 rounded-full transition-all duration-700 ${step >= s.id ? 'bg-black dark:bg-yellow-400 shadow-sm' : 'bg-slate-100 dark:bg-white/5'}`}></div>
+                        <div key={s.id} className="flex-1 flex flex-col gap-3">
+                            <div className={`h-3 rounded-full transition-all duration-1000 ${step >= s.id ? 'bg-[#FACC15] shadow-[0_0_20px_rgba(250,204,21,0.4)]' : 'bg-slate-100 dark:bg-white/5'}`}></div>
+                            <span className={`text-[9px] font-black uppercase tracking-widest text-center ${step >= s.id ? 'text-black dark:text-[#FACC15]' : 'text-slate-400'}`}>{s.title}</span>
+                        </div>
                     ))}
                 </div>
 
@@ -576,59 +581,60 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     {step === 1 && (
                         <div className="space-y-8 md:space-y-10 animate-slide-up">
                             {/* Trip Header */}
-                            <div className="flex flex-wrap bg-slate-100 dark:bg-white/5 p-2 rounded-3xl border border-slate-200 dark:border-white/10 w-full md:w-fit gap-2">
+                            <div className="flex flex-wrap bg-slate-100 dark:bg-white/5 p-2 rounded-[2rem] border border-slate-200 dark:border-white/10 w-full md:w-fit gap-2">
                                 {['one-way', 'round-trip'].map(t => (
-                                    <button key={t} onClick={() => setFormData({ ...formData, tripType: t })} className={`flex-1 md:flex-none px-6 md:px-8 py-3.5 rounded-2xl text-xs font-black uppercase tracking-[0.15em] transition-all whitespace-nowrap ${formData.tripType === t ? 'bg-black dark:bg-yellow-400 text-white dark:text-black shadow-lg' : 'text-slate-400 hover:text-black dark:hover:text-white'}`}>{t.replace('-', ' ')}</button>
+                                    <button key={t} onClick={() => setFormData({ ...formData, tripType: t })} className={`flex-1 md:flex-none px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all whitespace-nowrap italic ${formData.tripType === t ? 'bg-[#FACC15] text-black shadow-xl ring-2 ring-black/5' : 'text-slate-400 hover:text-black dark:hover:text-white'}`}>{t.replace('-', ' ')}</button>
                                 ))}
                             </div>
 
                             {/* Location Inputs - Premium Sharp Card */}
-                            <div className="space-y-6 bg-slate-50 dark:bg-[#0a0a0a] p-6 md:p-8 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-2xl shadow-black/5">
+                            <div className="premium-box bg-slate-50 dark:bg-[#0a0a0a] p-8 md:p-12 space-y-8 shadow-2xl">
                                 <div className="flex items-center justify-between mb-2">
-                                    <h3 className="text-xs font-black text-black dark:text-white uppercase tracking-[0.2em] flex items-center gap-3">
-                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                                        Journey Details
+                                    <h3 className="text-[10px] font-black text-black dark:text-white uppercase tracking-[0.4em] flex items-center gap-4 italic font-black">
+                                        <div className="w-3 h-3 rounded-full bg-[#FACC15] animate-pulse"></div>
+                                        ROUTING LOGISTICS
                                     </h3>
-                                    <div className="px-4 py-1.5 bg-black dark:bg-yellow-400 rounded-full text-[10px] font-black text-white dark:text-black uppercase tracking-widest italic">
+                                    <div className="px-6 py-2 bg-black text-[#FACC15] rounded-full text-[9px] font-black uppercase tracking-widest italic border border-white/10 shadow-xl">
                                         {formData.tripType.replace('-', ' ')}
                                     </div>
                                 </div>
-                                <div className="space-y-6 relative">
-                                    <LocationInput
-                                        label="Pick-Up Location"
-                                        icon={MapPin}
-                                        placeholder="Enter pickup (e.g. Airport)"
-                                        value={formData.pickup}
-                                        onSelect={(loc) => setFormData(prev => ({ ...prev, pickup: loc.address, pickupCoords: loc.lat ? { lat: loc.lat, lon: loc.lon } : null }))}
-                                    />
-
+                                <div className="space-y-10 relative">
+                                    <div className="relative group">
+                                        <LocationInput
+                                            label="Initial Pickup Point"
+                                            icon={MapPin}
+                                            placeholder="Where should we pick you up?"
+                                            value={formData.pickup}
+                                            onSelect={(loc) => setFormData(prev => ({ ...prev, pickup: loc.address, pickupCoords: loc.lat ? { lat: loc.lat, lon: loc.lon } : null }))}
+                                        />
+                                    </div>
                                     {/* Waypoints */}
                                     {formData.waypoints.map((wp, i) => (
-                                        <div key={i} className="relative group animate-slide-in pl-8">
-                                            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 z-10">
-                                                <Navigation size={18} />
+                                        <div key={i} className="relative group animate-slide-in pl-12">
+                                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[#FACC15] z-10 p-2 bg-black rounded-lg shadow-lg">
+                                                <Navigation size={18} strokeWidth={3} />
                                             </div>
-                                            <div className="w-full pl-10 pr-4 py-5 bg-white dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/10 text-sm font-black text-black dark:text-white flex items-center justify-between shadow-sm">
+                                            <div className="w-full pl-12 pr-6 py-6 bg-white dark:bg-white/5 rounded-2xl border-2 border-slate-100 dark:border-white/10 text-xs font-black text-black dark:text-white flex items-center justify-between shadow-sm group-hover:border-[#FACC15]/50 transition-all uppercase tracking-widest">
                                                 <span className="truncate">{wp.address || wp.name}</span>
                                                 <button
                                                     onClick={() => setFormData(prev => ({ ...prev, waypoints: prev.waypoints.filter((_, idx) => idx !== i) }))}
-                                                    className="w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-white/10 hover:bg-red-50 dark:hover:bg-red-900/40 hover:text-red-600 rounded-xl transition-all"
+                                                    className="w-10 h-10 flex items-center justify-center bg-slate-50 dark:bg-white/10 hover:bg-red-500 hover:text-white rounded-xl transition-all shadow-sm"
                                                 >
-                                                    <X size={16} />
+                                                    <X size={18} strokeWidth={3} />
                                                 </button>
                                             </div>
                                             {/* Connecting Line */}
-                                            <div className="absolute left-4 -top-6 w-0.5 h-6 bg-slate-200 dark:bg-white/10 -z-10"></div>
+                                            <div className="absolute left-6 -top-10 w-1 h-10 bg-gradient-to-b from-[#FACC15] to-transparent -z-10"></div>
                                         </div>
                                     ))}
 
-                                    <div className="relative">
+                                    <div className="relative group">
                                         {/* Connecting Line from pickup to waypoints/dropoff */}
-                                        <div className="absolute left-6 -top-6 w-0.5 h-6 bg-slate-200 dark:bg-white/10 -z-10"></div>
+                                        <div className="absolute left-8 -top-10 w-1 h-10 bg-gradient-to-b from-slate-200 dark:from-white/10 to-transparent -z-10"></div>
                                         <LocationInput
-                                            label="Drop-Off Location"
+                                            label="Final Destination"
                                             icon={Navigation}
-                                            placeholder="Enter destination (e.g. Hotel)"
+                                            placeholder="Where are we heading?"
                                             value={formData.dropoff}
                                             onSelect={(loc) => setFormData(prev => ({ ...prev, dropoff: loc.address, dropoffCoords: loc.lat ? { lat: loc.lat, lon: loc.lon } : null }))}
                                         />
@@ -636,11 +642,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
                             </div>
 
-                            <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-                                <div className="space-y-4">
+                            <div className="grid md:grid-cols-2 gap-10">
+                                <div className="space-y-8">
                                     <div className="space-y-6">
-                                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-2 leading-none">Choose Vehicle</label>
-                                        <div className="grid grid-cols-1 gap-5">
+                                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] pl-4 leading-none italic">Select Fleet Tier</label>
+                                        <div className="grid grid-cols-1 gap-6">
                                             {pricingData.map((v) => {
                                                 const totalPax = (formData.passengerCount?.adults || 0) + (formData.passengerCount?.children || 0);
                                                 const totalLuggage = formData.passengerCount?.luggage || 0;
@@ -653,356 +659,351 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     <button
                                                         key={v.vehicleType}
                                                         onClick={() => isFit && setFormData({ ...formData, vehicle: v.vehicleType })}
-                                                        className={`group/card relative w-full p-5 md:p-6 rounded-[2.5rem] border-2 transition-all cursor-pointer overflow-hidden flex flex-col gap-4 text-left
+                                                        className={`premium-box group/card relative w-full p-6 md:p-8 rounded-[2.5rem] border-4 transition-all cursor-pointer overflow-hidden flex flex-col gap-6 text-left
                                                         ${isSelected
-                                                                ? 'border-black dark:border-yellow-400 bg-slate-50 dark:bg-white/5 shadow-2xl shadow-black/10'
-                                                                : 'border-slate-100 dark:border-white/10 bg-white dark:bg-white/[0.02] hover:border-black/30 dark:hover:border-white/30'}
-                                                        ${!isFit ? 'opacity-40 grayscale pointer-events-none' : 'active:scale-[0.98]'}
+                                                                ? 'border-[#FACC15] bg-slate-50 dark:bg-white/5 ring-8 ring-[#FACC15]/5 shadow-2xl'
+                                                                : 'border-slate-100 dark:border-white/10 bg-white dark:bg-white/[0.02] hover:border-black/20 dark:hover:border-white/30'}
+                                                        ${!isFit ? 'opacity-30 grayscale pointer-events-none' : 'active:scale-[0.98]'}
                                                     `}
                                                     >
                                                         {/* Header info */}
-                                                        <div className="flex items-center gap-6">
+                                                        <div className="flex items-center gap-8">
                                                             {/* Image Box */}
-                                                            <div className="w-24 md:w-32 h-18 md:h-24 bg-white dark:bg-white/10 rounded-2xl flex items-center justify-center p-3 shrink-0 overflow-hidden border border-slate-100 dark:border-white/10 shadow-sm transition-colors group-hover/card:bg-slate-50 dark:group-hover/card:bg-white/20">
+                                                            <div className="w-28 md:w-36 h-20 md:h-28 bg-white dark:bg-white/10 rounded-2xl flex items-center justify-center p-4 shrink-0 overflow-hidden border border-slate-100 dark:border-white/10 shadow-inner">
                                                                 {v.image ? (
-                                                                    <img src={v.image} alt={v.name} className="w-full h-full object-contain transition-transform duration-500 group-hover/card:scale-110" />
+                                                                    <img src={v.image} alt={v.name} className="w-full h-full object-contain transition-transform duration-700 group-hover/card:scale-110" />
                                                                 ) : (
-                                                                    <Car className="text-slate-300 dark:text-white/20" size={32} />
+                                                                    <Car className="text-slate-200 dark:text-white/10" size={40} />
                                                                 )}
                                                             </div>
 
-                                                            {/* Title & Badge Container */}
+                                                            {/* Title & Badge */}
                                                             <div className="flex-1 min-w-0">
-                                                                {/* Badge for AC */}
-                                                                <div className="inline-flex bg-slate-100 dark:bg-white/10 text-black dark:text-yellow-400 text-[10px] font-black px-3 py-1 rounded-xl mb-3 uppercase items-center gap-2 shadow-sm border border-slate-200 dark:border-white/10">
-                                                                    <Zap size={12} fill="currentColor" /> AC
+                                                                <div className="flex items-center gap-3 mb-2">
+                                                                    <span className="bg-[#FACC15] text-black text-[9px] font-black px-3 py-1 rounded-lg uppercase tracking-widest italic shadow-sm">100% A/C</span>
+                                                                    {isSelected && <div className="w-2 h-2 rounded-full bg-[#FACC15] animate-ping"></div>}
                                                                 </div>
-                                                                <h4 className="text-xl md:text-2xl font-black text-black dark:text-white uppercase italic tracking-tight leading-none mb-2">{displayVehicleName(v.name)}</h4>
-                                                                <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Professional Sharp</p>
+                                                                <h4 className="text-2xl md:text-3xl font-black text-black dark:text-white uppercase italic tracking-tighter leading-none mb-1">{displayVehicleName(v.name)}</h4>
+                                                                <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Premium Service Class</p>
                                                             </div>
                                                         </div>
 
-                                                        {/* Redesigned Capacity Grid */}
-                                                        <div className="grid grid-cols-2 gap-4 mt-2">
-                                                            <div className="flex items-center gap-4 p-4 bg-white dark:bg-white/5 rounded-3xl border border-slate-100 dark:border-white/10 shadow-sm">
-                                                                <div className="w-10 h-10 bg-slate-50 dark:bg-white/10 rounded-xl flex items-center justify-center text-black dark:text-yellow-400">
-                                                                    <Users size={18} />
+                                                        {/* Capacity Grid */}
+                                                        <div className="grid grid-cols-2 gap-4">
+                                                            <div className="flex items-center gap-4 p-5 bg-white dark:bg-black/20 rounded-3xl border border-slate-100 dark:border-white/10 shadow-sm transition-colors group-hover/card:bg-slate-50 dark:group-hover/card:bg-black/40">
+                                                                <div className="w-12 h-12 bg-slate-50 dark:bg-white/10 rounded-xl flex items-center justify-center text-black dark:text-[#FACC15] shadow-sm">
+                                                                    <Users size={22} strokeWidth={3} />
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">Capacity</p>
-                                                                    <p className="text-sm font-black text-black dark:text-white leading-none">{v.capacity} <span className="text-[10px] text-slate-500 font-black uppercase ml-1">Pax</span></p>
+                                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Max PAX</p>
+                                                                    <p className="text-base font-black text-black dark:text-white leading-none italic">{v.capacity}</p>
                                                                 </div>
                                                             </div>
 
-                                                            <div className="flex items-center gap-4 p-4 bg-white dark:bg-white/5 rounded-3xl border border-slate-100 dark:border-white/10 shadow-sm">
-                                                                <div className="w-10 h-10 bg-slate-50 dark:bg-white/10 rounded-xl flex items-center justify-center text-black dark:text-yellow-400">
-                                                                    <Briefcase size={18} />
+                                                            <div className="flex items-center gap-4 p-5 bg-white dark:bg-black/20 rounded-3xl border border-slate-100 dark:border-white/10 shadow-sm transition-colors group-hover/card:bg-slate-50 dark:group-hover/card:bg-black/40">
+                                                                <div className="w-12 h-12 bg-slate-50 dark:bg-white/10 rounded-xl flex items-center justify-center text-black dark:text-[#FACC15] shadow-sm">
+                                                                    <Briefcase size={22} strokeWidth={3} />
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">Luggage</p>
-                                                                    <p className="text-sm font-black text-black dark:text-white leading-none">{v.luggage || 0} <span className="text-[10px] text-slate-500 font-black uppercase ml-1">Bags</span></p>
+                                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Baggage</p>
+                                                                    <p className="text-base font-black text-black dark:text-white leading-none italic">{v.luggage || 0}</p>
                                                                 </div>
                                                             </div>
-                                                        </div>
-
-                                                        {/* Included Perks */}
-                                                        <div className="flex flex-wrap gap-2 mt-2">
-                                                            {['100% A/C', 'Water Bottles', 'GPS Tracked'].map(f => (
-                                                                <div key={f} className="flex items-center gap-2 text-[10px] font-black uppercase text-black dark:text-white tracking-[0.1em] bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/10 px-3 py-1.5 rounded-xl">
-                                                                    <Check size={12} className="text-emerald-500" /> {f}
-                                                                </div>
-                                                            ))}
                                                         </div>
                                                     </button>
                                                 );
                                             })}
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div className="space-y-6">
-                                        {pricingCategory !== 'ride-now' && (
-                                            <div className="p-6 bg-slate-50 dark:bg-[#0a0a0a] border border-slate-200 dark:border-white/10 rounded-[2.5rem] shadow-2xl shadow-black/5 space-y-6">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-12 h-12 bg-black dark:bg-yellow-400 rounded-2xl flex items-center justify-center text-white dark:text-black shadow-lg">
-                                                        <Clock size={24} />
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs font-black text-black dark:text-white uppercase tracking-[0.2em] leading-none mb-1.5">Schedule Information</p>
-                                                        <p className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">Arrival & Departure</p>
-                                                    </div>
+                                <div className="space-y-6">
+                                    {pricingCategory !== 'ride-now' && (
+                                        <div className="premium-box bg-slate-50 dark:bg-[#0a0a0a] p-8 md:p-10 space-y-10 shadow-xl overflow-hidden relative">
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-[#FACC15]/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                                            <div className="flex items-center gap-6 relative z-10">
+                                                <div className="w-14 h-14 bg-black dark:bg-[#FACC15] rounded-2xl flex items-center justify-center text-[#FACC15] dark:text-black shadow-2xl transition-transform hover:rotate-6">
+                                                    <Clock size={28} strokeWidth={3} />
                                                 </div>
-                                                <div className="grid grid-cols-1 gap-5">
-                                                    <div className="space-y-3">
-                                                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Flight Number</label>
+                                                <div>
+                                                    <p className="text-[10px] font-black text-black dark:text-white uppercase tracking-[0.4em] leading-none mb-2 italic">Schedule Protocol</p>
+                                                    <p className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Time-Critical Dispatch</p>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-1 gap-8 relative z-10">
+                                                <div className="space-y-4">
+                                                    <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] pl-4 leading-none italic">Flight/Voyage Signifier</label>
+                                                    <div className="relative group">
+                                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15] group-focus-within:text-black dark:group-focus-within:text-[#FACC15] transition-colors"><Zap size={18} strokeWidth={3} fill="currentColor" /></div>
                                                         <input
                                                             type="text"
                                                             value={formData.flightNumber || ''}
                                                             onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                            className="w-full h-14 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 px-8 rounded-2xl outline-none focus:border-black dark:focus:border-yellow-400 transition-all font-black text-xs text-black dark:text-white shadow-sm"
-                                                            placeholder="e.g. EK 654"
+                                                            className="w-full h-16 bg-white dark:bg-white/5 border-2 border-slate-100 dark:border-white/10 pl-16 pr-8 rounded-3xl outline-none focus:border-[#FACC15] dark:focus:border-[#FACC15] transition-all font-black text-xs text-black dark:text-white shadow-sm uppercase tracking-widest placeholder:text-slate-300 dark:placeholder:text-slate-700"
+                                                            placeholder="e.g. UL 101"
                                                         />
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-5">
-                                                        <div className="space-y-3">
-                                                            <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Select Date</label>
-                                                            <input
-                                                                type="date"
-                                                                value={formData.flightArrivalDate || ''}
-                                                                onChange={e => {
-                                                                    const d = e.target.value;
-                                                                    setFormData(prev => ({ ...prev, flightArrivalDate: d, arrivalDate: d, date: isAirportService ? d : prev.date }));
-                                                                }}
-                                                                className="w-full h-14 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 px-6 rounded-2xl outline-none focus:border-black dark:focus:border-yellow-400 transition-all font-black text-xs text-black dark:text-white shadow-sm"
-                                                            />
-                                                        </div>
-                                                        <div className="space-y-3">
-                                                            <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Select Time</label>
-                                                            <input
-                                                                type="time"
-                                                                value={formData.flightArrivalTime || ''}
-                                                                onChange={e => {
-                                                                    const t = e.target.value;
-                                                                    setFormData(prev => ({ ...prev, flightArrivalTime: t, arrivalTime: t, time: isAirportService ? t : prev.time }));
-                                                                }}
-                                                                className="w-full h-14 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 px-6 rounded-2xl outline-none focus:border-black dark:focus:border-yellow-400 transition-all font-black text-xs text-black dark:text-white shadow-sm"
-                                                            />
-                                                        </div>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-6">
+                                                    <div className="space-y-4">
+                                                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] pl-4 leading-none italic">Target Date</label>
+                                                        <input
+                                                            type="date"
+                                                            value={formData.flightArrivalDate || ''}
+                                                            onChange={e => {
+                                                                const d = e.target.value;
+                                                                setFormData(prev => ({ ...prev, flightArrivalDate: d, arrivalDate: d, date: isAirportService ? d : prev.date }));
+                                                            }}
+                                                            className="w-full h-16 bg-white dark:bg-white/5 border-2 border-slate-100 dark:border-white/10 px-8 rounded-3xl outline-none focus:border-[#FACC15] dark:focus:border-[#FACC15] transition-all font-black text-xs text-black dark:text-white shadow-sm uppercase tracking-widest invert dark:invert-0"
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-4">
+                                                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] pl-4 leading-none italic">Target Time</label>
+                                                        <input
+                                                            type="time"
+                                                            value={formData.flightArrivalTime || ''}
+                                                            onChange={e => {
+                                                                const t = e.target.value;
+                                                                setFormData(prev => ({ ...prev, flightArrivalTime: t, arrivalTime: t, time: isAirportService ? t : prev.time }));
+                                                            }}
+                                                            className="w-full h-16 bg-white dark:bg-white/5 border-2 border-slate-100 dark:border-white/10 px-8 rounded-3xl outline-none focus:border-[#FACC15] dark:focus:border-[#FACC15] transition-all font-black text-xs text-black dark:text-white shadow-sm uppercase tracking-widest invert dark:invert-0"
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
-                                        )}
-
-                                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Passenger & Luggage</label>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            {[
-                                                { id: 'adults', label: 'Adults', icon: Users },
-                                                { id: 'children', label: 'Children', icon: User },
-                                                { id: 'luggage', label: 'Check-in Luggage', icon: Briefcase },
-                                                { id: 'handLuggage', label: 'Hand Luggage', icon: ShoppingBag }
-                                            ].map((field) => (
-                                                <div key={field.id} className="bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-4 md:p-5 rounded-[2rem] flex items-center justify-between shadow-sm">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-8 h-8 bg-white dark:bg-white/10 rounded-lg flex items-center justify-center text-black dark:text-white shadow-sm border border-slate-100 dark:border-white/10">
-                                                            <field.icon size={16} />
-                                                        </div>
-                                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
-                                                            {field.label}
-                                                        </span>
-                                                    </div>
-                                                    <div className="flex items-center gap-4">
-                                                        <button
-                                                            onClick={() => setFormData({
-                                                                ...formData,
-                                                                passengerCount: {
-                                                                    ...formData.passengerCount,
-                                                                    [field.id]: Math.max(0, formData.passengerCount[field.id] - 1)
-                                                                }
-                                                            })}
-                                                            className="text-black dark:text-white font-black text-lg w-10 h-10 flex items-center justify-center bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 rounded-xl hover:bg-slate-100 dark:hover:bg-white/20 transition-all shadow-sm active:scale-95"
-                                                        >
-                                                            <Minus size={16} strokeWidth={3} />
-                                                        </button>
-                                                        <span className="text-lg font-black text-black dark:text-white min-w-[24px] text-center">{formData.passengerCount[field.id]}</span>
-                                                        <button
-                                                            onClick={() => setFormData({
-                                                                ...formData,
-                                                                passengerCount: {
-                                                                    ...formData.passengerCount,
-                                                                    [field.id]: formData.passengerCount[field.id] + 1
-                                                                }
-                                                            })}
-                                                            className="text-white dark:text-black font-black text-lg w-10 h-10 flex items-center justify-center bg-black dark:bg-yellow-400 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg"
-                                                        >
-                                                            <Plus size={16} strokeWidth={3} />
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            ))}
                                         </div>
-                                        <div className="space-y-4">
-                                            <div className="flex items-center justify-between p-6 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] shadow-sm">
+                                    )}
+
+                                    <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Passenger & Luggage</label>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        {[
+                                            { id: 'adults', label: 'Adults', icon: Users },
+                                            { id: 'children', label: 'Children', icon: User },
+                                            { id: 'luggage', label: 'Check-in Luggage', icon: Briefcase },
+                                            { id: 'handLuggage', label: 'Hand Luggage', icon: ShoppingBag }
+                                        ].map((field) => (
+                                            <div key={field.id} className="bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-4 md:p-5 rounded-[2rem] flex items-center justify-between shadow-sm">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-8 h-8 bg-white dark:bg-white/10 rounded-lg flex items-center justify-center text-black dark:text-white shadow-sm border border-slate-100 dark:border-white/10">
+                                                        <field.icon size={16} />
+                                                    </div>
+                                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                                                        {field.label}
+                                                    </span>
+                                                </div>
                                                 <div className="flex items-center gap-4">
-                                                    <div className="w-10 h-10 bg-black dark:bg-yellow-400 rounded-xl flex items-center justify-center text-white dark:text-black">
-                                                        <Navigation size={20} />
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-xs font-black text-black dark:text-white uppercase tracking-[0.2em] leading-none mb-1">Total Distance</p>
-                                                        <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none mt-1">Calculated via OSRM</p>
-                                                    </div>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="text-lg font-black text-black dark:text-white leading-none italic">
-                                                        {distance.toFixed(1)} <span className="text-xs text-slate-400 uppercase tracking-widest">KM</span>
-                                                    </p>
+                                                    <button
+                                                        onClick={() => setFormData({
+                                                            ...formData,
+                                                            passengerCount: {
+                                                                ...formData.passengerCount,
+                                                                [field.id]: Math.max(0, formData.passengerCount[field.id] - 1)
+                                                            }
+                                                        })}
+                                                        className="text-black dark:text-white font-black text-lg w-10 h-10 flex items-center justify-center bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 rounded-xl hover:bg-slate-100 dark:hover:bg-white/20 transition-all shadow-sm active:scale-95"
+                                                    >
+                                                        <Minus size={16} strokeWidth={3} />
+                                                    </button>
+                                                    <span className="text-lg font-black text-black dark:text-white min-w-[24px] text-center">{formData.passengerCount[field.id]}</span>
+                                                    <button
+                                                        onClick={() => setFormData({
+                                                            ...formData,
+                                                            passengerCount: {
+                                                                ...formData.passengerCount,
+                                                                [field.id]: formData.passengerCount[field.id] + 1
+                                                            }
+                                                        })}
+                                                        className="text-white dark:text-black font-black text-lg w-10 h-10 flex items-center justify-center bg-black dark:bg-yellow-400 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg"
+                                                    >
+                                                        <Plus size={16} strokeWidth={3} />
+                                                    </button>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        {isOverCapacity && (
-                                            <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/30 rounded-2xl flex items-center gap-4 animate-pulse">
-                                                <div className="p-2 bg-red-100 dark:bg-red-900/40 rounded-lg text-red-600 dark:text-red-400">
-                                                    <AlertCircle size={18} />
+                                        ))}
+                                    </div>
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between p-6 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] shadow-sm">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-10 h-10 bg-black dark:bg-yellow-400 rounded-xl flex items-center justify-center text-white dark:text-black">
+                                                    <Navigation size={20} />
                                                 </div>
-                                                <p className="text-[10px] md:text-xs font-black text-red-900 dark:text-red-400 leading-tight uppercase tracking-[0.1em]">
-                                                    Capacity Exceeded: {totalPassengers} Pax (Limit {selectedVehicle.capacity})
+                                                <div>
+                                                    <p className="text-xs font-black text-black dark:text-white uppercase tracking-[0.2em] leading-none mb-1">Total Distance</p>
+                                                    <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none mt-1">Calculated via OSRM</p>
+                                                </div>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="text-lg font-black text-black dark:text-white leading-none italic">
+                                                    {distance.toFixed(1)} <span className="text-xs text-slate-400 uppercase tracking-widest">KM</span>
                                                 </p>
                                             </div>
-                                        )}
-
-                                        <div className="pt-4 space-y-6">
-                                            <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Greeting Service / Name Board</label>
-                                            <div className="grid grid-cols-2 gap-5">
-                                                <button
-                                                    onClick={() => setFormData({ ...formData, hasNameBoard: true })}
-                                                    className={`p-5 rounded-[2rem] border-2 transition-all flex items-center justify-between group/opt ${formData.hasNameBoard === true ? 'border-black dark:border-yellow-400 bg-black dark:bg-yellow-400 text-white dark:text-black shadow-xl scale-[1.02]' : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 hover:border-black/30 dark:hover:border-white/30'}`}
-                                                >
-                                                    <div className="flex items-center gap-4">
-                                                        <Check size={20} strokeWidth={3} className={formData.hasNameBoard === true ? 'text-emerald-400 dark:text-emerald-950' : 'text-slate-300'} />
-                                                        <span className="text-xs font-black uppercase tracking-widest italic">Yes, Please</span>
-                                                    </div>
-                                                </button>
-                                                <button
-                                                    onClick={() => setFormData({ ...formData, hasNameBoard: false, nameBoardText: '' })}
-                                                    className={`p-5 rounded-[2rem] border-2 transition-all flex items-center justify-between group/opt ${formData.hasNameBoard === false ? 'border-black dark:border-yellow-400 bg-black dark:bg-yellow-400 text-white dark:text-black shadow-xl scale-[1.02]' : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 hover:border-black/30 dark:hover:border-white/30'}`}
-                                                >
-                                                    <div className="flex items-center gap-4">
-                                                        <X size={20} strokeWidth={3} className={formData.hasNameBoard === false ? 'text-red-400 dark:text-red-950' : 'text-slate-300'} />
-                                                        <span className="text-xs font-black uppercase tracking-widest italic">No, Thanks</span>
-                                                    </div>
-                                                </button>
-                                            </div>
                                         </div>
+                                    </div>
 
-                                        {formData.hasNameBoard && (
-                                            <div className="space-y-3 mt-6 animate-slide-up">
-                                                <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Name Board Content</label>
-                                                <input
-                                                    type="text"
-                                                    value={formData.nameBoardText}
-                                                    onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
-                                                    className="w-full h-14 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-8 rounded-2xl outline-none focus:border-black dark:focus:border-yellow-400 transition-all font-black text-xs text-black dark:text-white shadow-inner"
-                                                    placeholder="Enter pickup name or greeting..."
-                                                />
+                                    {isOverCapacity && (
+                                        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/30 rounded-2xl flex items-center gap-4 animate-pulse">
+                                            <div className="p-2 bg-red-100 dark:bg-red-900/40 rounded-lg text-red-600 dark:text-red-400">
+                                                <AlertCircle size={18} />
                                             </div>
-                                        )}
+                                            <p className="text-[10px] md:text-xs font-black text-red-900 dark:text-red-400 leading-tight uppercase tracking-[0.1em]">
+                                                Capacity Exceeded: {totalPassengers} Pax (Limit {selectedVehicle.capacity})
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    <div className="pt-4 space-y-6">
+                                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Greeting Service / Name Board</label>
+                                        <div className="grid grid-cols-2 gap-5">
+                                            <button
+                                                onClick={() => setFormData({ ...formData, hasNameBoard: true })}
+                                                className={`p-5 rounded-[2rem] border-2 transition-all flex items-center justify-between group/opt ${formData.hasNameBoard === true ? 'border-black dark:border-yellow-400 bg-black dark:bg-yellow-400 text-white dark:text-black shadow-xl scale-[1.02]' : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 hover:border-black/30 dark:hover:border-white/30'}`}
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <Check size={20} strokeWidth={3} className={formData.hasNameBoard === true ? 'text-emerald-400 dark:text-emerald-950' : 'text-slate-300'} />
+                                                    <span className="text-xs font-black uppercase tracking-widest italic">Yes, Please</span>
+                                                </div>
+                                            </button>
+                                            <button
+                                                onClick={() => setFormData({ ...formData, hasNameBoard: false, nameBoardText: '' })}
+                                                className={`p-5 rounded-[2rem] border-2 transition-all flex items-center justify-between group/opt ${formData.hasNameBoard === false ? 'border-black dark:border-yellow-400 bg-black dark:bg-yellow-400 text-white dark:text-black shadow-xl scale-[1.02]' : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 hover:border-black/30 dark:hover:border-white/30'}`}
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <X size={20} strokeWidth={3} className={formData.hasNameBoard === false ? 'text-red-400 dark:text-red-950' : 'text-slate-300'} />
+                                                    <span className="text-xs font-black uppercase tracking-widest italic">No, Thanks</span>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {formData.hasNameBoard && (
+                                        <div className="space-y-3 mt-6 animate-slide-up">
+                                            <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Name Board Content</label>
+                                            <input
+                                                type="text"
+                                                value={formData.nameBoardText}
+                                                onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
+                                                className="w-full h-14 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-8 rounded-2xl outline-none focus:border-black dark:focus:border-yellow-400 transition-all font-black text-xs text-black dark:text-white shadow-inner"
+                                                placeholder="Enter pickup name or greeting..."
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="p-8 md:p-10 bg-black dark:bg-[#111] rounded-[3rem] text-white flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.4)] gap-10 relative overflow-hidden group border border-white/5">
+                                {/* Decorative Background Glow */}
+                                <div className="absolute top-0 right-0 w-72 h-72 bg-yellow-400/5 rounded-full blur-[120px] -mr-36 -mt-36"></div>
+
+                                <div className="relative z-10 space-y-10">
+                                    <div className="flex items-center gap-3 text-yellow-400 mb-2">
+                                        <Zap size={16} fill="currentColor" className="animate-pulse" />
+                                        <span className="text-[11px] font-black uppercase tracking-[0.4em] italic">{formData.paymentType === 'partial' ? 'Deposit Payment' : 'Immediate Payment'}</span>
+                                    </div>
+                                    <div className="text-5xl md:text-7xl font-black leading-none tracking-tighter flex items-center gap-4 italic uppercase">
+                                        <span className="text-2xl md:text-3xl font-black text-slate-500 not-italic">
+                                            {(rates?.[currency]) ? currentSymbol : 'Rs'}
+                                        </span>
+                                        <span className="text-white">
+                                            {payNow.toLocaleString()}
+                                        </span>
                                     </div>
                                 </div>
+                                <div className="text-left md:text-right bg-white/5 p-6 rounded-[2rem] border border-white/10 backdrop-blur-xl flex justify-between items-center">
+                                    <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1">Route Statistics</div>
+                                    <div className="text-2xl font-black text-white italic">{distance.toFixed(1)} <span className="text-sm font-black text-yellow-400 not-italic ml-1 tracking-widest">KM</span></div>
+                                </div>
 
-                                <div className="p-8 md:p-10 bg-black dark:bg-[#111] rounded-[3rem] text-white flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.4)] gap-10 relative overflow-hidden group border border-white/5">
-                                    {/* Decorative Background Glow */}
-                                    <div className="absolute top-0 right-0 w-72 h-72 bg-yellow-400/5 rounded-full blur-[120px] -mr-36 -mt-36"></div>
-
-                                    <div className="relative z-10 space-y-10">
-                                        <div className="flex items-center gap-3 text-yellow-400 mb-2">
-                                            <Zap size={16} fill="currentColor" className="animate-pulse" />
-                                            <span className="text-[11px] font-black uppercase tracking-[0.4em] italic">{formData.paymentType === 'partial' ? 'Deposit Payment' : 'Immediate Payment'}</span>
-                                        </div>
-                                        <div className="text-5xl md:text-7xl font-black leading-none tracking-tighter flex items-center gap-4 italic uppercase">
-                                            <span className="text-2xl md:text-3xl font-black text-slate-500 not-italic">
-                                                {(rates?.[currency]) ? currentSymbol : 'Rs'}
-                                            </span>
-                                            <span className="text-white">
-                                                {payNow.toLocaleString()}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="text-left md:text-right bg-white/5 p-6 rounded-[2rem] border border-white/10 backdrop-blur-xl flex justify-between items-center">
-                                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1">Route Statistics</div>
-                                        <div className="text-2xl font-black text-white italic">{distance.toFixed(1)} <span className="text-sm font-black text-yellow-400 not-italic ml-1 tracking-widest">KM</span></div>
+                                {/* Multi-Currency Grid */}
+                                <div className="space-y-6">
+                                    <div className="flex items-center gap-4">
+                                        <div className="h-px flex-1 bg-white/10"></div>
+                                        <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.4em] whitespace-nowrap">Global Pricing</span>
+                                        <div className="h-px flex-1 bg-white/10"></div>
                                     </div>
 
-                                    {/* Multi-Currency Grid */}
-                                    <div className="space-y-6">
-                                        <div className="flex items-center gap-4">
-                                            <div className="h-px flex-1 bg-white/10"></div>
-                                            <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.4em] whitespace-nowrap">Global Pricing</span>
-                                            <div className="h-px flex-1 bg-white/10"></div>
-                                        </div>
-
-                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                            {convertToAllCurrencies(totalPrice / (rates?.[currency] || 1)).map((c) => (
-                                                <button
-                                                    key={c.code}
-                                                    type="button"
-                                                    onClick={() => changeCurrency(c.code)}
-                                                    className={`p-4 rounded-2xl border-2 transition-all flex flex-col gap-3 text-left cursor-pointer relative overflow-hidden group/curr ${currency === c.code
-                                                        ? 'bg-yellow-400 border-yellow-400 shadow-[0_10px_30px_rgba(250,204,21,0.2)] scale-[1.05]'
-                                                        : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
-                                                        }`}
-                                                >
-                                                    <div className="flex items-center justify-between relative z-10 w-full text-[10px] font-black uppercase tracking-[0.2em]">
-                                                        <div className={`flex items-center gap-2 ${currency === c.code ? 'text-black' : 'text-slate-400 group-hover/curr:text-white transition-colors'}`}>
-                                                            <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-black/10 shadow-sm bg-white p-0.5">
-                                                                <img src={c.flag} alt={c.code} className="w-full h-full object-cover rounded-full" />
-                                                            </div>
-                                                            {c.code}
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                        {convertToAllCurrencies(totalPrice / (rates?.[currency] || 1)).map((c) => (
+                                            <button
+                                                key={c.code}
+                                                type="button"
+                                                onClick={() => changeCurrency(c.code)}
+                                                className={`p-4 rounded-2xl border-2 transition-all flex flex-col gap-3 text-left cursor-pointer relative overflow-hidden group/curr ${currency === c.code
+                                                    ? 'bg-yellow-400 border-yellow-400 shadow-[0_10px_30px_rgba(250,204,21,0.2)] scale-[1.05]'
+                                                    : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center justify-between relative z-10 w-full text-[10px] font-black uppercase tracking-[0.2em]">
+                                                    <div className={`flex items-center gap-2 ${currency === c.code ? 'text-black' : 'text-slate-400 group-hover/curr:text-white transition-colors'}`}>
+                                                        <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-black/10 shadow-sm bg-white p-0.5">
+                                                            <img src={c.flag} alt={c.code} className="w-full h-full object-cover rounded-full" />
                                                         </div>
+                                                        {c.code}
                                                     </div>
-                                                    <div className={`text-xl font-black relative z-10 tracking-tighter flex items-baseline gap-1 mt-1 italic ${currency === c.code ? 'text-black' : 'text-white'}`}>
-                                                        <span className={`text-[10px] font-black not-italic ${currency === c.code ? 'text-black/60' : 'text-slate-600'}`}>
-                                                            {c.symbol}
-                                                        </span>
-                                                        <span>{c.value.toLocaleString()}</span>
-                                                    </div>
-                                                </button>
+                                                </div>
+                                                <div className={`text-xl font-black relative z-10 tracking-tighter flex items-baseline gap-1 mt-1 italic ${currency === c.code ? 'text-black' : 'text-white'}`}>
+                                                    <span className={`text-[10px] font-black not-italic ${currency === c.code ? 'text-black/60' : 'text-slate-600'}`}>
+                                                        {c.symbol}
+                                                    </span>
+                                                    <span>{c.value.toLocaleString()}</span>
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Detailed Breakdown & Coupons */}
+                            <div className="space-y-4 bg-slate-50 dark:bg-white/5 p-6 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-sm">
+                                <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">
+                                    <span>Fare Subtotal</span>
+                                    <span className="text-black dark:text-white">{currentSymbol} {subtotal.toLocaleString()}</span>
+                                </div>
+
+                                {detailedBreakdown.detailedExtras?.map((s, idx) => (
+                                    <div key={idx} className="flex justify-between items-center text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">
+                                        <span>{s.label}</span>
+                                        <span className="text-black dark:text-white">+{currentSymbol} {s.value.toLocaleString()}</span>
+                                    </div>
+                                ))}
+
+                                {detailedBreakdown.discounts > 0 && (
+                                    <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-[0.2em] text-emerald-500 bg-white dark:bg-black/40 p-3 rounded-xl border border-emerald-500/20">
+                                        <div className="flex items-center gap-3">
+                                            <Tag size={14} className="animate-bounce" />
+                                            <span>
+                                                {appliedCoupons?.length > 0 ? `Code applied` : 'Special Discount'}
+                                            </span>
+                                        </div>
+                                        <span className="font-black italic">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
+                                    </div>
+                                )}
+
+                                {appliedCoupons?.length > 0 && (
+                                    <div className="pt-3 border-t border-slate-200 dark:border-white/10">
+                                        <div className="flex flex-wrap gap-2">
+                                            {appliedCoupons.map((c, idx) => (
+                                                <span key={idx} className="px-3 py-1 bg-black dark:bg-yellow-400 text-white dark:text-black text-[9px] font-black uppercase tracking-widest rounded-lg flex items-center gap-2 shadow-sm">
+                                                    <Check size={10} strokeWidth={4} /> {c}
+                                                </span>
                                             ))}
                                         </div>
                                     </div>
+                                )}
+                            </div>
+
+                            <div className="flex flex-col items-center justify-center gap-2 mt-4">
+                                <div className="flex items-center gap-1.5 text-emerald-800">
+                                    <ShieldCheck size={14} />
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-900">Taxes Included • Tolls Excluded</span>
                                 </div>
-
-                                {/* Detailed Breakdown & Coupons */}
-                                <div className="space-y-4 bg-slate-50 dark:bg-white/5 p-6 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-sm">
-                                    <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">
-                                        <span>Fare Subtotal</span>
-                                        <span className="text-black dark:text-white">{currentSymbol} {subtotal.toLocaleString()}</span>
-                                    </div>
-
-                                    {detailedBreakdown.detailedExtras?.map((s, idx) => (
-                                        <div key={idx} className="flex justify-between items-center text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">
-                                            <span>{s.label}</span>
-                                            <span className="text-black dark:text-white">+{currentSymbol} {s.value.toLocaleString()}</span>
-                                        </div>
-                                    ))}
-
-                                    {detailedBreakdown.discounts > 0 && (
-                                        <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-[0.2em] text-emerald-500 bg-white dark:bg-black/40 p-3 rounded-xl border border-emerald-500/20">
-                                            <div className="flex items-center gap-3">
-                                                <Tag size={14} className="animate-bounce" />
-                                                <span>
-                                                    {appliedCoupons?.length > 0 ? `Code applied` : 'Special Discount'}
-                                                </span>
-                                            </div>
-                                            <span className="font-black italic">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
-                                        </div>
-                                    )}
-
-                                    {appliedCoupons?.length > 0 && (
-                                        <div className="pt-3 border-t border-slate-200 dark:border-white/10">
-                                            <div className="flex flex-wrap gap-2">
-                                                {appliedCoupons.map((c, idx) => (
-                                                    <span key={idx} className="px-3 py-1 bg-black dark:bg-yellow-400 text-white dark:text-black text-[9px] font-black uppercase tracking-widest rounded-lg flex items-center gap-2 shadow-sm">
-                                                        <Check size={10} strokeWidth={4} /> {c}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="flex flex-col items-center justify-center gap-2 mt-4">
-                                    <div className="flex items-center gap-1.5 text-emerald-800">
-                                        <ShieldCheck size={14} />
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-900">Taxes Included • Tolls Excluded</span>
-                                    </div>
-                                    <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest bg-white px-3 py-1 rounded-full border border-slate-200">
-                                        Highway Ticket paid by customer at counter
-                                    </p>
-                                </div>
+                                <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest bg-white px-3 py-1 rounded-full border border-slate-200">
+                                    Highway Ticket paid by customer at counter
+                                </p>
                             </div>
                         </div>
                     )}
 
-                    {step === 2 && (
+                {step === 2 && (
                         <div className="animate-slide-up">
                             <div className="flex items-center justify-between mb-12">
                                 <div>
