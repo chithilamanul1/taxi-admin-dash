@@ -721,32 +721,32 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     {pricingCategory !== 'ride-now' && (
                                         <div className="premium-box bg-slate-50 dark:bg-[#0a0a0a] p-8 md:p-10 space-y-10 shadow-xl overflow-hidden relative">
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-[#FACC15]/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
-                                            <div className="flex items-center gap-6 relative z-10">
-                                                <div className="w-14 h-14 bg-black dark:bg-[#FACC15] rounded-2xl flex items-center justify-center text-[#FACC15] dark:text-black shadow-2xl transition-transform hover:rotate-6">
-                                                    <Clock size={28} strokeWidth={3} />
+                                            <div className="flex items-center gap-4 sm:gap-6 relative z-10">
+                                                <div className="w-10 h-10 sm:w-14 sm:h-14 bg-black dark:bg-[#FACC15] rounded-xl sm:rounded-2xl flex items-center justify-center text-[#FACC15] dark:text-black shadow-2xl transition-transform hover:rotate-6">
+                                                    <Clock size={20} className="sm:w-7 sm:h-7" strokeWidth={3} />
                                                 </div>
                                                 <div>
-                                                    <p className="text-[10px] font-black text-black dark:text-white uppercase tracking-[0.4em] leading-none mb-2 italic">Schedule Protocol</p>
-                                                    <p className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Time-Critical Dispatch</p>
+                                                    <p className="text-[9px] sm:text-[10px] font-black text-black dark:text-white uppercase tracking-[0.2em] sm:tracking-[0.4em] leading-none mb-1 sm:mb-2 italic">Schedule Details</p>
+                                                    <p className="text-[8px] sm:text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Time-Critical Dispatch</p>
                                                 </div>
                                             </div>
-                                            <div className="grid grid-cols-1 gap-8 relative z-10">
-                                                <div className="space-y-4">
-                                                    <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] pl-4 leading-none italic">Flight/Voyage Signifier</label>
+                                            <div className="grid grid-cols-1 gap-6 sm:gap-8 relative z-10">
+                                                <div className="space-y-3 sm:space-y-4">
+                                                    <label className="text-[8px] sm:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none italic">Flight Number (Optional)</label>
                                                     <div className="relative group">
-                                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15] group-focus-within:text-black dark:group-focus-within:text-[#FACC15] transition-colors"><Zap size={18} strokeWidth={3} fill="currentColor" /></div>
+                                                        <div className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 text-[#FACC15] group-focus-within:text-black dark:group-focus-within:text-[#FACC15] transition-colors"><Zap size={16} className="sm:w-[18px] sm:h-[18px]" strokeWidth={3} fill="currentColor" /></div>
                                                         <input
                                                             type="text"
                                                             value={formData.flightNumber || ''}
                                                             onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                            className="w-full h-16 bg-white dark:bg-white/5 border-2 border-slate-100 dark:border-white/10 pl-16 pr-8 rounded-3xl outline-none focus:border-[#FACC15] dark:focus:border-[#FACC15] transition-all font-black text-xs text-black dark:text-white shadow-sm uppercase tracking-widest placeholder:text-slate-300 dark:placeholder:text-slate-700"
+                                                            className="w-full h-12 sm:h-16 bg-white dark:bg-white/5 border-2 border-slate-100 dark:border-white/10 pl-12 sm:pl-16 pr-6 sm:pr-8 rounded-xl sm:rounded-3xl outline-none focus:border-[#FACC15] dark:focus:border-[#FACC15] transition-all font-black text-[10px] sm:text-xs text-black dark:text-white shadow-sm uppercase tracking-widest placeholder:text-slate-300 dark:placeholder:text-slate-700"
                                                             placeholder="e.g. UL 101"
                                                         />
                                                     </div>
                                                 </div>
-                                                <div className="grid grid-cols-2 gap-6">
-                                                    <div className="space-y-4">
-                                                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] pl-4 leading-none italic">Target Date</label>
+                                                <div className="grid grid-cols-2 gap-3 sm:gap-6">
+                                                    <div className="space-y-3 sm:space-y-4">
+                                                        <label className="text-[8px] sm:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none italic">Target Date</label>
                                                         <input
                                                             type="date"
                                                             value={formData.flightArrivalDate || ''}
@@ -754,11 +754,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                 const d = e.target.value;
                                                                 setFormData(prev => ({ ...prev, flightArrivalDate: d, arrivalDate: d, date: isAirportService ? d : prev.date }));
                                                             }}
-                                                            className="w-full h-16 bg-white dark:bg-white/5 border-2 border-slate-100 dark:border-white/10 px-8 rounded-3xl outline-none focus:border-[#FACC15] dark:focus:border-[#FACC15] transition-all font-black text-xs text-black dark:text-white shadow-sm uppercase tracking-widest invert dark:invert-0"
+                                                            className="w-full h-12 md:h-16 bg-white dark:bg-white/5 border-2 border-slate-100 dark:border-white/10 px-4 md:px-8 rounded-xl md:rounded-3xl outline-none focus:border-[#FACC15] dark:focus:border-[#FACC15] transition-all font-black text-[10px] md:text-xs text-black dark:text-white shadow-sm uppercase tracking-widest invert dark:invert-0"
                                                         />
                                                     </div>
-                                                    <div className="space-y-4">
-                                                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] pl-4 leading-none italic">Target Time</label>
+                                                    <div className="space-y-3 sm:space-y-4">
+                                                        <label className="text-[8px] sm:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none italic">Target Time</label>
                                                         <input
                                                             type="time"
                                                             value={formData.flightArrivalTime || ''}
@@ -766,7 +766,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                 const t = e.target.value;
                                                                 setFormData(prev => ({ ...prev, flightArrivalTime: t, arrivalTime: t, time: isAirportService ? t : prev.time }));
                                                             }}
-                                                            className="w-full h-16 bg-white dark:bg-white/5 border-2 border-slate-100 dark:border-white/10 px-8 rounded-3xl outline-none focus:border-[#FACC15] dark:focus:border-[#FACC15] transition-all font-black text-xs text-black dark:text-white shadow-sm uppercase tracking-widest invert dark:invert-0"
+                                                            className="w-full h-12 md:h-16 bg-white dark:bg-white/5 border-2 border-slate-100 dark:border-white/10 px-4 md:px-8 rounded-xl md:rounded-3xl outline-none focus:border-[#FACC15] dark:focus:border-[#FACC15] transition-all font-black text-[10px] md:text-xs text-black dark:text-white shadow-sm uppercase tracking-widest invert dark:invert-0"
                                                         />
                                                     </div>
                                                 </div>
