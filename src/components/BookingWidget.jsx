@@ -513,9 +513,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
     return (
         <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4">
-            {/* Tab Navigation - Premium Box Style */}
-            <div className="flex flex-wrap bg-white dark:bg-[#111] p-2 rounded-[2rem] w-fit mx-auto lg:mx-0 mb-8 gap-2 shadow-2xl border border-slate-200 dark:border-white/5 transition-all" role="tablist">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full sm:w-auto">
+            {/* Tab Navigation - Boxy Style */}
+            <div className="flex flex-wrap bg-white dark:bg-[#111] p-1.5 md:p-2 rounded-2xl md:rounded-3xl w-fit mx-auto lg:mx-0 mb-8 gap-2 shadow-2xl border border-slate-200 dark:border-white/5 transition-all" role="tablist">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 md:gap-2 w-full sm:w-auto">
                     {[
                         { id: 'pickup', label: 'Airport Pickup', icon: MapPin },
                         { id: 'drop', label: 'Airport Drop', icon: Navigation },
@@ -529,12 +529,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             aria-controls={`panel-${tab.id}`}
                             id={`tab-${tab.id}`}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center justify-center sm:justify-start gap-2 md:gap-3 px-3 sm:px-8 py-3.5 md:py-4 rounded-xl md:rounded-2xl text-[10px] md:text-xs font-black transition-all ${activeTab === tab.id
-                                ? 'bg-[#FACC15] text-black shadow-lg shadow-[#FACC15]/20'
-                                : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5'
+                            className={`flex items-center justify-center sm:justify-start gap-2 md:gap-3 px-3 sm:px-6 py-3.5 md:py-4 rounded-xl text-[10px] md:text-sm font-black transition-all ${activeTab === tab.id
+                                ? 'bg-[#FACC15] text-black shadow-md shadow-[#FACC15]/20 scale-100'
+                                : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5 scale-95 hover:scale-100'
                                 }`}
                         >
-                            <tab.icon size={16} className={activeTab === tab.id ? 'text-black' : 'text-slate-400'} />
+                            <tab.icon size={18} className={activeTab === tab.id ? 'text-black' : 'text-slate-400'} />
                             <span className="truncate uppercase tracking-wider">
                                 <span className="hidden xs:inline">{tab.label}</span>
                                 <span className="xs:hidden">{tab.label.split(' ')[0]}</span>
@@ -917,21 +917,21 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 ].map(c => (
                                     <div key={c.id} className="bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-3 md:p-4 rounded-xl md:rounded-2xl flex flex-col items-center justify-center transition-all shadow-sm">
                                         <span className="text-[9px] md:text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2 md:mb-3">{c.label}</span>
-                                        <div className="flex items-center gap-3 md:gap-4">
+                                        <div className="flex items-center gap-2 md:gap-4">
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, (Number(p[c.id]) || 0) - 1) }))}
-                                                className="w-7 h-7 md:w-8 md:h-8 rounded-lg md:rounded-xl bg-white dark:bg-white/10 border border-slate-300 dark:border-white/20 flex items-center justify-center hover:bg-slate-100 transition-all text-black dark:text-white"
+                                                className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-white dark:bg-white/10 border border-slate-300 dark:border-white/20 flex items-center justify-center hover:bg-slate-100 transition-all text-black dark:text-white"
                                                 aria-label={`Decrease ${c.label}`}
                                             >
-                                                <Minus size={12} strokeWidth={3} />
+                                                <Minus size={14} strokeWidth={3} />
                                             </button>
-                                            <span className="font-black text-lg md:text-xl text-black dark:text-white min-w-[16px] md:min-w-[20px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
+                                            <span className="font-black text-xl md:text-2xl text-black dark:text-white min-w-[24px] md:min-w-[28px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))}
-                                                className="w-7 h-7 md:w-8 md:h-8 rounded-lg md:rounded-xl bg-black dark:bg-yellow-400 border border-transparent flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-white dark:text-black shadow-md shadow-black/10 dark:shadow-yellow-400/10"
+                                                className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-black dark:bg-yellow-400 border border-transparent flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-white dark:text-black shadow-md shadow-black/10 dark:shadow-yellow-400/10"
                                                 aria-label={`Increase ${c.label}`}
                                             >
-                                                <Plus size={12} strokeWidth={3} />
+                                                <Plus size={14} strokeWidth={3} />
                                             </button>
                                         </div>
                                     </div>
@@ -1088,29 +1088,22 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         )}
                                     </div>
                                 </div>
-
                                 <div className="flex flex-col sm:flex-row gap-6 pt-6">
                                     <button
                                         onClick={handleBook}
                                         disabled={!distance}
-                                        className="flex-1 bg-black text-white h-24 rounded-[2rem] font-black uppercase italic tracking-[0.2em] text-xl hover:bg-[#FACC15] hover:text-black transition-all shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center gap-6"
+                                        className="w-full bg-[#FACC15] text-black h-20 md:h-24 rounded-2xl md:rounded-3xl font-black uppercase italic tracking-[0.2em] text-lg md:text-xl hover:translate-y-[-4px] active:translate-y-0 shadow-[0_20px_50px_rgba(250,204,21,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center"
                                     >
                                         {isLoadingPricing ? (
-                                            <div className="w-8 h-8 border-4 border-[#FACC15] border-t-transparent rounded-full animate-spin"></div>
+                                            <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
                                         ) : (
-                                            <>
-                                                CHECK AVAILABILITY
-                                                <ArrowRight className="group-hover:translate-x-4 transition-transform" size={28} strokeWidth={3} />
-                                            </>
+                                            <div className="flex items-center gap-4 justify-center w-full relative">
+                                                <span className="flex-1 text-center pl-8">BOOK NOW</span>
+                                                <div className="absolute right-6 w-12 h-12 bg-black rounded-xl flex items-center justify-center text-[#FACC15] group-hover:scale-110 transition-transform">
+                                                    <ArrowRight size={20} strokeWidth={3} />
+                                                </div>
+                                            </div>
                                         )}
-                                    </button>
-
-                                    <button
-                                        onClick={() => { setPickup(''); setDropoff(''); }}
-                                        className="bg-red-500/10 text-red-500 h-24 px-10 rounded-[2rem] font-black uppercase italic tracking-widest hover:bg-red-500 hover:text-white transition-all border-4 border-transparent hover:border-red-500/20"
-                                        title="Clear all fields"
-                                    >
-                                        RESET
                                     </button>
                                 </div>
                             </div>
