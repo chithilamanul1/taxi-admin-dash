@@ -45,7 +45,6 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
 
     return (
         <div className="relative group/carousel">
-            <div className="flex justify-between items-center mb-4 px-2">
             <div className="flex justify-between items-end mb-10 px-2">
                 <div>
                     <div className="yellow-badge mb-4">FLEET</div>
