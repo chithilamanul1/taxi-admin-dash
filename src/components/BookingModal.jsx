@@ -1297,7 +1297,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 </div>
 
                 {/* Modal Footer */}
-                <div className="p-4 md:p-10 pt-3 md:pt-6 border-t border-slate-100 dark:border-white/10 bg-white/80 dark:bg-black/80 backdrop-blur-3xl shrink-0 transition-colors">
+                <div className="p-4 pb-24 md:p-10 md:pb-10 pt-3 md:pt-6 border-t border-slate-100 dark:border-white/10 bg-white/80 dark:bg-black/80 backdrop-blur-3xl shrink-0 transition-colors">
                     <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-2 md:gap-6">
                         <button
                             onClick={() => (step > 1 ? setStep(step - 1) : onClose())}

@@ -134,9 +134,9 @@ const LocationInput = ({
                 onFocus={() => { if (onFocus) onFocus(); setIsFocused(true); }}
                 disabled={disabled}
                 placeholder={googleLoaded ? placeholder : 'Loading maps...'}
-                className={`w-full pl-16 pr-14 h-16 rounded-none text-base sm:text-lg font-bold bg-white dark:bg-white/5 border-4 transition-all outline-none text-black dark:text-white uppercase tracking-widest italic
-                ${isFocused && !disabled ? 'border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] -translate-y-1' : 'border-black/5 dark:border-white/10'}
-                ${disabled ? 'cursor-not-allowed opacity-75 bg-slate-50 dark:bg-white/5 grayscale-[0.5]' : 'hover:border-black'}`}
+                className={`w-full pl-16 pr-14 h-16 rounded-none text-base sm:text-lg font-bold bg-white dark:bg-black border-4 transition-all outline-none text-black dark:text-white uppercase tracking-widest italic
+                ${isFocused && !disabled ? 'border-black dark:border-yellow-400 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(250,204,21,0.2)] -translate-y-1' : 'border-black/5 dark:border-white/20'}
+                ${disabled ? 'cursor-not-allowed opacity-75 bg-slate-50 dark:bg-white/5 grayscale-[0.5]' : 'hover:border-black dark:hover:border-white/40'}`}
             />
 
             {/* Clear Button */}
@@ -152,7 +152,7 @@ const LocationInput = ({
 
             {/* Suggestions Dropdown - Boxy Style */}
             {isFocused && (suggestions.length > 0 || isLoading) && (
-                <div className="absolute top-[110%] left-0 right-0 bg-white dark:bg-[#111] rounded-none shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] border-4 border-black p-0 z-[100] animate-fade-in overflow-hidden">
+                <div className="absolute top-[110%] left-0 right-0 bg-white dark:bg-[#111] rounded-none shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[12px_12px_0px_0px_rgba(250,204,21,0.2)] border-4 border-black dark:border-white/20 p-0 z-[100] animate-fade-in overflow-hidden">
                     <div className="max-h-[350px] overflow-y-auto custom-scrollbar">
                         {isLoading ? (
                             <div className="p-8 flex items-center justify-center">
@@ -163,16 +163,16 @@ const LocationInput = ({
                                 <button
                                     key={i}
                                     onMouseDown={() => handleSelect(s)}
-                                    className="w-full flex items-center gap-6 p-6 hover:bg-[#FACC15] group transition-all rounded-none text-left border-b-4 border-black last:border-0"
+                                    className="w-full flex items-center gap-6 p-6 hover:bg-[#FACC15] group transition-all rounded-none text-left border-b-4 border-black dark:border-white/10 last:border-0"
                                 >
-                                    <div className="w-10 h-10 bg-black/5 rounded-none border-2 border-black flex items-center justify-center group-hover:bg-black/10 transition-colors">
-                                        <MapPin size={18} className="text-black group-hover:text-black" />
+                                    <div className="w-10 h-10 bg-black/5 dark:bg-white/5 rounded-none border-2 border-black dark:border-white/20 flex items-center justify-center group-hover:bg-black/10 transition-colors">
+                                        <MapPin size={18} className="text-black dark:text-white group-hover:text-black" />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="font-black text-black text-sm uppercase italic tracking-wider truncate mb-1">
+                                        <p className="font-black text-black dark:text-white group-hover:text-black text-sm uppercase italic tracking-wider truncate mb-1 transition-colors">
                                             {s.structured_formatting?.main_text || s.description.split(',')[0]}
                                         </p>
-                                        <p className="text-[10px] font-bold text-black/40 group-hover:text-black/60 uppercase tracking-widest truncate">
+                                        <p className="text-[10px] font-bold text-black/50 dark:text-slate-400 group-hover:text-black/70 uppercase tracking-widest truncate transition-colors">
                                             {s.structured_formatting?.secondary_text || s.description.split(',').slice(1).join(',')}
                                         </p>
                                     </div>
