@@ -138,7 +138,7 @@ import { useCurrency } from '../context/CurrencyContext';const VehicleCarousel =
                                     {[
                                         { icon: Users, label: `${vehicle.minCapacity || 1}-${vehicle.capacity} Passengers` },
                                         { icon: Briefcase, label: `${vehicle.luggage || 0} Luggages` },
-                                        { icon: Backpack, label: `${vehicle.handLuggage || 0} Hand Baggages` },
+                                        { icon: Backpack, label: `${vehicle.handLuggage || 0} Small Bags` },
                                         ...(vehicle.hasAC !== false ? [{ icon: Wind, label: 'Air Conditioning' }] : [])
                                     ].map((spec, i) => (
                                         <div key={i} className="flex items-center gap-3 p-3 bg-black/5 dark:bg-white/5 rounded-none border-2 border-black transition-all">

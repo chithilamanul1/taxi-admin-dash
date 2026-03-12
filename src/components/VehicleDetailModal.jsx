@@ -56,7 +56,7 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
                             <Briefcase size={16} className="text-black/60" strokeWidth={3} />
                             <div className="text-center">
                                 <p className="text-lg font-black text-black">{vehicle.handLuggage || 0}</p>
-                                <p className="text-[10px] text-black/40 uppercase font-black tracking-widest">Hand Baggages</p>
+                                <p className="text-[10px] text-black/40 uppercase font-black tracking-widest">Small Bags</p>
                             </div>
                         </div>
                     </div>
