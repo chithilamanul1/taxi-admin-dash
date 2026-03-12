@@ -247,10 +247,12 @@ const Prices = ({ initialDestination }) => {
     ];
 
     const convertToAllCurrencies = (amountLKR) => {
-        return SUPPORTED_CURRENCIES.map(c => ({
-            ...c,
-            value: Math.ceil(amountLKR * (rates?.[c.code] || 1))
-        }));
+        return SUPPORTED_CURRENCIES.map(c => {
+            const rate = rates?.[c.code] || 1;
+            const convertedRaw = amountLKR * rate;
+            const value = c.code === 'LKR' ? Math.round(amountLKR) : Number(convertedRaw.toFixed(2));
+            return { ...c, value };
+        });
     };
 
     // Refs for scrolling
@@ -726,12 +728,12 @@ const Prices = ({ initialDestination }) => {
                                                 <div className="space-y-1 mb-6 rounded-xl overflow-hidden shadow-inner font-black">
                                                     {(() => {
                                                         const basePrice = calculateBasePrice(distance, { ...v, vehicleType: key }, tripType, pickupSearch, dropoffSearch, [...staticDestinations, ...dynamicDestinations]);
-                                                        const usdVal = Math.ceil(basePrice * (rates?.USD || 0.0033));
-                                                        const eurVal = Math.ceil(basePrice * (rates?.EUR || 0.0031));
+                                                        const usdVal = Number((basePrice * (rates?.USD || 0.0033)).toFixed(2));
+                                                        const eurVal = Number((basePrice * (rates?.EUR || 0.0031)).toFixed(2));
                                                         return (
                                                             <>
                                                                 <div className="bg-black text-white p-3 flex justify-center items-center text-lg">
-                                                                    Rs {basePrice.toLocaleString()}
+                                                                    Rs {Math.round(basePrice).toLocaleString()}
                                                                 </div>
                                                                 <div className="bg-[#D1E1EC] text-slate-800 p-3 flex justify-center items-center text-lg">
                                                                     $ {usdVal.toLocaleString()}
@@ -781,7 +783,8 @@ const Prices = ({ initialDestination }) => {
 
                         const currentSymbol = SUPPORTED_CURRENCIES.find(c => c.code === currency)?.symbol || 'Rs'
                         const rate = rates?.[currency] || 1
-                        const totalSelected = Math.ceil(totalLKR * rate)
+                        const convertedRaw = totalLKR * rate;
+                        const totalSelected = currency === 'LKR' ? Math.round(totalLKR) : Number(convertedRaw.toFixed(2));
 
                         return (
                             <>

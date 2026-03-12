@@ -1050,7 +1050,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 {(() => {
                                                     const secCode = currency === 'LKR' ? 'USD' : 'LKR';
                                                     const secRate = rates ? (rates[secCode] || 1) : 1;
-                                                    const secValue = Math.ceil(finalTotal * secRate);
+                                                    const convertedRaw = finalTotal * secRate;
+                                                    const secValue = secCode === 'LKR' ? Math.round(convertedRaw) : Number(convertedRaw.toFixed(2));
                                                     const secSymbol = SUPPORTED_CURRENCIES.find(c => c.code === secCode)?.symbol || secCode;
                                                     return `~ ${secSymbol} ${secValue.toLocaleString()}`;
                                                 })()}

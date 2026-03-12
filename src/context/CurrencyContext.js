@@ -83,12 +83,15 @@ export function CurrencyProvider({ children }) {
     };
 
     const convertPrice = (lkrAmount) => {
-        if (currency === 'LKR') return { value: lkrAmount, symbol: 'Rs', code: 'LKR' };
+        if (currency === 'LKR') return { value: Math.round(lkrAmount), symbol: 'Rs', code: 'LKR' };
 
         const rate = rates[currency];
-        if (!rate) return { value: lkrAmount, symbol: 'Rs', code: 'LKR' };
+        if (!rate) return { value: Math.round(lkrAmount), symbol: 'Rs', code: 'LKR' };
 
-        const converted = Math.ceil(lkrAmount * rate);
+        const convertedRaw = lkrAmount * rate;
+        // Use 2 decimals for non-LKR currencies, but only if they aren't effectively whole numbers
+        const converted = Number(convertedRaw.toFixed(2));
+        
         const symbol = SUPPORTED_CURRENCIES.find(c => c.code === currency)?.symbol || currency;
 
         return { value: converted, symbol, code: currency };

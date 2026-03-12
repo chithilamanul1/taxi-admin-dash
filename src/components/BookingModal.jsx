@@ -163,10 +163,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     ];
 
     const convertToAllCurrencies = (amountLKR) => {
-        return SUPPORTED_CURRENCIES.map(c => ({
-            ...c,
-            value: Math.ceil(amountLKR * (rates?.[c.code] || 1))
-        }));
+        return SUPPORTED_CURRENCIES.map(c => {
+            const rate = rates?.[c.code] || 1;
+            const convertedRaw = amountLKR * rate;
+            // Round LKR to whole, others to 2 decimal places
+            const value = c.code === 'LKR' ? Math.round(amountLKR) : Number(convertedRaw.toFixed(2));
+            return { ...c, value };
+        });
     };
 
     const getPriceBreakdown = () => {
@@ -174,7 +177,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const vehicleData = pricing.find(p => p.vehicleType === formData.vehicle);
 
             // CRITICAL: Ensure we have a valid distance and vehicle data
-            const distKm = Math.ceil(distance || initialData.distance || 0);
+            const distKm = Number(distance || initialData.distance || 0);
 
             const isAirportPickup = (formData.pickup?.toLowerCase().includes('airport') || formData.dropoff?.toLowerCase().includes('airport')) || (typeof initialData.pickup === 'string' && initialData.pickup.toLowerCase().includes('airport'));
 
@@ -253,15 +256,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 payNow: convertedPayNow,
                 balance: convertedBalance,
                 lkr: {
-                    total: Math.ceil(baseTotal + surcharges + paymentSurchargeLKR - finalDiscount),
-                    payNow: Math.ceil((formData.paymentType === 'partial' ? (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) * 0.5 : (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount))),
-                    balance: Math.ceil((baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) - (formData.paymentType === 'partial' ? (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) * 0.5 : (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount))),
-                    surcharges: Math.ceil(surcharges),
-                    paymentFee: Math.ceil(paymentSurchargeLKR),
-                    subtotal: Math.ceil(baseTotal),
-                    discounts: Math.ceil(finalDiscount)
+                    total: Math.round(baseTotal + surcharges + paymentSurchargeLKR - finalDiscount),
+                    payNow: Math.round((formData.paymentType === 'partial' ? (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) * 0.5 : (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount))),
+                    balance: Math.round((baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) - (formData.paymentType === 'partial' ? (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) * 0.5 : (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount))),
+                    surcharges: Math.round(surcharges),
+                    paymentFee: Math.round(paymentSurchargeLKR),
+                    subtotal: Math.round(baseTotal),
+                    discounts: Math.round(finalDiscount)
                 },
-                originalLKR: baseTotal + surcharges + paymentSurchargeLKR - finalDiscount
+                originalLKR: Math.round(baseTotal + surcharges + paymentSurchargeLKR - finalDiscount)
             };
         } catch (err) {
             console.error("Price logic error:", err);
@@ -1365,5 +1368,3 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         </div>
     );
 }
-
-export default BookingModal;

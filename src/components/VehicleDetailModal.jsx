@@ -56,7 +56,9 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
                                         <span className="text-[10px] font-black tracking-tight">
                                             $ {(() => {
                                                 const rate = rates['USD'] || 0.0032;
-                                                return Math.ceil(calculatedTotal * rate).toLocaleString();
+                                                const convertedRaw = calculatedTotal * rate;
+                                                const value = Number(convertedRaw.toFixed(2));
+                                                return value.toLocaleString();
                                             })()}
                                         </span>
                                     </div>
@@ -64,7 +66,9 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
                                         <span className="text-[10px] font-black tracking-tight">
                                             € {(() => {
                                                 const rate = rates['EUR'] || 0.003;
-                                                return Math.ceil(calculatedTotal * rate).toLocaleString();
+                                                const convertedRaw = calculatedTotal * rate;
+                                                const value = Number(convertedRaw.toFixed(2));
+                                                return value.toLocaleString();
                                             })()}
                                         </span>
                                     </div>

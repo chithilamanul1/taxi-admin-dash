@@ -161,7 +161,9 @@ import { useCurrency } from '../context/CurrencyContext';const VehicleCarousel =
                                             <span className="text-xs font-black tracking-tight">
                                                 $ {(() => {
                                                     const rate = rates['USD'] || 0.0032;
-                                                    return Math.ceil(vehicle.calculatedTotal * rate).toLocaleString();
+                                                    const convertedRaw = (vehicle.calculatedTotal || 0) * rate;
+                                                    const value = currency === 'LKR' ? Math.round(convertedRaw) : Number(convertedRaw.toFixed(2));
+                                                    return value.toLocaleString();
                                                 })()}
                                             </span>
                                         </div>
@@ -170,7 +172,9 @@ import { useCurrency } from '../context/CurrencyContext';const VehicleCarousel =
                                             <span className="text-xs font-black tracking-tight">
                                                 € {(() => {
                                                     const rate = rates['EUR'] || 0.003;
-                                                    return Math.ceil(vehicle.calculatedTotal * rate).toLocaleString();
+                                                    const convertedRaw = (vehicle.calculatedTotal || 0) * rate;
+                                                    const value = currency === 'LKR' ? Math.round(convertedRaw) : Number(convertedRaw.toFixed(2));
+                                                    return value.toLocaleString();
                                                 })()}
                                             </span>
                                         </div>
