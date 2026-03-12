@@ -6,9 +6,13 @@
 import { destinations } from './destinations.js';
 
 export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '', dynamicDestinations = []) => {
-    if (!vehicleData || !distanceKm || distanceKm <= 0) return { price: 0, isOverride: false };
-
     const distKm = Math.ceil(Number(distanceKm) || 0);
+
+    // If no distance/location, return vehicle base price to show "Starting From" rates
+    if (distKm <= 0) {
+        return Number(vehicleData.basePrice) || 0;
+    }
+
     let baseTotal = 0;
 
     // More specific airport check to avoid matching "Airport Road" or city names near airport

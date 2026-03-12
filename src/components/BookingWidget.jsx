@@ -727,19 +727,22 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <button
                                         onClick={() => setHasNameBoard(!hasNameBoard)}
                                         aria-pressed={hasNameBoard}
-                                        className={`h-16 px-4 rounded-none border-4 transition-all flex items-center justify-between group ${hasNameBoard ? 'border-black bg-[#FACC15] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-white dark:bg-white/5 border-black text-black/40 dark:text-white/40 hover:border-black'}`}
+                                        className={`h-22 md:h-20 px-4 md:px-6 rounded-none border-4 transition-all flex items-center justify-between group ${hasNameBoard ? 'border-black bg-[#FACC15] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-white dark:bg-white/5 border-black text-black/40 dark:text-white/40 hover:border-black'}`}
                                     >
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-6 h-6 shrink-0 text-black">
-                                                <PlaneLanding size={24} strokeWidth={3} />
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-8 h-8 md:w-10 md:h-10 shrink-0 bg-black/5 dark:bg-white/5 rounded-none border-2 border-black flex items-center justify-center">
+                                                <PlaneLanding size={24} strokeWidth={3} className="text-black dark:text-white" />
                                             </div>
-                                            <div className="text-left">
-                                                <span className="text-[10px] font-black block uppercase tracking-tight">Airport Greeting (Board Show)</span>
-                                                <span className="text-[8px] font-bold text-black/50">Driver waits at arrival hall with name on board</span>
+                                            <div className="text-left py-2">
+                                                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                                                    <span className="text-[11px] md:text-xs font-black block uppercase tracking-tight text-black dark:text-white">Airport Greeting (Board Show)</span>
+                                                    <span className="text-[10px] font-black text-yellow-600 dark:text-[#FACC15] whitespace-nowrap bg-black px-2 py-0.5 border border-black">+ Rs {nameBoardPrice.toLocaleString()} (~ $6.43 USD)</span>
+                                                </div>
+                                                <span className="text-[9px] md:text-[10px] font-bold text-black/40 dark:text-white/40 block mt-1">Driver waits at arrival hall with name on board</span>
                                             </div>
                                         </div>
-                                        <div className={`w-5 h-5 rounded-none border-2 flex items-center justify-center transition-colors ${hasNameBoard ? 'border-black bg-black' : 'border-black/20'}`}>
-                                            {hasNameBoard && <Check size={12} className="text-[#FACC15]" />}
+                                        <div className={`w-6 h-6 shrink-0 rounded-none border-4 flex items-center justify-center transition-colors ${hasNameBoard ? 'border-black bg-black' : 'border-black/20'}`}>
+                                            {hasNameBoard && <Check size={14} className="text-[#FACC15]" strokeWidth={4} />}
                                         </div>
                                     </button>
                                 )}

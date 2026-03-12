@@ -26,15 +26,16 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                 {/* Header */}
                 <div className="p-6 md:p-8 pb-4 flex items-center justify-between border-b border-slate-100 dark:border-white/10 shrink-0">
                     <div>
-                        <div className="yellow-badge mb-3 md:mb-4 scale-90 md:scale-100 origin-left">Elite Fleet</div>
-                        <h2 className="text-2xl md:text-5xl font-black text-black dark:text-white uppercase italic tracking-tighter">SELECT YOUR <span className="text-[#FACC15]">RIDE</span></h2>
+                        <div className="yellow-badge mb-1 md:mb-4 scale-75 md:scale-100 origin-left">Elite Fleet</div>
+                        <h2 className="text-xl md:text-5xl font-black text-black dark:text-white uppercase italic tracking-tighter">SELECT YOUR <span className="text-[#FACC15]">RIDE</span></h2>
                     </div>
                     <button 
                         onClick={onClose}
-                        className="w-12 h-12 md:w-20 md:h-20 rounded-none bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:bg-red-600 hover:text-white transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-4 border-black"
+                        className="w-10 h-10 md:w-20 md:h-20 rounded-none bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:bg-black/80 transition-all border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                         aria-label="Close drawer"
                     >
-                        <X size={32} strokeWidth={4} />
+                        <X size={20} strokeWidth={3} className="md:hidden" />
+                        <X size={32} strokeWidth={4} className="hidden md:block" />
                     </button>
                 </div>
 
