@@ -730,8 +730,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         className={`h-22 md:h-20 px-4 md:px-6 rounded-none border-4 transition-all flex items-center justify-between group ${hasNameBoard ? 'border-black bg-[#FACC15] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-white dark:bg-white/5 border-black text-black/40 dark:text-white/40 hover:border-black'}`}
                                     >
                                         <div className="flex items-center gap-4">
-                                            <div className="w-8 h-8 md:w-10 md:h-10 shrink-0 bg-black/5 dark:bg-white/5 rounded-none border-2 border-black flex items-center justify-center">
-                                                <PlaneLanding size={24} strokeWidth={3} className="text-black dark:text-white" />
+                                            <div className="w-8 h-8 md:w-10 md:h-10 shrink-0 bg-black/5 dark:bg-white/5 rounded-none border-2 border-black flex items-center justify-center overflow-hidden">
+                                                <img src="/images/ui/name-board.png" alt="Name board" className="w-full h-full object-cover" />
                                             </div>
                                             <div className="text-left py-2">
                                                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">

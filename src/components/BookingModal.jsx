@@ -853,25 +853,38 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                     <div className="pt-4 space-y-6">
                                         <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Greeting Service / Name Board</label>
-                                        <div className="grid grid-cols-2 gap-5">
-                                            <button
-                                                onClick={() => setFormData({ ...formData, hasNameBoard: true })}
-                                                className={`p-5 rounded-[2rem] border-2 transition-all flex items-center justify-between group/opt ${formData.hasNameBoard === true ? 'border-black dark:border-yellow-400 bg-black dark:bg-yellow-400 text-white dark:text-black shadow-xl scale-[1.02]' : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 hover:border-black/30 dark:hover:border-white/30'}`}
-                                            >
-                                                <div className="flex items-center gap-4">
-                                                    <Check size={20} strokeWidth={3} className={formData.hasNameBoard === true ? 'text-emerald-400 dark:text-emerald-950' : 'text-slate-300'} />
-                                                    <span className="text-xs font-black uppercase tracking-widest italic">Yes, Please</span>
+                                        <div className={`relative overflow-hidden group rounded-[2.5rem] border-4 transition-all ${formData.hasNameBoard ? 'border-black dark:border-yellow-400 shadow-2xl scale-[1.02]' : 'border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/5'}`}>
+                                            <div className="absolute inset-0 z-0 bg-black/80">
+                                                <img src="/images/ui/name-board.png" alt="Name Board Greeting" className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
+                                            </div>
+                                            
+                                            <div className="relative z-10 p-6 md:p-8 flex flex-col items-start gap-6">
+                                                <div className="flex flex-col gap-1">
+                                                    <h4 className="text-2xl font-black text-white uppercase italic tracking-tighter">Airport Greeting</h4>
+                                                    <p className="text-xs font-black text-white/70 uppercase tracking-widest">Driver waiting at arrivals with your name</p>
+                                                    <span className="inline-block mt-2 px-3 py-1 bg-yellow-400 text-black text-[9px] font-black uppercase tracking-widest rounded-lg w-fit">
+                                                        + Rs {(pricingSettings?.nameBoardPrice || 2000).toLocaleString()}
+                                                    </span>
                                                 </div>
-                                            </button>
-                                            <button
-                                                onClick={() => setFormData({ ...formData, hasNameBoard: false, nameBoardText: '' })}
-                                                className={`p-5 rounded-[2rem] border-2 transition-all flex items-center justify-between group/opt ${formData.hasNameBoard === false ? 'border-black dark:border-yellow-400 bg-black dark:bg-yellow-400 text-white dark:text-black shadow-xl scale-[1.02]' : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 hover:border-black/30 dark:hover:border-white/30'}`}
-                                            >
-                                                <div className="flex items-center gap-4">
-                                                    <X size={20} strokeWidth={3} className={formData.hasNameBoard === false ? 'text-red-400 dark:text-red-950' : 'text-slate-300'} />
-                                                    <span className="text-xs font-black uppercase tracking-widest italic">No, Thanks</span>
+                                                
+                                                <div className="grid grid-cols-2 gap-4 w-full mt-4">
+                                                    <button
+                                                        onClick={() => setFormData({ ...formData, hasNameBoard: true })}
+                                                        className={`p-4 rounded-2xl border-2 transition-all flex items-center justify-center gap-3 ${formData.hasNameBoard === true ? 'border-yellow-400 bg-yellow-400 text-black shadow-xl ring-4 ring-yellow-400/20' : 'bg-black/40 backdrop-blur-md border-white/20 text-white hover:border-white/40'}`}
+                                                    >
+                                                        <Check size={18} strokeWidth={4} />
+                                                        <span className="text-[10px] font-black uppercase tracking-widest">Add Service</span>
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setFormData({ ...formData, hasNameBoard: false, nameBoardText: '' })}
+                                                        className={`p-4 rounded-2xl border-2 transition-all flex items-center justify-center gap-3 ${formData.hasNameBoard === false ? 'border-red-500 bg-red-500 text-white shadow-xl ring-4 ring-red-500/20' : 'bg-black/40 backdrop-blur-md border-white/20 text-white hover:border-white/40'}`}
+                                                    >
+                                                        <X size={18} strokeWidth={4} />
+                                                        <span className="text-[10px] font-black uppercase tracking-widest">Skip Service</span>
+                                                    </button>
                                                 </div>
-                                            </button>
+                                            </div>
                                         </div>
                                     </div>
 
