@@ -100,7 +100,7 @@ export default function RefundPolicyPage() {
                                         <span className="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold shrink-0">1</span>
                                         <div>
                                             <p className="font-bold text-emerald-900">Contact Us</p>
-                                            <p className="text-slate-600">Email us at <a href="mailto:info@airporttaxis.lk" className="text-emerald-600">info@airporttaxis.lk</a> or call <a href="tel:+94722885885" className="text-emerald-600">+94 722 885 885</a></p>
+                                            <p className="text-slate-600">Email us at <a href="mailto:info@airporttaxis.lk" className="text-emerald-600">info@airporttaxis.lk</a> or call <span className="text-emerald-600">+94 722 885 885 | 0719 885 885 | 0712 100 500</span></p>
                                         </div>
                                     </li>
                                     <li className="flex gap-4">
@@ -186,7 +186,7 @@ export default function RefundPolicyPage() {
                                 </div>
                                 <div className="flex items-center gap-3 text-slate-600">
                                     <Phone size={18} className="text-emerald-600" />
-                                    <a href="tel:+94722885885" className="hover:text-emerald-600 font-medium">+94 722 885 885</a>
+                                    <p className="hover:text-emerald-600 font-medium">+94 722 885 885 | 0719 885 885 | 0712 100 500</p>
                                 </div>
                                 <div className="flex items-start gap-3 text-slate-600">
                                     <MapPin size={18} className="text-emerald-600 shrink-0 mt-1" />

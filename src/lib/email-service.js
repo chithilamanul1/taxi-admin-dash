@@ -118,7 +118,7 @@ const getPremiumTemplate = (content, title = 'Airport Taxis Pvt (Ltd)') => `
                                 📍 118/5 St. Joseph Street, Grandpass, Colombo 14
                             </p>
                             <p style="margin: 0 0 8px; color: ${COLORS.textMuted}; font-size: 13px; text-align: center;">
-                                📞 +94 722 885 885 · 0719 885 885
+                                📞 +94 722 885 885 · 0719 885 885 · 0712 100 500
                             </p>
                             <p style="margin: 20px 0 0; color: #475569; font-size: 11px; text-align: center; letter-spacing: 1px;">
                                 © ${new Date().getFullYear()} AIRPORT TAXIS PVT (LTD) · ALL RIGHTS RESERVED
@@ -192,7 +192,7 @@ const getPrintFriendlyTemplate = (content, title = 'Booking Details') => `
                     Airport Taxis Pvt (Ltd) · 118/5 St. Joseph Street, Grandpass, Colombo 14
                 </p>
                 <p style="margin: 2px 0 0; font-size: 9px; color: #9ca3af;">
-                    📞 +94 722 885 885 · ✉️ info@airporttaxis.lk · 🌐 airporttaxis.lk
+                    📞 +94 722 885 885 · 0719 885 885 · 0712 100 500 · ✉️ info@airporttaxis.lk · 🌐 airporttaxis.lk
                 </p>
             </td>
         </tr>

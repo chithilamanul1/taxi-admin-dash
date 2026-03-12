@@ -162,7 +162,7 @@ const ToursWidget = () => {
                                         {selectedTour.price?.currency || 'USD'} {selectedTour.price?.amount || selectedTour.price}
                                         <span className="text-sm font-medium text-emerald-200 block mt-1">per person</span>
                                     </div>
-                                    <a href={`https://wa.me/+94722885885?text=I'm interested in booking the ${selectedTour.title} package.`} target="_blank" rel="noreferrer" className="w-full bg-emerald-400 hover:bg-emerald-300 text-emerald-900 font-black py-4 rounded-xl transition-colors flex justify-center items-center gap-2">
+                                    <a href={`https://wa.me/94722885885?text=I'm interested in booking the ${selectedTour.title} package.`} target="_blank" rel="noreferrer" className="w-full bg-emerald-400 hover:bg-emerald-300 text-emerald-900 font-black py-4 rounded-xl transition-colors flex justify-center items-center gap-2">
                                         Inquire via WhatsApp <ArrowRight size={18} />
                                     </a>
                                 </div>

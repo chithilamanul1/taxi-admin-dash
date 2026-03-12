@@ -60,7 +60,7 @@ const RentalsWidget = () => {
 
             <div className="mt-8 p-4 bg-emerald-900/10 rounded-xl inline-flex items-center gap-4 text-emerald-900 font-bold text-sm">
                 <Phone size={16} />
-                <span>Call for Custom Packages: +94 722 885 885</span>
+                <span>Call for Custom Packages: +94 722 885 885 | 0719 885 885 | 0712 100 500</span>
             </div>
         </div>
     )

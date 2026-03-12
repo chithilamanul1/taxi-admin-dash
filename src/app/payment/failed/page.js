@@ -110,13 +110,18 @@ function PaymentFailedContent() {
                         Back to Home
                     </Link>
 
-                    <a
-                        href="tel:+94716885880"
-                        className="flex items-center justify-center gap-2 w-full text-emerald-900 py-3 rounded-lg font-bold hover:underline"
-                    >
-                        <Phone size={20} />
-                        Call for Assistance
-                    </a>
+                    <div className="flex flex-col gap-2 w-full text-emerald-900 py-3 rounded-lg font-bold">
+                        <div className="flex items-center justify-center gap-2">
+                            <Phone size={20} />
+                            <span>+94 722 885 885</span>
+                        </div>
+                        <div className="flex items-center justify-center gap-2">
+                            <span>0719 885 885</span>
+                        </div>
+                        <div className="flex items-center justify-center gap-2">
+                            <span>0712 100 500</span>
+                        </div>
+                    </div>
                 </div>
 
                 <p className="text-xs text-gray-400 mt-6">
