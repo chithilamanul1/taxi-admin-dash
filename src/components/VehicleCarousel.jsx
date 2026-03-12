@@ -4,7 +4,7 @@ import VehicleDetailModal from './VehicleDetailModal';
 import { useCurrency } from '../context/CurrencyContext';const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => {
     const scrollRef = useRef(null);
     const [detailVehicle, setDetailVehicle] = useState(null);
-    const { convertPrice } = useCurrency();
+    const { convertPrice, rates } = useCurrency();
 
     const scroll = (direction) => {
         if (scrollRef.current) {

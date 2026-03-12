@@ -731,17 +731,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     >
                                         <div className="flex items-center gap-3">
                                             <div className="w-6 h-6 shrink-0 text-black">
-                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
-                                                    <circle cx="12" cy="7" r="2.5" />
-                                                    <path d="M12 9.5v5" />
-                                                    <path d="M9 13v7" />
-                                                    <path d="M15 13v7" />
-                                                    <rect x="7" y="10" width="10" height="5" rx="0" fill="white" stroke="currentColor" />
-                                                </svg>
+                                                <PlaneLanding size={24} strokeWidth={3} />
                                             </div>
                                             <div className="text-left">
-                                                <span className="text-[10px] font-black block uppercase tracking-tight">Name Board</span>
-                                                <span className="text-[8px] font-bold text-black/50">Driver waits with name sign</span>
+                                                <span className="text-[10px] font-black block uppercase tracking-tight">Airport Greeting (Board Show)</span>
+                                                <span className="text-[8px] font-bold text-black/50">Driver waits at arrival hall with name on board</span>
                                             </div>
                                         </div>
                                         <div className={`w-5 h-5 rounded-none border-2 flex items-center justify-center transition-colors ${hasNameBoard ? 'border-black bg-black' : 'border-black/20'}`}>
