@@ -514,8 +514,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     return (
         <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4">
             {/* Tab Navigation - Boxy Style */}
-            <div className="flex bg-white dark:bg-[#111] p-1.5 md:p-2 rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-4 border-black transition-all" role="tablist">
-                <div className="grid grid-cols-4 w-full sm:w-auto">
+            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-4 border-black transition-all overflow-hidden" role="tablist">
+                <div className="grid grid-cols-4 w-full sm:w-auto divide-x-4 divide-black">
                     {[
                         { id: 'pickup', label: 'Airport Pickup', icon: PlaneTakeoff },
                         { id: 'drop', label: 'Airport Drop', icon: PlaneLanding },
@@ -529,7 +529,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             aria-controls={`panel-${tab.id}`}
                             id={`tab-${tab.id}`}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex flex-col sm:flex-row items-center justify-center gap-1 md:gap-3 px-2 sm:px-6 py-3.5 md:py-4 rounded-none text-[8px] sm:text-xs md:text-sm font-black transition-all border-r-4 last:border-r-0 border-black ${activeTab === tab.id
+                            className={`flex flex-col sm:flex-row items-center justify-center gap-1 md:gap-3 px-2 sm:px-6 py-3.5 md:py-4 rounded-none text-[8px] sm:text-xs md:text-sm font-black transition-all ${activeTab === tab.id
                                 ? 'bg-[#FACC15] text-black'
                                 : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5'
                                 }`}
@@ -548,20 +548,26 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
                         <div className="flex-1 text-center lg:text-left">
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8">
-                                <div className="flex bg-slate-100 dark:bg-white/5 p-1 rounded-none border-4 border-black w-full sm:w-auto">
-                                    <button onClick={() => setTripType('one-way')} aria-label="One Way Trip" className={`flex-1 sm:flex-none px-8 py-3 rounded-none text-xs font-black uppercase tracking-widest transition-all ${tripType === 'one-way' ? 'bg-black text-white' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}`}>One Way</button>
+                                <div className="flex bg-slate-100 dark:bg-white/5 rounded-none border-4 border-black w-full sm:w-auto overflow-hidden">
+                                    <button 
+                                        onClick={() => setTripType('one-way')} 
+                                        aria-label="One Way Trip" 
+                                        className={`flex-1 sm:flex-none px-8 py-3 rounded-none text-[10px] font-black uppercase tracking-widest transition-all ${tripType === 'one-way' ? 'bg-black text-white' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}`}
+                                    >
+                                        One Way
+                                    </button>
                                     <button
                                         onClick={() => (activeTab !== 'pickup' && activeTab !== 'drop') && setTripType('round-trip')}
                                         disabled={activeTab === 'pickup' || activeTab === 'drop'}
                                         aria-label="Round Trip"
-                                        className={`flex-1 sm:flex-none px-8 py-3 rounded-none text-xs font-black uppercase tracking-widest transition-all relative
+                                        className={`flex-1 sm:flex-none px-8 py-3 rounded-none text-[10px] font-black uppercase tracking-widest transition-all relative flex items-center justify-center gap-2
                                             ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-black text-white' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}
                                             ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-40 cursor-not-allowed' : ''}
                                         `}
                                     >
                                         Round Trip
                                         {(activeTab === 'pickup' || activeTab === 'drop') && (
-                                            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-emerald-500 dark:bg-yellow-400 flex items-center justify-center text-[8px] text-white dark:text-black shadow-sm">🔒</span>
+                                            <span className="w-4 h-4 bg-emerald-500 dark:bg-[#FACC15] flex items-center justify-center text-[8px] text-white dark:text-black border border-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">🔒</span>
                                         )}
                                     </button>
                                 </div>
@@ -730,19 +736,21 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         className={`h-22 md:h-20 px-4 md:px-6 rounded-none border-4 transition-all flex items-center justify-between group ${hasNameBoard ? 'border-black bg-[#FACC15] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-white dark:bg-white/5 border-black text-black/40 dark:text-white/40 hover:border-black'}`}
                                     >
                                         <div className="flex items-center gap-4 flex-1">
-                                            <div className="w-8 h-8 md:w-10 md:h-10 shrink-0 bg-black/5 dark:bg-white/5 rounded-none border-2 border-black flex items-center justify-center">
-                                                <Signpost size={20} strokeWidth={3} className="text-black dark:text-white" />
+                                            <div className="w-10 h-10 md:w-16 md:h-16 shrink-0 bg-white rounded-none border-2 border-black flex items-center justify-center overflow-hidden shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                                                <img src="/images/ui/name-board.png" alt="Board" className="w-full h-full object-cover" />
                                             </div>
-                                            <div className="text-left py-2">
+                                            <div className="text-left py-2 flex-1">
                                                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                                                    <span className="text-[11px] md:text-xs font-black block uppercase tracking-tight text-black dark:text-white">Airport Greeting (Board Show)</span>
-                                                    <span className="text-[10px] font-black text-yellow-600 dark:text-[#FACC15] whitespace-nowrap bg-black px-2 py-0.5 border border-black">+ Rs {nameBoardPrice.toLocaleString()} (~ $6.43 USD)</span>
+                                                    <span className="text-[11px] md:text-sm font-black block uppercase tracking-tight text-black dark:text-white">Airport Greeting (Board Show)</span>
+                                                    <span className="text-[10px] font-black text-[#FACC15] whitespace-nowrap bg-black px-2 py-0.5 border-2 border-black">+ Rs {nameBoardPrice.toLocaleString()}</span>
                                                 </div>
                                                 <span className="text-[9px] md:text-[10px] font-bold text-black/40 dark:text-white/40 block mt-1">Driver waits at arrival hall with name on board</span>
                                             </div>
                                         </div>
-                                        <div className={`w-6 h-6 shrink-0 rounded-none border-4 flex items-center justify-center transition-colors ${hasNameBoard ? 'border-black bg-black' : 'border-black/20'}`}>
-                                            {hasNameBoard && <Check size={14} className="text-[#FACC15]" strokeWidth={4} />}
+                                        <div className="flex items-center ml-4">
+                                            <div className={`w-8 h-8 shrink-0 rounded-none border-4 flex items-center justify-center transition-colors ${hasNameBoard ? 'border-black bg-black shadow-[2px_2px_0px_0px_rgba(250,204,21,1)]' : 'border-black/20 bg-transparent'}`}>
+                                                {hasNameBoard && <Check size={18} className="text-[#FACC15]" strokeWidth={4} />}
+                                            </div>
                                         </div>
                                     </button>
                                 )}
