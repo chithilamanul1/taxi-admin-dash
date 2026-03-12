@@ -136,10 +136,10 @@ import { useCurrency } from '../context/CurrencyContext';const VehicleCarousel =
                                 {/* Vehicle Specs Grid - Premium Boxes */}
                                 <div className="grid grid-cols-2 gap-3 mb-6">
                                     {[
-                                        { icon: Users, label: `${vehicle.minCapacity || 1}-${vehicle.capacity} PAX` },
-                                        { icon: Briefcase, label: `${vehicle.luggage || 0} BAGS` },
-                                        { icon: Backpack, label: `${vehicle.handLuggage || 0} SMALL` },
-                                        ...(vehicle.hasAC !== false ? [{ icon: Wind, label: 'A/C' }] : [])
+                                        { icon: Users, label: `${vehicle.minCapacity || 1}-${vehicle.capacity} Passengers` },
+                                        { icon: Briefcase, label: `${vehicle.luggage || 0} Luggages` },
+                                        { icon: Backpack, label: `${vehicle.handLuggage || 0} Hand Baggages` },
+                                        ...(vehicle.hasAC !== false ? [{ icon: Wind, label: 'Air Conditioning' }] : [])
                                     ].map((spec, i) => (
                                         <div key={i} className="flex items-center gap-3 p-3 bg-black/5 dark:bg-white/5 rounded-none border-2 border-black transition-all">
                                             <spec.icon size={14} className="text-black dark:text-white" strokeWidth={3} />
@@ -149,10 +149,30 @@ import { useCurrency } from '../context/CurrencyContext';const VehicleCarousel =
                                 </div>
 
                                 {vehicle.calculatedTotal > 0 && (
-                                    <div className="mb-6 border-4 border-black bg-white dark:bg-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(250,204,21,0.2)] flex flex-col items-center justify-center p-4">
-                                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-black/50 dark:text-white/50 mb-1">TOTAL PRICE</div>
-                                        <div className="text-3xl font-black text-black dark:text-white uppercase tracking-tighter">
-                                            {convertPrice(vehicle.calculatedTotal).symbol} {convertPrice(vehicle.calculatedTotal).value.toLocaleString()}
+                                    <div className="mb-6 border-4 border-black bg-white dark:bg-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] overflow-hidden flex flex-col">
+                                        {/* LKR - Primary */}
+                                        <div className="bg-black text-white p-3 flex items-center justify-center border-b-2 border-black">
+                                            <span className="text-sm font-black tracking-tight">
+                                                Rs {vehicle.calculatedTotal.toLocaleString()}
+                                            </span>
+                                        </div>
+                                        {/* USD - Secondary */}
+                                        <div className="bg-[#E2E8F0] text-black p-2 flex items-center justify-center border-b-2 border-black">
+                                            <span className="text-xs font-black tracking-tight">
+                                                $ {(() => {
+                                                    const rate = rates['USD'] || 0.0032;
+                                                    return Math.ceil(vehicle.calculatedTotal * rate).toLocaleString();
+                                                })()}
+                                            </span>
+                                        </div>
+                                        {/* EUR - Tertiary */}
+                                        <div className="bg-[#F1F5F9] text-black p-2 flex items-center justify-center">
+                                            <span className="text-xs font-black tracking-tight">
+                                                € {(() => {
+                                                    const rate = rates['EUR'] || 0.003;
+                                                    return Math.ceil(vehicle.calculatedTotal * rate).toLocaleString();
+                                                })()}
+                                            </span>
                                         </div>
                                     </div>
                                 )}

@@ -42,21 +42,21 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
                             <Users size={20} className="text-black" strokeWidth={3} />
                             <div className="text-center">
                                 <p className="text-lg font-black text-black">1-{vehicle.capacity}</p>
-                                <p className="text-[10px] text-black/40 uppercase font-black tracking-widest">PAX</p>
+                                <p className="text-[10px] text-black/40 uppercase font-black tracking-widest">Passengers</p>
                             </div>
                         </div>
                         <div className="bg-black/5 p-4 rounded-none border-2 border-black flex flex-col items-center gap-2">
                             <Briefcase size={20} className="text-black" strokeWidth={3} />
                             <div className="text-center">
                                 <p className="text-lg font-black text-black">{vehicle.luggage}</p>
-                                <p className="text-[10px] text-black/40 uppercase font-black tracking-widest">BAGS</p>
+                                <p className="text-[10px] text-black/40 uppercase font-black tracking-widest">Luggages</p>
                             </div>
                         </div>
                         <div className="bg-black/5 p-4 rounded-none border-2 border-black flex flex-col items-center gap-2">
                             <Briefcase size={16} className="text-black/60" strokeWidth={3} />
                             <div className="text-center">
                                 <p className="text-lg font-black text-black">{vehicle.handLuggage || 0}</p>
-                                <p className="text-[10px] text-black/40 uppercase font-black tracking-widest">SMALL</p>
+                                <p className="text-[10px] text-black/40 uppercase font-black tracking-widest">Hand Baggages</p>
                             </div>
                         </div>
                     </div>
