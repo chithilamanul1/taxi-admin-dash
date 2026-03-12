@@ -853,22 +853,30 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                     <div className="pt-4 space-y-6">
                                         <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Greeting Service / Name Board</label>
-                                        <div className={`relative overflow-hidden group rounded-[2.5rem] border-4 transition-all ${formData.hasNameBoard ? 'border-black dark:border-yellow-400 shadow-2xl scale-[1.02]' : 'border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/5'}`}>
-                                            <div className="absolute inset-0 z-0 bg-black/80">
-                                                <img src="/images/ui/name-board.png" alt="Name Board Greeting" className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
-                                            </div>
+                                        <div className={`relative overflow-hidden group rounded-[2.5rem] border-4 transition-all ${formData.hasNameBoard ? 'border-black dark:border-yellow-400 bg-black dark:bg-[#111] shadow-2xl scale-[1.02]' : 'border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/5'}`}>
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
                                             
                                             <div className="relative z-10 p-6 md:p-8 flex flex-col items-start gap-6">
-                                                <div className="flex flex-col gap-1">
-                                                    <h4 className="text-2xl font-black text-white uppercase italic tracking-tighter">Airport Greeting</h4>
-                                                    <p className="text-xs font-black text-white/70 uppercase tracking-widest">Driver waiting at arrivals with your name</p>
-                                                    <span className="inline-block mt-2 px-3 py-1 bg-yellow-400 text-black text-[9px] font-black uppercase tracking-widest rounded-lg w-fit">
+                                                <div className="flex items-center gap-5">
+                                                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl border-2 transition-colors ${formData.hasNameBoard ? 'bg-yellow-400 border-black text-black' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-400'}`}>
+                                                        <Signpost size={28} strokeWidth={3} />
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <h4 className={`text-2xl font-black uppercase italic tracking-tighter ${formData.hasNameBoard ? 'text-white' : 'text-black dark:text-white'}`}>Airport Greeting</h4>
+                                                        <p className={`text-[10px] font-black uppercase tracking-widest ${formData.hasNameBoard ? 'text-white/60' : 'text-slate-400'}`}>Arrival Hall Meeting Service</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex flex-wrap items-center gap-4 w-full">
+                                                    <span className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 ${formData.hasNameBoard ? 'bg-white/10 border-white/20 text-yellow-400' : 'bg-black text-yellow-400 border-black'}`}>
                                                         + Rs {(pricingSettings?.nameBoardPrice || 2000).toLocaleString()}
                                                     </span>
+                                                    <p className={`text-[9px] font-bold uppercase tracking-tight flex-1 min-w-[200px] ${formData.hasNameBoard ? 'text-white/40' : 'text-slate-400'}`}>
+                                                        Our driver will wait with a name sign at the arrival hall.
+                                                    </p>
                                                 </div>
                                                 
-                                                <div className="grid grid-cols-2 gap-4 w-full mt-4">
+                                                <div className="grid grid-cols-2 gap-4 w-full">
                                                     <button
                                                         onClick={() => setFormData({ ...formData, hasNameBoard: true })}
                                                         className={`p-4 rounded-2xl border-2 transition-all flex items-center justify-center gap-3 ${formData.hasNameBoard === true ? 'border-yellow-400 bg-yellow-400 text-black shadow-xl ring-4 ring-yellow-400/20' : 'bg-black/40 backdrop-blur-md border-white/20 text-white hover:border-white/40'}`}
