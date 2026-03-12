@@ -109,8 +109,8 @@ export default function SpecialOffersSection() {
                                             {coupon.description || `Valid for rides to/from ${coupon.applicableLocations?.[0] || 'selected locations'}`}
                                         </p>
 
-                                        {/* Divider */}
-                                        <div className="border-t-4 border-dashed border-black/10 dark:border-white/10 mb-6"></div>
+                                        {/* Full width Solid Divider for Boxy look */}
+                                        <div className="border-t-4 border-black -mx-6 my-6"></div>
 
                                         {/* Footer: Code & Copy */}
                                         <div className="bg-black/5 dark:bg-white/5 p-3 flex items-center justify-between border-2 border-black group-hover/card:border-[#FACC15] transition-colors">

@@ -69,21 +69,22 @@ export default function RecentPosts() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="p-8 flex flex-col flex-1">
+                                <div className="p-8 flex flex-col flex-1 pb-0">
                                     <h3 className="text-xl font-black mb-4 leading-tight text-black dark:text-white group-hover:text-[#FACC15] transition-colors line-clamp-2 uppercase tracking-tight">
                                         {post.title}
                                     </h3>
-                                    <p className="text-black/50 dark:text-white/50 text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
+                                    <p className="text-black/50 dark:text-white/50 text-sm leading-relaxed line-clamp-3 mb-6">
                                         {post.seo?.metaDescription || post.excerpt}
                                     </p>
-                                    <div className="flex items-center justify-between border-t-4 border-black pt-6 mt-auto">
-                                        <div className="flex items-center gap-2 text-[10px] font-black text-[#FACC15] uppercase tracking-[0.2em]">
-                                            <Clock size={12} strokeWidth={3} />
-                                            5 MIN READ
-                                        </div>
-                                        <div className="w-10 h-10 rounded-none bg-black text-[#FACC15] flex items-center justify-center group-hover:bg-[#FACC15] group-hover:text-black transition-all border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                                            <ArrowRight size={16} strokeWidth={3} />
-                                        </div>
+                                </div>
+
+                                <div className="flex items-center justify-between border-t-4 border-black px-8 py-6 mt-auto bg-black/[0.02] dark:bg-white/[0.02]">
+                                    <div className="flex items-center gap-2 text-[10px] font-black text-[#FACC15] uppercase tracking-[0.2em]">
+                                        <Clock size={12} strokeWidth={3} />
+                                        <span>5 MIN READ</span>
+                                    </div>
+                                    <div className="w-10 h-10 rounded-none bg-black text-[#FACC15] flex items-center justify-center group-hover:bg-[#FACC15] group-hover:text-black transition-all border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] group-hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
+                                        <ArrowRight size={16} strokeWidth={3} />
                                     </div>
                                 </div>
                             </Link>

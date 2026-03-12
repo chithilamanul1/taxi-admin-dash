@@ -43,8 +43,8 @@ export default function MobileAppSection() {
                                 </button>
                             </div>
 
-                            {/* App Features Preview */}
-                            <div className="mt-12 flex flex-wrap justify-center lg:justify-start gap-6 pt-12 border-t-4 border-black">
+                            {/* App Features Preview - Boxy Separator */}
+                            <div className="mt-12 flex flex-wrap justify-center lg:justify-start gap-6 pt-12 border-t-4 border-black w-full">
                                 <div className="flex items-center gap-3 bg-black/5 dark:bg-white/5 px-4 py-2 border-2 border-black">
                                     <ShieldCheck className="text-black dark:text-[#FACC15]" size={18} strokeWidth={3} />
                                     <span className="text-[10px] font-black text-black dark:text-white uppercase tracking-[0.2em]">Safe Rides</span>
