@@ -78,6 +78,16 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [destinations, setDestinations] = useState([]);
 
 
+    // Manage body class for hiding chat
+    useEffect(() => {
+        if (distance) {
+            document.body.classList.add('booking-active');
+        } else {
+            document.body.classList.remove('booking-active');
+        }
+        return () => document.body.classList.remove('booking-active');
+    }, [distance]);
+
     // Fetch Pricing based on Tab
     useEffect(() => {
         const fetchPricing = async () => {
@@ -727,41 +737,44 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 </div>
                             </div>
 
-                            {/* Extra Options Grid - Stack on LG, Grid on XL */}
-                            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                            {/* Extra Options Grid - Refined Spacing & Alignment */}
+                            <div className="flex flex-col xl:flex-row gap-10 mt-10">
                                 {activeTab === 'pickup' && (
                                     <button
                                         onClick={() => setHasNameBoard(!hasNameBoard)}
                                         aria-pressed={hasNameBoard}
-                                        className={`h-22 md:h-20 px-4 md:px-6 rounded-none border-4 transition-all flex items-center justify-between group ${hasNameBoard ? 'border-black bg-[#FACC15] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-white dark:bg-white/5 border-black text-black/40 dark:text-white/40 hover:border-black'}`}
+                                        className={`flex-1 h-auto min-h-[5rem] px-6 py-4 rounded-none border-4 transition-all flex items-center justify-between group relative overflow-hidden ${hasNameBoard ? 'border-black bg-[#FACC15] text-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]' : 'bg-white dark:bg-white/5 border-black text-black/40 dark:text-white/40 hover:border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]'}`}
                                     >
-                                        <div className="flex items-center gap-4 flex-1">
-                                            <div className="w-10 h-10 md:w-16 md:h-16 shrink-0 bg-white rounded-none border-2 border-black flex items-center justify-center overflow-hidden shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                                                <img src="/images/ui/name-board.png" alt="Board" className="w-full h-full object-cover" />
+                                        <div className="flex items-center gap-5 flex-1 relative z-10">
+                                            <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 bg-white dark:bg-zinc-800 rounded-none border-2 border-black flex items-center justify-center overflow-hidden shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-[#FACC15]">
+                                                <Signpost size={24} strokeWidth={3} fill="currentColor" />
                                             </div>
-                                            <div className="text-left py-2 flex-1">
+                                            <div className="text-left flex-1">
                                                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                                                    <span className="text-[11px] md:text-sm font-black block uppercase tracking-tight text-black dark:text-white">Airport Greeting (Board Show)</span>
-                                                    <span className="text-[10px] font-black text-[#FACC15] whitespace-nowrap bg-black px-2 py-0.5 border-2 border-black">+ Rs {nameBoardPrice.toLocaleString()}</span>
+                                                    <span className="text-xs md:text-sm font-black block uppercase tracking-tight text-black dark:text-white leading-none">Airport Greeting</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="w-1 h-1 rounded-full bg-black/20 hidden sm:block"></span>
+                                                        <span className="text-[10px] font-black text-[#FACC15] whitespace-nowrap bg-black px-2 py-0.5 border border-black uppercase italic">+ Rs {nameBoardPrice.toLocaleString()}</span>
+                                                    </div>
                                                 </div>
-                                                <span className="text-[9px] md:text-[10px] font-bold text-black/40 dark:text-white/40 block mt-1">Driver waits at arrival hall with name on board</span>
+                                                <span className="text-[9px] font-bold text-black/40 dark:text-white/40 block mt-1 uppercase tracking-widest leading-none">Personal Meeting Service</span>
                                             </div>
                                         </div>
-                                        <div className="flex items-center ml-4">
-                                            <div className={`w-8 h-8 shrink-0 rounded-none border-4 flex items-center justify-center transition-colors ${hasNameBoard ? 'border-black bg-black shadow-[2px_2px_0px_0px_rgba(250,204,21,1)]' : 'border-black/20 bg-transparent'}`}>
+                                        <div className="flex items-center ml-4 relative z-10">
+                                            <div className={`w-8 h-8 shrink-0 rounded-none border-4 flex items-center justify-center transition-colors ${hasNameBoard ? 'border-black bg-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]' : 'border-black/10 bg-transparent'}`}>
                                                 {hasNameBoard && <Check size={18} className="text-[#FACC15]" strokeWidth={4} />}
                                             </div>
                                         </div>
                                     </button>
                                 )}
 
-                                <div className="space-y-3">
+                                <div className="flex-1 space-y-4">
                                     <button
                                         onClick={() => setIsCouponOpen(!isCouponOpen)}
-                                        className="flex items-center gap-2 text-[10px] font-black text-white hover:bg-[#FACC15] hover:text-black transition-all bg-black px-4 py-4 rounded-none w-full justify-center uppercase tracking-widest border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                                        className={`flex items-center gap-3 text-[10px] font-black h-full min-h-[5rem] transition-all px-8 py-4 rounded-none w-full justify-center uppercase tracking-[0.2em] border-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${isCouponOpen ? 'bg-[#FACC15] text-black border-black translate-y-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-black text-white border-black hover:translate-y-[-2px]'}`}
                                     >
-                                        <Tag size={16} className="fill-current" />
-                                        {isCouponOpen ? 'Hide Coupon' : 'Apply Coupon Code'}
+                                        <Tag size={18} className={isCouponOpen ? 'text-black' : 'text-[#FACC15]'} fill="currentColor" />
+                                        {isCouponOpen ? 'Close Offers' : 'Have a Coupon Code?'}
                                     </button>
 
                                     {/* Applied Coupons List */}
@@ -1044,17 +1057,29 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 )}
                                             </span>
                                         </div>
-                                        {/* Secondary Currency Display */}
+                                        {/* Multi-Currency Price Summary Block */}
                                         {distance && finalTotal > 0 && (
-                                            <div className="text-[10px] font-black text-slate-400 dark:text-white/40 uppercase tracking-widest mt-2">
-                                                {(() => {
-                                                    const secCode = currency === 'LKR' ? 'USD' : 'LKR';
-                                                    const secRate = rates ? (rates[secCode] || 1) : 1;
-                                                    const convertedRaw = finalTotal * secRate;
-                                                    const secValue = secCode === 'LKR' ? Math.round(convertedRaw) : Number(convertedRaw.toFixed(2));
-                                                    const secSymbol = SUPPORTED_CURRENCIES.find(c => c.code === secCode)?.symbol || secCode;
-                                                    return `~ ${secSymbol} ${secValue.toLocaleString()}`;
-                                                })()}
+                                            <div className="mt-4 border-2 border-dashed border-black/20 dark:border-white/10 rounded-2xl overflow-hidden shadow-sm">
+                                                <div className="grid grid-cols-2 bg-slate-100/50 dark:bg-white/5 p-3 gap-2">
+                                                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-white dark:bg-zinc-900 border border-black/5 shadow-sm">
+                                                        <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">USD Estimate</span>
+                                                        <span className="text-sm font-black text-black dark:text-white italic">
+                                                            $ {(() => {
+                                                                const rate = rates['USD'] || 0.0032;
+                                                                return (finalTotal * rate).toFixed(2);
+                                                            })()}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-white dark:bg-zinc-900 border border-black/5 shadow-sm">
+                                                        <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">EUR Estimate</span>
+                                                        <span className="text-sm font-black text-black dark:text-white italic">
+                                                            € {(() => {
+                                                                const rate = rates['EUR'] || 0.003;
+                                                                return (finalTotal * rate).toFixed(2);
+                                                            })()}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         )}
                                     </div>

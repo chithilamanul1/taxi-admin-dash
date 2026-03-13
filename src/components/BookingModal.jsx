@@ -35,6 +35,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const [destinations, setDestinations] = useState([]);
 
     useEffect(() => {
+        document.body.classList.add('booking-active');
         const fetchSettings = async () => {
             try {
                 const res = await fetch('/api/admin/pricing-settings', { cache: 'no-store' });
@@ -57,18 +58,27 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         };
         fetchSettings();
         fetchDestinations();
+        return () => document.body.classList.remove('booking-active');
     }, []);
 
-    // Body Scroll Lock
+    // Body Scroll Lock & Hide Chat
     useEffect(() => {
         if (isOpen) {
             const originalOverflow = document.body.style.overflow;
             const originalTouchAction = document.body.style.touchAction;
             document.body.style.overflow = 'hidden';
             document.body.style.touchAction = 'none';
+
+            // Hide Live Chat
+            const chatTrigger = document.querySelector('.live-chat-trigger');
+            if (chatTrigger) chatTrigger.style.display = 'none';
+
             return () => {
                 document.body.style.overflow = originalOverflow;
                 document.body.style.touchAction = originalTouchAction;
+                // Show Live Chat
+                const chatTriggerBack = document.querySelector('.live-chat-trigger');
+                if (chatTriggerBack) chatTriggerBack.style.display = 'flex';
             };
         }
     }, [isOpen]);
@@ -671,46 +681,70 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     >
                                                         {/* Header info */}
                                                         <div className="flex items-center gap-8">
-                                                            {/* Image Box */}
-                                                            <div className="w-28 md:w-36 h-20 md:h-28 bg-white dark:bg-white/10 rounded-none flex items-center justify-center p-4 shrink-0 overflow-hidden border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                                                {v.image ? (
-                                                                    <img src={v.image} alt={v.name} className="w-full h-full object-contain transition-transform duration-700 group-hover/card:scale-110" />
-                                                                ) : (
-                                                                    <Car className="text-slate-200 dark:text-white/10" size={40} />
-                                                                )}
+                                                                 {/* Image Box */}
+                                                                <div className="w-28 md:w-36 h-20 md:h-28 bg-white dark:bg-white/10 rounded-none flex items-center justify-center p-4 shrink-0 overflow-hidden border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] relative group-hover/card:bg-slate-50 transition-colors">
+                                                                    {v.image ? (
+                                                                        <img src={v.image} alt={v.name} className="w-full h-full object-contain transition-transform duration-700 group-hover/card:scale-110" />
+                                                                    ) : (
+                                                                        <Car className="text-slate-200 dark:text-white/10" size={40} />
+                                                                    )}
+                                                                    {/* Integrated A/C Badge */}
+                                                                    {v.hasAC !== false && (
+                                                                        <div className="absolute top-0 right-0 bg-black text-[#FACC15] text-[7px] font-black px-2 py-1 border-l-2 border-b-2 border-black uppercase tracking-widest italic z-10">
+                                                                            A/C
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+
+                                                                {/* Title & Stats */}
+                                                                <div className="flex-1 min-w-0">
+                                                                    <div className="flex items-center gap-3 mb-1">
+                                                                        <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none">Premium Service</span>
+                                                                        {isSelected && <div className="w-2 h-2 rounded-none bg-black animate-pulse border border-yellow-400"></div>}
+                                                                    </div>
+                                                                    <h4 className="text-xl md:text-2xl font-black text-black dark:text-white uppercase italic tracking-tighter leading-tight mb-2 truncate">
+                                                                        {displayVehicleName(v.name)}
+                                                                    </h4>
+                                                                    
+                                                                    {/* Mini Price Block */}
+                                                                    {distance > 0 && (
+                                                                        <div className="flex flex-wrap items-center gap-2">
+                                                                            <span className="text-sm font-black text-black dark:text-white bg-white/50 dark:bg-black/20 px-2 py-0.5 border border-black/10 rounded-lg italic">
+                                                                                Rs {(() => {
+                                                                                    const cardBaseTotal = calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
+                                                                                    return Math.round(cardBaseTotal).toLocaleString();
+                                                                                })()}
+                                                                            </span>
+                                                                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                                                                                ~ $ {(() => {
+                                                                                    const cardBaseTotal = calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
+                                                                                    const rate = rates['USD'] || 0.0032;
+                                                                                    return (cardBaseTotal * rate).toFixed(2);
+                                                                                })()}
+                                                                            </span>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             </div>
 
-                                                            {/* Title & Badge */}
-                                                            <div className="flex-1 min-w-0">
-                                                                <div className="flex items-center gap-3 mb-2">
-                                                                    <span className="bg-black text-[#FACC15] text-[9px] font-black px-3 py-1 rounded-none border-2 border-black uppercase tracking-widest italic shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">100% A/C</span>
-                                                                    {isSelected && <div className="w-2 h-2 rounded-none bg-black animate-pulse border border-yellow-400"></div>}
-                                                                </div>
-                                                                <h4 className="text-2xl md:text-3xl font-black text-black dark:text-white uppercase italic tracking-tighter leading-none mb-1">{displayVehicleName(v.name)}</h4>
-                                                                <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Premium Service Class</p>
+                                                            {/* Capacity Grid - Triple Column for Hand Luggage */}
+                                                            <div className="grid grid-cols-3 gap-2">
+                                                            <div className="flex flex-col items-center justify-center p-3 bg-white dark:bg-black/20 rounded-none border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-colors group/card:bg-slate-50 dark:group/card:bg-black/40">
+                                                                <Users size={14} className="text-[#FACC15] mb-1" strokeWidth={3} />
+                                                                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Pax</p>
+                                                                <p className="text-xs font-black text-black dark:text-white italic">{v.capacity}</p>
                                                             </div>
-                                                        </div>
+  
+                                                            <div className="flex flex-col items-center justify-center p-3 bg-white dark:bg-black/20 rounded-none border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-colors group/card:bg-slate-50 dark:group/card:bg-black/40">
+                                                                <Briefcase size={14} className="text-[#FACC15] mb-1" strokeWidth={3} />
+                                                                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Bags</p>
+                                                                <p className="text-xs font-black text-black dark:text-white italic">{v.luggage || 0}</p>
+                                                            </div>
 
-                                                        {/* Capacity Grid */}
-                                                        <div className="grid grid-cols-2 gap-4">
-                                                            <div className="flex items-center gap-4 p-5 bg-white dark:bg-black/20 rounded-none border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-colors group/card:bg-slate-50 dark:group/card:bg-black/40">
-                                                                <div className="w-12 h-12 bg-[#FACC15] rounded-none border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                                                                    <Users size={22} strokeWidth={3} />
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Max PAX</p>
-                                                                    <p className="text-base font-black text-black dark:text-white leading-none italic">{v.capacity}</p>
-                                                                </div>
-                                                            </div>
- 
-                                                            <div className="flex items-center gap-4 p-5 bg-white dark:bg-black/20 rounded-none border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-colors group/card:bg-slate-50 dark:group/card:bg-black/40">
-                                                                <div className="w-12 h-12 bg-[#FACC15] rounded-none border-2 border-black flex items-center justify-center text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                                                                    <Briefcase size={22} strokeWidth={3} />
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Baggage</p>
-                                                                    <p className="text-base font-black text-black dark:text-white leading-none italic">{v.luggage || 0}</p>
-                                                                </div>
+                                                            <div className="flex flex-col items-center justify-center p-3 bg-white dark:bg-black/20 rounded-none border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-colors group/card:bg-slate-50 dark:group/card:bg-black/40">
+                                                                <ShoppingBag size={14} className="text-[#FACC15] mb-1" strokeWidth={3} />
+                                                                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Hand</p>
+                                                                <p className="text-xs font-black text-black dark:text-white italic">{v.handLuggage || 0}</p>
                                                             </div>
                                                         </div>
                                                     </button>
@@ -778,23 +812,28 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     )}
 
                                     <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Passenger & Luggage</label>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                         {[
                                             { id: 'adults', label: 'Adults', icon: Users },
                                             { id: 'children', label: 'Children', icon: User },
                                             { id: 'luggage', label: 'Check-in Luggage', icon: Briefcase },
                                             { id: 'handLuggage', label: 'Hand Luggage', icon: ShoppingBag }
                                         ].map((field) => (
-                                            <div key={field.id} className="bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-4 md:p-5 rounded-[2rem] flex items-center justify-between shadow-sm">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 bg-white dark:bg-white/10 rounded-lg flex items-center justify-center text-black dark:text-white shadow-sm border border-slate-100 dark:border-white/10">
-                                                        <field.icon size={16} />
-                                                    </div>
-                                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
-                                                        {field.label}
-                                                    </span>
-                                                </div>
+                                            <div key={field.id} className="bg-white dark:bg-white/5 border-4 border-black p-5 rounded-none flex items-center justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] transition-all">
                                                 <div className="flex items-center gap-4">
+                                                    <div className="w-10 h-10 bg-black dark:bg-[#FACC15] rounded-none flex items-center justify-center text-[#FACC15] dark:text-black border-2 border-black">
+                                                        <field.icon size={18} strokeWidth={2.5} />
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] font-black uppercase tracking-widest text-[#FACC15] leading-none mb-1">
+                                                            {field.id === 'handLuggage' ? 'Carry-on' : field.id}
+                                                        </span>
+                                                        <span className="text-xs font-black uppercase tracking-tight text-black dark:text-white">
+                                                            {field.label}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-4 bg-slate-100 dark:bg-white/5 p-1 border-2 border-black rounded-none">
                                                     <button
                                                         onClick={() => setFormData({
                                                             ...formData,
@@ -803,11 +842,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                 [field.id]: Math.max(0, formData.passengerCount[field.id] - 1)
                                                             }
                                                         })}
-                                                        className="text-black dark:text-white font-black text-lg w-10 h-10 flex items-center justify-center bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 rounded-xl hover:bg-slate-100 dark:hover:bg-white/20 transition-all shadow-sm active:scale-95"
+                                                        className="text-black dark:text-white font-black text-lg w-10 h-10 flex items-center justify-center bg-white dark:bg-black border-2 border-black rounded-none hover:bg-black hover:text-[#FACC15] transition-all active:translate-y-1"
                                                     >
-                                                        <Minus size={16} strokeWidth={3} />
+                                                        <Minus size={18} strokeWidth={4} />
                                                     </button>
-                                                    <span className="text-lg font-black text-black dark:text-white min-w-[24px] text-center">{formData.passengerCount[field.id]}</span>
+                                                    <span className="text-xl font-black text-black dark:text-white min-w-[32px] text-center italic">{formData.passengerCount[field.id]}</span>
                                                     <button
                                                         onClick={() => setFormData({
                                                             ...formData,
@@ -816,28 +855,28 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                 [field.id]: formData.passengerCount[field.id] + 1
                                                             }
                                                         })}
-                                                        className="text-white dark:text-black font-black text-lg w-10 h-10 flex items-center justify-center bg-black dark:bg-yellow-400 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg"
+                                                        className="text-black dark:text-black font-black text-lg w-10 h-10 flex items-center justify-center bg-[#FACC15] border-2 border-black rounded-none hover:translate-y-[-2px] transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-1"
                                                     >
-                                                        <Plus size={16} strokeWidth={3} />
+                                                        <Plus size={18} strokeWidth={4} />
                                                     </button>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
                                     <div className="space-y-4">
-                                        <div className="flex items-center justify-between p-6 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] shadow-sm">
+                                        <div className="flex items-center justify-between p-6 bg-black dark:bg-white/5 border-4 border-black rounded-none shadow-[8px_8px_0px_0px_rgba(250,204,21,1)]">
                                             <div className="flex items-center gap-4">
-                                                <div className="w-10 h-10 bg-black dark:bg-yellow-400 rounded-xl flex items-center justify-center text-white dark:text-black">
-                                                    <Navigation size={20} />
+                                                <div className="w-12 h-12 bg-[#FACC15] dark:bg-yellow-400 rounded-none border-2 border-black flex items-center justify-center text-black">
+                                                    <Navigation size={24} strokeWidth={3} />
                                                 </div>
                                                 <div>
-                                                    <p className="text-xs font-black text-black dark:text-white uppercase tracking-[0.2em] leading-none mb-1">Total Distance</p>
-                                                    <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none mt-1">Calculated via OSRM</p>
+                                                    <p className="text-xs font-black text-white dark:text-white uppercase tracking-[0.2em] leading-none mb-2 italic">Total Trip Distance</p>
+                                                    <p className="text-[10px] font-black text-white/40 dark:text-slate-500 uppercase tracking-[0.3em] leading-none mt-1">Satellite Route Verified</p>
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <p className="text-lg font-black text-black dark:text-white leading-none italic">
-                                                    {distance.toFixed(1)} <span className="text-xs text-slate-400 uppercase tracking-widest">KM</span>
+                                                <p className="text-3xl font-black text-[#FACC15] leading-none italic tracking-tighter">
+                                                    {distance.toFixed(1)} <span className="text-xs text-white/40 uppercase tracking-widest not-italic">KM</span>
                                                 </p>
                                             </div>
                                         </div>
@@ -862,7 +901,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <div className="relative z-10 p-6 md:p-8 flex flex-col items-start gap-6">
                                                 <div className="flex items-center gap-5">
                                                     <div className={`w-16 h-16 rounded-none flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-4 transition-colors overflow-hidden shrink-0 ${formData.hasNameBoard ? 'bg-[#FACC15] border-black text-black' : 'bg-white dark:bg-white/5 border-black text-slate-400'}`}>
-                                                        <img src="/images/ui/name-board.png" alt="Name Board" className="w-full h-full object-cover" />
+                                                        <Signpost size={32} strokeWidth={3} fill="currentColor" />
                                                     </div>
                                                     <div className="flex flex-col">
                                                         <h4 className={`text-2xl font-black uppercase italic tracking-tighter ${formData.hasNameBoard ? 'text-white' : 'text-black dark:text-white'}`}>Airport Greeting</h4>
@@ -1332,8 +1371,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 </div>
 
                 {/* Modal Footer */}
-                <div className="p-4 pb-24 md:p-10 md:pb-10 pt-3 md:pt-6 border-t-4 border-black bg-white/80 dark:bg-black/80 backdrop-blur-3xl shrink-0 transition-colors">
-                    <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-2 md:gap-6">
+                <div className="p-4 pb-12 md:p-10 md:pb-10 pt-3 md:pt-6 border-t-4 border-black bg-white/80 dark:bg-black/80 backdrop-blur-3xl shrink-0 transition-colors">
+                    <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-6 md:gap-6">
                         <button
                             onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
                             className="flex items-center justify-center gap-2 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-white dark:bg-white/5 rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-slate-50 dark:hover:bg-white/10 transition-all text-black dark:text-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[180px] italic active:scale-95"

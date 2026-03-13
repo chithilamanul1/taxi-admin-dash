@@ -157,3 +157,14 @@ body {
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
     background: #334155;
 }
+/* Hide Chat Widgets during Booking Flow */
+body.booking-active .live-chat-trigger,
+body.booking-active #live-chat-container,
+body.booking-active [class*='chat-widget'],
+body.booking-active iframe[title*='chat'] {
+    display: none !important;
+}
+
+body.booking-active nextjs-portal {
+    display: none !important;
+}

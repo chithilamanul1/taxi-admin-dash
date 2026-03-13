@@ -136,14 +136,14 @@ import { useCurrency } from '../context/CurrencyContext';const VehicleCarousel =
                                 {/* Vehicle Specs Grid - Premium Boxes */}
                                 <div className="grid grid-cols-2 gap-3 mb-6">
                                     {[
-                                        { icon: Users, label: `${vehicle.minCapacity || 1}-${vehicle.capacity} Passengers` },
-                                        { icon: Briefcase, label: `${vehicle.luggage || 0} Luggages` },
-                                        { icon: Backpack, label: `${vehicle.handLuggage || 0} Small Bags` },
-                                        ...(vehicle.hasAC !== false ? [{ icon: Wind, label: 'Air Conditioning' }] : [])
+                                        { icon: Users, label: `${vehicle.capacity} PAX` },
+                                        { icon: Briefcase, label: `${vehicle.luggage || 0} BAGS` },
+                                        { icon: Backpack, label: `${vehicle.handLuggage || 0} HAND` },
+                                        ...(vehicle.hasAC !== false ? [{ icon: Wind, label: 'A/C' }] : [])
                                     ].map((spec, i) => (
-                                        <div key={i} className="flex items-center gap-3 p-3 bg-black/5 dark:bg-white/5 rounded-none border-2 border-black transition-all">
-                                            <spec.icon size={14} className="text-black dark:text-white" strokeWidth={3} />
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-black dark:text-white">{spec.label}</span>
+                                        <div key={i} className="flex items-center gap-2 p-2 bg-black/5 dark:bg-white/5 rounded-none border-2 border-black transition-all overflow-hidden">
+                                            <spec.icon size={12} className="text-[#FACC15] dark:text-[#FACC15] shrink-0" strokeWidth={3} />
+                                            <span className="text-[9px] font-black uppercase tracking-widest text-black dark:text-white truncate">{spec.label}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -151,32 +151,35 @@ import { useCurrency } from '../context/CurrencyContext';const VehicleCarousel =
                                 {vehicle.calculatedTotal > 0 && (
                                     <div className="mb-6 border-4 border-black bg-white dark:bg-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] overflow-hidden flex flex-col">
                                         {/* LKR - Primary */}
-                                        <div className="bg-black text-white p-3 flex items-center justify-center border-b-2 border-black">
-                                            <span className="text-sm font-black tracking-tight">
+                                        <div className="bg-black text-[#FACC15] p-3 flex flex-col items-center justify-center border-b-4 border-black group/lkr relative overflow-hidden">
+                                             <div className="absolute inset-0 bg-white/5 translate-x-full group-hover/lkr:translate-x-0 transition-transform duration-500"></div>
+                                             <p className="text-[8px] font-black uppercase tracking-[0.3em] mb-1 relative z-10 text-white/40">Total Fare (LKR)</p>
+                                             <span className="text-2xl font-black tracking-tighter relative z-10 italic">
                                                 Rs {vehicle.calculatedTotal.toLocaleString()}
-                                            </span>
+                                             </span>
                                         </div>
-                                        {/* USD - Secondary */}
-                                        <div className="bg-[#E2E8F0] text-black p-2 flex items-center justify-center border-b-2 border-black">
-                                            <span className="text-xs font-black tracking-tight">
-                                                $ {(() => {
-                                                    const rate = rates['USD'] || 0.0032;
-                                                    const convertedRaw = (vehicle.calculatedTotal || 0) * rate;
-                                                    const value = currency === 'LKR' ? Math.round(convertedRaw) : Number(convertedRaw.toFixed(2));
-                                                    return value.toLocaleString();
-                                                })()}
-                                            </span>
-                                        </div>
-                                        {/* EUR - Tertiary */}
-                                        <div className="bg-[#F1F5F9] text-black p-2 flex items-center justify-center">
-                                            <span className="text-xs font-black tracking-tight">
-                                                € {(() => {
-                                                    const rate = rates['EUR'] || 0.003;
-                                                    const convertedRaw = (vehicle.calculatedTotal || 0) * rate;
-                                                    const value = currency === 'LKR' ? Math.round(convertedRaw) : Number(convertedRaw.toFixed(2));
-                                                    return value.toLocaleString();
-                                                })()}
-                                            </span>
+                                        
+                                        <div className="grid grid-cols-2">
+                                            {/* USD - Secondary */}
+                                            <div className="bg-slate-100 dark:bg-zinc-900 text-black dark:text-white p-2 flex flex-col items-center justify-center border-r-4 border-black">
+                                                <p className="text-[7px] font-black uppercase tracking-widest mb-1 opacity-40">USD ($)</p>
+                                                <span className="text-base font-black tracking-tighter italic">
+                                                    $ {(() => {
+                                                        const rate = rates['USD'] || 0.0032;
+                                                        return (vehicle.calculatedTotal * rate).toFixed(2);
+                                                    })()}
+                                                </span>
+                                            </div>
+                                            {/* EUR - Tertiary */}
+                                            <div className="bg-slate-50 dark:bg-zinc-800 text-black dark:text-white p-2 flex flex-col items-center justify-center">
+                                                <p className="text-[7px] font-black uppercase tracking-widest mb-1 opacity-40">EUR (€)</p>
+                                                <span className="text-base font-black tracking-tighter italic">
+                                                    € {(() => {
+                                                        const rate = rates['EUR'] || 0.003;
+                                                        return (vehicle.calculatedTotal * rate).toFixed(2);
+                                                    })()}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
