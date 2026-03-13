@@ -737,9 +737,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 </div>
                             </div>
 
-                            {/* Extra Options Grid - Refined Spacing & Alignment */}
-                            <div className="flex flex-col xl:flex-row gap-10 mt-10">
-                                {activeTab === 'pickup' && (
+                                {/* Extra Options Grid - Refined Spacing & Alignment */}
+                                <div className="flex flex-col xl:flex-row gap-8 lg:gap-10 mt-12 mb-8">
+                                    {activeTab === 'pickup' && (
                                     <button
                                         onClick={() => setHasNameBoard(!hasNameBoard)}
                                         aria-pressed={hasNameBoard}
@@ -890,9 +890,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 )}
                             </div>
 
-                            {/* Counters Grid */}
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                                {[
+                            {/* Counters Section with Label */}
+                            <div className="mt-12 space-y-4">
+                                <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none italic">Passenger & Luggage</label>
+                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                                    {[
                                     { id: 'adults', label: 'Adults' },
                                     { id: 'children', label: 'Children' },
                                     { id: 'luggage', label: 'Luggage' },
@@ -920,6 +922,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                 ))}
                             </div>
+                        </div>
 
                             {/* Vehicle Selection - Unified for Desktop & Mobile */}
                             <div className="">
