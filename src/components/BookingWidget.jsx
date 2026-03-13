@@ -738,7 +738,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             </div>
 
                                 {/* Extra Options Grid - Refined Spacing & Alignment */}
-                                <div className="flex flex-col xl:flex-row gap-8 lg:gap-10 mt-12 mb-8">
+                                <div className="flex flex-col xl:flex-row gap-6 lg:gap-8 mt-12 lg:mt-8 mb-6 lg:mb-4">
                                     {activeTab === 'pickup' && (
                                     <button
                                         onClick={() => setHasNameBoard(!hasNameBoard)}
@@ -771,10 +771,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex-1 space-y-4">
                                     <button
                                         onClick={() => setIsCouponOpen(!isCouponOpen)}
-                                        className={`flex items-center gap-3 text-[10px] font-black h-full min-h-[5rem] transition-all px-8 py-4 rounded-none w-full justify-center uppercase tracking-[0.2em] border-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${isCouponOpen ? 'bg-[#FACC15] text-black border-black translate-y-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-black text-white border-black hover:translate-y-[-2px]'}`}
+                                        className={`flex items-center gap-3 text-[10px] font-black h-full min-h-[5rem] lg:min-h-[4rem] transition-all px-8 py-4 lg:py-2 rounded-none w-full justify-center uppercase tracking-[0.2em] border-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] lg:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${isCouponOpen ? 'bg-[#FACC15] text-black border-black translate-y-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] lg:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-black text-white border-black hover:translate-y-[-2px]'}`}
                                     >
                                         <Tag size={18} className={isCouponOpen ? 'text-black' : 'text-[#FACC15]'} fill="currentColor" />
-                                        {isCouponOpen ? 'Close Offers' : 'Have a Coupon Code?'}
+                                        {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
                                     </button>
 
                                     {/* Applied Coupons List */}
@@ -891,9 +891,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             </div>
 
                             {/* Counters Section with Label */}
-                            <div className="mt-12 space-y-4">
+                            <div className="mt-12 lg:mt-6 space-y-3 lg:space-y-4">
                                 <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none italic">Passenger & Luggage</label>
-                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-3">
                                     {[
                                     { id: 'adults', label: 'Adults' },
                                     { id: 'children', label: 'Children' },
