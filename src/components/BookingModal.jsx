@@ -803,30 +803,31 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                         </h4>
                                                                         
                                                                         {/* Mini Price Block */}
-                                                                        {distance > 0 && (
-                                                                            <div className="flex flex-wrap items-center gap-3">
-                                                                                <div className="flex items-center gap-1.5">
-                                                                                    {v.hasAC !== false && <div className={isSelected ? 'text-black/60' : 'text-[#FACC15]'}><Zap size={12} fill="currentColor" /></div>}
-                                                                                    <span className={`text-2xl font-black tracking-tight italic
-                                                                                        ${isSelected ? 'text-black' : 'text-[#1A1A1A] dark:text-white'}
-                                                                                    `}>
-                                                                                        Rs {(() => {
-                                                                                            const cardBaseTotal = calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
-                                                                                            return Math.round(cardBaseTotal).toLocaleString();
-                                                                                        })()}
-                                                                                    </span>
-                                                                                </div>
-                                                                                <span className={`text-xs font-bold tracking-tight opacity-50
-                                                                                    ${isSelected ? 'text-black' : 'text-slate-400'}
+                                                                        <div className="flex flex-wrap items-center gap-3">
+                                                                            {!(distance > 0) && (
+                                                                                <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest italic">Starting</span>
+                                                                            )}
+                                                                            <div className="flex items-center gap-1.5">
+                                                                                {v.hasAC !== false && <div className={isSelected ? 'text-black/60' : 'text-[#FACC15]'}><Zap size={12} fill="currentColor" /></div>}
+                                                                                <span className={`text-2xl font-black tracking-tight italic
+                                                                                    ${isSelected ? 'text-black' : 'text-[#1A1A1A] dark:text-white'}
                                                                                 `}>
-                                                                                    ~ $ {(() => {
+                                                                                    Rs {(() => {
                                                                                         const cardBaseTotal = calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
-                                                                                        const rate = rates['USD'] || 0.0032;
-                                                                                        return (cardBaseTotal * rate).toFixed(2);
+                                                                                        return Math.round(cardBaseTotal).toLocaleString();
                                                                                     })()}
                                                                                 </span>
                                                                             </div>
-                                                                        )}
+                                                                            <span className={`text-xs font-bold tracking-tight opacity-50
+                                                                                ${isSelected ? 'text-black' : 'text-slate-400'}
+                                                                            `}>
+                                                                                ~ $ {(() => {
+                                                                                    const cardBaseTotal = calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
+                                                                                    const rate = rates['USD'] || 0.0032;
+                                                                                    return (cardBaseTotal * rate).toFixed(2);
+                                                                                })()}
+                                                                            </span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
 

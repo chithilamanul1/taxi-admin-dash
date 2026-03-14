@@ -136,8 +136,11 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                     {displayName(vehicle.name)}
                                 </h4>
 
-                                {vehicle.calculatedTotal > 0 && (
+                                {vehicle.calculatedTotal >= 0 && (
                                     <div className="mb-8 text-center">
+                                        {!(passengerCount.distance > 0) && (
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Starting from</p>
+                                        )}
                                         <div className="flex items-center justify-center gap-3">
                                             {(vehicle.hasAC !== false) && (
                                                 <div className="text-[#FACC15] animate-pulse">

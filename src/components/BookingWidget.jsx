@@ -20,7 +20,7 @@ import { calculateBasePrice, calculateSurcharges } from '@/lib/pricing-util';
 
 // (Helper to calculate price)
 const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, pickupName = '', dropoffName = '', destinations = []) => {
-    if (!distance || !pricingMap[vehicleId]) return { total: 0 };
+    if (!pricingMap[vehicleId]) return { total: 0 };
     const vehicleData = pricingMap[vehicleId];
 
     const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupName, dropoffName, destinations);
