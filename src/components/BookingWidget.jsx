@@ -58,7 +58,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [distance, setDistance] = useState(null)
     const [vehicle, setVehicle] = useState('mini-car')
     const [waitingHours, setWaitingHours] = useState(0)
-    const [hasNameBoard, setHasNameBoard] = useState(false)
+    const [waitingHours, setWaitingHours] = useState(0)
     const [couponCode, setCouponCode] = useState('')
     const [isManualVehicle, setIsManualVehicle] = useState(false)
     const [isLocating, setIsLocating] = useState(false)
@@ -457,7 +457,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         tripType,
         vehiclePricing,
         totalWaitingHours,
-        hasNameBoard,
+        totalWaitingHours,
+        false, // hasNameBoard removed from landing page
         nameBoardPrice,
         pickup?.name || pickupSearch,
         dropoff?.name || dropoffSearch,
@@ -498,7 +499,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             passengerCount,
             tripType,
             waitingHours: totalWaitingHours,
-            hasNameBoard,
+            hasNameBoard: null, // Force selection in modal
             distance,
             vehicle,
             couponCode: verifiedCoupons.length > 0 ? verifiedCoupons[0].code : '',
@@ -739,41 +740,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 {/* Extra Options Grid - Refined Spacing & Alignment */}
                                 <div className="flex flex-col xl:flex-row gap-6 lg:gap-8 mt-12 lg:mt-8 mb-6 lg:mb-4">
-                                    {activeTab === 'pickup' && (
-                                    <button
-                                        onClick={() => setHasNameBoard(!hasNameBoard)}
-                                        aria-pressed={hasNameBoard}
-                                        className={`flex-1 h-auto min-h-[5rem] px-6 py-4 rounded-none border-4 transition-all flex items-center justify-between group relative overflow-hidden ${hasNameBoard ? 'border-black bg-[#FACC15] text-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]' : 'bg-white dark:bg-white/5 border-black text-black/40 dark:text-white/40 hover:border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]'}`}
-                                    >
-                                        <div className="flex items-center gap-5 flex-1 relative z-10">
-                                            <div className="w-12 h-12 md:w-14 md:h-14 shrink-0 bg-white dark:bg-zinc-800 rounded-none border-2 border-black flex items-center justify-center overflow-hidden shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-[#FACC15]">
-                                                <Signpost size={24} strokeWidth={3} fill="currentColor" />
-                                            </div>
-                                            <div className="text-left flex-1">
-                                                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                                                    <span className="text-xs md:text-sm font-black block uppercase tracking-tight text-black dark:text-white leading-none">Airport Greeting</span>
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="w-1 h-1 rounded-full bg-black/20 hidden sm:block"></span>
-                                                        <span className="text-[10px] font-black text-[#FACC15] whitespace-nowrap bg-black px-2 py-0.5 border border-black uppercase italic">+ Rs {nameBoardPrice.toLocaleString()}</span>
-                                                    </div>
-                                                </div>
-                                                <span className="text-[9px] font-bold text-black/40 dark:text-white/40 block mt-1 uppercase tracking-widest leading-none">Personal Meeting Service</span>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center ml-4 relative z-10">
-                                            <div className={`w-8 h-8 shrink-0 rounded-none border-4 flex items-center justify-center transition-colors ${hasNameBoard ? 'border-black bg-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]' : 'border-black/10 bg-transparent'}`}>
-                                                {hasNameBoard && <Check size={18} className="text-[#FACC15]" strokeWidth={4} />}
-                                            </div>
-                                        </div>
-                                    </button>
-                                )}
 
                                 <div className="flex-1 space-y-4">
                                     <button
                                         onClick={() => setIsCouponOpen(!isCouponOpen)}
-                                        className={`flex items-center gap-3 text-[10px] font-black h-full min-h-[5rem] lg:min-h-[4rem] transition-all px-8 py-4 lg:py-2 rounded-none w-full justify-center uppercase tracking-[0.2em] border-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] lg:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${isCouponOpen ? 'bg-[#FACC15] text-black border-black translate-y-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] lg:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-black text-white border-black hover:translate-y-[-2px]'}`}
+                                        className={`flex items-center gap-3 text-[10px] lg:text-[9px] font-black h-full min-h-[5rem] lg:min-h-[3.5rem] transition-all px-8 lg:px-6 py-4 lg:py-2 rounded-none w-full justify-center uppercase tracking-[0.2em] lg:tracking-[0.15em] border-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] lg:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${isCouponOpen ? 'bg-[#FACC15] text-black border-black translate-y-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] lg:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-black text-white border-black hover:translate-y-[-2px]'}`}
                                     >
-                                        <Tag size={18} className={isCouponOpen ? 'text-black' : 'text-[#FACC15]'} fill="currentColor" />
+                                        <Tag size={18} className={`${isCouponOpen ? 'text-black' : 'text-[#FACC15]'} lg:w-4 lg:h-4`} fill="currentColor" />
                                         {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
                                     </button>
 
