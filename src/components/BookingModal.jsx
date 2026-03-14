@@ -756,33 +756,36 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                                     return (
                                                         <button
-                                                            key={v.vehicleType}
-                                                            onClick={() => {
-                                                                if (isFit) {
-                                                                    setFormData({ ...formData, vehicle: v.vehicleType });
-                                                                    if (isVehicleExpanded) setIsVehicleExpanded(false);
-                                                                }
-                                                            }}
-                                                            className={`premium-box group/card relative w-full p-6 md:p-8 rounded-none border-4 transition-all cursor-pointer overflow-hidden flex flex-col gap-6 text-left
-                                                            ${isSelected
-                                                                    ? 'border-black bg-[#FACC15] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] -translate-y-1'
-                                                                    : 'border-black bg-white dark:bg-white/[0.02] hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]'}
-                                                            ${!isFit ? 'opacity-30 grayscale pointer-events-none' : 'active:scale-[0.98]'}
-                                                        `}
+                                                             key={v.vehicleType}
+                                                             onClick={() => {
+                                                                 if (isFit) {
+                                                                     setFormData({ ...formData, vehicle: v.vehicleType });
+                                                                     if (isVehicleExpanded) setIsVehicleExpanded(false);
+                                                                 }
+                                                             }}
+                                                             className={`group/card relative w-full p-4 md:p-6 transition-all cursor-pointer overflow-hidden flex flex-col gap-4 text-left rounded-2xl
+                                                             ${isSelected
+                                                                     ? 'bg-[#FACC15] shadow-[0_15px_40px_rgba(250,204,21,0.2)] scale-[1.01]'
+                                                                     : 'bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.05] shadow-sm'}
+                                                             ${!isFit ? 'opacity-30 grayscale pointer-events-none' : 'active:scale-[0.98]'}
+                                                         `}
                                                         >
                                                             {/* Header info */}
                                                             <div className="flex items-center gap-8">
                                                                      {/* Image Box */}
-                                                                    <div className="w-28 md:w-36 h-20 md:h-28 bg-white dark:bg-white/10 rounded-none flex items-center justify-center p-4 shrink-0 overflow-hidden border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] relative group-hover/card:bg-slate-50 transition-colors">
+                                                                    <div className={`w-24 md:w-32 h-20 md:h-24 rounded-xl flex items-center justify-center p-3 shrink-0 overflow-hidden relative shadow-inner
+                                                                        ${isSelected ? 'bg-black/10' : 'bg-slate-100 dark:bg-black/40'}
+                                                                    `}>
                                                                         {v.image ? (
-                                                                            <img src={v.image} alt={v.name} className="w-full h-full object-contain transition-transform duration-700 group-hover/card:scale-110" />
+                                                                            <img src={v.image} alt={v.name} className="w-full h-full object-contain drop-shadow-md group-hover/card:scale-110 transition-transform duration-500" />
                                                                         ) : (
-                                                                            <Car className="text-slate-200 dark:text-white/10" size={40} />
+                                                                            <Car className="text-slate-300" size={32} />
                                                                         )}
-                                                                        {/* Integrated A/C Badge */}
                                                                         {v.hasAC !== false && (
-                                                                            <div className="absolute top-0 right-0 bg-black text-[#FACC15] text-[7px] font-black px-2 py-1 border-l-2 border-b-2 border-black uppercase tracking-widest italic z-10">
-                                                                                A/C
+                                                                            <div className="absolute top-0 right-0 p-1">
+                                                                                <div className="text-[7px] font-black text-[#FACC15] dark:text-yellow-400">
+                                                                                    <Zap size={8} fill="currentColor" />
+                                                                                </div>
                                                                             </div>
                                                                         )}
                                                                     </div>
@@ -793,20 +796,29 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                             <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none">Premium Service</span>
                                                                             {isSelected && <div className="w-2 h-2 rounded-none bg-black animate-pulse border border-yellow-400"></div>}
                                                                         </div>
-                                                                        <h4 className="text-xl md:text-2xl font-black text-black dark:text-white uppercase italic tracking-tighter leading-tight mb-2 truncate">
+                                                                        <h4 className={`text-lg md:text-xl font-black uppercase tracking-tighter leading-tight mb-2 truncate
+                                                                            ${isSelected ? 'text-black' : 'text-[#1A1A1A] dark:text-white'}
+                                                                        `}>
                                                                             {displayVehicleName(v.name)}
                                                                         </h4>
                                                                         
                                                                         {/* Mini Price Block */}
                                                                         {distance > 0 && (
-                                                                            <div className="flex flex-wrap items-center gap-2">
-                                                                                <span className="text-sm font-black text-black dark:text-white bg-white/50 dark:bg-black/20 px-2 py-0.5 border border-black/10 rounded-lg italic">
-                                                                                    Rs {(() => {
-                                                                                        const cardBaseTotal = calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
-                                                                                        return Math.round(cardBaseTotal).toLocaleString();
-                                                                                    })()}
-                                                                                </span>
-                                                                                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                                                                            <div className="flex flex-wrap items-center gap-3">
+                                                                                <div className="flex items-center gap-1.5">
+                                                                                    {v.hasAC !== false && <div className={isSelected ? 'text-black/60' : 'text-[#FACC15]'}><Zap size={12} fill="currentColor" /></div>}
+                                                                                    <span className={`text-2xl font-black tracking-tight italic
+                                                                                        ${isSelected ? 'text-black' : 'text-[#1A1A1A] dark:text-white'}
+                                                                                    `}>
+                                                                                        Rs {(() => {
+                                                                                            const cardBaseTotal = calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
+                                                                                            return Math.round(cardBaseTotal).toLocaleString();
+                                                                                        })()}
+                                                                                    </span>
+                                                                                </div>
+                                                                                <span className={`text-xs font-bold tracking-tight opacity-50
+                                                                                    ${isSelected ? 'text-black' : 'text-slate-400'}
+                                                                                `}>
                                                                                     ~ $ {(() => {
                                                                                         const cardBaseTotal = calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
                                                                                         const rate = rates['USD'] || 0.0032;
@@ -818,26 +830,23 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                     </div>
                                                                 </div>
 
-                                                                {/* Capacity Grid - Triple Column for Hand Luggage */}
-                                                                <div className="grid grid-cols-3 gap-2">
-                                                                <div className="flex flex-col items-center justify-center p-3 bg-white dark:bg-black/20 rounded-none border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-colors group/card:bg-slate-50 dark:group/card:bg-black/40">
-                                                                    <Users size={14} className="text-[#FACC15] mb-1" strokeWidth={3} />
-                                                                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Pax</p>
-                                                                    <p className="text-xs font-black text-black dark:text-white italic">{v.capacity}</p>
+                                                                <div className="grid grid-cols-3 gap-3">
+                                                                    {[
+                                                                        { icon: Users, label: 'PAX', value: v.capacity },
+                                                                        { icon: Briefcase, label: 'BAGS', value: v.luggage || 0 },
+                                                                        { icon: ShoppingBag, label: 'HAND', value: v.handLuggage || 0 }
+                                                                    ].map((spec, i) => (
+                                                                        <div key={i} className={`flex flex-col items-center justify-center p-2 rounded-xl border transition-colors
+                                                                            ${isSelected ? 'bg-black/10 border-black/10' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/5'}
+                                                                        `}>
+                                                                            <spec.icon size={14} className={isSelected ? 'text-black/40' : 'text-slate-400'} strokeWidth={2} />
+                                                                            <span className={`text-[7px] font-bold tracking-widest uppercase mb-1
+                                                                                ${isSelected ? 'text-black/40' : 'text-slate-400'}
+                                                                            `}>{spec.label}</span>
+                                                                            <p className={`text-base font-black italic ${isSelected ? 'text-black' : 'text-black dark:text-white'}`}>{spec.value}</p>
+                                                                        </div>
+                                                                    ))}
                                                                 </div>
-      
-                                                                <div className="flex flex-col items-center justify-center p-3 bg-white dark:bg-black/20 rounded-none border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-colors group/card:bg-slate-50 dark:group/card:bg-black/40">
-                                                                    <Briefcase size={14} className="text-[#FACC15] mb-1" strokeWidth={3} />
-                                                                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Bags</p>
-                                                                    <p className="text-xs font-black text-black dark:text-white italic">{v.luggage || 0}</p>
-                                                                </div>
-
-                                                                <div className="flex flex-col items-center justify-center p-3 bg-white dark:bg-black/20 rounded-none border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-colors group/card:bg-slate-50 dark:group/card:bg-black/40">
-                                                                    <ShoppingBag size={14} className="text-[#FACC15] mb-1" strokeWidth={3} />
-                                                                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Hand</p>
-                                                                    <p className="text-xs font-black text-black dark:text-white italic">{v.handLuggage || 0}</p>
-                                                                </div>
-                                                            </div>
                                                         </button>
                                                     );
                                                 })}

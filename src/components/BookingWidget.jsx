@@ -1115,7 +1115,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         tripType,
                         vehiclePricing,
                         waitingHours,
-                        hasNameBoard,
+                        false, // hasNameBoard removed from landing page
                         nameBoardPrice,
                         pickup.name,
                         dropoff.name,

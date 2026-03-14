@@ -78,17 +78,19 @@ import { useCurrency } from '../context/CurrencyContext';const VehicleCarousel =
                 className="flex gap-8 overflow-x-auto pb-12 px-2 snap-x snap-mandatory scrollbar-hide w-full"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-                {vehicles.map((vehicle) => {
+                {vehicles.map((vehicle, index) => {
                     const { suitable, reason } = isSuitable(vehicle);
                     const isSelected = selectedId === vehicle.vehicleType;
+                    const displayIdx = (index + 1).toString().padStart(2, '0');
 
                     return (
                         <div
                             key={vehicle._id || vehicle.vehicleType}
                             className={`
-                                relative flex-shrink-0 w-[290px] md:w-[350px] snap-center rounded-none border-4 transition-all duration-500 overflow-hidden group/card
-                                ${isSelected ? 'border-black bg-[#FACC15]/5 shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] -translate-y-2' : 'border-black bg-white dark:bg-white/5 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1'}
+                                relative flex-shrink-0 w-[300px] md:w-[380px] snap-center transition-all duration-500 overflow-hidden group/card
+                                ${isSelected ? 'shadow-[0_20px_50px_rgba(0,0,0,0.1)] -translate-y-2' : 'hover:shadow-[0_15px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1'}
                                 ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
+                                bg-white dark:bg-[#1a1a1a]
                             `}
                             onClick={() => suitable && onSelect(vehicle.vehicleType)}
                         >
@@ -102,96 +104,84 @@ import { useCurrency } from '../context/CurrencyContext';const VehicleCarousel =
                                 </div>
                             )}
 
-                            <div className="h-48 md:h-56 w-full p-6 md:p-8 bg-slate-50 dark:bg-black/20 relative flex items-center justify-center group-hover/card:scale-105 transition-transform duration-700">
+                            {/* Selection Border Overlay */}
+                            {isSelected && (
+                                <div className="absolute inset-0 border-[6px] border-[#FACC15] z-10 pointer-events-none"></div>
+                            )}
+
+                            <div className="h-48 md:h-64 w-full p-6 md:p-8 bg-slate-50 dark:bg-black/20 relative flex items-center justify-center overflow-hidden">
+                                {/* Background Index - Large Faint Number */}
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[180px] font-black text-black/[0.03] dark:text-white/[0.02] italic tracking-tighter pointer-events-none select-none italic">
+                                    {displayIdx}
+                                </div>
+
                                 <img
                                     src={vehicle.image}
                                     alt={vehicle.name}
-                                    width={240}
-                                    height={150}
-                                    className="w-auto h-3/4 object-contain drop-shadow-[5px_5px_0px_rgba(0,0,0,0.2)]"
+                                    className="w-auto h-4/5 object-contain drop-shadow-[15px_15px_30px_rgba(0,0,0,0.1)] relative z-10 group-hover/card:scale-110 transition-transform duration-700"
                                 />
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setDetailVehicle(vehicle); }}
-                                    className="absolute top-6 right-6 w-12 h-12 bg-black text-[#FACC15] border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:bg-[#FACC15] hover:text-black transition-all z-20"
+                                    className="absolute top-4 right-4 w-10 h-10 bg-white/80 dark:bg-black/80 backdrop-blur-md text-slate-400 border border-slate-100 dark:border-white/10 rounded-full flex items-center justify-center hover:bg-[#FACC15] hover:text-black transition-all z-20 shadow-sm"
                                     aria-label={`View details for ${vehicle.name}`}
                                 >
-                                    <Info size={20} strokeWidth={4} />
+                                    <Info size={18} strokeWidth={2.5} />
                                 </button>
                             </div>
 
-                            <div className="p-8">
-                                <div className="flex justify-between items-start mb-6 min-h-[64px]">
-                                    <h4 className="text-2xl font-black text-black dark:text-white uppercase italic tracking-tighter leading-none">
-                                        {vehicle.name.split('(').map((part, i) => (
-                                            <span key={i} className={i > 0 ? "block text-[10px] opacity-40 not-italic font-black mt-2 tracking-widest leading-none" : "block leading-none"}>
-                                                {i > 0 ? `(${part}` : part}
-                                            </span>
-                                        ))}
-                                    </h4>
-                                    {suitable && <div className={`w-8 h-8 rounded-none border-4 flex items-center justify-center transition-all ${isSelected ? 'border-black bg-[#FACC15] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'border-black/5'}`}>
-                                        {isSelected && <Check size={16} strokeWidth={5} className="text-black" />}
-                                    </div>}
-                                </div>
-
-                                {/* Vehicle Specs Grid - Premium Boxes */}
-                                <div className="grid grid-cols-2 gap-3 mb-6">
-                                    {[
-                                        { icon: Users, label: `${vehicle.capacity} PAX` },
-                                        { icon: Briefcase, label: `${vehicle.luggage || 0} BAGS` },
-                                        { icon: Backpack, label: `${vehicle.handLuggage || 0} HAND` },
-                                        ...(vehicle.hasAC !== false ? [{ icon: Wind, label: 'A/C' }] : [])
-                                    ].map((spec, i) => (
-                                        <div key={i} className="flex items-center gap-2 p-2 bg-black/5 dark:bg-white/5 rounded-none border-2 border-black transition-all overflow-hidden">
-                                            <spec.icon size={12} className="text-[#FACC15] dark:text-[#FACC15] shrink-0" strokeWidth={3} />
-                                            <span className="text-[9px] font-black uppercase tracking-widest text-black dark:text-white truncate">{spec.label}</span>
-                                        </div>
-                                    ))}
-                                </div>
+                            <div className="p-8 pb-12 relative flex flex-col items-center">
+                                <h4 className="text-2xl font-black text-[#1A1A1A] dark:text-white uppercase tracking-tighter mb-4 text-center">
+                                    {displayName(vehicle.name)}
+                                </h4>
 
                                 {vehicle.calculatedTotal > 0 && (
-                                    <div className="mb-6 border-4 border-black bg-white dark:bg-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] overflow-hidden flex flex-col">
-                                        {/* LKR - Primary */}
-                                        <div className="bg-black text-[#FACC15] p-3 flex flex-col items-center justify-center border-b-4 border-black group/lkr relative overflow-hidden">
-                                             <div className="absolute inset-0 bg-white/5 translate-x-full group-hover/lkr:translate-x-0 transition-transform duration-500"></div>
-                                             <p className="text-[8px] font-black uppercase tracking-[0.3em] mb-1 relative z-10 text-white/40">Total Fare (LKR)</p>
-                                             <span className="text-2xl font-black tracking-tighter relative z-10 italic">
+                                    <div className="mb-8 text-center">
+                                        <div className="flex items-center justify-center gap-3">
+                                            {(vehicle.hasAC !== false) && (
+                                                <div className="text-[#FACC15] animate-pulse">
+                                                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                        <line x1="12" y1="2" x2="12" y2="6"></line>
+                                                        <line x1="12" y1="18" x2="12" y2="22"></line>
+                                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                                                        <line x1="2" y1="12" x2="6" y2="12"></line>
+                                                        <line x1="18" y1="12" x2="22" y2="12"></line>
+                                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                                                    </svg>
+                                                </div>
+                                            )}
+                                            <span className="text-[40px] font-black text-[#1A1A1A] dark:text-white tracking-tight leading-none">
                                                 Rs {vehicle.calculatedTotal.toLocaleString()}
-                                             </span>
+                                            </span>
                                         </div>
-                                        
-                                        <div className="grid grid-cols-2">
-                                            {/* USD - Secondary */}
-                                            <div className="bg-slate-100 dark:bg-zinc-900 text-black dark:text-white p-2 flex flex-col items-center justify-center border-r-4 border-black">
-                                                <p className="text-[7px] font-black uppercase tracking-widest mb-1 opacity-40">USD ($)</p>
-                                                <span className="text-base font-black tracking-tighter italic">
-                                                    $ {(() => {
-                                                        const rate = rates['USD'] || 0.0032;
-                                                        return (vehicle.calculatedTotal * rate).toFixed(2);
-                                                    })()}
-                                                </span>
-                                            </div>
-                                            {/* EUR - Tertiary */}
-                                            <div className="bg-slate-50 dark:bg-zinc-800 text-black dark:text-white p-2 flex flex-col items-center justify-center">
-                                                <p className="text-[7px] font-black uppercase tracking-widest mb-1 opacity-40">EUR (€)</p>
-                                                <span className="text-base font-black tracking-tighter italic">
-                                                    € {(() => {
-                                                        const rate = rates['EUR'] || 0.003;
-                                                        return (vehicle.calculatedTotal * rate).toFixed(2);
-                                                    })()}
-                                                </span>
-                                            </div>
+                                        <div className="text-[24px] font-bold text-slate-400 mt-2 tracking-tight">
+                                            ~ $ {(() => {
+                                                const rate = rates['USD'] || 0.0032;
+                                                return (vehicle.calculatedTotal * rate).toFixed(2);
+                                            })()}
                                         </div>
                                     </div>
                                 )}
 
-                                <button
-                                    className={`w-full py-4 rounded-none border-4 border-black font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(250,204,21,0.2)] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${isSelected ? 'bg-[#FACC15] text-black border-black' : 'bg-black hover:bg-[#111] text-[#FACC15] dark:border-white/20 dark:hover:border-[#FACC15]'}`}
-                                    onClick={(e) => { e.stopPropagation(); suitable && onSelect(vehicle.vehicleType); }}
-                                >
-                                    {isSelected ? 'SELECTED' : 'SELECT'} 
-                                    <ArrowRight size={20} strokeWidth={4} />
-                                </button>
+                                {/* Capacity Stats - Distinct Boxes */}
+                                <div className="grid grid-cols-3 gap-4 w-full mb-2">
+                                    {[
+                                        { icon: Users, label: 'PAX', value: vehicle.capacity || 4 },
+                                        { icon: Briefcase, label: 'BAGS', value: vehicle.luggage || 0 },
+                                        { icon: Backpack, label: 'HAND', value: vehicle.handLuggage || 0 }
+                                    ].map((spec, i) => (
+                                        <div key={i} className="flex flex-col items-center p-4 bg-slate-50 dark:bg-white/[0.03] rounded-xl border border-slate-100 dark:border-white/5 shadow-sm group-hover/card:shadow-md transition-shadow">
+                                            <spec.icon size={24} className="text-slate-400 mb-2" strokeWidth={1.5} />
+                                            <span className="text-[10px] font-bold text-slate-400 tracking-[0.2em] mb-1">{spec.label}</span>
+                                            <span className="text-2xl font-black text-[#1A1A1A] dark:text-white">{spec.value}</span>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
+
+                            {/* Bottom Accent Bar */}
+                            <div className={`h-3 w-full transition-colors duration-500 ${isSelected ? 'bg-black dark:bg-[#FACC15]' : 'bg-[#FACC15]'}`}></div>
                         </div>
                     );
                 })}
