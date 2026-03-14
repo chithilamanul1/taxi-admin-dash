@@ -58,7 +58,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [distance, setDistance] = useState(null)
     const [vehicle, setVehicle] = useState('mini-car')
     const [waitingHours, setWaitingHours] = useState(0)
-    const [waitingHours, setWaitingHours] = useState(0)
     const [couponCode, setCouponCode] = useState('')
     const [isManualVehicle, setIsManualVehicle] = useState(false)
     const [isLocating, setIsLocating] = useState(false)
