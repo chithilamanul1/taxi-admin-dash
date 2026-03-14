@@ -62,6 +62,7 @@ export default function Navbar() {
 
                     {[
                         { label: 'Airport Drop & Pickup', href: '/' },
+                        { label: 'Ride', href: '/ride' },
                         { label: 'Day Tours', href: '/day-trips' },
                         { label: 'City Tours', href: '/tours' },
                         { label: 'Tour Packages', href: '/tour-packages' },
@@ -204,6 +205,7 @@ export default function Navbar() {
                             {[
                                 { label: 'Home', href: '/', icon: '🏠', id: 'm-home' },
                                 { label: 'Airport Drop & Pickup', href: '/', icon: '✈️', id: 'm-drop' },
+                                { label: 'Ride', href: '/ride', icon: '🚗', id: 'm-ride' },
                                 { label: 'Day Tours', href: '/day-trips', icon: '🌴', id: 'm-day' },
                                 { label: 'City Tours', href: '/tours', icon: '🏙️', id: 'm-city' },
                                 { label: 'Tour Packages', href: '/tour-packages', icon: '🗺️', id: 'm-pkg' },
