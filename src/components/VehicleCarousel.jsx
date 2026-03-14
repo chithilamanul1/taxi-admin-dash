@@ -1,7 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Users, Briefcase, Info, Lock, Wind, Backpack, Check, ArrowRight, Car } from 'lucide-react';
 import VehicleDetailModal from './VehicleDetailModal';
-import { useCurrency } from '../context/CurrencyContext';const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => {
+import { useCurrency } from '../context/CurrencyContext';const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
+
+const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => {
     const scrollRef = useRef(null);
     const [detailVehicle, setDetailVehicle] = useState(null);
     const { convertPrice, rates } = useCurrency();
