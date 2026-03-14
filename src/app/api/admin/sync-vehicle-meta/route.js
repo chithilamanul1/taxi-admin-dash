@@ -32,7 +32,15 @@ export async function POST(req) {
             const meta = VEHICLE_METADATA[pricing.vehicleType];
             if (meta) {
                 pricing.name = meta.name;
-                pricing.image = meta.image;
+                
+                // Only update image if it's NOT a remote URL (Cloudinary) and NOT already the correct local path
+                const isRemote = pricing.image && (pricing.image.startsWith('http') || pricing.image.startsWith('https'));
+                if (!isRemote) {
+                    pricing.image = meta.image;
+                } else {
+                    console.log(`Protecting remote image for ${pricing.vehicleType}: ${pricing.image}`);
+                }
+
                 pricing.capacity = meta.capacity;
                 pricing.luggage = meta.luggage;
                 pricing.handLuggage = meta.handLuggage;

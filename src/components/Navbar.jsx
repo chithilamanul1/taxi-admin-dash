@@ -40,14 +40,14 @@ export default function Navbar() {
     const needsSolidBg = isScrolled || !isTransparentPage
 
     return (
-        <nav className={`fixed w-full z-50 transition-all duration-500 py-4 bg-white dark:bg-black border-b-4 border-[#FACC15] shadow-2xl`}>
+        <nav className={`fixed w-full z-50 transition-all duration-500 py-4 bg-white/80 dark:bg-navy/80 backdrop-blur-lg border-b border-[#FDD12C]/20 shadow-premium`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <Link href="/" className="flex items-center gap-3 group">
                     <div className="flex flex-col">
-                        <span className="font-black text-2xl tracking-tighter leading-none text-black dark:text-white uppercase italic">
-                            AIRPORT <span className="text-[#FACC15]">TAXIS</span>
+                        <span className="font-black text-2xl tracking-tighter leading-none text-navy dark:text-white uppercase italic">
+                            AIRPORT <span className="text-[#FDD12C]">TAXIS</span>
                         </span>
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#FACC15]/60">Sri Lanka</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#FDD12C]/60">Sri Lanka</span>
                     </div>
                 </Link>
 
@@ -71,7 +71,7 @@ export default function Navbar() {
                         <Link
                             key={item.label}
                             href={item.href}
-                            className={`text-[10px] font-black uppercase tracking-widest hover:text-[#FACC15] transition-colors ${pathname === item.href ? 'text-[#FACC15]' : 'text-black/70 dark:text-white/70'}`}
+                            className={`text-[10px] font-black uppercase tracking-widest hover:text-[#FDD12C] transition-colors ${pathname === item.href ? 'text-[#FDD12C]' : 'text-navy/70 dark:text-white/70'}`}
                         >
                             {item.label}
                         </Link>
@@ -80,7 +80,7 @@ export default function Navbar() {
                     {/* Secondary Navigation Dropdown */}
                     <div className="relative group">
                         <button
-                            className={`flex items-center gap-1 text-[10px] font-black uppercase tracking-widest hover:text-[#FACC15] transition-colors ${['/custom-trip', '/blog', '/trip-planner', '/contact'].some(p => pathname.includes(p)) ? 'text-[#FACC15]' : 'text-black/70 dark:text-white/70'}`}
+                            className={`flex items-center gap-1 text-[10px] font-black uppercase tracking-widest hover:text-[#FDD12C] transition-colors ${['/custom-trip', '/blog', '/trip-planner', '/contact'].some(p => pathname.includes(p)) ? 'text-[#FDD12C]' : 'text-navy/70 dark:text-white/70'}`}
                         >
                             More
                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
@@ -108,13 +108,13 @@ export default function Navbar() {
                     {/* Currency Selector */}
                     <div className="relative group">
                         <button
-                            className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-colors px-4 py-2 bg-[#FACC15] text-black border-2 border-black`}
+                            className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all px-4 py-2 bg-[#FDD12C] text-navy rounded-full shadow-sm hover:shadow-premium`}
                         >
                             <Globe size={14} />
                             <span>{currency}</span>
                             <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
                         </button>
-                        <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-black border-4 border-[#FACC15] py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all flex flex-col z-50">
+                        <div className="absolute top-full right-0 mt-3 w-56 bg-white dark:bg-navy rounded-2xl shadow-premium py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all flex flex-col z-50 border border-white/10">
                             <div className="px-5 py-2 mb-1 border-b border-[#FACC15]/20 bg-black/5 dark:bg-white/5">
                                 <span className="text-[10px] font-black text-[#FACC15] uppercase tracking-widest">Select Currency</span>
                             </div>
@@ -199,7 +199,7 @@ export default function Navbar() {
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-black border-t-4 border-[#FACC15] shadow-2xl max-h-[85vh] overflow-y-auto animate-slide-up">
+                <div className="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-navy border-t border-[#FDD12C]/20 shadow-premium max-h-[85vh] overflow-y-auto animate-slide-up backdrop-blur-lg">
                     <div className="p-6 space-y-4">
                         <div className="grid grid-cols-1 gap-4">
                             {[
@@ -227,7 +227,7 @@ export default function Navbar() {
                             ].map(item => (
                                 item.isDropdown ? (
                                     <div key={item.id} className="space-y-3">
-                                        <div className="p-4 bg-black/5 dark:bg-white/5 border-l-4 border-[#FACC15] text-[#FACC15] font-black uppercase tracking-widest text-[10px]">
+                                        <div className="p-4 bg-[#FDD12C]/5 dark:bg-white/5 border-l-2 border-[#FDD12C] text-navy dark:text-[#FDD12C] font-black uppercase tracking-widest text-[10px]">
                                             {item.label}
                                         </div>
                                         <div className="grid grid-cols-2 gap-2">
@@ -246,10 +246,10 @@ export default function Navbar() {
                                     <Link
                                         key={item.id}
                                         href={item.href}
-                                        className="p-4 bg-black/5 dark:bg-white/5 border-l-4 border-[#FACC15] hover:bg-[#FACC15] hover:text-black transition-all text-black dark:text-white font-black uppercase tracking-widest text-[10px] flex items-center justify-between"
+                                        className="p-4 bg-[#FDD12C]/5 dark:bg-white/5 border-l-2 border-[#FDD12C] hover:bg-[#FDD12C] hover:text-navy transition-all text-navy dark:text-white font-black uppercase tracking-widest text-[10px] flex items-center justify-between group"
                                     >
                                         <span>{item.label}</span>
-                                        <span className="text-lg">{item.icon}</span>
+                                        <span className="text-lg group-hover:scale-110 transition-transform">{item.icon}</span>
                                     </Link>
                                 )
                             ))}
@@ -258,7 +258,7 @@ export default function Navbar() {
                         <div className="pt-6 border-t border-white/10 space-y-4">
                             <a
                                 href="tel:+94716885880"
-                                className="flex items-center justify-center gap-3 w-full py-5 bg-[#FACC15] text-black font-black uppercase tracking-widest text-xs"
+                                className="flex items-center justify-center gap-3 w-full py-5 bg-[#FDD12C] text-navy font-black uppercase tracking-widest text-xs rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all"
                             >
                                 <Phone size={18} /> Call Specialist
                             </a>

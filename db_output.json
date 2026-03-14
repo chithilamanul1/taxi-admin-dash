@@ -1,0 +1,1519 @@
+[
+  {
+    "_id": "69a2eb44763ebaa3526cd6f4",
+    "vehicleType": "mini-car",
+    "name": "Mini Car",
+    "category": "airport-transfer",
+    "basePrice": 3500,
+    "baseKm": 20,
+    "perKmRate": 102,
+    "capacity": 2,
+    "luggage": 2,
+    "image": "/vehicles/minicar.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 3500,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 4000,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 130,
+        "type": "per_km",
+        "price": 0,
+        "rate": 100
+      },
+      {
+        "min": 130,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 102
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "updatedAt": "2026-03-04T05:49:36.864Z",
+    "handLuggage": 2,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 1
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd6f9",
+    "vehicleType": "sedan",
+    "name": "Sedan",
+    "category": "airport-transfer",
+    "basePrice": 4500,
+    "baseKm": 20,
+    "perKmRate": 110,
+    "capacity": 3,
+    "luggage": 3,
+    "image": "/vehicles/sedancar.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 4500,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 6000,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 50,
+        "type": "per_km",
+        "price": 0,
+        "rate": 150
+      },
+      {
+        "min": 50,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 130
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 120
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 115
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 110
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 3,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 2,
+    "updatedAt": "2026-03-04T05:49:37.107Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd6fe",
+    "vehicleType": "vezel",
+    "name": "Honda Vezel",
+    "category": "airport-transfer",
+    "basePrice": 6500,
+    "baseKm": 20,
+    "perKmRate": 135,
+    "capacity": 3,
+    "luggage": 3,
+    "image": "/vehicles/Hondavezel.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 6500,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 9500,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 150
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 145
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 140
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 135
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 3,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 99,
+    "updatedAt": "2026-03-04T10:31:16.469Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd703",
+    "vehicleType": "mini-van-every",
+    "name": "Mini Van (Every)",
+    "category": "airport-transfer",
+    "basePrice": 4500,
+    "baseKm": 20,
+    "perKmRate": 110,
+    "capacity": 3,
+    "luggage": 3,
+    "image": "/vehicles/susukievery.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 4500,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 6000,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 50,
+        "type": "per_km",
+        "price": 0,
+        "rate": 150
+      },
+      {
+        "min": 50,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 130
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 120
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 115
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 110
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 3,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 3,
+    "updatedAt": "2026-03-04T05:49:37.346Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd708",
+    "vehicleType": "mini-van-05",
+    "name": "Mini Van (4 Seat)",
+    "category": "airport-transfer",
+    "basePrice": 6000,
+    "baseKm": 20,
+    "perKmRate": 132,
+    "capacity": 4,
+    "luggage": 4,
+    "image": "/vehicles/minivan5seat.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 6000,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 8500,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 200
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 176
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 143
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 132
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 4,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 4,
+    "updatedAt": "2026-03-04T05:49:37.585Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd70d",
+    "vehicleType": "suv",
+    "name": "SUV",
+    "category": "airport-transfer",
+    "basePrice": 6500,
+    "baseKm": 20,
+    "perKmRate": 135,
+    "capacity": 3,
+    "luggage": 3,
+    "image": "/vehicles/Hondavezel.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 6500,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 9500,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 150
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 145
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 140
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 135
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 3,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 5,
+    "updatedAt": "2026-03-04T10:31:15.985Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd712",
+    "vehicleType": "kdh-van",
+    "name": "Mini Bus (KDH High Roof)",
+    "category": "airport-transfer",
+    "basePrice": 6000,
+    "baseKm": 20,
+    "perKmRate": 120,
+    "capacity": 8,
+    "luggage": 8,
+    "image": "/vehicles/toyota-highroof.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 6000,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 8500,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 200
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 160
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 130
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 120
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 6,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 7,
+    "updatedAt": "2026-03-04T10:31:17.430Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd717",
+    "vehicleType": "mini-bus",
+    "name": "Coaster Bus",
+    "category": "airport-transfer",
+    "basePrice": 7500,
+    "baseKm": 20,
+    "perKmRate": 155,
+    "capacity": 8,
+    "luggage": 8,
+    "image": "/vehicles/costerbus.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 7500,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 12000,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 220
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 220
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 175
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 155
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 6,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 8,
+    "updatedAt": "2026-03-04T10:31:17.909Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd71b",
+    "vehicleType": "coach-bus",
+    "name": "Coach Bus",
+    "category": "airport-transfer",
+    "basePrice": 25000,
+    "baseKm": 20,
+    "perKmRate": 450,
+    "capacity": 40,
+    "luggage": 30,
+    "image": "/vehicles/coach-bus.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 25000,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 45000,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "flat",
+        "price": 60000,
+        "rate": 0
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "flat",
+        "price": 85000,
+        "rate": 0
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "flat",
+        "price": 95000,
+        "rate": 0
+      },
+      {
+        "min": 200,
+        "max": 300,
+        "type": "flat",
+        "price": 135000,
+        "rate": 0
+      },
+      {
+        "min": 300,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 450
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 2,
+    "handLuggage": 20,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 99,
+    "updatedAt": "2026-03-04T10:31:23.416Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd71f",
+    "vehicleType": "mini-car",
+    "name": "Mini Car",
+    "category": "ride-now",
+    "basePrice": 3500,
+    "baseKm": 20,
+    "perKmRate": 102,
+    "capacity": 2,
+    "luggage": 2,
+    "image": "/vehicles/minicar.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 3500,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 4000,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 130,
+        "type": "per_km",
+        "price": 0,
+        "rate": 100
+      },
+      {
+        "min": 130,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 102
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 2,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 1,
+    "updatedAt": "2026-03-04T05:49:38.543Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd724",
+    "vehicleType": "sedan",
+    "name": "Sedan",
+    "category": "ride-now",
+    "basePrice": 4500,
+    "baseKm": 20,
+    "perKmRate": 110,
+    "capacity": 3,
+    "luggage": 3,
+    "image": "/vehicles/sedancar.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 4500,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 6000,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 50,
+        "type": "per_km",
+        "price": 0,
+        "rate": 150
+      },
+      {
+        "min": 50,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 130
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 120
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 115
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 110
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 3,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 2,
+    "updatedAt": "2026-03-04T05:49:38.782Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd729",
+    "vehicleType": "vezel",
+    "name": "Honda Vezel",
+    "category": "ride-now",
+    "basePrice": 6500,
+    "baseKm": 20,
+    "perKmRate": 135,
+    "capacity": 3,
+    "luggage": 3,
+    "image": "/vehicles/Hondavezel.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 6500,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 9500,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 150
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 145
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 140
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 135
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 3,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 99,
+    "updatedAt": "2026-03-04T10:31:21.262Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd72e",
+    "vehicleType": "mini-van-every",
+    "name": "Mini Van (Every)",
+    "category": "ride-now",
+    "basePrice": 4500,
+    "baseKm": 20,
+    "perKmRate": 110,
+    "capacity": 3,
+    "luggage": 3,
+    "image": "/vehicles/susukievery.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 4500,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 6000,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 50,
+        "type": "per_km",
+        "price": 0,
+        "rate": 150
+      },
+      {
+        "min": 50,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 130
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 120
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 115
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 110
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 3,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 3,
+    "updatedAt": "2026-03-04T05:49:39.023Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd733",
+    "vehicleType": "mini-van-05",
+    "name": "Mini Van (4 Seat)",
+    "category": "ride-now",
+    "basePrice": 6000,
+    "baseKm": 20,
+    "perKmRate": 120,
+    "capacity": 4,
+    "luggage": 4,
+    "image": "/vehicles/minivan5seat.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 6000,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 8500,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 200
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 160
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 130
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 120
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 4,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 4,
+    "updatedAt": "2026-03-04T05:49:39.263Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd738",
+    "vehicleType": "suv",
+    "name": "SUV",
+    "category": "ride-now",
+    "basePrice": 6500,
+    "baseKm": 20,
+    "perKmRate": 135,
+    "capacity": 3,
+    "luggage": 3,
+    "image": "/vehicles/Hondavezel.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 6500,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 9500,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 150
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 145
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 140
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 135
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 3,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 5,
+    "updatedAt": "2026-03-04T10:31:20.784Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd73d",
+    "vehicleType": "kdh-van",
+    "name": "Mini Bus (KDH High Roof)",
+    "category": "ride-now",
+    "basePrice": 6000,
+    "baseKm": 20,
+    "perKmRate": 120,
+    "capacity": 8,
+    "luggage": 8,
+    "image": "/vehicles/toyota-highroof.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 6000,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 8500,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 200
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 160
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 130
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 120
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 6,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 7,
+    "updatedAt": "2026-03-04T10:31:22.220Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd742",
+    "vehicleType": "mini-bus",
+    "name": "Coaster Bus",
+    "category": "ride-now",
+    "basePrice": 7500,
+    "baseKm": 20,
+    "perKmRate": 155,
+    "capacity": 8,
+    "luggage": 8,
+    "image": "/vehicles/costerbus.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 7500,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 12000,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 220
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 220
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 175
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 155
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 1,
+    "handLuggage": 6,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 8,
+    "updatedAt": "2026-03-04T10:31:22.698Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd746",
+    "vehicleType": "coach-bus",
+    "name": "Coach Bus",
+    "category": "ride-now",
+    "basePrice": 15000,
+    "baseKm": 20,
+    "perKmRate": 220,
+    "capacity": 40,
+    "luggage": 30,
+    "image": "/vehicles/coach-bus.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 15000,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 20000,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 300
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 300
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 250
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 220
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 2,
+    "handLuggage": 20,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 99,
+    "updatedAt": "2026-03-04T10:31:23.416Z"
+  },
+  {
+    "_id": "69a70a2f7cc554d643f717f8",
+    "vehicleType": "normal-kdh",
+    "category": "airport-transfer",
+    "name": "Van (KDH Flat Roof)",
+    "image": "/vehicles/van.png",
+    "capacity": 6,
+    "luggage": 7,
+    "handLuggage": 7,
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "basePrice": 6000,
+    "baseKm": 20,
+    "perKmRate": 135,
+    "hourlyRate": 0,
+    "waitingCharges": [],
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 6000,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 8500,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 200
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 180
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 145
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 135
+      }
+    ],
+    "isActive": true,
+    "sortOrder": 6,
+    "createdAt": "2026-03-03T16:19:59.364Z",
+    "updatedAt": "2026-03-04T05:49:40.218Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a70a307cc554d643f717fd",
+    "vehicleType": "bus",
+    "category": "airport-transfer",
+    "name": "Bus (20+ Seater)",
+    "image": "/vehicles/coach-bus.png",
+    "capacity": 25,
+    "luggage": 20,
+    "handLuggage": 20,
+    "features": [
+      "Air Conditioning"
+    ],
+    "basePrice": 20000,
+    "baseKm": 20,
+    "perKmRate": 400,
+    "hourlyRate": 0,
+    "waitingCharges": [],
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 20000,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 30000,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "flat",
+        "price": 50000,
+        "rate": 0
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "flat",
+        "price": 70000,
+        "rate": 0
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "flat",
+        "price": 85000,
+        "rate": 0
+      },
+      {
+        "min": 200,
+        "max": 300,
+        "type": "flat",
+        "price": 120000,
+        "rate": 0
+      },
+      {
+        "min": 300,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 400
+      }
+    ],
+    "isActive": false,
+    "sortOrder": 99,
+    "createdAt": "2026-03-03T16:20:00.324Z",
+    "updatedAt": "2026-03-04T10:31:23.657Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a70a347cc554d643f7180e",
+    "vehicleType": "normal-kdh",
+    "category": "ride-now",
+    "name": "Van (KDH Flat Roof)",
+    "image": "/vehicles/van.png",
+    "capacity": 6,
+    "luggage": 7,
+    "handLuggage": 7,
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "basePrice": 6000,
+    "baseKm": 20,
+    "perKmRate": 120,
+    "hourlyRate": 0,
+    "waitingCharges": [],
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 6000,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 8500,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 200
+      },
+      {
+        "min": 100,
+        "max": 140,
+        "type": "per_km",
+        "price": 0,
+        "rate": 160
+      },
+      {
+        "min": 140,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 130
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 120
+      }
+    ],
+    "isActive": true,
+    "sortOrder": 6,
+    "createdAt": "2026-03-03T16:20:04.152Z",
+    "updatedAt": "2026-03-04T05:49:40.456Z",
+    "__v": 0
+  },
+  {
+    "_id": "69a70a357cc554d643f71813",
+    "vehicleType": "bus",
+    "category": "ride-now",
+    "name": "Bus (20+ Seater)",
+    "image": "/vehicles/coach-bus.png",
+    "capacity": 25,
+    "luggage": 20,
+    "handLuggage": 20,
+    "features": [
+      "Air Conditioning"
+    ],
+    "basePrice": 20000,
+    "baseKm": 20,
+    "perKmRate": 400,
+    "hourlyRate": 0,
+    "waitingCharges": [],
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 20000,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 30000,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "flat",
+        "price": 50000,
+        "rate": 0
+      },
+      {
+        "min": 100,
+        "max": 150,
+        "type": "flat",
+        "price": 70000,
+        "rate": 0
+      },
+      {
+        "min": 150,
+        "max": 200,
+        "type": "flat",
+        "price": 85000,
+        "rate": 0
+      },
+      {
+        "min": 200,
+        "max": 300,
+        "type": "flat",
+        "price": 120000,
+        "rate": 0
+      },
+      {
+        "min": 300,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 400
+      }
+    ],
+    "isActive": false,
+    "sortOrder": 99,
+    "createdAt": "2026-03-03T16:20:05.107Z",
+    "updatedAt": "2026-03-04T10:31:23.657Z",
+    "__v": 0
+  }
+]
