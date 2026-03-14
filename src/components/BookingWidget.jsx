@@ -456,7 +456,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         tripType,
         vehiclePricing,
         totalWaitingHours,
-        totalWaitingHours,
         false, // hasNameBoard removed from landing page
         nameBoardPrice,
         pickup?.name || pickupSearch,
@@ -988,15 +987,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <div className="pt-6 border-t border-slate-200 dark:border-white/10 space-y-4">
                                         <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.15em]">
                                             <span className="text-slate-500 dark:text-slate-400">Trip Subtotal</span>
-                                            <span className="text-black dark:text-white font-black">{convertPrice(total - (calculateSurcharges({ hasNameBoard }, vehiclePricing[vehicle]) || 0)).symbol} {convertPrice(total - (calculateSurcharges({ hasNameBoard }, vehiclePricing[vehicle]) || 0)).value.toLocaleString()}</span>
+                                            <span className="text-black dark:text-white font-black">{convertPrice(total).symbol} {convertPrice(total).value.toLocaleString()}</span>
                                         </div>
-
-                                        {hasNameBoard && nameBoardPrice > 0 && (
-                                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400">
-                                                <span>Name Board Surcharge</span>
-                                                <span>+{convertPrice(nameBoardPrice).symbol} {convertPrice(nameBoardPrice).value.toLocaleString()}</span>
-                                            </div>
-                                        )}
 
                                         {discountAmount > 0 && (
                                             <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.15em] text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-400/10 p-3 rounded-xl border border-yellow-200 dark:border-yellow-400/20">
