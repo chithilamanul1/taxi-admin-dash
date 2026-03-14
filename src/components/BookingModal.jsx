@@ -23,6 +23,7 @@ const displayVehicleName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim
 export default function BookingModal({ isOpen, onClose, initialData = {}, pricingCategory = 'airport-transfer' }) {
     const { data: session } = useSession();
     const [step, setStep] = useState(1);
+    const [errors, setErrors] = useState({});
     const isAirportService = pricingCategory === 'airport-transfer';
     const [loading, setLoading] = useState(false);
     const [hasAgreed, setHasAgreed] = useState(false);
@@ -405,7 +406,60 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
     // Removed duplicate declaration
 
+    const validateForm = (targetStep) => {
+        const newErrors = {};
+        
+        // Step 1 Validation
+        if (targetStep >= 1) {
+            if (!formData.pickup) newErrors.pickup = true;
+            if (!formData.dropoff) newErrors.dropoff = true;
+            if (formData.hasNameBoard === null) newErrors.hasNameBoard = true;
+            if (isAirportService) {
+                if (!formData.flightArrivalDate) newErrors.date = true;
+                if (!formData.flightArrivalTime) newErrors.time = true;
+            }
+        }
+
+        // Step 2 Validation
+        if (targetStep >= 2) {
+            if (!formData.name) newErrors.name = true;
+            if (!formData.phone) newErrors.phone = true;
+            if (!formData.email) newErrors.email = true;
+            if (isAirportService && !formData.flightNumber) newErrors.flightNumber = true;
+            if (formData.hasNameBoard && !formData.nameBoardText) newErrors.nameBoardText = true;
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const scrollToFirstError = (newErrors = errors) => {
+        const firstErrorKey = Object.keys(newErrors)[0];
+        if (!firstErrorKey) return;
+
+        // If error is on a different step, switch first
+        const step1Keys = ['pickup', 'dropoff', 'hasNameBoard', 'date', 'time'];
+        const errorIsInStep1 = step1Keys.includes(firstErrorKey);
+
+        if (errorIsInStep1 && step !== 1) {
+            setStep(1);
+            // Wait for step change to render before scrolling
+            setTimeout(() => {
+                const el = document.getElementById(`field-${firstErrorKey}`);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+            return;
+        }
+
+        const el = document.getElementById(`field-${firstErrorKey}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+
     const handleSubmit = async () => {
+        if (!validateForm(2)) {
+            scrollToFirstError();
+            return;
+        }
         console.log("Submitting Booking... Step 1");
         setLoading(true);
         try {
@@ -613,15 +667,18 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     </div>
                                 </div>
                                 <div className="space-y-10 relative">
-                                    <div className="relative group">
-                                        <LocationInput
-                                            label="Initial Pickup Point"
-                                            icon={MapPin}
-                                            placeholder="Where should we pick you up?"
-                                            value={formData.pickup}
-                                            onSelect={(loc) => setFormData(prev => ({ ...prev, pickup: loc.address, pickupCoords: loc.lat ? { lat: loc.lat, lon: loc.lon } : null }))}
-                                        />
-                                    </div>
+                                        <div id="field-pickup" className={`relative group border-4 transition-all ${errors.pickup ? 'border-red-500 animate-shake' : 'border-transparent'}`}>
+                                            <LocationInput
+                                                label="Initial Pickup Point"
+                                                icon={MapPin}
+                                                placeholder="Where should we pick you up?"
+                                                value={formData.pickup}
+                                                onSelect={(loc) => {
+                                                    setFormData(prev => ({ ...prev, pickup: loc.address, pickupCoords: loc.lat ? { lat: loc.lat, lon: loc.lon } : null }));
+                                                    if (errors.pickup) setErrors(prev => ({ ...prev, pickup: false }));
+                                                }}
+                                            />
+                                        </div>
                                     {/* Waypoints */}
                                     {formData.waypoints.map((wp, i) => (
                                         <div key={i} className="relative group animate-slide-in pl-12">
@@ -642,7 +699,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </div>
                                     ))}
 
-                                    <div className="relative group">
+                                    <div id="field-dropoff" className={`relative group border-4 transition-all ${errors.dropoff ? 'border-red-500 animate-shake' : 'border-transparent'}`}>
                                         {/* Connecting Line from pickup to waypoints/dropoff */}
                                         <div className="absolute left-8 -top-10 w-1 h-10 bg-gradient-to-b from-slate-200 dark:from-white/10 to-transparent -z-10"></div>
                                         <LocationInput
@@ -650,7 +707,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             icon={Navigation}
                                             placeholder="Where are we heading?"
                                             value={formData.dropoff}
-                                            onSelect={(loc) => setFormData(prev => ({ ...prev, dropoff: loc.address, dropoffCoords: loc.lat ? { lat: loc.lat, lon: loc.lon } : null }))}
+                                            onSelect={(loc) => {
+                                                setFormData(prev => ({ ...prev, dropoff: loc.address, dropoffCoords: loc.lat ? { lat: loc.lat, lon: loc.lon } : null }));
+                                                if (errors.dropoff) setErrors(prev => ({ ...prev, dropoff: false }));
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -815,29 +875,33 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-3 sm:gap-6">
                                                     <div className="space-y-3 sm:space-y-4">
-                                                        <label className="text-[8px] sm:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none italic">Target Date</label>
-                                                        <input
-                                                            type="date"
-                                                            value={formData.flightArrivalDate || ''}
-                                                            onChange={e => {
-                                                                const d = e.target.value;
-                                                                setFormData(prev => ({ ...prev, flightArrivalDate: d, arrivalDate: d, date: isAirportService ? d : prev.date }));
-                                                            }}
-                                                            className="w-full h-12 md:h-16 bg-white dark:bg-white/5 border-4 border-black px-4 md:px-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-[10px] md:text-xs text-black dark:text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest invert dark:invert-0"
-                                                        />
-                                                    </div>
-                                                    <div className="space-y-3 sm:space-y-4">
-                                                        <label className="text-[8px] sm:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none italic">Target Time</label>
-                                                        <input
-                                                            type="time"
-                                                            value={formData.flightArrivalTime || ''}
-                                                            onChange={e => {
-                                                                const t = e.target.value;
-                                                                setFormData(prev => ({ ...prev, flightArrivalTime: t, arrivalTime: t, time: isAirportService ? t : prev.time }));
-                                                            }}
-                                                            className="w-full h-12 md:h-16 bg-white dark:bg-white/5 border-4 border-black px-4 md:px-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-[10px] md:text-xs text-black dark:text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest invert dark:invert-0"
-                                                        />
-                                                    </div>
+                                                         <label className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none italic ${errors.date ? 'text-red-500' : 'text-slate-400 dark:text-slate-500'}`}>Target Date</label>
+                                                         <input
+                                                             id="field-date"
+                                                             type="date"
+                                                             value={formData.flightArrivalDate || ''}
+                                                             onChange={e => {
+                                                                 const d = e.target.value;
+                                                                 setFormData(prev => ({ ...prev, flightArrivalDate: d, arrivalDate: d, date: isAirportService ? d : prev.date }));
+                                                                 if (errors.date) setErrors(prev => ({ ...prev, date: false }));
+                                                             }}
+                                                             className={`w-full h-12 md:h-16 bg-white dark:bg-white/5 border-4 px-4 md:px-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-[10px] md:text-xs text-black dark:text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest invert dark:invert-0 ${errors.date ? 'border-red-500 animate-shake' : 'border-black'}`}
+                                                         />
+                                                     </div>
+                                                     <div className="space-y-3 sm:space-y-4">
+                                                         <label className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none italic ${errors.time ? 'text-red-500' : 'text-slate-400 dark:text-slate-500'}`}>Target Time</label>
+                                                         <input
+                                                             id="field-time"
+                                                             type="time"
+                                                             value={formData.flightArrivalTime || ''}
+                                                             onChange={e => {
+                                                                 const t = e.target.value;
+                                                                 setFormData(prev => ({ ...prev, flightArrivalTime: t, arrivalTime: t, time: isAirportService ? t : prev.time }));
+                                                                 if (errors.time) setErrors(prev => ({ ...prev, time: false }));
+                                                             }}
+                                                             className={`w-full h-12 md:h-16 bg-white dark:bg-white/5 border-4 px-4 md:px-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-[10px] md:text-xs text-black dark:text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest invert dark:invert-0 ${errors.time ? 'border-red-500 animate-shake' : 'border-black'}`}
+                                                         />
+                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -926,8 +990,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     )}
 
                                     <div className="pt-4 space-y-6">
-                                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Greeting Service / Name Board</label>
-                                        <div className={`relative overflow-hidden group rounded-none border-4 transition-all ${formData.hasNameBoard ? 'border-black dark:border-[#FACC15] bg-black dark:bg-[#111] shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]' : 'border-black bg-white dark:bg-white/5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'}`}>
+                                         <label className={`text-[10px] font-black uppercase tracking-[0.3em] pl-3 leading-none ${errors.hasNameBoard ? 'text-red-500' : 'text-slate-400 dark:text-slate-500'}`}>Greeting Service / Name Board</label>
+                                         <div id="field-hasNameBoard" className={`relative overflow-hidden group rounded-none border-4 transition-all ${errors.hasNameBoard ? 'border-red-500 animate-shake' : ''} ${formData.hasNameBoard ? 'border-black dark:border-[#FACC15] bg-black dark:bg-[#111] shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]' : 'border-black bg-white dark:bg-white/5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'}`}>
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/10 rounded-none blur-3xl -mr-16 -mt-16"></div>
                                             
                                             <div className="relative z-10 p-6 md:p-8 flex flex-col items-start gap-6">
@@ -1111,16 +1175,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 {/* Left Column: Client Info & Logistics */}
                                 <div className="lg:col-span-7 space-y-12">
                                     {!session && (
-                                        <div className="bg-black dark:bg-[#FACC15] border-4 border-black p-8 rounded-none flex items-center justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden group">
-                                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                                        <div className="bg-[#FACC15] border-4 border-black p-8 rounded-none flex items-center justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden group">
+                                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                                             <div className="flex items-center gap-6 relative z-10">
-                                                <div className="w-14 h-14 rounded-none border-2 border-black bg-white dark:bg-black flex items-center justify-center text-black dark:text-[#FACC15] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><User size={28} /></div>
+                                                <div className="w-14 h-14 rounded-none border-2 border-black bg-black flex items-center justify-center text-[#FACC15] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><User size={28} /></div>
                                                 <div>
-                                                    <p className="text-sm font-black text-white dark:text-black uppercase tracking-widest italic">Personal Account?</p>
-                                                    <p className="text-[10px] font-black text-white/40 dark:text-black/40 uppercase tracking-[0.2em] mt-1">Unlock priority support & booking history.</p>
+                                                    <p className="text-sm font-black text-black uppercase tracking-widest italic">Personal Account?</p>
+                                                    <p className="text-[10px] font-black text-black/40 uppercase tracking-[0.2em] mt-1">Unlock priority support & booking history.</p>
                                                 </div>
                                             </div>
-                                            <button onClick={() => signIn()} className="relative z-10 px-10 py-4 bg-white dark:bg-black rounded-none border-4 border-black text-xs font-black text-black dark:text-[#FACC15] hover:scale-105 active:scale-95 transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest italic">Sign In</button>
+                                            <button onClick={() => signIn()} className="relative z-10 px-10 py-4 bg-black rounded-none border-4 border-black text-xs font-black text-[#FACC15] hover:scale-105 active:scale-95 transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest italic">Sign In</button>
                                         </div>
                                     )}
 
@@ -1135,69 +1199,77 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver chat', icon: MessageSquare },
                                             ].map(f => (
                                                 <div key={f.key} className="space-y-3">
-                                                    <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 flex items-center gap-2">
-                                                        <f.icon size={12} /> {f.label}
-                                                    </label>
-                                                    {f.type === 'tel' ? (
-                                                        <PhoneInput
-                                                            defaultCountry="lk"
-                                                            value={formData[f.key] || ''}
-                                                            onChange={(phone) => setFormData({ ...formData, [f.key]: phone })}
-                                                            inputClassName="!w-full !h-14 !bg-transparent !border-none !px-4 !outline-none focus:!ring-0 !font-black !text-black dark:!text-white placeholder:!text-slate-300 dark:placeholder:!text-slate-600 !text-sm !uppercase !tracking-widest"
-                                                            countrySelectorStyleProps={{
-                                                                buttonClassName: '!h-14 !bg-slate-50 dark:!bg-white/5 !border-r-2 !border-black !px-4 !flex !items-center !justify-center !min-w-[70px] !rounded-none',
-                                                                flagClassName: '!w-8 !h-auto !shadow-sm',
-                                                                dropdownStyleProps: {
-                                                                    className: '!z-[20000] !min-w-[200px] !max-h-[300px] !rounded-none !border-4 !border-black !shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] !bg-white dark:!bg-black dark:!text-white'
-                                                                }
-                                                            }}
-                                                            className="w-full bg-white dark:bg-white/5 border-4 border-black rounded-none flex focus-within:border-[#FACC15] transition-all overflow-visible shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
-                                                        />
-                                                    ) : (
-                                                        <input
-                                                            type={f.type}
-                                                            value={formData[f.key] || ''}
-                                                            onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
-                                                            className="w-full h-14 bg-white dark:bg-white/5 border-4 border-black px-8 rounded-none outline-none focus:border-[#FACC15] transition-all font-black text-black dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm uppercase tracking-widest"
-                                                            placeholder={f.placeholder}
-                                                        />
-                                                    )}
-                                                </div>
+                                                     <label className={`text-[10px] font-black uppercase tracking-[0.3em] pl-3 flex items-center gap-2 ${errors[f.key] ? 'text-red-500' : 'text-slate-400 dark:text-slate-500'}`}>
+                                                         <f.icon size={12} /> {f.label}
+                                                     </label>
+                                                     {f.type === 'tel' ? (
+                                                         <PhoneInput
+                                                             id={`field-${f.key}`}
+                                                             defaultCountry="lk"
+                                                             value={formData[f.key] || ''}
+                                                             onChange={(phone) => {
+                                                                 setFormData({ ...formData, [f.key]: phone });
+                                                                 if (errors[f.key]) setErrors(prev => ({ ...prev, [f.key]: false }));
+                                                             }}
+                                                             inputClassName="!w-full !h-14 !bg-transparent !border-none !px-4 !outline-none focus:!ring-0 !font-black !text-black dark:!text-white placeholder:!text-slate-300 dark:placeholder:!text-slate-600 !text-sm !uppercase !tracking-widest"
+                                                             countrySelectorStyleProps={{
+                                                                 buttonClassName: '!h-14 !bg-slate-50 dark:!bg-white/5 !border-r-2 !border-black !px-4 !flex !items-center !justify-center !min-w-[70px] !rounded-none',
+                                                                 flagClassName: '!w-8 !h-auto !shadow-sm',
+                                                                 dropdownStyleProps: {
+                                                                     className: '!z-[20000] !min-w-[200px] !max-h-[300px] !rounded-none !border-4 !border-black !shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] !bg-white dark:!bg-black dark:!text-white'
+                                                                 }
+                                                             }}
+                                                             className={`w-full bg-white dark:bg-white/5 border-4 rounded-none flex focus-within:border-[#FACC15] transition-all overflow-visible shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-black'}`}
+                                                         />
+                                                     ) : (
+                                                         <input
+                                                             id={`field-${f.key}`}
+                                                             type={f.type}
+                                                             value={formData[f.key] || ''}
+                                                             onChange={e => {
+                                                                 setFormData({ ...formData, [f.key]: e.target.value });
+                                                                 if (errors[f.key]) setErrors(prev => ({ ...prev, [f.key]: false }));
+                                                             }}
+                                                             className={`w-full h-14 bg-white dark:bg-white/5 border-4 px-8 rounded-none outline-none focus:border-[#FACC15] transition-all font-black text-black dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm uppercase tracking-widest ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-black'}`}
+                                                             placeholder={f.placeholder}
+                                                         />
+                                                     )}
+                                                 </div>
                                             ))}
                                         </div>
 
                                         <div className="space-y-6 pt-6 border-t border-slate-100 dark:border-white/5">
-                                            <h4 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-2 flex items-center gap-3">
-                                                <CreditCard size={14} /> Billing Details
-                                            </h4>
-                                            <div className="grid md:grid-cols-2 gap-8">
-                                                <input
-                                                    type="text"
-                                                    value={formData.billingName || ''}
-                                                    onChange={e => setFormData({ ...formData, billingName: e.target.value })}
-                                                    className="w-full h-14 bg-white dark:bg-white/5 border-4 border-black px-8 rounded-none text-sm font-black text-black dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest outline-none focus:border-[#FACC15]"
-                                                    placeholder="Billing Name"
-                                                />
-                                                <input
-                                                    type="text"
-                                                    value={formData.billingCountry || ''}
-                                                    onChange={e => setFormData({ ...formData, billingCountry: e.target.value })}
-                                                    className="w-full h-14 bg-white dark:bg-white/5 border-4 border-black px-8 rounded-none text-sm font-black text-black dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest outline-none focus:border-[#FACC15]"
-                                                    placeholder="Country"
-                                                />
-                                                <textarea
-                                                    rows="3"
-                                                    value={formData.billingAddress}
-                                                    onChange={e => setFormData({ ...formData, billingAddress: e.target.value })}
-                                                    className="md:col-span-2 w-full px-8 py-5 bg-white dark:bg-white/5 border-4 border-black rounded-none text-sm font-black text-black dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 resize-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest outline-none focus:border-[#FACC15]"
-                                                    placeholder="Full Billing Address"
-                                                ></textarea>
-                                            </div>
-                                        </div>
+                                             <h4 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-2 flex items-center gap-3">
+                                                 <CreditCard size={14} /> Billing Details
+                                             </h4>
+                                             <div className="grid md:grid-cols-2 gap-8">
+                                                 <input
+                                                     type="text"
+                                                     value={formData.billingName || ''}
+                                                     onChange={e => setFormData({ ...formData, billingName: e.target.value })}
+                                                     className={`w-full h-14 bg-white dark:bg-white/5 border-4 px-8 rounded-none text-sm font-black text-black dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest outline-none focus:border-[#FACC15] border-black`}
+                                                     placeholder="Billing Name"
+                                                 />
+                                                 <input
+                                                     type="text"
+                                                     value={formData.billingCountry || ''}
+                                                     onChange={e => setFormData({ ...formData, billingCountry: e.target.value })}
+                                                     className={`w-full h-14 bg-white dark:bg-white/5 border-4 px-8 rounded-none text-sm font-black text-black dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest outline-none focus:border-[#FACC15] border-black`}
+                                                     placeholder="Country"
+                                                 />
+                                                 <textarea
+                                                     rows="3"
+                                                     value={formData.billingAddress}
+                                                     onChange={e => setFormData({ ...formData, billingAddress: e.target.value })}
+                                                     className={`md:col-span-2 w-full px-8 py-5 bg-white dark:bg-white/5 border-4 px-8 rounded-none text-sm font-black text-black dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 resize-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest outline-none focus:border-[#FACC15] border-black`}
+                                                     placeholder="Full Billing Address"
+                                                 ></textarea>
+                                             </div>
+                                         </div>
                                     </div>
                                     {/* Right Column: Summary & Payment */}
                                     <div className="lg:col-span-5 space-y-8">
-                                        <div className="p-8 md:p-10 bg-white dark:bg-[#111] rounded-none text-black dark:text-white shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] border-4 border-black relative overflow-hidden group">
+                                        <div className="p-8 md:p-10 bg-white dark:bg-[#111] rounded-none text-black dark:text-white shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] border-4 border-black relative overflow-hidden group border-t-[12px] border-t-[#FACC15]">
                                             <div className="absolute top-0 right-0 w-48 h-48 bg-[#FACC15]/5 rounded-none blur-[80px] -mr-24 -mt-24"></div>
 
                                             <div className="relative z-10 space-y-8">
@@ -1226,10 +1298,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         </div>
                                                     </div>
                                                     {formData.hasNameBoard && (
-                                                        <div className="flex gap-5 bg-slate-50 dark:bg-white/5 p-4 rounded-none border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                                            <div className="w-12 h-12 rounded-none bg-white flex items-center justify-center shrink-0 border-2 border-black overflow-hidden shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                                                                <img src="/images/ui/name-board.png" alt="Board" className="w-full h-full object-cover" />
-                                                            </div>
+                                                      <div className="flex gap-5 bg-slate-50 dark:bg-white/5 p-4 rounded-none border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                                             <div className="w-12 h-12 rounded-none bg-white flex items-center justify-center shrink-0 border-2 border-black overflow-hidden shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                                                                 <Signpost size={28} className="text-black" strokeWidth={3} />
+                                                             </div>
                                                             <div className="min-w-0">
                                                                 <p className="text-[9px] font-black text-black dark:text-[#FACC15] uppercase tracking-[0.4em] mb-1">Airport Greeting</p>
                                                                 <p className="text-[10px] font-black text-black dark:text-white uppercase italic truncate">"{formData.nameBoardText || 'Elite Greeting'}"</p>
@@ -1291,11 +1363,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         paymentType: m === 'cash' ? 'full' : prev.paymentType
                                                     }))}
                                                     className={`p-6 rounded-none border-4 transition-all flex flex-col items-center gap-4 group/pm ${formData.paymentMethod === m
-                                                        ? 'border-black dark:border-[#FACC15] bg-slate-50 dark:bg-[#FACC15]/10 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]'
-                                                        : 'border-slate-100 dark:border-white/5 bg-white dark:bg-white/[0.02] opacity-40 hover:opacity-100 hover:border-black'}`}
+                                                        ? 'border-black bg-[#FACC15] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]'
+                                                        : 'border-black/5 dark:border-white/5 bg-white dark:bg-white/[0.02] opacity-40 hover:opacity-100 hover:border-black'}`}
                                                 >
-                                                    <div className={`w-12 h-12 rounded-none flex items-center justify-center text-2xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform group-hover/pm:scale-110 ${formData.paymentMethod === m ? 'bg-black dark:bg-[#FACC15]' : 'bg-slate-100 dark:bg-white/10'}`}>
-                                                        {m === 'cash' ? <Coins size={24} className={formData.paymentMethod === m ? 'text-[#FACC15] dark:text-black' : 'text-slate-400'} /> : <CreditCard size={24} className={formData.paymentMethod === m ? 'text-[#FACC15] dark:text-black' : 'text-slate-400'} />}
+                                                    <div className={`w-12 h-12 rounded-none flex items-center justify-center text-2xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform group-hover/pm:scale-110 ${formData.paymentMethod === m ? 'bg-black' : 'bg-slate-100 dark:bg-white/10'}`}>
+                                                        {m === 'cash' ? <Coins size={24} className={formData.paymentMethod === m ? 'text-[#FACC15]' : 'text-slate-400'} /> : <CreditCard size={24} className={formData.paymentMethod === m ? 'text-[#FACC15]' : 'text-slate-400'} />}
                                                     </div>
                                                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-black dark:text-white">{m === 'cash' ? 'Pay Cash to Driver' : 'Online Secure Pay'}</span>
                                                 </button>
@@ -1331,7 +1403,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <button
                                                     onClick={() => handleApplyCoupon()}
                                                     disabled={couponLoading || !couponInput}
-                                                    className="px-8 bg-black dark:bg-[#FACC15] text-white dark:text-black rounded-none border-2 border-black text-[10px] font-black uppercase tracking-widest disabled:opacity-20 active:scale-95 transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                                    className="px-8 bg-[#FACC15] text-black rounded-none border-2 border-black text-[10px] font-black uppercase tracking-widest disabled:opacity-20 active:scale-95 transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                                                 >
                                                     {couponLoading ? <Loader2 className="animate-spin" size={14} /> : 'Apply'}
                                                 </button>
@@ -1340,7 +1412,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         {verifiedCoupons.length > 0 && (
                                             <div className="flex flex-wrap gap-2 px-2">
                                                 {verifiedCoupons.map((c, i) => (
-                                                    <span key={i} className="px-4 py-2 bg-black dark:bg-[#FACC15] text-white dark:text-black rounded-none border-2 border-black text-[9px] font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center gap-3 animate-slide-in">
+                                                    <span key={i} className="px-4 py-2 bg-[#FACC15] text-black rounded-none border-2 border-black text-[9px] font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center gap-3 animate-slide-in">
                                                         <Tag size={12} fill="currentColor" /> {c.code}
                                                         <X size={14} className="cursor-pointer hover:rotate-90 transition-transform" onClick={() => setVerifiedCoupons(prev => prev.filter(vc => vc.code !== c.code))} />
                                                     </span>
@@ -1368,19 +1440,23 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                         {step < 2 ? (
                             <button
                                 onClick={() => {
-                                    setStep(step + 1);
-                                    if (modalContentRef.current) modalContentRef.current.scrollTop = 0;
-                                }}
-                                disabled={(step === 1 && (!formData.pickup || !formData.dropoff || isOverCapacity || formData.hasNameBoard === null || (isAirportService && (!formData.date || !formData.time))))}
-                                className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-3 md:py-5 bg-black dark:bg-[#FACC15] text-white dark:text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-slate-800 dark:hover:scale-105 transition-all outline-none border-4 border-black disabled:opacity-30 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[220px] italic active:scale-95"
+                                     if (validateForm(1)) {
+                                         setStep(step + 1);
+                                         if (modalContentRef.current) modalContentRef.current.scrollTop = 0;
+                                     } else {
+                                         scrollToFirstError();
+                                     }
+                                 }}
+                                 disabled={isOverCapacity}
+                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-3 md:py-5 bg-black dark:bg-[#FACC15] text-white dark:text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-slate-800 dark:hover:scale-105 transition-all outline-none border-4 border-black disabled:opacity-30 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[220px] italic active:scale-95"
                             >
                                 Review & Checkout <ChevronRight size={16} className="md:w-4 md:h-4 group-hover:translate-x-2 transition-transform" />
                             </button>
                         ) : (
                             <button
                                 onClick={handleSubmit}
-                                disabled={loading || isOverCapacity || !formData.name || !formData.phone || !formData.email || (isAirportService && !formData.flightNumber) || (formData.hasNameBoard && !formData.nameBoardText)}
-                                className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-3 md:py-5 bg-emerald-600 dark:bg-[#FACC15] text-white dark:text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-emerald-700 dark:hover:scale-105 transition-all border-4 border-black disabled:opacity-30 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[240px] italic active:scale-95"
+                                 disabled={loading || isOverCapacity}
+                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-3 md:py-5 bg-[#FACC15] text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:scale-105 transition-all border-4 border-black disabled:opacity-30 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[240px] italic active:scale-95"
                             >
                                 {loading ? <Loader2 className="animate-spin" size={16} /> : <Zap size={16} className="md:w-4 md:h-4" fill="currentColor" />}
                                 {loading ? 'Securing Spot...' : 'Confirm My Order'}

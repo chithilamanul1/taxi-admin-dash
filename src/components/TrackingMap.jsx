@@ -88,11 +88,11 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
         };
     }, [driverId]);
 
-    if (!isLoaded) return <div className="w-full h-64 bg-slate-100 animate-pulse rounded-2xl flex items-center justify-center">Loading Map...</div>;
+    if (!isLoaded) return <div className="w-full h-64 bg-slate-100 animate-pulse rounded-none border-4 border-black flex items-center justify-center font-black italic uppercase tracking-widest text-[10px]">Loading Map...</div>;
 
     return (
         <div className="space-y-4">
-            <div className="w-full h-[400px] rounded-2xl overflow-hidden border border-emerald-900/10 shadow-lg relative">
+            <div className="w-full h-[400px] rounded-none overflow-hidden border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative">
                 <GoogleMap
                     mapContainerStyle={{ width: '100%', height: '100%' }}
                     center={pickup?.lat ? { lat: pickup.lat, lng: pickup.lng } : { lat: 7.8731, lng: 80.7718 }}
@@ -107,10 +107,10 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
                             position={driverLocation}
                             icon={{
                                 path: "M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z",
-                                fillColor: "#10b981",
+                                fillColor: "#000000",
                                 fillOpacity: 1,
-                                strokeWeight: 1,
-                                strokeColor: "#ffffff",
+                                strokeWeight: 2,
+                                strokeColor: "#FACC15",
                                 scale: 2,
                             }}
                             title="Your Driver"
@@ -118,7 +118,7 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
                     )}
                 </GoogleMap>
                 {!driverId && (
-                    <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-3 rounded-xl border border-emerald-900/10 text-sm text-center font-bold text-slate-500">
+                    <div className="absolute bottom-4 left-4 right-4 bg-white/90 dark:bg-black/90 backdrop-blur-md p-3 rounded-none border-2 border-black text-[10px] text-center font-black uppercase tracking-widest text-black dark:text-[#FACC15] italic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                         Driver will appear on map once assigned.
                     </div>
                 )}
@@ -126,18 +126,18 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
 
             {/* Driver Info under Map */}
             {driverData && (
-                <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl flex items-center justify-between animate-fade-in">
+                <div className="bg-[#FACC15] border-4 border-black p-4 rounded-none flex items-center justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-fade-in">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-emerald-600 shadow-sm font-bold text-lg">
+                        <div className="w-12 h-12 bg-black rounded-none border-2 border-black flex items-center justify-center text-[#FACC15] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-black text-xl italic">
                             {driverData.name?.charAt(0)}
                         </div>
                         <div>
-                            <p className="text-xs text-emerald-900/50 font-bold uppercase tracking-wider">Your Driver</p>
-                            <p className="text-emerald-900 font-bold text-lg">{driverData.name}</p>
-                            <p className="text-sm text-emerald-700">{driverData.vehicleNumber}</p>
+                            <p className="text-[10px] text-black/60 font-black uppercase tracking-widest italic leading-none mb-1">Your Driver</p>
+                            <p className="text-black font-black text-xl uppercase italic leading-tight">{driverData.name}</p>
+                            <p className="text-[12px] text-black/80 font-bold uppercase tracking-tighter">{driverData.vehicleNumber}</p>
                         </div>
                     </div>
-                    <span className="bg-green-500 text-white text-[10px] uppercase font-bold px-2 py-1 rounded animate-pulse">Live</span>
+                    <span className="bg-black text-[#FACC15] text-[10px] uppercase font-black px-3 py-1.5 border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-pulse italic">Live Tracking</span>
                 </div>
             )}
         </div>

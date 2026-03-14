@@ -39,95 +39,99 @@ function PaymentSuccessContent() {
     const isCash = booking?.paymentMethod === 'cash';
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center pt-32 pb-12 px-4">
-            <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 text-center animate-slide-up">
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle className="text-green-500" size={48} />
+        <div className="min-h-screen bg-white flex items-center justify-center pt-32 pb-12 px-4 relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FACC15]/20 -mr-32 -mt-32 blur-3xl rounded-none"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/5 -ml-32 -mb-32 blur-2xl rounded-none"></div>
+
+            <div className="bg-white rounded-none border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] max-w-md w-full p-8 md:p-12 text-center animate-slide-up relative z-10">
+                <div className="w-24 h-24 bg-[#FACC15] rounded-none border-4 border-black flex items-center justify-center mx-auto mb-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] -rotate-3 hover:rotate-0 transition-transform">
+                    <CheckCircle className="text-black" size={56} strokeWidth={3} />
                 </div>
 
-                <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                    {isCash ? 'Booking Confirmed!' : 'Payment Successful!'}
+                <h1 className="text-3xl font-black text-black mb-3 uppercase italic tracking-tighter leading-none">
+                    {isCash ? 'Booking Secured!' : 'Payment Complete!'}
                 </h1>
 
-                <p className="text-gray-600 mb-6 font-medium">
+                <p className="text-black/60 mb-8 font-black uppercase tracking-widest text-[10px] italic leading-relaxed">
                     {isCash
-                        ? 'Your taxi is scheduled. You can pay the total amount directly to the driver at the end of your trip.'
-                        : 'Transaction was processed successfully. We\'ll send you a confirmation via WhatsApp shortly.'}
+                        ? 'Your taxi is scheduled. Pay directly to the driver at the end of your trip.'
+                        : 'Transaction processed! Your confirmation will arrive via WhatsApp shortly.'}
                 </p>
 
                 {isCash && (
-                    <div className="mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200 flex items-start gap-3 text-left">
-                        <Info className="text-emerald-600 shrink-0" size={20} />
+                    <div className="mb-8 p-5 bg-[#FACC15] rounded-none border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-start gap-4 text-left relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 bg-black text-[#FACC15] text-[7px] font-black px-2 py-1 uppercase tracking-widest italic border-l-2 border-b-2 border-black">REQUIRED</div>
+                        <Info className="text-black shrink-0 mt-1" size={24} strokeWidth={3} />
                         <div>
-                            <p className="text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">Cash Payment Required</p>
-                            <p className="text-[11px] text-emerald-800 leading-relaxed font-medium">Please ensure you have the cash ready for the driver. Our chauffeurs take local currency (LKR) or major currencies like USD/EUR.</p>
+                            <p className="text-[11px] font-black text-black uppercase tracking-widest mb-1 italic">Cash Payment Only</p>
+                            <p className="text-[12px] text-black font-bold leading-tight">Please have cash ready for the driver. We accept LKR, USD, or EUR.</p>
                         </div>
                     </div>
                 )}
 
                 {!isCash && (
-                    <div className="mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200 flex items-start gap-3 text-left">
-                        <Info className="text-emerald-600 shrink-0" size={20} />
+                    <div className="mb-8 p-5 bg-black border-4 border-black rounded-none shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-start gap-4 text-left">
+                        <Info className="text-[#FACC15] shrink-0 mt-1" size={24} strokeWidth={3} />
                         <div>
-                            <p className="text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">Important Notice</p>
-                            <p className="text-[11px] text-emerald-800 leading-relaxed font-medium">
-                                Highway ticket is not included in this price. It means the customer must pay it at the counter.
+                            <p className="text-[11px] font-black text-[#FACC15] uppercase tracking-widest mb-1 italic">Important Notice</p>
+                            <p className="text-[12px] text-white font-bold leading-tight uppercase tracking-tighter">
+                                Highway ticket is NOT included. Customer must pay at the counter.
                             </p>
                         </div>
                     </div>
                 )}
 
                 {!isCash && booking?.displayBalanceAmount > 0 && (
-                    <div className="mb-6 p-4 bg-red-50 rounded-xl border border-red-200 flex items-start gap-3 text-left animate-pulse-subtle">
-                        <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center shrink-0">
-                            <span className="text-red-600 font-black">!</span>
+                    <div className="mb-8 p-5 bg-red-600 border-4 border-black rounded-none shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-start gap-4 text-left animate-pulse">
+                        <div className="w-12 h-12 bg-white rounded-none border-2 border-black flex items-center justify-center shrink-0 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                            <span className="text-red-600 font-black text-2xl italic">!</span>
                         </div>
                         <div>
-                            <p className="text-xs font-bold text-red-900 uppercase tracking-wider mb-1">Balance Due to Driver</p>
-                            <p className="text-lg font-black text-red-600 leading-none">
+                            <p className="text-[10px] font-black text-white uppercase tracking-widest mb-1 italic">Balance Due Today</p>
+                            <p className="text-2xl font-black text-white italic tracking-tighter leading-none">
                                 {booking.currency === 'GBP' ? '£' :
                                     booking.currency === 'USD' ? '$' :
                                         booking.currency === 'EUR' ? '€' :
                                             booking.currency === 'INR' ? '₹' : 'Rs'} {booking.displayBalanceAmount.toLocaleString()}
                             </p>
-                            <p className="text-[10px] text-red-800/60 mt-1 font-medium italic">Please pay this amount to the driver at the end of your journey.</p>
                         </div>
                     </div>
                 )}
 
-                <div className="bg-gray-50 rounded-lg p-4 mb-6 grid grid-cols-2 gap-4 divide-x divide-gray-200 text-center">
+                <div className="bg-slate-50 border-4 border-black rounded-none p-5 mb-8 grid grid-cols-2 gap-4 divide-x-4 divide-black text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <div className="px-2">
-                        <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Booking Ref</div>
-                        <div className="text-base font-black text-emerald-900 break-all">#{bookingId?.slice(-8).toUpperCase()}</div>
+                        <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Booking Ref</div>
+                        <div className="text-xl font-black text-black italic tracking-tighter truncate">#{bookingId?.slice(-8).toUpperCase()}</div>
                     </div>
                     {searchParams.get('txnId') && (
                         <div className="px-2">
-                            <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Transaction Ref</div>
-                            <div className="text-sm font-black text-emerald-900 break-all leading-tight">#{searchParams.get('txnId')}</div>
+                            <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Txn Ref</div>
+                            <div className="text-sm font-black text-black tracking-tighter leading-tight truncate">#{searchParams.get('txnId')}</div>
                         </div>
                     )}
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-4">
                     <Link
                         href="/"
-                        className="flex items-center justify-center gap-2 w-full bg-emerald-900 text-white py-4 rounded-xl font-bold hover:bg-emerald-800 transition-all shadow-lg active:scale-[0.98]"
+                        className="flex items-center justify-center gap-3 w-full bg-black text-[#FACC15] py-5 rounded-none border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-black uppercase italic tracking-[0.2em] transform transition-all hover:translate-y-[-4px] active:translate-y-0 text-xs"
                     >
-                        <Home size={20} />
+                        <Home size={20} strokeWidth={3} />
                         Back to Home
                     </Link>
 
                     <Link
                         href={`/booking/${bookingId}`}
-                        className="flex items-center justify-center gap-2 w-full border-2 border-emerald-900/10 text-emerald-900 py-4 rounded-xl font-bold hover:bg-emerald-50 transition-all"
+                        className="flex items-center justify-center gap-3 w-full bg-white text-black py-4 rounded-none border-4 border-black font-black uppercase italic tracking-[0.15em] hover:bg-slate-50 transition-all text-[10px]"
                     >
-                        <FileText size={20} />
-                        View Booking Details
+                        <FileText size={18} strokeWidth={3} />
+                        Track My Ride
                     </Link>
                 </div>
 
-                <p className="text-xs text-gray-400 mt-8 font-medium">
-                    Questions? Contact us at +94 71 688 5880
+                <p className="text-[9px] font-black text-slate-400 mt-10 uppercase tracking-widest italic">
+                    Need Help? Call +94 71 688 5880
                 </p>
             </div>
         </div>
