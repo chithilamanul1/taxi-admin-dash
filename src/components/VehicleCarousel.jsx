@@ -19,24 +19,15 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
     // Smart Capacity Logic
     const isSuitable = (vehicle) => {
         const totalPax = (passengerCount.adults || 0) + (passengerCount.children || 0);
-        // Infants usually free/lap, but let's count 0.
-        // Luggage logic:
         const totalBags = passengerCount.bags || 0;
 
         const vehiclePax = vehicle.capacity || 4;
         const vehicleLargeBags = vehicle.luggage || 0;
         const vehicleSmallBags = vehicle.handLuggage || 0;
 
-        // Effective Luggage Capacity:
-        // Assume 1 empty seat = 2 large bags worth of space?
-        // Or strictly strictly stick to guidelines? 
-        // User "Think usage practical".
-        // Let's be lenient:
         const spareSeats = Math.max(0, vehiclePax - totalPax);
         const extraBagCapacity = spareSeats * 2;
 
-        // Combined 'Bag Units' capacity. Let's say Large = 1 unit, Small = 0.5 unit.
-        // User input 'bags' are undefined size. Assume Large (1 unit).
         const maxBagUnits = vehicleLargeBags + (vehicleSmallBags * 0.5) + extraBagCapacity;
 
         if (totalPax > vehiclePax) return { suitable: false, reason: "Too many passengers" };
@@ -75,9 +66,10 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                 </div>
             </div>
 
+            {/* pb-20 gives extra bottom room so the overflowing car image isn't clipped */}
             <div
                 ref={scrollRef}
-                className="flex gap-8 overflow-x-auto pb-12 px-2 snap-x snap-mandatory scrollbar-hide w-full"
+                className="flex gap-8 overflow-x-auto pb-20 px-2 snap-x snap-mandatory scrollbar-hide w-full"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {vehicles.map((vehicle, index) => {
@@ -89,10 +81,13 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                         <div
                             key={vehicle._id || vehicle.vehicleType}
                             className={`
-                                relative flex-shrink-0 w-[300px] md:w-[380px] snap-center transition-all duration-500 overflow-hidden group/card
-                                ${isSelected ? 'shadow-[0_20px_50px_rgba(0,0,0,0.1)] -translate-y-2' : 'hover:shadow-[0_15px_30px_rgba(0,0,0,0.05)] hover:-translate-y-1'}
+                                relative flex-shrink-0 w-[300px] md:w-[380px] snap-center transition-all duration-500 group/card
+                                ${isSelected
+                                    ? '-translate-y-6 shadow-[0_32px_64px_rgba(0,0,0,0.22)]'
+                                    : 'hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,0,0,0.10)] shadow-[0_4px_16px_rgba(0,0,0,0.06)]'}
                                 ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
                                 bg-white dark:bg-[#1a1a1a]
+                                overflow-visible
                             `}
                             onClick={() => suitable && onSelect(vehicle.vehicleType)}
                         >
@@ -106,38 +101,34 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                 </div>
                             )}
 
-                            {/* Selection Border Overlay */}
+                            {/* Selected indicator — thin top bar instead of full border */}
                             {isSelected && (
-                                <div className="absolute inset-0 border-[6px] border-[#FACC15] z-10 pointer-events-none"></div>
+                                <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#FACC15] z-10 pointer-events-none" />
                             )}
 
-                            <div className="h-48 md:h-64 w-full p-6 md:p-8 bg-slate-50 dark:bg-black/20 relative flex items-center justify-center overflow-hidden">
-                                {/* Background Index - Large Faint Number */}
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[180px] font-black text-black/[0.03] dark:text-white/[0.02] italic tracking-tighter pointer-events-none select-none italic">
+                            {/* ───── Card top: price + name area ───── */}
+                            <div className="p-6 md:p-8 pb-4 relative flex flex-col items-center">
+
+                                {/* Faint background index number */}
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[160px] font-black text-black/[0.03] dark:text-white/[0.02] italic tracking-tighter pointer-events-none select-none">
                                     {displayIdx}
                                 </div>
 
-                                <img
-                                    src={vehicle.image}
-                                    alt={vehicle.name}
-                                    className="w-auto h-4/5 object-contain drop-shadow-[15px_15px_30px_rgba(0,0,0,0.1)] relative z-10 group-hover/card:scale-110 transition-transform duration-700"
-                                />
+                                {/* Info button */}
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setDetailVehicle(vehicle); }}
-                                    className="absolute top-4 right-4 w-10 h-10 bg-white/80 dark:bg-black/80 backdrop-blur-md text-slate-400 border border-slate-100 dark:border-white/10 rounded-full flex items-center justify-center hover:bg-[#FACC15] hover:text-black transition-all z-20 shadow-sm"
+                                    className="absolute top-4 right-4 w-9 h-9 bg-slate-100 dark:bg-white/10 text-slate-400 rounded-full flex items-center justify-center hover:bg-[#FACC15] hover:text-black transition-all z-20 shadow-sm"
                                     aria-label={`View details for ${vehicle.name}`}
                                 >
-                                    <Info size={18} strokeWidth={2.5} />
+                                    <Info size={16} strokeWidth={2.5} />
                                 </button>
-                            </div>
 
-                            <div className="p-8 pb-12 relative flex flex-col items-center">
-                                <h4 className="text-2xl font-black text-[#1A1A1A] dark:text-white uppercase tracking-tighter mb-4 text-center">
+                                <h4 className="text-2xl font-black text-[#1A1A1A] dark:text-white uppercase tracking-tighter mb-4 text-center relative z-10">
                                     {displayName(vehicle.name)}
                                 </h4>
 
                                 {vehicle.calculatedTotal >= 0 && (
-                                    <div className="mb-8 text-center">
+                                    <div className="mb-2 text-center relative z-10">
                                         {!(passengerCount.distance > 0) && (
                                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Starting from</p>
                                         )}
@@ -160,7 +151,8 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                                 Rs {vehicle.calculatedTotal.toLocaleString()}
                                             </span>
                                         </div>
-                                        <div className="text-[24px] font-bold text-slate-400 mt-2 tracking-tight">
+                                        {/* USD secondary price — lighter & slightly larger */}
+                                        <div className="text-[18px] font-semibold text-slate-300 dark:text-white/30 mt-1 tracking-tight">
                                             ~ $ {(() => {
                                                 const rate = rates['USD'] || 0.0032;
                                                 return (vehicle.calculatedTotal * rate).toFixed(2);
@@ -169,8 +161,8 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                     </div>
                                 )}
 
-                                {/* Capacity Stats - Distinct Boxes */}
-                                <div className="grid grid-cols-3 gap-4 w-full mb-2">
+                                {/* Capacity Stats */}
+                                <div className="grid grid-cols-3 gap-4 w-full mt-4 mb-2 relative z-10">
                                     {[
                                         { icon: Users, label: 'PAX', value: vehicle.capacity || 4 },
                                         { icon: Briefcase, label: 'BAGS', value: vehicle.luggage || 0 },
@@ -186,7 +178,26 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                             </div>
 
                             {/* Bottom Accent Bar */}
-                            <div className={`h-3 w-full transition-colors duration-500 ${isSelected ? 'bg-black dark:bg-[#FACC15]' : 'bg-[#FACC15]'}`}></div>
+                            <div className={`h-3 w-full transition-colors duration-500 ${isSelected ? 'bg-[#FACC15]' : 'bg-black dark:bg-[#FACC15]/40'}`}></div>
+
+                            {/* ───── Vehicle image — outside the box, overflowing below ───── */}
+                            {/*
+                                The image sits below the card, centred horizontally.
+                                overflow-visible on the parent lets it spill out.
+                                We use absolute positioning relative to the card bottom.
+                            */}
+                            <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-[115%] flex items-end justify-center pointer-events-none select-none z-20">
+                                <img
+                                    src={vehicle.image}
+                                    alt={vehicle.name}
+                                    className={`
+                                        w-full h-auto object-contain
+                                        drop-shadow-[0_20px_40px_rgba(0,0,0,0.28)]
+                                        transition-transform duration-700
+                                        ${isSelected ? 'scale-110' : 'group-hover/card:scale-105'}
+                                    `}
+                                />
+                            </div>
                         </div>
                     );
                 })}
