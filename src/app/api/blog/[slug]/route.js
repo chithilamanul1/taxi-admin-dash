@@ -43,6 +43,14 @@ export async function PUT(req, { params }) {
         const isId = mongoose.Types.ObjectId.isValid(params.slug);
         const query = isId ? { _id: params.slug } : { slug: params.slug };
 
+        // Normalize slug if provided in body
+        if (body.slug) {
+            body.slug = body.slug
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)+/g, '');
+        }
+
         const post = await Post.findOneAndUpdate(
             query,
             body,

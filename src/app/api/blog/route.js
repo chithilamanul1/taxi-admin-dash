@@ -55,8 +55,8 @@ export async function POST(req) {
         await dbConnect();
         const body = await req.json();
 
-        // Generate slug if not provided, or ensure provided one is unique
-        let slug = body.slug || generateSlug(body.title);
+        // Generate slug if not provided, or ensure provided one is normalized
+        let slug = generateSlug(body.slug || body.title);
 
         // Ensure unique slug
         let uniqueSlug = slug;

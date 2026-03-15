@@ -152,7 +152,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                             </span>
                                         </div>
                                         {/* USD secondary price — lighter & slightly larger */}
-                                        <div className="text-[18px] font-semibold text-slate-300 dark:text-white/30 mt-1 tracking-tight">
+                                        <div className="text-[18px] font-semibold text-slate-400 dark:text-white/50 mt-1 tracking-tight">
                                             ~ $ {(() => {
                                                 const rate = rates['USD'] || 0.0032;
                                                 return (vehicle.calculatedTotal * rate).toFixed(2);
@@ -162,7 +162,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                 )}
 
                                 {/* Capacity Stats */}
-                                <div className="grid grid-cols-3 gap-4 w-full mt-4 mb-2 relative z-10">
+                                <div className="grid grid-cols-3 gap-4 w-full mt-4 mb-2 relative z-30">
                                     {[
                                         { icon: Users, label: 'PAX', value: vehicle.capacity || 4 },
                                         { icon: Briefcase, label: 'BAGS', value: vehicle.luggage || 0 },
@@ -178,7 +178,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                             </div>
 
                             {/* Bottom Accent Bar */}
-                            <div className={`h-3 w-full transition-colors duration-500 ${isSelected ? 'bg-[#FACC15]' : 'bg-black dark:bg-[#FACC15]/40'}`}></div>
+                            <div className={`h-3 w-full transition-colors duration-500 relative z-30 ${isSelected ? 'bg-[#FACC15]' : 'bg-black dark:bg-[#FACC15]/40'}`}></div>
 
                             {/* ───── Vehicle image — outside the box, overflowing below ───── */}
                             {/*
@@ -186,7 +186,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                 overflow-visible on the parent lets it spill out.
                                 We use absolute positioning relative to the card bottom.
                             */}
-                            <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-[115%] flex items-end justify-center pointer-events-none select-none z-20">
+                            <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-[115%] flex items-end justify-center pointer-events-none select-none z-10">
                                 <img
                                     src={vehicle.image}
                                     alt={vehicle.name}

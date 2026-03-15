@@ -12,7 +12,17 @@ async function getPost(slug) {
     try {
         await dbConnect();
         const decodedSlug = decodeURIComponent(slug);
-        const post = await Post.findOne({ slug: decodedSlug, isPublished: true });
+        const normalizedSlug = decodedSlug
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)+/g, '');
+
+        let post = await Post.findOne({ slug: decodedSlug, isPublished: true });
+
+        // Fallback for legacy slugs or normalization mismatches
+        if (!post && normalizedSlug !== decodedSlug) {
+            post = await Post.findOne({ slug: normalizedSlug, isPublished: true });
+        }
         return post;
     } catch (e) {
         console.error('Blog Post DB Error:', e);
