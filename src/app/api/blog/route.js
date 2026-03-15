@@ -39,6 +39,8 @@ export async function GET(req) {
                 total,
                 pages: Math.ceil(total / limit)
             }
+        }, {
+            headers: { 'Cache-Control': 'no-store, max-age=0' }
         });
     } catch (error) {
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });

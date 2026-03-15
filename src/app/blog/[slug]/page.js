@@ -1,5 +1,8 @@
 import dbConnect from '../../../lib/db';
 import Post from '../../../models/Post';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, User, Tag } from 'lucide-react';
@@ -11,18 +14,35 @@ async function getPost(slug) {
     if (!connectionString) return null;
     try {
         await dbConnect();
-        const decodedSlug = decodeURIComponent(slug);
+        const decodedSlug = decodeURIComponent(slug).trim();
         const normalizedSlug = decodedSlug
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, '-')
             .replace(/(^-|-$)+/g, '');
 
-        let post = await Post.findOne({ slug: decodedSlug, isPublished: true });
+        // 1. Try exact match with decoded slug
+        let post = await Post.findOne({ slug: decodedSlug });
 
-        // Fallback for legacy slugs or normalization mismatches
-        if (!post && normalizedSlug !== decodedSlug) {
-            post = await Post.findOne({ slug: normalizedSlug, isPublished: true });
+        // 2. Try regex match for spaces vs hyphens (very common issue)
+        if (!post) {
+            const pattern = decodedSlug.replace(/[ \-_]+/g, '[ \\-_]');
+            post = await Post.findOne({ 
+                slug: { $regex: new RegExp(`^${pattern}$`, 'i') } 
+            });
         }
+
+        // 3. Try normalized slug
+        if (!post && normalizedSlug !== decodedSlug) {
+            post = await Post.findOne({ slug: normalizedSlug });
+        }
+
+        // 4. Try fuzzy match for title if strictly necessary (last resort)
+        if (!post) {
+            post = await Post.findOne({ 
+                title: { $regex: new RegExp(`^${decodedSlug.replace(/[-]/g, ' ')}$`, 'i') } 
+            });
+        }
+
         return post;
     } catch (e) {
         console.error('Blog Post DB Error:', e);

@@ -3,6 +3,9 @@ import { ArrowRight } from 'lucide-react';
 import dbConnect from '../../lib/db';
 import Post from '../../models/Post';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export const metadata = {
     title: 'Travel Blog - Airport Taxi Tours Sri Lanka',
     description: 'Explore our latest travel guides, tips, and news about visiting Sri Lanka. Plan your perfect trip with our expert advice.',

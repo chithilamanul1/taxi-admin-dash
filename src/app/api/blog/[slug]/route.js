@@ -22,7 +22,9 @@ export async function GET(req, { params }) {
             return NextResponse.json({ success: false, error: 'Post not found' }, { status: 404 });
         }
 
-        return NextResponse.json({ success: true, data: post });
+        return NextResponse.json({ success: true, data: post }, {
+            headers: { 'Cache-Control': 'no-store, max-age=0' }
+        });
     } catch (error) {
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }

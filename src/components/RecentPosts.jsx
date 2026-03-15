@@ -8,7 +8,7 @@ export default function RecentPosts() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('/api/blog?limit=3')
+        fetch(`/api/blog?limit=3&t=${Date.now()}`)
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
