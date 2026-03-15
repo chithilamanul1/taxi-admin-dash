@@ -33,81 +33,79 @@ export default function OffersPage() {
     };
 
     return (
-        <main className="min-h-screen bg-slate-50">
+        <main className="min-h-screen bg-[#F3F4F6] pb-20">
             <Navbar />
 
             {/* Hero Section */}
-            <div className="pt-32 pb-16 bg-emerald-900 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-10 mix-blend-overlay"></div>
-                <div className="container mx-auto px-4 relative z-10 text-center text-white">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-400/20 rounded-full border border-emerald-400/30 text-emerald-400 text-xs font-black uppercase tracking-widest mb-6">
-                        <Tag size={14} fill="currentColor" /> Active Coupons
-                    </div>
-                    <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tight uppercase text-white">
-                        Exclusive <span className="text-emerald-400">Savings</span>
+            <div className="pt-32 pb-20 bg-[#111827] relative overflow-hidden border-b-[8px] border-black">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-[#FACC15]/5 -mr-48 -mt-48 blur-3xl rounded-none"></div>
+                <div className="container mx-auto px-6 relative z-10">
+                    <div className="yellow-badge mb-8 scale-90 md:scale-100 origin-left">OFFERS</div>
+                    <h1 className="text-5xl md:text-8xl font-black text-white mb-6 uppercase italic tracking-tighter leading-none">
+                        EXCLUSIVE <span className="text-[#FACC15]">SAVINGS</span>
                     </h1>
-                    <p className="text-lg text-emerald-100/80 max-w-2xl mx-auto font-medium">
-                        Apply these coupon codes during checkout to unlock special discounts on your Sri Lankan travels.
+                    <p className="text-xl text-white/70 max-w-2xl font-black uppercase tracking-widest italic">
+                        APPLY THESE CODES DURING CHECKOUT TO UNLOCK SPECIAL DISCOUNTS ON YOUR SRI LANKAN TRAVELS.
                     </p>
                 </div>
             </div>
 
             {/* Offers Grid */}
-            <div className="container mx-auto px-4 py-16">
+            <div className="container mx-auto px-6 py-20 max-w-7xl">
                 {loading ? (
-                    <div className="flex flex-col justify-center items-center h-64 gap-4">
-                        <Loader2 className="animate-spin text-emerald-600" size={48} />
-                        <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Loading Best Prices...</p>
+                    <div className="flex flex-col justify-center items-center h-64 gap-6">
+                        <Loader2 className="animate-spin text-black" size={48} strokeWidth={3} />
+                        <p className="text-sm font-black text-black uppercase tracking-[0.3em] italic">Loading Best Prices...</p>
                     </div>
                 ) : offers.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
                         {offers.map((coupon) => (
-                            <div key={coupon._id} className="bg-white rounded-[2.5rem] border border-slate-200 overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group relative">
+                            <div key={coupon._id} className="bg-white rounded-none border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-8px] transition-all duration-300 group relative">
                                 {coupon.displayInWidget && (
-                                    <div className="absolute top-6 right-6 px-3 py-1 bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full z-10 shadow-lg shadow-emerald-200">
-                                        Featured
+                                    <div className="absolute top-0 right-0 px-4 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-widest z-10 border-l-4 border-b-4 border-black italic">
+                                        FEATURED
                                     </div>
                                 )}
-                                <div className="p-8">
-                                    <div className="flex items-center gap-4 mb-8">
-                                        <div className="w-16 h-16 bg-emerald-50 rounded-[1.5rem] flex items-center justify-center text-emerald-600 border border-emerald-100 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-500 shadow-inner">
-                                            <Tag size={32} />
+                                <div className="p-8 md:p-10">
+                                    <div className="flex items-center gap-6 mb-10">
+                                        <div className="w-20 h-20 bg-black text-[#FACC15] rounded-none flex items-center justify-center border-4 border-black group-hover:bg-[#FACC15] group-hover:text-black transition-all duration-300 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                                            <Tag size={36} strokeWidth={3} />
                                         </div>
                                         <div>
-                                            <h3 className="text-2xl font-black text-emerald-900 leading-tight">
+                                            <h3 className="text-[32px] font-black text-black leading-none uppercase italic tracking-tighter mb-2">
                                                 {coupon.discountType === 'percentage' ? `${coupon.value}% OFF` : `Rs. ${coupon.value.toLocaleString()} OFF`}
                                             </h3>
-                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                            <p className="text-[10px] font-black text-black/40 uppercase tracking-[0.2em] italic">
                                                 {coupon.description || 'Valid on all bookings'}
                                             </p>
                                         </div>
                                     </div>
 
-                                    <div className="bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] p-6 mb-8 relative group/code overflow-hidden">
-                                        <div className="absolute inset-0 bg-emerald-600 translate-y-full group-hover/code:translate-y-0 transition-transform duration-500 ease-out"></div>
+                                    <div className="bg-black border-4 border-black rounded-none p-6 mb-10 relative group/code overflow-hidden shadow-[8px_8px_0px_0px_#FACC15]">
+                                        <div className="absolute inset-0 bg-[#FACC15] translate-y-full group-hover/code:translate-y-0 transition-transform duration-300 ease-out"></div>
                                         <div className="relative z-10 flex items-center justify-between">
-                                            <span className="text-2xl font-black text-emerald-900 group-hover/code:text-white transition-colors duration-500 tracking-wider">
+                                            <span className="text-3xl font-black text-[#FACC15] group-hover/code:text-black transition-colors duration-300 tracking-[0.1em] uppercase italic">
                                                 {coupon.code}
                                             </span>
                                             <button
                                                 onClick={() => copyToClipboard(coupon.code)}
-                                                className="px-4 py-2 bg-white text-emerald-900 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm hover:scale-110 active:scale-95 transition-all"
+                                                className="px-6 py-3 bg-[#FACC15] text-black border-2 border-black rounded-none text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none"
                                             >
-                                                Copy
+                                                COPY
                                             </button>
                                         </div>
                                     </div>
 
-                                    <div className="pt-6 border-t border-slate-100 flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
-                                            <Calendar size={14} className="text-emerald-600" />
-                                            <span>Exp: {coupon.expiryDate ? new Date(coupon.expiryDate).toLocaleDateString() : 'Never'}</span>
+                                    <div className="pt-8 border-t-4 border-black flex items-center justify-between">
+                                        <div className="flex items-center gap-3 text-[10px] font-black text-black/50 uppercase tracking-widest italic">
+                                            <Calendar size={18} className="text-[#FACC15]" strokeWidth={3} />
+                                            <span>EXP: {coupon.expiryDate ? new Date(coupon.expiryDate).toLocaleDateString() : 'NEVER'}</span>
                                         </div>
                                         <Link
                                             href="/"
-                                            className="flex items-center gap-2 text-[10px] font-black text-emerald-600 uppercase tracking-widest hover:gap-3 transition-all"
+                                            className="flex items-center gap-3 text-xs font-black text-black uppercase tracking-widest hover:gap-5 transition-all bg-[#FACC15] px-4 py-2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] italic"
                                         >
-                                            Book Now <ArrowRight size={14} />
+                                            BOOK NOW <ArrowRight size={18} strokeWidth={3} />
                                         </Link>
                                     </div>
                                 </div>
@@ -115,37 +113,31 @@ export default function OffersPage() {
                         ))}
                     </div>
                 ) : (
-                    <div className="text-center py-20 bg-white rounded-[3rem] border border-dashed border-slate-300">
-                        <Tag className="mx-auto text-slate-200 mb-4" size={64} />
-                        <h3 className="text-xl font-bold text-emerald-900 mb-2">No Active Offers</h3>
-                        <p className="text-slate-500">Check back soon for seasonal flat rates and discounts.</p>
-                        <Link href="/" className="inline-flex mt-6 font-bold text-emerald-600 hover:underline">Return to Booking Widget</Link>
+                    <div className="text-center py-24 bg-white rounded-none border-4 border-black shadow-[12px_12px_0px_0px_#FACC15] border-dashed">
+                        <Tag className="mx-auto text-black/10 mb-8" size={80} strokeWidth={1} />
+                        <h3 className="text-3xl font-black text-black mb-4 uppercase italic tracking-tighter">No Active Offers</h3>
+                        <p className="text-black/50 font-black uppercase tracking-widest italic text-xs">Check back soon for seasonal flat rates and discounts.</p>
+                        <Link href="/" className="inline-flex mt-10 font-black text-black uppercase tracking-[0.2em] italic bg-[#FACC15] px-8 py-4 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-4px] transition-all">
+                            RETURN TO TERMINAL
+                        </Link>
                     </div>
                 )}
 
                 {/* Info Section */}
-                <div className="mt-24 grid md:grid-cols-3 gap-8 text-center bg-emerald-900/5 p-12 rounded-[3rem] border border-emerald-900/10">
-                    <div className="space-y-3">
-                        <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center mx-auto text-emerald-600">
-                            <Users size={24} />
+                <div className="mt-32 grid md:grid-cols-3 gap-12">
+                    {[
+                        { icon: Users, title: 'GROUP FRIENDLY', text: 'Vehicles available for up to 10 passengers with luggage.' },
+                        { icon: Briefcase, title: 'AMPLE SPACE', text: 'Our vans guarantee enough space for all your belongings.' },
+                        { icon: Zap, title: 'INSTANT BOOKING', text: 'Secure your flat rate in seconds with our express checkout.' }
+                    ].map((item, i) => (
+                        <div key={i} className="bg-white border-4 border-black p-10 rounded-none shadow-[8px_8px_0px_0px_#FACC15] relative group hover:translate-y-[-4px] transition-all">
+                            <div className="w-16 h-16 bg-black text-[#FACC15] rounded-none flex items-center justify-center mb-8 border-4 border-black group-hover:bg-[#FACC15] group-hover:text-black transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                <item.icon size={32} strokeWidth={3} />
+                            </div>
+                            <h4 className="font-black text-black uppercase text-xl tracking-tighter italic mb-4">{item.title}</h4>
+                            <p className="text-xs text-black/60 font-black uppercase tracking-widest leading-loose italic">{item.text}</p>
                         </div>
-                        <h4 className="font-black text-emerald-900 uppercase text-sm tracking-widest">Group Friendly</h4>
-                        <p className="text-xs text-slate-500 font-medium">Vehicles available for up to 10 passengers with luggage.</p>
-                    </div>
-                    <div className="space-y-3">
-                        <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center mx-auto text-emerald-600">
-                            <Briefcase size={24} />
-                        </div>
-                        <h4 className="font-black text-emerald-900 uppercase text-sm tracking-widest">Ample Space</h4>
-                        <p className="text-xs text-slate-500 font-medium">Our vans guarantee enough space for all your belongings.</p>
-                    </div>
-                    <div className="space-y-3">
-                        <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center mx-auto text-emerald-600">
-                            <Zap size={24} />
-                        </div>
-                        <h4 className="font-black text-emerald-900 uppercase text-sm tracking-widest">Instant Booking</h4>
-                        <p className="text-xs text-slate-500 font-medium">Secure your flat rate in seconds with our express checkout.</p>
-                    </div>
+                    ))}
                 </div>
             </div>
 
