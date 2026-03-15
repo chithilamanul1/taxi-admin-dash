@@ -10,7 +10,34 @@ async function findPost(slug) {
     if (isId) {
         return await Post.findById(slug);
     }
-    return await Post.findOne({ slug });
+
+    const decodedSlug = decodeURIComponent(slug).trim();
+    
+    // 1. Try exact match (case-insensitive)
+    let post = await Post.findOne({ 
+        slug: { $regex: new RegExp(`^${decodedSlug}$`, 'i') } 
+    });
+
+    // 2. Try normalized slug if exact fails
+    if (!post) {
+        const normalized = decodedSlug
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)+/g, '');
+        if (normalized !== decodedSlug.toLowerCase()) {
+            post = await Post.findOne({ slug: normalized });
+        }
+    }
+
+    // 3. Try hyphen-flexible regex
+    if (!post) {
+        const pattern = decodedSlug.replace(/[ \-_]+/g, '[ \\-_]');
+        post = await Post.findOne({ 
+            slug: { $regex: new RegExp(`^${pattern}$`, 'i') } 
+        });
+    }
+
+    return post;
 }
 
 export async function GET(req, { params }) {

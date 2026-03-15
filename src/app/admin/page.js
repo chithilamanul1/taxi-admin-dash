@@ -1816,15 +1816,33 @@ export default function AdminDashboard() {
                             <div className="bg-white rounded-xl shadow-sm p-6">
                                 <div className="flex items-center justify-between mb-6">
                                     <h2 className="text-2xl font-bold text-emerald-900">Blog Posts</h2>
-                                    <button
-                                        onClick={() => {
-                                            setPostForm({ isPublished: true })
-                                            setEditingPost('NEW')
-                                        }}
-                                        className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
-                                    >
-                                        <FileText size={16} /> Add New Post
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={async () => {
+                                                if (!confirm('This will normalize all blog slugs (e.g. "mirissa tourism zone" -> "mirissa-tourism-zone"). This fixes 404 errors but may break old links. Continue?')) return;
+                                                setIsLoading(true);
+                                                const res = await fetch('/api/admin/sync-slugs', { method: 'POST' });
+                                                const data = await res.json();
+                                                alert(data.message || (data.success ? 'Slugs fixed!' : 'Error fixing slugs'));
+                                                // Refresh list
+                                                fetch('/api/blog?isAdmin=true&limit=100').then(r => r.json()).then(d => d.success && setBlogPosts(d.data))
+                                                setIsLoading(false);
+                                            }}
+                                            className="text-xs bg-blue-100 text-blue-700 px-3 py-2 rounded-lg hover:bg-blue-200 font-bold flex items-center gap-2"
+                                            title="Normalizes slugs to prevent 404 errors"
+                                        >
+                                            <Activity size={14} /> Fix Slugs
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setPostForm({ isPublished: true })
+                                                setEditingPost('NEW')
+                                            }}
+                                            className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
+                                        >
+                                            <FileText size={16} /> Add New Post
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* Post List */}

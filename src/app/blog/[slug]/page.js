@@ -11,36 +11,59 @@ import BlogCoverImage from '../../../components/BlogCoverImage';
 
 async function getPost(slug) {
     const connectionString = process.env.MONGODB_URI || process.env.MONGO_URI;
-    if (!connectionString) return null;
+    if (!connectionString) {
+        console.error('Blog Error: MONGODB_URI is missing');
+        return null;
+    }
+    
     try {
         await dbConnect();
+        const rawSlug = slug;
         const decodedSlug = decodeURIComponent(slug).trim();
-        const normalizedSlug = decodedSlug
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/(^-|-$)+/g, '');
+        
+        console.log(`Searching for blog post with slug: ${decodedSlug} (Raw: ${rawSlug})`);
 
-        // 1. Try exact match with decoded slug
-        let post = await Post.findOne({ slug: decodedSlug });
+        // 1. Try exact match with decoded slug (case-insensitive)
+        let post = await Post.findOne({ 
+            slug: { $regex: new RegExp(`^${decodedSlug}$`, 'i') } 
+        });
 
-        // 2. Try regex match for spaces vs hyphens (very common issue)
+        // 2. Try normalized slug (hyphenated)
         if (!post) {
+            const normalized = decodedSlug
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)+/g, '');
+            
+            if (normalized !== decodedSlug.toLowerCase()) {
+                console.log(`Trying normalized slug: ${normalized}`);
+                post = await Post.findOne({ slug: normalized });
+            }
+        }
+
+        // 3. Try regex match for spaces vs hyphens vs underscores (very common issue)
+        if (!post) {
+            // Replace any separator with a regex char class
             const pattern = decodedSlug.replace(/[ \-_]+/g, '[ \\-_]');
+            console.log(`Trying regex pattern: ${pattern}`);
             post = await Post.findOne({ 
                 slug: { $regex: new RegExp(`^${pattern}$`, 'i') } 
             });
         }
 
-        // 3. Try normalized slug
-        if (!post && normalizedSlug !== decodedSlug) {
-            post = await Post.findOne({ slug: normalizedSlug });
+        // 4. Try matching the title itself if slug fails
+        if (!post) {
+            const titlePattern = decodedSlug.replace(/[ \-_]+/g, '[ \\-_]');
+            console.log(`Trying title match with: ${titlePattern}`);
+            post = await Post.findOne({ 
+                title: { $regex: new RegExp(`^${titlePattern}$`, 'i') } 
+            });
         }
 
-        // 4. Try fuzzy match for title if strictly necessary (last resort)
-        if (!post) {
-            post = await Post.findOne({ 
-                title: { $regex: new RegExp(`^${decodedSlug.replace(/[-]/g, ' ')}$`, 'i') } 
-            });
+        if (post) {
+            console.log(`Success! Found post: ${post.title}`);
+        } else {
+            console.warn(`Post NOT found for slug: ${decodedSlug}`);
         }
 
         return post;

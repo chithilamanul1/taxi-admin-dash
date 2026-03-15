@@ -161,44 +161,48 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                     </div>
                                 )}
 
+                                {/* ───── Vehicle image — now in flow to stay below details ───── */}
+                                <div className="w-full flex justify-center py-2 relative z-10 mt-2">
+                                    <img
+                                        src={vehicle.image}
+                                        alt={vehicle.name}
+                                        className={`
+                                            w-[92%] h-auto object-contain
+                                            drop-shadow-[0_15px_30px_rgba(0,0,0,0.15)]
+                                            transition-transform duration-700
+                                            ${isSelected ? 'scale-110' : 'group-hover/card:scale-105'}
+                                        `}
+                                    />
+                                </div>
+
                             </div>
 
                             {/* Bottom Accent Bar */}
                             <div className={`h-3 w-full transition-colors duration-500 relative z-30 ${isSelected ? 'bg-[#FACC15]' : 'bg-black dark:bg-[#FACC15]/40'}`}></div>
 
-                            {/* Capacity Stats - Relocated below the yellow line */}
-                            <div className="px-5 md:px-8 pb-14 mt-[-1rem] relative z-40">
+                            {/* Capacity Stats - Relocated below everything */}
+                            <div className="px-5 md:px-8 pb-10 mt-6 relative z-40">
                                 <div className="grid grid-cols-3 gap-2 md:gap-3">
                                     {[
                                         { icon: Users, label: 'PAX', value: vehicle.capacity || 4 },
-                                        { icon: Briefcase, label: 'BAGS', value: vehicle.luggage || 0 },
-                                        { icon: Backpack, label: 'HAND', value: vehicle.handLuggage || 0 }
-                                    ].map((spec, i) => (
-                                        <div 
-                                            key={i} 
-                                            className="flex flex-col items-center p-3 md:p-4 bg-white dark:bg-[#1a1a1a] rounded-none border-4 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] transform transition-transform group-hover/card:scale-105"
-                                        >
-                                            <spec.icon size={20} className="text-black dark:text-white mb-1" strokeWidth={3} />
-                                            <span className="text-[9px] font-black text-black dark:text-white/40 tracking-[0.1em] mb-1 uppercase italic">{spec.label}</span>
-                                            <span className="text-xl md:text-2xl font-black text-black dark:text-white leading-none italic">{spec.value}</span>
+                                        { icon: Briefcase, label: 'BAGS', value: vehicle.suitcases || 2 },
+                                        { icon: ShoppingBag, label: 'HAND', value: vehicle.handLuggage || 2 }
+                                    ].map((item, i) => (
+                                        <div key={i} className={`
+                                            bg-white dark:bg-slate-800 border-2 border-black p-3 
+                                            flex flex-col items-center justify-center 
+                                            transition-all duration-300 
+                                            shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_#FACC15]
+                                            ${isSelected ? 'translate-x-[-2px] translate-y-[-2px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_#FACC15]' : 'group-hover/card:translate-x-[-1px] group-hover/card:translate-y-[-1px]'}
+                                        `}>
+                                            <item.icon size={18} className="text-emerald-900 dark:text-[#FACC15] mb-1" strokeWidth={3} />
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{item.label}</span>
+                                            <span className="text-lg font-black text-slate-900 dark:text-white leading-none mt-1">{item.value}</span>
                                         </div>
                                     ))}
                                 </div>
                             </div>
 
-                            {/* ───── Vehicle image — outside the box, overflowing below ───── */}
-                            <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-[115%] flex items-end justify-center pointer-events-none select-none z-10">
-                                <img
-                                    src={vehicle.image}
-                                    alt={vehicle.name}
-                                    className={`
-                                        w-full h-auto object-contain
-                                        drop-shadow-[0_20px_40px_rgba(0,0,0,0.28)]
-                                        transition-transform duration-700
-                                        ${isSelected ? 'scale-110' : 'group-hover/card:scale-105'}
-                                    `}
-                                />
-                            </div>
                         </div>
                     );
                 })}
