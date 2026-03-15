@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Users, Briefcase, Info, Lock, Wind, Backpack, Check, ArrowRight, Car } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Users, Briefcase, ShoppingBag, Info, Lock, Wind, Backpack, Check, ArrowRight, Car } from 'lucide-react';
 import VehicleDetailModal from './VehicleDetailModal';
 import { useCurrency } from '../context/CurrencyContext';const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
 

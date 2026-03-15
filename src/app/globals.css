@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-    --color-navy: #001C3D;
-    --color-gold: #FACC15; /* Standardized to Yellow-400 */
-    --background: #ffffff;
-    --foreground: #0f172a;
-    --radius-premium: 0rem; /* Boxy = No rounding */
+    --color-navy: #0F172A;
+    --color-gold: #FACC15;
+    --background: #FFFFFF;
+    --foreground: #0F172A;
+    --radius-premium: 0rem;
 }
 
 [class~="dark"] {
