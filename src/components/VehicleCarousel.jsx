@@ -151,8 +151,8 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                                 Rs {vehicle.calculatedTotal.toLocaleString()}
                                             </span>
                                         </div>
-                                        {/* USD secondary price — lighter & slightly larger */}
-                                        <div className="text-[18px] font-semibold text-slate-400 dark:text-white/50 mt-1 tracking-tight">
+                                        {/* USD secondary price — dark gray as requested */}
+                                        <div className="text-[18px] font-semibold text-slate-600 dark:text-white/60 mt-1 tracking-tight">
                                             ~ $ {(() => {
                                                 const rate = rates['USD'] || 0.0032;
                                                 return (vehicle.calculatedTotal * rate).toFixed(2);
@@ -161,32 +161,33 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                     </div>
                                 )}
 
-                                {/* Capacity Stats */}
-                                <div className="grid grid-cols-3 gap-4 w-full mt-4 mb-2 relative z-30">
-                                    {[
-                                        { icon: Users, label: 'PAX', value: vehicle.capacity || 4 },
-                                        { icon: Briefcase, label: 'BAGS', value: vehicle.luggage || 0 },
-                                        { icon: Backpack, label: 'HAND', value: vehicle.handLuggage || 0 }
-                                    ].map((spec, i) => (
-                                        <div key={i} className="flex flex-col items-center p-4 bg-slate-50 dark:bg-white/[0.03] rounded-xl border border-slate-100 dark:border-white/5 shadow-sm group-hover/card:shadow-md transition-shadow">
-                                            <spec.icon size={24} className="text-slate-400 mb-2" strokeWidth={1.5} />
-                                            <span className="text-[10px] font-bold text-slate-400 tracking-[0.2em] mb-1">{spec.label}</span>
-                                            <span className="text-2xl font-black text-[#1A1A1A] dark:text-white">{spec.value}</span>
-                                        </div>
-                                    ))}
-                                </div>
                             </div>
 
                             {/* Bottom Accent Bar */}
                             <div className={`h-3 w-full transition-colors duration-500 relative z-30 ${isSelected ? 'bg-[#FACC15]' : 'bg-black dark:bg-[#FACC15]/40'}`}></div>
 
+                            {/* Capacity Stats - Relocated below the yellow line */}
+                            <div className="px-5 md:px-8 pb-14 mt-[-1rem] relative z-40">
+                                <div className="grid grid-cols-3 gap-2 md:gap-3">
+                                    {[
+                                        { icon: Users, label: 'PAX', value: vehicle.capacity || 4 },
+                                        { icon: Briefcase, label: 'BAGS', value: vehicle.luggage || 0 },
+                                        { icon: Backpack, label: 'HAND', value: vehicle.handLuggage || 0 }
+                                    ].map((spec, i) => (
+                                        <div 
+                                            key={i} 
+                                            className="flex flex-col items-center p-3 md:p-4 bg-white dark:bg-[#1a1a1a] rounded-none border-4 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] transform transition-transform group-hover/card:scale-105"
+                                        >
+                                            <spec.icon size={20} className="text-black dark:text-white mb-1" strokeWidth={3} />
+                                            <span className="text-[9px] font-black text-black dark:text-white/40 tracking-[0.1em] mb-1 uppercase italic">{spec.label}</span>
+                                            <span className="text-xl md:text-2xl font-black text-black dark:text-white leading-none italic">{spec.value}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
                             {/* ───── Vehicle image — outside the box, overflowing below ───── */}
-                            {/*
-                                The image sits below the card, centred horizontally.
-                                overflow-visible on the parent lets it spill out.
-                                We use absolute positioning relative to the card bottom.
-                            */}
-                            <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-[115%] flex items-end justify-center pointer-events-none select-none z-10">
+                            <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-[115%] flex items-end justify-center pointer-events-none select-none z-10">
                                 <img
                                     src={vehicle.image}
                                     alt={vehicle.name}
