@@ -917,58 +917,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </div>
                                     )}
 
-                                    <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Passenger & Luggage</label>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                        {[
-                                            { id: 'adults', label: 'Adults', icon: Users },
-                                            { id: 'children', label: 'Children', icon: User },
-                                            { id: 'luggage', label: 'Check-in Luggage', icon: Briefcase },
-                                            { id: 'handLuggage', label: 'Hand Luggage', icon: ShoppingBag }
-                                        ].map((field) => (
-                                            <div key={field.id} className="bg-white dark:bg-white/5 border-4 border-black p-5 rounded-none flex items-center justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] transition-all">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-10 h-10 bg-black dark:bg-[#FACC15] rounded-none flex items-center justify-center text-[#FACC15] dark:text-black border-2 border-black">
-                                                        <field.icon size={18} strokeWidth={2.5} />
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <span className="text-[10px] font-black uppercase tracking-widest text-[#FACC15] leading-none mb-1">
-                                                            {field.id === 'handLuggage' ? 'Carry-on' : field.id}
-                                                        </span>
-                                                        <span className="text-xs font-black uppercase tracking-tight text-black dark:text-white">
-                                                            {field.label}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-4 bg-slate-100 dark:bg-white/5 p-1 border-2 border-black rounded-none">
-                                                    <button
-                                                        onClick={() => setFormData({
-                                                            ...formData,
-                                                            passengerCount: {
-                                                                ...formData.passengerCount,
-                                                                [field.id]: Math.max(0, formData.passengerCount[field.id] - 1)
-                                                            }
-                                                        })}
-                                                        className="text-black dark:text-white font-black text-lg w-10 h-10 flex items-center justify-center bg-white dark:bg-black border-2 border-black rounded-none hover:bg-black hover:text-[#FACC15] transition-all active:translate-y-1"
-                                                    >
-                                                        <Minus size={18} strokeWidth={4} />
-                                                    </button>
-                                                    <span className="text-xl font-black text-black dark:text-white min-w-[32px] text-center italic">{formData.passengerCount[field.id]}</span>
-                                                    <button
-                                                        onClick={() => setFormData({
-                                                            ...formData,
-                                                            passengerCount: {
-                                                                ...formData.passengerCount,
-                                                                [field.id]: formData.passengerCount[field.id] + 1
-                                                            }
-                                                        })}
-                                                        className="text-black dark:text-black font-black text-lg w-10 h-10 flex items-center justify-center bg-[#FACC15] border-2 border-black rounded-none hover:translate-y-[-2px] transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-1"
-                                                    >
-                                                        <Plus size={18} strokeWidth={4} />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
+                                    {/* Passenger & Luggage Section Removed as it's redundant with home page/widget info */}
+
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between p-6 bg-black dark:bg-white/5 border-4 border-black rounded-none shadow-[8px_8px_0px_0px_rgba(250,204,21,1)]">
                                             <div className="flex items-center gap-4">
@@ -1403,19 +1353,19 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                     <div className="space-y-4">
                                         <div className="flex gap-4">
-                                            <div className="flex-1 bg-slate-50 dark:bg-white/5 border-4 border-black p-2 rounded-none flex gap-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                            <div className="flex-1 bg-white dark:bg-white/5 border-2 border-black p-1 rounded-none flex gap-2">
                                                 <input
                                                     value={couponInput}
                                                     onChange={e => setCouponInput(e.target.value.toUpperCase())}
-                                                    placeholder="ENTER COUPON..."
-                                                    className="flex-1 h-12 bg-white dark:bg-black border-2 border-black px-6 rounded-none text-[10px] font-black uppercase placeholder:normal-case tracking-widest outline-none focus:border-[#FACC15] text-black dark:text-white"
+                                                    placeholder="COUPON?"
+                                                    className="flex-1 h-9 bg-white dark:bg-black border border-black/10 px-4 rounded-none text-[9px] font-black uppercase tracking-widest outline-none focus:border-[#FACC15] text-black dark:text-white"
                                                 />
                                                 <button
                                                     onClick={() => handleApplyCoupon()}
                                                     disabled={couponLoading || !couponInput}
-                                                    className="px-8 bg-[#FACC15] text-black rounded-none border-2 border-black text-[10px] font-black uppercase tracking-widest disabled:opacity-20 active:scale-95 transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                                                    className="px-6 bg-[#FACC15] text-black rounded-none border border-black text-[9px] font-black uppercase tracking-widest disabled:opacity-20 active:scale-95 transition-all"
                                                 >
-                                                    {couponLoading ? <Loader2 className="animate-spin" size={14} /> : 'Apply'}
+                                                    {couponLoading ? <Loader2 className="animate-spin" size={12} /> : 'Apply'}
                                                 </button>
                                             </div>
                                         </div>

@@ -7,7 +7,7 @@
     --color-gold: #FACC15; /* Standardized to Yellow-400 */
     --background: #ffffff;
     --foreground: #0f172a;
-    --radius-premium: 3rem;
+    --radius-premium: 0rem; /* Boxy = No rounding */
 }
 
 [class~="dark"] {
@@ -37,7 +37,7 @@ body {
 
 @layer components {
     .premium-box {
-        @apply bg-white dark:bg-[#111] rounded-[var(--radius-premium)] border border-slate-200 dark:border-white/10 shadow-xl;
+        @apply bg-white dark:bg-[#111] rounded-none border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)];
     }
 
     .yellow-badge {

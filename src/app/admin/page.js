@@ -1818,7 +1818,7 @@ export default function AdminDashboard() {
                                     <h2 className="text-2xl font-bold text-emerald-900">Blog Posts</h2>
                                     <button
                                         onClick={() => {
-                                            setPostForm({})
+                                            setPostForm({ isPublished: true })
                                             setEditingPost('NEW')
                                         }}
                                         className="bg-emerald-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-900/90 text-sm flex items-center gap-2 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"

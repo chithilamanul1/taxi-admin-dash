@@ -124,16 +124,19 @@ export default function CustomTripPage() {
 
     if (isSuccess) {
         return (
-            <div className="min-h-screen bg-white flex items-center justify-center p-4">
-                <div className="max-w-md w-full bg-slate-50 rounded-3xl p-8 text-center shadow-2xl">
-                    <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <CheckCircle size={40} className="text-emerald-600" />
+            <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+                <div className="max-w-md w-full bg-white rounded-none p-12 text-center border-8 border-black shadow-[20px_20px_0px_0px_#006064]">
+                    <div className="w-24 h-24 bg-emerald-900 rounded-none border-4 border-black flex items-center justify-center mx-auto mb-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                        <CheckCircle size={48} className="text-[#FACC15]" strokeWidth={3} />
                     </div>
-                    <h2 className="text-3xl font-black text-[#006064] mb-4">Request Sent!</h2>
-                    <p className="text-slate-600 mb-8">
+                    <h2 className="text-4xl font-black text-[#006064] mb-4 uppercase italic tracking-tighter">REQUEST SENT!</h2>
+                    <p className="text-slate-600 mb-10 font-bold uppercase text-xs tracking-widest leading-relaxed">
                         We've received your custom itinerary. Our team will review the details and contact you via WhatsApp/Email to finalize the booking.
                     </p>
-                    <button onClick={() => router.push('/')} className="w-full py-4 bg-[#006064] text-white rounded-xl font-bold">
+                    <button 
+                        onClick={() => router.push('/')} 
+                        className="w-full py-5 bg-[#006064] text-white rounded-none font-black uppercase italic tracking-widest border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all"
+                    >
                         Back to Home
                     </button>
                 </div>
@@ -143,76 +146,73 @@ export default function CustomTripPage() {
 
     return (
         <div className="min-h-screen bg-slate-50 pt-24 pb-20 px-4">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr,450px] gap-8">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr,450px] gap-12">
 
                 {/* Left Column: Map & Itinerary Builder */}
-                <div className="space-y-4 md:space-y-6">
-                    <div className="bg-white rounded-[1.5rem] md:rounded-[2rem] p-5 md:p-8 shadow-xl border-none">
-                        <div className="flex items-center justify-between mb-6 md:mb-8">
+                <div className="space-y-8">
+                    <div className="bg-white rounded-none p-8 md:p-12 border-8 border-black shadow-[20px_20px_0px_0px_#006064]">
+                        <div className="flex items-center justify-between mb-12">
                             <div>
-                                <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-[#006064] leading-tight flex items-center gap-3">
-                                    <MapPin className="text-[#00A99D]" /> Plan Your Trip
+                                <h1 className="text-4xl md:text-6xl font-black text-[#006064] leading-none flex items-center gap-4 uppercase italic tracking-tighter mb-4">
+                                    <MapPin size={48} className="text-[#00A99D]" strokeWidth={3} /> Plan Your Trip
                                 </h1>
-                                <p className="text-slate-500 text-sm font-medium mt-1 md:mt-2">Build your own multi-stop adventure across Sri Lanka.</p>
+                                <p className="text-[#00A99D] text-xs font-black uppercase tracking-[0.3em] italic">Build your own multi-stop adventure across Sri Lanka.</p>
                             </div>
                         </div>
 
                         {/* Stops List */}
-                        <div className="space-y-4 relative">
+                        <div className="space-y-8 relative">
                             {/* Vertical Line */}
-                            <div className="absolute left-6 md:left-8 top-8 bottom-8 w-0.5 bg-slate-100 -z-0"></div>
+                            <div className="absolute left-8 md:left-10 top-8 bottom-8 w-1.5 bg-slate-100 -z-0"></div>
 
                             {stops.map((stop, index) => (
                                 <div key={stop.id} className="relative group" style={{ zIndex: stops.length - index }}>
-                                    <div className="flex items-start gap-4">
-                                        <div className={`w-12 h-12 md:w-16 md:h-16 shrink-0 rounded-2xl flex items-center justify-center font-black text-base md:text-lg shadow-sm border-2 
-                                            ${index === 0 ? 'bg-emerald-50 border-emerald-100 text-emerald-600' :
-                                                index === stops.length - 1 ? 'bg-rose-50 border-rose-100 text-rose-600' :
-                                                    'bg-white border-slate-100 text-slate-400'}`}>
+                                    <div className="flex items-start gap-8">
+                                        <div className={`w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-none flex items-center justify-center font-black text-xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-4 border-black transition-all group-hover:translate-y-[-4px] group-hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]
+                                            ${index === 0 ? 'bg-[#006064] text-white' :
+                                                index === stops.length - 1 ? 'bg-rose-600 text-white' :
+                                                    'bg-white text-slate-800'}`}>
                                             {index === 0 ? (
-                                                <div className="flex flex-col items-center gap-0.5 md:gap-1">
-                                                    <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-                                                    <span className="text-[8px] md:text-[10px] font-black uppercase tracking-tighter">Start</span>
+                                                <div className="flex flex-col items-center gap-1">
+                                                    <div className="w-3 h-3 rounded-none bg-emerald-400 animate-pulse border-2 border-black" />
+                                                    <span className="text-[10px] font-black uppercase tracking-tighter italic">Start</span>
                                                 </div>
                                             ) : index === stops.length - 1 ? (
-                                                <div className="flex flex-col items-center gap-0.5">
-                                                    <Navigation size={18} className="fill-rose-600 md:size-5" />
-                                                    <span className="text-[8px] md:text-[10px] font-black uppercase tracking-tighter">End</span>
+                                                <div className="flex flex-col items-center gap-1">
+                                                    <Navigation size={24} className="fill-white" />
+                                                    <span className="text-[10px] font-black uppercase tracking-tighter italic">End</span>
                                                 </div>
                                             ) : (
-                                                <span className="text-lg md:text-xl font-black">{index}</span>
+                                                <span className="text-2xl font-black italic">{index}</span>
                                             )}
                                         </div>
 
-                                        <div className="flex-1 space-y-2">
+                                        <div className="flex-1 space-y-4">
                                             <div className="flex justify-between items-center">
-                                                <span className="text-xs font-bold uppercase tracking-widest text-slate-400">
-                                                    {index === 0 ? 'Pick Up Location' : index === stops.length - 1 ? 'Final Drop Off' : 'Stopover'}
+                                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 italic">
+                                                    {index === 0 ? 'Pick Up Location' : index === stops.length - 1 ? 'Final Drop Off' : `Stopover ${index}`}
                                                 </span>
                                                 {stop.type === 'waypoint' && (
-                                                    <button onClick={() => handleRemoveStop(stop.id)} className="text-red-400 hover:text-red-600 p-1">
-                                                        <Trash2 size={16} />
+                                                    <button onClick={() => handleRemoveStop(stop.id)} className="text-red-500 hover:text-red-700 bg-red-50 p-2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] transition-all">
+                                                        <Trash2 size={18} strokeWidth={3} />
                                                     </button>
                                                 )}
                                             </div>
                                             <div className="relative">
                                                 <LocationInput
-                                                    placeholder={index === 0 ? "Enter pickup location" : "Enter destination"}
+                                                    placeholder={index === 0 ? "ENTER PICKUP LOCATION" : "ENTER DESTINATION"}
                                                     value={stop.address}
                                                     zIndex={50}
                                                     onSelect={(loc) => handleUpdateStop(stop.id, { address: loc.address, lat: loc.lat, lon: loc.lon })}
                                                     onChange={(val) => {
-                                                        // CRITICAL: Only reset if the value is actually different and NOT just a manual tweak to a selected address
-                                                        // This prevents the 'Please select a location' warning from appearing too aggressively
                                                         if (val !== stop.address) {
                                                             handleUpdateStop(stop.id, { address: val, lat: null, lon: null });
                                                         }
                                                     }}
                                                 />
-                                                {/* Validation Warning - Relative positioning to avoid overlapping */}
                                                 {stop.address && (stop.lat === null || stop.lon === null) && (
-                                                    <div className="mt-2 text-[10px] sm:text-xs font-bold text-emerald-600 flex items-center gap-1 bg-emerald-50 px-2 py-1.5 rounded-lg border border-emerald-200">
-                                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                                    <div className="mt-3 text-[10px] font-black text-rose-600 flex items-center gap-2 bg-rose-50 px-4 py-2 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase italic tracking-widest animate-fade-in">
+                                                        <div className="w-2 h-2 rounded-none bg-rose-500 animate-pulse border border-black"></div>
                                                         Please select a location from the list to calculate distance.
                                                     </div>
                                                 )}
@@ -220,14 +220,13 @@ export default function CustomTripPage() {
                                         </div>
                                     </div>
 
-                                    {/* Add Button Logic - Increased padding and z-index to avoid overlap */}
                                     {index < stops.length - 1 && (
-                                        <div className="pl-16 md:pl-20 py-4 relative z-30">
+                                        <div className="pl-24 md:pl-28 py-6 relative z-30">
                                             <button
                                                 onClick={handleAddStop}
-                                                className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-[#00A99D] hover:text-[#006064] transition-colors bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-full w-fit shadow-sm"
+                                                className="flex items-center gap-3 text-[10px] font-black text-white px-6 py-3 rounded-none bg-[#00A99D] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-3px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all uppercase tracking-[0.2em] italic"
                                             >
-                                                <Plus size={14} /> Add Stopover
+                                                <Plus size={16} strokeWidth={4} /> Add Stopover
                                             </button>
                                         </div>
                                     )}
@@ -237,7 +236,7 @@ export default function CustomTripPage() {
                     </div>
 
                     {/* Map Visualization */}
-                    <div className="bg-white rounded-[2rem] p-2 shadow-xl border-none overflow-hidden h-[400px]">
+                    <div className="bg-white rounded-none p-2 shadow-[15px_15px_0px_0px_#006064] border-8 border-black overflow-hidden h-[450px]">
                         <TripMap
                             pickup={stops[0]}
                             dropoff={stops[stops.length - 1]}
@@ -249,20 +248,20 @@ export default function CustomTripPage() {
 
                 {/* Right Column: Quote Form */}
                 <div className="relative">
-                    <div className="sticky top-24 bg-white rounded-[2rem] p-8 shadow-2xl border border-[#00A99D]/10">
-                        <div className="flex items-center justify-between mb-6 pb-6 border-b border-slate-100">
+                    <div className="sticky top-24 bg-white rounded-none p-8 border-8 border-black shadow-[20px_20px_0px_0px_rgba(0,0,0,1)]">
+                        <div className="grid grid-cols-2 gap-8 mb-8 pb-8 border-b-4 border-black">
                             <div>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Route Distance</p>
+                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-2 italic leading-none">Route Distance</p>
                                 <div className="flex items-baseline gap-1 text-[#006064]">
-                                    <span className="text-3xl md:text-4xl font-black">{Math.round(routeStats.distanceKm)}</span>
-                                    <span className="text-xs md:text-sm font-bold opacity-60">km</span>
+                                    <span className="text-5xl font-black italic tracking-tighter">{Math.round(routeStats.distanceKm)}</span>
+                                    <span className="text-sm font-black opacity-40 uppercase">km</span>
                                 </div>
                             </div>
                             <div className="text-right">
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Approx. Time</p>
+                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-2 italic leading-none">Approx. Time</p>
                                 <div className="flex items-baseline gap-1 text-[#006064] justify-end">
-                                    <span className="text-3xl md:text-4xl font-black">
-                                        {Math.floor(routeStats.durationMin / 60)}<span className="text-base md:text-lg text-slate-400">h</span> {routeStats.durationMin % 60}<span className="text-base md:text-lg text-slate-400">m</span>
+                                    <span className="text-5xl font-black italic tracking-tighter">
+                                        {Math.floor(routeStats.durationMin / 60)}<span className="text-xl text-slate-400">h</span> {routeStats.durationMin % 60}<span className="text-xl text-slate-400">m</span>
                                     </span>
                                 </div>
                             </div>
@@ -270,43 +269,49 @@ export default function CustomTripPage() {
 
                         {/* Estimated Price Section */}
                         {routeStats.distanceKm > 0 && (
-                            <div className="mb-8 p-6 bg-emerald-900 rounded-3xl text-white shadow-xl shadow-emerald-900/20 relative overflow-hidden group">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                            <div className="mb-10 p-8 bg-[#006064] rounded-none text-white border-4 border-black shadow-[10px_10px_0px_0px_#00A99D] relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 -mr-24 -mt-24 rotate-45 transform pointer-events-none"></div>
                                 <div className="relative z-10">
-                                    <div className="flex items-center gap-2 text-emerald-400 mb-2">
-                                        <Tag size={14} className="fill-emerald-400/20" />
-                                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Estimated Rate</span>
+                                    <div className="flex items-center gap-3 text-emerald-400 mb-2">
+                                        <Tag size={16} className="fill-emerald-400/20" strokeWidth={3} />
+                                        <span className="text-[10px] font-black uppercase tracking-[0.3em] italic">ESTIMATED RATE</span>
                                     </div>
-                                    <div className="flex items-baseline gap-2">
-                                        <span className="text-4xl font-black">{convertedEstimate.symbol} {convertedEstimate.value.toLocaleString()}</span>
-                                        <span className="text-xs font-bold text-emerald-400/60 uppercase">{currency}</span>
+                                    <div className="flex items-baseline gap-3">
+                                        <span className="text-5xl font-black italic tracking-tighter">{convertedEstimate.symbol} {convertedEstimate.value.toLocaleString()}</span>
+                                        <span className="text-xs font-black text-emerald-400 uppercase tracking-widest">{currency}</span>
                                     </div>
-                                    <p className="text-[10px] text-white/40 mt-3 font-medium flex items-center gap-1.5 leading-relaxed italic">
-                                        <Star size={10} fill="currentColor" /> Final price may vary based on vehicle availability and exact stops.
-                                    </p>
+                                    <div className="mt-6 flex items-start gap-3 bg-black/20 p-4 border-2 border-black/20">
+                                        <Star size={16} fill="#FACC15" className="text-[#FACC15] shrink-0 mt-0.5" />
+                                        <p className="text-[9px] text-white/60 font-black uppercase tracking-widest leading-relaxed">
+                                            Final price may vary based on vehicle availability and exact stops.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         )}
 
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <h3 className="text-xl font-bold text-[#006064] mb-4">Request Your Quote</h3>
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <h3 className="text-2xl font-black text-[#006064] uppercase italic tracking-tighter mb-8 flex items-center gap-3">
+                                <div className="w-4 h-4 bg-[#FACC15] border-2 border-black"></div>
+                                Request Quote
+                            </h3>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-6">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Your Name</label>
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] italic ml-1">Your Name</label>
                                     <input
                                         required
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-emerald-900"
-                                        placeholder="John Doe"
+                                        className="w-full bg-slate-50 rounded-none px-6 py-4 font-black outline-none border-4 border-black focus:bg-white focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all text-emerald-900 uppercase italic placeholder:text-slate-300"
+                                        placeholder="JOHN DOE"
                                         value={formData.name}
                                         onChange={e => setFormData({ ...formData, name: e.target.value })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Mobile / WhatsApp</label>
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] italic ml-1">Mobile / WhatsApp</label>
                                     <input
                                         required
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-emerald-900"
+                                        className="w-full bg-slate-50 rounded-none px-6 py-4 font-black outline-none border-4 border-black focus:bg-white focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all text-emerald-900 uppercase italic placeholder:text-slate-300"
                                         placeholder="+94..."
                                         value={formData.phone}
                                         onChange={e => setFormData({ ...formData, phone: e.target.value })}
@@ -315,64 +320,64 @@ export default function CustomTripPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Email Address</label>
+                                <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] italic ml-1">Email Address</label>
                                 <input
                                     required
                                     type="email"
-                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-emerald-900"
-                                    placeholder="john@example.com"
+                                    className="w-full bg-slate-50 rounded-none px-6 py-4 font-black outline-none border-4 border-black focus:bg-white focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all text-emerald-900 uppercase italic placeholder:text-slate-300"
+                                    placeholder="JOHN@EXAMPLE.COM"
                                     value={formData.email}
                                     onChange={e => setFormData({ ...formData, email: e.target.value })}
                                 />
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Travel Date</label>
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] italic ml-1">Travel Date</label>
                                     <input
                                         required
                                         type="date"
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-emerald-900"
+                                        className="w-full bg-slate-50 rounded-none px-6 py-4 font-black outline-none border-4 border-black focus:bg-white focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all text-emerald-900 uppercase italic"
                                         value={formData.date}
                                         onChange={e => setFormData({ ...formData, date: e.target.value })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Group Size</label>
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] italic ml-1">Group Size</label>
                                     <select
-                                        className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-emerald-900"
+                                        className="w-full bg-slate-50 rounded-none px-6 py-4 font-black outline-none border-4 border-black focus:bg-white focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all text-emerald-900 uppercase italic appearance-none"
                                         value={formData.passengers}
                                         onChange={e => setFormData({ ...formData, passengers: parseInt(e.target.value) })}
                                     >
                                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20].map(n => (
-                                            <option key={n} value={n}>{n} Pax</option>
+                                            <option key={n} value={n}>{n} PAX</option>
                                         ))}
                                     </select>
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Preferred Vehicle</label>
+                                <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] italic ml-1">Preferred Vehicle</label>
                                 <select
-                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors text-emerald-900"
+                                    className="w-full bg-slate-50 rounded-none px-6 py-4 font-black outline-none border-4 border-black focus:bg-white focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all text-emerald-900 uppercase italic appearance-none"
                                     value={formData.vehicleType}
                                     onChange={e => setFormData({ ...formData, vehicleType: e.target.value })}
                                 >
                                     {isLoadingPricing ? (
-                                        <option>Loading vehicles...</option>
+                                        <option>LOADING VEHICLES...</option>
                                     ) : (
                                         vehiclePricing.map(v => (
-                                            <option key={v.vehicleType} value={v.vehicleType}>{v.name}</option>
+                                            <option key={v.vehicleType} value={v.vehicleType}>{v.name.toUpperCase()}</option>
                                         ))
                                     )}
                                 </select>
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Special Requirements</label>
+                                <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] italic ml-1">Requirement</label>
                                 <textarea
-                                    className="w-full bg-slate-50 rounded-xl px-4 py-3 font-bold outline-none border border-slate-100 focus:border-[#00A99D] transition-colors min-h-[80px] text-emerald-900"
-                                    placeholder="Extra luggage, child seats, etc..."
+                                    className="w-full bg-slate-50 rounded-none px-6 py-4 font-black outline-none border-4 border-black focus:bg-white focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all min-h-[100px] text-emerald-900 uppercase italic placeholder:text-slate-300"
+                                    placeholder="EXTRA LUGGAGE, CHILD SEATS, ETC..."
                                     value={formData.message}
                                     onChange={e => setFormData({ ...formData, message: e.target.value })}
                                 />
@@ -381,11 +386,15 @@ export default function CustomTripPage() {
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full py-5 bg-[#006064] text-white rounded-2xl font-black text-lg shadow-xl shadow-cyan-900/20 hover:bg-[#004D40] hover:scale-[1.02] transition-all flex items-center justify-center gap-3"
+                                className="w-full py-6 bg-[#006064] text-white rounded-none font-black text-xl border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-4px] hover:shadow-[14px_14px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 transition-all flex items-center justify-center gap-4 uppercase italic tracking-widest"
                             >
-                                {isSubmitting ? <Loader2 className="animate-spin" /> : <>Contact for Best Quote <ArrowRight size={20} /></>}
+                                {isSubmitting ? <Loader2 className="animate-spin" /> : <>SEND QUOTE REQUEST <ArrowRight size={24} strokeWidth={4} /></>}
                             </button>
-                            <p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-4">24/7 dedicated travel support</p>
+                            <div className="flex items-center justify-center gap-4 mt-8">
+                                <div className="h-0.5 flex-1 bg-slate-100"></div>
+                                <p className="text-center text-[8px] text-slate-400 font-black uppercase tracking-[0.4em] italic">24/7 DEDICATED SUPPORT</p>
+                                <div className="h-0.5 flex-1 bg-slate-100"></div>
+                            </div>
                         </form>
                     </div>
                 </div>

@@ -32,7 +32,7 @@ const PostSchema = new mongoose.Schema({
     },
     isPublished: {
         type: Boolean,
-        default: false
+        default: true
     },
     seo: {
         metaTitle: String,
