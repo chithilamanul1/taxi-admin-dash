@@ -33,14 +33,14 @@ export default async function BlogPage() {
     return (
         <div className="min-h-screen bg-white pb-20 transition-colors">
             {/* Hero Section */}
-            <div className="bg-slate-50 py-24 md:py-32 border-b-8 border-black relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full bg-[#FACC15]/5 -skew-y-6 transform origin-top-left transition-transform"></div>
+            <div className="bg-slate-50 py-16 md:py-20 border-b-4 border-black relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full bg-[#FACC15]/5 -skew-y-3 transform origin-top-left transition-transform"></div>
                 <div className="container mx-auto px-6 text-center relative z-10">
-                    <div className="inline-block bg-black px-12 py-12 border-8 border-black shadow-[20px_20px_0px_0px_#FACC15] transform -rotate-1">
-                        <h1 className="text-6xl md:text-9xl font-black mb-6 uppercase italic tracking-tighter leading-none text-white">
+                    <div className="inline-block bg-black px-8 py-8 border-4 border-black shadow-[12px_12px_0px_0px_#FACC15]">
+                        <h1 className="text-4xl md:text-6xl font-black mb-3 uppercase italic tracking-tighter leading-none text-white">
                             TRAVEL <span className="text-[#FACC15]">CHRONICLES</span>
                         </h1>
-                        <p className="text-[#FACC15]/80 max-w-2xl mx-auto uppercase font-black tracking-[0.4em] text-[10px] md:text-xs italic leading-relaxed">
+                        <p className="text-[#FACC15]/80 max-w-xl mx-auto uppercase font-black tracking-[0.3em] text-[9px] md:text-[10px] italic leading-relaxed">
                             Expert guides and professional insights from Sri Lanka's leading airport transfer network.
                         </p>
                     </div>
