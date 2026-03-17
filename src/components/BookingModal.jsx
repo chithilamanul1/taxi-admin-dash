@@ -917,11 +917,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             </span>
                                         </div>
                                     </div>
-                                    <div className="text-left md:text-right bg-black text-[#FACC15] p-6 rounded-none border-4 border-black backdrop-blur-xl flex justify-between items-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                        <div className="text-[10px] font-black text-[#FACC15]/40 uppercase tracking-[0.3em] mb-1">Trip Distance</div>
-                                        <div className="text-2xl font-black text-[#FACC15] italic">{distance.toFixed(1)} <span className="text-sm font-black text-white not-italic ml-1 tracking-widest">KM</span></div>
-                                    </div>
-
                                 {/* Multi-Currency Grid */}
                                 <div className="space-y-6">
                                     <div className="flex items-center gap-4">
