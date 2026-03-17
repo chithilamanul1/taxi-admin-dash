@@ -95,7 +95,7 @@ const ToursWidget = () => {
             {loading && activeCategory !== 'Custom Trip' ? (
                 <div className="flex justify-center py-20"><Loader2 className="animate-spin text-navy" size={32} /></div>
             ) : selectedTour ? (
-                <div className="animate-fade-in bg-white rounded-none border-4 border-black overflow-hidden shadow-[20px_20px_0px_0px_rgba(0,0,0,1)]">
+                <div className="animate-fade-in bg-white rounded-none border-4 border-black overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:shadow-[20px_20px_0px_0px_rgba(0,0,0,1)]">
                     <div className="relative h-64 md:h-80 bg-navy">
                         {selectedTour.heroImage || selectedTour.image || selectedTour.images?.[0] ? (
                             <img src={selectedTour.heroImage || selectedTour.image || selectedTour.images[0]} alt={selectedTour.title} className="w-full h-full object-cover opacity-80" />
@@ -216,7 +216,7 @@ const ToursWidget = () => {
                 </div>
             ) : activeCategory === 'Custom Trip' ? (
                 <div className="grid grid-cols-1 animate-slide-up px-2">
-                    <Link href="/custom-trip" className="group relative rounded-none overflow-hidden min-h-[380px] md:h-[450px] flex items-center justify-center bg-navy border-4 border-black shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] hover:scale-[1.01] transition-all duration-500">
+                    <Link href="/custom-trip" className="group relative rounded-none overflow-hidden min-h-[380px] md:h-[450px] flex items-center justify-center bg-navy border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] hover:scale-[1.01] transition-all duration-500">
                         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1546708973-4903328e19ba?q=80&w=1600')] bg-cover bg-center opacity-40 group-hover:opacity-50 transition-opacity"></div>
                         <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/60 to-transparent"></div>
                         <div className="relative z-10 text-center space-y-4 md:space-y-6 px-6 max-w-2xl py-8">

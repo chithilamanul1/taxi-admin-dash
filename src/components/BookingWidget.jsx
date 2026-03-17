@@ -521,9 +521,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const pricingCategory = isAirportService ? 'airport-transfer' : 'ride-now';
 
     return (
-        <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-4">
+        <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-3 sm:px-4">
             {/* Tab Navigation - Boxy Style */}
-            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-4 border-black transition-all overflow-hidden" role="tablist">
+            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-4 border-black transition-all overflow-hidden" role="tablist">
                 <div className="grid grid-cols-4 w-full sm:w-auto divide-x-4 divide-black">
                     {[
                         { id: 'pickup', label: 'Airport Pickup', icon: PlaneTakeoff },
@@ -551,7 +551,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             </div>
 
             {/* Widget Main Content - Boxy Style */}
-            <div className="bg-white dark:bg-[#111] border-4 border-black p-4 md:p-12 animate-slide-up relative z-10 shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] rounded-none">
+            <div className="bg-white dark:bg-[#111] border-4 border-black p-4 md:p-12 animate-slide-up relative z-10 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] rounded-none w-full box-border">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
@@ -561,7 +561,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <button 
                                         onClick={() => setTripType('one-way')} 
                                         aria-label="One Way Trip" 
-                                        className={`flex-1 sm:flex-none px-8 py-3 rounded-none text-[10px] font-black uppercase tracking-widest transition-all ${tripType === 'one-way' ? 'bg-black text-white' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}`}
+                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-3 rounded-none text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all ${tripType === 'one-way' ? 'bg-black text-white' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}`}
                                     >
                                         One Way
                                     </button>
@@ -569,7 +569,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         onClick={() => (activeTab !== 'pickup' && activeTab !== 'drop') && setTripType('round-trip')}
                                         disabled={activeTab === 'pickup' || activeTab === 'drop'}
                                         aria-label="Round Trip"
-                                        className={`flex-1 sm:flex-none px-8 py-3 rounded-none text-[10px] font-black uppercase tracking-widest transition-all relative flex items-center justify-center gap-2
+                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-3 rounded-none text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all relative flex items-center justify-center gap-1 sm:gap-2
                                             ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-black text-white' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}
                                             ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-40 cursor-not-allowed' : ''}
                                         `}
@@ -643,19 +643,19 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             type="text"
                                             readOnly
                                             value={wp.name}
-                                            className="flex-1 min-w-0 pl-12 pr-4 h-14 bg-transparent border-none text-sm font-black text-black dark:text-white outline-none truncate"
+                                            className="flex-1 min-w-0 px-2 sm:pl-12 sm:pr-4 h-14 bg-transparent border-none text-[10px] sm:text-sm font-black text-black dark:text-white outline-none truncate"
                                         />
 
-                                        <div className="flex flex-col items-center border-l border-black/5 dark:border-white/10 px-3 min-w-[70px] sm:min-w-[100px] justify-center">
+                                        <div className="flex flex-col items-center border-l border-black/5 dark:border-white/10 px-1 sm:px-3 min-w-[60px] sm:min-w-[100px] justify-center">
                                             <div className="flex items-center gap-2">
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: Math.max(0, (w.waitingTime || 0) - 1) } : w)); }}
-                                                    className="w-7 h-7 flex items-center justify-center rounded-none bg-white dark:bg-white/10 text-black dark:text-white text-xs font-black shadow-sm hover:bg-slate-100 transition-colors border-2 border-black"
+                                                    className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-white dark:bg-white/10 text-black dark:text-white text-[10px] sm:text-xs font-black shadow-sm hover:bg-slate-100 transition-colors border sm:border-2 border-black"
                                                 >−</button>
-                                                <span className="text-sm font-black text-black dark:text-white w-6 text-center">{wp.waitingTime || 0}h</span>
+                                                <span className="text-[10px] sm:text-sm font-black text-black dark:text-white w-4 sm:w-6 text-center">{wp.waitingTime || 0}h</span>
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: (w.waitingTime || 0) + 1 } : w)); }}
-                                                    className="w-7 h-7 flex items-center justify-center rounded-none bg-black dark:bg-yellow-400 text-white dark:text-black text-xs font-black shadow-sm hover:bg-slate-800 transition-colors border-2 border-black"
+                                                    className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-black dark:bg-yellow-400 text-white dark:text-black text-[10px] sm:text-xs font-black shadow-sm hover:bg-slate-800 transition-colors border sm:border-2 border-black"
                                                 >+</button>
                                             </div>
                                             <span className="text-[9px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider mt-1">Wait Time</span>
@@ -663,10 +663,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                         <button
                                             onClick={() => setWaypoints(prev => prev.filter((_, i) => i !== idx))}
-                                            className="ml-2 mr-3 p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all"
+                                            className="ml-0 sm:ml-2 mr-1 sm:mr-3 p-1 sm:p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all"
                                             aria-label="Remove stop"
                                         >
-                                            <X size={18} />
+                                            <X size={14} className="sm:hidden" />
+                                            <X size={18} className="hidden sm:block" />
                                         </button>
                                     </div>
                                 ))}
@@ -742,9 +743,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex-1 space-y-4">
                                     <button
                                         onClick={() => setIsCouponOpen(!isCouponOpen)}
-                                        className={`flex items-center gap-3 text-[10px] lg:text-[9px] font-black h-full min-h-[5rem] lg:min-h-[3.5rem] transition-all px-8 lg:px-6 py-4 lg:py-2 rounded-none w-full justify-center uppercase tracking-[0.2em] lg:tracking-[0.15em] border-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] lg:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${isCouponOpen ? 'bg-[#FACC15] text-black border-black translate-y-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] lg:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-black text-white border-black hover:translate-y-[-2px]'}`}
+                                        className={`flex items-center gap-3 text-[10px] lg:text-[9px] font-black h-full min-h-[4rem] sm:min-h-[5rem] lg:min-h-[3.5rem] transition-all px-4 sm:px-8 lg:px-6 py-3 sm:py-4 lg:py-2 rounded-none w-full justify-center uppercase tracking-[0.2em] lg:tracking-[0.15em] border-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] lg:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${isCouponOpen ? 'bg-[#FACC15] text-black border-black translate-y-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] lg:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-black text-white border-black hover:translate-y-[-2px]'}`}
                                     >
-                                        <Tag size={18} className={`${isCouponOpen ? 'text-black' : 'text-[#FACC15]'} lg:w-4 lg:h-4`} fill="currentColor" />
+                                        <Tag size={18} className={`${isCouponOpen ? 'text-black' : 'text-[#FACC15]'} w-4 h-4 sm:w-5 sm:h-5 lg:w-4 lg:h-4`} fill="currentColor" />
                                         {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
                                     </button>
 
