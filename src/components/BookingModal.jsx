@@ -11,6 +11,7 @@ import { calculateBasePrice, calculateSurcharges, calculatePaymentFees } from '.
 import LocationInput from './LocationInput';
 import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
+import VehicleCarousel from './VehicleCarousel';
 const STEPS = [
     { id: 1, title: 'Route & Vehicle', icon: MapPin },
     { id: 2, title: 'Checkout & Pay', icon: CreditCard },
@@ -742,115 +743,22 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 transition={{ duration: 0.4, ease: "circOut" }}
                                                 className="grid grid-cols-1 gap-6 overflow-hidden"
                                             >
-                                                {pricingData.map((v) => {
-                                                    const totalPax = (formData.passengerCount?.adults || 0) + (formData.passengerCount?.children || 0);
-                                                    const totalLuggage = formData.passengerCount?.luggage || 0;
-                                                    const isFit = totalPax <= v.capacity && totalLuggage <= (v.luggage || 0);
-                                                    const isSelected = formData.vehicle === v.vehicleType;
-
-                                                    // If collapsed, only show the selected one
-                                                    if (!isVehicleExpanded && !isSelected) return null;
-                                                    
-                                                    // Filter out non-fit ones unless selected
-                                                    if (isVehicleExpanded && !isFit && !isSelected) return null;
-
-                                                    return (
-                                                        <button
-                                                             key={v.vehicleType}
-                                                             onClick={() => {
-                                                                 if (isFit) {
-                                                                     setFormData({ ...formData, vehicle: v.vehicleType });
-                                                                     if (isVehicleExpanded) setIsVehicleExpanded(false);
-                                                                 }
-                                                             }}
-                                                             className={`group/card relative w-full p-4 md:p-6 transition-all cursor-pointer overflow-hidden flex flex-col gap-4 text-left rounded-2xl
-                                                             ${isSelected
-                                                                     ? 'bg-[#FACC15] shadow-[0_15px_40px_rgba(250,204,21,0.2)] scale-[1.01]'
-                                                                     : 'bg-white dark:bg-white/[0.03] border border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.05] shadow-sm'}
-                                                             ${!isFit ? 'opacity-30 grayscale pointer-events-none' : 'active:scale-[0.98]'}
-                                                         `}
-                                                        >
-                                                            {/* Header info */}
-                                                            <div className="flex items-center gap-8">
-                                                                     {/* Image Box */}
-                                                                    <div className={`w-24 md:w-32 h-20 md:h-24 rounded-xl flex items-center justify-center p-3 shrink-0 overflow-hidden relative shadow-inner
-                                                                        ${isSelected ? 'bg-black/10' : 'bg-slate-100 dark:bg-black/40'}
-                                                                    `}>
-                                                                        {v.image ? (
-                                                                            <img src={v.image} alt={v.name} className="w-full h-full object-contain drop-shadow-md group-hover/card:scale-110 transition-transform duration-500" />
-                                                                        ) : (
-                                                                            <Car className="text-slate-300" size={32} />
-                                                                        )}
-                                                                        {v.hasAC !== false && (
-                                                                            <div className="absolute top-0 right-0 p-1">
-                                                                                <div className="text-[7px] font-black text-[#FACC15] dark:text-yellow-400">
-                                                                                    <Zap size={8} fill="currentColor" />
-                                                                                </div>
-                                                                            </div>
-                                                                        )}
-                                                                    </div>
-
-                                                                    {/* Title & Stats */}
-                                                                    <div className="flex-1 min-w-0">
-                                                                        <div className="flex items-center gap-3 mb-1">
-                                                                            <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none">Premium Service</span>
-                                                                            {isSelected && <div className="w-2 h-2 rounded-none bg-black animate-pulse border border-yellow-400"></div>}
-                                                                        </div>
-                                                                        <h4 className={`text-lg md:text-xl font-black uppercase tracking-tighter leading-tight mb-2 truncate
-                                                                            ${isSelected ? 'text-black' : 'text-[#1A1A1A] dark:text-white'}
-                                                                        `}>
-                                                                            {displayVehicleName(v.name)}
-                                                                        </h4>
-                                                                        
-                                                                        {/* Mini Price Block */}
-                                                                        <div className="flex flex-wrap items-center gap-3">
-                                                                            {!(distance > 0) && (
-                                                                                <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest italic">Starting</span>
-                                                                            )}
-                                                                            <div className="flex items-center gap-1.5">
-                                                                                {v.hasAC !== false && <div className={isSelected ? 'text-black/60' : 'text-[#FACC15]'}><Zap size={12} fill="currentColor" /></div>}
-                                                                                <span className={`text-2xl font-black tracking-tight italic
-                                                                                    ${isSelected ? 'text-black' : 'text-[#1A1A1A] dark:text-white'}
-                                                                                `}>
-                                                                                    Rs {(() => {
-                                                                                        const cardBaseTotal = calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
-                                                                                        return Math.round(cardBaseTotal).toLocaleString();
-                                                                                    })()}
-                                                                                </span>
-                                                                            </div>
-                                                                            <span className={`text-xs font-bold tracking-tight opacity-50
-                                                                                ${isSelected ? 'text-black' : 'text-slate-400'}
-                                                                            `}>
-                                                                                ~ $ {(() => {
-                                                                                    const cardBaseTotal = calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
-                                                                                    const rate = rates['USD'] || 0.0032;
-                                                                                    return (cardBaseTotal * rate).toFixed(2);
-                                                                                })()}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className="grid grid-cols-3 gap-3">
-                                                                    {[
-                                                                        { icon: Users, label: 'PAX', value: v.capacity },
-                                                                        { icon: Briefcase, label: 'BAGS', value: v.luggage || 0 },
-                                                                        { icon: ShoppingBag, label: 'HAND', value: v.handLuggage || 0 }
-                                                                    ].map((spec, i) => (
-                                                                        <div key={i} className={`flex flex-col items-center justify-center p-2 rounded-xl border transition-colors
-                                                                            ${isSelected ? 'bg-black/10 border-black/10' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/5'}
-                                                                        `}>
-                                                                            <spec.icon size={14} className={isSelected ? 'text-black/40' : 'text-slate-400'} strokeWidth={2} />
-                                                                            <span className={`text-[7px] font-bold tracking-widest uppercase mb-1
-                                                                                ${isSelected ? 'text-black/40' : 'text-slate-400'}
-                                                                            `}>{spec.label}</span>
-                                                                            <p className={`text-base font-black italic ${isSelected ? 'text-black' : 'text-black dark:text-white'}`}>{spec.value}</p>
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
-                                                        </button>
-                                                    );
-                                                })}
+                                                <VehicleCarousel 
+                                                    vehicles={pricingData.map(v => ({ 
+                                                        ...v, 
+                                                        calculatedTotal: calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations) 
+                                                    }))}
+                                                    selectedId={formData.vehicle}
+                                                    onSelect={(vehicleType) => {
+                                                        setFormData({ ...formData, vehicle: vehicleType });
+                                                    }}
+                                                    passengerCount={{ 
+                                                        adults: formData.passengerCount?.adults || 1, 
+                                                        children: formData.passengerCount?.children || 0,
+                                                        bags: (formData.passengerCount?.luggage || 0) + (formData.passengerCount?.handLuggage || 0) * 0.5,
+                                                        distance: distance
+                                                    }}
+                                                />
                                             </motion.div>
                                         </AnimatePresence>
                                     </div>
@@ -919,24 +827,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                     {/* Passenger & Luggage Section Removed as it's redundant with home page/widget info */}
 
-                                    <div className="space-y-4">
-                                        <div className="flex items-center justify-between p-6 bg-black dark:bg-white/5 border-4 border-black rounded-none shadow-[8px_8px_0px_0px_rgba(250,204,21,1)]">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 bg-[#FACC15] dark:bg-yellow-400 rounded-none border-2 border-black flex items-center justify-center text-black">
-                                                    <Navigation size={24} strokeWidth={3} />
-                                                </div>
-                                                <div>
-                                                    <p className="text-xs font-black text-white dark:text-white uppercase tracking-[0.2em] leading-none mb-2 italic">Total Trip Distance</p>
-                                                    <p className="text-[10px] font-black text-white/40 dark:text-slate-500 uppercase tracking-[0.3em] leading-none mt-1">Satellite Route Verified</p>
-                                                </div>
-                                            </div>
-                                            <div className="text-right">
-                                                <p className="text-3xl font-black text-[#FACC15] leading-none italic tracking-tighter">
-                                                    {distance.toFixed(1)} <span className="text-xs text-white/40 uppercase tracking-widest not-italic">KM</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
 
                                     {isOverCapacity && (
                                         <div className="p-4 bg-red-50 dark:bg-red-900/20 border-4 border-black rounded-none flex items-center gap-4 animate-pulse shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
@@ -1040,31 +930,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         <div className="h-px flex-1 bg-white/10"></div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    <div className="flex flex-wrap gap-2">
                                         {convertToAllCurrencies(totalPrice / (rates?.[currency] || 1)).map((c) => (
                                             <button
                                                 key={c.code}
                                                 type="button"
                                                 onClick={() => changeCurrency(c.code)}
-                                                className={`p-4 rounded-none border-4 transition-all flex flex-col gap-3 text-left cursor-pointer relative overflow-hidden group/curr ${currency === c.code
-                                                    ? 'bg-[#FACC15] border-black shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] scale-[1.05]'
-                                                    : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
+                                                className={`px-3 py-2 rounded-none border-2 transition-all flex items-center gap-2 text-left cursor-pointer group/curr ${currency === c.code
+                                                    ? 'bg-[#FACC15] border-black text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'
+                                                    : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10 text-slate-400 hover:text-white'
                                                     }`}
                                             >
-                                                <div className="flex items-center justify-between relative z-10 w-full text-[10px] font-black uppercase tracking-[0.2em]">
-                                                    <div className={`flex items-center gap-2 ${currency === c.code ? 'text-black' : 'text-slate-400 group-hover/curr:text-white transition-colors'}`}>
-                                                        <div className="w-6 h-6 rounded-none overflow-hidden shrink-0 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] bg-white p-0.5">
-                                                            <img src={c.flag} alt={c.code} className="w-full h-full object-cover rounded-none" />
-                                                        </div>
-                                                        {c.code}
-                                                    </div>
+                                                <div className="w-4 h-4 rounded-none overflow-hidden shrink-0 border border-black/20 bg-white p-px">
+                                                    <img src={c.flag} alt={c.code} className="w-full h-full object-cover rounded-none" />
                                                 </div>
-                                                <div className={`text-xl font-black relative z-10 tracking-tighter flex items-baseline gap-1 mt-1 italic ${currency === c.code ? 'text-black' : 'text-white'}`}>
-                                                    <span className={`text-[10px] font-black not-italic ${currency === c.code ? 'text-black/60' : 'text-slate-600'}`}>
-                                                        {c.symbol}
-                                                    </span>
-                                                    <span>{c.value.toLocaleString()}</span>
-                                                </div>
+                                                <span className="text-[9px] font-black uppercase tracking-widest">{c.code}</span>
                                             </button>
                                         ))}
                                     </div>
@@ -1115,9 +995,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <ShieldCheck size={14} />
                                     <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-900">Taxes Included • Tolls Excluded</span>
                                 </div>
-                                <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest bg-white px-3 py-1 rounded-full border border-slate-200">
-                                    Highway Ticket paid by customer at counter
-                                </p>
                             </div>
                         </div>
                     )}
@@ -1408,7 +1285,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                      }
                                  }}
                                  disabled={isOverCapacity}
-                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-3 md:py-5 bg-black dark:bg-[#FACC15] text-white dark:text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-slate-800 dark:hover:scale-105 transition-all outline-none border-4 border-black disabled:opacity-30 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[220px] italic active:scale-95"
+                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-3 md:py-5 bg-[#FACC15] text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-[#EAB308] hover:scale-105 transition-all outline-none border-4 border-black disabled:opacity-30 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[220px] italic active:scale-95"
                             >
                                 Review & Checkout <ChevronRight size={16} className="md:w-4 md:h-4 group-hover:translate-x-2 transition-transform" />
                             </button>
