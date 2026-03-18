@@ -69,7 +69,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
             {/* pb-20 gives extra bottom room so the overflowing car image isn't clipped */}
             <div
                 ref={scrollRef}
-                className="flex gap-8 overflow-x-auto pb-20 px-2 snap-x snap-mandatory scrollbar-hide w-full"
+                className="flex gap-8 overflow-x-auto pb-20 px-2 snap-x snap-mandatory scrollbar-hide w-full items-stretch"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {vehicles.map((vehicle, index) => {
@@ -81,13 +81,13 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                         <div
                             key={vehicle._id || vehicle.vehicleType}
                             className={`
-                                relative flex-shrink-0 w-[300px] md:w-[380px] snap-center transition-all duration-500 group/card
+                                relative flex-shrink-0 w-[300px] md:w-[380px] snap-center transition-all duration-500 group/card flex flex-col
                                 ${isSelected
-                                    ? '-translate-y-6 shadow-[0_32px_64px_rgba(0,0,0,0.22)]'
-                                    : 'hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,0,0,0.10)] shadow-[0_4px_16px_rgba(0,0,0,0.06)]'}
+                                    ? 'shadow-[0_32px_64px_rgba(0,0,0,0.22)]'
+                                    : 'hover:shadow-[0_15px_30px_rgba(0,0,0,0.10)] shadow-[0_4px_16px_rgba(0,0,0,0.06)]'}
                                 ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
                                 bg-white dark:bg-[#1a1a1a]
-                                overflow-visible
+                                overflow-visible h-full
                             `}
                             onClick={() => suitable && onSelect(vehicle.vehicleType)}
                         >
@@ -107,7 +107,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                             )}
 
                             {/* ───── Card top: price + name area ───── */}
-                            <div className="p-6 md:p-8 pb-4 relative flex flex-col items-center">
+                            <div className="p-6 md:p-8 pb-4 relative flex flex-col items-center flex-1">
 
                                 {/* Faint background index number */}
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[160px] font-black text-black/[0.03] dark:text-white/[0.02] italic tracking-tighter pointer-events-none select-none">
@@ -123,12 +123,12 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                     <Info size={16} strokeWidth={2.5} />
                                 </button>
 
-                                <h4 className="text-2xl font-black text-[#1A1A1A] dark:text-white uppercase tracking-tighter mb-4 text-center relative z-10">
+                                <h4 className="text-2xl font-black text-[#1A1A1A] dark:text-white uppercase tracking-tighter mb-4 text-center relative z-10 min-h-[64px] flex items-center justify-center">
                                     {displayName(vehicle.name)}
                                 </h4>
 
                                 {vehicle.calculatedTotal >= 0 && (
-                                    <div className="mb-2 text-center relative z-10">
+                                    <div className="text-center relative z-10 min-h-[80px] flex flex-col justify-end">
                                         {!(passengerCount.distance > 0) && (
                                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Starting from</p>
                                         )}
@@ -162,7 +162,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                 )}
 
                                 {/* ───── Vehicle image — now in flow to stay below details ───── */}
-                                <div className="w-full flex justify-center py-2 relative z-10 mt-2">
+                                <div className="w-full flex justify-center items-end py-2 relative z-10 mt-auto min-h-[160px] md:min-h-[200px]">
                                     <img
                                         src={vehicle.image}
                                         alt={vehicle.name}
@@ -178,10 +178,10 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                             </div>
 
                             {/* Bottom Accent Bar */}
-                            <div className={`h-3 w-full transition-colors duration-500 relative z-30 ${isSelected ? 'bg-[#FACC15]' : 'bg-black dark:bg-[#FACC15]/40'}`}></div>
+                            <div className={`h-3 w-full transition-colors duration-500 relative z-30 shrink-0 ${isSelected ? 'bg-[#FACC15]' : 'bg-black dark:bg-[#FACC15]/40'}`}></div>
 
                             {/* Capacity Stats - Relocated below everything */}
-                            <div className="px-5 md:px-8 pb-10 mt-6 relative z-40">
+                            <div className="px-5 md:px-8 pb-10 mt-6 relative z-40 shrink-0">
                                 <div className="grid grid-cols-3 gap-2 md:gap-3">
                                     {[
                                         { icon: Users, label: 'PAX', value: vehicle.capacity || 4 },
