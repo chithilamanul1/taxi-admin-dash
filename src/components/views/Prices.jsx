@@ -229,10 +229,15 @@ const Prices = ({ initialDestination }) => {
     const [arrivalTime, setArrivalTime] = useState('')
     const [isVehicleListExpanded, setIsVehicleListExpanded] = useState(true)
     const [dynamicDestinations, setDynamicDestinations] = useState([])
+    const [pricingSettings, setPricingSettings] = useState({ nameBoardPrice: 2000 })
 
     useEffect(() => {
         fetch('/api/destinations').then(res => res.json()).then(data => {
             if (data.success) setDynamicDestinations(data.data)
+        }).catch(err => console.error(err))
+
+        fetch('/api/pricing-settings').then(res => res.json()).then(data => {
+            if (data.success && data.data) setPricingSettings(data.data)
         }).catch(err => console.error(err))
     }, [])
 
@@ -523,10 +528,10 @@ const Prices = ({ initialDestination }) => {
                         </div>
                         <div className="flex flex-col items-end gap-3">
                             <div className="flex flex-col items-end">
-                                <span className="text-emerald-600 font-bold text-lg">+ Rs 2,000.00</span>
+                                <span className="text-emerald-600 font-bold text-lg">+ Rs {(pricingSettings?.nameBoardPrice || 2000).toLocaleString()}</span>
                                 {rates?.USD && (
                                     <span className="text-xs text-gray-400 font-medium">
-                                        (≈ ${(2000 * rates.USD).toFixed(2)} USD)
+                                        (≈ ${((pricingSettings?.nameBoardPrice || 2000) * rates.USD).toFixed(2)} USD)
                                     </span>
                                 )}
                             </div>
@@ -779,7 +784,7 @@ const Prices = ({ initialDestination }) => {
 
                     {(() => {
                         const baseTotal = calculateBasePrice(distance, { ...VEHICLE_PRICING[vehicle], vehicleType: vehicle }, tripType, pickupSearch, dropoffSearch, [...staticDestinations, ...dynamicDestinations]);
-                        const totalLKR = baseTotal + (boardShow ? 2000 : 0)
+                        const totalLKR = baseTotal + (boardShow ? (pricingSettings?.nameBoardPrice || 2000) : 0)
 
                         const currentSymbol = SUPPORTED_CURRENCIES.find(c => c.code === currency)?.symbol || 'Rs'
                         const rate = rates?.[currency] || 1
@@ -889,7 +894,7 @@ const Prices = ({ initialDestination }) => {
                                             date: date,
                                             time: time,
                                             email: email || 'Not Provided',
-                                            whatsapp: whatsapp || 'Not Provided',
+                                            whatsappNumber: whatsapp || 'Not Provided',
                                             payment: paymentMethod.toUpperCase(),
                                             boardShow: boardShow ? 'YES' : 'NO',
                                             boardDetails: boardShow ? "Name: " + boardName + ", Flight: " + flightNumber + ", Arrival: " + arrivalDate + " @ " + arrivalTime : 'N/A',
@@ -900,7 +905,7 @@ const Prices = ({ initialDestination }) => {
                                         // 1. Open WhatsApp Immediately (User Experience Priority)
                                         const usdValue = rates?.USD ? Math.ceil(totalLKR * rates.USD) : 0;
                                         const usdText = usdValue ? " (~$" + usdValue + ")" : ''
-                                        const boardText = boardShow ? "%0A---%0ABoard Show: YES (+Rs 2000)%0AName: " + boardName + "%0AFlight: " + flightNumber + "%0AArrival: " + arrivalDate + " @ " + arrivalTime : ''
+                                        const boardText = boardShow ? "%0A---%0ABoard Show: YES (+Rs " + (pricingSettings?.nameBoardPrice || 2000).toLocaleString() + ")%0AName: " + boardName + "%0AFlight: " + flightNumber + "%0AArrival: " + arrivalDate + " @ " + arrivalTime : ''
                                         const emailText = email ? "%0AEmail: " + email : ''
                                         const waText = whatsapp ? "%0AWhatsApp: " + whatsapp : ''
                                         const msg = "Booking Request: %0AFrom: " + pickup.name + "%0ATo: " + dropoff.name + "%0ADistance: " + distance.toFixed(1) + "km%0AVehicle: " + VEHICLE_PRICING[vehicle].name + "%0ATrip: " + tripType + "%0ADate: " + date + "%0ATime: " + time + emailText + waText + "%0APayment: " + paymentMethod.toUpperCase() + boardText + "%0ATotal: Rs " + totalLKR.toLocaleString() + usdText
@@ -917,8 +922,8 @@ const Prices = ({ initialDestination }) => {
                                                     dropoffLocation: { address: dropoff.name, lat: dropoff.lat, lng: dropoff.lon },
                                                     vehicleType: vehicle,
                                                     distanceKm: distance,
-                                                    totalPrice: total,
-                                                    guestPhone: whatsapp,
+                                                    totalPrice: totalLKR, // Corrected total logic
+                                                    whatsappNumber: whatsapp,
                                                     date: date,
                                                     time: time,
                                                     status: 'pending'
@@ -946,7 +951,7 @@ const Prices = ({ initialDestination }) => {
                                                             { name: "Contact", value: "Email: " + (email || 'N/A') + "\nWA: " + (whatsapp || 'N/A'), inline: false },
                                                             { name: "Date & Time", value: date + " @ " + time, inline: true },
                                                             { name: "Payment", value: paymentMethod.toUpperCase(), inline: true },
-                                                            { name: "Airport Greeting", value: boardShow ? "YES (+Rs 2000)\nName: " + boardName + "\nFlight: " + flightNumber + "\nArr: " + arrivalDate + " @ " + arrivalTime : "NO", inline: false }
+                                                            { name: "Airport Greeting", value: boardShow ? "YES (+Rs " + (pricingSettings?.nameBoardPrice || 2000).toLocaleString() + ")\nName: " + boardName + "\nFlight: " + flightNumber + "\nArr: " + arrivalDate + " @ " + arrivalTime : "NO", inline: false }
                                                         ]
                                                     }]
                                                 })

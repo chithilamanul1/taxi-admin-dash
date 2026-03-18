@@ -107,7 +107,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                             )}
 
                             {/* ───── Card top: price + name area ───── */}
-                            <div className="p-6 md:p-8 pb-4 relative flex flex-col items-center flex-1">
+                            <div className="p-6 md:p-8 pb-4 relative flex flex-col items-center flex-1 h-full">
 
                                 {/* Faint background index number */}
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[160px] font-black text-black/[0.03] dark:text-white/[0.02] italic tracking-tighter pointer-events-none select-none">
@@ -167,7 +167,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                         src={vehicle.image}
                                         alt={vehicle.name}
                                         className={`
-                                            w-[92%] h-auto object-contain
+                                            w-[92%] h-[160px] md:h-[200px] object-contain
                                             drop-shadow-[0_15px_30px_rgba(0,0,0,0.15)]
                                             transition-transform duration-700
                                             ${isSelected ? 'scale-110' : 'group-hover/card:scale-105'}
@@ -192,8 +192,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                             bg-white dark:bg-slate-800 border-2 border-black p-3 
                                             flex flex-col items-center justify-center 
                                             transition-all duration-300 
-                                            shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_#FACC15]
-                                            ${isSelected ? 'translate-x-[-2px] translate-y-[-2px] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_#FACC15]' : 'group-hover/card:translate-x-[-1px] group-hover/card:translate-y-[-1px]'}
+                                            ${isSelected ? 'shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_#FACC15]' : 'shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_#FACC15]'}
                                         `}>
                                             <item.icon size={18} className="text-emerald-900 dark:text-[#FACC15] mb-1" strokeWidth={3} />
                                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{item.label}</span>
@@ -202,6 +201,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                     ))}
                                 </div>
                             </div>
+
 
                         </div>
                     );

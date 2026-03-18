@@ -450,7 +450,7 @@ export async function sendBookingConfirmation(booking) {
             </tr>
             <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Whatsapp No</td>
-                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.whatsapp || booking.guestPhone || 'N/A'}</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.whatsappNumber || booking.guestPhone || 'N/A'}</td>
             </tr>
             <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">NIC / Passport No</td>
@@ -569,8 +569,13 @@ export async function sendBookingConfirmation(booking) {
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 10px;">
              <tr>
                 <td style="text-align: center;">
-                    <a href="https://wa.me/${booking.guestPhone?.replace(/[^0-9]/g, '')}" style="display: inline-block; background-color: #25D366; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 13px;">
-                        Connect via WhatsApp
+                    <a href="https://wa.me/${(() => {
+                        const phone = booking.whatsappNumber || booking.guestPhone || '';
+                        let digits = phone.replace(/[^0-9]/g, '');
+                        if (digits.startsWith('0')) digits = '94' + digits.substring(1);
+                        return digits || '94722885885';
+                    })()}" style="display: inline-block; background-color: #25D366; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 13px;">
+                        Connect The Customer
                     </a>
                 </td>
             </tr>

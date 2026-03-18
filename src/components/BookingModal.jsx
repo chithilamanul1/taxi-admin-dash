@@ -200,7 +200,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
             const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType, formData.pickup, formData.dropoff, destinations);
             const surcharges = calculateSurcharges({
-                hasNameBoard: formData.hasNameBoard
+                hasNameBoard: formData.hasNameBoard,
+                nameBoardPrice: pricingSettings?.nameBoardPrice
             }, vehicleData);
 
             // Payment Method Surcharges per User Request

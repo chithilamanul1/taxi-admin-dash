@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const bookingSchema = new mongoose.Schema({
     customer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Optional if guest booking
     guestPhone: { type: String }, // For guest checkout
+    whatsappNumber: { type: String }, // Customer WhatsApp number
     pickupLocation: {
         address: { type: String, required: true },
         lat: { type: Number },
