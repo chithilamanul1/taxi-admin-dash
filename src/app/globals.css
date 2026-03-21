@@ -37,7 +37,7 @@ body {
 
 @layer components {
     .premium-box {
-        @apply bg-white dark:bg-[#111] rounded-none border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)];
+        @apply bg-white dark:bg-[#111] rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm;
     }
 
     .yellow-badge {

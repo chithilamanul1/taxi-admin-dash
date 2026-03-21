@@ -522,9 +522,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
     return (
         <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-3 sm:px-4">
-            {/* Tab Navigation - Boxy Style */}
-            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-4 border-black transition-all overflow-hidden" role="tablist">
-                <div className="grid grid-cols-4 w-full sm:w-auto divide-x-4 divide-black">
+            {/* Tab Navigation - Clean Style */}
+            <div className="flex bg-white dark:bg-[#1a1a1a] rounded-xl w-full sm:w-fit mx-auto lg:mx-0 mb-8 shadow-sm border border-slate-200 dark:border-slate-800 transition-all overflow-hidden" role="tablist">
+                <div className="grid grid-cols-4 w-full sm:w-auto divide-x divide-slate-100 dark:divide-slate-800">
                     {[
                         { id: 'pickup', label: 'Airport Pickup', icon: PlaneTakeoff },
                         { id: 'drop', label: 'Airport Drop', icon: PlaneLanding },
@@ -550,18 +550,18 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 </div>
             </div>
 
-            {/* Widget Main Content - Boxy Style */}
-            <div className="bg-white dark:bg-[#111] border-4 border-black p-4 md:p-12 animate-slide-up relative z-10 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] rounded-none w-full box-border">
+            {/* Widget Main Content - Clean Style */}
+            <div className="bg-white dark:bg-[#1a1a1a] border border-slate-200 dark:border-slate-800 p-4 md:p-12 animate-slide-up relative z-10 shadow-xl rounded-3xl w-full box-border">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
                         <div className="flex-1 text-center lg:text-left">
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8">
-                                <div className="flex bg-slate-100 dark:bg-white/5 rounded-none border-4 border-black w-full sm:w-auto overflow-hidden">
+                                <div className="flex bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10 w-full sm:w-auto overflow-hidden p-1">
                                     <button 
                                         onClick={() => setTripType('one-way')} 
                                         aria-label="One Way Trip" 
-                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-3 rounded-none text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all ${tripType === 'one-way' ? 'bg-black text-white' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}`}
+                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all ${tripType === 'one-way' ? 'bg-black dark:bg-amber-400 text-white dark:text-black shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}`}
                                     >
                                         One Way
                                     </button>
@@ -569,14 +569,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         onClick={() => (activeTab !== 'pickup' && activeTab !== 'drop') && setTripType('round-trip')}
                                         disabled={activeTab === 'pickup' || activeTab === 'drop'}
                                         aria-label="Round Trip"
-                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-3 rounded-none text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all relative flex items-center justify-center gap-1 sm:gap-2
-                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-black text-white' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}
+                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all relative flex items-center justify-center gap-1 sm:gap-2
+                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-black dark:bg-amber-400 text-white dark:text-black shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}
                                             ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-40 cursor-not-allowed' : ''}
                                         `}
                                     >
                                         Round Trip
                                         {(activeTab === 'pickup' || activeTab === 'drop') && (
-                                            <span className="w-4 h-4 bg-emerald-500 dark:bg-[#FACC15] flex items-center justify-center text-[8px] text-white dark:text-black border border-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]">🔒</span>
+                                            <span className="w-4 h-4 bg-emerald-500 dark:bg-[#FACC15] flex items-center justify-center text-[8px] text-white dark:text-black rounded-full shadow-sm">🔒</span>
                                         )}
                                     </button>
                                 </div>
@@ -584,14 +584,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex items-center gap-2 w-full sm:w-auto">
                                     {/* Currency Selector */}
                                     <div className="relative group z-[110]">
-                                        <button className="flex items-center gap-2 bg-white dark:bg-black border-4 border-black rounded-none px-4 py-3 text-xs font-black text-black dark:text-white hover:bg-[#FACC15] transition-all">
-                                            <div className="w-5 h-5 overflow-hidden border border-black/10">
+                                        <button className="flex items-center gap-2 bg-white dark:bg-[#1a1a1a] border border-slate-200 dark:border-white/20 rounded-xl px-4 py-3 text-xs font-black text-black dark:text-white hover:bg-amber-50 dark:hover:bg-white/10 transition-all">
+                                            <div className="w-5 h-5 overflow-hidden rounded-full border border-black/10">
                                                 <img src={SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag} alt={currency} className="w-full h-full object-cover scale-150" />
                                             </div>
                                             <span className="uppercase">{currency}</span>
                                             <ChevronDown size={14} className="opacity-50" />
                                         </button>
-                                        <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-[#111] rounded-none shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-4 border-black overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
+                                        <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-[#1a1a1a] rounded-xl shadow-lg border border-slate-200 dark:border-white/20 overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
                                             <div className="py-2">
                                                 {SUPPORTED_CURRENCIES.map(c => (
                                                     <button
@@ -609,7 +609,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                     </div>
 
-                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-black text-[10px] md:text-xs font-black uppercase tracking-widest hover:translate-y-[-2px] active:translate-y-0 transition-all flex items-center gap-2 bg-[#FACC15] px-4 md:px-6 py-2.5 md:py-3 rounded-none border-4 border-black justify-center whitespace-nowrap shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-black text-[10px] md:text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 bg-[#FACC15] px-4 md:px-6 py-2.5 md:py-3 rounded-xl border border-transparent shadow-sm hover:shadow-md justify-center whitespace-nowrap">
                                         {isLocating ? <Loader2 size={14} className="animate-spin" /> : <Zap size={14} className="fill-current" />}
                                         <span className="hidden sm:inline">Auto Detect</span>
                                         <span className="sm:hidden uppercase">Detect</span>
@@ -635,7 +635,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 {/* Waypoints List */}
                                 {waypoints.map((wp, idx) => (
-                                    <div key={idx} className="relative group animate-slide-up bg-slate-50 dark:bg-white/5 rounded-none border-4 border-black p-1 flex items-center overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                    <div key={idx} className="relative group animate-slide-up bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10 p-1 flex items-center overflow-hidden shadow-sm">
                                         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-black/20 dark:text-white/20 pointer-events-none z-10">
                                             <Navigation size={18} />
                                         </div>
@@ -643,19 +643,19 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             type="text"
                                             readOnly
                                             value={wp.name}
-                                            className="flex-1 min-w-0 px-2 sm:pl-12 sm:pr-4 h-14 bg-transparent border-none text-[10px] sm:text-sm font-black text-black dark:text-white outline-none truncate"
+                                            className="flex-1 min-w-0 px-2 sm:pl-12 sm:pr-4 h-12 bg-transparent border-none text-[10px] sm:text-sm font-black text-black dark:text-white outline-none truncate"
                                         />
 
                                         <div className="flex flex-col items-center border-l border-black/5 dark:border-white/10 px-1 sm:px-3 min-w-[60px] sm:min-w-[100px] justify-center">
                                             <div className="flex items-center gap-2">
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: Math.max(0, (w.waitingTime || 0) - 1) } : w)); }}
-                                                    className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-white dark:bg-white/10 text-black dark:text-white text-[10px] sm:text-xs font-black shadow-sm hover:bg-slate-100 transition-colors border sm:border-2 border-black"
+                                                    className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-lg bg-white dark:bg-white/10 text-black dark:text-white text-[10px] sm:text-xs font-black shadow-sm hover:bg-slate-100 transition-colors border border-slate-200 dark:border-transparent"
                                                 >−</button>
                                                 <span className="text-[10px] sm:text-sm font-black text-black dark:text-white w-4 sm:w-6 text-center">{wp.waitingTime || 0}h</span>
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: (w.waitingTime || 0) + 1 } : w)); }}
-                                                    className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-black dark:bg-yellow-400 text-white dark:text-black text-[10px] sm:text-xs font-black shadow-sm hover:bg-slate-800 transition-colors border sm:border-2 border-black"
+                                                    className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-lg bg-black dark:bg-yellow-400 text-white dark:text-black text-[10px] sm:text-xs font-black shadow-sm hover:bg-slate-800 transition-colors border border-transparent"
                                                 >+</button>
                                             </div>
                                             <span className="text-[9px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider mt-1">Wait Time</span>
@@ -678,7 +678,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <>
                                         {/* "Add Stop" Button - Aligned with icons */}
                                         {waypointSearches.length === 0 && (
-                                            <div className="flex justify-start pl-14 py-1">
+                                            <div className="flex justify-start pl-12 py-1">
                                                 <button
                                                     onClick={() => setWaypointSearches([{ active: true }])}
                                                     aria-label="Add Stop"
@@ -743,7 +743,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex-1 space-y-4">
                                     <button
                                         onClick={() => setIsCouponOpen(!isCouponOpen)}
-                                        className={`flex items-center gap-3 text-[10px] lg:text-[9px] font-black h-full min-h-[4rem] sm:min-h-[5rem] lg:min-h-[3.5rem] transition-all px-4 sm:px-8 lg:px-6 py-3 sm:py-4 lg:py-2 rounded-none w-full justify-center uppercase tracking-[0.2em] lg:tracking-[0.15em] border-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] lg:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${isCouponOpen ? 'bg-[#FACC15] text-black border-black translate-y-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] lg:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-black text-white border-black hover:translate-y-[-2px]'}`}
+                                        className={`flex items-center gap-3 text-[10px] lg:text-[9px] font-black h-full min-h-[4rem] sm:min-h-[5rem] lg:min-h-[3.5rem] transition-all px-4 sm:px-8 lg:px-6 py-3 sm:py-4 lg:py-2 rounded-xl w-full justify-center uppercase tracking-[0.2em] lg:tracking-[0.15em] border shadow-sm ${isCouponOpen ? 'bg-amber-100 dark:bg-amber-400/20 text-black dark:text-amber-400 border-amber-200 dark:border-amber-400/30' : 'bg-black text-white border-transparent hover:bg-slate-900'}`}
                                     >
                                         <Tag size={18} className={`${isCouponOpen ? 'text-black' : 'text-[#FACC15]'} w-4 h-4 sm:w-5 sm:h-5 lg:w-4 lg:h-4`} fill="currentColor" />
                                         {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
@@ -778,7 +778,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 placeholder="ENTER COUPON CODE"
                                                 value={couponCode}
                                                 onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                                className="w-full h-full pl-14 pr-24 rounded-none bg-white dark:bg-white/5 border-4 border-black text-base font-black outline-none transition-all uppercase text-black dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                                                className="w-full h-full pl-14 pr-24 rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/20 text-base font-black outline-none transition-all uppercase text-black dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 tracking-widest shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20"
                                                 aria-label="Coupon code"
                                             />
                                             <button
@@ -786,7 +786,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     /* ... same logic ... */
                                                 }}
                                                 aria-label="Apply Coupon"
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 bg-black text-white px-4 py-2 rounded-none border-2 border-black text-xs font-bold hover:bg-[#FACC15] hover:text-black transition-all"
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 bg-black text-white px-4 py-2 rounded-lg border border-transparent text-xs font-bold hover:bg-[#FACC15] hover:text-black transition-all"
                                             >
                                                 Apply
                                             </button>
@@ -821,7 +821,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                             setAppliedOffers(prev => [...prev, couponOffer]);
                                                         }
                                                     }}
-                                                    className={`snap-start min-w-[280px] sm:min-w-[320px] group relative flex items-center justify-between gap-4 p-5 rounded-none border-4 border-dashed transition-all hover:shadow-2xl text-left flex-shrink-0 ${appliedOffers.some(o => o.name === c.code) ? 'border-emerald-500 bg-emerald-50/80 shadow-[8px_8px_0px_0px_rgba(16,185,129,0.2)]' : 'border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]'}`}
+                                                    className={`snap-start min-w-[280px] sm:min-w-[320px] group relative flex items-center justify-between gap-4 p-5 rounded-2xl border transition-all hover:shadow-lg text-left flex-shrink-0 ${appliedOffers.some(o => o.name === c.code) ? 'border-amber-500 bg-amber-50 shadow-md ring-2 ring-amber-400/20' : 'border-slate-200 bg-white shadow-sm'}`}
                                                 >
                                                     <div className="flex items-center gap-4 min-w-0">
                                                         <div className="w-14 h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 flex-shrink-0 flex items-center justify-center overflow-hidden border border-emerald-200/50">
@@ -872,12 +872,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     { id: 'luggage', label: 'Luggage' },
                                     { id: 'handLuggage', label: 'Hand Luggage' }
                                 ].map(c => (
-                                    <div key={c.id} className="bg-white dark:bg-white/5 border-4 border-black p-3 md:p-4 rounded-none flex flex-col items-center justify-center transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                    <div key={c.id} className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 p-3 md:p-4 rounded-2xl flex flex-col items-center justify-center transition-all shadow-sm">
                                         <span className="text-[9px] md:text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2 md:mb-3">{c.label}</span>
                                         <div className="flex items-center gap-2 md:gap-4">
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, (Number(p[c.id]) || 0) - 1) }))}
-                                                className="w-8 h-8 md:w-10 md:h-10 rounded-none bg-white dark:bg-white/10 border-2 border-black flex items-center justify-center hover:bg-slate-100 transition-all text-black dark:text-white"
+                                                className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-slate-50 dark:bg-white/10 border border-slate-200 dark:border-white/20 flex items-center justify-center hover:bg-slate-100 transition-all text-black dark:text-white"
                                                 aria-label={`Decrease ${c.label}`}
                                             >
                                                 <Minus size={14} strokeWidth={3} />
@@ -885,7 +885,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             <span className="font-black text-xl md:text-2xl text-black dark:text-white min-w-[24px] md:min-w-[28px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))}
-                                                className="w-8 h-8 md:w-10 md:h-10 rounded-none bg-black dark:bg-[#FACC15] border-2 border-black flex items-center justify-center hover:translate-y-[-2px] active:translate-y-0 transition-all text-white dark:text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                                className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-black dark:bg-[#FACC15] border border-transparent flex items-center justify-center shadow-sm hover:shadow transition-all text-white dark:text-black"
                                                 aria-label={`Increase ${c.label}`}
                                             >
                                                 <Plus size={14} strokeWidth={3} />
@@ -900,11 +900,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             <div className="">
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
-                                    className="w-full h-24 px-6 flex items-center justify-between bg-white dark:bg-white/5 border-4 border-black rounded-none hover:bg-slate-50 transition-all group overflow-hidden relative shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mt-4"
+                                    className="w-full h-24 px-6 flex items-center justify-between bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl hover:shadow-md transition-all group overflow-hidden relative shadow-sm mt-4"
                                     aria-label="Select Vehicle"
                                 >
                                     <div className="flex items-center gap-6">
-                                        <div className="w-16 h-14 bg-white dark:bg-white/10 rounded-none flex items-center justify-center p-1 border-2 border-black">
+                                        <div className="w-16 h-14 bg-slate-50 dark:bg-white/10 rounded-xl flex items-center justify-center p-1 border border-slate-200 dark:border-transparent">
                                             {vehiclePricing[vehicle]?.image ? (
                                                 <div className="relative w-full h-full">
                                                     <Image
@@ -928,7 +928,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="w-10 h-10 rounded-none bg-black dark:bg-[#FACC15] text-white dark:text-black flex items-center justify-center group-hover:scale-110 transition-transform border-2 border-black">
+                                    <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-[#FACC15]/20 text-slate-500 dark:text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <ChevronDown size={20} />
                                     </div>
                                 </button>
@@ -1052,11 +1052,16 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         )}
                                     </div>
                                 </div>
-                                <div className="flex flex-col sm:flex-row gap-6 pt-6">
+                                
+                                <div className="pt-4 text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-2">
+                                    * Note: Highway tickets are not included and must be paid by the customer.
+                                </div>
+
+                                <div className="flex flex-col sm:flex-row gap-6 pt-4">
                                     <button
                                         onClick={handleBook}
                                         disabled={!distance}
-                                        className="w-full bg-[#FACC15] text-black h-20 md:h-24 rounded-none border-4 border-black font-black uppercase italic tracking-[0.2em] text-lg md:text-xl hover:translate-y-[-4px] active:translate-y-0 shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center"
+                                        className="w-full bg-[#FACC15] text-black h-20 md:h-24 rounded-2xl border border-transparent font-black uppercase italic tracking-[0.2em] text-lg md:text-xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center"
                                     >
                                         {isLoadingPricing ? (
                                             <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin"></div>

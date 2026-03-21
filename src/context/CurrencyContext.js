@@ -85,7 +85,14 @@ export function CurrencyProvider({ children }) {
     const convertPrice = (lkrAmount) => {
         if (currency === 'LKR') return { value: Math.round(lkrAmount), symbol: 'Rs', code: 'LKR' };
 
-        const rate = rates[currency];
+        let rate = rates[currency];
+        
+        // Fallback rates if API fails to load or populate
+        if (!rate) {
+            const staticRates = { 'USD': 0.0032, 'EUR': 0.003, 'GBP': 0.0026, 'INR': 0.27 };
+            rate = staticRates[currency];
+        }
+
         if (!rate) return { value: Math.round(lkrAmount), symbol: 'Rs', code: 'LKR' };
 
         const convertedRaw = lkrAmount * rate;

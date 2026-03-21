@@ -107,54 +107,73 @@ export default function LocationSearchInput({
         setInputValue('')
         setSuggestions([])
         onSelect({ address: '', lat: null, lon: null })
+        if (inputRef.current) {
+            inputRef.current.focus() // Focus input after clearing
+        }
+    }
+
+    const handleFocus = () => {
+        setIsFocused(true)
+        if (inputValue && suggestions.length > 0) {
+            setIsOpen(true)
+        }
+    }
+
+    const handleBlur = () => {
+        // Delay setting isFocused to false to allow click on suggestion
+        setTimeout(() => {
+            if (!wrapperRef.current.contains(document.activeElement)) {
+                setIsFocused(false)
+                setIsOpen(false)
+            }
+        }, 100)
     }
 
     return (
         <div className="relative space-y-2" ref={wrapperRef}>
             {label && <label className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest pl-2">{label}</label>}
             <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                    <Icon size={20} />
+                {/* Icon - Clean Style */}
+                <div className={`absolute left-5 top-1/2 -translate-y-1/2 transition-colors z-10 ${isFocused ? 'text-amber-500' : 'text-slate-400'}`}>
+                    <div className={`p-2 rounded-lg border border-transparent transition-all ${isFocused ? 'bg-amber-50' : 'bg-transparent'}`}>
+                        <Icon size={20} strokeWidth={3} />
+                    </div>
                 </div>
+
+                {/* Input */}
                 <input
+                    ref={inputRef}
                     type="text"
                     value={inputValue}
                     onChange={handleInputChange}
-                    onFocus={() => inputValue && suggestions.length > 0 && setIsOpen(true)}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                    disabled={!googleLoaded} // Disable input if Google Maps not loaded
                     placeholder={googleLoaded ? placeholder : 'Loading maps...'}
                     required={required}
-                    className="w-full h-12 md:h-14 bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-200 dark:border-emerald-800/50 pl-12 pr-10 rounded-2xl outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-600/20 transition-all font-bold text-sm text-emerald-900 dark:text-white truncate placeholder:text-emerald-900/40 dark:placeholder:text-emerald-400/40"
+                    className={`w-full pl-20 pr-14 h-14 rounded-xl text-base sm:text-lg font-bold bg-white dark:bg-[#1a1a1a] border transition-all outline-none text-black dark:text-white uppercase tracking-widest italic
+                    ${isFocused && googleLoaded ? 'border-amber-400 dark:border-yellow-400 shadow-sm -translate-y-0.5' : 'border-slate-200 dark:border-white/20'}
+                    ${!googleLoaded ? 'cursor-not-allowed opacity-75 bg-slate-50 dark:bg-white/5 grayscale-[0.5]' : 'hover:border-amber-400 dark:hover:border-white/40'}`}
                 />
+
+                {/* Loading Spinner */}
                 {loading && (
                     <div className="absolute right-10 top-1/2 -translate-y-1/2">
                         <Loader2 size={16} className="animate-spin text-emerald-600" />
                     </div>
                 )}
-                {inputValue && !loading && (
-                    <button type="button" onClick={clearInput} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500">
-                        <X size={16} />
+
+                {/* Clear Button */}
+                {inputValue && !loading && !(!googleLoaded) && ( // Show clear button if input has value, not loading, and not disabled
+                    <button
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); clearInput(); }}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-black dark:hover:text-white transition-colors bg-white dark:bg-[#1a1a1a]"
+                    >
+                        <X size={16} strokeWidth={3} />
                     </button>
                 )}
             </div>
 
-            {isOpen && suggestions.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-emerald-900/10 dark:border-white/10 z-50 overflow-hidden max-h-60 overflow-y-auto custom-scrollbar">
-                    {suggestions.map((item) => (
-                        <button
-                            key={item.place_id}
-                            type="button"
-                            onClick={() => handleSelect(item)}
-                            className="w-full text-left px-4 py-3 hover:bg-emerald-50 dark:hover:bg-white/5 border-b border-gray-100 dark:border-white/5 last:border-0 transition-colors flex items-start gap-3"
-                        >
-                            <MapPin size={16} className="text-emerald-600 mt-0.5 shrink-0" />
-                            <div className="min-w-0">
-                                <span className="font-bold text-emerald-900 dark:text-white block truncate">
-                                    {item.structured_formatting.main_text}
-                                </span>
-                                <span className="text-xs text-slate-500 dark:text-slate-400 block truncate">
-                                    {item.description}
-                                </span>
-                            </div>
                         </button>
                     ))}
                     <div className="px-4 py-1 bg-slate-50 dark:bg-emerald-900/50 text-[10px] text-slate-400 text-right">

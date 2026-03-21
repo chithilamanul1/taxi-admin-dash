@@ -1,12 +1,14 @@
 import React, { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Users, Briefcase, ShoppingBag, Info, Lock, Wind, Backpack, Check, ArrowRight, Car } from 'lucide-react';
 import VehicleDetailModal from './VehicleDetailModal';
-import { useCurrency } from '../context/CurrencyContext';const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
+import { useCurrency } from '../context/CurrencyContext';
+
+const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
 
 const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => {
     const scrollRef = useRef(null);
     const [detailVehicle, setDetailVehicle] = useState(null);
-    const { convertPrice, rates } = useCurrency();
+    const { convertPrice, rates, currency } = useCurrency();
 
     const scroll = (direction) => {
         if (scrollRef.current) {
@@ -48,29 +50,12 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                         </span>
                     </h3>
                 </div>
-                <div className="flex gap-3 md:gap-4 self-end md:self-auto">
-                    <button
-                        onClick={() => scroll('left')}
-                        className="w-12 h-12 md:w-16 md:h-16 rounded-none bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:translate-y-[-4px] transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] border-4 border-black"
-                        aria-label="Scroll left"
-                    >
-                        <ChevronLeft size={24} strokeWidth={4} className="w-5 h-5 md:w-6 md:h-6" />
-                    </button>
-                    <button
-                        onClick={() => scroll('right')}
-                        className="w-12 h-12 md:w-16 md:h-16 rounded-none bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:translate-y-[-4px] transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] border-4 border-black"
-                        aria-label="Scroll right"
-                    >
-                        <ChevronRight size={24} strokeWidth={4} className="w-5 h-5 md:w-6 md:h-6" />
-                    </button>
-                </div>
             </div>
 
             {/* pb-20 gives extra bottom room so the overflowing car image isn't clipped */}
             <div
                 ref={scrollRef}
-                className="flex gap-8 overflow-x-auto pb-20 px-2 snap-x snap-mandatory scrollbar-hide w-full items-stretch"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                className="flex flex-col gap-6 overflow-y-auto max-h-[60vh] pb-8 px-2 snap-y snap-mandatory custom-scrollbar w-full items-stretch"
             >
                 {vehicles.map((vehicle, index) => {
                     const { suitable, reason } = isSuitable(vehicle);
@@ -81,23 +66,23 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                         <div
                             key={vehicle._id || vehicle.vehicleType}
                             className={`
-                                relative flex-shrink-0 w-[300px] md:w-[380px] snap-center transition-all duration-500 group/card flex flex-col
+                                relative flex-shrink-0 w-full max-w-[420px] mx-auto snap-start transition-all duration-300 group/card flex flex-col
                                 ${isSelected
-                                    ? 'shadow-[0_32px_64px_rgba(0,0,0,0.22)]'
-                                    : 'hover:shadow-[0_15px_30px_rgba(0,0,0,0.10)] shadow-[0_4px_16px_rgba(0,0,0,0.06)]'}
+                                    ? 'shadow-xl ring-2 ring-amber-400'
+                                    : 'hover:shadow-md shadow-sm border border-slate-200 dark:border-white/10'}
                                 ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
-                                bg-white dark:bg-[#1a1a1a]
+                                bg-white dark:bg-[#1a1a1a] rounded-2xl
                                 overflow-visible h-full
                             `}
                             onClick={() => suitable && onSelect(vehicle.vehicleType)}
                         >
                             {!suitable && (
                                 <div className="absolute inset-0 z-30 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center p-8 text-center">
-                                    <div className="w-16 h-16 bg-red-600 rounded-none mb-6 flex items-center justify-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-4 border-black">
+                                    <div className="w-16 h-16 bg-red-500 rounded-full mb-6 flex items-center justify-center shadow-sm">
                                         <Lock size={28} className="text-white" strokeWidth={3} />
                                     </div>
                                     <p className="text-xl font-black text-white uppercase italic tracking-tighter leading-tight">{reason}</p>
-                                    <p className="text-[10px] text-[#FACC15] font-black mt-4 uppercase tracking-[0.3em] bg-black px-4 py-2 border-2 border-black">SELECT LARGER VEHICLE</p>
+                                    <p className="text-[10px] text-white font-bold mt-4 uppercase tracking-[0.3em] bg-red-600 px-4 py-2 rounded-full">SELECT LARGER VEHICLE</p>
                                 </div>
                             )}
 
@@ -148,16 +133,24 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                                 </div>
                                             )}
                                             <span className="text-[40px] font-black text-[#1A1A1A] dark:text-white tracking-tight leading-none">
-                                                Rs {vehicle.calculatedTotal.toLocaleString()}
+                                                {convertPrice(vehicle.calculatedTotal).symbol} {convertPrice(vehicle.calculatedTotal).value.toLocaleString()}
                                             </span>
                                         </div>
-                                        {/* USD secondary price — dark gray as requested */}
-                                        <div className="text-[18px] font-semibold text-slate-600 dark:text-white/60 mt-1 tracking-tight">
-                                            ~ $ {(() => {
-                                                const rate = rates['USD'] || 0.0032;
-                                                return (vehicle.calculatedTotal * rate).toFixed(2);
-                                            })()}
-                                        </div>
+                                        {/* Secondary currency display */}
+                                        {currency === 'LKR' ? (
+                                            <div className="flex justify-center gap-4 mt-2">
+                                                <div className="text-[14px] font-semibold text-slate-500 dark:text-white/50 tracking-tight">
+                                                    ~ $ {(vehicle.calculatedTotal * (rates['USD'] || 0.0032)).toFixed(2)}
+                                                </div>
+                                                <div className="text-[14px] font-semibold text-slate-500 dark:text-white/50 tracking-tight">
+                                                    ~ € {(vehicle.calculatedTotal * (rates['EUR'] || 0.003)).toFixed(2)}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="text-[14px] font-semibold text-slate-500 dark:text-white/50 mt-1 tracking-tight">
+                                                ~ Rs {vehicle.calculatedTotal.toLocaleString()}
+                                            </div>
+                                        )}
                                     </div>
                                 )}
 
@@ -189,10 +182,9 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                         { icon: ShoppingBag, label: 'HAND', value: vehicle.handLuggage || 2 }
                                     ].map((item, i) => (
                                         <div key={i} className={`
-                                            bg-white dark:bg-slate-800 border-2 border-black p-3 
+                                            bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl p-3 
                                             flex flex-col items-center justify-center 
                                             transition-all duration-300 
-                                            ${isSelected ? 'shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_#FACC15]' : 'shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_#FACC15]'}
                                         `}>
                                             <item.icon size={18} className="text-emerald-900 dark:text-[#FACC15] mb-1" strokeWidth={3} />
                                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{item.label}</span>

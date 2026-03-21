@@ -1178,6 +1178,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             <p className="text-xs font-black text-black dark:text-white uppercase italic tracking-tighter">{displayVehicleName(selectedVehicle?.name)}</p>
                                                         </div>
                                                     </div>
+                                                    
+                                                    {/* Disclaimer Section */}
+                                                    <div className="pt-4 mt-2 text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider leading-relaxed">
+                                                        * Note: Highway tickets are not included and must be paid by the customer.
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

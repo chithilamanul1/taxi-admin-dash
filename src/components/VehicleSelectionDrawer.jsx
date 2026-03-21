@@ -21,8 +21,8 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                 onClick={onClose}
             />
 
-            {/* Drawer Content - Boxy Style */}
-            <div className={`absolute bottom-0 left-0 right-0 max-h-[95vh] bg-white dark:bg-[#111] rounded-none shadow-[0_-20px_60px_rgba(0,0,0,0.5)] transform transition-transform duration-500 ease-out z-50 overflow-hidden flex flex-col border-t-[20px] border-black ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+            {/* Drawer Content - Clean Style */}
+            <div className={`absolute bottom-0 left-0 right-0 max-h-[95vh] bg-white dark:bg-[#1a1a1a] rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] transform transition-transform duration-500 ease-out z-50 overflow-hidden flex flex-col border-t border-slate-200 dark:border-white/10 ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}>
                 {/* Header */}
                 <div className="p-6 md:p-8 pb-4 flex items-center justify-between border-b border-slate-100 dark:border-white/10 shrink-0">
                     <div>
@@ -31,7 +31,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                     </div>
                     <button 
                         onClick={onClose}
-                        className="w-10 h-10 md:w-20 md:h-20 rounded-none bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:bg-black/80 transition-all border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                        className="w-10 h-10 md:w-16 md:h-16 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 md:text-black dark:text-white flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/20 transition-all border border-transparent shadow-sm"
                         aria-label="Close drawer"
                     >
                         <X size={20} strokeWidth={3} className="md:hidden" />
@@ -55,13 +55,13 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                 passengerCount={passengerCount}
                             />
                             
-                            {/* Boxy Feature Highlight */}
-                            <div className="p-10 bg-black text-[#FACC15] rounded-none border-4 border-[#FACC15] shadow-[15px_15px_0px_0px_rgba(250,204,21,0.2)]">
-                                <h3 className="text-2xl font-black uppercase italic tracking-tight mb-4 flex items-center gap-3">
-                                    <ShieldCheck size={28} strokeWidth={3} />
-                                    ALL-INCLUSIVE SERVICE
+                            {/* Clean Feature Highlight */}
+                            <div className="py-6 px-4 md:px-0 mt-8 border-t border-slate-100 dark:border-white/10 text-slate-600 dark:text-slate-400 text-center">
+                                <h3 className="text-lg font-bold uppercase tracking-tight mb-2 flex items-center justify-center gap-2">
+                                    <ShieldCheck size={20} className="text-emerald-500" strokeWidth={2} />
+                                    All-Inclusive Service
                                 </h3>
-                                <p className="text-xs font-black uppercase tracking-[0.2em] leading-relaxed opacity-80">
+                                <p className="text-sm">
                                     Fuel, Insurance, Chauffeur & Tax Included. No Hidden Surprises.
                                 </p>
                             </div>
