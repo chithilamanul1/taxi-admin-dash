@@ -635,27 +635,27 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 {/* Waypoints List */}
                                 {waypoints.map((wp, idx) => (
-                                    <div key={idx} className="relative group animate-slide-up bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10 p-1 flex items-center overflow-hidden shadow-sm">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-black/20 dark:text-white/20 pointer-events-none z-10">
+                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-white/5 rounded-none border-2 border-black p-1 flex items-center overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none z-10 bg-black p-1.5 border border-[#FACC15] rounded-none">
                                             <Navigation size={18} />
                                         </div>
                                         <input
                                             type="text"
                                             readOnly
                                             value={wp.name}
-                                            className="flex-1 min-w-0 px-2 sm:pl-12 sm:pr-4 h-12 bg-transparent border-none text-[10px] sm:text-sm font-black text-black dark:text-white outline-none truncate"
+                                            className="flex-1 min-w-0 px-2 sm:pl-14 sm:pr-4 h-12 bg-transparent border-none text-[10px] sm:text-sm font-black text-black dark:text-white outline-none truncate"
                                         />
 
-                                        <div className="flex flex-col items-center border-l border-black/5 dark:border-white/10 px-1 sm:px-3 min-w-[60px] sm:min-w-[100px] justify-center">
+                                        <div className="flex flex-col items-center border-l-2 border-black/20 px-1 sm:px-3 min-w-[60px] sm:min-w-[100px] justify-center">
                                             <div className="flex items-center gap-2">
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: Math.max(0, (w.waitingTime || 0) - 1) } : w)); }}
-                                                    className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-lg bg-white dark:bg-white/10 text-black dark:text-white text-[10px] sm:text-xs font-black shadow-sm hover:bg-slate-100 transition-colors border border-slate-200 dark:border-transparent"
+                                                    className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-white dark:bg-white/10 text-black dark:text-white text-[10px] sm:text-xs font-black hover:bg-slate-100 transition-colors border border-black"
                                                 >−</button>
                                                 <span className="text-[10px] sm:text-sm font-black text-black dark:text-white w-4 sm:w-6 text-center">{wp.waitingTime || 0}h</span>
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: (w.waitingTime || 0) + 1 } : w)); }}
-                                                    className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-lg bg-black dark:bg-yellow-400 text-white dark:text-black text-[10px] sm:text-xs font-black shadow-sm hover:bg-slate-800 transition-colors border border-transparent"
+                                                    className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-black dark:bg-yellow-400 text-white dark:text-black text-[10px] sm:text-xs font-black hover:bg-slate-800 transition-colors border border-black"
                                                 >+</button>
                                             </div>
                                             <span className="text-[9px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider mt-1">Wait Time</span>
@@ -663,7 +663,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                         <button
                                             onClick={() => setWaypoints(prev => prev.filter((_, i) => i !== idx))}
-                                            className="ml-0 sm:ml-2 mr-1 sm:mr-3 p-1 sm:p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all"
+                                            className="ml-0 sm:ml-2 mr-1 sm:mr-3 p-1 sm:p-2 text-black hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-none transition-all"
                                             aria-label="Remove stop"
                                         >
                                             <X size={14} className="sm:hidden" />
