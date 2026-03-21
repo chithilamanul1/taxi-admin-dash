@@ -522,8 +522,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
     return (
         <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-3 sm:px-4">
-            {/* Tab Navigation - Clean Style */}
-            <div className="flex bg-white dark:bg-[#1a1a1a] rounded-xl w-full sm:w-fit mx-auto lg:mx-0 mb-8 shadow-sm border border-slate-200 dark:border-slate-800 transition-all overflow-hidden" role="tablist">
+            {/* Tab Navigation - Boxy Style */}
+            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-8 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all overflow-hidden" role="tablist">
                 <div className="grid grid-cols-4 w-full sm:w-auto divide-x divide-slate-100 dark:divide-slate-800">
                     {[
                         { id: 'pickup', label: 'Airport Pickup', icon: PlaneTakeoff },
@@ -550,18 +550,18 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 </div>
             </div>
 
-            {/* Widget Main Content - Clean Style */}
-            <div className="bg-white dark:bg-[#1a1a1a] border border-slate-200 dark:border-slate-800 p-4 md:p-12 animate-slide-up relative z-10 shadow-xl rounded-3xl w-full box-border">
+            {/* Widget Main Content - Boxy Style */}
+            <div className="bg-white dark:bg-[#111] border-4 border-black p-4 md:p-12 animate-slide-up relative z-10 shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] rounded-none w-full box-border">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
                         <div className="flex-1 text-center lg:text-left">
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8">
-                                <div className="flex bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10 w-full sm:w-auto overflow-hidden p-1">
+                                <div className="flex bg-white dark:bg-[#111] rounded-none border-[3px] border-black w-full sm:w-auto overflow-hidden p-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                                     <button 
                                         onClick={() => setTripType('one-way')} 
                                         aria-label="One Way Trip" 
-                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all ${tripType === 'one-way' ? 'bg-black dark:bg-amber-400 text-white dark:text-black shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}`}
+                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-2.5 rounded-none text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all ${tripType === 'one-way' ? 'bg-[#FACC15] text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'text-slate-400 hover:text-black dark:hover:text-[#FACC15]'}`}
                                     >
                                         One Way
                                     </button>
@@ -609,7 +609,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                     </div>
 
-                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-black text-[10px] md:text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 bg-[#FACC15] px-4 md:px-6 py-2.5 md:py-3 rounded-xl border border-transparent shadow-sm hover:shadow-md justify-center whitespace-nowrap">
+                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-black text-[10px] md:text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 bg-[#FACC15] px-4 md:px-6 py-2.5 md:py-3 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 justify-center whitespace-nowrap">
                                         {isLocating ? <Loader2 size={14} className="animate-spin" /> : <Zap size={14} className="fill-current" />}
                                         <span className="hidden sm:inline">Auto Detect</span>
                                         <span className="sm:hidden uppercase">Detect</span>
@@ -743,7 +743,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex-1 space-y-4">
                                     <button
                                         onClick={() => setIsCouponOpen(!isCouponOpen)}
-                                        className={`flex items-center gap-3 text-[10px] lg:text-[9px] font-black h-full min-h-[4rem] sm:min-h-[5rem] lg:min-h-[3.5rem] transition-all px-4 sm:px-8 lg:px-6 py-3 sm:py-4 lg:py-2 rounded-xl w-full justify-center uppercase tracking-[0.2em] lg:tracking-[0.15em] border shadow-sm ${isCouponOpen ? 'bg-amber-100 dark:bg-amber-400/20 text-black dark:text-amber-400 border-amber-200 dark:border-amber-400/30' : 'bg-black text-white border-transparent hover:bg-slate-900'}`}
+                                        className={`flex items-center gap-3 text-[10px] lg:text-[9px] font-black h-full min-h-[4rem] sm:min-h-[5rem] lg:min-h-[3.5rem] transition-all px-4 sm:px-8 lg:px-6 py-3 sm:py-4 lg:py-2 rounded-none w-full justify-center uppercase tracking-[0.2em] lg:tracking-[0.15em] border-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_#FACC15] ${isCouponOpen ? 'bg-[#FACC15] text-black border-black' : 'bg-black text-[#FACC15] border-black hover:bg-slate-900'}`}
                                     >
                                         <Tag size={18} className={`${isCouponOpen ? 'text-black' : 'text-[#FACC15]'} w-4 h-4 sm:w-5 sm:h-5 lg:w-4 lg:h-4`} fill="currentColor" />
                                         {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}

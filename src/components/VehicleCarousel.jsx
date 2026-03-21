@@ -67,11 +67,11 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                             key={vehicle._id || vehicle.vehicleType}
                             className={`
                                 relative flex-shrink-0 w-full max-w-[420px] mx-auto snap-start transition-all duration-300 group/card flex flex-col
-                                ${isSelected
-                                    ? 'shadow-xl ring-2 ring-amber-400'
-                                    : 'hover:shadow-md shadow-sm border border-slate-200 dark:border-white/10'}
+                                ${isSelected 
+                                    ? 'shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] dark:shadow-[15px_15px_0px_0px_#FACC15] border-[4px] border-black -translate-y-2' 
+                                    : 'hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[10px_10px_0px_0px_#FACC15] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_#FACC15] border-[3px] border-black hover:-translate-y-1'}
                                 ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
-                                bg-white dark:bg-[#1a1a1a] rounded-2xl
+                                bg-white dark:bg-[#111] rounded-none
                                 overflow-visible h-full
                             `}
                             onClick={() => suitable && onSelect(vehicle.vehicleType)}
@@ -102,7 +102,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                 {/* Info button */}
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setDetailVehicle(vehicle); }}
-                                    className="absolute top-4 right-4 w-9 h-9 bg-slate-100 dark:bg-white/10 text-slate-400 rounded-full flex items-center justify-center hover:bg-[#FACC15] hover:text-black transition-all z-20 shadow-sm"
+                                    className="absolute top-4 right-4 w-9 h-9 bg-white dark:bg-[#111] text-black dark:text-[#FACC15] rounded-none border-2 border-black flex items-center justify-center hover:bg-[#FACC15] hover:text-black transition-all z-20 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_#FACC15]"
                                     aria-label={`View details for ${vehicle.name}`}
                                 >
                                     <Info size={16} strokeWidth={2.5} />
@@ -182,9 +182,10 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                                         { icon: ShoppingBag, label: 'HAND', value: vehicle.handLuggage || 2 }
                                     ].map((item, i) => (
                                         <div key={i} className={`
-                                            bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl p-3 
+                                            bg-white dark:bg-slate-800 border-2 border-black p-3 
                                             flex flex-col items-center justify-center 
                                             transition-all duration-300 
+                                            ${isSelected ? 'shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_#FACC15]' : 'shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_#FACC15]'}
                                         `}>
                                             <item.icon size={18} className="text-emerald-900 dark:text-[#FACC15] mb-1" strokeWidth={3} />
                                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{item.label}</span>

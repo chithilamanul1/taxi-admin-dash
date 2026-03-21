@@ -121,10 +121,10 @@ const LocationInput = ({
 
     return (
         <div className={`relative group ${zIndex || 'z-20'}`} ref={wrapperRef}>
-            {/* Icon - Clean Style */}
-            <div className={`absolute left-5 top-1/2 -translate-y-1/2 transition-colors z-10 ${isFocused ? 'text-amber-500' : 'text-slate-400'}`}>
-                <div className={`p-2 rounded-lg border border-transparent transition-all ${isFocused ? 'bg-amber-50' : 'bg-transparent'}`}>
-                    <Icon size={20} strokeWidth={3} />
+            {/* Icon - Boxy Style */}
+            <div className={`absolute left-5 top-1/2 -translate-y-1/2 transition-colors z-10 ${isFocused ? 'text-black' : 'text-black/50'}`}>
+                <div className={`p-2 rounded-none border-2 border-black transition-all ${isFocused ? 'bg-[#FACC15] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'}`}>
+                    <Icon size={20} className="dark:text-black" strokeWidth={3} />
                 </div>
             </div>
 
@@ -134,9 +134,9 @@ const LocationInput = ({
                 onFocus={() => { if (onFocus) onFocus(); setIsFocused(true); }}
                 disabled={disabled}
                 placeholder={googleLoaded ? placeholder : 'Loading maps...'}
-                className={`w-full pl-20 pr-14 h-14 rounded-xl text-base sm:text-lg font-bold bg-white dark:bg-[#1a1a1a] border transition-all outline-none text-black dark:text-white uppercase tracking-widest italic
-                ${isFocused && !disabled ? 'border-amber-400 dark:border-yellow-400 shadow-sm -translate-y-0.5' : 'border-slate-200 dark:border-white/20'}
-                ${disabled ? 'cursor-not-allowed opacity-75 bg-slate-50 dark:bg-white/5 grayscale-[0.5]' : 'hover:border-amber-400 dark:hover:border-white/40'}`}
+                className={`w-full pl-20 pr-14 h-14 rounded-none text-base sm:text-lg font-black bg-white dark:bg-[#1a1a1a] border-[3px] transition-all outline-none text-black dark:text-white uppercase tracking-widest italic
+                ${isFocused && !disabled ? 'border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_#FACC15] -translate-y-0.5' : 'border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_#FACC15]'}
+                ${disabled ? 'cursor-not-allowed opacity-75 bg-slate-50 dark:bg-white/5 grayscale-[0.5]' : 'hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_0px_#FACC15]'}`}
             />
 
             {/* Clear Button */}
@@ -152,7 +152,7 @@ const LocationInput = ({
 
             {/* Suggestions Dropdown - Boxy Style */}
             {isFocused && (suggestions.length > 0 || isLoading) && (
-                <div className="absolute top-[110%] left-0 right-0 bg-white dark:bg-[#1a1a1a] rounded-xl shadow-lg border border-slate-200 dark:border-white/20 p-0 z-[100] animate-fade-in overflow-hidden">
+                <div className="absolute top-[110%] left-0 right-0 bg-white dark:bg-[#111] rounded-none border-[3px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_#FACC15] p-0 z-[100] animate-fade-in overflow-hidden">
                     <div className="max-h-[350px] overflow-y-auto custom-scrollbar">
                         {isLoading ? (
                             <div className="p-8 flex items-center justify-center">
@@ -163,10 +163,10 @@ const LocationInput = ({
                                 <button
                                     key={i}
                                     onMouseDown={() => handleSelect(s)}
-                                    className="w-full flex items-center gap-6 p-6 hover:bg-amber-50 group transition-all rounded-none text-left border-b border-slate-100 dark:border-white/10 last:border-0"
+                                    className="w-full flex items-center gap-6 p-6 hover:bg-[#FACC15] group transition-all rounded-none text-left border-b-2 border-black last:border-0"
                                 >
-                                    <div className="w-10 h-10 bg-slate-50 dark:bg-white/5 rounded-lg border border-slate-200 dark:border-white/20 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
-                                        <MapPin size={18} className="text-slate-400 dark:text-white group-hover:text-amber-500" />
+                                    <div className="w-10 h-10 bg-white dark:bg-black rounded-none border-2 border-black flex items-center justify-center group-hover:bg-black transition-colors">
+                                        <MapPin size={18} className="text-black dark:text-[#FACC15] group-hover:text-[#FACC15]" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <p className="font-black text-black dark:text-white group-hover:text-black text-sm uppercase italic tracking-wider truncate mb-1 transition-colors">
