@@ -687,11 +687,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[#FACC15] z-10 p-2 bg-black rounded-none shadow-[2px_2px_0px_0px_rgba(250,204,21,1)] border border-yellow-400">
                                                 <Navigation size={18} strokeWidth={3} />
                                             </div>
-                                            <div className="w-full pl-12 pr-6 py-6 bg-white dark:bg-white/5 rounded-none border-4 border-black text-xs font-black text-black dark:text-white flex items-center justify-between shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:bg-[#FACC15]/5 transition-all uppercase tracking-widest">
+                                            <div className="w-full pl-12 pr-6 py-6 bg-white dark:bg-white/5 rounded-none border-2 border-black text-xs font-black text-black dark:text-white flex items-center justify-between shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:bg-[#FACC15]/5 transition-all uppercase tracking-widest">
                                                 <span className="truncate">{wp.address || wp.name}</span>
                                                 <button
                                                     onClick={() => setFormData(prev => ({ ...prev, waypoints: prev.waypoints.filter((_, idx) => idx !== i) }))}
-                                                    className="w-10 h-10 flex items-center justify-center bg-slate-50 dark:bg-white/10 hover:bg-black hover:text-white rounded-none transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] border-2 border-black"
+                                                    className="w-10 h-10 flex items-center justify-center bg-slate-50 dark:bg-white/10 hover:bg-black hover:text-white rounded-none transition-all border border-black/30"
                                                 >
                                                     <X size={18} strokeWidth={3} />
                                                 </button>

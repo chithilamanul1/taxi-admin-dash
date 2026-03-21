@@ -126,10 +126,10 @@ const GoogleReviews = () => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <button onClick={() => scroll('left')} className="w-14 h-14 bg-white dark:bg-black border-4 border-black dark:border-white/20 hover:border-[#FACC15] dark:hover:border-[#FACC15] text-black dark:text-white hover:text-[#FACC15] flex items-center justify-center transition-all group shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(250,204,21,0.2)] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none">
+                        <button onClick={() => scroll('left')} className="w-14 h-14 bg-white dark:bg-black border-2 border-black dark:border-white/20 hover:border-[#FACC15] dark:hover:border-[#FACC15] text-black dark:text-white hover:text-[#FACC15] flex items-center justify-center transition-all group shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(250,204,21,0.2)] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-none">
                             <ChevronLeft size={24} strokeWidth={3} className="group-hover:-translate-x-1 transition-transform" />
                         </button>
-                        <button onClick={() => scroll('right')} className="w-14 h-14 bg-[#FACC15] text-black border-4 border-black flex items-center justify-center transition-all group shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(250,204,21,0.5)] hover:bg-black hover:text-[#FACC15] hover:translate-y-[-2px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none">
+                        <button onClick={() => scroll('right')} className="w-14 h-14 bg-[#FACC15] text-black border-2 border-black flex items-center justify-center transition-all group shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(250,204,21,0.5)] hover:bg-black hover:text-[#FACC15] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-none">
                             <ChevronRight size={24} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
                         </button>
                     </div>
