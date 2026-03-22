@@ -584,22 +584,22 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex items-center gap-2 w-full sm:w-auto">
                                     {/* Currency Selector */}
                                     <div className="relative group z-[110]">
-                                        <button className="flex items-center gap-2 bg-white dark:bg-[#1a1a1a] border border-slate-200 dark:border-white/20 rounded-xl px-4 py-3 text-xs font-black text-black dark:text-white hover:bg-amber-50 dark:hover:bg-white/10 transition-all">
-                                            <div className="w-5 h-5 overflow-hidden rounded-full border border-black/10">
+                                        <button className="flex items-center gap-2 bg-white dark:bg-[#1a1a1a] border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] px-4 py-2.5 text-xs font-black text-black dark:text-white hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all">
+                                            <div className="w-5 h-5 overflow-hidden rounded-none border-[1.5px] border-black">
                                                 <img src={SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag} alt={currency} className="w-full h-full object-cover scale-150" />
                                             </div>
-                                            <span className="uppercase">{currency}</span>
-                                            <ChevronDown size={14} className="opacity-50" />
+                                            <span className="uppercase text-black dark:text-white">{currency}</span>
+                                            <ChevronDown size={14} className="opacity-100 text-black dark:text-white" />
                                         </button>
-                                        <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-[#1a1a1a] rounded-xl shadow-lg border border-slate-200 dark:border-white/20 overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
-                                            <div className="py-2">
+                                        <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-[#111] rounded-none shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] border-[3px] border-black overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
+                                            <div className="py-0">
                                                 {SUPPORTED_CURRENCIES.map(c => (
                                                     <button
                                                         key={c.code}
                                                         onClick={() => changeCurrency(c.code)}
-                                                        className={`w-full text-left px-5 py-3 text-xs font-black flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors ${currency === c.code ? 'text-black dark:text-yellow-400 bg-slate-50 dark:bg-white/5 border-l-4 border-black dark:border-yellow-400' : 'text-slate-500 dark:text-slate-400'}`}
+                                                        className={`w-full text-left px-5 py-3 text-xs font-black flex items-center gap-3 hover:bg-[#FACC15] hover:text-black transition-colors ${currency === c.code ? 'text-black bg-[#FACC15] border-l-[3px] border-black' : 'text-black dark:text-white border-b-2 border-black last:border-0'}`}
                                                     >
-                                                        <div className="w-4 h-4 rounded-full overflow-hidden border border-black/10 dark:border-white/20">
+                                                        <div className="w-4 h-4 rounded-none overflow-hidden border-[1.5px] border-black dark:border-white/20">
                                                             <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
                                                         </div>
                                                         <span>{c.code}</span>
@@ -643,7 +643,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             type="text"
                                             readOnly
                                             value={wp.name}
-                                            className="flex-1 min-w-0 px-2 sm:pl-14 sm:pr-4 h-12 bg-transparent border-none text-[10px] sm:text-sm font-black text-black dark:text-white outline-none truncate"
+                                            className="flex-1 min-w-0 pl-14 pr-2 sm:pr-4 h-12 bg-transparent border-none text-[10px] sm:text-sm font-black text-black dark:text-white outline-none truncate"
                                         />
 
                                         <div className="flex flex-col items-center border-l-2 border-black/20 px-1 sm:px-3 min-w-[60px] sm:min-w-[100px] justify-center">
@@ -682,9 +682,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 <button
                                                     onClick={() => setWaypointSearches([{ active: true }])}
                                                     aria-label="Add Stop"
-                                                    className="text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center gap-1 hover:bg-emerald-50 dark:hover:bg-white/5 py-1.5 px-3 rounded-lg transition-colors"
+                                                    className="text-black bg-white dark:bg-[#111] dark:text-[#FACC15] text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 py-2 px-3 rounded-none border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all"
                                                 >
-                                                    <Plus size={14} /> Add Stop ({waypoints.length}/4)
+                                                    <Plus size={14} strokeWidth={3} /> ADD STOP ({waypoints.length}/4)
                                                 </button>
                                             </div>
                                         )}
@@ -743,7 +743,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex-1 space-y-4">
                                     <button
                                         onClick={() => setIsCouponOpen(!isCouponOpen)}
-                                        className={`flex items-center gap-3 text-[10px] lg:text-[9px] font-black h-full min-h-[4rem] sm:min-h-[5rem] lg:min-h-[3.5rem] transition-all px-4 sm:px-8 lg:px-6 py-3 sm:py-4 lg:py-2 rounded-none w-full justify-center uppercase tracking-[0.2em] lg:tracking-[0.15em] border-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_#FACC15] ${isCouponOpen ? 'bg-[#FACC15] text-black border-black' : 'bg-black text-[#FACC15] border-black hover:bg-slate-900'}`}
+                                        className={`flex items-center gap-3 text-[10px] lg:text-[9px] font-black h-full min-h-[4rem] sm:min-h-[5rem] lg:min-h-[3.5rem] transition-all px-4 sm:px-8 lg:px-6 py-3 sm:py-4 lg:py-2 rounded-none w-full justify-center uppercase tracking-[0.2em] lg:tracking-[0.15em] border-[3px] border-black ${isCouponOpen ? 'bg-[#FACC15] text-black' : 'bg-black text-[#FACC15] hover:bg-slate-900'}`}
                                     >
                                         <Tag size={18} className={`${isCouponOpen ? 'text-black' : 'text-[#FACC15]'} w-4 h-4 sm:w-5 sm:h-5 lg:w-4 lg:h-4`} fill="currentColor" />
                                         {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
@@ -1106,6 +1106,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             <VehicleSelectionDrawer
                 isOpen={isVehicleDrawerOpen}
                 onClose={() => setIsVehicleDrawerOpen(false)}
+                pickupLocation={pickup?.name || pickupSearch}
+                dropoffLocation={dropoff?.name || dropoffSearch}
                 vehicles={Object.values(vehiclePricing).map(v => {
                     const priceInfo = calculatePrice(
                         distance,

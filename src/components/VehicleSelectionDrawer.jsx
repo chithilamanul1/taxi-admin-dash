@@ -6,7 +6,7 @@ import VehicleCarousel from './VehicleCarousel';
 // Strip the word 'KDH' from display names only (keeps DB IDs intact)
 const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
 
-const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelect, passengerCount, isLoading }) => {
+const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocation, vehicles, selectedId, onSelect, passengerCount, isLoading }) => {
     if (!isOpen) return null;
 
     return (
@@ -22,7 +22,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
             />
 
             {/* Drawer Content - Boxy Style */}
-            <div className={`absolute bottom-0 left-0 right-0 max-h-[95vh] bg-white dark:bg-[#111] rounded-none shadow-[0_-20px_60px_rgba(0,0,0,0.5)] transform transition-transform duration-500 ease-out z-50 overflow-hidden flex flex-col border-t-[20px] border-black ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+            <div className={`absolute inset-0 max-h-screen bg-white dark:bg-[#111] rounded-none transform transition-transform duration-500 ease-out z-50 overflow-hidden flex flex-col ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}>
                 {/* Header */}
                 <div className="p-6 md:p-8 pb-4 flex items-center justify-between border-b border-slate-100 dark:border-white/10 shrink-0">
                     <div>
@@ -53,6 +53,8 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                 selectedId={selectedId} 
                                 onSelect={(id) => { onSelect(id); onClose(); }}
                                 passengerCount={passengerCount}
+                                pickupLocation={pickupLocation}
+                                dropoffLocation={dropoffLocation}
                             />
                             
                             {/* Boxy Feature Highlight */}
@@ -61,9 +63,14 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, vehicles, selectedId, onSelec
                                     <ShieldCheck size={28} strokeWidth={3} />
                                     ALL-INCLUSIVE SERVICE
                                 </h3>
-                                <p className="text-xs font-black uppercase tracking-[0.2em] leading-relaxed opacity-80">
-                                    Fuel, Insurance, Chauffeur & Tax Included. No Hidden Surprises.
-                                </p>
+                                <div className="space-y-2">
+                                    <p className="text-xs font-black uppercase tracking-[0.2em] leading-relaxed opacity-80">
+                                        Fuel, Insurance, Chauffeur & Tax Included. No Hidden Surprises.
+                                    </p>
+                                    <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-white/60">
+                                        * Note: Highway tickets are not included and must be paid by the customer.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     ) : (

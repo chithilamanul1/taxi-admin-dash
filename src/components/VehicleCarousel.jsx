@@ -5,7 +5,7 @@ import { useCurrency } from '../context/CurrencyContext';
 
 const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
 
-const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => {
+const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, pickupLocation, dropoffLocation }) => {
     const scrollRef = useRef(null);
     const [detailVehicle, setDetailVehicle] = useState(null);
     const { convertPrice, rates, currency } = useCurrency();
@@ -43,6 +43,15 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
             <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-8 md:mb-10 px-2 lg:px-0">
                 <div className="flex flex-col gap-4">
                     <div className="yellow-badge w-fit scale-90 md:scale-100 origin-left">FLEET</div>
+                    
+                    {pickupLocation && dropoffLocation && (
+                        <div className="flex items-center gap-3 text-[10px] sm:text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest bg-slate-100 dark:bg-white/5 p-3 rounded-none border-2 border-black w-fit">
+                            <span className="truncate max-w-[150px] sm:max-w-xs">{pickupLocation.split(',')[0]}</span>
+                            <ArrowRight size={14} className="text-[#FACC15]" strokeWidth={3} />
+                            <span className="truncate max-w-[150px] sm:max-w-xs">{dropoffLocation.split(',')[0]}</span>
+                        </div>
+                    )}
+
                     <h3 className="text-xl md:text-2xl font-black text-black dark:text-white flex flex-wrap items-center gap-3 md:gap-4 uppercase italic tracking-tighter">
                         VEHICLE OPTIONS
                         <span className="text-[9px] md:text-[10px] bg-black dark:bg-yellow-400 text-yellow-400 dark:text-black px-3 md:px-4 py-1 rounded-full not-italic tracking-[0.2em] font-black">
@@ -52,10 +61,9 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount }) => 
                 </div>
             </div>
 
-            {/* pb-20 gives extra bottom room so the overflowing car image isn't clipped */}
             <div
                 ref={scrollRef}
-                className="flex flex-col gap-6 overflow-y-auto max-h-[60vh] pb-8 px-2 snap-y snap-mandatory custom-scrollbar w-full items-stretch"
+                className="flex flex-col gap-6 overflow-y-visible pb-8 px-2 w-full items-stretch"
             >
                 {vehicles.map((vehicle, index) => {
                     const { suitable, reason } = isSuitable(vehicle);
