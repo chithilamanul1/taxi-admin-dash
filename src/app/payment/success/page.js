@@ -66,7 +66,9 @@ function PaymentSuccessContent() {
                     <div className="mb-8 p-5 bg-slate-50 border-4 border-black rounded-none shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-4">
                         <div>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Route</p>
-                            <p className="text-sm font-bold text-black uppercase">{booking.pickup} ➔ {booking.dropoff}</p>
+                            <p className="text-sm font-bold text-black uppercase">
+                                {typeof booking.pickup === 'object' ? booking.pickup?.name : booking.pickup} ➔ {typeof booking.dropoff === 'object' ? booking.dropoff?.name : booking.dropoff}
+                            </p>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
