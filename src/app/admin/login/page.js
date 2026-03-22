@@ -1,17 +1,16 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
 import { LogIn, ShieldAlert, Loader2, Mail, Lock } from 'lucide-react';
 
-function LoginForm() {
+export default function AdminLogin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const searchParams = useSearchParams();
     const { data: session, status } = useSession();
 
     // Redirect if already logged in as admin
@@ -21,14 +20,17 @@ function LoginForm() {
         }
     }, [status, session, router]);
 
-    const errorParam = searchParams.get('error');
     useEffect(() => {
-        if (errorParam === 'CredentialsSignin') {
-            setError('Invalid email or password');
-        } else if (errorParam) {
-            setError('An authentication error occurred');
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const errorParam = params.get('error');
+            if (errorParam === 'CredentialsSignin') {
+                setError('Invalid email or password');
+            } else if (errorParam) {
+                setError('An authentication error occurred');
+            }
         }
-    }, [errorParam]);
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -59,6 +61,18 @@ function LoginForm() {
     const handleGoogleSignIn = () => {
         signIn('google', { callbackUrl: '/admin' });
     };
+
+    // Prevent rendering the form while checking session
+    if (status === 'loading') {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-[#0a0f18]">
+                <div className="text-center">
+                    <Loader2 className="animate-spin text-emerald-600 mb-4 mx-auto" size={48} />
+                    <p className="text-slate-400 font-bold tracking-widest">LOADING PORTAL...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-[#0a0f18] p-4 font-['Inter',sans-serif]">
@@ -152,20 +166,5 @@ function LoginForm() {
                 </div>
             </div>
         </div>
-    );
-}
-
-export default function AdminLogin() {
-    return (
-        <Suspense fallback={
-            <div className="flex min-h-screen items-center justify-center bg-[#0a0f18]">
-                <div className="text-center">
-                    <Loader2 className="animate-spin text-emerald-600 mb-4 mx-auto" size={48} />
-                    <p className="text-slate-400 font-bold tracking-widest">LOADING PORTAL...</p>
-                </div>
-            </div>
-        }>
-            <LoginForm />
-        </Suspense>
     );
 }

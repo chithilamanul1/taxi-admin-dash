@@ -73,7 +73,10 @@ function PaymentSuccessContent() {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Date</p>
-                                <p className="text-sm font-bold text-black uppercase">{booking.pickupDate ? new Date(booking.pickupDate).toLocaleDateString() : 'TBD'}</p>
+                                <p className="text-sm font-bold text-black uppercase">
+                                    {booking.scheduledDate ? new Date(booking.scheduledDate).toLocaleDateString() : 'TBD'} 
+                                    {booking.scheduledTime ? ` at ${booking.scheduledTime}` : ''}
+                                </p>
                             </div>
                             <div>
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Total Fare</p>

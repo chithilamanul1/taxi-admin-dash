@@ -3,7 +3,7 @@ import Booking from '@/models/Booking';
 import User from '@/models/User'; // Ensure User is registered
 import Driver from '@/models/Driver'; // Ensure Driver is registered
 import { notFound } from 'next/navigation';
-import { CheckCircle, MapPin, Calendar, Clock, Car, Star, Phone, MessageSquare } from 'lucide-react';
+import { CheckCircle, MapPin, Calendar, Clock, Car, Star, Phone, MessageSquare, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import BookingActions from '@/components/BookingActions';
 import TrackingMap from '@/components/TrackingMap';
