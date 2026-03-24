@@ -19,7 +19,10 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
                         <img
                             src={vehicle.image}
                             alt={vehicle.name}
-                            className="w-full h-full object-contain drop-shadow-xl"
+                            className={`w-full h-full object-contain drop-shadow-xl transition-transform duration-500
+                                ${vehicle.vehicleType?.toLowerCase().includes('sedan') || vehicle.vehicleType?.toLowerCase().includes('car') ? 'scale-[1.2] md:scale-[1.25]' : ''}
+                                ${vehicle.vehicleType?.toLowerCase().includes('wagon') ? 'scale-[1.1]' : ''}
+                            `}
                         />
                         <button
                             onClick={onClose}

@@ -9,6 +9,7 @@ import Hero from './Hero'
 import Features from './Features'
 import BookingModal from './BookingModal'
 import BookingWidget from './BookingWidget'
+import FleetSection from './FleetSection'
 import ReviewStatsBar from './ReviewStatsBar'
 import { destinations } from '@/lib/destinations'
 
@@ -56,11 +57,18 @@ export default function HomeClient() {
         localStorage.setItem('last_marketing_popup', Date.now().toString());
     };
 
+    const handleHeroBook = (tabId) => {
+        setBookingInitialData({ activeTab: tabId });
+        setIsBookingOpen(true);
+    };
+
     return (
         <div className="bg-white dark:bg-black overflow-hidden transition-colors duration-300">
-            <Hero onBookClick={() => setIsBookingOpen(true)} />
+            <Hero onBookClick={handleHeroBook} />
 
             <BookingWidget />
+
+            <FleetSection />
 
             <BookingModal
                 isOpen={isBookingOpen}

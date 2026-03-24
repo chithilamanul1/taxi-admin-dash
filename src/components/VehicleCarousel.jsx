@@ -172,6 +172,8 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                             drop-shadow-[0_15px_30px_rgba(0,0,0,0.15)]
                                             transition-transform duration-700
                                             ${isSelected ? 'scale-110' : 'group-hover/card:scale-105'}
+                                            ${vehicle.vehicleType?.toLowerCase().includes('sedan') || vehicle.vehicleType?.toLowerCase().includes('car') ? 'scale-[1.3] md:scale-[1.35]' : ''}
+                                            ${vehicle.vehicleType?.toLowerCase().includes('wagon') ? 'scale-[1.15]' : ''}
                                         `}
                                     />
                                 </div>
