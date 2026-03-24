@@ -54,7 +54,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
 
                     <h3 className="text-xl md:text-2xl font-black text-black dark:text-white flex flex-wrap items-center gap-3 md:gap-4 uppercase italic tracking-tighter">
                         VEHICLE OPTIONS
-                        <span className="text-[9px] md:text-[10px] bg-black dark:bg-yellow-400 text-yellow-400 dark:text-black px-3 md:px-4 py-1 rounded-full not-italic tracking-[0.2em] font-black">
+                        <span className="text-[9px] md:text-[10px] bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black px-4 md:px-6 py-1.5 rounded-none border-2 border-black not-italic tracking-[0.2em] font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                             {vehicles.length} MODELS
                         </span>
                     </h3>
@@ -86,11 +86,11 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                         >
                             {!suitable && (
                                 <div className="absolute inset-0 z-30 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center p-8 text-center">
-                                    <div className="w-16 h-16 bg-red-500 rounded-full mb-6 flex items-center justify-center shadow-sm">
+                                    <div className="w-16 h-16 bg-red-600 rounded-none mb-6 flex items-center justify-center border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                                         <Lock size={28} className="text-white" strokeWidth={3} />
                                     </div>
                                     <p className="text-xl font-black text-white uppercase italic tracking-tighter leading-tight">{reason}</p>
-                                    <p className="text-[10px] text-white font-bold mt-4 uppercase tracking-[0.3em] bg-red-600 px-4 py-2 rounded-full">SELECT LARGER VEHICLE</p>
+                                    <p className="text-[10px] text-white font-black mt-4 uppercase tracking-[0.3em] bg-red-700 px-6 py-2.5 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">SELECT LARGER VEHICLE</p>
                                 </div>
                             )}
 

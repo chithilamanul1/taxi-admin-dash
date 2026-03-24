@@ -569,14 +569,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         onClick={() => (activeTab !== 'pickup' && activeTab !== 'drop') && setTripType('round-trip')}
                                         disabled={activeTab === 'pickup' || activeTab === 'drop'}
                                         aria-label="Round Trip"
-                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all relative flex items-center justify-center gap-1 sm:gap-2
-                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-black dark:bg-amber-400 text-white dark:text-black shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}
+                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-2.5 rounded-none text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all relative flex items-center justify-center gap-1 sm:gap-2
+                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-black dark:bg-[#FACC15] text-white dark:text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] border-2 border-black' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}
                                             ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-40 cursor-not-allowed' : ''}
                                         `}
                                     >
                                         Round Trip
                                         {(activeTab === 'pickup' || activeTab === 'drop') && (
-                                            <span className="w-4 h-4 bg-emerald-500 dark:bg-[#FACC15] flex items-center justify-center text-[8px] text-white dark:text-black rounded-full shadow-sm">🔒</span>
+                                            <span className="w-4 h-4 bg-emerald-500 dark:bg-[#FACC15] flex items-center justify-center text-[8px] text-white dark:text-black rounded-none border border-black shadow-sm">🔒</span>
                                         )}
                                     </button>
                                 </div>
@@ -597,9 +597,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     <button
                                                         key={c.code}
                                                         onClick={() => changeCurrency(c.code)}
-                                                        className={`w-full text-left px-5 py-3 text-xs font-black flex items-center gap-3 hover:bg-[#FACC15] hover:text-black transition-colors ${currency === c.code ? 'text-black bg-[#FACC15] border-l-[3px] border-black' : 'text-black dark:text-white border-b-2 border-black last:border-0'}`}
+                                                        className={`w-full text-left px-5 py-3 text-xs font-black flex items-center gap-3 hover:bg-[#FACC15] hover:text-black transition-colors ${currency === c.code ? 'text-black bg-[#FACC15] border-l-[4px] border-black' : 'text-black dark:text-white border-b-[3px] border-black last:border-0'}`}
                                                     >
-                                                        <div className="w-4 h-4 rounded-none overflow-hidden border-[1.5px] border-black dark:border-white/20">
+                                                        <div className="w-5 h-5 rounded-none overflow-hidden border-2 border-black">
                                                             <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
                                                         </div>
                                                         <span>{c.code}</span>
@@ -636,8 +636,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 {/* Waypoints List */}
                                 {waypoints.map((wp, idx) => (
                                     <div key={idx} className="relative group animate-slide-up bg-white dark:bg-white/5 rounded-none border-2 border-black p-1 flex items-center overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none z-10 bg-black p-1.5 border border-[#FACC15] rounded-none">
-                                            <Navigation size={18} />
+                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none z-10 bg-black p-1 border border-[#FACC15] rounded-none">
+                                            <Navigation size={16} />
                                         </div>
                                         <input
                                             type="text"
@@ -718,9 +718,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 {/* Dropoff Input */}
                                 <div className="relative">
                                     {/* Uber-style vertical connecting line */}
-                                    <div className="absolute left-[22px] top-[-36px] bottom-[28px] w-[2px] bg-slate-200 dark:bg-white/10 z-0">
-                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-slate-300 dark:border-white/20 bg-white dark:bg-black z-10"></div>
-                                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 border-2 border-slate-300 dark:border-white/20 bg-white dark:bg-black z-10"></div>
+                                    <div className="absolute left-[22px] top-[-36px] bottom-[28px] w-[2px] bg-black dark:bg-white/30 z-0">
+                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-none border-2 border-black bg-white dark:bg-black z-10"></div>
+                                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-none border-2 border-black bg-[#FACC15] z-10"></div>
                                     </div>
                                     <LocationInput
                                         placeholder="Drop-off Location"
@@ -753,15 +753,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     {appliedOffers.length > 0 && (
                                         <div className="flex flex-wrap gap-2 animate-fade-in">
                                             {appliedOffers.map((offer, i) => (
-                                                <div key={i} className="flex items-center gap-1.5 bg-emerald-100 text-emerald-900 px-3 py-1.5 rounded-lg border border-emerald-200 shadow-sm">
-                                                    <Tag size={12} className="fill-emerald-500/20" />
-                                                    <span className="text-[10px] font-bold uppercase">{offer.name}</span>
-                                                    <span className="text-[10px] font-bold opacity-60">
+                                                <div key={i} className="flex items-center gap-1.5 bg-[#FACC15] text-black px-3 py-1.5 rounded-none border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                                                    <Tag size={12} className="fill-black/10" />
+                                                    <span className="text-[10px] font-black uppercase">{offer.name}</span>
+                                                    <span className="text-[10px] font-black opacity-60">
                                                         (-{offer.discountPercentage > 0 ? `${offer.discountPercentage}%` : `Rs ${offer.discountAmount}`})
                                                     </span>
                                                     <button
                                                         onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))}
-                                                        className="ml-1 p-0.5 hover:bg-emerald-200 rounded-md transition-colors"
+                                                        className="ml-1 p-0.5 hover:bg-black hover:text-white rounded-none transition-colors border border-transparent hover:border-black"
                                                     >
                                                         <X size={12} />
                                                     </button>
@@ -778,15 +778,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 placeholder="ENTER COUPON CODE"
                                                 value={couponCode}
                                                 onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                                className="w-full h-full pl-14 pr-24 rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/20 text-base font-black outline-none transition-all uppercase text-black dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 tracking-widest shadow-inner focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20"
+                                                className="w-full h-full pl-14 pr-24 rounded-none bg-white dark:bg-white/5 border-2 border-black text-base font-black outline-none transition-all uppercase text-black dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 tracking-widest shadow-[inset_2px_2px_4px_rgba(0,0,0,0.1)] focus:border-black focus:ring-0"
                                                 aria-label="Coupon code"
                                             />
                                             <button
                                                 onClick={async () => {
-                                                    /* ... same logic ... */
+                                                    /* apply logic */
                                                 }}
                                                 aria-label="Apply Coupon"
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 bg-black text-white px-4 py-2 rounded-lg border border-transparent text-xs font-bold hover:bg-[#FACC15] hover:text-black transition-all"
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 bg-black text-[#FACC15] px-4 py-2 rounded-none border-2 border-black text-xs font-black uppercase italic hover:bg-[#FACC15] hover:text-black transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                                             >
                                                 Apply
                                             </button>
@@ -821,10 +821,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                             setAppliedOffers(prev => [...prev, couponOffer]);
                                                         }
                                                     }}
-                                                    className={`snap-start min-w-[280px] sm:min-w-[320px] group relative flex items-center justify-between gap-4 p-5 rounded-2xl border transition-all hover:shadow-lg text-left flex-shrink-0 ${appliedOffers.some(o => o.name === c.code) ? 'border-amber-500 bg-amber-50 shadow-md ring-2 ring-amber-400/20' : 'border-slate-200 bg-white shadow-sm'}`}
+                                                    className={`snap-start min-w-[280px] sm:min-w-[320px] group relative flex items-center justify-between gap-4 p-5 rounded-none border-2 transition-all text-left flex-shrink-0 ${appliedOffers.some(o => o.name === c.code) ? 'border-black bg-[#FACC15] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]' : 'border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]'}`}
                                                 >
                                                     <div className="flex items-center gap-4 min-w-0">
-                                                        <div className="w-14 h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 flex-shrink-0 flex items-center justify-center overflow-hidden border border-emerald-200/50">
+                                                        <div className="w-14 h-14 rounded-none bg-white dark:bg-black flex-shrink-0 flex items-center justify-center overflow-hidden border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                                                             {c.imageUrl ? (
                                                                 <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" />
                                                             ) : (
@@ -838,7 +838,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                                     <span className="font-bold text-emerald-950 uppercase">OFF</span>
                                                                 </span>
                                                                 <div className="flex items-center gap-2 mt-2">
-                                                                    <div className="px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center gap-2">
+                                                                    <div className="px-3 py-1.5 rounded-none bg-white dark:bg-white/5 border-2 border-black flex items-center gap-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                                                                         <span className="text-xs font-black text-emerald-700 dark:text-emerald-500 uppercase tracking-wider">{c.code}</span>
                                                                         <div className="h-3 w-px bg-slate-300 dark:bg-white/10"></div>
                                                                         <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1 group-hover:text-emerald-500 transition-colors">
@@ -851,7 +851,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     </div>
 
                                                     {appliedOffers.some(o => o.name === c.code) && (
-                                                        <div className="flex-shrink-0 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
+                                                        <div className="flex-shrink-0 w-8 h-8 bg-black border-2 border-white rounded-none flex items-center justify-center text-[#FACC15] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                                                             <Check size={18} strokeWidth={3} />
                                                         </div>
                                                     )}

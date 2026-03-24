@@ -39,7 +39,7 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
                                 <p className="text-black/40 font-bold uppercase tracking-widest text-xs mt-2">{vehicle.vehicleType}</p>
                             </div>
                             <div className="text-right flex flex-col items-end">
-                                <span className="flex items-center gap-2 text-[10px] bg-[#FACC15] text-black px-3 py-1.5 rounded-none border-2 border-black font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                <span className="flex items-center gap-2 text-[10px] bg-[#FACC15] text-black px-4 py-2 rounded-none border-2 border-black font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                                     <CheckCircle2 size={12} strokeWidth={3} /> 5★ SERVICE
                                 </span>
                             </div>

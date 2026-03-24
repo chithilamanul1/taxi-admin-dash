@@ -609,10 +609,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 20 }}
-                            className="absolute bottom-24 left-1/2 -translate-x-1/2 z-[10010] bg-black border border-slate-700 text-white px-6 py-3 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.3)] flex items-center gap-3 backdrop-blur-xl"
+                            className="absolute bottom-24 left-1/2 -translate-x-1/2 z-[10010] bg-black border-4 border-[#FACC15] text-white px-8 py-4 rounded-none shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center gap-4 backdrop-blur-xl"
                         >
-                            <Loader2 className="animate-spin text-white" size={18} />
-                            <span className="text-xs font-black uppercase tracking-widest">Verifying code...</span>
+                            <Loader2 className="animate-spin text-[#FACC15]" size={20} />
+                            <span className="text-xs font-black uppercase tracking-widest text-[#FACC15]">Verifying Security Code...</span>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -684,7 +684,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     {/* Waypoints */}
                                     {formData.waypoints.map((wp, i) => (
                                         <div key={i} className="relative group animate-slide-in pl-12">
-                                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[#FACC15] z-10 p-2 bg-black rounded-none shadow-[2px_2px_0px_0px_rgba(250,204,21,1)] border border-yellow-400">
+                                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[#FACC15] z-10 p-2 bg-black rounded-none shadow-[2px_2px_0px_0px_rgba(250,204,21,1)] border-2 border-[#FACC15]">
                                                 <Navigation size={18} strokeWidth={3} />
                                             </div>
                                             <div className="w-full pl-12 pr-6 py-6 bg-white dark:bg-white/5 rounded-none border-2 border-black text-xs font-black text-black dark:text-white flex items-center justify-between shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:bg-[#FACC15]/5 transition-all uppercase tracking-widest">
@@ -770,7 +770,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         <div className="premium-box bg-slate-50 dark:bg-[#0a0a0a] p-8 md:p-10 space-y-10 shadow-xl overflow-hidden relative">
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-[#FACC15]/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
                                             <div className="flex items-center gap-4 sm:gap-6 relative z-10">
-                                                <div className="w-10 h-10 sm:w-14 sm:h-14 bg-black dark:bg-[#FACC15] rounded-xl sm:rounded-2xl flex items-center justify-center text-[#FACC15] dark:text-black shadow-2xl transition-transform hover:rotate-6">
+                                                <div className="w-10 h-10 sm:w-14 sm:h-14 bg-black dark:bg-[#FACC15] rounded-none border-4 border-black flex items-center justify-center text-[#FACC15] dark:text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform hover:rotate-6">
                                                     <Clock size={20} className="sm:w-7 sm:h-7" strokeWidth={3} />
                                                 </div>
                                                 <div>
@@ -892,7 +892,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 type="text"
                                                 value={formData.nameBoardText}
                                                 onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
-                                                className="w-full h-14 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-8 rounded-2xl outline-none focus:border-black dark:focus:border-yellow-400 transition-all font-black text-xs text-black dark:text-white shadow-inner"
+                                                className="w-full h-14 bg-slate-50 dark:bg-white/5 border-4 border-black px-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-xs text-black dark:text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest"
                                                 placeholder="Enter pickup name or greeting..."
                                             />
                                         </div>
@@ -977,7 +977,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <div className="pt-3 border-t border-slate-200 dark:border-white/10">
                                         <div className="flex flex-wrap gap-2">
                                             {detailedBreakdown.appliedCoupons.map((c, idx) => (
-                                                <span key={idx} className="px-3 py-1 bg-black dark:bg-yellow-400 text-white dark:text-black text-[9px] font-black uppercase tracking-widest rounded-lg flex items-center gap-2 shadow-sm">
+                                                <span key={idx} className="px-3 py-1 bg-black text-[#FACC15] text-[9px] font-black uppercase tracking-widest rounded-none flex items-center gap-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] border border-black">
                                                     <Check size={10} strokeWidth={4} /> {c.code || c}
                                                 </span>
                                             ))}
@@ -1218,8 +1218,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     <button
                                                         key={t}
                                                         onClick={() => setFormData(prev => ({ ...prev, paymentType: t }))}
-                                                        className={`py-4 rounded-none text-[10px] font-black uppercase tracking-widest transition-all shadow-sm ${formData.paymentType === t
-                                                            ? 'bg-black dark:bg-[#FACC15] text-white dark:text-black border-2 border-black'
+                                                        className={`py-4 rounded-none text-[10px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t
+                                                            ? 'bg-black dark:bg-[#FACC15] text-white dark:text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_#FACC15]'
                                                             : 'text-slate-400 hover:text-black dark:hover:text-white'}`}
                                                     >
                                                         {t === 'full' ? 'Complete 100%' : 'Deposit 50%'}
