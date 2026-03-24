@@ -70,6 +70,45 @@ export default function HomeClient() {
 
             <FleetSection />
 
+            {/* Travel Gallery - "More Images" Request */}
+            <section className="py-20 bg-slate-50 dark:bg-[#0a0a0a] border-t-8 border-black overflow-hidden">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-8">
+                        <div>
+                            <h2 className="text-4xl md:text-6xl font-black text-black dark:text-white uppercase italic tracking-tighter">EXPLORE <span className="text-[#FACC15]">SRI LANKA</span></h2>
+                            <p className="text-xs font-black uppercase tracking-widest text-black/40 dark:text-white/40 mt-2">More than just a ride. An experience of a lifetime.</p>
+                        </div>
+                        <div className="flex gap-4">
+                            <div className="w-12 h-12 border-4 border-black flex items-center justify-center font-black italic">SL</div>
+                            <div className="w-12 h-12 bg-black text-[#FACC15] border-4 border-black flex items-center justify-center animate-bounce">
+                                <ArrowRight size={24} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        {[
+                            { name: 'SIGIRIYA ROCK', img: '/Hero/sigiriya.jpg', rotate: '-3deg' },
+                            { name: 'KANDY TEMPLE', img: '/Hero/izanuradapura.jpg', rotate: '2deg' },
+                            { name: 'GALLE FORT', img: '/Hero/view.jpg', rotate: '-2deg' },
+                            { name: 'WILD SAFARI', img: '/Hero/elephants.jpg', rotate: '4deg' },
+                        ].map((item, i) => (
+                            <div key={i} className="group relative">
+                                <div 
+                                    className="bg-white p-4 shadow-xl border-2 border-black/5 transition-transform hover:scale-105 hover:rotate-0 duration-500"
+                                    style={{ transform: `rotate(${item.rotate})` }}
+                                >
+                                    <div className="relative aspect-square overflow-hidden mb-4 border border-black/10">
+                                        <Image src={item.img} alt={item.name} fill className="object-cover" />
+                                    </div>
+                                    <div className="text-[10px] font-black uppercase tracking-tighter text-black italic">{item.name}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             <BookingModal
                 isOpen={isBookingOpen}
                 onClose={() => setIsBookingOpen(false)}

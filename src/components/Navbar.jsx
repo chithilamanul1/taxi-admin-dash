@@ -51,7 +51,12 @@ export default function Navbar() {
                     </div>
                 </Link>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 md:gap-4">
+                    {/* Quick Contact (NEW) */}
+                    <a href="tel:+94716885880" className="w-12 h-12 md:w-16 md:h-16 bg-white border-4 border-black flex items-center justify-center text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] transition-all">
+                        <Phone size={24} strokeWidth={3} />
+                    </a>
+
                     {/* Currency Selector (Always Visible) */}
                     <div className="relative group hidden sm:block">
                         <button className="w-12 h-12 md:w-16 md:h-16 bg-[#FACC15] border-4 border-black flex items-center justify-center text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] transition-all">

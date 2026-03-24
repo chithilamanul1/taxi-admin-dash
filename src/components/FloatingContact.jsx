@@ -9,23 +9,7 @@ export default function FloatingContact() {
     const pathname = usePathname()
 
     const isAdminRoute = pathname.startsWith('/admin')
-    const [isChatActive, setIsChatActive] = useState(false)
-
-    // Listen for chat widget state
-    useEffect(() => { // Added useEffect import if needed, but it's likely there
-        const handleChatOpen = () => setIsChatActive(true)
-        const handleChatClose = () => setIsChatActive(false)
-
-        window.addEventListener('live-chat-opened', handleChatOpen)
-        window.addEventListener('live-chat-closed', handleChatClose)
-
-        return () => {
-            window.removeEventListener('live-chat-opened', handleChatOpen)
-            window.removeEventListener('live-chat-closed', handleChatClose)
-        }
-    }, [])
-
-    if (isAdminRoute || isChatActive) return null
+    if (isAdminRoute) return null
 
     return (
         <div className="live-chat-trigger fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[100] flex flex-col items-end gap-3 md:gap-4 scale-75 sm:scale-90 md:scale-100 origin-bottom-right">

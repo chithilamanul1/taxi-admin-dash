@@ -8,7 +8,7 @@ const fleetData = [
     {
         category: "Mini Cars",
         name: "Suzuki Wagon R / Similar",
-        image: "/Suarez/wagonr.png",
+        image: "/vehicles/minicar.png",
         capacity: 2,
         luggage: 2,
         handLuggage: 2,
@@ -22,7 +22,7 @@ const fleetData = [
     {
         category: "Sedan Cars",
         name: "Toyota Prius / Axio / Similar",
-        image: "/Suarez/prius.png",
+        image: "/vehicles/sedancar.png",
         capacity: 3,
         luggage: 3,
         handLuggage: 2,
@@ -31,20 +31,6 @@ const fleetData = [
             { name: "Galle", priceLKR: 21500 },
             { name: "Ahangama", priceLKR: 22500 },
             { name: "Sigiriya", priceLKR: 32500 }
-        ]
-    },
-    {
-        category: "Vans / SUVs",
-        name: "Toyota KDH / Similar",
-        image: "/Suarez/kdh.png",
-        capacity: 7,
-        luggage: 5,
-        handLuggage: 5,
-        features: ["Group Travel", "Large Luggage Space", "Premium Audio"],
-        popularRoutes: [
-            { name: "Galle", priceLKR: 28500 },
-            { name: "Ahangama", priceLKR: 30500 },
-            { name: "Sigiriya", priceLKR: 42500 }
         ]
     }
 ];
@@ -62,7 +48,7 @@ const FleetSection = () => {
                     </h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
                     {fleetData.map((item, idx) => (
                         <div key={idx} className="flex flex-col border-4 border-black bg-white dark:bg-[#111] shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[12px_12px_0px_0px_#FACC15]">
                             {/* Category Header */}
@@ -79,7 +65,7 @@ const FleetSection = () => {
                                     src={item.image} 
                                     alt={item.name} 
                                     className={`w-full max-h-full object-contain drop-shadow-2xl group-hover:scale-110 transition-transform duration-500 
-                                        ${item.category.includes('Sedan') ? 'scale-125 md:scale-135' : ''}`} 
+                                        ${item.category.includes('Sedan') || item.category.includes('Mini') ? 'scale-[1.15] md:scale-[1.25]' : ''}`} 
                                 />
                             </div>
 

@@ -43,45 +43,66 @@ const Hero = ({ onBookClick }) => {
                          </div>
                     </div>
 
-                    {/* Polaroid 1 - Kitesurfing */}
+                    {/* Polaroid 1 - Mirissa */}
                     <motion.div 
                         initial={{ opacity: 0, rotate: -15, x: -100 }}
                         animate={{ opacity: 1, rotate: -8, x: -20 }}
                         transition={{ duration: 1, delay: 0.2 }}
-                        className="absolute left-0 md:left-20 top-0 w-64 md:w-96 bg-white p-4 md:p-6 shadow-[20px_20px_60px_rgba(0,0,0,0.1)] border-2 border-slate-100 rotate-[-8deg] z-10"
+                        className="absolute left-0 md:left-20 top-0 w-64 md:w-80 bg-white p-4 md:p-6 shadow-[20px_20px_60px_rgba(0,0,0,0.1)] border-2 border-slate-100 rotate-[-8deg] z-10"
                     >
                         <div className="relative aspect-[4/5] overflow-hidden bg-slate-100 mb-6 border-2 border-black/5">
                             <Image 
-                                src="/Hero/arugam_beach.png" 
-                                alt="Kitesurfing in Sri Lanka" 
+                                src="/Hero/hero_mirissa.jpg" 
+                                alt="Mirissa Beach Sri Lanka" 
                                 fill 
                                 className="object-cover"
                             />
                         </div>
                         <div className="flex justify-between items-center">
-                             <div className="font-black italic uppercase tracking-tighter text-black">KALPITIYA LAGOON</div>
+                             <div className="font-black italic uppercase tracking-tighter text-black">MIRISSA BEACH</div>
                              <div className="w-10 h-10 rounded-full border-4 border-black/10 flex items-center justify-center italic font-black text-black">01</div>
                         </div>
                     </motion.div>
 
-                    {/* Polaroid 2 - Rafting */}
+                    {/* Polaroid 2 - Yala */}
                     <motion.div 
                         initial={{ opacity: 0, rotate: 15, x: 100 }}
                         animate={{ opacity: 1, rotate: 6, x: 20 }}
                         transition={{ duration: 1, delay: 0.4 }}
-                        className="absolute right-0 md:right-20 bottom-10 w-64 md:w-96 bg-white p-4 md:p-6 shadow-[20px_20px_60px_rgba(0,0,0,0.1)] border-2 border-slate-100 rotate-[6deg] z-20"
+                        className="absolute right-0 md:right-20 bottom-10 w-64 md:w-80 bg-white p-4 md:p-6 shadow-[20px_20px_60px_rgba(0,0,0,0.1)] border-2 border-slate-100 rotate-[6deg] z-20"
                     >
                         <div className="relative aspect-[4/5] overflow-hidden bg-slate-100 mb-6 border-2 border-black/5">
                             <Image 
                                 src="/Hero/safari_tour.png" 
-                                alt="Rafting Adventure" 
+                                alt="Yala Safari Sri Lanka" 
                                 fill 
                                 className="object-cover"
                             />
                         </div>
                         <div className="flex justify-between items-center">
-                             <div className="font-black italic uppercase tracking-tighter text-black">KITHULGALA RAPIDS</div>
+                             <div className="font-black italic uppercase tracking-tighter text-black">SAFARI YALA</div>
                              <div className="w-10 h-10 rounded-full border-4 border-black/10 flex items-center justify-center italic font-black text-black">02</div>
+                        </div>
+                    </motion.div>
+
+                    {/* Polaroid 3 - Ella (NEW) */}
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.8, y: 100 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ duration: 1, delay: 0.6 }}
+                        className="absolute left-1/2 -translate-x-1/2 top-40 w-56 md:w-72 bg-white p-4 shadow-[20px_20px_60px_rgba(0,0,0,0.1)] border-2 border-slate-100 rotate-[-4deg] z-[15]"
+                    >
+                        <div className="relative aspect-[4/5] overflow-hidden bg-slate-100 mb-4 border-2 border-black/5">
+                            <Image 
+                                src="/Hero/ella.jpg" 
+                                alt="Ella Nine Arch Bridge" 
+                                fill 
+                                className="object-cover"
+                            />
+                        </div>
+                        <div className="flex justify-between items-center">
+                             <div className="font-black italic uppercase tracking-tighter text-black text-xs">ELLA NINE ARCH</div>
+                             <div className="text-[10px] font-black text-black opacity-20 italic">03</div>
                         </div>
                     </motion.div>
 
