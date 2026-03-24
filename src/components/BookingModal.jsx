@@ -286,7 +286,19 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         }
     };
 
+    // Price Calculation Helper for Vehicle List
+    const calculatePrice = (v) => {
+        const distKm = Number(distance || initialData.distance || 0);
+        const baseTotal = calculateBasePrice(distKm, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
+        const surcharges = calculateSurcharges({
+            hasNameBoard: formData.hasNameBoard,
+            nameBoardPrice: pricingSettings?.nameBoardPrice
+        }, v);
+        return baseTotal + surcharges;
+    };
+
     // Extract calculated values for render
+
     // Memoize the price breakdown to ensure reactivity and performance
     const { total: totalPrice, subtotal, surcharges, payNow, balance: balanceAmount, ...detailedBreakdown } = useMemo(() => {
         return getPriceBreakdown();
@@ -298,15 +310,27 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
     // 1. Initialize State from initialData when modal opens or initialData changes
     useEffect(() => {
-        if (isOpen && initialData && Object.keys(initialData).length > 0) {
-            console.log("Initializing Modal with data:", initialData);
-            setFormData(prev => ({
-                ...prev,
+        if (isOpen) {
+            setFormData(prev => ({ 
+                ...prev, 
                 ...initialData,
+                // Ensure initial data maps correctly to form fields
+                pickup: initialData.pickup || prev.pickup,
+                dropoff: initialData.drop || initialData.dropoff || prev.dropoff,
+                vehicle: initialData.vehicle || prev.vehicle,
                 // Ensure specific nested objects are merged correctly
                 passengerCount: { ...prev.passengerCount, ...(initialData.passengerCount || {}) },
                 waypoints: initialData.waypoints || prev.waypoints
             }));
+            
+            // If vehicle is pre-selected, collapse the list by default for a focused view
+            if (initialData.vehicle) {
+                setIsVehicleExpanded(false);
+            } else {
+                setIsVehicleExpanded(true);
+            }
+            
+            setStep(1);
 
             if (initialData.distance) {
                 const d = Number(initialData.distance);
@@ -728,41 +752,40 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             {formData.vehicle && (
                                                 <button 
                                                     onClick={() => setIsVehicleExpanded(!isVehicleExpanded)}
-                                                    className="text-[9px] font-black uppercase tracking-widest text-[#FACC15] bg-black px-4 py-2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] active:translate-y-0 transition-all italic"
+                                                    className="text-[9px] font-black uppercase tracking-widest text-[#FACC15] bg-black px-4 py-2 border-2 border-black hover:translate-y-[-2px] active:translate-y-0 transition-all italic"
                                                 >
                                                     {isVehicleExpanded ? 'Collapse List' : 'Change Vehicle'}
                                                 </button>
                                             )}
                                         </div>
-                                        
+
                                         <AnimatePresence mode="wait">
                                             <motion.div 
                                                 key={isVehicleExpanded ? 'expanded' : 'collapsed'}
                                                 initial={{ opacity: 0, height: 0 }}
                                                 animate={{ opacity: 1, height: 'auto' }}
                                                 exit={{ opacity: 0, height: 0 }}
-                                                transition={{ duration: 0.4, ease: "circOut" }}
-                                                className="grid grid-cols-1 gap-6 overflow-hidden"
+                                                transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                                                className="overflow-hidden"
                                             >
                                                 <VehicleCarousel 
-                                                    vehicles={pricingData.map(v => ({ 
-                                                        ...v, 
-                                                        calculatedTotal: calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations) 
+                                                    vehicles={pricingData.map(v => ({
+                                                        ...v,
+                                                        calculatedTotal: calculatePrice(v)
                                                     }))}
                                                     selectedId={formData.vehicle}
                                                     onSelect={(vehicleType) => {
                                                         setFormData({ ...formData, vehicle: vehicleType });
                                                     }}
-                                                    passengerCount={{ 
-                                                        adults: formData.passengerCount?.adults || 1, 
-                                                        children: formData.passengerCount?.children || 0,
-                                                        bags: (formData.passengerCount?.luggage || 0) + (formData.passengerCount?.handLuggage || 0) * 0.5,
-                                                        distance: distance
-                                                    }}
+                                                    passengerCount={formData}
+                                                    pickupLocation={formData.pickup}
+                                                    dropoffLocation={formData.dropoff}
+                                                    isCondensed={!isVehicleExpanded}
                                                 />
                                             </motion.div>
                                         </AnimatePresence>
                                     </div>
+
                                 </div>
 
                                 <div className="space-y-6">
@@ -805,6 +828,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                  if (errors.date) setErrors(prev => ({ ...prev, date: false }));
                                                              }}
                                                              className={`w-full h-12 md:h-16 bg-white dark:bg-white/5 border-4 px-4 md:px-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-[10px] md:text-xs text-black dark:text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest ${errors.date ? 'border-red-500 animate-shake' : 'border-black'}`}
+                                                             placeholder="YYYY-MM-DD"
                                                          />
                                                      </div>
                                                      <div className="space-y-3 sm:space-y-4">
@@ -945,10 +969,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         ))}
                                     </div>
                                 </div>
-                            </div>
 
-                            {/* Detailed Breakdown & Coupons */}
-                            <div className="space-y-4 bg-slate-50 dark:bg-white/5 p-6 rounded-none border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                                {/* Detailed Breakdown & Coupons */}
+                                <div className="space-y-4 bg-slate-50 dark:bg-white/5 p-6 rounded-none border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+
                                 <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">
                                     <span>Fare Subtotal</span>
                                     <span className="text-black dark:text-white">{currentSymbol} {subtotal.toLocaleString()}</span>
@@ -1008,7 +1032,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 {/* Left Column: Client Info & Logistics */}
                                 <div className="lg:col-span-7 space-y-12">
                                     {!session && (
-                                        <div className="bg-[#FACC15] border-4 border-black p-8 rounded-none flex items-center justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden group">
+                                        <div className="bg-[#FACC15] border-4 border-black p-8 rounded-none flex items-center justify-between relative overflow-hidden group">
                                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                                             <div className="flex items-center gap-6 relative z-10">
                                                 <div className="w-14 h-14 rounded-none border-2 border-black bg-black flex items-center justify-center text-[#FACC15] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><User size={28} /></div>
@@ -1017,7 +1041,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     <p className="text-[10px] font-black text-black/40 uppercase tracking-[0.2em] mt-1">Unlock priority support & booking history.</p>
                                                 </div>
                                             </div>
-                                            <button onClick={() => signIn()} className="relative z-10 px-10 py-4 bg-black rounded-none border-4 border-black text-xs font-black text-[#FACC15] hover:scale-105 active:scale-95 transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest italic">Sign In</button>
+                                            <button onClick={() => signIn()} className="relative z-10 px-10 py-4 bg-black rounded-none border-4 border-black text-xs font-black text-[#FACC15] hover:scale-105 active:scale-95 transition-all uppercase tracking-widest italic">Sign In</button>
                                         </div>
                                     )}
 
@@ -1098,8 +1122,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                      placeholder="Full Billing Address"
                                                  ></textarea>
                                              </div>
-                                         </div>
-                                    </div>
+                                          </div>
+                                     </div>
+                                </div>
                                     {/* Right Column: Summary & Payment */}
                                     <div className="lg:col-span-5 space-y-8">
                                         <div className="p-8 md:p-10 bg-white dark:bg-[#111] rounded-none text-black dark:text-white border-4 border-black relative overflow-hidden group border-t-[12px] border-t-[#FACC15]">
@@ -1186,7 +1211,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 </div>
                                             </div>
                                         </div>
- </div>
 
                                     {/* Payment Selection */}
                                     <div className="space-y-6">
@@ -1201,7 +1225,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         paymentType: m === 'cash' ? 'full' : prev.paymentType
                                                     }))}
                                                     className={`p-6 rounded-none border-4 transition-all flex flex-col items-center gap-4 group/pm ${formData.paymentMethod === m
-                                                        ? 'border-black bg-[#FACC15] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]'
+                                                        ? 'border-black bg-[#FACC15]'
                                                         : 'border-black/5 dark:border-white/5 bg-white dark:bg-white/[0.02] opacity-40 hover:opacity-100 hover:border-black'}`}
                                                 >
                                                     <div className={`w-12 h-12 rounded-none flex items-center justify-center text-2xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform group-hover/pm:scale-110 ${formData.paymentMethod === m ? 'bg-black' : 'bg-slate-100 dark:bg-white/10'}`}>
@@ -1211,6 +1235,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 </button>
                                             ))}
                                         </div>
+                                    </div>
 
                                         {formData.paymentMethod === 'card' && (
                                             <div className="grid grid-cols-2 gap-4 p-2 bg-slate-100 dark:bg-white/5 rounded-none border-4 border-black">
@@ -1270,7 +1295,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-6 md:gap-6">
                         <button
                             onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                            className="flex items-center justify-center gap-2 md:gap-4 px-6 md:px-10 py-2.5 md:py-5 bg-white dark:bg-white/5 rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-slate-50 dark:hover:bg-white/10 transition-all text-black dark:text-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[180px] italic active:scale-95"
+                            className="flex items-center justify-center gap-2 md:gap-4 px-6 md:px-10 py-2.5 md:py-5 bg-white dark:bg-white/5 rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-slate-50 dark:hover:bg-white/10 transition-all text-black dark:text-white border-4 border-black w-full md:w-auto md:min-w-[180px] italic active:scale-95"
                         >
                             <ChevronLeft size={16} className="md:w-4 md:h-4" /> {step === 1 ? 'Cancel Trip' : 'Return Back'}
                         </button>
@@ -1306,3 +1331,5 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         </div>
     );
 }
+
+

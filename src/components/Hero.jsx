@@ -120,30 +120,25 @@ const Hero = ({ onBookClick }) => {
                     </div>
                 </div>
 
-                {/* Tabbed Navigation Widget from Sketch */}
-                <div className="w-full max-w-5xl bg-white dark:bg-black border-4 border-black shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
-                    <div className="grid grid-cols-2 md:grid-cols-4 border-b-4 border-black">
-                        {[
-                            { id: 'pickup', label: 'AIRPORT PICKUP', icon: PlaneTakeoff },
-                            { id: 'drop', label: 'AIRPORT DROP', icon: PlaneLanding },
-                            { id: 'ride', label: 'RIDE', icon: Car },
-                            { id: 'tours', label: 'TOURS', icon: Compass },
-                        ].map((tab, i) => (
-                            <button
-                                key={tab.id}
-                                onClick={() => onBookClick(tab.id)}
-                                className={`flex flex-col items-center justify-center gap-3 py-8 transition-all hover:bg-slate-50 dark:hover:bg-white/5 border-r-4 border-black last:border-r-0 group
-                                    ${i === 0 ? 'bg-[#FACC15]' : ''}`}
-                            >
-                                <tab.icon size={28} className={`${i === 0 ? 'text-black' : 'text-slate-400 dark:text-slate-600'} transition-colors group-hover:text-[#FACC15] ${i === 0 ? 'group-hover:text-black' : ''}`} strokeWidth={3} />
-                                <span className={`text-[10px] md:text-xs font-black tracking-widest uppercase italic 
-                                    ${i === 0 ? 'text-black' : 'text-slate-400 dark:text-slate-600'} group-hover:text-black dark:group-hover:text-white transition-colors`}>
-                                    {tab.label}
-                                </span>
-                            </button>
-                        ))}
+                {/* Space-Saving Start Booking Bar */}
+                <div className="w-full max-w-4xl mt-10 md:mt-20">
+                    <button
+                        onClick={() => onBookClick('pickup')}
+                        className="w-full bg-[#FACC15] border-8 border-black p-8 md:p-12 flex items-center justify-between group hover:bg-black hover:text-[#FACC15] transition-all duration-500"
+                    >
+                        <span className="text-4xl md:text-7xl font-black italic uppercase tracking-tighter leading-none">
+                            START YOUR JOURNEY
+                        </span>
+                        <div className="w-16 h-16 md:w-24 md:h-24 bg-black text-[#FACC15] border-4 border-black group-hover:bg-[#FACC15] group-hover:text-black flex items-center justify-center transition-all">
+                            <ArrowRight size={48} className="transform group-hover:translate-x-4 transition-transform" />
+                        </div>
+                    </button>
+                    <div className="flex justify-between mt-4 px-2">
+                         <div className="text-[10px] font-black uppercase tracking-[0.3em] text-black/40 dark:text-white/40 italic">PREMIUM TRANSFERS • 24/7 SUPPORT • FIXED RATES</div>
+                         <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[#FACC15] italic">EST. 2012</div>
                     </div>
                 </div>
+
             </div>
 
             {/* Side Ornaments */}

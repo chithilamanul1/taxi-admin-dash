@@ -50,7 +50,8 @@ const FleetSection = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
                     {fleetData.map((item, idx) => (
-                        <div key={idx} className="flex flex-col border-4 border-black bg-white dark:bg-[#111] shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:shadow-[12px_12px_0px_0px_#FACC15]">
+                        <div key={idx} className="flex flex-col border-4 border-black bg-white dark:bg-[#111]">
+
                             {/* Category Header */}
                             <div className="bg-black text-[#FACC15] p-4 text-center border-b-4 border-black font-black uppercase tracking-[0.3em] text-sm">
                                 {item.category}

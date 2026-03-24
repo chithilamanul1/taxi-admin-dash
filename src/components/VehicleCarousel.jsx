@@ -1,14 +1,30 @@
 import React, { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Users, Briefcase, ShoppingBag, Info, Lock, Wind, Backpack, Check, ArrowRight, Car } from 'lucide-react';
-import VehicleDetailModal from './VehicleDetailModal';
 import { useCurrency } from '../context/CurrencyContext';
 
 const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
 
-const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, pickupLocation, dropoffLocation }) => {
+const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, pickupLocation, dropoffLocation, isCondensed = false }) => {
     const scrollRef = useRef(null);
-    const [detailVehicle, setDetailVehicle] = useState(null);
     const { convertPrice, rates, currency } = useCurrency();
+
+    // Custom sorting logic for vehicles
+    const sortedVehicles = [...vehicles].sort((a, b) => {
+        const getPriority = (type) => {
+            const t = type?.toLowerCase() || '';
+            if (t.includes('mini')) return 1;
+            if (t.includes('sedan')) return 2;
+            if (t.includes('suv')) return 3;
+            if (t.includes('vezel')) return 4;
+            if (t.includes('van')) return 5;
+            return 10;
+        };
+        return getPriority(a.vehicleType) - getPriority(b.vehicleType);
+    });
+
+    const displayVehicles = isCondensed && selectedId 
+        ? sortedVehicles.filter(v => v.vehicleType === selectedId)
+        : sortedVehicles;
 
     const scroll = (direction) => {
         if (scrollRef.current) {
@@ -53,9 +69,9 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                     )}
 
                     <h3 className="text-xl md:text-2xl font-black text-black dark:text-white flex flex-wrap items-center gap-3 md:gap-4 uppercase italic tracking-tighter">
-                        VEHICLE OPTIONS
-                        <span className="text-[9px] md:text-[10px] bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black px-4 md:px-6 py-1.5 rounded-none border-2 border-black not-italic tracking-[0.2em] font-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                            {vehicles.length} MODELS
+                        {isCondensed ? 'SELECTED VEHICLE' : 'VEHICLE OPTIONS'}
+                        <span className="text-[9px] md:text-[10px] bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black px-4 md:px-6 py-1.5 rounded-none border-2 border-black not-italic tracking-[0.2em] font-black">
+                            {displayVehicles.length} {displayVehicles.length === 1 ? 'UNIT' : 'MODELS'}
                         </span>
                     </h3>
                 </div>
@@ -65,7 +81,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                 ref={scrollRef}
                 className="flex flex-col gap-6 overflow-y-visible pb-8 px-2 w-full items-stretch"
             >
-                {vehicles.map((vehicle, index) => {
+                {displayVehicles.map((vehicle, index) => {
                     const { suitable, reason } = isSuitable(vehicle);
                     const isSelected = selectedId === vehicle.vehicleType;
                     const displayIdx = (index + 1).toString().padStart(2, '0');
@@ -76,8 +92,8 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                             className={`
                                 relative flex-shrink-0 w-full max-w-[420px] mx-auto snap-start transition-all duration-300 group/card flex flex-col
                                 ${isSelected 
-                                    ? 'shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] dark:shadow-[15px_15px_0px_0px_#FACC15] border-[4px] border-black -translate-y-2' 
-                                    : 'hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[10px_10px_0px_0px_#FACC15] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_#FACC15] border-[3px] border-black hover:-translate-y-1'}
+                                    ? 'border-[4px] border-black bg-[#FACC15]/5 -translate-y-2' 
+                                    : 'border-[4px] border-black hover:-translate-y-1'}
                                 ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
                                 bg-white dark:bg-[#111] rounded-none
                                 overflow-visible h-full
@@ -86,11 +102,11 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                         >
                             {!suitable && (
                                 <div className="absolute inset-0 z-30 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center p-8 text-center">
-                                    <div className="w-16 h-16 bg-red-600 rounded-none mb-6 flex items-center justify-center border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                    <div className="w-16 h-16 bg-red-600 rounded-none mb-6 flex items-center justify-center border-4 border-black">
                                         <Lock size={28} className="text-white" strokeWidth={3} />
                                     </div>
                                     <p className="text-xl font-black text-white uppercase italic tracking-tighter leading-tight">{reason}</p>
-                                    <p className="text-[10px] text-white font-black mt-4 uppercase tracking-[0.3em] bg-red-700 px-6 py-2.5 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">SELECT LARGER VEHICLE</p>
+                                    <p className="text-[10px] text-white font-black mt-4 uppercase tracking-[0.3em] bg-red-700 px-6 py-2.5 rounded-none border-2 border-black">SELECT LARGER VEHICLE</p>
                                 </div>
                             )}
 
@@ -107,14 +123,6 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                     {displayIdx}
                                 </div>
 
-                                {/* Info button */}
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); setDetailVehicle(vehicle); }}
-                                    className="absolute top-4 right-4 w-9 h-9 bg-white dark:bg-[#111] text-black dark:text-[#FACC15] rounded-none border-2 border-black flex items-center justify-center hover:bg-[#FACC15] hover:text-black transition-all z-20 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_#FACC15]"
-                                    aria-label={`View details for ${vehicle.name}`}
-                                >
-                                    <Info size={16} strokeWidth={2.5} />
-                                </button>
 
                                 <h4 className="text-2xl font-black text-[#1A1A1A] dark:text-white uppercase tracking-tighter mb-4 text-center relative z-10 min-h-[64px] flex items-center justify-center">
                                     {displayName(vehicle.name)}
@@ -195,7 +203,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                             bg-white dark:bg-slate-800 border-2 border-black p-3 
                                             flex flex-col items-center justify-center 
                                             transition-all duration-300 
-                                            ${isSelected ? 'shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_#FACC15]' : 'shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_#FACC15]'}
+                                            ${isSelected ? 'bg-[#FACC15]/20' : ''}
                                         `}>
                                             <item.icon size={18} className="text-emerald-900 dark:text-[#FACC15] mb-1" strokeWidth={3} />
                                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{item.label}</span>
@@ -211,12 +219,6 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                 })}
             </div>
 
-            <VehicleDetailModal
-                isOpen={!!detailVehicle}
-                vehicle={detailVehicle}
-                onClose={() => setDetailVehicle(null)}
-                onSelect={onSelect}
-            />
         </div>
     );
 };

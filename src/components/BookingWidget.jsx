@@ -523,7 +523,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     return (
         <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-3 sm:px-4">
             {/* Tab Navigation - Boxy Style */}
-            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-8 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all overflow-hidden" role="tablist">
+            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-8 border-4 border-black transition-all overflow-hidden" role="tablist">
+
                 <div className="grid grid-cols-4 w-full sm:w-auto divide-x divide-slate-100 dark:divide-slate-800">
                     {[
                         { id: 'pickup', label: 'Airport Pickup', icon: PlaneTakeoff },
@@ -557,11 +558,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
                         <div className="flex-1 text-center lg:text-left">
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8">
-                                <div className="flex bg-white dark:bg-[#111] rounded-none border-[3px] border-black w-full sm:w-auto overflow-hidden p-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                <div className="flex bg-white dark:bg-[#111] rounded-none border-[4px] border-black w-full sm:w-auto overflow-hidden p-1">
                                     <button 
                                         onClick={() => setTripType('one-way')} 
                                         aria-label="One Way Trip" 
-                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-2.5 rounded-none text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all ${tripType === 'one-way' ? 'bg-[#FACC15] text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'text-slate-400 hover:text-black dark:hover:text-[#FACC15]'}`}
+                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-2.5 rounded-none text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all ${tripType === 'one-way' ? 'bg-[#FACC15] text-black border-2 border-black' : 'text-slate-400 hover:text-black dark:hover:text-[#FACC15]'}`}
                                     >
                                         One Way
                                     </button>
@@ -570,7 +571,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         disabled={activeTab === 'pickup' || activeTab === 'drop'}
                                         aria-label="Round Trip"
                                         className={`flex-1 sm:flex-none px-3 sm:px-8 py-2.5 rounded-none text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all relative flex items-center justify-center gap-1 sm:gap-2
-                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-black dark:bg-[#FACC15] text-white dark:text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] border-2 border-black' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}
+                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-black dark:bg-[#FACC15] text-white dark:text-black border-2 border-black' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}
                                             ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-40 cursor-not-allowed' : ''}
                                         `}
                                     >
@@ -584,14 +585,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex items-center gap-2 w-full sm:w-auto">
                                     {/* Currency Selector */}
                                     <div className="relative group z-[110]">
-                                        <button className="flex items-center gap-2 bg-white dark:bg-[#1a1a1a] border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] px-4 py-2.5 text-xs font-black text-black dark:text-white hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all">
+                                        <button className="flex items-center gap-2 bg-white dark:bg-[#1a1a1a] border-2 border-black rounded-none px-4 py-2.5 text-xs font-black text-black dark:text-white hover:-translate-y-0.5 transition-all">
+
                                             <div className="w-5 h-5 overflow-hidden rounded-none border-[1.5px] border-black">
                                                 <img src={SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag} alt={currency} className="w-full h-full object-cover scale-150" />
                                             </div>
                                             <span className="uppercase text-black dark:text-white">{currency}</span>
                                             <ChevronDown size={14} className="opacity-100 text-black dark:text-white" />
                                         </button>
-                                        <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-[#111] rounded-none shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] border-[3px] border-black overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
+                                        <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-[#111] rounded-none border-[3px] border-black overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
                                             <div className="py-0">
                                                 {SUPPORTED_CURRENCIES.map(c => (
                                                     <button
@@ -609,7 +611,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                     </div>
 
-                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-black text-[10px] md:text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 bg-[#FACC15] px-4 md:px-6 py-2.5 md:py-3 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 justify-center whitespace-nowrap">
+                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-black text-[10px] md:text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 bg-[#FACC15] px-4 md:px-6 py-2.5 md:py-3 rounded-none border-2 border-black hover:-translate-y-0.5 justify-center whitespace-nowrap">
+
                                         {isLocating ? <Loader2 size={14} className="animate-spin" /> : <Zap size={14} className="fill-current" />}
                                         <span className="hidden sm:inline">Auto Detect</span>
                                         <span className="sm:hidden uppercase">Detect</span>
@@ -635,7 +638,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 {/* Waypoints List */}
                                 {waypoints.map((wp, idx) => (
-                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-white/5 rounded-none border-2 border-black p-1 flex items-center overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-white/5 rounded-none border-2 border-black p-1 flex items-center overflow-hidden">
                                         <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none z-10 bg-black p-1 border border-[#FACC15] rounded-none">
                                             <Navigation size={16} />
                                         </div>
@@ -682,7 +685,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 <button
                                                     onClick={() => setWaypointSearches([{ active: true }])}
                                                     aria-label="Add Stop"
-                                                    className="text-black bg-white dark:bg-[#111] dark:text-[#FACC15] text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 py-2 px-3 rounded-none border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all"
+                                                    className="text-black bg-white dark:bg-[#111] dark:text-[#FACC15] text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 py-2 px-3 rounded-none border-2 border-black hover:-translate-y-0.5 transition-all"
+
                                                 >
                                                     <Plus size={14} strokeWidth={3} /> ADD STOP ({waypoints.length}/4)
                                                 </button>

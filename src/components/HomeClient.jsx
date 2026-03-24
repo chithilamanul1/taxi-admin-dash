@@ -89,16 +89,20 @@ export default function HomeClient() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                         {[
                             { name: 'SIGIRIYA ROCK', img: '/Hero/sigiriya.jpg', rotate: '-3deg' },
-                            { name: 'KANDY TEMPLE', img: '/Hero/izanuradapura.jpg', rotate: '2deg' },
-                            { name: 'GALLE FORT', img: '/Hero/view.jpg', rotate: '-2deg' },
-                            { name: 'WILD SAFARI', img: '/Hero/elephants.jpg', rotate: '4deg' },
+                            { name: 'KANDY TEMPLE', img: '/tours/kandy.jpg', rotate: '2deg' },
+                            { name: 'GALLE FORT', img: '/tours/galle3.jpg', rotate: '-2deg' },
+                            { name: 'WILD SAFARI YALA', img: '/tours/safari_yala.png', rotate: '4deg' },
+                            { name: 'MIRISSA WHALES', img: '/Hero/hero_mirissa.jpg', rotate: '-2deg' },
+                            { name: 'ELLA PEAK', img: '/Hero/ella.jpg', rotate: '3deg' },
+                            { name: 'COLOMBO CITY', img: '/tours/colombo.jpg', rotate: '-1deg' },
+                            { name: 'TEA ESTATES', img: '/Hero/view.jpg', rotate: '2deg' },
                         ].map((item, i) => (
                             <div key={i} className="group relative">
                                 <div 
-                                    className="bg-white p-4 shadow-xl border-2 border-black/5 transition-transform hover:scale-105 hover:rotate-0 duration-500"
+                                    className="bg-white p-4 border-4 border-black transition-transform hover:scale-105 hover:rotate-0 duration-500 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
                                     style={{ transform: `rotate(${item.rotate})` }}
                                 >
-                                    <div className="relative aspect-square overflow-hidden mb-4 border border-black/10">
+                                    <div className="relative aspect-square overflow-hidden mb-4 border-4 border-black">
                                         <Image src={item.img} alt={item.name} fill className="object-cover" />
                                     </div>
                                     <div className="text-[10px] font-black uppercase tracking-tighter text-black italic">{item.name}</div>
@@ -106,6 +110,7 @@ export default function HomeClient() {
                             </div>
                         ))}
                     </div>
+
                 </div>
             </section>
 
@@ -128,7 +133,7 @@ export default function HomeClient() {
                 product={selectedExpressProduct}
             />
 
-            <div id="calculator" className="py-20 md:py-40 relative border-t border-black/5 dark:border-white/5">
+            <div id="calculator" className="py-20 md:py-40 relative border-t-8 border-black">
                 <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
                     <h2 className="text-5xl md:text-8xl font-black text-black dark:text-white mb-10 uppercase italic tracking-tighter leading-none">
                         SEAMLESS <br /><span className="text-[#FACC15]">AIRPORT TRANSFERS</span>
@@ -136,7 +141,7 @@ export default function HomeClient() {
                     <p className="text-black/40 dark:text-white/40 mb-14 text-sm font-black uppercase tracking-[0.3em] max-w-2xl mx-auto">Predictable pricing, premium vehicles, and professional chauffeurs waiting for you.</p>
                     <button
                         onClick={() => setIsBookingOpen(true)}
-                        className="bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black px-16 py-6 font-black text-sm uppercase tracking-widest hover:translate-y-[-4px] transition-all shadow-2xl inline-flex items-center gap-4 group italic rounded-2xl"
+                        className="bg-[#FACC15] text-black px-16 py-6 font-black text-sm uppercase tracking-widest hover:translate-y-[-8px] transition-all shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] inline-flex items-center gap-4 group italic rounded-none border-4 border-black"
                     >
                         BOOK YOUR TRIP NOW
                         <ArrowRight size={22} className="group-hover:translate-x-2 transition-transform" />

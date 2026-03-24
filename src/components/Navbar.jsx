@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Phone, User, LogOut, Calendar, ChevronDown, Globe } from 'lucide-react'
+import { Menu, X, Phone, User, LogOut, Calendar, ChevronDown, Globe, MessageCircle } from 'lucide-react'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useCurrency } from '../context/CurrencyContext'
 import ThemeToggle from './ThemeToggle'
@@ -51,16 +51,38 @@ export default function Navbar() {
                     </div>
                 </Link>
 
-                <div className="flex items-center gap-3 md:gap-4">
-                    {/* Quick Contact (NEW) */}
-                    <a href="tel:+94716885880" className="w-12 h-12 md:w-16 md:h-16 bg-white border-4 border-black flex items-center justify-center text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] transition-all">
-                        <Phone size={24} strokeWidth={3} />
+                <div className="flex items-center gap-2 md:gap-3">
+                    {/* Phone/Contact */}
+                    <a href="tel:+94716885880" className="w-10 h-10 md:w-14 md:h-14 bg-white border-4 border-black flex items-center justify-center text-black hover:bg-slate-50 transition-all">
+                        <Phone size={20} md:size={24} strokeWidth={3} />
                     </a>
+
+                    {/* Live Chat Toggle (NEW) */}
+                    <button 
+                        onClick={() => window.dispatchEvent(new CustomEvent('open-live-chat'))}
+                        className="w-10 h-10 md:w-14 md:h-14 bg-emerald-500 border-4 border-black flex items-center justify-center text-black hover:bg-emerald-400 transition-all"
+                    >
+                        <MessageCircle size={20} md:size={24} strokeWidth={3} />
+                    </button>
+
+                    {/* Login/User (NEW) */}
+                    {status === 'authenticated' ? (
+                        <Link href="/admin/dashboard" className="w-10 h-10 md:w-14 md:h-14 bg-[#FACC15] border-4 border-black flex items-center justify-center text-black hover:bg-yellow-300 transition-all">
+                            <User size={20} md:size={24} strokeWidth={3} />
+                        </Link>
+                    ) : (
+                        <button 
+                            onClick={() => signIn('google')}
+                            className="w-10 h-10 md:w-14 md:h-14 bg-[#FACC15] border-4 border-black flex items-center justify-center text-black hover:bg-yellow-300 transition-all"
+                        >
+                            <User size={20} md:size={24} strokeWidth={3} />
+                        </button>
+                    )}
 
                     {/* Currency Selector (Always Visible) */}
                     <div className="relative group hidden sm:block">
-                        <button className="w-12 h-12 md:w-16 md:h-16 bg-[#FACC15] border-4 border-black flex items-center justify-center text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] transition-all">
-                            <Globe size={24} strokeWidth={3} />
+                        <button className="w-10 h-10 md:w-14 md:h-14 bg-white border-4 border-black flex items-center justify-center text-black hover:bg-slate-50 transition-all">
+                            <Globe size={20} md:size={24} strokeWidth={3} />
                         </button>
                         <div className="absolute top-full right-0 mt-4 w-48 bg-white dark:bg-black border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
                              {SUPPORTED_CURRENCIES.map(c => (
