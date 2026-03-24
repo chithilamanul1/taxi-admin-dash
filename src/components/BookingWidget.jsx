@@ -551,7 +551,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             </div>
 
             {/* Widget Main Content - Boxy Style */}
-            <div className="bg-white dark:bg-[#111] border-4 border-black p-4 md:p-12 animate-slide-up relative z-10 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] rounded-none w-full box-border">
+            <div className="bg-white dark:bg-[#111] border-4 border-black p-4 md:p-12 animate-slide-up relative z-10 rounded-none w-full box-border">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
