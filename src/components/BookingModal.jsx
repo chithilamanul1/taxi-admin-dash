@@ -601,7 +601,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             `}</style>
 
             {/* Modal Container */}
-            <div id="modal-container" className="bg-white dark:bg-black w-full h-full sm:h-auto sm:max-h-[95vh] rounded-none border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative transition-colors duration-500">
+            <div id="modal-container" className="bg-white dark:bg-black w-full h-full sm:h-auto sm:max-h-[95vh] rounded-none border-4 border-black sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative transition-colors duration-500">
                 {/* Coupon Verification Notification - Moved to Bottom */}
                 <AnimatePresence>
                     {couponLoading && (
@@ -900,7 +900,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
                             </div>
 
-                                <div className="p-8 md:p-10 bg-white dark:bg-[#111] rounded-none text-black dark:text-white flex flex-col shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] gap-10 relative overflow-hidden group border-4 border-black transition-all">
+                                <div className="p-8 md:p-10 bg-white dark:bg-[#111] rounded-none text-black dark:text-white flex flex-col gap-10 relative overflow-hidden group border-4 border-black transition-all">
                                     {/* Decorative Background Glow */}
                                     <div className="absolute top-0 right-0 w-72 h-72 bg-[#FACC15]/10 rounded-none blur-3xl -mr-36 -mt-36"></div>
 
@@ -1102,7 +1102,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     </div>
                                     {/* Right Column: Summary & Payment */}
                                     <div className="lg:col-span-5 space-y-8">
-                                        <div className="p-8 md:p-10 bg-white dark:bg-[#111] rounded-none text-black dark:text-white shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] border-4 border-black relative overflow-hidden group border-t-[12px] border-t-[#FACC15]">
+                                        <div className="p-8 md:p-10 bg-white dark:bg-[#111] rounded-none text-black dark:text-white border-4 border-black relative overflow-hidden group border-t-[12px] border-t-[#FACC15]">
                                             <div className="absolute top-0 right-0 w-48 h-48 bg-[#FACC15]/5 rounded-none blur-[80px] -mr-24 -mt-24"></div>
 
                                             <div className="relative z-10 space-y-8">
