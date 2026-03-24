@@ -551,7 +551,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             </div>
 
             {/* Widget Main Content - Boxy Style */}
-            <div className="bg-white dark:bg-[#111] border-4 border-black p-4 md:p-12 animate-slide-up relative z-10 shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] rounded-none w-full box-border">
+            <div className="bg-white dark:bg-[#111] border-4 border-black p-4 md:p-12 animate-slide-up relative z-10 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] md:shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] rounded-none w-full box-border">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
@@ -743,7 +743,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex-1 space-y-4">
                                     <button
                                         onClick={() => setIsCouponOpen(!isCouponOpen)}
-                                        className={`flex items-center gap-3 text-[10px] lg:text-[9px] font-black h-full min-h-[4rem] sm:min-h-[5rem] lg:min-h-[3.5rem] transition-all px-4 sm:px-8 lg:px-6 py-3 sm:py-4 lg:py-2 rounded-none w-full justify-center uppercase tracking-[0.2em] lg:tracking-[0.15em] border-[3px] border-black ${isCouponOpen ? 'bg-[#FACC15] text-black' : 'bg-black text-[#FACC15] hover:bg-slate-900'}`}
+                                        className={`flex items-center gap-3 text-[10px] lg:text-[9px] font-black h-full min-h-[4rem] sm:min-h-[5rem] lg:min-h-[3.5rem] transition-all px-4 sm:px-8 lg:px-6 py-3 sm:py-4 lg:py-2 rounded-none w-full justify-center uppercase tracking-[0.2em] lg:tracking-[0.15em] border-[3px] border-black ${isCouponOpen ? 'bg-[#FACC15] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-white text-black hover:bg-slate-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'}`}
                                     >
                                         <Tag size={18} className={`${isCouponOpen ? 'text-black' : 'text-[#FACC15]'} w-4 h-4 sm:w-5 sm:h-5 lg:w-4 lg:h-4`} fill="currentColor" />
                                         {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}

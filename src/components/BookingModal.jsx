@@ -804,7 +804,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                  setFormData(prev => ({ ...prev, flightArrivalDate: d, arrivalDate: d, date: isAirportService ? d : prev.date }));
                                                                  if (errors.date) setErrors(prev => ({ ...prev, date: false }));
                                                              }}
-                                                             className={`w-full h-12 md:h-16 bg-white dark:bg-white/5 border-4 px-4 md:px-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-[10px] md:text-xs text-black dark:text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest invert dark:invert-0 ${errors.date ? 'border-red-500 animate-shake' : 'border-black'}`}
+                                                             className={`w-full h-12 md:h-16 bg-white dark:bg-white/5 border-4 px-4 md:px-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-[10px] md:text-xs text-black dark:text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest ${errors.date ? 'border-red-500 animate-shake' : 'border-black'}`}
                                                          />
                                                      </div>
                                                      <div className="space-y-3 sm:space-y-4">
@@ -818,7 +818,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                  setFormData(prev => ({ ...prev, flightArrivalTime: t, arrivalTime: t, time: isAirportService ? t : prev.time }));
                                                                  if (errors.time) setErrors(prev => ({ ...prev, time: false }));
                                                              }}
-                                                             className={`w-full h-12 md:h-16 bg-white dark:bg-white/5 border-4 px-4 md:px-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-[10px] md:text-xs text-black dark:text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest invert dark:invert-0 ${errors.time ? 'border-red-500 animate-shake' : 'border-black'}`}
+                                                             className={`w-full h-12 md:h-16 bg-white dark:bg-white/5 border-4 px-4 md:px-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-[10px] md:text-xs text-black dark:text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest ${errors.time ? 'border-red-500 animate-shake' : 'border-black'}`}
                                                          />
                                                      </div>
                                                 </div>
@@ -842,12 +842,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                     <div className="pt-4 space-y-6">
                                          <label className={`text-[10px] font-black uppercase tracking-[0.3em] pl-3 leading-none ${errors.hasNameBoard ? 'text-red-500' : 'text-slate-400 dark:text-slate-500'}`}>Greeting Service / Name Board</label>
-                                         <div id="field-hasNameBoard" className={`relative overflow-hidden group rounded-none border-4 transition-all ${errors.hasNameBoard ? 'border-red-500 animate-shake' : ''} ${formData.hasNameBoard ? 'border-black dark:border-[#FACC15] bg-black dark:bg-[#111] shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]' : 'border-black bg-white dark:bg-white/5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'}`}>
+                                         <div id="field-hasNameBoard" className={`relative overflow-hidden group rounded-none border-4 transition-all ${errors.hasNameBoard ? 'border-red-500 animate-shake' : ''} ${formData.hasNameBoard ? 'border-black dark:border-[#FACC15] bg-white dark:bg-[#111]' : 'border-black bg-white dark:bg-white/5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'}`}>
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/10 rounded-none blur-3xl -mr-16 -mt-16"></div>
                                             
                                             <div className="relative z-10 p-6 md:p-8 flex flex-col items-start gap-6">
                                                 <div className="flex items-center gap-5">
-                                                    <div className={`w-16 h-16 rounded-none flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-4 transition-colors overflow-hidden shrink-0 ${formData.hasNameBoard ? 'bg-[#FACC15] border-black text-black' : 'bg-white dark:bg-white/5 border-black text-slate-400'}`}>
+                                                    <div className={`w-16 h-16 rounded-none flex items-center justify-center border-4 transition-colors overflow-hidden shrink-0 ${formData.hasNameBoard ? 'bg-[#FACC15] border-black text-black' : 'bg-white dark:bg-white/5 border-black text-slate-400'}`}>
                                                         <Signpost size={32} strokeWidth={3} fill="currentColor" />
                                                     </div>
                                                     <div className="flex flex-col">
@@ -857,7 +857,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 </div>
  
                                                 <div className="flex flex-wrap items-center gap-4 w-full">
-                                                    <span className={`px-4 py-2 rounded-none text-[10px] font-black uppercase tracking-widest border-4 ${formData.hasNameBoard ? 'bg-white/10 border-white/20 text-[#FACC15]' : 'bg-black text-[#FACC15] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'}`}>
+                                                    <span className={`px-4 py-2 rounded-none text-[10px] font-black uppercase tracking-widest border-4 ${formData.hasNameBoard ? 'bg-white/10 border-white/20 text-[#FACC15]' : 'bg-[#FACC15]/20 border-black text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'}`}>
                                                         + Rs {(pricingSettings?.nameBoardPrice || 2000).toLocaleString()}
                                                     </span>
                                                     <p className={`text-[9px] font-bold uppercase tracking-tight flex-1 min-w-[200px] ${formData.hasNameBoard ? 'text-white/40' : 'text-slate-400'}`}>
@@ -1266,11 +1266,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 </div>
 
                 {/* Modal Footer */}
-                <div className="p-4 pb-12 md:p-10 md:pb-10 pt-3 md:pt-6 border-t-4 border-black bg-white/80 dark:bg-black/80 backdrop-blur-3xl shrink-0 transition-colors">
+                <div className="p-4 pb-6 md:p-10 md:pb-10 pt-3 md:pt-6 border-t-4 border-black bg-white/80 dark:bg-black/80 backdrop-blur-3xl shrink-0 transition-colors">
                     <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-6 md:gap-6">
                         <button
                             onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                            className="flex items-center justify-center gap-2 md:gap-4 px-6 md:px-10 py-3 md:py-5 bg-white dark:bg-white/5 rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-slate-50 dark:hover:bg-white/10 transition-all text-black dark:text-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[180px] italic active:scale-95"
+                            className="flex items-center justify-center gap-2 md:gap-4 px-6 md:px-10 py-2.5 md:py-5 bg-white dark:bg-white/5 rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-slate-50 dark:hover:bg-white/10 transition-all text-black dark:text-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[180px] italic active:scale-95"
                         >
                             <ChevronLeft size={16} className="md:w-4 md:h-4" /> {step === 1 ? 'Cancel Trip' : 'Return Back'}
                         </button>
@@ -1286,7 +1286,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                      }
                                  }}
                                  disabled={isOverCapacity}
-                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-3 md:py-5 bg-[#FACC15] text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-[#EAB308] hover:scale-105 transition-all outline-none border-4 border-black disabled:opacity-30 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[220px] italic active:scale-95"
+                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-2.5 md:py-5 bg-[#FACC15] text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-[#EAB308] hover:scale-105 transition-all outline-none border-4 border-black disabled:opacity-30 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[220px] italic active:scale-95"
                             >
                                 Review & Checkout <ChevronRight size={16} className="md:w-4 md:h-4 group-hover:translate-x-2 transition-transform" />
                             </button>
@@ -1294,7 +1294,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <button
                                 onClick={handleSubmit}
                                  disabled={loading || isOverCapacity}
-                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-3 md:py-5 bg-[#FACC15] text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:scale-105 transition-all border-4 border-black disabled:opacity-30 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[240px] italic active:scale-95"
+                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-2.5 md:py-5 bg-[#FACC15] text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:scale-105 transition-all border-4 border-black disabled:opacity-30 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[240px] italic active:scale-95"
                             >
                                 {loading ? <Loader2 className="animate-spin" size={16} /> : <Zap size={16} className="md:w-4 md:h-4" fill="currentColor" />}
                                 {loading ? 'Securing Spot...' : 'Confirm My Order'}

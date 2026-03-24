@@ -37,7 +37,7 @@ export default function RecentPosts() {
                         </h2>
                         <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] md:text-xs leading-relaxed">Discover Sri Lanka through the eyes of our expert travel guides and professional chauffeurs.</p>
                     </div>
-                    <Link href="/blog" className="px-12 py-6 bg-[#FACC15] text-black rounded-none text-xs font-black uppercase tracking-[0.2em] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-[4px] active:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center gap-4 border-4 border-black group">
+                    <Link href="/blog" className="px-12 py-6 bg-[#FACC15] text-black rounded-none text-xs font-black uppercase tracking-[0.2em] hover:translate-y-[2px] active:translate-y-[4px] transition-all flex items-center gap-4 border-4 border-black group">
                         JOURNAL INDEX <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
                     </Link>
                 </div>
@@ -54,7 +54,7 @@ export default function RecentPosts() {
                             <Link
                                 href={`/blog/${post.slug}`}
                                 key={post._id}
-                                className="group relative bg-white rounded-none overflow-hidden border-4 border-black flex flex-col h-[600px] animate-slide-up shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-500"
+                                className="group relative bg-white rounded-none overflow-hidden border-4 border-black flex flex-col h-[600px] animate-slide-up hover:-translate-y-2 transition-all duration-500"
                                 style={{ animationDelay: `${idx * 0.1}s` }}
                             >
                                 <div className="aspect-video overflow-hidden relative">
@@ -87,7 +87,7 @@ export default function RecentPosts() {
                                         <Clock size={16} strokeWidth={2} />
                                         <span>READ JOURNAL</span>
                                     </div>
-                                    <div className="w-12 h-12 rounded-none bg-black text-[#FACC15] border-2 border-black flex items-center justify-center group-hover:bg-[#FACC15] group-hover:text-black transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:translate-x-1">
+                                    <div className="w-12 h-12 rounded-none bg-black text-[#FACC15] border-2 border-black flex items-center justify-center group-hover:bg-[#FACC15] group-hover:text-black transition-all group-hover:translate-x-1">
                                         <ArrowRight size={22} strokeWidth={2} />
                                     </div>
                                 </div>

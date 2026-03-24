@@ -168,7 +168,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                         src={vehicle.image}
                                         alt={vehicle.name}
                                         className={`
-                                            w-[92%] h-[160px] md:h-[200px] object-contain
+                                            w-full h-[200px] md:h-[240px] object-contain
                                             drop-shadow-[0_15px_30px_rgba(0,0,0,0.15)]
                                             transition-transform duration-700
                                             ${isSelected ? 'scale-110' : 'group-hover/card:scale-105'}
