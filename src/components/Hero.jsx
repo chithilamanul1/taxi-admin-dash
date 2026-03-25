@@ -7,7 +7,7 @@ import { Compass } from 'lucide-react';
 
 const Hero = ({ onBookClick }) => {
     return (
-        <section className="relative min-h-[90vh] md:min-h-screen bg-white dark:bg-[#0a0a0a] pt-28 md:pt-32 pb-10 md:pb-20 overflow-hidden border-b-8 border-[#FACC15]">
+        <section className="relative min-h-[90vh] md:min-h-screen bg-white dark:bg-[#0a0a0a] pt-28 md:pt-32 pb-20 md:pb-32 overflow-hidden border-b-8 border-[#FACC15]">
             {/* Grid Pattern Background */}
             <div className="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.05]" 
                  style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '40px 40px' }}>

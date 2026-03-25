@@ -521,7 +521,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const pricingCategory = isAirportService ? 'airport-transfer' : 'ride-now';
 
     return (
-        <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-24 relative z-40 px-3 sm:px-4">
+        <div className="w-full max-w-6xl mx-auto -mt-4 md:-mt-16 relative z-40 px-3 sm:px-4">
             {/* Tab Navigation - Boxy Style */}
             <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-8 border-b-4 border-black transition-all overflow-hidden" role="tablist">
 
