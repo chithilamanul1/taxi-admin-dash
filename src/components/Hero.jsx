@@ -73,7 +73,7 @@ const Hero = () => {
     };
 
     return (
-        <section className="relative h-[450px] md:h-[550px] bg-white dark:bg-[#0a0a0a] overflow-hidden pt-12 pb-8 flex items-center justify-center border-b-8 border-black">
+        <section className="relative h-[450px] md:h-[550px] bg-white dark:bg-[#0a0a0a] overflow-hidden pt-12 pb-20 flex items-center justify-center border-b-8 border-black">
             
             {/* Minimal Background Elements */}
             <div className="absolute top-10 left-10 w-32 h-32 border-[2px] border-black/5 -rotate-12 -z-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.03)_10px,rgba(0,0,0,0.03)_20px)]"></div>
@@ -178,31 +178,31 @@ const Hero = () => {
                         </button>
                     </div>
 
-                    {/* Pagination Indicator Bars - Slimmer */}
-                    <div className="flex gap-2 my-6">
-                        {destinations.map((_, i) => {
-                            const displayIndex = currentIndex === 0 ? destinations.length - 1 : (currentIndex === extendedDestinations.length - 1 ? 0 : currentIndex - 1);
-                            return (
-                                <button
-                                    key={i}
-                                    onClick={() => setCurrentIndex(i + 1)}
-                                    className={`h-2 border-2 border-black transition-all ${i === displayIndex ? 'w-10 bg-[#FACC15]' : 'w-4 bg-white hover:w-6'}`}
-                                    aria-label={`View Slide ${i + 1}`}
-                                />
-                            );
-                        })}
-                    </div>
-                </div>
-
-                {/* Main CTA Label - Integrated and smaller */}
-                <div className="mt-2 text-center">
-                     <div className="bg-black text-[#FACC15] inline-block px-8 py-3 border-4 border-black font-black text-2xl md:text-3xl italic uppercase tracking-tighter shadow-[10px_10px_0px_0px_#FACC15] -rotate-1">
-                        Travel Smarter.
-                    </div>
+                {/* Pagination Indicator Bars - Slimmer - More Space */}
+                <div className="flex gap-2 my-10">
+                    {destinations.map((_, i) => {
+                        const displayIndex = currentIndex === 0 ? destinations.length - 1 : (currentIndex === extendedDestinations.length - 1 ? 0 : currentIndex - 1);
+                        return (
+                            <button
+                                key={i}
+                                onClick={() => setCurrentIndex(i + 1)}
+                                className={`h-2 border-2 border-black transition-all ${i === displayIndex ? 'w-10 bg-[#FACC15]' : 'w-4 bg-white hover:w-6'}`}
+                                aria-label={`View Slide ${i + 1}`}
+                            />
+                        );
+                    })}
                 </div>
             </div>
-        </section>
-    );
+
+            {/* Main CTA Label - Integrated and smaller - Added much more top margin */}
+            <div className="mt-12 text-center relative z-20">
+                    <div className="bg-black text-[#FACC15] inline-block px-8 py-3 border-4 border-black font-black text-2xl md:text-3xl italic uppercase tracking-tighter shadow-[10px_10px_0px_0px_#FACC15] -rotate-1">
+                    Travel Smarter.
+                </div>
+            </div>
+        </div>
+    </section>
+);
 };
 
 export default Hero;
