@@ -39,12 +39,12 @@ export default function SpecialOffersSection() {
 
                 <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16">
                     {/* Header */}
-                    <div className="mb-12 md:mb-16">
+                    <div className="mb-10 md:mb-16">
                         <div className="inline-flex items-center gap-2 bg-black px-4 py-1.5 mb-6">
                             <Tag size={14} className="text-[#FACC15]" strokeWidth={3} />
                             <span className="text-xs font-black text-[#FACC15] uppercase tracking-[0.2em]">Exclusive Deals</span>
                         </div>
-                        <h2 className="text-5xl md:text-7xl font-black text-black mb-6 leading-none uppercase italic tracking-tighter">
+                        <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-black mb-6 leading-none uppercase italic tracking-tighter">
                             SAVE ON YOUR <br />
                             <span className="text-white">NEXT JOURNEY</span>
                         </h2>

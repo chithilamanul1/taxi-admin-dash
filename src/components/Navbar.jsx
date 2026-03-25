@@ -40,26 +40,26 @@ export default function Navbar() {
     const needsSolidBg = isScrolled || !isTransparentPage
 
     return (
-        <nav className={`fixed w-full z-[100] transition-all duration-500 py-6 bg-white dark:bg-[#0a0a0a] border-b-4 border-black`}>
+        <nav className={`fixed w-full z-[100] transition-all duration-500 py-3 md:py-6 bg-white dark:bg-[#0a0a0a] border-b-4 border-black`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-                <Link href="/" className="flex items-center gap-3 group">
+                <Link href="/" className="flex items-center gap-2 group">
                     <div className="flex flex-col">
-                        <span className="font-black text-3xl md:text-4xl tracking-tighter leading-none text-black dark:text-white uppercase italic">
+                        <span className="font-black text-2xl sm:text-3xl md:text-4xl tracking-tighter leading-none text-black dark:text-white uppercase italic">
                             AIRPORT <span className="text-[#FACC15]">TAXIS</span>
                         </span>
-                        <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-black/30 dark:text-white/30">Sri Lanka</span>
+                        <span className="text-[8px] md:text-xs font-black uppercase tracking-[0.4em] text-black/30 dark:text-white/30">Sri Lanka</span>
                     </div>
                 </Link>
 
                 <div className="flex items-center gap-2 md:gap-3">
 
-                    {/* Live Chat Toggle (NEW) */}
+                    {/* Live Chat Toggle */}
                     <button 
                         onClick={() => window.dispatchEvent(new CustomEvent('open-live-chat'))}
-                        className="w-10 h-10 md:w-14 md:h-14 bg-emerald-500 border-4 border-black flex items-center justify-center text-black hover:bg-emerald-400 transition-all"
+                        className="w-9 h-9 md:w-14 md:h-14 bg-[#FACC15] border-3 md:border-4 border-black flex items-center justify-center text-black hover:bg-yellow-400 transition-all"
                         aria-label="Open Live Chat"
                     >
-                        <MessageCircle size={20} strokeWidth={3} />
+                        <MessageCircle size={18} md:size={20} strokeWidth={3} />
                     </button>
 
                     {/* Currency Selector (Always Visible) */}
@@ -83,13 +83,13 @@ export default function Navbar() {
                         </div>
                     </div>
 
-                    {/* Menu Toggle (Match Sketch Image 2) */}
+                    {/* Menu Toggle */}
                     <button
-                        className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] transition-all"
+                        className="w-10 h-10 md:w-16 md:h-16 flex items-center justify-center bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black border-3 md:border-4 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] transition-all"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
                     >
-                        {isMobileMenuOpen ? <X size={28} strokeWidth={4} /> : <Menu size={28} strokeWidth={4} />}
+                        {isMobileMenuOpen ? <X size={22} md:size={28} strokeWidth={4} /> : <Menu size={22} md:size={28} strokeWidth={4} />}
                     </button>
                 </div>
             </div>

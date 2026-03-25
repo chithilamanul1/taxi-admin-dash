@@ -7,7 +7,7 @@ import { Compass } from 'lucide-react';
 
 const Hero = ({ onBookClick }) => {
     return (
-        <section className="relative min-h-[90vh] md:min-h-screen bg-white dark:bg-[#0a0a0a] pt-28 md:pt-32 pb-20 md:pb-32 overflow-hidden border-b-8 border-[#FACC15]">
+        <section className="relative min-h-[85vh] md:min-h-screen bg-white dark:bg-[#0a0a0a] pt-24 md:pt-32 pb-20 md:pb-32 overflow-hidden border-b-8 border-[#FACC15]">
             {/* Grid Pattern Background */}
             <div className="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.05]" 
                  style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
@@ -15,17 +15,17 @@ const Hero = ({ onBookClick }) => {
 
             <div className="container mx-auto px-6 relative z-10 h-full">
                 {/* Two-Column Desktop Layout */}
-                <div className="grid lg:grid-cols-2 gap-8 lg:gap-0 items-center min-h-[70vh]">
+                <div className="grid lg:grid-cols-2 gap-8 lg:gap-0 items-center min-h-[60vh] md:min-h-[70vh]">
 
                     {/* Left: Text Content */}
                     <div className="flex flex-col justify-center">
-                        <h1 className="text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] font-black text-black dark:text-white uppercase italic tracking-tighter leading-[0.85] mb-6">
+                        <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] font-black text-black dark:text-white uppercase italic tracking-tighter leading-[0.9] md:leading-[0.85] mb-6">
                             AIRPORT <br /><span className="text-[#FACC15]">TAXIS</span>
                         </h1>
-                        <div className="text-3xl md:text-4xl lg:text-5xl font-black text-black/20 dark:text-white/20 uppercase italic tracking-tighter mb-8">
+                        <div className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-black text-black/20 dark:text-white/20 uppercase italic tracking-tighter mb-8">
                             SRI LANKA
                         </div>
-                        <p className="text-sm md:text-base font-black uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500 max-w-md italic mb-10">
+                        <p className="text-xs md:text-base font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-slate-400 dark:text-slate-500 max-w-md italic mb-10">
                             Premium Transfers & Curated Tours. Professional Chauffeurs Waiting For You 24/7.
                         </p>
 
