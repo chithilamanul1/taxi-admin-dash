@@ -7,89 +7,73 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const Hero = () => {
     const destinations = [
-        { id: 1, name: 'MIRISSA BEACH', image: '/Hero/hero_mirissa.jpg' },
-        { id: 2, name: 'YALA SAFARI', image: '/Hero/safari_tour.png' },
-        { id: 3, name: 'ELLA NINE ARCH', image: '/Hero/ella.jpg' },
-        { id: 4, name: 'SIGIRIYA ROCK', image: '/Hero/sigiriya.jpg' },
-        { id: 5, name: 'GALLE FORT', image: '/tours/galle3.jpg' },
-        { id: 6, name: 'KANDY TEMPLE', image: '/tours/kandy.jpg' },
+        { id: 1, name: 'MIRISSA BEACH', image: '/Hero/hero_mirissa.jpg', rotate: -6, zIndex: 10 },
+        { id: 2, name: 'YALA SAFARI', image: '/Hero/safari_tour.png', rotate: 4, zIndex: 20 },
+        { id: 3, name: 'ELLA NINE ARCH', image: '/Hero/ella.jpg', rotate: -2, zIndex: 15 },
+        { id: 4, name: 'SIGIRIYA ROCK', image: '/Hero/sigiriya.jpg', rotate: 8, zIndex: 5 },
     ];
 
-    const [index, setIndex] = React.useState(0);
-
-    const next = () => setIndex((prev) => (prev + 1) % destinations.length);
-    const prev = () => setIndex((prev) => (prev - 1 + destinations.length) % destinations.length);
-
-    React.useEffect(() => {
-        const timer = setInterval(next, 5000);
-        return () => clearInterval(timer);
-    }, []);
-
     return (
-        <section className="relative h-[70vh] md:h-[85vh] bg-white dark:bg-[#0a0a0a] overflow-hidden border-b-[12px] border-black pt-24 md:pt-32">
+        <section className="relative min-h-[90vh] bg-white dark:bg-[#0a0a0a] overflow-hidden pt-32 pb-20 flex items-center justify-center">
             
-            {/* Minimalist Image Slider */}
-            <div className="relative w-full h-full flex items-center justify-center px-6 md:px-20 py-10">
-                
-                <div className="relative w-full max-w-7xl h-full flex items-center">
-                    
-                    <div className="relative w-full h-full overflow-hidden border-8 border-black shadow-[30px_30px_0px_0px_rgba(0,0,0,1)] bg-black">
+            {/* Background Doodles/Accents */}
+            <div className="absolute top-40 left-10 w-64 h-64 border-2 border-black/5 -rotate-12 -z-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.02)_10px,rgba(0,0,0,0.02)_20px)]"></div>
+            <div className="absolute bottom-20 right-10 w-80 h-80 border-2 border-black/5 rotate-12 -z-10 rounded-full"></div>
+
+            <div className="container mx-auto px-6 relative">
+                <div className="flex flex-wrap justify-center gap-8 md:gap-4 items-center">
+                    {destinations.map((dest, i) => (
                         <motion.div
-                            key={index}
-                            initial={{ opacity: 0, scale: 1.1 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="relative w-full h-full"
+                            key={dest.id}
+                            initial={{ opacity: 0, y: 50, rotate: 0 }}
+                            animate={{ opacity: 1, y: 0, rotate: dest.rotate }}
+                            whileHover={{ 
+                                rotate: 0, 
+                                scale: 1.05, 
+                                zIndex: 50,
+                                transition: { duration: 0.3 }
+                            }}
+                            className="relative bg-white border-[8px] border-black p-4 pb-16 w-full max-w-[320px] shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] cursor-pointer group"
+                            style={{ zIndex: dest.zIndex }}
                         >
-                            <Image
-                                src={destinations[index].image}
-                                alt={destinations[index].name}
-                                fill
-                                className="object-cover opacity-80"
-                                priority
-                            />
-                            
-                            {/* Simple Label */}
-                            <div className="absolute top-10 left-10 z-20">
-                                <div className="bg-[#FACC15] text-black px-8 py-4 border-4 border-black font-black text-2xl md:text-4xl italic uppercase tracking-tighter shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                                    {destinations[index].name}
-                                </div>
+                            {/* Card Number */}
+                            <div className="absolute top-4 right-4 z-20 w-12 h-12 bg-slate-100 border-4 border-black rounded-full flex items-center justify-center font-black italic text-sm">
+                                0{dest.id}
                             </div>
+
+                            {/* Image Container */}
+                            <div className="relative aspect-square overflow-hidden border-4 border-black">
+                                <Image
+                                    src={dest.image}
+                                    alt={dest.name}
+                                    fill
+                                    className="object-cover grayscale-[0%] group-hover:grayscale-0 transition-all duration-500"
+                                />
+                            </div>
+
+                            {/* Info Section */}
+                            <div className="mt-8">
+                                <h3 className="text-2xl font-black italic uppercase tracking-tighter text-black">
+                                    {dest.name}
+                                </h3>
+                            </div>
+
+                            {/* Polaroid Bottom Shine/Texture */}
+                            <div className="absolute bottom-0 left-0 w-full h-1 bg-black/5"></div>
                         </motion.div>
+                    ))}
+                </div>
 
-                        {/* Navigation Overlay (Minimal) */}
-                        <div className="absolute bottom-10 right-10 flex gap-4 z-30">
-                            <button 
-                                onClick={prev}
-                                className="w-16 h-16 bg-white border-4 border-black flex items-center justify-center hover:bg-[#FACC15] transition-all shadow-[8px_8px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none"
-                            >
-                                <ArrowLeft size={32} strokeWidth={3} />
-                            </button>
-                            <button 
-                                onClick={next}
-                                className="w-16 h-16 bg-[#FACC15] border-4 border-black flex items-center justify-center hover:bg-black hover:text-[#FACC15] transition-all shadow-[8px_8px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none"
-                            >
-                                <ArrowRight size={32} strokeWidth={3} />
-                            </button>
-                        </div>
+                {/* Main CTA Overlay (Floating) */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[100] w-full text-center hidden md:block">
+                     <div className="bg-black text-[#FACC15] inline-block px-12 py-6 border-8 border-black font-black text-6xl italic uppercase tracking-tighter shadow-[20px_20px_0px_0px_#FACC15]">
+                        Explored by You
                     </div>
-
-                    {/* Background Accents (Brutalist) */}
-                    <div className="absolute -top-10 -right-10 w-40 h-40 border-8 border-black -z-10 bg-[#FACC15] hidden lg:block"></div>
-                    <div className="absolute -bottom-10 -left-10 w-64 h-64 border-8 border-black -z-10 opacity-5 hidden lg:block bg-[repeating-linear-gradient(45deg,#000,#000_10px,transparent_10px,transparent_20px)]"></div>
-                    
                 </div>
             </div>
 
-            {/* Pagination Progress */}
-            <div className="absolute bottom-0 left-0 w-full h-3 bg-black/10">
-                <motion.div 
-                    initial={{ width: "0%" }}
-                    animate={{ width: `${((index + 1) / destinations.length) * 100}%` }}
-                    className="h-full bg-[#FACC15]"
-                />
-            </div>
+            {/* Bottom Border Accent */}
+            <div className="absolute bottom-0 left-0 w-full h-8 bg-black"></div>
         </section>
     );
 };

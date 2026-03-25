@@ -71,7 +71,7 @@ const FleetSection = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-6xl mx-auto">
                     {vehicles.map((vehicle, idx) => (
-                        <div key={vehicle._id} className="flex flex-col border-8 border-black bg-white dark:bg-[#111] shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] group hover:translate-y-[-8px] transition-all duration-500">
+                        <div key={vehicle._id} className="flex flex-col border-8 border-black bg-white dark:bg-[#111] hover:bg-slate-50 transition-all duration-300">
 
                             {/* Category Header */}
                             <div className="bg-black text-[#FACC15] p-5 text-center border-b-8 border-black font-black uppercase tracking-[0.4em] text-xs italic">
@@ -139,8 +139,8 @@ const FleetSection = () => {
                                     {[...popularPoints, ...popularPoints].map((point, i) => {
                                         const dist = getDistance(point);
                                         const priceLKR = calculateBasePrice(dist, vehicle, 'one-way', 'Airport', point, dynamicDestinations);
-                                        const converted = convertPrice(priceLKR, 'LKR', 'USD');
-                                        const displayUSD = (typeof converted === 'number' && !isNaN(converted)) ? converted.toFixed(0) : '0';
+                                        const converted = convertPrice(priceLKR);
+                                        const displayUSD = (converted && typeof converted.value === 'number') ? converted.value.toFixed(0) : '0';
                                         
                                         return (
                                             <div key={`${point}-${i}`} className="inline-flex flex-col items-center justify-center min-w-[160px] px-8 border-r-4 border-black/10 py-4 h-24">
