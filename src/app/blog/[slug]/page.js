@@ -97,8 +97,35 @@ export default async function SinglePostPage({ params }) {
         notFound();
     }
 
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post.title,
+        "description": post.excerpt || post.seo?.metaDescription,
+        "image": post.imageUrl || 'https://airporttaxis.lk/og-image.jpg',
+        "author": {
+            "@type": "Person",
+            "name": post.author || "Airport Taxis Sri Lanka"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Airport Taxis Pvt (Ltd)",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://airporttaxis.lk/logo.png"
+            }
+        },
+        "datePublished": post.createdAt,
+        "url": `https://airporttaxis.lk/blog/${slug}`
+    };
+
     return (
-        <article className="min-h-screen bg-white pb-20 transition-colors relative overflow-hidden">
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <article className="min-h-screen bg-white pb-20 transition-colors relative overflow-hidden">
             {/* Background elements */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-[#FACC15]/5 -mr-48 -mt-48 blur-3xl rounded-none"></div>
 
@@ -152,5 +179,6 @@ export default async function SinglePostPage({ params }) {
                 </div>
             </div>
         </article>
+        </>
     );
 }

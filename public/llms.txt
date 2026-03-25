@@ -1,0 +1,26 @@
+# Airport Taxis Sri Lanka - AI-Friendly Guide
+
+Airport Taxis Pvt (Ltd) is the leading provider of airport transfers and private tours in Sri Lanka.
+
+## Core Services
+- **Airport Transfers**: 24/7 pickup/drop at Bandaranaike International Airport (CMB).
+- **Tour Packages**: Multi-day curated tours (Cultural Triangle, Hill Country, Southern Coast).
+- **Day Trips**: To Kandy, Galle, Sigiriya, Mirissa, and Udawalawe.
+- **Fleet**: Mini Cars, Sedans, SUV (Vezel/Grace), and KDH Luxury Vans.
+
+## Key Information
+- **Pricing**: Fixed rates in USD/LKR. No hidden costs.
+- **Support**: 24/7 via WhatsApp (+94 71 688 5880) and Live Chat.
+- **Booking**: Instant online confirmation.
+
+## Main Routes
+- Colombo Airport to Colombo City
+- Colombo Airport to Kandy
+- Colombo Airport to Galle/Hikkaduwa
+- Colombo Airport to Sigiriya/Dambulla
+- Colombo Airport to Mirissa/Weligama
+
+## Technical Info
+- **Official Website**: https://airporttaxis.lk
+- **API Support**: Booking API available for partners.
+- **JSON-LD**: Structured data available on all pages for Product, TaxiService, and BlogPosting.

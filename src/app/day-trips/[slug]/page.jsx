@@ -47,5 +47,32 @@ export default async function DayTripPage({ params }) {
         notFound();
     }
 
-    return <TourDetailsClient tour={tour} />;
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": tour.title,
+        "description": tour.description,
+        "image": tour.heroImage || tour.images?.[0],
+        "offers": {
+            "@type": "Offer",
+            "price": tour.price,
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": `https://airporttaxis.lk/day-trips/${slug}`
+        },
+        "brand": {
+            "@type": "Brand",
+            "name": "Airport Taxis Sri Lanka"
+        }
+    };
+
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <TourDetailsClient tour={tour} />
+        </>
+    );
 }

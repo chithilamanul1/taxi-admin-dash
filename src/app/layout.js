@@ -144,11 +144,12 @@ const jsonLd = [
     {
         '@context': 'https://schema.org',
         '@type': 'LocalBusiness',
+        '@id': 'https://airporttaxis.lk/#localbusiness',
         name: 'Airport Taxis Pvt (Ltd)',
         image: 'https://airporttaxis.lk/og-image.jpg',
-        '@id': 'https://airporttaxis.lk',
         url: 'https://airporttaxis.lk',
         telephone: '+94716885880',
+        priceRange: '$$',
         address: {
             '@type': 'PostalAddress',
             streetAddress: 'Bandaranaike International Airport',
@@ -164,13 +165,7 @@ const jsonLd = [
         openingHoursSpecification: {
             '@type': 'OpeningHoursSpecification',
             dayOfWeek: [
-                'Monday',
-                'Tuesday',
-                'Wednesday',
-                'Thursday',
-                'Friday',
-                'Saturday',
-                'Sunday'
+                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
             ],
             opens: '00:00',
             closes: '23:59'
@@ -179,16 +174,27 @@ const jsonLd = [
     {
         '@context': 'https://schema.org',
         '@type': 'Organization',
+        '@id': 'https://airporttaxis.lk/#organization',
         name: 'Airport Taxis Pvt (Ltd)',
         url: 'https://airporttaxis.lk',
-        logo: 'https://airporttaxis.lk/logo.png',
+        logo: {
+            '@type': 'ImageObject',
+            'url': 'https://airporttaxis.lk/logo.png',
+            'width': 512,
+            'height': 512
+        },
         contactPoint: {
             '@type': 'ContactPoint',
             telephone: '+94716885880',
             contactType: 'customer service',
             areaServed: 'LK',
             availableLanguage: ['English', 'Sinhala']
-        }
+        },
+        sameAs: [
+            'https://www.facebook.com/airporttaxistours',
+            'https://www.instagram.com/airporttaxistours',
+            'https://wa.me/94716885880'
+        ]
     }
 ]
 
@@ -214,6 +220,9 @@ export default function RootLayout({ children }) {
     return (
         <html lang="en" suppressHydrationWarning className={`${inter.variable} ${montserrat.variable}`}>
             <head>
+                <meta name="theme-color" content="#059669" />
+                <link rel="preconnect" href="https://airporttaxis.lk" />
+                <link rel="dns-prefetch" href="https://airporttaxis.lk" />
                 <link rel="preconnect" href="https://ipapi.co" />
                 <link rel="dns-prefetch" href="https://ipapi.co" />
                 <link rel="preconnect" href="https://api.exchangerate-api.com" />

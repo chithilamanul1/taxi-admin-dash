@@ -1,10 +1,17 @@
 export default function robots() {
     return {
-        rules: {
-            userAgent: '*',
-            allow: '/',
-            disallow: ['/admin/', '/api/', '/driver/', '/checkout/', '/my-bookings/'],
-        },
+        rules: [
+            {
+                userAgent: '*',
+                allow: '/',
+                disallow: ['/admin/', '/api/', '/driver/', '/checkout/', '/my-bookings/'],
+            },
+            {
+                userAgent: ['GPTBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-Web', 'PerplexityBot'],
+                allow: ['/', '/llms.txt'],
+                disallow: ['/admin/', '/api/'],
+            }
+        ],
         sitemap: 'https://airporttaxis.lk/sitemap.xml',
     }
 }

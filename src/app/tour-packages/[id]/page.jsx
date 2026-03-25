@@ -45,5 +45,32 @@ export default async function TourPackagePage({ params }) {
 
     if (!tour) notFound()
 
-    return <TourPackageDetailsClient tour={tour} />
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": tour.title,
+        "description": tour.description,
+        "image": tour.heroImage || tour.images?.[0],
+        "offers": {
+            "@type": "Offer",
+            "price": tour.price,
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": `https://airporttaxis.lk/tour-packages/${slug}`
+        },
+        "brand": {
+            "@type": "Brand",
+            "name": "Airport Taxis Sri Lanka"
+        }
+    };
+
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <TourPackageDetailsClient tour={tour} />
+        </>
+    );
 }

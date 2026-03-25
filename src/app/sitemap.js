@@ -1,8 +1,7 @@
 export default function sitemap() {
     const baseUrl = 'https://airporttaxis.lk';
 
-    // Core Pages
-    const routes = [
+    const staticRoutes = [
         '',
         '/about',
         '/contact',
@@ -13,12 +12,17 @@ export default function sitemap() {
         '/login',
         '/services',
         '/review',
+        '/offers',
+        '/privacy-policy',
+        '/refund-policy',
+        '/terms',
+        '/destination'
     ].map((route) => ({
         url: `${baseUrl}${route}`,
         lastModified: new Date(),
         changeFrequency: route === '' ? 'daily' : 'weekly',
-        priority: route === '' ? 1 : 0.8,
+        priority: route === '' ? 1 : (route.includes('trips') || route.includes('packages') ? 0.9 : 0.7),
     }));
 
-    return routes;
+    return staticRoutes;
 }
