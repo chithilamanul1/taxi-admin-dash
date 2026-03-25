@@ -120,24 +120,7 @@ const Hero = ({ onBookClick }) => {
                     </div>
                 </div>
 
-                {/* Space-Saving Start Booking Bar */}
-                <div className="w-full max-w-4xl mt-10 md:mt-20">
-                    <button
-                        onClick={() => onBookClick('pickup')}
-                        className="w-full bg-[#FACC15] border-8 border-black p-8 md:p-12 flex items-center justify-between group hover:bg-black hover:text-[#FACC15] transition-all duration-500"
-                    >
-                        <span className="text-4xl md:text-7xl font-black italic uppercase tracking-tighter leading-none">
-                            START YOUR JOURNEY
-                        </span>
-                        <div className="w-16 h-16 md:w-24 md:h-24 bg-black text-[#FACC15] border-4 border-black group-hover:bg-[#FACC15] group-hover:text-black flex items-center justify-center transition-all">
-                            <ArrowRight size={48} className="transform group-hover:translate-x-4 transition-transform" />
-                        </div>
-                    </button>
-                    <div className="flex justify-between mt-4 px-2">
-                         <div className="text-[10px] font-black uppercase tracking-[0.3em] text-black/40 dark:text-white/40 italic">PREMIUM TRANSFERS • 24/7 SUPPORT • FIXED RATES</div>
-                         <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[#FACC15] italic">EST. 2012</div>
-                    </div>
-                </div>
+
 
             </div>
 
