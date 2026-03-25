@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { Car, MapPin, Clock, Phone, LogOut, CheckCircle, XCircle, Navigation, Calendar, User, Loader2, Wifi, WifiOff, Radio, Signpost, Mail, CreditCard, Banknote, ShieldCheck } from 'lucide-react';
+import { Car, MapPin, Clock, Phone, LogOut, CheckCircle, XCircle, Navigation, Calendar, User, Users, Briefcase, Loader2, Wifi, WifiOff, Radio, Signpost, Mail, CreditCard, Banknote, ShieldCheck } from 'lucide-react';
 import { GoogleMap, useJsApiLoader, Marker, DirectionsRenderer } from '@react-google-maps/api';
 
 export default function DriverDashboard() {
