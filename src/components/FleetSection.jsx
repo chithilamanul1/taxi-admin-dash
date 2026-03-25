@@ -127,7 +127,8 @@ const FleetSection = () => {
                                 >
                                     {[...popularPoints, ...popularPoints].map((point, i) => {
                                         const dist = getDistance(point);
-                                        const priceLKR = calculateBasePrice(dist, vehicle);
+                                        const converted = convertPrice(priceLKR, 'LKR', 'USD');
+                                        const displayUSD = (typeof converted === 'number' && !isNaN(converted)) ? converted.toFixed(0) : '0';
                                         
                                         return (
                                             <div key={`${point}-${i}`} className="inline-flex flex-col items-center justify-center min-w-[160px] px-8 border-r-4 border-black/10 py-4 h-24">
@@ -135,7 +136,7 @@ const FleetSection = () => {
                                                 <div className="flex flex-col items-center">
                                                     <span className="text-sm font-black text-black">Rs {priceLKR.toLocaleString()}</span>
                                                     <span className="text-[10px] font-black text-black/50">
-                                                        $ {convertPrice(priceLKR, 'LKR', 'USD').toFixed(0)}
+                                                        $ {displayUSD}
                                                     </span>
                                                 </div>
                                             </div>
