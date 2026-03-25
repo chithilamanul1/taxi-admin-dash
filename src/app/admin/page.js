@@ -158,6 +158,27 @@ export default function AdminDashboard() {
             alert('An error occurred while creating the coupon.');
         }
     }
+    
+    const handlePurgeData = async () => {
+        if (!window.confirm('CRITICAL: This will PERMANENTLY DELETE all booking data. Are you absolutely sure?')) return;
+        
+        setIsPurging(true)
+        try {
+            const res = await fetch('/api/admin/clear-test-data', { method: 'DELETE' })
+            const data = await res.json()
+            if (data.success) {
+                alert(data.message)
+                window.location.reload();
+            } else {
+                alert('Purge failed: ' + data.message)
+            }
+        } catch (err) {
+            console.error(err)
+            alert('Purge failed')
+        } finally {
+            setIsPurging(false)
+        }
+    }
 
     const handleDeleteCoupon = async (id) => {
         if (!confirm('Are you sure you want to delete this coupon?')) return;
