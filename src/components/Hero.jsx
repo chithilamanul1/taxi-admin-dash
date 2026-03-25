@@ -73,7 +73,7 @@ const Hero = () => {
     };
 
     return (
-        <section className="relative h-[450px] md:h-[550px] bg-white dark:bg-[#0a0a0a] overflow-hidden pt-12 pb-20 flex items-center justify-center border-b-8 border-black">
+        <section className="relative h-[450px] md:h-[550px] bg-white dark:bg-[#0a0a0a] overflow-hidden pt-24 md:pt-32 pb-12 flex items-center justify-center border-b-8 border-black">
             
             {/* Minimal Background Elements */}
             <div className="absolute top-10 left-10 w-32 h-32 border-[2px] border-black/5 -rotate-12 -z-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.03)_10px,rgba(0,0,0,0.03)_20px)]"></div>
@@ -191,13 +191,6 @@ const Hero = () => {
                             />
                         );
                     })}
-                </div>
-            </div>
-
-            {/* Main CTA Label - Integrated and smaller - Added much more top margin */}
-            <div className="mt-12 text-center relative z-20">
-                    <div className="bg-black text-[#FACC15] inline-block px-8 py-3 border-4 border-black font-black text-2xl md:text-3xl italic uppercase tracking-tighter shadow-[10px_10px_0px_0px_#FACC15] -rotate-1">
-                    Travel Smarter.
                 </div>
             </div>
         </div>
