@@ -98,15 +98,15 @@ const LocationInput = ({
                         onSelect({
                             address: place.formatted_address || address,
                             lat: place.geometry.location.lat(),
-                            lon: place.geometry.location.lng()
+                            lng: place.geometry.location.lng()
                         });
                         setQuery(place.formatted_address || address);
                     } else {
-                        onSelect({ address: address, lat: null, lon: null });
+                        onSelect({ address: address, lat: null, lng: null });
                     }
                 });
             } else {
-                onSelect({ address: address, lat: null, lon: null });
+                onSelect({ address: address, lat: null, lng: null });
             }
         }
         if (onChange) onChange(address);

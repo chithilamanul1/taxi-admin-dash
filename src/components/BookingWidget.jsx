@@ -38,8 +38,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [isLoadingPricing, setIsLoadingPricing] = useState(true);
     const [activeTab, setActiveTab] = useState(defaultTab);
     const [tripType, setTripType] = useState('one-way');
-    const [pickup, setPickup] = useState({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lon: 79.8837 })
-    const [dropoff, setDropoff] = useState({ name: '', lat: null, lon: null })
+    const [pickup, setPickup] = useState({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lng: 79.8837 })
+    const [dropoff, setDropoff] = useState({ name: '', lat: null, lng: null })
     const [waypoints, setWaypoints] = useState([])
     const [pickupSearch, setPickupSearch] = useState('Bandaranaike International Airport (CMB)')
     const [dropoffSearch, setDropoffSearch] = useState('')
@@ -155,7 +155,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             setDropoff({
                 address: destParam,
                 lat: null,
-                lon: null,
+                lng: null,
                 name: destParam
             });
             setDropoffSearch(destParam);
@@ -167,21 +167,21 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     // Tab Logic - reset fields based on mode
     useEffect(() => {
         if (activeTab === 'pickup') {
-            setPickup({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lon: 79.8837 })
+            setPickup({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lng: 79.8837 })
             setPickupSearch('Bandaranaike International Airport (CMB)')
-            setDropoff({ name: '', lat: null, lon: null })
+            setDropoff({ name: '', lat: null, lng: null })
             setDropoffSearch('')
             setTripType('one-way')
         } else if (activeTab === 'drop') {
-            setPickup({ name: '', lat: null, lon: null })
+            setPickup({ name: '', lat: null, lng: null })
             setPickupSearch('')
-            setDropoff({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lon: 79.8837 })
+            setDropoff({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lng: 79.8837 })
             setDropoffSearch('Bandaranaike International Airport (CMB)')
             setTripType('one-way')
         } else if (activeTab === 'ride') {
-            setPickup({ name: '', lat: null, lon: null })
+            setPickup({ name: '', lat: null, lng: null })
             setPickupSearch('')
-            setDropoff({ name: '', lat: null, lon: null })
+            setDropoff({ name: '', lat: null, lng: null })
             setDropoffSearch('')
         }
     }, [activeTab])
@@ -207,20 +207,20 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             const loc = {
                                 name: results[0].formatted_address,
                                 lat: latitude,
-                                lon: longitude
+                                lng: longitude
                             };
                             setPickup(loc);
                             setPickupSearch(loc.name);
                         } else {
                             // Fallback to coords
-                            setPickup({ name: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`, lat: latitude, lon: longitude });
+                            setPickup({ name: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`, lat: latitude, lng: longitude });
                             setPickupSearch(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
                         }
                         setIsLocating(false);
                     });
                 } else {
                     // Very fallback
-                    setPickup({ name: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`, lat: latitude, lon: longitude });
+                    setPickup({ name: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`, lat: latitude, lng: longitude });
                     setPickupSearch(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
                     setIsLocating(false);
                 }
@@ -490,9 +490,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
         setBookingInitialData({
             pickup: pickup.name,
-            pickupCoords: { lat: pickup.lat, lon: pickup.lon },
+            pickupCoords: { lat: pickup.lat, lng: pickup.lng },
             dropoff: dropoff.name,
-            dropoffCoords: { lat: dropoff.lat, lon: dropoff.lon },
+            dropoffCoords: { lat: dropoff.lat, lng: dropoff.lng },
             waypoints,
             passengerCount,
             tripType,
@@ -637,7 +637,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     onChange={(val) => setPickupSearch(val)}
                                     zIndex={100}
                                     onSelect={(loc) => {
-                                        setPickup({ name: loc.address, lat: loc.lat, lon: loc.lon });
+                                        setPickup({ name: loc.address, lat: loc.lat, lng: loc.lng });
                                         setPickupSearch(loc.address);
                                     }}
                                 />
@@ -708,7 +708,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     icon={Navigation}
                                                     zIndex={40}
                                                     onSelect={(loc) => {
-                                                        setWaypoints([...waypoints, { name: loc.address, lat: loc.lat, lon: loc.lon, waitingTime: 0 }]);
+                                                        setWaypoints([...waypoints, { name: loc.address, lat: loc.lat, lng: loc.lng, waitingTime: 0 }]);
                                                         setWaypointSearches([]);
                                                     }}
                                                 />
@@ -741,7 +741,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         disabled={activeTab === 'drop'}
                                         onChange={(val) => setDropoffSearch(val)}
                                         onSelect={(loc) => {
-                                            setDropoff({ name: loc.address, lat: loc.lat, lon: loc.lon });
+                                            setDropoff({ name: loc.address, lat: loc.lat, lng: loc.lng });
                                             setDropoffSearch(loc.address);
                                         }}
                                     />

@@ -16,6 +16,7 @@ export async function POST(req, { params }) {
 
         // Verify it's assigned to this driver
         if (booking.driver?.toString() !== driverId) {
+            console.warn(`[Auth-403] Unauthorized Accept update. Booking#${id}. Assigned: ${booking.driver}. Body-Driver: ${driverId}`);
             return NextResponse.json({ success: false, message: 'Unauthorized driver' }, { status: 403 });
         }
 

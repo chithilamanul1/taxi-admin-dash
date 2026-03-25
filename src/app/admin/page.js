@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { Users, Car, MapPin, Map as MapIcon, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink, Plus } from 'lucide-react'
+import { Users, Car, MapPin, Map as MapIcon, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink, Plus, XCircle } from 'lucide-react'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -80,6 +80,7 @@ export default function AdminDashboard() {
     const [notifications, setNotifications] = useState([])
     const [showNotifications, setShowNotifications] = useState(false)
     const [unreadCount, setUnreadCount] = useState(0)
+    const [isPurging, setIsPurging] = useState(false)
 
     // Quick Links State
     const [quickLinks, setQuickLinks] = useState([])
@@ -581,7 +582,14 @@ export default function AdminDashboard() {
                             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${notificationsEnabled ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}
                         >
                             <div className={`w-1.5 h-1.5 rounded-full ${notificationsEnabled ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`}></div>
-                            Alerts: {notificationsEnabled ? 'ON' : 'OFF'}
+                        </button>
+                        <button 
+                            onClick={handlePurgeData}
+                            disabled={isPurging}
+                            className="flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 border border-red-200 rounded-lg text-[10px] font-black uppercase tracking-wider hover:bg-red-100 transition-all disabled:opacity-50"
+                        >
+                            {isPurging ? <Loader2 size={12} className="animate-spin" /> : <XCircle size={12} />}
+                            Purge Data
                         </button>
                         <div className="relative">
                             <button

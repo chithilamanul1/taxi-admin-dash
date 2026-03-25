@@ -511,17 +511,17 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 pickupLocation: {
                     address: formData.pickup,
                     lat: formData.pickupCoords?.lat || null,
-                    lng: formData.pickupCoords?.lon || null
+                    lng: formData.pickupCoords?.lng || null
                 },
                 dropoffLocation: {
                     address: formData.dropoff,
                     lat: formData.dropoffCoords?.lat || null,
-                    lng: formData.dropoffCoords?.lon || null
+                    lng: formData.dropoffCoords?.lng || null
                 },
                 waypoints: formData.waypoints.map(wp => ({
                     address: wp.name,
                     lat: wp.lat,
-                    lng: wp.lon
+                    lng: wp.lng
                 })),
                 vehicleType: formData.vehicle,
                 tripType: formData.tripType,
