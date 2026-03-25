@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
@@ -9,9 +9,9 @@ import { FLEET } from '@/lib/mock-taxi-db';
 
 const Hero = () => {
     // Wagon R is the baseline for Hero prices (id: v3)
-    const baselineVehicle = React.useMemo(() => FLEET.find(v => v.id === 'v3') || FLEET[0], []);
+    const baselineVehicle = useMemo(() => FLEET.find(v => v.id === 'v3') || FLEET[0], []);
 
-    const destinations = React.useMemo(() => [
+    const destinations = useMemo(() => [
         { id: 1, name: 'MIRISSA BEACH', image: '/Hero/mirissa_illust.jpg', distance: 150, rotate: -3 },
         { id: 2, name: 'YALA SAFARI', image: '/Hero/safari_tour.png', distance: 245, rotate: 2 },
         { id: 3, name: 'ELLA NINE ARCH', image: '/Hero/ella.jpg', distance: 210, rotate: -2 },
@@ -20,27 +20,56 @@ const Hero = () => {
         { id: 6, name: 'ANURADHAPURA', image: '/Hero/izanuradapura.jpg', distance: 170, rotate: 2 },
     ], []);
 
-    const [currentIndex, setCurrentIndex] = useState(0);
+    // For infinite loop, we clone the first and last slides
+    const extendedDestinations = useMemo(() => [
+        destinations[destinations.length - 1],
+        ...destinations,
+        destinations[0]
+    ], [destinations]);
+
+    const [currentIndex, setCurrentIndex] = useState(1); // Start at 1 (real first slide)
     const [isPaused, setIsPaused] = useState(false);
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
-    const next = React.useCallback(() => {
-        setCurrentIndex((prev) => (prev + 1) % destinations.length);
-    }, [destinations.length]);
+    const handleNext = useCallback(() => {
+        if (isTransitioning) return;
+        setIsTransitioning(true);
+        setCurrentIndex(prev => prev + 1);
+    }, [isTransitioning]);
 
-    const prev = React.useCallback(() => {
-        setCurrentIndex((prev) => (prev - 1 + destinations.length) % destinations.length);
-    }, [destinations.length]);
+    const handlePrev = useCallback(() => {
+        if (isTransitioning) return;
+        setIsTransitioning(true);
+        setCurrentIndex(prev => prev - 1);
+    }, [isTransitioning]);
 
-    // Auto-slide logic
+    // Loop logic: When we reach a clone, jump back to the real slide instantly
+    useEffect(() => {
+        if (currentIndex === 0) {
+            setTimeout(() => {
+                setIsTransitioning(false);
+                setCurrentIndex(destinations.length);
+            }, 500); // Match transition duration
+        } else if (currentIndex === extendedDestinations.length - 1) {
+            setTimeout(() => {
+                setIsTransitioning(false);
+                setCurrentIndex(1);
+            }, 500); // Match transition duration
+        } else {
+            setIsTransitioning(false);
+        }
+    }, [currentIndex, destinations.length, extendedDestinations.length]);
+
+    // Auto-slide effect
     useEffect(() => {
         if (isPaused) return;
-        const timer = setInterval(next, 4000); // Slightly faster for "automatic" feel
+        const timer = setInterval(handleNext, 4000);
         return () => clearInterval(timer);
-    }, [isPaused, next]);
+    }, [isPaused, handleNext]);
 
     const handleDragEnd = (event, info) => {
-        if (info.offset.x < -50) next();
-        else if (info.offset.x > 50) prev();
+        if (info.offset.x < -50) handleNext();
+        else if (info.offset.x > 50) handlePrev();
     };
 
     return (
@@ -65,24 +94,27 @@ const Hero = () => {
                                 dragConstraints={{ left: 0, right: 0 }}
                                 onDragEnd={handleDragEnd}
                                 animate={{ x: `-${currentIndex * 100}%` }}
-                                transition={{ type: "spring", stiffness: 200, damping: 25 }}
+                                transition={{ 
+                                    type: isTransitioning ? "spring" : "tween", 
+                                    stiffness: 200, 
+                                    damping: 25,
+                                    duration: isTransitioning ? 0 : 0.5 // Instant jump if not transitioning
+                                }}
                             >
-                                {destinations.map((dest, i) => {
+                                {extendedDestinations.map((dest, i) => {
                                     // Calculate dynamic price based on current Wagon R rate
                                     const price = calculateBasePrice(dest.distance, {
                                         ...baselineVehicle,
-                                        basePrice: baselineVehicle.ratePerKm * 10, // Mock base price if needed
+                                        basePrice: baselineVehicle.ratePerKm * 10,
                                         perKmRate: baselineVehicle.ratePerKm,
                                         baseKm: 10
                                     });
 
                                     return (
-                                        <div key={dest.id} className="min-w-full flex justify-center px-4">
+                                        <div key={`${dest.id}-${i}`} className="min-w-full flex justify-center px-4">
                                             <motion.div
-                                                initial={{ opacity: 0, scale: 0.9 }}
+                                                initial={false}
                                                 animate={{ 
-                                                    opacity: 1, 
-                                                    scale: 1,
                                                     rotate: dest.rotate
                                                 }}
                                                 className="relative bg-white border-[12px] border-black p-6 pb-24 w-full shadow-[25px_25px_0px_0px_rgba(0,0,0,1)] group select-none"
@@ -104,7 +136,7 @@ const Hero = () => {
                                                         alt={dest.name}
                                                         fill
                                                         className="object-cover group-hover:scale-110 transition-transform duration-1000"
-                                                        priority={i === 0}
+                                                        priority={i === 1}
                                                     />
                                                     
                                                     {/* "Starting From" Overlay */}
@@ -120,7 +152,7 @@ const Hero = () => {
                                                         <span className="text-[#FACC15] stroke-black stroke-2">{dest.name.split(' ')[1] || ''}</span>
                                                     </h3>
                                                     <div className="text-right">
-                                                        <div className="text-xs font-bold uppercase opacity-50">Economy Rate</div>
+                                                        <div className="text-xs font-bold uppercase opacity-50">Economy</div>
                                                         <div className="text-xl font-black italic leading-none">LKR {price.toLocaleString()}</div>
                                                     </div>
                                                 </div>
@@ -134,31 +166,35 @@ const Hero = () => {
                             </motion.div>
                         </div>
 
-                        {/* Navigation Buttons (Desktop Only) */}
+                        {/* Navigation Buttons */}
                         <button 
-                            onClick={prev}
+                            onClick={handlePrev}
                             className="absolute left-[-30px] lg:-left-32 z-50 w-16 h-16 bg-white border-8 border-black flex items-center justify-center hover:bg-[#FACC15] transition-all shadow-[10px_10px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none hidden md:flex"
                         >
                             <ArrowLeft size={36} strokeWidth={5} />
                         </button>
                         <button 
-                            onClick={next}
+                            onClick={handleNext}
                             className="absolute right-[-30px] lg:-right-32 z-50 w-16 h-16 bg-[#FACC15] border-8 border-black flex items-center justify-center hover:bg-black hover:text-[#FACC15] transition-all shadow-[10px_10px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none hidden md:flex"
                         >
                             <ArrowRight size={36} strokeWidth={5} />
                         </button>
                     </div>
 
-                    {/* Pagination Indicator Bars (Brutalist Style) */}
+                    {/* Pagination Indicator Bars */}
                     <div className="flex gap-4 my-12">
-                        {destinations.map((_, i) => (
-                            <button
-                                key={i}
-                                onClick={() => setCurrentIndex(i)}
-                                className={`h-4 border-4 border-black transition-all ${i === currentIndex ? 'w-16 bg-[#FACC15]' : 'w-8 bg-white hover:w-12 hover:bg-slate-100'}`}
-                                aria-label={`View Slide ${i + 1}`}
-                            />
-                        ))}
+                        {destinations.map((_, i) => {
+                            // Current display index logic for indicators
+                            const displayIndex = currentIndex === 0 ? destinations.length - 1 : (currentIndex === extendedDestinations.length - 1 ? 0 : currentIndex - 1);
+                            return (
+                                <button
+                                    key={i}
+                                    onClick={() => setCurrentIndex(i + 1)}
+                                    className={`h-4 border-4 border-black transition-all ${i === displayIndex ? 'w-16 bg-[#FACC15]' : 'w-8 bg-white hover:w-12 hover:bg-slate-100'}`}
+                                    aria-label={`View Slide ${i + 1}`}
+                                />
+                            );
+                        })}
                     </div>
                 </div>
 
