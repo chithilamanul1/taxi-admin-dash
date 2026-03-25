@@ -49,12 +49,12 @@ const Hero = () => {
             setTimeout(() => {
                 setIsTransitioning(false);
                 setCurrentIndex(destinations.length);
-            }, 500); // Match transition duration
+            }, 500);
         } else if (currentIndex === extendedDestinations.length - 1) {
             setTimeout(() => {
                 setIsTransitioning(false);
                 setCurrentIndex(1);
-            }, 500); // Match transition duration
+            }, 500);
         } else {
             setIsTransitioning(false);
         }
@@ -73,11 +73,11 @@ const Hero = () => {
     };
 
     return (
-        <section className="relative min-h-[95vh] bg-white dark:bg-[#0a0a0a] overflow-hidden pt-32 pb-20 flex items-center justify-center">
+        <section className="relative h-[450px] md:h-[550px] bg-white dark:bg-[#0a0a0a] overflow-hidden pt-12 pb-8 flex items-center justify-center border-b-8 border-black">
             
-            {/* Background Branding Elements */}
-            <div className="absolute top-40 left-10 w-64 h-64 border-[4px] border-black/5 -rotate-12 -z-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.03)_10px,rgba(0,0,0,0.03)_20px)]"></div>
-            <div className="absolute bottom-20 right-10 w-96 h-96 border-[4px] border-black/5 rotate-12 -z-10 rounded-full"></div>
+            {/* Minimal Background Elements */}
+            <div className="absolute top-10 left-10 w-32 h-32 border-[2px] border-black/5 -rotate-12 -z-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.03)_10px,rgba(0,0,0,0.03)_20px)]"></div>
+            <div className="absolute bottom-10 right-10 w-48 h-48 border-[2px] border-black/5 rotate-12 -z-10 rounded-full"></div>
 
             <div className="container mx-auto px-6 relative z-10" 
                  onMouseEnter={() => setIsPaused(true)}
@@ -85,9 +85,9 @@ const Hero = () => {
                 
                 <div className="relative flex flex-col items-center justify-center">
                     
-                    <div className="relative w-full max-w-[550px] flex items-center justify-center">
+                    <div className="relative w-full max-w-[450px] flex items-center justify-center">
                         {/* Carousel Container */}
-                        <div className="w-full overflow-hidden py-12 px-6 touch-none">
+                        <div className="w-full overflow-hidden py-4 px-4 touch-none">
                             <motion.div 
                                 className="flex cursor-grab active:cursor-grabbing"
                                 drag="x"
@@ -98,11 +98,10 @@ const Hero = () => {
                                     type: isTransitioning ? "spring" : "tween", 
                                     stiffness: 200, 
                                     damping: 25,
-                                    duration: isTransitioning ? 0 : 0.5 // Instant jump if not transitioning
+                                    duration: isTransitioning ? 0 : 0.5
                                 }}
                             >
                                 {extendedDestinations.map((dest, i) => {
-                                    // Calculate dynamic price based on current Wagon R rate
                                     const price = calculateBasePrice(dest.distance, {
                                         ...baselineVehicle,
                                         basePrice: baselineVehicle.ratePerKm * 10,
@@ -117,20 +116,20 @@ const Hero = () => {
                                                 animate={{ 
                                                     rotate: dest.rotate
                                                 }}
-                                                className="relative bg-white border-[12px] border-black p-6 pb-24 w-full shadow-[25px_25px_0px_0px_rgba(0,0,0,1)] group select-none"
+                                                className="relative bg-white border-[8px] border-black p-4 pb-16 w-full shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] group select-none"
                                             >
                                                 {/* Card Number & Price Ticker */}
-                                                <div className="absolute top-6 right-6 z-20 flex flex-col items-end gap-2">
-                                                    <div className="w-16 h-16 bg-[#FACC15] border-4 border-black rounded-full flex items-center justify-center font-black italic text-xl shadow-[6px_6px_0px_0px_#000]">
+                                                <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-1">
+                                                    <div className="w-10 h-10 bg-[#FACC15] border-4 border-black rounded-full flex items-center justify-center font-black italic text-sm shadow-[4px_4px_0px_0px_#000]">
                                                         0{dest.id}
                                                     </div>
-                                                    <div className="bg-black text-white px-4 py-1 font-black italic text-sm border-2 border-black -rotate-2">
+                                                    <div className="bg-black text-white px-3 py-0.5 font-black italic text-[10px] border-2 border-black -rotate-2">
                                                         LKR {price.toLocaleString()}
                                                     </div>
                                                 </div>
 
-                                                {/* Image Container */}
-                                                <div className="relative aspect-square overflow-hidden border-4 border-black bg-slate-200 pointer-events-none">
+                                                {/* Image Container - Slimmer aspect ratio */}
+                                                <div className="relative aspect-[3/2] overflow-hidden border-4 border-black bg-slate-200 pointer-events-none">
                                                     <Image
                                                         src={dest.image}
                                                         alt={dest.name}
@@ -139,26 +138,24 @@ const Hero = () => {
                                                         priority={i === 1}
                                                     />
                                                     
-                                                    {/* "Starting From" Overlay */}
-                                                    <div className="absolute bottom-4 left-4 z-10 bg-[#FACC15] border-2 border-black px-3 py-1 font-black text-xs uppercase italic tracking-tighter shadow-[4px_4px_0px_0px_#000]">
-                                                        Budget Friendly
+                                                    <div className="absolute bottom-2 left-2 z-10 bg-[#FACC15] border-2 border-black px-2 py-0.5 font-black text-[9px] uppercase italic tracking-tighter shadow-[2px_2px_0px_0px_#000]">
+                                                        HOT DEAL
                                                     </div>
                                                 </div>
 
-                                                {/* Info Section */}
-                                                <div className="mt-12 flex items-center justify-between">
-                                                    <h3 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-black leading-none">
+                                                {/* Info Section - Smaller fonts */}
+                                                <div className="mt-6 flex items-center justify-between">
+                                                    <h3 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-black leading-none">
                                                         {dest.name.split(' ')[0]}<br/>
-                                                        <span className="text-[#FACC15] stroke-black stroke-2">{dest.name.split(' ')[1] || ''}</span>
+                                                        <span className="text-[#FACC15] stroke-black stroke-1">{dest.name.split(' ')[1] || ''}</span>
                                                     </h3>
                                                     <div className="text-right">
-                                                        <div className="text-xs font-bold uppercase opacity-50">Economy</div>
-                                                        <div className="text-xl font-black italic leading-none">LKR {price.toLocaleString()}</div>
+                                                        <div className="text-[10px] font-bold uppercase opacity-50">Economy</div>
+                                                        <div className="text-lg font-black italic leading-none">Rs {price.toLocaleString()}</div>
                                                     </div>
                                                 </div>
 
-                                                {/* Polaroid Texture Stripe */}
-                                                <div className="absolute bottom-0 left-0 w-full h-2 bg-black/5"></div>
+                                                <div className="absolute bottom-0 left-0 w-full h-1.5 bg-black/5"></div>
                                             </motion.div>
                                         </div>
                                     );
@@ -166,31 +163,30 @@ const Hero = () => {
                             </motion.div>
                         </div>
 
-                        {/* Navigation Buttons */}
+                        {/* Navigation Buttons - Smaller and more compact */}
                         <button 
                             onClick={handlePrev}
-                            className="absolute left-[-30px] lg:-left-32 z-50 w-16 h-16 bg-white border-8 border-black flex items-center justify-center hover:bg-[#FACC15] transition-all shadow-[10px_10px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none hidden md:flex"
+                            className="absolute left-[-20px] lg:-left-24 z-50 w-12 h-12 bg-white border-4 border-black flex items-center justify-center hover:bg-[#FACC15] transition-all shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none hidden md:flex"
                         >
-                            <ArrowLeft size={36} strokeWidth={5} />
+                            <ArrowLeft size={24} strokeWidth={5} />
                         </button>
                         <button 
                             onClick={handleNext}
-                            className="absolute right-[-30px] lg:-right-32 z-50 w-16 h-16 bg-[#FACC15] border-8 border-black flex items-center justify-center hover:bg-black hover:text-[#FACC15] transition-all shadow-[10px_10px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none hidden md:flex"
+                            className="absolute right-[-20px] lg:-right-24 z-50 w-12 h-12 bg-[#FACC15] border-4 border-black flex items-center justify-center hover:bg-black hover:text-[#FACC15] transition-all shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none hidden md:flex"
                         >
-                            <ArrowRight size={36} strokeWidth={5} />
+                            <ArrowRight size={24} strokeWidth={5} />
                         </button>
                     </div>
 
-                    {/* Pagination Indicator Bars */}
-                    <div className="flex gap-4 my-12">
+                    {/* Pagination Indicator Bars - Slimmer */}
+                    <div className="flex gap-2 my-6">
                         {destinations.map((_, i) => {
-                            // Current display index logic for indicators
                             const displayIndex = currentIndex === 0 ? destinations.length - 1 : (currentIndex === extendedDestinations.length - 1 ? 0 : currentIndex - 1);
                             return (
                                 <button
                                     key={i}
                                     onClick={() => setCurrentIndex(i + 1)}
-                                    className={`h-4 border-4 border-black transition-all ${i === displayIndex ? 'w-16 bg-[#FACC15]' : 'w-8 bg-white hover:w-12 hover:bg-slate-100'}`}
+                                    className={`h-2 border-2 border-black transition-all ${i === displayIndex ? 'w-10 bg-[#FACC15]' : 'w-4 bg-white hover:w-6'}`}
                                     aria-label={`View Slide ${i + 1}`}
                                 />
                             );
@@ -198,16 +194,13 @@ const Hero = () => {
                     </div>
                 </div>
 
-                {/* Main CTA Label */}
-                <div className="mt-4 text-center">
-                     <div className="bg-black text-[#FACC15] inline-block px-12 py-6 border-8 border-black font-black text-4xl md:text-7xl italic uppercase tracking-tighter shadow-[20px_20px_0px_0px_#FACC15] -rotate-1">
+                {/* Main CTA Label - Integrated and smaller */}
+                <div className="mt-2 text-center">
+                     <div className="bg-black text-[#FACC15] inline-block px-8 py-3 border-4 border-black font-black text-2xl md:text-3xl italic uppercase tracking-tighter shadow-[10px_10px_0px_0px_#FACC15] -rotate-1">
                         Travel Smarter.
                     </div>
                 </div>
             </div>
-
-            {/* Bottom Border Accent */}
-            <div className="absolute bottom-0 left-0 w-full h-10 bg-black"></div>
         </section>
     );
 };
