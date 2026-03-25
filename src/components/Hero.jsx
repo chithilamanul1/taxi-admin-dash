@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const Hero = () => {
@@ -20,6 +20,11 @@ const Hero = () => {
     const next = () => setCurrentIndex((prev) => (prev + 1) % destinations.length);
     const prev = () => setCurrentIndex((prev) => (prev - 1 + destinations.length) % destinations.length);
 
+    const handleDragEnd = (event, info) => {
+        if (info.offset.x < -50) next();
+        else if (info.offset.x > 50) prev();
+    };
+
     return (
         <section className="relative min-h-[90vh] bg-white dark:bg-[#0a0a0a] overflow-hidden pt-32 pb-20 flex items-center justify-center">
             
@@ -28,74 +33,90 @@ const Hero = () => {
             <div className="absolute bottom-20 right-10 w-80 h-80 border-2 border-black/5 rotate-12 -z-10 rounded-full"></div>
 
             <div className="container mx-auto px-6 relative z-10">
-                <div className="relative flex items-center justify-center">
+                <div className="relative flex flex-col items-center justify-center">
                     
-                    {/* Carousel Container */}
-                    <div className="w-full max-w-[500px] overflow-hidden py-12 px-4">
-                        <motion.div 
-                            className="flex"
-                            animate={{ x: `-${currentIndex * 100}%` }}
-                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    <div className="relative w-full max-w-[500px] flex items-center justify-center">
+                        {/* Carousel Container */}
+                        <div className="w-full overflow-hidden py-12 px-4 touch-none">
+                            <motion.div 
+                                className="flex cursor-grab active:cursor-grabbing"
+                                drag="x"
+                                dragConstraints={{ left: 0, right: 0 }}
+                                onDragEnd={handleDragEnd}
+                                animate={{ x: `-${currentIndex * 100}%` }}
+                                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                            >
+                                {destinations.map((dest, i) => (
+                                    <div key={dest.id} className="min-w-full flex justify-center">
+                                        <motion.div
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ 
+                                                opacity: 1, 
+                                                scale: 1,
+                                                rotate: dest.rotate
+                                            }}
+                                            className="relative bg-white border-[10px] border-black p-5 pb-20 w-full shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] group select-none"
+                                        >
+                                            {/* Card Number */}
+                                            <div className="absolute top-6 right-6 z-20 w-14 h-14 bg-[#FACC15] border-4 border-black rounded-full flex items-center justify-center font-black italic text-lg shadow-[4px_4px_0px_0px_#000]">
+                                                0{dest.id}
+                                            </div>
+
+                                            {/* Image Container */}
+                                            <div className="relative aspect-square overflow-hidden border-4 border-black bg-slate-100 pointer-events-none">
+                                                <Image
+                                                    src={dest.image}
+                                                    alt={dest.name}
+                                                    fill
+                                                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                                    priority={i === 0}
+                                                />
+                                            </div>
+
+                                            {/* Info Section */}
+                                            <div className="mt-10">
+                                                <h3 className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter text-black">
+                                                    {dest.name}
+                                                </h3>
+                                            </div>
+
+                                            {/* Polaroid Texture */}
+                                            <div className="absolute bottom-0 left-0 w-full h-1 bg-black/5"></div>
+                                        </motion.div>
+                                    </div>
+                                ))}
+                            </motion.div>
+                        </div>
+
+                        {/* Navigation Buttons (Desktop Only) */}
+                        <button 
+                            onClick={prev}
+                            className="absolute left-[-20px] lg:-left-24 z-50 w-14 h-14 bg-white border-4 border-black flex items-center justify-center hover:bg-[#FACC15] transition-all shadow-[8px_8px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none hidden md:flex"
                         >
-                            {destinations.map((dest, i) => (
-                                <div key={dest.id} className="min-w-full flex justify-center">
-                                    <motion.div
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        animate={{ 
-                                            opacity: 1, 
-                                            scale: 1,
-                                            rotate: dest.rotate
-                                        }}
-                                        className="relative bg-white border-[10px] border-black p-5 pb-20 w-full shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] group"
-                                    >
-                                        {/* Card Number */}
-                                        <div className="absolute top-6 right-6 z-20 w-14 h-14 bg-[#FACC15] border-4 border-black rounded-full flex items-center justify-center font-black italic text-lg shadow-[4px_4px_0px_0px_#000]">
-                                            0{dest.id}
-                                        </div>
-
-                                        {/* Image Container */}
-                                        <div className="relative aspect-square overflow-hidden border-4 border-black bg-slate-100">
-                                            <Image
-                                                src={dest.image}
-                                                alt={dest.name}
-                                                fill
-                                                className="object-cover group-hover:scale-110 transition-transform duration-700"
-                                                priority={i === 0}
-                                            />
-                                        </div>
-
-                                        {/* Info Section */}
-                                        <div className="mt-10">
-                                            <h3 className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter text-black">
-                                                {dest.name}
-                                            </h3>
-                                        </div>
-
-                                        {/* Polaroid Texture */}
-                                        <div className="absolute bottom-0 left-0 w-full h-1 bg-black/5"></div>
-                                    </motion.div>
-                                </div>
-                            ))}
-                        </motion.div>
+                            <ArrowLeft size={28} strokeWidth={4} />
+                        </button>
+                        <button 
+                            onClick={next}
+                            className="absolute right-[-20px] lg:-right-24 z-50 w-14 h-14 bg-[#FACC15] border-4 border-black flex items-center justify-center hover:bg-black hover:text-[#FACC15] transition-all shadow-[8px_8px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none hidden md:flex"
+                        >
+                            <ArrowRight size={28} strokeWidth={4} />
+                        </button>
                     </div>
 
-                    {/* Navigation Buttons */}
-                    <button 
-                        onClick={prev}
-                        className="absolute left-0 lg:-left-20 z-50 w-16 h-16 bg-white border-8 border-black flex items-center justify-center hover:bg-[#FACC15] transition-all shadow-[10px_10px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none"
-                    >
-                        <ArrowLeft size={32} strokeWidth={4} />
-                    </button>
-                    <button 
-                        onClick={next}
-                        className="absolute right-0 lg:-right-20 z-50 w-16 h-16 bg-[#FACC15] border-8 border-black flex items-center justify-center hover:bg-black hover:text-[#FACC15] transition-all shadow-[10px_10px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none"
-                    >
-                        <ArrowRight size={32} strokeWidth={4} />
-                    </button>
+                    {/* Pagination Dots */}
+                    <div className="flex gap-3 my-8">
+                        {destinations.map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setCurrentIndex(i)}
+                                className={`w-4 h-4 border-2 border-black transition-all ${i === currentIndex ? 'bg-[#FACC15] scale-125' : 'bg-white'}`}
+                            />
+                        ))}
+                    </div>
                 </div>
 
                 {/* Main CTA Label */}
-                <div className="mt-16 text-center">
+                <div className="mt-8 text-center">
                      <div className="bg-black text-[#FACC15] inline-block px-10 py-5 border-8 border-black font-black text-4xl md:text-6xl italic uppercase tracking-tighter shadow-[15px_15px_0px_0px_#FACC15]">
                         Your Journey Starts Here
                     </div>
