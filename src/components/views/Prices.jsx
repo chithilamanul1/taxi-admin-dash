@@ -29,7 +29,7 @@ const VEHICLE_PRICING = {
     'sedan': {
         name: 'SEDAN',
         model: '',
-        image: '/vehicles/sedancar.png',
+        image: '/vehicles/sedan2.png',
         specs: {
             luggage: 3,
             handLuggage: 3,

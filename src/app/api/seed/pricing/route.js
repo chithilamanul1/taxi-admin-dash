@@ -99,7 +99,7 @@ export async function GET(req) {
             sedan: {
                 vehicleType: 'sedan',
                 name: 'Sedan Car',
-                image: '/vehicles/sedancar.png',
+                image: '/vehicles/sedan2.png',
                 capacity: 4, luggage: 3, handLuggage: 3,
                 basePrice: 4500, baseKm: 20, perKmRate: 130,
                 features: commonFeatures,

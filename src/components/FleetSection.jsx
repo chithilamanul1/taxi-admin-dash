@@ -22,7 +22,7 @@ const fleetData = [
     {
         category: "Sedan Cars",
         name: "Toyota Prius / Axio / Similar",
-        image: "/vehicles/sedancar.png",
+        image: "/vehicles/sedan2.png",
         capacity: 3,
         luggage: 3,
         handLuggage: 2,
