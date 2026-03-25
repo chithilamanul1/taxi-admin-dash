@@ -6,11 +6,13 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, MapPin, Star, Compass } from 'lucide-react'
 import Hero from './Hero'
-import Features from './Features'
-import BookingModal from './BookingModal'
 import BookingWidget from './BookingWidget'
-import FleetSection from './FleetSection'
-import ReviewStatsBar from './ReviewStatsBar'
+
+// Dynamic imports for heavy components
+const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
+const FleetSection = dynamic(() => import('./FleetSection'), { ssr: false })
+const Features = dynamic(() => import('./Features'), { ssr: false })
+const ReviewStatsBar = dynamic(() => import('./ReviewStatsBar'), { ssr: false })
 import { destinations } from '@/lib/destinations'
 
 // Dynamic imports for components below the fold
@@ -103,7 +105,7 @@ export default function HomeClient() {
                                     style={{ transform: `rotate(${item.rotate})` }}
                                 >
                                     <div className="relative aspect-square overflow-hidden mb-4 border-4 border-black">
-                                        <Image src={item.img} alt={item.name} fill className="object-cover" />
+                                        <Image src={item.img} alt={item.name} fill className="object-cover" loading="lazy" sizes="(max-width: 768px) 50vw, 25vw" />
                                     </div>
                                     <div className="text-[10px] font-black uppercase tracking-tighter text-black italic">{item.name}</div>
                                 </div>

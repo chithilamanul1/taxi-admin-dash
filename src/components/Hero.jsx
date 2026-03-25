@@ -70,6 +70,8 @@ const Hero = ({ onBookClick }) => {
                                     alt="Mirissa Beach Sri Lanka" 
                                     fill 
                                     className="object-cover"
+                                    priority
+                                    sizes="(max-width: 768px) 208px, 288px"
                                 />
                             </div>
                             <div className="flex justify-between items-center">
@@ -91,6 +93,7 @@ const Hero = ({ onBookClick }) => {
                                     alt="Yala Safari Sri Lanka" 
                                     fill 
                                     className="object-cover"
+                                    sizes="(max-width: 768px) 208px, 288px"
                                 />
                             </div>
                             <div className="flex justify-between items-center">
@@ -112,6 +115,7 @@ const Hero = ({ onBookClick }) => {
                                     alt="Ella Nine Arch Bridge" 
                                     fill 
                                     className="object-cover"
+                                    sizes="(max-width: 768px) 192px, 256px"
                                 />
                             </div>
                             <div className="flex justify-between items-center">
