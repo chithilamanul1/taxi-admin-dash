@@ -12,6 +12,7 @@ const FleetSection = () => {
     const { convertPrice, rates } = useCurrency();
     const [vehicles, setVehicles] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
+    const [dynamicDestinations, setDynamicDestinations] = React.useState([]);
 
     const popularPoints = ['Galle', 'Ahangama', 'Sigiriya', 'Mirissa', 'Ella', 'Kandy'];
 
@@ -29,7 +30,17 @@ const FleetSection = () => {
                 setLoading(false);
             }
         };
+        const fetchDestinations = async () => {
+            try {
+                const res = await fetch('/api/admin/destinations');
+                const data = await res.json();
+                if (data.success) setDynamicDestinations(data.data);
+            } catch (err) {
+                console.error("Destinations fetch error:", err);
+            }
+        };
         fetchPricing();
+        fetchDestinations();
     }, []);
 
     // Helper to get distance for a destination name
@@ -127,6 +138,7 @@ const FleetSection = () => {
                                 >
                                     {[...popularPoints, ...popularPoints].map((point, i) => {
                                         const dist = getDistance(point);
+                                        const priceLKR = calculateBasePrice(dist, vehicle, 'one-way', 'Airport', point, dynamicDestinations);
                                         const converted = convertPrice(priceLKR, 'LKR', 'USD');
                                         const displayUSD = (typeof converted === 'number' && !isNaN(converted)) ? converted.toFixed(0) : '0';
                                         
