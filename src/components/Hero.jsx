@@ -9,29 +9,34 @@ import { FLEET } from '@/lib/mock-taxi-db';
 
 const Hero = () => {
     // Wagon R is the baseline for Hero prices (id: v3)
-    const baselineVehicle = FLEET.find(v => v.id === 'v3') || FLEET[0];
+    const baselineVehicle = React.useMemo(() => FLEET.find(v => v.id === 'v3') || FLEET[0], []);
 
-    const destinations = [
+    const destinations = React.useMemo(() => [
         { id: 1, name: 'MIRISSA BEACH', image: '/Hero/mirissa_illust.jpg', distance: 150, rotate: -3 },
         { id: 2, name: 'YALA SAFARI', image: '/Hero/safari_tour.png', distance: 245, rotate: 2 },
         { id: 3, name: 'ELLA NINE ARCH', image: '/Hero/ella.jpg', distance: 210, rotate: -2 },
         { id: 4, name: 'SIGIRIYA ROCK', image: '/Hero/sigiriya_illust.jpg', distance: 150, rotate: 3 },
         { id: 5, name: 'ARUGAM BAY', image: '/Hero/arugam_surf.jpg', distance: 320, rotate: -1 },
         { id: 6, name: 'ANURADHAPURA', image: '/Hero/izanuradapura.jpg', distance: 170, rotate: 2 },
-    ];
+    ], []);
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
 
-    const next = () => setCurrentIndex((prev) => (prev + 1) % destinations.length);
-    const prev = () => setCurrentIndex((prev) => (prev - 1 + destinations.length) % destinations.length);
+    const next = React.useCallback(() => {
+        setCurrentIndex((prev) => (prev + 1) % destinations.length);
+    }, [destinations.length]);
+
+    const prev = React.useCallback(() => {
+        setCurrentIndex((prev) => (prev - 1 + destinations.length) % destinations.length);
+    }, [destinations.length]);
 
     // Auto-slide logic
     useEffect(() => {
         if (isPaused) return;
-        const timer = setInterval(next, 5000);
+        const timer = setInterval(next, 4000); // Slightly faster for "automatic" feel
         return () => clearInterval(timer);
-    }, [isPaused]);
+    }, [isPaused, next]);
 
     const handleDragEnd = (event, info) => {
         if (info.offset.x < -50) next();
