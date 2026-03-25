@@ -1009,6 +1009,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     </div>
                                 )}
                             </div>
+                            </div>
 
                             <div className="flex flex-col items-center justify-center gap-2 mt-4">
                                 <div className="flex items-center gap-1.5 text-emerald-800">
@@ -1286,7 +1287,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                 </div>
                             </div>
-                        </div>
                     )}
                 </div>
 
