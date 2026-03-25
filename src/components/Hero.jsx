@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Compass } from 'lucide-react';
+import { Compass, ArrowRight } from 'lucide-react';
 
 const Hero = ({ onBookClick }) => {
     const destinations = [
