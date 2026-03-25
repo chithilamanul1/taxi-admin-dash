@@ -112,8 +112,9 @@ export default function SpecialOffersSection() {
                                                 setTimeout(() => setCopiedCode(null), 2000);
                                             }}
                                             className={`px-4 py-2 font-black text-xs flex items-center gap-2 transition-all border-2 border-[#FACC15] uppercase tracking-widest ${copiedCode === coupon.code ? 'bg-[#FACC15] text-black' : 'bg-transparent text-[#FACC15] hover:bg-[#FACC15] hover:text-black'}`}
+                                            aria-label={copiedCode === coupon.code ? "Coupon code copied" : "Copy coupon code"}
                                         >
-                                            {copiedCode === coupon.code ? <Check size={14} /> : <Copy size={14} />}
+                                            {copiedCode === coupon.code ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
                                             {copiedCode === coupon.code ? 'COPIED' : 'COPY'}
                                         </button>
                                     </div>
@@ -126,8 +127,11 @@ export default function SpecialOffersSection() {
                                                 <span>EXP: {new Date(coupon.expiryDate).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' })}</span>
                                             </div>
                                         )}
-                                        <div className="bg-[#FACC15] border-2 border-black px-4 py-2 text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-2 group-hover/card:bg-black group-hover/card:text-[#FACC15] transition-all">
-                                            BOOK NOW <ArrowRight size={12} />
+                                        <div 
+                                            className="bg-[#FACC15] border-2 border-black px-4 py-2 text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-2 group-hover/card:bg-black group-hover/card:text-[#FACC15] transition-all"
+                                            aria-label={`Book now using coupon ${coupon.code}`}
+                                        >
+                                            BOOK NOW <ArrowRight size={12} aria-hidden="true" />
                                         </div>
                                     </div>
                                 </div>

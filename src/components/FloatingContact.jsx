@@ -23,10 +23,11 @@ export default function FloatingContact() {
                             setIsOpen(false);
                         }}
                         className="group flex items-center gap-3"
+                        aria-label="Open Live Chat"
                     >
                         <span className="bg-[#0F172A] px-4 py-2 border-2 border-black text-[10px] font-black text-white whitespace-nowrap uppercase tracking-widest">Live Chat</span>
                         <div className="w-14 h-14 bg-emerald-500 text-white border-4 border-black flex items-center justify-center hover:scale-110 transition-transform">
-                            <MessageCircle size={24} />
+                            <MessageCircle size={24} aria-hidden="true" />
                         </div>
                     </button>
 
@@ -35,20 +36,22 @@ export default function FloatingContact() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group flex items-center gap-3"
+                        aria-label="Contact us on WhatsApp"
                     >
                         <span className="bg-[#25D366] px-4 py-2 border-2 border-black text-[10px] font-black text-white whitespace-nowrap uppercase tracking-widest">WhatsApp</span>
                         <div className="w-14 h-14 bg-[#25D366] text-white border-4 border-black flex items-center justify-center hover:scale-110 transition-transform">
-                            <MessageCircle size={24} />
+                            <MessageCircle size={24} aria-hidden="true" />
                         </div>
                     </a>
 
                     <a
                         href="mailto:info@airporttaxis.lk"
                         className="group flex items-center gap-3"
+                        aria-label="Send us an email"
                     >
                         <span className="bg-slate-700 px-4 py-2 border-2 border-black text-[10px] font-black text-white whitespace-nowrap uppercase tracking-widest">Email Us</span>
                         <div className="w-14 h-14 bg-white text-black border-4 border-black flex items-center justify-center hover:scale-110 transition-transform">
-                            <Mail size={24} />
+                            <Mail size={24} aria-hidden="true" />
                         </div>
                     </a>
                 </div>

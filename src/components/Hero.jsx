@@ -126,7 +126,7 @@ const Hero = ({ onBookClick }) => {
 
                         {/* Compass Ornament */}
                         <div className="absolute bottom-4 left-4 hidden lg:block z-30">
-                             <div className="w-16 h-16 bg-[#FACC15] border-4 border-black flex items-center justify-center">
+                             <div className="w-16 h-16 bg-[#FACC15] border-4 border-black flex items-center justify-center" aria-hidden="true">
                                 <Compass size={32} className="text-black animate-spin-slow" />
                             </div>
                         </div>

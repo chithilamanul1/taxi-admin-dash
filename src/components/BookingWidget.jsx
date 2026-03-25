@@ -538,13 +538,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             aria-selected={activeTab === tab.id}
                             aria-controls={`panel-${tab.id}`}
                             id={`tab-${tab.id}`}
+                            aria-label={`Switch to ${tab.label} tab`}
                             onClick={() => setActiveTab(tab.id)}
                             className={`flex flex-col sm:flex-row items-center justify-center gap-1 md:gap-3 px-2 sm:px-6 py-3.5 md:py-4 rounded-none text-[8px] sm:text-xs md:text-sm font-black transition-all ${activeTab === tab.id
                                 ? 'bg-[#FACC15] text-black'
                                 : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5'
                                 }`}
                         >
-                            <tab.icon size={16} className={activeTab === tab.id ? 'text-black' : 'text-slate-400'} />
+                            <tab.icon size={16} className={activeTab === tab.id ? 'text-black' : 'text-slate-400'} aria-hidden="true" />
                             <span className="uppercase tracking-widest">{tab.label}</span>
                         </button>
                     ))}
@@ -585,13 +586,19 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex items-center gap-2 w-full sm:w-auto">
                                     {/* Currency Selector */}
                                     <div className="relative group z-[110]">
-                                        <button className="flex items-center gap-2 bg-white dark:bg-[#1a1a1a] border-2 border-black rounded-none px-4 py-2.5 text-xs font-black text-black dark:text-white hover:-translate-y-0.5 transition-all">
-
+                                        <button 
+                                            className="flex items-center gap-2 bg-white dark:bg-[#1a1a1a] border-2 border-black rounded-none px-4 py-2.5 text-xs font-black text-black dark:text-white hover:-translate-y-0.5 transition-all"
+                                            aria-label="Select Currency"
+                                        >
                                             <div className="w-5 h-5 overflow-hidden rounded-none border-[1.5px] border-black">
-                                                <img src={SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag} alt={currency} className="w-full h-full object-cover scale-150" />
+                                                <img 
+                                                    src={SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag} 
+                                                    alt={`${currency} flag`} 
+                                                    className="w-full h-full object-cover scale-150" 
+                                                />
                                             </div>
                                             <span className="uppercase text-black dark:text-white">{currency}</span>
-                                            <ChevronDown size={14} className="opacity-100 text-black dark:text-white" />
+                                            <ChevronDown size={14} className="opacity-100 text-black dark:text-white" aria-hidden="true" />
                                         </button>
                                         <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-[#111] rounded-none border-[3px] border-black overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
                                             <div className="py-0">

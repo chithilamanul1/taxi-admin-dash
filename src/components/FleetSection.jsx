@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { Users, Briefcase, ShoppingBag, Wind, CheckCircle2 } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
 
@@ -62,11 +63,13 @@ const FleetSection = () => {
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[120px] font-black text-black/[0.03] italic tracking-tighter select-none pointer-events-none">
                                     0{idx + 1}
                                 </div>
-                                <img 
+                                <Image 
                                     src={item.image} 
-                                    alt={item.name} 
-                                    className={`w-full max-h-full object-contain drop-shadow-2xl group-hover:scale-110 transition-transform duration-500 
+                                    alt={`Airport Taxi Sri Lanka - ${item.name}`} 
+                                    fill
+                                    className={`object-contain drop-shadow-2xl group-hover:scale-110 transition-transform duration-500 
                                         ${item.category.includes('Sedan') || item.category.includes('Mini') ? 'scale-[1.4] md:scale-[1.5]' : ''}`} 
+                                    sizes="(max-width: 768px) 100vw, 50vw"
                                 />
                             </div>
 

@@ -49,7 +49,7 @@ const Footer = () => {
                     {/* Links */}
                     <div className="grid grid-cols-2 gap-8 lg:col-span-1">
                         <div className="space-y-8">
-                            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#FACC15] border-b-2 border-[#FACC15]/20 pb-2 inline-block">Explore</h4>
+                            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[#FACC15] border-b-2 border-[#FACC15]/20 pb-2 inline-block">Explore</h3>
                             <ul className="space-y-4 text-black/50 dark:text-white/50 text-[11px] font-black uppercase tracking-widest">
                                 <li><Link href="/" className="hover:text-[#FACC15] transition-colors">Home</Link></li>
                                 <li><Link href="/day-trips" className="hover:text-[#FACC15] transition-colors">Day Trips</Link></li>
@@ -58,7 +58,7 @@ const Footer = () => {
                             </ul>
                         </div>
                         <div className="space-y-8">
-                            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#FACC15] border-b-2 border-[#FACC15]/20 pb-2 inline-block">Legal</h4>
+                            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[#FACC15] border-b-2 border-[#FACC15]/20 pb-2 inline-block">Legal</h3>
                             <ul className="space-y-4 text-black/50 dark:text-white/50 text-[11px] font-black uppercase tracking-widest">
                                 <li><Link href="/privacy-policy" className="hover:text-[#FACC15] transition-colors">Privacy</Link></li>
                                 <li><Link href="/terms" className="hover:text-[#FACC15] transition-colors">Terms</Link></li>
@@ -69,22 +69,22 @@ const Footer = () => {
 
                     {/* Contact */}
                     <div className="space-y-8">
-                        <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#FACC15] border-b-2 border-[#FACC15]/20 pb-2 inline-block">Get in Touch</h4>
+                        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[#FACC15] border-b-2 border-[#FACC15]/20 pb-2 inline-block">Get in Touch</h3>
                         <ul className="space-y-6 text-black/80 dark:text-white/80 text-xs font-black uppercase tracking-tight">
                             <li className="flex gap-4 group">
-                                <div className="w-10 h-10 bg-[#FACC15] text-black flex items-center justify-center shrink-0">
+                                <div className="w-10 h-10 bg-[#FACC15] text-black flex items-center justify-center shrink-0" aria-hidden="true">
                                     <MapPin size={18} />
                                 </div>
                                 <span className="pt-2">118/5 St. Joseph Street, Grandpass, Colombo 14</span>
                             </li>
                             <li className="flex gap-4 group">
-                                <div className="w-10 h-10 bg-[#FACC15] text-black flex items-center justify-center shrink-0">
+                                <div className="w-10 h-10 bg-[#FACC15] text-black flex items-center justify-center shrink-0" aria-hidden="true">
                                     <Phone size={18} />
                                 </div>
                                 <a href="tel:+94716885880" className="hover:text-[#FACC15] pt-2">+94 71 688 5880</a>
                             </li>
                             <li className="flex gap-4 group">
-                                <div className="w-10 h-10 bg-[#FACC15] text-black flex items-center justify-center shrink-0">
+                                <div className="w-10 h-10 bg-[#FACC15] text-black flex items-center justify-center shrink-0" aria-hidden="true">
                                     <Mail size={18} />
                                 </div>
                                 <a href="mailto:info@airporttaxis.lk" className="hover:text-[#FACC15] pt-2">info@airporttaxis.lk</a>

@@ -57,13 +57,17 @@ export default function Navbar() {
                     <button 
                         onClick={() => window.dispatchEvent(new CustomEvent('open-live-chat'))}
                         className="w-10 h-10 md:w-14 md:h-14 bg-emerald-500 border-4 border-black flex items-center justify-center text-black hover:bg-emerald-400 transition-all"
+                        aria-label="Open Live Chat"
                     >
                         <MessageCircle size={20} strokeWidth={3} />
                     </button>
 
                     {/* Currency Selector (Always Visible) */}
                     <div className="relative group hidden sm:block">
-                        <button className="w-10 h-10 md:w-14 md:h-14 bg-white border-4 border-black flex items-center justify-center text-black hover:bg-slate-50 transition-all">
+                        <button 
+                            className="w-10 h-10 md:w-14 md:h-14 bg-white border-4 border-black flex items-center justify-center text-black hover:bg-slate-50 transition-all"
+                            aria-label="Toggle Currency Selector"
+                        >
                             <Globe size={20} strokeWidth={3} />
                         </button>
                         <div className="absolute top-full right-0 mt-4 w-48 bg-white dark:bg-black border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
@@ -152,6 +156,7 @@ export default function Navbar() {
                             <a
                                 href="tel:+94716885880"
                                 className="flex items-center justify-center gap-3 w-full py-5 bg-[#FDD12C] text-navy font-black uppercase tracking-widest text-xs rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all"
+                                aria-label="Call support specialist"
                             >
                                 <Phone size={18} /> Call Specialist
                             </a>
