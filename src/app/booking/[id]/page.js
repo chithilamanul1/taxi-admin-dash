@@ -3,10 +3,11 @@ import Booking from '@/models/Booking';
 import User from '@/models/User'; // Ensure User is registered
 import Driver from '@/models/Driver'; // Ensure Driver is registered
 import { notFound } from 'next/navigation';
-import { CheckCircle, MapPin, Calendar, Clock, Car, Star, Phone, MessageSquare, ArrowRight } from 'lucide-react';
+import { CheckCircle, MapPin, Calendar, Clock, Car, Star, Phone, MessageSquare, ArrowRight, ShieldCheck, Zap, AlertCircle, Info } from 'lucide-react';
 import Link from 'next/link';
 import BookingActions from '@/components/BookingActions';
 import TrackingMap from '@/components/TrackingMap';
+import RatingSystem from '@/components/RatingSystem';
 
 export const dynamic = 'force-dynamic';
 
@@ -74,6 +75,110 @@ export default async function BookingStatusPage({ params }) {
                             </div>
                         </div>
                     )}
+
+                    {/* Trip Status Timeline */}
+                    <div className="px-4 py-8 bg-slate-50 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)] mb-12">
+                        <div className="flex justify-between relative">
+                            {/* Connecting Lines */}
+                            <div className="absolute top-5 left-0 right-0 h-1 bg-slate-200 -z-0"></div>
+                            <div className={`absolute top-5 left-0 h-1 bg-[#006064] transition-all duration-1000 -z-0 ${
+                                booking.status === 'pending' ? 'w-0' : 
+                                booking.status === 'confirmed' ? 'w-1/3' : 
+                                booking.status === 'ongoing' ? 'w-2/3' : 'w-full'
+                            }`}></div>
+
+                            {[
+                                { id: 'pending', label: 'Booked', icon: CheckCircle },
+                                { id: 'confirmed', label: 'Assigned', icon: User },
+                                { id: 'ongoing', label: 'En Route', icon: Car },
+                                { id: 'completed', label: 'Finished', icon: Star }
+                            ].map((s, idx) => {
+                                const isActive = booking.status === s.id || (s.id === 'pending' && booking.status !== 'cancelled');
+                                const isPast = ['completed', 'cancelled', 'ongoing', 'confirmed'].includes(booking.status) && idx <= ['pending', 'confirmed', 'ongoing', 'completed'].indexOf(booking.status);
+                                
+                                return (
+                                    <div key={s.id} className="flex flex-col items-center gap-3 relative z-10 flex-1">
+                                        <div className={`w-10 h-10 rounded-none border-4 border-black flex items-center justify-center transition-all ${
+                                            isActive ? 'bg-[#FACC15] scale-110 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 
+                                            isPast ? 'bg-[#006064] text-white' : 'bg-white text-slate-300'
+                                        }`}>
+                                            <s.icon size={20} strokeWidth={3} />
+                                        </div>
+                                        <span className={`text-[9px] font-black uppercase tracking-widest italic ${isActive ? 'text-black' : 'text-slate-400'}`}>
+                                            {s.label}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {/* Safety & Sharing Panel (STREET STYLE) */}
+                    <div className="grid md:grid-cols-2 gap-8 mb-12">
+                        <div className="bg-black text-white p-8 border-4 border-black shadow-[10px_10px_0px_0px_#006064] relative overflow-hidden group">
+                           <div className="absolute top-0 right-0 bg-[#006064] text-white text-[8px] font-black px-4 py-1 uppercase italic tracking-widest border-b-2 border-l-2 border-black">LIVE HUB</div>
+                           <h4 className="text-xl font-black uppercase italic tracking-tighter mb-6 flex items-center gap-3">
+                               <ShieldCheck className="text-[#FACC15]" size={24} />
+                               SAFETY CENTER
+                           </h4>
+                           <div className="grid grid-cols-2 gap-4">
+                               <button 
+                                   onClick={() => {
+                                       if(navigator.share) {
+                                           navigator.share({
+                                               title: 'Track My Airport Taxi',
+                                               text: `I'm on my way! Track my ride here:`,
+                                               url: window.location.href
+                                           });
+                                       } else {
+                                           navigator.clipboard.writeText(window.location.href);
+                                           alert('Tracking link copied to clipboard!');
+                                       }
+                                   }}
+                                   className="flex flex-col items-center justify-center gap-3 bg-white/10 hover:bg-[#FACC15] hover:text-black p-4 border-2 border-white/20 hover:border-black transition-all group/btn"
+                               >
+                                   <Zap size={24} className="text-[#FACC15] group-hover/btn:text-black" />
+                                   <span className="text-[10px] font-black uppercase tracking-widest">Share Trip</span>
+                               </button>
+                               <button 
+                                   onClick={() => {
+                                       if(confirm("EMERGENCY SOS: Do you need to contact local emergency services?")) {
+                                           window.location.href = "tel:119";
+                                       }
+                                   }}
+                                   className="flex flex-col items-center justify-center gap-3 bg-red-600/20 hover:bg-red-600 p-4 border-2 border-red-600/30 hover:border-black transition-all group/sos"
+                               >
+                                   <AlertCircle size={24} className="text-red-500 group-hover/sos:text-white animate-pulse" />
+                                   <span className="text-[10px] font-black uppercase tracking-widest text-red-500 group-hover/sos:text-white">SOS / Help</span>
+                               </button>
+                           </div>
+                           <p className="mt-6 text-[8px] font-bold text-white/40 uppercase tracking-[0.2em] italic">Encrypted Connection Ref: {booking._id.slice(-8)}</p>
+                        </div>
+
+                        <div className="bg-[#FACC15] p-8 border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
+                           <div className="absolute top-0 right-0 bg-black text-[#FACC15] text-[8px] font-black px-4 py-1 uppercase italic tracking-widest border-b-4 border-l-4 border-black">HOSPITALITY</div>
+                           <h4 className="text-xl font-black uppercase italic tracking-tighter mb-6 flex items-center gap-3 text-black">
+                               <Info className="text-black" size={24} />
+                               TRIP SUPPORT
+                           </h4>
+                           <div className="space-y-4">
+                               <a href="tel:+94716885880" className="flex items-center justify-between bg-black text-white p-4 border-2 border-black hover:translate-y-[-2px] transition-all">
+                                   <div className="flex items-center gap-3">
+                                       <Phone size={18} className="text-[#FACC15]" />
+                                       <span className="text-[10px] font-black uppercase tracking-widest">24/7 Agent</span>
+                                   </div>
+                                   <ArrowRight size={16} />
+                               </a>
+                               <a href="https://wa.me/94716885880" target="_blank" className="flex items-center justify-between bg-white text-black p-4 border-2 border-black hover:translate-y-[-2px] transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                   <div className="flex items-center gap-3">
+                                       <MessageSquare size={18} className="text-emerald-500" />
+                                       <span className="text-[10px] font-black uppercase tracking-widest">WhatsApp Support</span>
+                                   </div>
+                                   <ArrowRight size={16} />
+                               </a>
+                           </div>
+                        </div>
+                    </div>
 
                     {/* Driver Profile Section (Boxy Style) */}
                     {booking.driver && (
@@ -200,11 +305,22 @@ export default async function BookingStatusPage({ params }) {
                         </div>
                     </div>
 
+                    {/* Rating System (Visible when Completed) */}
+                    {booking.status === 'completed' && (
+                        <div className="mt-8">
+                            <RatingSystem 
+                                bookingId={booking._id} 
+                                initialRating={booking.rating} 
+                                initialReview={booking.review} 
+                            />
+                        </div>
+                    )}
+
                     {/* Action Buttons (PDF, Email, Ticket) */}
                     <BookingActions booking={booking} />
 
                     <div className="text-center pt-8 border-t-8 border-slate-50">
-                        <Link href="/" className="inline-flex items-center gap-3 text-slate-400 hover:text-[#006064] font-black text-xs uppercase italic tracking-widest transition-all hover:translate-y-[-2px] group">
+                        <Link href="/" className="inline-flex items-center justify-center w-full md:w-auto gap-3 bg-black text-white px-10 py-5 rounded-none font-black text-xs uppercase italic tracking-widest transition-all hover:translate-y-[-2px] group border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
                             <ArrowRight size={16} className="rotate-180 group-hover:translate-x-[-4px] transition-transform" />
                             Return to Homepage
                         </Link>

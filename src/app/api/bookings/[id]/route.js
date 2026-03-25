@@ -41,13 +41,6 @@ async function checkAuth(bookingId) {
 export async function PATCH(request, { params }) {
     try {
         await dbConnect();
-        // Check Auth
-        const auth = await checkAuth();
-        if (!auth) {
-            console.log('[Auth] Unauthorized access attempt to update booking');
-            return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
-        }
-
         const { id } = await params;
         const body = await request.json();
         const {
@@ -55,7 +48,9 @@ export async function PATCH(request, { params }) {
             changedBy,
             driverNotes,
             completedAt,
-            assignedDriver
+            assignedDriver,
+            rating,
+            review
         } = body;
 
         if (!id) {
@@ -63,6 +58,15 @@ export async function PATCH(request, { params }) {
                 { success: false, error: 'Booking ID is required' },
                 { status: 400 }
             );
+        }
+
+        // Check Auth - Relaxed for ratings/reviews (Customer can submit without driver/admin token)
+        const auth = await checkAuth();
+        const isFeedbackOnly = (rating || review) && !status && !assignedDriver && !driverNotes;
+
+        if (!auth && !isFeedbackOnly) {
+            console.log('[Auth] Unauthorized access attempt to update booking');
+            return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
 
         // Valid status transitions
@@ -88,6 +92,9 @@ export async function PATCH(request, { params }) {
         if (status) update.status = status;
         if (driverNotes) update.driverNotes = driverNotes;
         if (assignedDriver) update.driver = assignedDriver;
+        if (rating) update.rating = rating;
+        if (review) update.review = review;
+        
         if (status === 'completed') {
             update.completedAt = completedAt || new Date();
         }
@@ -98,6 +105,29 @@ export async function PATCH(request, { params }) {
             update,
             { new: true }
         ).populate('driver');
+
+        // If rating provided, update driver's average rating
+        if (rating && booking.driver) {
+            try {
+                const driverId = booking.driver._id;
+                // Find all completed bookings for this driver with a rating
+                const ratedBookings = await Booking.find({ 
+                    driver: driverId, 
+                    status: 'completed', 
+                    rating: { $exists: true } 
+                });
+                
+                if (ratedBookings.length > 0) {
+                    const avgRating = ratedBookings.reduce((sum, b) => sum + b.rating, 0) / ratedBookings.length;
+                    await Driver.findByIdAndUpdate(driverId, { 
+                        ratings: Number(avgRating.toFixed(1)),
+                        totalRides: await Booking.countDocuments({ driver: driverId, status: 'completed' })
+                    });
+                }
+            } catch (err) {
+                console.error("Error updating driver rating:", err);
+            }
+        }
 
         // Log to Discord
         await logBookingStatusChanged(booking, status, changedBy);
