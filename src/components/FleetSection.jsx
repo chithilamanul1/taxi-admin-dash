@@ -66,7 +66,7 @@ const FleetSection = () => {
                                     src={item.image} 
                                     alt={item.name} 
                                     className={`w-full max-h-full object-contain drop-shadow-2xl group-hover:scale-110 transition-transform duration-500 
-                                        ${item.category.includes('Sedan') || item.category.includes('Mini') ? 'scale-[1.15] md:scale-[1.25]' : ''}`} 
+                                        ${item.category.includes('Sedan') || item.category.includes('Mini') ? 'scale-[1.4] md:scale-[1.5]' : ''}`} 
                                 />
                             </div>
 
