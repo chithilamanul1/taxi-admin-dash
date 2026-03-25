@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { MessageCircle, Mail, X, PhoneCall } from 'lucide-react'
+import { MessageCircle, Mail, X } from 'lucide-react'
 
 export default function FloatingContact() {
     const [isOpen, setIsOpen] = useState(false)
@@ -24,8 +24,8 @@ export default function FloatingContact() {
                         }}
                         className="group flex items-center gap-3"
                     >
-                        <span className="bg-emerald-600 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg whitespace-nowrap uppercase tracking-wider">Live Chat</span>
-                        <div className="w-14 h-14 bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-xl hover:scale-110 transition-transform">
+                        <span className="bg-[#0F172A] px-4 py-2 border-2 border-black text-[10px] font-black text-white whitespace-nowrap uppercase tracking-widest">Live Chat</span>
+                        <div className="w-14 h-14 bg-emerald-500 text-white border-4 border-black flex items-center justify-center hover:scale-110 transition-transform">
                             <MessageCircle size={24} />
                         </div>
                     </button>
@@ -36,8 +36,8 @@ export default function FloatingContact() {
                         rel="noopener noreferrer"
                         className="group flex items-center gap-3"
                     >
-                        <span className="bg-[#25D366] px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg whitespace-nowrap uppercase tracking-wider">WhatsApp</span>
-                        <div className="w-14 h-14 bg-[#25D366] text-white rounded-2xl flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.3)] hover:scale-110 transition-transform">
+                        <span className="bg-[#25D366] px-4 py-2 border-2 border-black text-[10px] font-black text-white whitespace-nowrap uppercase tracking-widest">WhatsApp</span>
+                        <div className="w-14 h-14 bg-[#25D366] text-white border-4 border-black flex items-center justify-center hover:scale-110 transition-transform">
                             <MessageCircle size={24} />
                         </div>
                     </a>
@@ -46,8 +46,8 @@ export default function FloatingContact() {
                         href="mailto:info@airporttaxis.lk"
                         className="group flex items-center gap-3"
                     >
-                        <span className="bg-slate-700 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-lg whitespace-nowrap uppercase tracking-wider">Email Us</span>
-                        <div className="w-14 h-14 bg-white text-emerald-900 rounded-2xl flex items-center justify-center shadow-xl hover:scale-110 transition-transform border border-emerald-900/10">
+                        <span className="bg-slate-700 px-4 py-2 border-2 border-black text-[10px] font-black text-white whitespace-nowrap uppercase tracking-widest">Email Us</span>
+                        <div className="w-14 h-14 bg-white text-black border-4 border-black flex items-center justify-center hover:scale-110 transition-transform">
                             <Mail size={24} />
                         </div>
                     </a>
@@ -56,23 +56,23 @@ export default function FloatingContact() {
 
             {/* Animated Prompt */}
             {!isOpen && (
-                <div className="absolute bottom-5 right-20 bg-[#0F172A] text-white text-[10px] font-black tracking-widest px-3 py-2 rounded-lg shadow-xl whitespace-nowrap animate-bounce z-[90] flex items-center">
+                <div className="absolute bottom-5 right-20 bg-black text-[#FACC15] text-[10px] font-black tracking-widest px-3 py-2 border-2 border-black whitespace-nowrap animate-bounce z-[90] flex items-center">
                     LIVE CHAT
-                    <div className="absolute top-1/2 -translate-y-1/2 -right-1 w-2 h-2 bg-[#0F172A] rotate-45"></div>
+                    <div className="absolute top-1/2 -translate-y-1/2 -right-1 w-2 h-2 bg-black rotate-45"></div>
                 </div>
             )}
 
             {/* Main Toggle */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center shadow-2xl transition-all duration-500 hover:scale-105 active:scale-95 z-[100] ${isOpen ? 'bg-white text-emerald-900 rotate-90 border border-emerald-900/10' : 'bg-emerald-900 text-white shadow-[0_15px_40px_-10px_rgba(6,78,59,0.4)]'}`}
+                className={`w-16 h-16 flex items-center justify-center transition-all duration-500 hover:scale-105 active:scale-95 z-[100] border-4 border-black ${isOpen ? 'bg-white text-black rotate-90' : 'bg-[#FACC15] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'}`}
                 aria-label={isOpen ? "Close contact menu" : "Open contact menu"}
             >
-                {isOpen ? <X size={28} /> : (
+                {isOpen ? <X size={28} strokeWidth={3} /> : (
                     <div className="relative">
-                        <MessageCircle size={32} />
-                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-400 rounded-full border-2 border-emerald-900 flex items-center justify-center">
-                            <div className="w-1.5 h-1.5 bg-white rounded-full animate-ping"></div>
+                        <MessageCircle size={32} strokeWidth={2.5} />
+                        <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-black flex items-center justify-center">
+                            <div className="w-1 h-1 bg-white animate-ping"></div>
                         </span>
                     </div>
                 )}

@@ -61,20 +61,6 @@ export default function Navbar() {
                         <MessageCircle size={20} strokeWidth={3} />
                     </button>
 
-                    {/* Login/User (NEW) */}
-                    {status === 'authenticated' ? (
-                        <Link href="/admin/dashboard" className="w-10 h-10 md:w-14 md:h-14 bg-[#FACC15] border-4 border-black flex items-center justify-center text-black hover:bg-yellow-300 transition-all">
-                            <User size={20} strokeWidth={3} />
-                        </Link>
-                    ) : (
-                        <button 
-                            onClick={() => signIn('google')}
-                            className="w-10 h-10 md:w-14 md:h-14 bg-[#FACC15] border-4 border-black flex items-center justify-center text-black hover:bg-yellow-300 transition-all"
-                        >
-                            <User size={20} strokeWidth={3} />
-                        </button>
-                    )}
-
                     {/* Currency Selector (Always Visible) */}
                     <div className="relative group hidden sm:block">
                         <button className="w-10 h-10 md:w-14 md:h-14 bg-white border-4 border-black flex items-center justify-center text-black hover:bg-slate-50 transition-all">
