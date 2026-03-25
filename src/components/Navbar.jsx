@@ -59,7 +59,7 @@ export default function Navbar() {
                         className="w-9 h-9 md:w-14 md:h-14 bg-[#FACC15] border-3 md:border-4 border-black flex items-center justify-center text-black hover:bg-yellow-400 transition-all"
                         aria-label="Open Live Chat"
                     >
-                        <MessageCircle size={18} md:size={20} strokeWidth={3} />
+                        <MessageCircle size={20} strokeWidth={3} />
                     </button>
 
                     {/* Currency Selector (Always Visible) */}
@@ -89,7 +89,7 @@ export default function Navbar() {
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
                     >
-                        {isMobileMenuOpen ? <X size={22} md:size={28} strokeWidth={4} /> : <Menu size={22} md:size={28} strokeWidth={4} />}
+                        {isMobileMenuOpen ? <X size={24} strokeWidth={4} /> : <Menu size={24} strokeWidth={4} />}
                     </button>
                 </div>
             </div>
