@@ -31,13 +31,13 @@ const Home = () => {
             {/* Popular Routes Section */}
             <section className="py-20 px-6 max-w-7xl mx-auto">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-emerald-900 mb-4">Popular <span className="text-emerald-600">Transfer Routes</span></h2>
-                    <p className="text-gray-500">Most requested destinations from Bandaranaike International Airport (CMB)</p>
+                    <h2 className="text-3xl md:text-5xl font-black text-black mb-4 uppercase tracking-tighter">Popular <span className="text-[#FACC15]">Transfer Routes</span></h2>
+                    <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Most requested destinations from Bandaranaike International Airport (CMB)</p>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8">
                     {/* Mirissa */}
-                    <button onClick={() => handleRouteClick('Mirissa')} className="group relative h-[400px] rounded-3xl overflow-hidden shadow-xl w-full text-left">
+                    <button onClick={() => handleRouteClick('Mirissa')} className="group relative h-[420px] rounded-none overflow-hidden border-4 border-black w-full text-left transition-all hover:-translate-y-1">
                         <img
                             src="https://images.pexels.com/photos/1835718/pexels-photo-1835718.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                             alt="Airport to Mirissa"
@@ -45,9 +45,9 @@ const Home = () => {
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/20 to-transparent"></div>
                         <div className="absolute bottom-0 left-0 p-8 w-full">
-                            <span className="bg-emerald-600 text-emerald-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Top Choice</span>
+                             <span className="bg-[#FACC15] text-black text-[10px] font-black px-3 py-1 rounded-none border-2 border-black uppercase tracking-wider mb-3 inline-block">Top Choice</span>
                             <h3 className="text-2xl font-bold text-white mb-2">Airport to Mirissa</h3>
-                            <p className="text-emerald-600 font-bold text-lg mb-4">Starting from $59</p>
+                             <p className="text-[#FACC15] font-black text-2xl mb-4 uppercase tracking-tight">Starting from $59</p>
                             <div className="flex items-center gap-2 text-white/80 font-bold uppercase tracking-widest text-sm group-hover:gap-4 transition-all">
                                 Get Quote <ArrowRight size={16} />
                             </div>
@@ -55,7 +55,7 @@ const Home = () => {
                     </button>
 
                     {/* Tangalle */}
-                    <button onClick={() => handleRouteClick('Tangalle')} className="group relative h-[400px] rounded-3xl overflow-hidden shadow-xl w-full text-left">
+                    <button onClick={() => handleRouteClick('Tangalle')} className="group relative h-[420px] rounded-none overflow-hidden border-4 border-black w-full text-left transition-all hover:-translate-y-1">
                         <img
                             src="https://images.pexels.com/photos/3355788/pexels-photo-3355788.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                             alt="Airport to Tangalle"
@@ -64,7 +64,7 @@ const Home = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/20 to-transparent"></div>
                         <div className="absolute bottom-0 left-0 p-8 w-full">
                             <h3 className="text-2xl font-bold text-white mb-2">Airport to Tangalle</h3>
-                            <p className="text-emerald-600 font-bold text-lg mb-4">Starting from $72</p>
+                             <p className="text-[#FACC15] font-black text-2xl mb-4 uppercase tracking-tight">Starting from $72</p>
                             <div className="flex items-center gap-2 text-white/80 font-bold uppercase tracking-widest text-sm group-hover:gap-4 transition-all">
                                 Get Quote <ArrowRight size={16} />
                             </div>
@@ -72,7 +72,7 @@ const Home = () => {
                     </button>
 
                     {/* Sigiriya */}
-                    <button onClick={() => handleRouteClick('Sigiriya')} className="group relative h-[400px] rounded-3xl overflow-hidden shadow-xl w-full text-left">
+                    <button onClick={() => handleRouteClick('Sigiriya')} className="group relative h-[420px] rounded-none overflow-hidden border-4 border-black w-full text-left transition-all hover:-translate-y-1">
                         <img
                             src="https://images.pexels.com/photos/13391116/pexels-photo-13391116.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                             alt="Airport to Sigiriya"
@@ -81,7 +81,7 @@ const Home = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/20 to-transparent"></div>
                         <div className="absolute bottom-0 left-0 p-8 w-full">
                             <h3 className="text-2xl font-bold text-white mb-2">Airport to Sigiriya</h3>
-                            <p className="text-emerald-600 font-bold text-lg mb-4">Starting from $50</p>
+                             <p className="text-[#FACC15] font-black text-2xl mb-4 uppercase tracking-tight">Starting from $50</p>
                             <div className="flex items-center gap-2 text-white/80 font-bold uppercase tracking-widest text-sm group-hover:gap-4 transition-all">
                                 Get Quote <ArrowRight size={16} />
                             </div>

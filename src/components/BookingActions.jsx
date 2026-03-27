@@ -68,55 +68,55 @@ export default function BookingActions({ booking }) {
 
     return (
         <>
-            <div className="flex flex-wrap gap-4 pt-6 border-t border-gray-100 justify-center">
+            <div className="flex flex-wrap gap-4 pt-8 border-t-4 border-black justify-center">
                 <button
                     onClick={handleDownloadPDF}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-bold transition-colors"
+                    className="flex items-center gap-2 px-6 py-3 bg-white hover:bg-black hover:text-[#FACC15] text-black rounded-none border-2 border-black text-xs font-black uppercase tracking-widest transition-all active:scale-95"
                 >
-                    <Download size={16} /> Download PDF
+                    <Download size={16} strokeWidth={3} /> Download PDF
                 </button>
                 <button
                     onClick={handleEmailReceipt}
                     disabled={emailLoading}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-bold transition-colors disabled:opacity-50"
+                    className="flex items-center gap-2 px-6 py-3 bg-white hover:bg-black hover:text-[#FACC15] text-black rounded-none border-2 border-black text-xs font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50"
                 >
-                    {emailLoading ? <Loader2 size={16} className="animate-spin" /> : <Mail size={16} />}
+                    {emailLoading ? <Loader2 size={16} className="animate-spin" /> : <Mail size={16} strokeWidth={3} />}
                     Email Receipt
                 </button>
                 <button
                     onClick={() => setTicketOpen(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-sm font-bold transition-colors"
+                    className="flex items-center gap-2 px-6 py-3 bg-[#FACC15] hover:bg-black hover:text-[#FACC15] text-black rounded-none border-2 border-black text-xs font-black uppercase tracking-widest transition-all active:scale-95"
                 >
-                    <MessageSquare size={16} /> Report Issue
+                    <MessageSquare size={16} strokeWidth={3} /> Report Issue
                 </button>
             </div>
 
             {/* Ticket Modal */}
             {ticketOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 animate-fade-in-up">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-                                <AlertTriangle className="text-red-500" size={24} /> Report an Issue
+                <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+                    <div className="bg-white rounded-none border-4 border-black w-full max-w-md p-10 animate-slide-up transition-colors">
+                        <div className="flex justify-between items-center mb-8">
+                            <h3 className="text-2xl font-black text-black flex items-center gap-3 tracking-tighter uppercase">
+                                <AlertTriangle className="text-[#FACC15]" size={28} strokeWidth={3} /> Report Issue
                             </h3>
-                            <button onClick={() => setTicketOpen(false)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
+                            <button onClick={() => setTicketOpen(false)} className="w-10 h-10 bg-slate-100 flex items-center justify-center border-2 border-black hover:bg-black hover:text-white transition-all"><X size={20} strokeWidth={3} /></button>
                         </div>
 
                         <form onSubmit={handleSubmitTicket} className="space-y-4">
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Subject</label>
+                                <label className="block text-[10px] font-black text-black/40 uppercase tracking-widest mb-2">Subject</label>
                                 <input
                                     required
-                                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-slate-50 border-2 border-black rounded-none px-4 py-3 text-xs font-black uppercase tracking-widest focus:outline-none focus:bg-[#FACC15]/10"
                                     placeholder="e.g. Driver Late, Lost Item"
                                     value={ticketForm.subject}
                                     onChange={e => setTicketForm({ ...ticketForm, subject: e.target.value })}
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Priority</label>
+                                <label className="block text-[10px] font-black text-black/40 uppercase tracking-widest mb-2">Priority</label>
                                 <select
-                                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-slate-50 border-2 border-black rounded-none px-4 py-3 text-xs font-black uppercase tracking-widest focus:outline-none focus:bg-[#FACC15]/10 cursor-pointer"
                                     value={ticketForm.priority}
                                     onChange={e => setTicketForm({ ...ticketForm, priority: e.target.value })}
                                 >
@@ -126,11 +126,11 @@ export default function BookingActions({ booking }) {
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Message</label>
+                                <label className="block text-[10px] font-black text-black/40 uppercase tracking-widest mb-2">Message</label>
                                 <textarea
                                     required
                                     rows={4}
-                                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500"
+                                    className="w-full bg-slate-50 border-2 border-black rounded-none px-4 py-4 text-xs font-black uppercase tracking-widest focus:outline-none focus:bg-[#FACC15]/10 resize-none"
                                     placeholder="Describe your issue..."
                                     value={ticketForm.message}
                                     onChange={e => setTicketForm({ ...ticketForm, message: e.target.value })}
@@ -139,7 +139,7 @@ export default function BookingActions({ booking }) {
                             <button
                                 type="submit"
                                 disabled={ticketLoading}
-                                className="w-full bg-emerald-900 text-white rounded-xl py-3 font-bold hover:bg-emerald-800 transition-colors disabled:opacity-50 flex justify-center items-center gap-2"
+                                className="w-full bg-black text-[#FACC15] rounded-none border-4 border-black py-4 font-black uppercase tracking-[0.2em] text-xs hover:bg-[#FACC15] hover:text-black transition-all disabled:opacity-50 flex justify-center items-center gap-3 active:scale-95 mt-4"
                             >
                                 {ticketLoading && <Loader2 size={16} className="animate-spin" />} Submit Ticket
                             </button>

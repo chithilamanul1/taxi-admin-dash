@@ -33,7 +33,7 @@ const TourPackages = () => {
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#FACC15]/5 rounded-none blur-[120px] -ml-48 -mb-48"></div>
                 
                 <div className="relative z-10">
-                    <div className="inline-block px-6 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-[0.4em] rounded-none mb-8 shadow-xl">Elite Experiences</div>
+                    <div className="inline-block px-6 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-[0.4em] rounded-none mb-8 border-2 border-black">Elite Experiences</div>
                     <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter uppercase mb-6">
                         TOUR <span className="text-[#FACC15]">PACKAGES</span>
                     </h1>
@@ -51,7 +51,7 @@ const TourPackages = () => {
                 ) : (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                         {tours.map((pkg) => (
-                            <div key={pkg._id || pkg.id} className="premium-box bg-white dark:bg-[#111] overflow-hidden group hover:scale-[1.02] transition-all duration-500 border-none flex flex-col h-full shadow-2xl rounded-none">
+                            <div key={pkg._id || pkg.id} className="premium-box bg-white dark:bg-[#111] overflow-hidden group hover:scale-[1.02] transition-all duration-500 border-4 border-black flex flex-col h-full rounded-none">
                                 {/* Image */}
                                 <Link href={`/tour-packages/${pkg.slug || pkg.id}`} className="block h-64 overflow-hidden relative">
                                     <img
@@ -59,11 +59,11 @@ const TourPackages = () => {
                                         alt={pkg.title}
                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                     />
-                                    <div className="absolute bottom-4 left-4 bg-black/90 text-[#FACC15] text-[10px] font-black px-4 py-2 rounded-none uppercase tracking-widest backdrop-blur-md shadow-2xl border border-white/10 flex items-center gap-2">
+                                    <div className="absolute bottom-4 left-4 bg-black/90 text-[#FACC15] text-[10px] font-black px-4 py-2 rounded-none uppercase tracking-widest backdrop-blur-md border-2 border-black flex items-center gap-2">
                                         <Clock size={12} strokeWidth={3} /> {typeof pkg.duration === 'object' ? `${pkg.duration.days}D / ${pkg.duration.nights}N` : pkg.duration}
                                     </div>
                                     {pkg.isFeatured && (
-                                        <div className="absolute top-4 right-4 bg-[#FACC15] text-black text-[10px] font-extrabold px-4 py-2 rounded-none uppercase tracking-widest shadow-xl">
+                                        <div className="absolute top-4 right-4 bg-[#FACC15] text-black text-[10px] font-extrabold px-4 py-2 rounded-none uppercase tracking-widest border-2 border-black">
                                             Priority
                                         </div>
                                     )}
@@ -98,7 +98,7 @@ const TourPackages = () => {
                                         
                                         <Link
                                             href={`/tour-packages/${pkg.slug || pkg.id}`}
-                                            className="w-14 h-14 bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black rounded-none flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xl group/btn"
+                                            className="w-14 h-14 bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black rounded-none flex items-center justify-center hover:scale-110 active:scale-95 transition-all border-2 border-black group/btn"
                                         >
                                             <ArrowRight size={24} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
                                         </Link>
@@ -117,7 +117,7 @@ const TourPackages = () => {
                         <div className="yellow-badge mx-auto">Tailored For You</div>
                         <h3 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">CRAFT YOUR <span className="text-[#FACC15]">DREAM</span> ROUTE</h3>
                         <p className="text-white/40 max-w-xl mx-auto font-bold uppercase tracking-widest text-xs leading-relaxed">Bespoke itineraries designed for travelers who refuse to settle for ordinary.</p>
-                        <Link href="/contact" className="inline-flex items-center gap-4 bg-[#FACC15] text-black font-black px-12 py-6 rounded-none hover:scale-105 active:scale-95 transition-all shadow-[0_20px_50px_rgba(250,204,21,0.3)] uppercase tracking-[0.2em] text-sm group">
+                        <Link href="/contact" className="inline-flex items-center gap-4 bg-[#FACC15] text-black font-black px-12 py-6 rounded-none hover:scale-105 active:scale-95 transition-all border-4 border-black uppercase tracking-[0.2em] text-sm group">
                             Start Planning <ArrowRight size={20} strokeWidth={3} className="group-hover:translate-x-2 transition-transform" />
                         </Link>
                     </div>

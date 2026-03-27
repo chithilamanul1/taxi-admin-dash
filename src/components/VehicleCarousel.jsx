@@ -177,7 +177,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                         alt={vehicle.name}
                                         className={`
                                             w-full h-[200px] md:h-[240px] object-contain
-                                            drop-shadow-[0_15px_30px_rgba(0,0,0,0.15)]
+                                            drop-shadow-none
                                             transition-transform duration-700
                                             ${isSelected ? 'scale-110' : 'group-hover/card:scale-105'}
                                             ${vehicle.vehicleType?.toLowerCase().includes('sedan') || vehicle.vehicleType?.toLowerCase().includes('car') ? 'scale-[1.3] md:scale-[1.35]' : ''}
@@ -200,12 +200,12 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                         { icon: ShoppingBag, label: 'HAND', value: vehicle.handLuggage || 2 }
                                     ].map((item, i) => (
                                         <div key={i} className={`
-                                            bg-white dark:bg-slate-800 border-2 border-black p-3 
+                                            bg-white dark:bg-slate-800 border-4 border-black p-3 
                                             flex flex-col items-center justify-center 
                                             transition-all duration-300 
                                             ${isSelected ? 'bg-[#FACC15]/20' : ''}
                                         `}>
-                                            <item.icon size={18} className="text-emerald-900 dark:text-[#FACC15] mb-1" strokeWidth={3} />
+                                            <item.icon size={18} className="text-black dark:text-[#FACC15] mb-1" strokeWidth={3} />
                                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{item.label}</span>
                                             <span className="text-lg font-black text-slate-900 dark:text-white leading-none mt-1">{item.value}</span>
                                         </div>

@@ -31,7 +31,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                     </div>
                     <button 
                         onClick={onClose}
-                        className="w-10 h-10 md:w-20 md:h-20 rounded-none bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:bg-black/80 transition-all border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                        className="w-10 h-10 md:w-20 md:h-20 rounded-none bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:bg-black/80 transition-all border-2 border-black"
                         aria-label="Close drawer"
                     >
                         <X size={20} strokeWidth={3} className="md:hidden" />
@@ -43,7 +43,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                 <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 gap-6">
-                            <div className="w-16 h-16 border-8 border-[#FACC15] border-t-transparent rounded-full animate-spin"></div>
+                            <div className="w-16 h-16 border-8 border-[#FACC15] border-t-transparent rounded-none animate-spin"></div>
                             <p className="font-black text-black/40 uppercase tracking-widest">Calculating Best Rates...</p>
                         </div>
                     ) : vehicles && vehicles.length > 0 ? (
@@ -58,7 +58,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                             />
                             
                             {/* Boxy Feature Highlight */}
-                            <div className="p-10 bg-black text-[#FACC15] rounded-none border-4 border-[#FACC15] shadow-[15px_15px_0px_0px_rgba(250,204,21,0.2)]">
+                            <div className="p-10 bg-black text-[#FACC15] rounded-none border-4 border-[#FACC15]">
                                 <h3 className="text-2xl font-black uppercase tracking-tight mb-4 flex items-center gap-3">
                                     <ShieldCheck size={28} strokeWidth={3} />
                                     ALL-INCLUSIVE SERVICE
@@ -75,7 +75,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center py-20 text-center gap-6">
-                            <div className="w-20 h-20 bg-slate-50 dark:bg-white/5 rounded-full flex items-center justify-center text-black/20">
+                            <div className="w-20 h-20 bg-slate-50 dark:bg-white/5 rounded-none border-2 border-black flex items-center justify-center text-black/20">
                                 <X size={40} />
                             </div>
                             <div>

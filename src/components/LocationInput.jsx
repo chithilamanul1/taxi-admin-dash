@@ -150,7 +150,7 @@ const LocationInput = ({
 
             {/* Suggestions Dropdown - Sharp UI */}
             {isFocused && (suggestions.length > 0 || isLoading) && (
-                <div className="absolute top-[110%] left-0 right-0 bg-white dark:bg-[#111] rounded-none border-[3px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-0 z-[100] animate-fade-in overflow-hidden">
+                <div className="absolute top-[110%] left-0 right-0 bg-white dark:bg-[#111] rounded-none border-[3px] border-black p-0 z-[100] animate-fade-in overflow-hidden">
                     <div className="max-h-[350px] overflow-y-auto custom-scrollbar">
                         {isLoading ? (
                             <div className="p-8 flex items-center justify-center">

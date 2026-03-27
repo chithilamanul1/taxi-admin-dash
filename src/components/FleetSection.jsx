@@ -71,15 +71,15 @@ const FleetSection = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-6xl mx-auto">
                     {vehicles.map((vehicle, idx) => (
-                        <div key={vehicle._id} className="flex flex-col border-[12px] border-black bg-white dark:bg-[#111] hover:bg-slate-50 transition-all duration-300">
+                        <div key={vehicle._id} className="flex flex-col border-[16px] border-black bg-white dark:bg-[#111] hover:bg-slate-50 transition-all duration-300">
 
-                            {/* Category Header - Yellow & White */}
-                            <div className="bg-[#FACC15] text-white p-2 text-center border-b-8 border-black font-black uppercase tracking-[0.4em] text-[10px]">
+                            {/* Category Header - Sharp UI (White & Black) */}
+                            <div className="bg-white text-black p-2 text-center border-b-[10px] border-black font-black uppercase tracking-[0.4em] text-[10px]">
                                 {vehicle.category.replace('-', ' ')}
                             </div>
 
                             {/* Image Box - Bigger Images, still compact */}
-                            <div className="p-2 h-60 md:h-80 flex items-center justify-center bg-slate-50 dark:bg-white/5 border-b-8 border-black relative overflow-hidden">
+                            <div className="p-2 h-60 md:h-80 flex items-center justify-center bg-slate-50 dark:bg-white/5 border-b-[10px] border-black relative overflow-hidden">
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[140px] font-black text-black/[0.05] tracking-tighter select-none pointer-events-none uppercase">
                                     {vehicle.vehicleType.split('-')[0]}
                                 </div>
@@ -95,7 +95,7 @@ const FleetSection = () => {
                             </div>
 
                             {/* Description Box - Tighter */}
-                            <div className="p-4 md:p-8 flex-1 border-b-8 border-black">
+                            <div className="p-4 md:p-8 flex-1 border-b-[10px] border-black">
                                 <h3 className="text-xl md:text-2xl font-black text-black dark:text-white mb-4 uppercase tracking-tighter leading-none">{vehicle.name}</h3>
                                 <div className="grid grid-cols-2 gap-3 md:gap-6">
                                     <div className="flex items-center gap-3 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500">
@@ -126,7 +126,7 @@ const FleetSection = () => {
                             </div>
 
                             {/* Auto-Sliding Dynamic Pricing Ticker - Slimmer */}
-                            <div className="bg-[#FACC15] border-t-8 border-black p-0 overflow-hidden relative h-20 md:h-24 flex items-center">
+                            <div className="bg-[#FACC15] border-t-[10px] border-black p-0 overflow-hidden relative h-20 md:h-24 flex items-center">
                                 <motion.div 
                                     animate={{ x: ["0%", "-50%"] }}
                                     transition={{ 
@@ -139,16 +139,13 @@ const FleetSection = () => {
                                     {[...popularPoints, ...popularPoints].map((point, i) => {
                                         const dist = getDistance(point);
                                         const priceLKR = calculateBasePrice(dist, vehicle, 'one-way', 'Airport', point, dynamicDestinations);
-                                        const converted = convertPrice(priceLKR);
-                                        const displayUSD = (converted && typeof converted.value === 'number') ? converted.value.toFixed(0) : '0';
+                                        const usdRate = rates['USD'] || 0.0031;
+                                        const displayUSD = (priceLKR * usdRate).toFixed(0);
                                         
                                         return (
                                             <div key={`${point}-${i}`} className="inline-flex flex-col items-center justify-center min-w-[140px] px-6 relative py-3 h-20 md:h-24">
-                                                {/* Double Line Divider */}
-                                                <div className="absolute right-0 inset-y-0 w-[12px] flex justify-center gap-[3px] pointer-events-none translate-x-1/2">
-                                                    <div className="w-[3px] h-full bg-black"></div>
-                                                    <div className="w-[3px] h-full bg-black"></div>
-                                                </div>
+                                                {/* Single Line Divider */}
+                                                <div className="absolute right-0 inset-y-0 w-[6px] bg-black translate-x-1/2"></div>
                                                 <span className="text-[8px] font-black uppercase tracking-widest mb-1 text-black/40">{point}</span>
                                                 <div className="flex flex-col items-center">
                                                     <span className="text-xs md:text-sm font-black text-black">Rs {priceLKR.toLocaleString()}</span>
@@ -160,10 +157,6 @@ const FleetSection = () => {
                                         );
                                     })}
                                 </motion.div>
-                                
-                                {/* Fade Edges */}
-                                <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#FACC15] to-transparent z-10"></div>
-                                <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#FACC15] to-transparent z-10"></div>
                             </div>
                         </div>
                     ))}

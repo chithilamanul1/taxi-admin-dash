@@ -260,8 +260,8 @@ export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalcul
             <div ref={mapRef} className="w-full h-full" />
 
             {error && (
-                <div className="absolute top-4 left-4 right-4 bg-white/90 backdrop-blur-sm border border-rose-100 p-4 rounded-2xl shadow-xl z-20 flex items-center gap-3">
-                    <div className="w-8 h-8 bg-rose-500 rounded-full flex items-center justify-center text-white font-black text-lg">!</div>
+                <div className="absolute top-4 left-4 right-4 bg-white/90 border-4 border-black p-4 rounded-none z-20 flex items-center gap-3">
+                    <div className="w-8 h-8 bg-rose-500 rounded-none flex items-center justify-center text-white font-black text-lg border-2 border-black">!</div>
                     <div>
                         <p className="text-emerald-950 font-black text-xs uppercase tracking-tight">{error}</p>
                         <p className="text-[10px] text-slate-500">The map could not load the full route.</p>
@@ -271,7 +271,7 @@ export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalcul
 
             {!mapInitialized && (
                 <div className="absolute inset-0 bg-slate-50 flex flex-col items-center justify-center gap-4 z-10">
-                    <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-none animate-spin"></div>
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading Interactive Map...</p>
                 </div>
             )}

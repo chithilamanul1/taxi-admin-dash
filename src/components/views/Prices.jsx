@@ -325,13 +325,13 @@ const Prices = ({ initialDestination }) => {
     return (
         <div className="pt-32 pb-20 max-w-6xl mx-auto px-6 dark:bg-emerald-900 transition-colors">
             <div id="prices" className="py-12 text-center scroll-mt-32">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-emerald-900 dark:text-white mb-4">Price <span className="text-emerald-600 dark:text-emerald-400">Calculator</span></h1>
-                <p className="text-emerald-900/60 dark:text-white/60 max-w-2xl mx-auto">Select your pickup and destination points for an instant, transparent quote.</p>
+                <h1 className="text-4xl md:text-5xl font-black text-black mb-4 uppercase tracking-tighter">Price <span className="text-[#FACC15] outline-black">Calculator</span></h1>
+                <p className="text-black/60 max-w-2xl mx-auto font-bold uppercase text-xs tracking-widest">Select your pickup and destination points for an instant, transparent quote.</p>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-12 mt-8">
                 {/* Left: Input Controls */}
-                <div className="space-y-8 bg-white dark:bg-emerald-900 p-8 md:p-12 rounded-[2.5rem] shadow-xl border border-gray-100 dark:border-white/5">
+                <div className="space-y-8 bg-white p-8 md:p-12 rounded-none border-4 border-black">
 
                     {/* Pickup Search */}
                     <div className="relative">
@@ -346,7 +346,7 @@ const Prices = ({ initialDestination }) => {
                                 debouncedSearchPickup(e.target.value)
                             }}
                             placeholder="Start searching..."
-                            className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white placeholder:text-gray-400/50"
+                            className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none text-black placeholder:text-gray-400 font-bold"
                         />
                         {pickupResults.length > 0 && (
                             <div className="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-gray-100 dark:border-white/10 overflow-hidden">
@@ -381,7 +381,7 @@ const Prices = ({ initialDestination }) => {
                                 debouncedSearchDropoff(e.target.value)
                             }}
                             placeholder="Where are you going?"
-                            className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white placeholder:text-gray-400/50"
+                            className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none text-black placeholder:text-gray-400 font-bold"
                         />
                         {dropoffResults.length > 0 && (
                             <div className="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-gray-100 dark:border-white/10 overflow-hidden">
@@ -409,20 +409,20 @@ const Prices = ({ initialDestination }) => {
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
                                 <Users size={16} className="text-emerald-600 dark:text-emerald-400" /> Passengers
                             </label>
-                            <div className="flex items-center justify-between bg-slate-50 dark:bg-white/5 px-4 py-3 rounded-2xl border border-transparent hover:border-emerald-600/30 transition-all">
-                                <span className="text-xs font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider mr-2">Count:</span>
+                            <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-none border-4 border-black">
+                                <span className="text-xs font-black text-black uppercase tracking-wider mr-2">Count:</span>
                                 <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => setPassengers(Math.max(1, passengers - 1))}
-                                        className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-md text-emerald-900 dark:text-white font-bold hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white active:scale-95 transition-all text-xl"
+                                        className="w-10 h-10 flex items-center justify-center bg-white border-2 border-black rounded-none text-black font-black hover:bg-[#FACC15] active:translate-y-1 transition-all text-xl"
                                         aria-label="Decrease passengers"
                                     >
                                         -
                                     </button>
-                                    <span className="font-extrabold text-emerald-900 dark:text-white text-xl w-6 text-center">{passengers}</span>
+                                    <span className="font-black text-black text-xl w-6 text-center">{passengers}</span>
                                     <button
                                         onClick={() => setPassengers(Math.min(15, passengers + 1))}
-                                        className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-md text-emerald-900 dark:text-white font-bold hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white active:scale-95 transition-all text-xl"
+                                        className="w-10 h-10 flex items-center justify-center bg-white border-2 border-black rounded-none text-black font-black hover:bg-[#FACC15] active:translate-y-1 transition-all text-xl"
                                         aria-label="Increase passengers"
                                     >
                                         +
@@ -434,12 +434,12 @@ const Prices = ({ initialDestination }) => {
                             <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
                                 <ArrowRightLeft size={16} className="text-emerald-900 dark:text-emerald-400" /> Trip Type
                             </label>
-                            <div className="flex bg-slate-50 dark:bg-white/5 p-1.5 rounded-2xl">
+                            <div className="flex bg-slate-50 p-1.5 rounded-none border-4 border-black">
                                 {['one-way', 'round-trip'].map(t => (
                                     <button
                                         key={t}
                                         onClick={() => setTripType(t)}
-                                        className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${tripType === t ? 'bg-emerald-900 text-white shadow-md' : 'text-gray-400 hover:text-emerald-900'}`}
+                                        className={`flex-1 py-2.5 rounded-none text-sm font-black uppercase tracking-widest transition-all ${tripType === t ? 'bg-black text-[#FACC15]' : 'text-black/40 hover:text-black'}`}
                                     >
                                         {t === 'one-way' ? 'One Way' : 'Return'}
                                     </button>
@@ -459,7 +459,7 @@ const Prices = ({ initialDestination }) => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="name@example.com"
-                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white"
+                                className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none text-black font-bold"
                             />
                         </div>
                         <div>
@@ -471,7 +471,7 @@ const Prices = ({ initialDestination }) => {
                                 value={whatsapp}
                                 onChange={(e) => setWhatsapp(e.target.value)}
                                 placeholder="+1 66 77 88 99 ..."
-                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white"
+                                className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none text-black font-bold"
                             />
                         </div>
                     </div>
@@ -486,7 +486,7 @@ const Prices = ({ initialDestination }) => {
                                 type="date"
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
-                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 outline-none"
+                                className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none text-black font-bold"
                             />
                         </div>
                         <div>
@@ -497,7 +497,7 @@ const Prices = ({ initialDestination }) => {
                                 type="time"
                                 value={time}
                                 onChange={(e) => setTime(e.target.value)}
-                                className="w-full bg-slate-50 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 outline-none"
+                                className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none text-black font-bold"
                             />
                         </div>
                         <div>
@@ -507,16 +507,16 @@ const Prices = ({ initialDestination }) => {
                             <select
                                 value={paymentMethod}
                                 onChange={(e) => setPaymentMethod(e.target.value)}
-                                className="w-full bg-slate-50 dark:bg-white/5 border-none px-6 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-900/20 dark:focus:ring-emerald-500/20 outline-none cursor-pointer text-emerald-900 dark:text-white"
+                                className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none cursor-pointer text-black font-bold"
                             >
-                                <option value="cash" className="dark:bg-emerald-900">Cash to Driver</option>
-                                <option value="card" className="dark:bg-emerald-900">Card Payment</option>
+                                <option value="cash">Cash to Driver</option>
+                                <option value="card">Card Payment</option>
                             </select>
                         </div>
                     </div>
 
                     {/* Airport Greeting (Board Show) Option */}
-                    <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:border-emerald-600/50 mb-8">
+                    <div className="bg-white p-6 rounded-none border-4 border-black flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:bg-slate-50 mb-8">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 bg-emerald-900/10 dark:bg-white/5 rounded-full flex items-center justify-center text-2xl">
                                 🛫
@@ -613,7 +613,7 @@ const Prices = ({ initialDestination }) => {
                         {!isVehicleListExpanded && (
                             <div
                                 onClick={() => setIsVehicleListExpanded(true)}
-                                className="relative w-full overflow-hidden rounded-2xl border-2 border-emerald-600 ring-2 ring-emerald-600/20 shadow-lg cursor-pointer group"
+                                className="relative w-full overflow-hidden rounded-none border-4 border-black cursor-pointer group"
                             >
                                 <div className="aspect-[21/9] w-full relative">
                                     <img
@@ -623,26 +623,26 @@ const Prices = ({ initialDestination }) => {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/40 to-transparent"></div>
                                     <div className="absolute inset-0 p-6 flex flex-col justify-center text-white">
-                                        <div className="bg-emerald-600 text-emerald-900 text-xs font-bold px-3 py-1 rounded-full w-fit mb-2">SELECTED</div>
+                                        <div className="bg-[#FACC15] text-black text-[10px] font-black px-3 py-1 rounded-none w-fit mb-2 border-2 border-black">SELECTED</div>
                                         <div className="font-bold text-2xl mb-1">{VEHICLE_PRICING[vehicle].name}</div>
                                         <div className="text-sm text-white/80 mb-2">{VEHICLE_PRICING[vehicle].model}</div>
                                         {VEHICLE_PRICING[vehicle].specs && (
                                             <div className="flex flex-col gap-1 mb-2 opacity-90">
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Users size={12} className="text-emerald-600" /> 1-{VEHICLE_PRICING[vehicle].maxPassengers} PASSENGERS
+                                                    <Users size={12} className="text-black" /> 1-{VEHICLE_PRICING[vehicle].maxPassengers} PASSENGERS
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Briefcase size={12} className="text-emerald-600" /> {VEHICLE_PRICING[vehicle].specs.luggage} LUGGAGE
+                                                    <Briefcase size={12} className="text-black" /> {VEHICLE_PRICING[vehicle].specs.luggage} LUGGAGE
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Briefcase size={12} className="text-emerald-600 scale-75" /> {VEHICLE_PRICING[vehicle].specs.handLuggage} HAND LUGGAGE
+                                                    <Briefcase size={12} className="text-black scale-75" /> {VEHICLE_PRICING[vehicle].specs.handLuggage} HAND LUGGAGE
                                                 </span>
                                                 <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-                                                    <Wind size={12} className="text-emerald-600" /> AIR - CONDITIONING
+                                                    <Wind size={12} className="text-black" /> AIR - CONDITIONING
                                                 </span>
                                             </div>
                                         )}
-                                        <div className="flex items-center gap-4 mt-1 text-xs font-bold text-emerald-600 uppercase tracking-widest">
+                                        <div className="flex items-center gap-4 mt-1 text-xs font-black text-[#FACC15] uppercase tracking-widest">
                                             <span>Click to Change</span>
                                             <ArrowRightLeft size={14} />
                                         </div>
@@ -669,12 +669,12 @@ const Prices = ({ initialDestination }) => {
                                                 }
                                             }}
                                             disabled={isLocked}
-                                            className={`relative w-full overflow-hidden rounded-[2.5rem] border-[3px] transition-all group text-left bg-white dark:bg-slate-800 p-8
+                                            className={`relative w-full overflow-hidden rounded-none border-4 transition-all group text-left bg-white p-8
                                                 ${vehicle === key
-                                                    ? 'border-emerald-700 shadow-2xl scale-[1.02]'
+                                                    ? 'border-black bg-[#FACC15]/10 scale-[1.02]'
                                                     : isLocked
                                                         ? 'border-gray-100 dark:border-white/5 opacity-60 cursor-not-allowed grayscale'
-                                                        : 'border-black dark:border-white/20 hover:border-emerald-700 shadow-lg hover:shadow-xl'
+                                                        : 'border-black hover:border-black shadow-none'
                                                 }`}
                                         >
                                             <div className="flex justify-between items-start mb-6">
@@ -685,7 +685,7 @@ const Prices = ({ initialDestination }) => {
                                                             return (
                                                                 <>
                                                                     <h3 className="font-black text-black dark:text-white text-3xl md:text-4xl leading-tight uppercase tracking-tight">{match[1].trim()}</h3>
-                                                                    <span className="inline-block mt-1 px-3 py-0.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold rounded-full uppercase tracking-wide">{match[2]}</span>
+                                                                    <span className="inline-block mt-1 px-3 py-0.5 bg-slate-50 text-black text-xs font-black border-2 border-black rounded-none uppercase tracking-wide">{match[2]}</span>
                                                                 </>
                                                             );
                                                         }
@@ -730,7 +730,7 @@ const Prices = ({ initialDestination }) => {
                                             </div>
 
                                             {distance > 0 && (
-                                                <div className="space-y-1 mb-6 rounded-xl overflow-hidden shadow-inner font-black">
+                                                <div className="space-y-1 mb-6 rounded-none overflow-hidden border-2 border-black font-black">
                                                     {(() => {
                                                         const basePrice = calculateBasePrice(distance, { ...v, vehicleType: key }, tripType, pickupSearch, dropoffSearch, [...staticDestinations, ...dynamicDestinations]);
                                                         const usdVal = Number((basePrice * (rates?.USD || 0.0033)).toFixed(2));
@@ -753,17 +753,17 @@ const Prices = ({ initialDestination }) => {
                                             )}
 
                                             <div
-                                                className={`w-full py-4 text-center rounded-2xl font-black text-xl uppercase tracking-widest transition-all shadow-xl
+                                                className={`w-full py-4 text-center rounded-none font-black text-xl uppercase tracking-widest transition-all
                                                     ${vehicle === key
-                                                        ? 'bg-emerald-900 text-white shadow-emerald-900/20'
-                                                        : 'bg-red-600 text-white hover:bg-red-700 shadow-red-600/20'}`}
+                                                        ? 'bg-black text-[#FACC15]'
+                                                        : 'bg-[#FACC15] text-black hover:bg-black hover:text-[#FACC15]'}`}
                                             >
                                                 {vehicle === key ? 'Selected ✓' : 'Select'}
                                             </div>
 
                                             {isLocked && (
                                                 <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center z-10">
-                                                    <div className="bg-red-500/90 text-white px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 shadow-lg">
+                                                    <div className="bg-red-600 text-white px-4 py-2 rounded-none text-sm font-black flex items-center gap-2 border-2 border-black">
                                                         <Lock size={14} /> Too Small
                                                     </div>
                                                 </div>
@@ -777,8 +777,8 @@ const Prices = ({ initialDestination }) => {
                 </div>
 
                 {/* Right: Summary & Quote */}
-                <div ref={quoteRef} className="bg-emerald-900 rounded-[2.5rem] p-8 md:p-14 text-white shadow-3xl lg:sticky lg:top-28 flex flex-col h-fit">
-                    <h3 className="text-emerald-400 text-2xl font-bold mb-8 flex items-center gap-3">
+                <div ref={quoteRef} className="bg-black rounded-none p-8 md:p-14 text-white lg:sticky lg:top-28 flex flex-col h-fit border-4 border-black">
+                    <h3 className="text-[#FACC15] text-2xl font-black mb-8 flex items-center gap-3 uppercase tracking-tighter">
                         Trip Quote
                     </h3>
 
@@ -795,13 +795,13 @@ const Prices = ({ initialDestination }) => {
                             <>
                                 <div className="space-y-6 flex-grow">
                                     {/* Currency Indicator */}
-                                    <div className="flex items-center gap-2 text-emerald-500 mb-2">
+                                    <div className="flex items-center gap-2 text-[#FACC15] mb-2">
                                         <Zap size={14} fill="currentColor" className="animate-pulse" />
                                         <span className="text-[10px] font-black uppercase tracking-[0.2em]">{currency} ESTIMATE</span>
                                     </div>
 
                                     <div className="text-5xl md:text-7xl font-black leading-tight tracking-tighter flex items-center gap-3">
-                                        <span className="text-xl md:text-3xl font-bold text-emerald-500">
+                                        <span className="text-xl md:text-3xl font-bold text-[#FACC15]">
                                             {currentSymbol}
                                         </span>
                                         <span className="text-white">
@@ -818,9 +818,9 @@ const Prices = ({ initialDestination }) => {
                                         </div>
 
                                         {/* Highway Toll Notice */}
-                                        <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-start gap-3">
-                                            <Info size={16} className="text-emerald-500 shrink-0 mt-0.5" />
-                                            <p className="text-[11px] font-bold text-emerald-500/90 leading-relaxed uppercase tracking-wider">
+                                        <div className="p-4 rounded-none bg-[#FACC15]/10 border-4 border-[#FACC15] flex items-start gap-3">
+                                            <Info size={16} className="text-black shrink-0 mt-0.5" />
+                                            <p className="text-[11px] font-bold text-black/90 leading-relaxed uppercase tracking-wider">
                                                 Note: Highway tolls must be paid by the customer during the journey.
                                             </p>
                                         </div>
@@ -831,8 +831,8 @@ const Prices = ({ initialDestination }) => {
                                                     key={c.code}
                                                     type="button"
                                                     onClick={() => changeCurrency(c.code)}
-                                                    className={`p-3 rounded-2xl border-2 transition-all flex flex-col gap-1 text-left cursor-pointer group/card ${currency === c.code
-                                                        ? 'bg-emerald-500/10 border-emerald-500 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
+                                                    className={`p-3 rounded-none border-4 transition-all flex flex-col gap-1 text-left cursor-pointer group/card ${currency === c.code
+                                                        ? 'bg-[#FACC15]/20 border-[#FACC15]'
                                                         : 'bg-white/5 border-white/5 hover:border-white/20 hover:bg-white/10'
                                                         }`}
                                                 >
@@ -840,9 +840,9 @@ const Prices = ({ initialDestination }) => {
                                                         <span className="text-[10px] font-black text-white/40 uppercase tracking-widest flex items-center gap-1.5">
                                                             <span className="text-xs">{c.flag}</span> {c.code}
                                                         </span>
-                                                        {currency === c.code && <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgb(245,158,11)]"></div>}
+                                                        {currency === c.code && <div className="w-1.5 h-1.5 rounded-none bg-[#FACC15] border border-black"></div>}
                                                     </div>
-                                                    <div className={`text-sm md:text-base font-black ${currency === c.code ? 'text-emerald-500' : 'text-white'}`}>
+                                                    <div className={`text-sm md:text-base font-black ${currency === c.code ? 'text-[#FACC15]' : 'text-white'}`}>
                                                         <span className="text-[10px] font-bold mr-1 opacity-60">{c.symbol}</span>
                                                         {c.value.toLocaleString()}
                                                     </div>
@@ -853,22 +853,22 @@ const Prices = ({ initialDestination }) => {
                                 </div>
 
                                 {/* Important Notices */}
-                                <div className="bg-red-500/10 border-2 border-red-500 rounded-xl p-4 mb-4 text-sm text-white space-y-2 animate-pulse">
+                                <div className="bg-red-500/10 border-4 border-dashed border-red-500 rounded-none p-4 mb-4 text-sm text-white space-y-2 animate-pulse">
                                     <div className="flex items-start gap-2 font-bold text-red-200">
                                         <Info size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
                                         <p className="uppercase tracking-wide">Highway tickets needed for the trip must be paid by the customer.</p>
                                     </div>
                                 </div>
-                                <div className="bg-white/10 rounded-xl p-4 mb-8 text-xs text-white/80 space-y-2">
+                                <div className="bg-white/10 rounded-none p-4 mb-8 text-xs text-white/80 space-y-2">
                                     <div className="flex items-start gap-2 font-bold text-white">
-                                        <Info size={14} className="text-emerald-400 flex-shrink-0 mt-0.5" />
+                                        <Info size={14} className="text-black flex-shrink-0 mt-0.5" />
                                         <p>IMPORTANT: We accept card payments (Visa/Mastercard).</p>
                                     </div>
                                 </div>
 
                                 <div className="mb-10 text-center">
-                                    <p className="text-white/60 uppercase tracking-widest text-xs mb-2">Total</p>
-                                    <div className="text-4xl md:text-6xl font-extrabold text-emerald-400 leading-none pb-2 break-words">
+                                    <p className="text-white/60 uppercase tracking-widest text-[10px] font-black mb-2">Total Estimated Price</p>
+                                    <div className="text-4xl md:text-6xl font-black text-[#FACC15] leading-none pb-2 break-words">
                                         {currentSymbol} {totalSelected.toLocaleString()}
                                     </div>
                                 </div>
@@ -981,7 +981,7 @@ const Prices = ({ initialDestination }) => {
                                             setLoading(false); // Reset loading state
                                         }
                                     }}
-                                    className="w-full bg-emerald-600 text-emerald-900 font-extrabold py-6 rounded-2xl text-xl hover:scale-[1.02] transition-all shadow-2xl disabled:opacity-50 disabled:grayscale"
+                                    className="w-full bg-[#FACC15] text-black font-black py-6 rounded-none text-xl hover:bg-white transition-all border-4 border-black disabled:opacity-50 disabled:grayscale"
                                 >
                                     {loading ? <Loader2 className="animate-spin mx-auto" /> : 'Book This Trip Now'}
                                 </button>

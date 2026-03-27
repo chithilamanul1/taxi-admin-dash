@@ -13,13 +13,13 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white rounded-none w-full max-w-lg shadow-[20px_20px_0px_0px_rgba(0,0,0,1)] border-4 border-black animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh] overflow-hidden">
+            <div className="bg-white rounded-none w-full max-w-lg border-4 border-black animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh] overflow-hidden">
                 <div className="overflow-y-auto custom-scrollbar">
                     <div className="relative h-56 md:h-64 bg-slate-50 dark:bg-white/5 border-b-4 border-black p-8 shrink-0">
                         <img
                             src={vehicle.image}
                             alt={vehicle.name}
-                            className={`w-full h-full object-contain drop-shadow-xl transition-transform duration-500
+                            className={`w-full h-full object-contain transition-transform duration-500
                                 ${vehicle.vehicleType?.toLowerCase().includes('sedan') || vehicle.vehicleType?.toLowerCase().includes('car') ? 'scale-[1.2] md:scale-[1.25]' : ''}
                                 ${vehicle.vehicleType?.toLowerCase().includes('wagon') ? 'scale-[1.1]' : ''}
                             `}
@@ -42,7 +42,7 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
                                 <p className="text-black/40 font-bold uppercase tracking-widest text-xs mt-2">{vehicle.vehicleType}</p>
                             </div>
                             <div className="text-right flex flex-col items-end">
-                                <span className="flex items-center gap-2 text-[10px] bg-[#FACC15] text-black px-4 py-2 rounded-none border-2 border-black font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                <span className="flex items-center gap-2 text-[10px] bg-[#FACC15] text-black px-4 py-2 rounded-none border-2 border-black font-black uppercase tracking-widest">
                                     <CheckCircle2 size={12} strokeWidth={3} /> 5★ SERVICE
                                 </span>
                             </div>
@@ -50,7 +50,7 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
 
                         {/* Price Section */}
                         {calculatedTotal > 0 && (
-                            <div className="mb-8 border-4 border-black bg-white dark:bg-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] overflow-hidden flex flex-col">
+                            <div className="mb-8 border-4 border-black bg-white dark:bg-black overflow-hidden flex flex-col">
                                 <div className="bg-black text-white p-3 flex items-center justify-center border-b-2 border-black">
                                     <span className="text-sm font-black tracking-tight">
                                         Rs {calculatedTotal.toLocaleString()}
@@ -128,7 +128,7 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
                                     </button>
                                     <button
                                         onClick={() => { onSelect(vehicle.vehicleType); onClose(); }}
-                                        className="flex-[2] py-4 bg-[#FACC15] text-black border-4 border-black rounded-none font-black text-sm uppercase tracking-widest hover:translate-y-[-4px] transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+                                        className="flex-[2] py-4 bg-[#FACC15] text-black border-4 border-black rounded-none font-black text-sm uppercase tracking-widest hover:translate-y-[-4px] transition-all"
                                     >
                                         CONFIRM SELECTION
                                     </button>

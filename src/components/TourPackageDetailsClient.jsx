@@ -118,11 +118,11 @@ export default function TourPackageDetailsClient({ tour }) {
     return (
         <main className="min-h-screen bg-[#F8F9FA] pb-20 text-slate-900 font-sans">
             {/* Navigation Bar */}
-            <div className="fixed top-0 left-0 w-full z-50 bg-black border-b-4 border-[#FACC15]">
+            <div className="fixed top-0 left-0 w-full z-50 bg-black border-b-[6px] border-[#FACC15]">
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                     <Link href="/tour-packages" className="flex items-center gap-2 text-white hover:text-[#FACC15] transition-all font-black uppercase tracking-tighter text-sm group">
                         <ArrowLeft size={16} />
-                        Back to Tours
+                        BACK TO TOURS
                     </Link>
                     <div className="hidden lg:flex items-center gap-8">
                         <div className="flex flex-col items-end">
@@ -130,24 +130,24 @@ export default function TourPackageDetailsClient({ tour }) {
                             <span className="text-sm font-black text-white truncate max-w-[250px] uppercase tracking-tighter">{tour.title}</span>
                         </div>
                         <div className="h-8 w-px bg-[#FACC15]/20" />
-                        <button onClick={() => setIsModalOpen(true)} className="px-8 py-3 bg-[#FACC15] text-black font-black uppercase tracking-widest hover:bg-white transition-all text-xs border-l-4 border-black">
-                            Book Now
+                        <button onClick={() => setIsModalOpen(true)} className="px-8 py-3 bg-[#FACC15] text-black font-black uppercase tracking-widest hover:bg-white transition-all text-xs border-l-[6px] border-black">
+                            BOOK NOW
                         </button>
                     </div>
-                    <button onClick={() => setIsModalOpen(true)} className="lg:hidden px-6 py-2 bg-[#FACC15] text-black font-black uppercase tracking-widest text-xs border-l-4 border-black">
-                        Book
+                    <button onClick={() => setIsModalOpen(true)} className="lg:hidden px-6 py-2 bg-[#FACC15] text-black font-black uppercase tracking-widest text-xs border-l-[6px] border-black">
+                        BOOK
                     </button>
                 </div>
             </div>
 
             {/* Immersive Hero Section */}
-            <div className="relative h-[75vh] w-full overflow-hidden pt-20 bg-slate-900 border-b-8 border-black shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+            <div className="relative h-[75vh] w-full overflow-hidden pt-20 bg-slate-900 border-b-[16px] border-black">
                 <div className="absolute inset-0">
                     <Image
                         src={tour.heroImage || tour.image || tour.images?.[0] || 'https://images.unsplash.com/photo-1544644181-1484b3fdfc63?q=80&w=1240&auto=format&fit=crop'}
                         alt={tour.title}
                         fill
-                        className="object-cover transition-transform duration-[10s] hover:scale-110"
+                        className="object-cover transition-opacity duration-700"
                         priority
                     />
                     <div className="absolute inset-0 bg-black/40" />
@@ -156,16 +156,16 @@ export default function TourPackageDetailsClient({ tour }) {
                 <div className="absolute inset-0 flex flex-col justify-end p-6 pb-20 md:p-12 lg:p-24">
                     <div className="max-w-7xl mx-auto w-full">
                         <div className="flex flex-wrap gap-2 mb-6">
-                            <div className="inline-block bg-[#FACC15] text-black px-4 py-1 text-[10px] font-black uppercase tracking-widest mb-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                            <div className="inline-block bg-[#FACC15] text-black px-4 py-1 text-[10px] font-black uppercase tracking-widest mb-4 border-4 border-black">
                                 {tour.type || 'Verified Premium'}
                             </div>
                         </div>
-                        <h1 className="text-4xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-[1.1] tracking-tight max-w-5xl uppercase drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">
+                        <h1 className="text-4xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-[1.1] tracking-tight max-w-5xl uppercase">
                             {tour.title}
                         </h1>
                         <div className="flex flex-wrap items-center gap-4">
                             <div className="flex flex-wrap items-center gap-4">
-                                <div className="flex items-center gap-3 text-white font-black uppercase tracking-widest text-xs bg-black backdrop-blur-sm self-start p-4 border-4 border-[#FACC15] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                                <div className="flex items-center gap-3 text-white font-black uppercase tracking-widest text-xs bg-black self-start p-6 border-[8px] border-[#FACC15]">
                                     <MapPin size={16} className="text-[#FACC15]" />
                                     <span>{Array.isArray(tour.destinations) ? tour.destinations.join(' / ') : 'Island Wide Tour'}</span>
                                 </div>
@@ -180,14 +180,14 @@ export default function TourPackageDetailsClient({ tour }) {
                     {/* Left Column (8/12) */}
                     <div className="lg:col-span-8 space-y-12">
                         {/* Quick Stats bar */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 bg-black p-0 border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]">
+                        <div className="grid grid-cols-2 md:grid-cols-4 bg-black p-0 border-[10px] border-black">
                             {[
                                 { icon: Users, label: 'Group', val: 'Private Only' },
                                 { icon: Navigation, label: 'Transit', val: 'Luxury AC' },
                                 { icon: Hotel, label: 'Hotels', val: '3-5 Star' },
                                 { icon: ShieldCheck, label: 'Status', val: 'Verified', color: 'text-black' }
                             ].map((stat, i) => (
-                                <div key={i} className="bg-white p-6 border-r-4 border-black flex flex-col items-center text-center gap-2 last:border-r-0">
+                                <div key={i} className="bg-white p-6 border-r-[6px] border-black flex flex-col items-center text-center gap-2 last:border-r-0">
                                     <stat.icon size={20} className={stat.color || 'text-black'} />
                                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{stat.label}</span>
                                     <span className="text-sm font-black text-black uppercase">{stat.val}</span>
@@ -196,19 +196,19 @@ export default function TourPackageDetailsClient({ tour }) {
                         </div>
 
                         {/* Overview Section */}
-                        <section className="bg-white border-4 border-black p-8 md:p-12 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] rounded-none">
+                        <section className="bg-white border-[10px] border-black p-8 md:p-12 rounded-none">
                             <div className="flex items-center gap-4 mb-8">
-                                <div className="w-2 h-8 bg-[#FACC15] border border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"></div>
+                                <div className="w-2 h-8 bg-[#FACC15] border border-black"></div>
                                 <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
                                     Package Overview
                                 </h2>
                             </div>
-                            <div className="prose prose-slate max-w-none text-slate-800 leading-relaxed text-lg mb-10 font-medium font-sans">
+                            <div className="prose prose-slate max-w-none text-slate-800 leading-relaxed text-lg mb-10 font-bold">
                                 {tour.description}
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-t-4 border-black">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-t-[10px] border-black">
                                 {tour.highlights?.map((h, i) => (
-                                    <div key={i} className="flex items-center gap-4 p-5 bg-white group hover:bg-slate-50 transition-colors border-r-4 border-b-4 border-black last:border-b-0 md:even:border-r-0">
+                                    <div key={i} className="flex items-center gap-4 p-5 bg-white border-r-[6px] border-b-[6px] border-black last:border-b-0 md:even:border-r-0">
                                         <Check size={18} className="text-black shrink-0" strokeWidth={4} />
                                         <span className="font-black text-black text-sm uppercase tracking-tight">{h}</span>
                                     </div>
@@ -217,14 +217,14 @@ export default function TourPackageDetailsClient({ tour }) {
                         </section>
 
                         {/* Visual Route Section */}
-                        <section className="bg-white border-4 border-black p-8 md:p-12 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] rounded-none">
+                        <section className="bg-white border-[10px] border-black p-8 md:p-12 rounded-none">
                             <div className="flex items-center gap-4 mb-10">
                                 <div className="w-2 h-8 bg-black"></div>
                                 <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
                                     Journey Visualization
                                 </h2>
                             </div>
-                            <div className="w-full h-[450px] bg-slate-100 border-4 border-black relative overflow-hidden mb-6">
+                            <div className="w-full h-[450px] bg-slate-100 border-[6px] border-black relative overflow-hidden mb-6">
                                 {pickup ? (
                                     <TripMap
                                         pickup={pickup}
@@ -239,7 +239,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                     </div>
                                 )}
                             </div>
-                            <div className="p-4 bg-black text-[#FACC15] font-black uppercase tracking-widest text-[10px] inline-block border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                            <div className="p-4 bg-black text-[#FACC15] font-black uppercase tracking-widest text-[10px] inline-block border-4 border-black">
                                 <Activity size={16} className="animate-pulse inline mr-2" />
                                 Interactive GPS Route Enabled • Accurate Point-to-Point Distances
                             </div>
@@ -247,9 +247,9 @@ export default function TourPackageDetailsClient({ tour }) {
 
                         {/* Itinerary Section */}
                         {tour.itinerary && tour.itinerary.length > 0 && (
-                            <section className="bg-white border-4 border-black p-8 md:p-12 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] rounded-none">
+                            <section className="bg-white border-[10px] border-black p-8 md:p-12 rounded-none">
                                 <div className="flex items-center gap-4 mb-10">
-                                    <div className="w-2 h-8 bg-[#FACC15] border border-black"></div>
+                                    <div className="w-2 h-8 bg-[#FACC15] border-4 border-black"></div>
                                     <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
                                         Day-by-Day Experience
                                     </h2>
@@ -258,12 +258,12 @@ export default function TourPackageDetailsClient({ tour }) {
                                     {tour.itinerary.map((item, idx) => {
                                         const isExpanded = collapsedDay !== item.day;
                                         return (
-                                            <div key={item.day || idx} className="border-4 border-black rounded-none overflow-hidden mb-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                            <div key={item.day || idx} className="border-[6px] border-black rounded-none overflow-hidden mb-4">
                                                 <button
                                                     onClick={() => setCollapsedDay(collapsedDay === item.day ? null : item.day)}
-                                                    className={`w-full flex items-center gap-6 py-6 px-4 transition-colors text-left ${isExpanded ? 'bg-[#FACC15]' : 'bg-white hover:bg-slate-50'}`}
+                                                    className={`w-full flex items-center gap-6 py-6 px-4 transition-colors text-left ${isExpanded ? 'bg-[#FACC15]' : 'bg-white'}`}
                                                 >
-                                                    <div className={`w-12 h-12 shrink-0 flex flex-col items-center justify-center font-black transition-colors border-2 border-black ${isExpanded ? 'bg-black text-[#FACC15]' : 'bg-[#FACC15] text-black'}`}>
+                                                    <div className={`w-12 h-12 shrink-0 flex flex-col items-center justify-center font-black transition-colors border-4 border-black ${isExpanded ? 'bg-black text-[#FACC15]' : 'bg-[#FACC15] text-black'}`}>
                                                         <span className="text-[8px] uppercase">DAY</span>
                                                         <span className="text-xl -mt-1">{item.day}</span>
                                                     </div>
@@ -274,12 +274,12 @@ export default function TourPackageDetailsClient({ tour }) {
                                                         {item.location && <span className="text-[10px] font-black uppercase tracking-widest block mt-1 text-black/60">{item.location}</span>}
                                                     </div>
                                                     <div className="text-black">
-                                                        {isExpanded ? <Minus size={20} strokeWidth={4} /> : <Plus size={20} strokeWidth={4} />}
+                                                        {isExpanded ? <Minus size={20} strokeWidth={6} /> : <Plus size={20} strokeWidth={6} />}
                                                     </div>
                                                 </button>
-                                                <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-[1000px] opacity-100 border-t-4 border-black' : 'max-h-0 opacity-0'}`}>
+                                                <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-[1000px] opacity-100 border-t-[6px] border-black' : 'max-h-0 opacity-0'}`}>
                                                     <div className="p-8 bg-white">
-                                                        <p className="text-slate-800 leading-relaxed text-base font-bold mb-6">
+                                                        <p className="text-slate-800 leading-relaxed text-base font-black mb-6 uppercase">
                                                             {item.description || item.desc}
                                                         </p>
                                                         {item.activities && item.activities.length > 0 && (
@@ -300,21 +300,21 @@ export default function TourPackageDetailsClient({ tour }) {
 
                         {/* Experience Visual Timeline */}
                         {tour.experience && tour.experience.length > 0 && (
-                            <section className="bg-white border-4 border-black p-8 md:p-12 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] rounded-none text-black">
+                            <section className="bg-white border-[10px] border-black p-8 md:p-12 rounded-none text-black">
                                 <div className="flex items-center gap-4 mb-12">
-                                    <div className="w-2 h-8 bg-black"></div>
+                                    <div className="w-4 h-8 bg-black"></div>
                                     <h2 className="text-3xl font-black text-black uppercase tracking-tighter">
                                         Your Experience
                                     </h2>
                                 </div>
                                 <div className="space-y-0 relative ml-2">
-                                    <div className="absolute left-1 top-0 bottom-0 w-1 bg-black opacity-20" />
+                                    <div className="absolute left-1 top-0 bottom-0 w-2 bg-black opacity-20" />
                                     {tour.experience.map((exp, idx) => (
                                         <div key={idx} className="relative pl-12 pb-12 last:pb-0">
-                                            <div className="absolute left-0 top-1.5 w-4 h-4 bg-black border-4 border-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]" />
+                                            <div className="absolute left-0 top-1.5 w-6 h-6 bg-black border-4 border-white" />
                                             <div className="flex flex-col gap-2">
-                                                <h4 className="text-xl font-black text-black uppercase tracking-tighter">{exp.heading}</h4>
-                                                <p className="text-slate-800 font-bold text-base leading-relaxed max-w-2xl">{exp.text}</p>
+                                                <h4 className="text-xl font-black text-black uppercase tracking-tighter italic">{exp.heading}</h4>
+                                                <p className="text-slate-800 font-black text-base leading-relaxed max-w-2xl uppercase tracking-tight">{exp.text}</p>
                                             </div>
                                         </div>
                                     ))}
@@ -323,10 +323,10 @@ export default function TourPackageDetailsClient({ tour }) {
                         )}
 
                         {/* Inclusions & Exclusions */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] rounded-none overflow-hidden">
-                            <section className="bg-white p-10 border-b-4 md:border-b-0 border-black">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-[10px] border-black rounded-none overflow-hidden">
+                            <section className="bg-white p-10 border-b-[10px] md:border-b-0 border-black">
                                 <h3 className="text-2xl font-black text-black mb-8 uppercase tracking-tighter flex items-center gap-3">
-                                    <CheckCircle size={24} className="text-[#FACC15] bg-black" />
+                                    <CheckCircle size={24} className="text-[#FACC15] bg-black border-2 border-black" />
                                     INCLUSIONS
                                 </h3>
                                 <ul className="space-y-4">
@@ -340,7 +340,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                     )}
                                 </ul>
                             </section>
-                            <section className="bg-white p-10 md:border-l-4 border-black">
+                            <section className="bg-white p-10 md:border-l-[10px] border-black">
                                 <h3 className="text-2xl font-black text-black mb-8 uppercase tracking-tighter flex items-center gap-3">
                                     <XCircle size={24} className="text-white bg-red-600 border-2 border-black" />
                                     EXCLUSIONS
@@ -348,7 +348,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                 <ul className="space-y-4">
                                     {validExclusions.length > 0 ? validExclusions.map((item, i) => (
                                         <li key={i} className="flex gap-3 text-slate-500 items-start group">
-                                            <div className="shrink-0 mt-1 w-2 h-2 bg-slate-300 rounded-none" />
+                                            <div className="shrink-0 mt-1 w-2 h-2 bg-slate-300 rounded-none border border-black" />
                                             <span className="text-sm font-black uppercase tracking-tight line-through opacity-70">{item}</span>
                                         </li>
                                     )) : (
@@ -362,16 +362,16 @@ export default function TourPackageDetailsClient({ tour }) {
                     {/* Right Column (Sidebar) */}
                     <div className="lg:col-span-4 mt-[-100px] lg:mt-0">
                         <div className="sticky top-32 space-y-8">
-                            <div className="bg-white p-8 border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] rounded-none">
-                                <div className="mb-8 text-center bg-black py-6 px-2 border-b-8 border-[#FACC15]">
+                            <div className="bg-white p-8 border-[10px] border-black rounded-none">
+                                <div className="mb-8 text-center bg-black py-8 px-2 border-b-[12px] border-[#FACC15]">
                                     <span className="text-[10px] font-black text-[#FACC15] uppercase tracking-widest block mb-1">Exclusive Web Rate</span>
                                     <div className="flex items-center justify-center gap-1 text-white">
                                         <span className="text-xl font-black">{priceCurrency}</span>
-                                        <span className="text-6xl font-black tracking-tighter">
+                                        <span className="text-7xl font-black tracking-tighter leading-none">
                                             {totalPrice > 0 ? totalPrice.toLocaleString() : 'Price on Request'}
                                         </span>
                                     </div>
-                                    <span className="text-[10px] font-black text-white uppercase tracking-widest mt-1 block">All-Inclusive Price</span>
+                                    <span className="text-[10px] font-black text-[#FACC15] uppercase tracking-widest mt-2 block italic">All-Inclusive Price</span>
                                 </div>
 
                                 {priceAmount > 0 && (
@@ -396,19 +396,19 @@ export default function TourPackageDetailsClient({ tour }) {
                                 )}
 
                                 <div className="space-y-4">
-                                    <button onClick={() => setIsModalOpen(true)} className="w-full h-16 bg-[#FACC15] text-black font-black uppercase tracking-[0.2em] text-sm hover:translate-y-[-2px] transition-all border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                                        Instant Booking
+                                    <button onClick={() => setIsModalOpen(true)} className="w-full h-16 bg-[#FACC15] text-black font-black uppercase tracking-[0.2em] text-sm hover:bg-black hover:text-[#FACC15] transition-all border-[6px] border-black">
+                                        INSTANT BOOKING
                                     </button>
-                                    <a href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking "${tour.title}".`)}`} target="_blank" className="w-full h-16 bg-white text-black font-black uppercase tracking-[0.2em] text-[10px] border-4 border-black flex items-center justify-center gap-3 hover:translate-y-[-2px] transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                                        <MessageCircle size={20} /> WhatsApp Inquiry
+                                    <a href={`https://wa.me/+94716885880?text=${encodeURIComponent(`Hi, I'm interested in booking "${tour.title}".`)}`} target="_blank" className="w-full h-16 bg-white text-black font-black uppercase tracking-[0.2em] text-[10px] border-[6px] border-black flex items-center justify-center gap-3 transition-all hover:bg-slate-50">
+                                        <MessageCircle size={20} /> WHATSAPP INQUIRY
                                     </a>
                                 </div>
                             </div>
 
                             {/* Trust Features */}
-                            <div className="bg-white p-8 border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] rounded-none flex flex-col gap-6">
-                                <div className="flex items-center gap-4 border-b-2 border-slate-100 pb-4">
-                                    <div className="w-12 h-12 bg-black flex items-center justify-center text-[#FACC15] border-2 border-black">
+                            <div className="bg-white p-8 border-[10px] border-black rounded-none flex flex-col gap-6">
+                                <div className="flex items-center gap-4 border-b-[6px] border-black pb-4">
+                                    <div className="w-12 h-12 bg-black flex items-center justify-center text-[#FACC15] border-4 border-black">
                                         <ShieldCheck size={24} />
                                     </div>
                                     <div className="flex flex-col">
@@ -417,7 +417,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-black flex items-center justify-center text-[#FACC15] border-2 border-black">
+                                    <div className="w-12 h-12 bg-black flex items-center justify-center text-[#FACC15] border-4 border-black">
                                         <Users size={24} />
                                     </div>
                                     <div className="flex flex-col">

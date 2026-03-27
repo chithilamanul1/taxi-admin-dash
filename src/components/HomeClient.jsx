@@ -75,7 +75,7 @@ export default function HomeClient() {
             <FleetSection />
 
             {/* Travel Gallery - "More Images" Request */}
-            <section className="py-20 bg-slate-50 dark:bg-[#0a0a0a] border-t-8 border-black overflow-hidden">
+            <section className="py-20 bg-slate-50 dark:bg-[#0a0a0a] border-t-[16px] border-black overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-8">
                         <div>
@@ -97,7 +97,7 @@ export default function HomeClient() {
                         ].map((item, i) => (
                             <div key={i} className="group relative">
                                 <div 
-                                    className="bg-white p-4 border-[12px] border-black transition-transform hover:scale-105 hover:rotate-0 duration-500"
+                                    className="bg-white p-4 border-[12px] border-black"
                                     style={{ transform: `rotate(${item.rotate})` }}
                                 >
                                     <div className="relative aspect-square overflow-hidden mb-4 border-8 border-black">
@@ -131,7 +131,7 @@ export default function HomeClient() {
                 product={selectedExpressProduct}
             />
 
-            <div id="calculator" className="py-20 md:py-40 relative border-t-8 border-black">
+            <div id="calculator" className="py-20 md:py-40 relative border-t-[16px] border-black">
                 <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
                     <h2 className="text-5xl md:text-8xl font-black text-black dark:text-white mb-10 uppercase tracking-tighter leading-none">
                         SEAMLESS <br /><span className="text-[#FACC15]">AIRPORT TRANSFERS</span>
@@ -139,17 +139,17 @@ export default function HomeClient() {
                     <p className="text-black/40 dark:text-white/40 mb-14 text-sm font-black uppercase tracking-[0.3em] max-w-2xl mx-auto">Predictable pricing, premium vehicles, and professional chauffeurs waiting for you.</p>
                     <button
                         onClick={() => setIsBookingOpen(true)}
-                        className="bg-[#FACC15] text-black px-16 py-6 font-black text-sm uppercase tracking-widest hover:translate-y-[-8px] transition-all shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] inline-flex items-center gap-4 group rounded-none border-4 border-black"
+                        className="bg-[#FACC15] text-black px-16 py-6 font-black text-sm uppercase tracking-widest transition-all inline-flex items-center gap-4 group rounded-none border-[10px] border-black"
                     >
                         BOOK YOUR TRIP NOW
-                        <ArrowRight size={22} className="group-hover:translate-x-2 transition-transform" />
+                        <ArrowRight size={22} className="group-hover:translate-x-4 transition-transform" />
                     </button>
                 </div>
             </div>
 
             <SpecialOffersSection />
 
-            <section className="py-20 md:py-32 px-6 border-t border-black/5 dark:border-white/5">
+            <section className="py-20 md:py-32 px-6 border-t-[16px] border-black">
                 <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col md:flex-row items-end justify-between mb-16 md:mb-24 gap-10">
                         <div className="max-w-3xl">
@@ -178,7 +178,7 @@ export default function HomeClient() {
                                     });
                                     setIsBookingOpen(true);
                                 }}
-                                className="group p-8 bg-white dark:bg-black border-4 border-black dark:border-white/20 hover:border-[#FACC15] dark:hover:border-[#FACC15] transition-all duration-300 text-left flex flex-col justify-between h-64 shrink-0 w-[280px] md:w-auto snap-start hover:translate-y-[-4px]"
+                                className="group p-8 bg-white dark:bg-black border-[6px] border-black dark:border-white/20 hover:border-[#FACC15] dark:hover:border-[#FACC15] transition-all duration-300 text-left flex flex-col justify-between h-64 shrink-0 w-[280px] md:w-auto snap-start"
                             >
                                 <div>
                                     <div className="flex items-center gap-3 text-[#FACC15] mb-4">
@@ -191,8 +191,8 @@ export default function HomeClient() {
                                 </div>
                                 <div className="flex items-center justify-between mt-6">
                                     <span className="text-[9px] font-black text-black/40 dark:text-white/40 uppercase tracking-[0.3em]">INSTANT QUOTE</span>
-                                    <div className="w-12 h-12 bg-[#FACC15] text-black border-2 border-black flex items-center justify-center group-hover:bg-black group-hover:text-[#FACC15] transition-all">
-                                        <ArrowRight size={20} className="transform group-hover:translate-x-1 transition-transform" />
+                                    <div className="w-12 h-12 bg-[#FACC15] text-black border-4 border-black flex items-center justify-center group-hover:bg-black group-hover:text-[#FACC15] transition-all">
+                                        <ArrowRight size={20} className="transform group-hover:translate-x-2 transition-transform" />
                                     </div>
                                 </div>
                             </button>
@@ -206,7 +206,7 @@ export default function HomeClient() {
             <GoogleReviews />
             <RecentPosts />
 
-            <section className="py-20 md:py-32 bg-white dark:bg-black border-t border-black/10 dark:border-white/10 transition-colors">
+            <section className="py-20 md:py-32 bg-white dark:bg-black border-t-[16px] border-black transition-colors">
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="bg-[#FACC15] p-10 md:p-20 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12 border-b-[20px] border-black rounded-none">
                         <div className="relative z-10 max-w-xl text-center md:text-left text-black">
@@ -215,16 +215,16 @@ export default function HomeClient() {
                                 Join our exclusive fleet of professional chauffeurs. Get consistent bookings, fair rates, and become part of Sri Lanka's premium network.
                             </p>
                             <div className="flex flex-wrap gap-6 justify-center md:justify-start">
-                                <Link href="/driver/register" className="bg-black text-[#FACC15] px-12 py-5 font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all shadow-2xl rounded-none">
+                                <Link href="/driver/register" className="bg-black text-[#FACC15] px-12 py-5 font-black uppercase tracking-widest text-xs hover:bg-[#FACC15] hover:text-black transition-all rounded-none border-[6px] border-black">
                                     JOIN OUR FLEET <ArrowRight size={20} />
                                 </Link>
-                                <Link href="/driver/login" className="px-12 py-5 font-black uppercase tracking-widest text-xs text-black border-4 border-black/20 hover:border-black transition-all rounded-none">
+                                <Link href="/driver/login" className="px-12 py-5 font-black uppercase tracking-widest text-xs text-black border-[6px] border-black transition-all rounded-none">
                                     DRIVER LOGIN
                                 </Link>
                             </div>
                         </div>
 
-                        <div className="relative z-10 w-full md:w-1/3 aspect-square bg-black p-10 flex flex-col items-center justify-center text-center transform rotate-3 hover:rotate-0 transition-all duration-500 border-4 border-black rounded-none">
+                        <div className="relative z-10 w-full md:w-1/3 aspect-square bg-black p-10 flex flex-col items-center justify-center text-center transform rotate-6 border-[8px] border-black rounded-none">
                             <Star size={64} className="mb-6 text-[#FACC15]" />
                             <h3 className="text-4xl font-black text-white tracking-tighter uppercase mb-4">EARN MORE</h3>
                             <p className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Accept rides, track earnings, and get paid weekly.</p>

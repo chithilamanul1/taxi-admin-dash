@@ -61,16 +61,16 @@ const DayTrips = () => {
     return (
         <div className="pb-20">
             {/* Header */}
-            <div className="bg-emerald-900 py-16 md:py-24 text-center px-4">
-                <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Day <span className="text-emerald-600">Trips</span></h1>
-                <p className="text-white/60 max-w-2xl mx-auto">Short on time? Experience the best of Sri Lanka in just one day.</p>
+            <div className="bg-black py-16 md:py-24 text-center px-4 border-b-8 border-[#FACC15]">
+                <h1 className="text-5xl md:text-7xl font-black text-white mb-4 uppercase tracking-tighter">Day <span className="text-[#FACC15]">Trips</span></h1>
+                <p className="text-white/40 max-w-2xl mx-auto font-bold uppercase tracking-widest text-xs">Short on time? Experience the best of Sri Lanka in just one day.</p>
             </div>
 
             {/* Grid */}
             <div className="max-w-7xl mx-auto px-4 md:px-6 -mt-10">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {DAY_TRIPS.map((trip, idx) => (
-                        <div key={idx} itemScope itemType="https://schema.org/Product" className="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 flex flex-col">
+                        <div key={idx} itemScope itemType="https://schema.org/Product" className="bg-white rounded-none border-4 border-black overflow-hidden group transition-all duration-300 flex flex-col hover:-translate-y-1">
                             {/* Image */}
                             <div className="h-56 overflow-hidden relative">
                                 <img
@@ -79,8 +79,8 @@ const DayTrips = () => {
                                     itemProp="image"
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
-                                {trip.tags.map((tag, i) => (
-                                    <div key={i} className={`absolute top-3 ${i === 0 ? 'left-3' : 'right-3'} bg-emerald-900/90 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm`}>
+                                 {trip.tags.map((tag, i) => (
+                                    <div key={i} className={`absolute top-3 ${i === 0 ? 'left-3' : 'right-3'} bg-black text-[#FACC15] text-[10px] font-black px-3 py-1 rounded-none border-2 border-black uppercase tracking-wider backdrop-blur-sm`}>
                                         {tag}
                                     </div>
                                 ))}
@@ -89,8 +89,8 @@ const DayTrips = () => {
                             {/* Content */}
                             <div className="p-6 flex flex-col flex-1">
                                 <div className="flex items-start justify-between mb-2">
-                                    <div className="flex items-center gap-2 text-emerald-600 text-xs font-bold uppercase tracking-wider">
-                                        <Clock size={14} />
+                                     <div className="flex items-center gap-2 text-black text-[10px] font-black uppercase tracking-wider">
+                                        <Clock size={14} strokeWidth={3} />
                                         <span>{trip.duration}</span>
                                     </div>
                                     <div className="flex items-center gap-1 text-gray-400 text-xs">
@@ -99,31 +99,31 @@ const DayTrips = () => {
                                     </div>
                                 </div>
 
-                                <h3 itemProp="name" className="text-xl font-bold text-emerald-900 mb-2 line-clamp-2" title={trip.title}>{trip.title}</h3>
+                                 <h3 itemProp="name" className="text-xl font-black text-black mb-2 line-clamp-2 uppercase tracking-tight group-hover:text-[#FACC15] transition-colors" title={trip.title}>{trip.title}</h3>
 
                                 <div className="mt-auto pt-6 border-t border-gray-100 flex items-end justify-between">
                                     <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
                                         {trip.originalPrice && (
                                             <span className="text-xs text-gray-400 line-through block mb-1">${trip.originalPrice}</span>
                                         )}
-                                        <div className="text-3xl font-extrabold text-emerald-600 leading-none">
-                                            <meta itemProp="priceCurrency" content="USD" />
-                                            <span itemProp="price" content={trip.price}>
-                                                ${trip.price}
-                                            </span>
-                                            <span className="text-xs text-gray-400 font-medium ml-1">/pp</span>
-                                        </div>
+                                         <div className="text-3xl font-black text-black leading-none">
+                                             <meta itemProp="priceCurrency" content="USD" />
+                                             <span itemProp="price" content={trip.price}>
+                                                 <span className="text-[#FACC15] mr-1">$</span>{trip.price}
+                                             </span>
+                                             <span className="text-[10px] text-gray-400 font-black uppercase ml-1">/pp</span>
+                                         </div>
                                         <link itemProp="availability" href="https://schema.org/InStock" />
                                     </div>
-                                    <button
-                                        onClick={() => {
-                                            const msg = `Inquiry about Day Trip: ${trip.title} (${trip.duration})`
-                                            window.open(`https://wa.me/94716885880?text=${msg}`, '_blank')
-                                        }}
-                                        className="bg-emerald-900 text-white p-3 rounded-xl hover:bg-emerald-600 hover:text-emerald-900 transition-all shadow-lg hover:checkbox-md"
-                                    >
-                                        <ArrowRight size={24} />
-                                    </button>
+                                     <button
+                                         onClick={() => {
+                                             const msg = `Inquiry about Day Trip: ${trip.title} (${trip.duration})`
+                                             window.open(`https://wa.me/94716885880?text=${msg}`, '_blank')
+                                         }}
+                                         className="bg-[#FACC15] text-black p-3 rounded-none border-4 border-black hover:bg-black hover:text-[#FACC15] transition-all"
+                                     >
+                                         <ArrowRight size={24} strokeWidth={4} />
+                                     </button>
                                 </div>
                             </div>
                         </div>
@@ -131,12 +131,13 @@ const DayTrips = () => {
                 </div>
             </div>
 
-            <div className="text-center mt-16">
-                <p className="text-gray-500 mb-6">Need a custom itinerary? We can tailor a trip just for you.</p>
-                <Link href="/contact" className="inline-block bg-emerald-600 text-emerald-900 font-bold px-8 py-3 rounded-xl hover:scale-105 transition-transform">
-                    Contact Us for Custom Tours
-                </Link>
-            </div>
+             <div className="text-center mt-16 px-6">
+                 <p className="text-slate-400 font-black uppercase tracking-widest text-[10px] mb-6 border-b border-black/5 pb-4 inline-block">Need a custom itinerary? We can tailor a trip just for you.</p>
+                 <br />
+                 <Link href="/contact" className="inline-block bg-[#FACC15] text-black font-black px-10 py-4 rounded-none border-4 border-black hover:bg-black hover:text-[#FACC15] transition-all uppercase tracking-[0.2em] text-sm">
+                     Contact Us for Custom Tours
+                 </Link>
+             </div>
         </div>
     )
 }

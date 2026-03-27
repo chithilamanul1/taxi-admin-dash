@@ -98,7 +98,7 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
     const timeDisplay = formatTimeDisplay();
 
     return (
-        <div className="bg-[#212121] rounded-3xl p-6 border border-white/10 text-white w-full max-w-[320px] mx-auto shadow-2xl">
+        <div className="bg-black rounded-none p-6 border-4 border-[#FACC15] text-white w-full max-w-[320px] mx-auto">
             {/* Header / Display */}
             <div className="flex justify-between items-start mb-6">
                 <div>
@@ -133,8 +133,8 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                 </div>
                 {/* View Switcher Icons */}
                 <div className="flex gap-2">
-                    <button onClick={() => setView('date')} className={`p-2 rounded-full ${view === 'date' ? 'bg-white/10 text-white' : 'text-white/40 hover:bg-white/5'}`}>
-                        <Calendar size={20} />
+                    <button onClick={() => setView('date')} className={`p-2 rounded-none border-2 ${view === 'date' ? 'bg-[#FACC15] border-black text-black' : 'border-white/10 text-white/40 hover:bg-white/5'}`}>
+                        <Calendar size={20} strokeWidth={3} />
                     </button>
                 </div>
             </div>
@@ -151,8 +151,8 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                         <div className="flex items-center justify-between mb-4 px-2">
                             <span className="text-sm font-bold">{viewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
                             <div className="flex gap-2">
-                                <button onClick={handlePrevMonth} className="p-1 hover:bg-white/10 rounded-full"><ChevronLeft size={16} /></button>
-                                <button onClick={handleNextMonth} className="p-1 hover:bg-white/10 rounded-full"><ChevronRight size={16} /></button>
+                                <button onClick={handlePrevMonth} className="p-1 hover:bg-[#FACC15] hover:text-black rounded-none border-2 border-white/10"><ChevronLeft size={16} strokeWidth={3} /></button>
+                                <button onClick={handleNextMonth} className="p-1 hover:bg-[#FACC15] hover:text-black rounded-none border-2 border-white/10"><ChevronRight size={16} strokeWidth={3} /></button>
                             </div>
                         </div>
 
@@ -171,9 +171,9 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                                     <button
                                         key={i}
                                         onClick={() => handleDateClick(d)}
-                                        className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-medium transition-all
-                                            ${isSelected ? 'bg-[#90CAF9] text-black font-bold shadow-lg scale-110' : 'hover:bg-white/10 text-white'}
-                                            ${isToday && !isSelected ? 'border border-[#90CAF9] text-[#90CAF9]' : ''}
+                                        className={`w-8 h-8 flex items-center justify-center rounded-none text-sm font-black transition-all border-2
+                                            ${isSelected ? 'bg-[#FACC15] text-black border-black scale-110 z-10' : 'hover:bg-white/10 text-white border-transparent'}
+                                            ${isToday && !isSelected ? 'border-[#FACC15] text-[#FACC15]' : ''}
                                         `}
                                     >
                                         {d.getDate()}
@@ -190,17 +190,22 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                         exit={{ opacity: 0, scale: 0.95 }}
                         className="flex justify-center items-center py-4"
                     >
-                        <div className="relative w-64 h-64 bg-[#2b2b2b] rounded-full flex items-center justify-center shadow-inner">
+                        <div className="relative w-64 h-64 bg-white/5 rounded-none flex items-center justify-center border-4 border-black">
+                           {/* Decorative grid for Sharp Look */}
+                           <div className="absolute inset-0 opacity-10 pointer-events-none">
+                               <div className="h-full w-px bg-white absolute left-1/2"></div>
+                               <div className="w-full h-px bg-white absolute top-1/2"></div>
+                           </div>
                             {/* Center Dot */}
-                            <div className="absolute w-2 h-2 bg-[#90CAF9] rounded-full z-20"></div>
+                            <div className="absolute w-2 h-2 bg-[#FACC15] rounded-none z-20 border border-black"></div>
 
                             {/* Hand */}
                             <div
-                                className="absolute w-0.5 h-[40%] bg-[#90CAF9] bottom-1/2 origin-bottom transition-transform duration-300 z-10"
+                                className="absolute w-0.5 h-[40%] bg-[#FACC15] bottom-1/2 origin-bottom transition-transform duration-300 z-10"
                                 style={{ transform: `rotate(${getHandRotation()}deg)` }}
                             >
-                                <div className="absolute -top-1 -left-2 w-5 h-5 bg-[#90CAF9] rounded-full flex items-center justify-center">
-                                    <div className="w-1 h-1 bg-black rounded-full"></div>
+                                <div className="absolute -top-1 -left-2 w-5 h-5 bg-[#FACC15] rounded-none flex items-center justify-center border-2 border-black">
+                                    <div className="w-1.5 h-1.5 bg-black rounded-none"></div>
                                 </div>
                             </div>
 
@@ -236,8 +241,8 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                                     <button
                                         key={val}
                                         onClick={() => handleTimeSelect(val)}
-                                        className={`absolute w-7 h-7 flex items-center justify-center rounded-full text-[10px] font-black transition-all z-20
-                                            ${isSelected ? 'text-black' : 'text-white/80 hover:text-[#90CAF9] hover:bg-white/5'}
+                                        className={`absolute w-8 h-8 flex items-center justify-center rounded-none text-[10px] font-black transition-all z-20 border-2
+                                            ${isSelected ? 'bg-[#FACC15] text-black border-black' : 'text-white/80 border-transparent hover:text-[#FACC15] hover:bg-white/5'}
                                         `}
                                         style={{
                                             left: `${x}%`,

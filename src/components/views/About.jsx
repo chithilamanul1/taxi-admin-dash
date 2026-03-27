@@ -6,28 +6,28 @@ const About = () => {
     return (
         <div className="pb-20 dark:bg-emerald-900 transition-colors">
             {/* Header */}
-            <div className="bg-emerald-900 py-20 text-center text-white px-4">
-                <h1 className="text-4xl md:text-5xl font-extrabold mb-4">About <span className="text-emerald-600 dark:text-emerald-400">Airport Taxis Pvt (Ltd)</span></h1>
-                <p className="text-white/60 max-w-2xl mx-auto text-lg">Your trusted partner for seamless airport transfers and unforgettable island tours.</p>
+            <div className="bg-black py-20 text-center text-white px-4 border-b-8 border-[#FACC15]">
+                <h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tighter uppercase">About <span className="text-[#FACC15]">Airport Taxis</span></h1>
+                <p className="text-white/40 max-w-2xl mx-auto text-xs font-bold uppercase tracking-widest">Your trusted partner for seamless airport transfers and unforgettable island tours.</p>
             </div>
 
             <div className="max-w-7xl mx-auto px-6 py-12">
                 <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
                     {/* Image Section */}
-                    <div className="relative h-[400px] rounded-[2.5rem] overflow-hidden shadow-2xl transform md:rotate-2 hover:rotate-0 transition-all duration-500 group">
+                    <div className="relative h-[400px] rounded-none overflow-hidden border-4 border-black transform md:rotate-2 hover:rotate-0 transition-all duration-500 group">
                         <img
                             src="https://images.pexels.com/photos/17654876/pexels-photo-17654876.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                             alt="Sri Lanka Coast"
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-emerald-900/20 group-hover:bg-transparent transition-colors"></div>
+                        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
                     </div>
 
                     {/* Content Section */}
                     <div className="space-y-6">
                         <div>
-                            <span className="text-emerald-600 dark:text-emerald-400 font-bold tracking-widest uppercase text-sm">Who We Are</span>
-                            <h2 className="text-3xl font-bold text-emerald-900 dark:text-white mt-2">More than just a Taxi Service</h2>
+                            <span className="text-black font-black tracking-widest uppercase text-xs">Who We Are</span>
+                            <h2 className="text-4xl font-black text-black dark:text-white mt-2 uppercase tracking-tight">More than just a Taxi Service</h2>
                         </div>
                         <p className="text-gray-600 dark:text-white/60 leading-relaxed">
                             Airport Taxis Pvt (Ltd) is Sri Lanka's premier transportation provider, dedicated to offering safety, reliability, and comfort.
@@ -40,16 +40,16 @@ const About = () => {
 
                         <div className="grid grid-cols-3 gap-6 pt-6 border-t border-gray-100 dark:border-white/5">
                             <div>
-                                <h3 className="font-bold text-3xl text-emerald-600 dark:text-emerald-400">5k+</h3>
-                                <p className="text-xs text-gray-400 dark:text-slate-500 font-bold uppercase">Happy Clients</p>
+                                <h3 className="font-black text-4xl text-[#FACC15]">5k+</h3>
+                                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-widest">Happy Clients</p>
                             </div>
                             <div>
-                                <h3 className="font-bold text-3xl text-emerald-600 dark:text-emerald-400">500+</h3>
-                                <p className="text-xs text-gray-400 dark:text-slate-500 font-bold uppercase">Tours Completed</p>
+                                <h3 className="font-black text-4xl text-[#FACC15]">500+</h3>
+                                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-widest">Tours Completed</p>
                             </div>
                             <div>
-                                <h3 className="font-bold text-3xl text-emerald-600 dark:text-emerald-400">24/7</h3>
-                                <p className="text-xs text-gray-400 dark:text-slate-500 font-bold uppercase">Support</p>
+                                <h3 className="font-black text-4xl text-[#FACC15]">24/7</h3>
+                                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-widest">Support</p>
                             </div>
                         </div>
                     </div>
@@ -57,11 +57,11 @@ const About = () => {
 
                 {/* Values Section */}
                 <div className="grid md:grid-cols-3 gap-8">
-                    <div className="bg-slate-50 dark:bg-emerald-900 p-8 rounded-none border border-slate-100 dark:border-white/5 hover:shadow-xl transition-all hover:-translate-y-1">
-                        <div className="w-12 h-12 bg-emerald-900 dark:bg-white/5 text-emerald-600 dark:text-emerald-400 rounded-none flex items-center justify-center mb-4 text-2xl border border-white/5">
-                            <Shield size={24} />
+                    <div className="bg-white dark:bg-[#111] p-8 rounded-none border-4 border-black transition-all hover:-translate-y-1">
+                        <div className="w-12 h-12 bg-black text-[#FACC15] rounded-none flex items-center justify-center mb-4 text-2xl border-2 border-black">
+                            <Shield size={24} strokeWidth={3} />
                         </div>
-                        <h3 className="font-bold text-lg text-emerald-900 dark:text-white mb-2">Safety First</h3>
+                        <h3 className="font-black text-xl text-black dark:text-white mb-2 uppercase tracking-tight">Safety First</h3>
                         <p className="text-sm text-gray-500 dark:text-white/60">All our vehicles are regularly inspected and sanitized. Our drivers are licensed professionals.</p>
                     </div>
                     <div className="bg-slate-50 dark:bg-emerald-900 p-8 rounded-none border border-slate-100 dark:border-white/5 hover:shadow-xl transition-all hover:-translate-y-1">

@@ -98,7 +98,7 @@ ${boardInfo}
     }
 
     return (
-        <form onSubmit={handleSubmit} className="p-10 rounded-[2.5rem] border border-emerald-900/10 shadow-2xl bg-white text-emerald-900 max-w-4xl mx-auto">
+        <form onSubmit={handleSubmit} className="p-10 rounded-none border-4 border-black bg-white text-black max-w-4xl mx-auto transition-colors">
             <div className="grid md:grid-cols-2 gap-8">
                 {/* Row 1 */}
                 <div className="space-y-2">
@@ -107,7 +107,7 @@ ${boardInfo}
                         required
                         type="text" name="name" value={formData.name} onChange={handleChange}
                         placeholder="John Doe"
-                        className="w-full bg-slate-50 border-none px-6 py-4 rounded-xl focus:ring-2 focus:ring-emerald-900/20 outline-none transition-all"
+                        className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm"
                     />
                 </div>
                 <div className="space-y-2">
@@ -116,7 +116,7 @@ ${boardInfo}
                         required
                         type="email" name="email" value={formData.email} onChange={handleChange}
                         placeholder="john@example.com"
-                        className="w-full bg-slate-50 border-none px-6 py-4 rounded-xl focus:ring-2 focus:ring-emerald-900/20 outline-none transition-all"
+                        className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm"
                     />
                 </div>
 
@@ -127,7 +127,7 @@ ${boardInfo}
                         required
                         type="tel" name="phone" value={formData.phone} onChange={handleChange}
                         placeholder="+1 234 567 890"
-                        className="w-full bg-slate-50 border-none px-6 py-4 rounded-xl focus:ring-2 focus:ring-emerald-900/20 outline-none transition-all"
+                        className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm"
                     />
                 </div>
                 <div className="space-y-2">
@@ -136,7 +136,7 @@ ${boardInfo}
                         required
                         type="text" name="flightNumber" value={formData.flightNumber} onChange={handleChange}
                         placeholder="EK 650"
-                        className="w-full bg-slate-50 border-none px-6 py-4 rounded-xl focus:ring-2 focus:ring-emerald-900/20 outline-none transition-all uppercase"
+                        className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm"
                     />
                 </div>
 
@@ -148,7 +148,7 @@ ${boardInfo}
                         onChange={handleDateChange}
                         showTimeSelect
                         dateFormat="MMMM d, yyyy h:mm aa"
-                        className="w-full bg-slate-50 border-none px-6 py-4 rounded-xl focus:ring-2 focus:ring-emerald-900/20 outline-none transition-all cursor-pointer"
+                        className="w-full bg-slate-50 border-2 border-black/10 px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all cursor-pointer font-black uppercase text-sm"
                         wrapperClassName="w-full"
                     />
                 </div>
@@ -158,7 +158,7 @@ ${boardInfo}
                     <label className="text-sm font-bold uppercase tracking-wider text-gray-500">Passengers</label>
                     <select
                         name="passengers" value={formData.passengers} onChange={handleChange}
-                        className="w-full bg-slate-50 border-none px-6 py-4 rounded-xl focus:ring-2 focus:ring-emerald-900/20 outline-none transition-all"
+                        className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm"
                     >
                         {[1, 2, 3, 4, 5, 6, 7, 8].map(n => <option key={n} value={n}>{n} Passenger{n > 1 ? 's' : ''}</option>)}
                         <option value="9+">9+ Group</option>
@@ -170,19 +170,19 @@ ${boardInfo}
                         required
                         type="text" name="destination" value={formData.destination} onChange={handleChange}
                         placeholder="Galle, Colombo, etc."
-                        className="w-full bg-slate-50 border-none px-6 py-4 rounded-xl focus:ring-2 focus:ring-emerald-900/20 outline-none transition-all"
+                        className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all font-black uppercase text-sm"
                     />
                 </div>
             </div>
 
             {/* Display Name Board Toggle */}
-            <div className="mt-8 p-6 bg-slate-50 rounded-2xl border border-slate-100">
+            <div className="mt-8 p-6 bg-slate-50 rounded-none border-4 border-black">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <img src="https://cdn-icons-png.flaticon.com/512/3284/3284646.png" alt="NAME BORD" className="h-10 w-10 opacity-70" />
                         <div>
                             <div className="flex items-center gap-3">
-                                <Signpost size={20} className={formData.boardShow ? 'text-emerald-600' : 'text-slate-400'} />
+                                <Signpost size={20} className={formData.boardShow ? 'text-black' : 'text-slate-400'} />
                                 <div className="text-left">
                                     <span className="text-xs font-bold block uppercase tracking-tight text-slate-700">Display Name Board</span>
                                     <span className="text-[10px] font-medium text-slate-400">Driver waits with name sign</span>
@@ -191,8 +191,8 @@ ${boardInfo}
                         </div>
                     </div>
                     <div className="text-right">
-                        <span className="font-bold text-emerald-900 uppercase">NAME BOARD</span>
-                        <span className="block font-bold text-emerald-600 text-sm">+ Rs 2000.00</span>
+                        <span className="font-black text-black uppercase tracking-tight">NAME BOARD</span>
+                        <span className="block font-black text-[#FACC15] text-sm">+ Rs 2000.00</span>
                         <label className="relative inline-flex items-center cursor-pointer mt-1">
                             <input
                                 type="checkbox"
@@ -201,7 +201,7 @@ ${boardInfo}
                                 onChange={handleChange}
                                 className="sr-only peer"
                             />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-900"></div>
+                            <div className="w-12 h-6 bg-gray-200 rounded-none peer peer-checked:after:translate-x-6 peer-checked:after:border-black after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-black after:border-2 after:rounded-none after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
                         </label>
                     </div>
                 </div>
@@ -216,7 +216,7 @@ ${boardInfo}
                             value={formData.boardName}
                             onChange={handleChange}
                             placeholder="e.g. Mr. John Doe"
-                            className="w-full bg-white border border-gray-200 px-4 py-3 rounded-xl focus:ring-2 focus:ring-emerald-900/20 outline-none text-sm"
+                            className="w-full bg-white border-4 border-black px-4 py-3 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none text-xs font-black uppercase tracking-widest"
                         />
                     </div>
                 )}
@@ -228,14 +228,14 @@ ${boardInfo}
                     name="notes" value={formData.notes} onChange={handleChange}
                     rows="3"
                     placeholder="Any special requests or large luggage?"
-                    className="w-full bg-slate-50 border-none px-6 py-4 rounded-xl focus:ring-2 focus:ring-emerald-900/20 outline-none transition-all resize-none"
+                    className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 focus:border-[#FACC15] outline-none transition-all resize-none font-black uppercase tracking-wider text-xs"
                 ></textarea>
             </div>
 
             <button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-10 w-full bg-emerald-900 text-white font-extrabold text-xl py-5 rounded-2xl shadow-xl hover:bg-emerald-800 hover:scale-[1.01] transition-all disabled:opacity-70 disabled:grayscale"
+                className="mt-10 w-full bg-black text-[#FACC15] font-black text-2xl py-6 rounded-none border-4 border-black hover:bg-[#FACC15] hover:text-black transition-all disabled:opacity-70 disabled:grayscale uppercase tracking-tighter"
             >
                 {isSubmitting ? 'Processing...' : 'Confirm Reservation'}
             </button>

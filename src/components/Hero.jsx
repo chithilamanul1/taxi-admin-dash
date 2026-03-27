@@ -6,8 +6,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { calculateBasePrice } from '@/lib/pricing-util';
 import { FLEET } from '@/lib/mock-taxi-db';
+import { useCurrency } from '@/context/CurrencyContext';
 
 const Hero = () => {
+    const { convertPrice } = useCurrency();
     // Wagon R is the baseline for Hero prices (id: v3)
     const baselineVehicle = useMemo(() => FLEET.find(v => v.id === 'v3') || FLEET[0], []);
 
@@ -77,7 +79,7 @@ const Hero = () => {
             
             {/* Minimal Background Elements */}
             <div className="absolute top-10 left-10 w-32 h-32 border-[2px] border-black/5 -rotate-12 -z-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.03)_10px,rgba(0,0,0,0.03)_20px)]"></div>
-            <div className="absolute bottom-10 right-10 w-48 h-48 border-[2px] border-black/5 rotate-12 -z-10 rounded-full"></div>
+            <div className="absolute bottom-10 right-10 w-48 h-48 border-[2px] border-black/5 rotate-12 -z-10 rounded-none"></div>
 
             <div className="container mx-auto px-6 relative z-10" 
                  onMouseEnter={() => setIsPaused(true)}
@@ -116,20 +118,20 @@ const Hero = () => {
                                                 animate={{ 
                                                     rotate: dest.rotate
                                                 }}
-                                                className="relative bg-white border-[16px] border-black p-4 pb-16 w-full group select-none"
+                                                 className="relative bg-white border-4 border-black p-4 pb-16 w-full group select-none"
                                             >
                                                 {/* Card Number & Price Ticker */}
                                                 <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-1">
-                                                    <div className="w-10 h-10 bg-[#FACC15] border-6 border-black rounded-none flex items-center justify-center font-black text-sm">
+                                                    <div className="w-10 h-10 bg-[#FACC15] border-2 border-black rounded-none flex items-center justify-center font-black text-sm">
                                                         0{dest.id}
                                                     </div>
-                                                    <div className="bg-black text-white px-3 py-0.5 font-black text-[10px] border-4 border-black -rotate-2">
-                                                        LKR {price.toLocaleString()}
+                                                    <div className="bg-black text-white px-3 py-0.5 font-black text-[10px] border-2 border-black -rotate-2">
+                                                        {convertPrice(price).symbol} {convertPrice(price).value.toLocaleString()}
                                                     </div>
                                                 </div>
 
                                                 {/* Image Container - Slimmer aspect ratio */}
-                                                <div className="relative aspect-[3/2] overflow-hidden border-10 border-black bg-slate-200 pointer-events-none">
+                                                 <div className="relative aspect-[3/2] overflow-hidden border-4 border-black bg-slate-200 pointer-events-none">
                                                     <Image
                                                         src={dest.image}
                                                         alt={dest.name}
@@ -149,9 +151,9 @@ const Hero = () => {
                                                         {dest.name.split(' ')[0]}<br/>
                                                         <span className="text-[#FACC15] stroke-black stroke-1">{dest.name.split(' ')[1] || ''}</span>
                                                     </h3>
-                                                    <div className="text-right">
-                                                        <div className="text-[10px] font-bold uppercase opacity-50">Economy</div>
-                                                        <div className="text-lg font-black leading-none">Rs {price.toLocaleString()}</div>
+                                                     <div className="text-right">
+                                                        <div className="text-[10px] font-black uppercase text-black/40">Economy</div>
+                                                        <div className="text-lg font-black leading-none text-black">{convertPrice(price).symbol} {convertPrice(price).value.toLocaleString()}</div>
                                                     </div>
                                                 </div>
 
