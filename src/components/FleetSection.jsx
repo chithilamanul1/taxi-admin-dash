@@ -62,7 +62,7 @@ const FleetSection = () => {
             <div className="container mx-auto px-6">
                 <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
                     <div>
-                        <div className="bg-black text-[#FACC15] w-fit px-4 py-1 text-[10px] font-black uppercase tracking-[0.3em] italic mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">OUR PREMIUM FLEET</div>
+                        <div className="bg-black text-[#FACC15] w-fit px-4 py-1 text-[10px] font-black uppercase tracking-[0.3em] italic mb-6 border-2 border-[#FACC15]">OUR PREMIUM FLEET</div>
                         <h2 className="text-5xl md:text-8xl font-black text-black dark:text-white uppercase italic tracking-tighter leading-none">
                             SELECT YOUR <span className="text-[#FACC15]">COMFORT</span>
                         </h2>
@@ -78,9 +78,9 @@ const FleetSection = () => {
                                 {vehicle.category.replace('-', ' ')}
                             </div>
 
-                            {/* Image Box - Shorter */}
-                            <div className="p-6 h-48 md:h-64 flex items-center justify-center bg-slate-50 dark:bg-white/5 border-b-4 border-black relative overflow-hidden">
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[100px] font-black text-black/[0.05] italic tracking-tighter select-none pointer-events-none uppercase">
+                            {/* Image Box - Bigger Images, still compact */}
+                            <div className="p-2 h-60 md:h-80 flex items-center justify-center bg-slate-50 dark:bg-white/5 border-b-4 border-black relative overflow-hidden">
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[140px] font-black text-black/[0.05] italic tracking-tighter select-none pointer-events-none uppercase">
                                     {vehicle.vehicleType.split('-')[0]}
                                 </div>
                                 <div className="relative w-full h-full transform group-hover:scale-110 transition-transform duration-700">
@@ -88,7 +88,7 @@ const FleetSection = () => {
                                         src={vehicle.image || "/vehicles/minicar.png"} 
                                         alt={vehicle.name} 
                                         fill
-                                        className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.2)]" 
+                                        className="object-contain" 
                                         sizes="(max-width: 768px) 100vw, 50vw"
                                     />
                                 </div>
