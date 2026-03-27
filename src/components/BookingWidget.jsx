@@ -874,9 +874,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             </div>
 
                             {/* Counters Section with Label */}
-                            <div className="mt-12 lg:mt-6 space-y-3 lg:space-y-4">
-                                <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Passenger & Luggage</label>
-                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-3">
+                            <div className="mt-20 lg:mt-12 space-y-4 lg:space-y-6">
+                                <label className="text-[12px] font-black text-black dark:text-[#FACC15] uppercase tracking-[0.4em] pl-1 leading-none block mb-6">Passenger & Luggage</label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
                                     {[
                                     { id: 'adults', label: 'Adults' },
                                     { id: 'children', label: 'Children' },
