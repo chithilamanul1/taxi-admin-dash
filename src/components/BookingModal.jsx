@@ -1057,7 +1057,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver chat', icon: MessageSquare },
                                             ].map(f => (
                                                 <div key={f.key} className="space-y-3">
-                                                     <label className={`text-[10px] font-black uppercase tracking-[0.3em] pl-3 flex items-center gap-2 ${errors[f.key] ? 'text-red-500' : 'text-slate-400 dark:text-slate-500'}`}>
+                                                     <label className={`text-[10px] font-black uppercase tracking-[0.3em] pl-3 flex items-center gap-2 ${errors[f.key] ? 'text-red-500' : 'text-black dark:text-white'}`}>
                                                          <f.icon size={12} /> {f.label}
                                                      </label>
                                                      {f.type === 'tel' ? (
@@ -1069,7 +1069,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                  setFormData({ ...formData, [f.key]: phone });
                                                                  if (errors[f.key]) setErrors(prev => ({ ...prev, [f.key]: false }));
                                                              }}
-                                                             inputClassName="!w-full !h-14 !bg-transparent !border-none !px-4 !outline-none focus:!ring-0 !font-black !text-black dark:!text-white placeholder:!text-slate-300 dark:placeholder:!text-slate-600 !text-sm !uppercase !tracking-widest"
+                                                             inputClassName="!w-full !h-14 !bg-transparent !border-none !px-4 !outline-none focus:!ring-0 !font-black !text-black dark:!text-white placeholder:!text-black/20 dark:placeholder:!text-white/20 !text-sm !uppercase !tracking-widest"
                                                              countrySelectorStyleProps={{
                                                                  buttonClassName: '!h-14 !bg-slate-50 dark:!bg-white/5 !border-r-2 !border-black !px-4 !flex !items-center !justify-center !min-w-[70px] !rounded-none',
                                                                  flagClassName: '!w-8 !h-auto !shadow-sm',
@@ -1077,7 +1077,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                      className: '!z-[20000] !min-w-[200px] !max-h-[300px] !rounded-none !border-4 !border-black !shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] !bg-white dark:!bg-black dark:!text-white'
                                                                  }
                                                              }}
-                                                             className={`w-full bg-white dark:bg-white/5 border-4 rounded-none flex focus-within:border-[#FACC15] transition-all overflow-visible shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-black'}`}
+                                                             className={`w-full bg-white dark:bg-white/5 border-4 rounded-none flex focus-within:border-[#FACC15] transition-all overflow-visible ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-black'}`}
                                                          />
                                                      ) : (
                                                          <input
@@ -1088,7 +1088,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                  setFormData({ ...formData, [f.key]: e.target.value });
                                                                  if (errors[f.key]) setErrors(prev => ({ ...prev, [f.key]: false }));
                                                              }}
-                                                             className={`w-full h-14 bg-white dark:bg-white/5 border-4 px-8 rounded-none outline-none focus:border-[#FACC15] transition-all font-black text-black dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm uppercase tracking-widest ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-black'}`}
+                                                             className={`w-full h-14 bg-white dark:bg-white/5 border-4 px-8 rounded-none outline-none focus:border-[#FACC15] transition-all font-black text-black dark:text-white placeholder:text-black/20 dark:placeholder:text-white/20 text-sm uppercase tracking-widest ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-black'}`}
                                                              placeholder={f.placeholder}
                                                          />
                                                      )}
@@ -1097,7 +1097,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </div>
 
                                         <div className="space-y-6 pt-6 border-t border-slate-100 dark:border-white/5">
-                                             <h4 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-2 flex items-center gap-3">
+                                             <h4 className="text-[10px] font-black text-black dark:text-white uppercase tracking-[0.3em] pl-2 flex items-center gap-3">
                                                  <CreditCard size={14} /> Billing Details
                                              </h4>
                                              <div className="grid md:grid-cols-2 gap-8">
@@ -1105,21 +1105,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                      type="text"
                                                      value={formData.billingName || ''}
                                                      onChange={e => setFormData({ ...formData, billingName: e.target.value })}
-                                                     className={`w-full h-14 bg-white dark:bg-white/5 border-4 px-8 rounded-none text-sm font-black text-black dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest outline-none focus:border-[#FACC15] border-black`}
+                                                     className={`w-full h-14 bg-white dark:bg-white/5 border-4 px-8 rounded-none text-sm font-black text-black dark:text-white placeholder:text-black/20 dark:placeholder:text-white/20 uppercase tracking-widest outline-none focus:border-[#FACC15] border-black`}
                                                      placeholder="Billing Name"
                                                  />
                                                  <input
                                                      type="text"
                                                      value={formData.billingCountry || ''}
                                                      onChange={e => setFormData({ ...formData, billingCountry: e.target.value })}
-                                                     className={`w-full h-14 bg-white dark:bg-white/5 border-4 px-8 rounded-none text-sm font-black text-black dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest outline-none focus:border-[#FACC15] border-black`}
+                                                     className={`w-full h-14 bg-white dark:bg-white/5 border-4 px-8 rounded-none text-sm font-black text-black dark:text-white placeholder:text-black/20 dark:placeholder:text-white/20 uppercase tracking-widest outline-none focus:border-[#FACC15] border-black`}
                                                      placeholder="Country"
                                                  />
                                                  <textarea
                                                      rows="3"
                                                      value={formData.billingAddress}
                                                      onChange={e => setFormData({ ...formData, billingAddress: e.target.value })}
-                                                     className={`md:col-span-2 w-full px-8 py-5 bg-white dark:bg-white/5 border-4 px-8 rounded-none text-sm font-black text-black dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 resize-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest outline-none focus:border-[#FACC15] border-black`}
+                                                     className={`md:col-span-2 w-full px-8 py-5 bg-white dark:bg-white/5 border-4 px-8 rounded-none text-sm font-black text-black dark:text-white placeholder:text-black/20 dark:placeholder:text-white/20 resize-none uppercase tracking-widest outline-none focus:border-[#FACC15] border-black`}
                                                      placeholder="Full Billing Address"
                                                  ></textarea>
                                              </div>
