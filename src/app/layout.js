@@ -1,5 +1,6 @@
 import './globals.css'
 import Navbar from '../components/Navbar'
+import CategoryBar from '../components/CategoryBar'
 import OfferMarquee from '../components/OfferMarquee'
 import FloatingContact from '../components/FloatingContact'
 import Footer from '../components/Footer'
@@ -242,6 +243,7 @@ export default function RootLayout({ children }) {
                     <AuthProvider>
                         <CurrencyProvider>
                             <div className="sticky top-0 z-[100] w-full flex flex-col">
+                                <CategoryBar />
                                 <Navbar />
                                 <OfferMarquee />
                             </div>

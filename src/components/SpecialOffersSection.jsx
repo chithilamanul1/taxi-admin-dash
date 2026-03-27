@@ -54,7 +54,7 @@ export default function SpecialOffersSection() {
 
     return (
         <section id="offers" className="py-0 relative transition-colors duration-300">
-            <section className="relative py-16 md:py-32 overflow-hidden bg-[#FACC15] border-t-4 border-black transition-colors duration-300"
+            <section className="relative py-16 md:py-32 overflow-hidden bg-white border-t-8 border-black transition-colors duration-300"
                      onMouseEnter={() => setIsPaused(true)}
                      onMouseLeave={() => setIsPaused(false)}>
 
@@ -68,16 +68,16 @@ export default function SpecialOffersSection() {
                             </div>
                             <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-black mb-6 leading-none uppercase tracking-tighter">
                                 SAVE ON YOUR <br />
-                                <span className="text-white">NEXT JOURNEY</span>
+                                <span className="text-[#FACC15]">NEXT JOURNEY</span>
                             </h2>
                         </div>
                         
                         {/* Custom Navigation for Mobile/Desktop */}
                         <div className="flex gap-4 mb-6 md:mb-0">
-                            <button onClick={prev} className="w-12 h-12 bg-black text-[#FACC15] flex items-center justify-center border-2 border-black hover:bg-white hover:text-black transition-all">
+                            <button onClick={prev} className="w-12 h-12 bg-[#FACC15] text-black flex items-center justify-center border-4 border-black hover:bg-black hover:text-[#FACC15] transition-all">
                                 <ChevronLeft size={24} strokeWidth={3} />
                             </button>
-                            <button onClick={next} className="w-12 h-12 bg-black text-[#FACC15] flex items-center justify-center border-2 border-black hover:bg-white hover:text-black transition-all">
+                            <button onClick={next} className="w-12 h-12 bg-[#FACC15] text-black flex items-center justify-center border-4 border-black hover:bg-black hover:text-[#FACC15] transition-all">
                                 <ChevronRight size={24} strokeWidth={3} />
                             </button>
                         </div>
@@ -105,16 +105,16 @@ export default function SpecialOffersSection() {
                                         }
                                         window.location.href = `/?${params.toString()}#booking`;
                                     }}
-                                    className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(33.33%-21px)] bg-white border-4 border-black p-6 md:p-8 hover:translate-y-[-4px] transition-all cursor-pointer group/card relative overflow-hidden flex flex-col justify-between h-full min-h-[400px]"
+                                    className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(33.33%-21px)] bg-[#FACC15] border-4 border-black p-6 md:p-8 hover:translate-y-[-8px] transition-all cursor-pointer group/card relative overflow-hidden flex flex-col justify-between h-full min-h-[400px] shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]"
                                 >
                                     <div className="relative z-10">
                                         {/* Header: Icon & Badge */}
                                         <div className="flex justify-between items-start mb-6">
-                                            <div className="w-12 h-12 bg-[#FACC15] border-2 border-black flex items-center justify-center text-black">
+                                            <div className="w-12 h-12 bg-black border-2 border-black flex items-center justify-center text-[#FACC15]">
                                                 <Tag size={22} strokeWidth={3} />
                                             </div>
                                             {coupon.applicableLocations && coupon.applicableLocations.length > 0 && (
-                                                <span className="inline-flex items-center gap-1 bg-black text-[#FACC15] px-3 py-1 text-[10px] font-black uppercase tracking-wider border-2 border-black">
+                                                <span className="inline-flex items-center gap-1 bg-white text-black px-3 py-1 text-[10px] font-black uppercase tracking-wider border-2 border-black">
                                                     <MapPin size={10} />
                                                     {coupon.applicableLocations[0]}
                                                 </span>
@@ -130,7 +130,7 @@ export default function SpecialOffersSection() {
                                         </div>
 
                                         {/* Description */}
-                                        <p className="text-xs font-bold text-black/50 mb-6 leading-relaxed uppercase tracking-wider">
+                                        <p className="text-xs font-bold text-black/80 mb-6 leading-relaxed uppercase tracking-wider">
                                             {coupon.description || `Valid for rides to/from ${coupon.applicableLocations?.[0] || 'selected locations'}`}
                                         </p>
                                     </div>
@@ -165,7 +165,7 @@ export default function SpecialOffersSection() {
                                                 </div>
                                             )}
                                             <div 
-                                                className="bg-[#FACC15] border-2 border-black px-4 py-2 text-[10px] font-black text-black uppercase tracking-widest flex items-center gap-2 group-hover/card:bg-black group-hover/card:text-[#FACC15] transition-all"
+                                                className="bg-black border-2 border-black px-4 py-2 text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2 group-hover/card:bg-white group-hover/card:text-black transition-all"
                                                 aria-label={`Book now using coupon ${coupon.code}`}
                                             >
                                                 BOOK <ArrowRight size={12} aria-hidden="true" />

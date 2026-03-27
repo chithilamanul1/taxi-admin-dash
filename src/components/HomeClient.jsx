@@ -71,43 +71,6 @@ export default function HomeClient() {
 
             <FleetSection />
 
-            {/* Travel Gallery - "More Images" Request */}
-            <section className="py-20 bg-slate-50 dark:bg-[#0a0a0a] border-t-[16px] border-black overflow-hidden">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-8">
-                        <div>
-                            <h2 className="text-4xl md:text-6xl font-black text-black dark:text-white uppercase tracking-tighter">EXPLORE <span className="text-[#FACC15]">SRI LANKA</span></h2>
-                            <p className="text-xs font-black uppercase tracking-widest text-black/40 dark:text-white/40 mt-2">More than just a ride. An experience of a lifetime.</p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                        {[
-                            { name: 'SIGIRIYA ROCK', img: '/Hero/sigiriya.jpg', rotate: '-3deg' },
-                            { name: 'KANDY TEMPLE', img: '/tours/kandy.jpg', rotate: '2deg' },
-                            { name: 'GALLE FORT', img: '/tours/galle3.jpg', rotate: '-2deg' },
-                            { name: 'WILD SAFARI YALA', img: '/tours/safari_yala.png', rotate: '4deg' },
-                            { name: 'MIRISSA WHALES', img: '/Hero/hero_mirissa.jpg', rotate: '-2deg' },
-                            { name: 'ELLA PEAK', img: '/Hero/ella.jpg', rotate: '3deg' },
-                            { name: 'COLOMBO CITY', img: '/tours/colombo.jpg', rotate: '-1deg' },
-                            { name: 'TEA ESTATES', img: '/Hero/view.jpg', rotate: '2deg' },
-                        ].map((item, i) => (
-                            <div key={i} className="group relative">
-                                <div 
-                                    className="bg-white p-4 border-[12px] border-black"
-                                    style={{ transform: `rotate(${item.rotate})` }}
-                                >
-                                    <div className="relative aspect-square overflow-hidden mb-4 border-8 border-black">
-                                        <Image src={item.img} alt={item.name} fill className="object-cover" loading="lazy" sizes="(max-width: 768px) 50vw, 25vw" />
-                                    </div>
-                                    <div className="text-[10px] font-black uppercase tracking-tighter text-black">{item.name}</div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                </div>
-            </section>
 
             <BookingModal
                 isOpen={isBookingOpen}
