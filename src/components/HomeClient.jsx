@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, MapPin, Star, Compass } from 'lucide-react'
-import Hero from './Hero'
 import BookingWidget from './BookingWidget'
 
 // Dynamic imports for heavy components
@@ -69,8 +68,6 @@ export default function HomeClient() {
             <BookingWidget />
             
             <div className="h-10 md:h-20" /> {/* Spacing to prevent clash */}
-
-            <Hero onBookClick={handleHeroBook} />
 
             <FleetSection />
 

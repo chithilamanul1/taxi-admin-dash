@@ -883,8 +883,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     { id: 'luggage', label: 'Luggage' },
                                     { id: 'handLuggage', label: 'Hand Luggage' }
                                 ].map(c => (
-                                    <div key={c.id} className="bg-white dark:bg-white/5 border-2 border-black p-3 rounded-none flex items-center justify-between transition-all group/counter min-h-[72px]">
-                                        <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest flex-1 pr-2">{c.label}</span>
+                                    <div key={c.id} className="bg-white dark:bg-white/5 border-2 border-black p-3 rounded-none flex items-center justify-between transition-all group/counter h-20">
+                                        <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest w-20 flex-shrink-0 leading-tight pr-2">{c.label}</span>
                                         <div className="flex items-center gap-3 shrink-0">
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, (Number(p[c.id]) || 0) - 1) }))}
