@@ -241,8 +241,8 @@ export default function RootLayout({ children }) {
 
                     <AuthProvider>
                         <CurrencyProvider>
-                            <OfferMarquee />
                             <Navbar />
+                            <OfferMarquee />
                             <main>{children}</main>
                             <FloatingContact />
                             <LiveChatWidget />
