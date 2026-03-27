@@ -37,27 +37,30 @@ export default function RatingSystem({ bookingId, initialRating, initialReview, 
             <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-emerald-50 border-4 border-black p-8 text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+                className="bg-white border-[6px] border-black p-10 text-center shadow-[15px_15px_0px_0px_rgba(0,0,0,1)]"
             >
-                <div className="w-16 h-16 bg-black rounded-none border-2 border-emerald-400 flex items-center justify-center mx-auto mb-4 shadow-[4px_4px_0px_0px_#10b981]">
-                    <CheckCircle className="text-emerald-400" size={32} strokeWidth={3} />
+                <div className="w-20 h-20 bg-black rounded-none border-4 border-[#FACC15] flex items-center justify-center mx-auto mb-6 shadow-[6px_6px_0px_0px_#FACC15]">
+                    <CheckCircle className="text-[#FACC15]" size={40} strokeWidth={3} />
                 </div>
-                <h3 className="text-xl font-black uppercase tracking-tighter text-black mb-2">THANK YOU FOR YOUR FEEDBACK!</h3>
-                <div className="flex justify-center gap-1 mb-4">
+                <h3 className="text-2xl font-black uppercase tracking-tighter text-black mb-4 italic leading-none strike-through">FEEDBACK LOGGED</h3>
+                <div className="flex justify-center gap-2 mb-6">
                     {[1, 2, 3, 4, 5].map((star) => (
                         <Star 
                             key={star} 
-                            size={20} 
+                            size={24} 
                             fill={star <= rating ? "#FACC15" : "none"} 
-                            className={star <= rating ? "text-[#FACC15]" : "text-slate-300"}
+                            className={star <= rating ? "text-black" : "text-slate-100"}
                             strokeWidth={3}
                         />
                     ))}
                 </div>
                 {review && (
-                    <p className="text-slate-600 font-bold text-sm border-t-2 border-emerald-100 pt-4 mt-2 max-w-md mx-auto">
-                        "{review}"
-                    </p>
+                    <div className="relative">
+                        <div className="absolute top-0 left-0 w-8 h-1 bg-black"></div>
+                        <p className="text-slate-800 font-bold text-sm pt-6 mt-2 max-w-md mx-auto italic uppercase tracking-widest">
+                            "{review}"
+                        </p>
+                    </div>
                 )}
             </motion.div>
         );

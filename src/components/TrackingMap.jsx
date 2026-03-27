@@ -124,7 +124,7 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
                     zoom={15}
                     options={{ disableDefaultUI: true, zoomControl: true, styles: [/* Optional custom map styles */] }}
                 >
-                    {directions && <DirectionsRenderer directions={directions} options={{ suppressMarkers: false, polylineOptions: { strokeColor: '#006064', strokeOpacity: 0.8, strokeWeight: 6 } }} />}
+                    {directions && <DirectionsRenderer directions={directions} options={{ suppressMarkers: false, polylineOptions: { strokeColor: '#000000', strokeOpacity: 0.8, strokeWeight: 6 } }} />}
 
                     {/* Driver Marker - MORE PROMINENT */}
                     {driverLocation && (
@@ -155,7 +155,7 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
                     )}
                     {eta && (
                         <div className="bg-white text-black px-4 py-2 border-2 border-black text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                            <Navigation size={14} className="text-[#006064]" />
+                            <Navigation size={14} className="text-black" />
                             EST. JOURNEY: {eta}
                         </div>
                     )}
