@@ -40,7 +40,7 @@ export default function Navbar() {
     const needsSolidBg = isScrolled || !isTransparentPage
 
     return (
-        <nav className={`fixed w-full z-[100] transition-all duration-500 py-3 md:py-6 bg-white dark:bg-[#0a0a0a] border-b-4 border-black`}>
+        <nav className={`relative w-full z-[100] transition-all duration-500 py-3 md:py-6 bg-white dark:bg-[#0a0a0a] border-b-4 border-black`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <Link href="/" className="flex items-center gap-2 group">
                     <div className="flex flex-col">

@@ -874,32 +874,32 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             </div>
 
                             {/* Counters Section with Label */}
-                            <div className="mt-20 lg:mt-12 space-y-4 lg:space-y-6">
-                                <label className="text-[12px] font-black text-black dark:text-[#FACC15] uppercase tracking-[0.4em] pl-1 leading-none block mb-6">Passenger & Luggage</label>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
+                            <div className="mt-8 lg:mt-10 space-y-4">
+                                <label className="text-[11px] font-black text-black dark:text-[#FACC15] uppercase tracking-[0.3em] pl-1 leading-none block mb-4">Passenger & Luggage</label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                                     {[
                                     { id: 'adults', label: 'Adults' },
                                     { id: 'children', label: 'Children' },
                                     { id: 'luggage', label: 'Luggage' },
                                     { id: 'handLuggage', label: 'Hand Luggage' }
                                 ].map(c => (
-                                    <div key={c.id} className="bg-white dark:bg-white/5 border-2 border-black p-3 md:p-4 rounded-none flex flex-col items-center justify-center transition-all">
-                                        <span className="text-[9px] md:text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2 md:mb-3">{c.label}</span>
-                                        <div className="flex items-center gap-2 md:gap-4">
+                                    <div key={c.id} className="bg-white dark:bg-white/5 border-2 border-black p-3 rounded-none flex items-center justify-between transition-all group/counter">
+                                        <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">{c.label}</span>
+                                        <div className="flex items-center gap-3">
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, (Number(p[c.id]) || 0) - 1) }))}
-                                                className="w-8 h-8 md:w-10 md:h-10 rounded-none bg-white dark:bg-white/10 border-2 border-black flex items-center justify-center hover:bg-slate-100 transition-all text-black dark:text-white"
+                                                className="w-8 h-8 rounded-none bg-white dark:bg-white/10 border-2 border-black flex items-center justify-center hover:bg-slate-100 transition-all text-black dark:text-white active:scale-95"
                                                 aria-label={`Decrease ${c.label}`}
                                             >
-                                                <Minus size={14} strokeWidth={3} />
+                                                <Minus size={12} strokeWidth={3} />
                                             </button>
-                                            <span className="font-black text-xl md:text-2xl text-black dark:text-white min-w-[24px] md:min-w-[28px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
+                                            <span className="font-black text-lg text-black dark:text-white min-w-[20px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))}
-                                                className="w-8 h-8 md:w-10 md:h-10 rounded-none bg-black dark:bg-[#FACC15] border-2 border-black flex items-center justify-center transition-all text-white dark:text-black"
+                                                className="w-8 h-8 rounded-none bg-black dark:bg-[#FACC15] border-2 border-black flex items-center justify-center transition-all text-white dark:text-black active:scale-95"
                                                 aria-label={`Increase ${c.label}`}
                                             >
-                                                <Plus size={14} strokeWidth={3} />
+                                                <Plus size={12} strokeWidth={3} />
                                             </button>
                                         </div>
                                     </div>

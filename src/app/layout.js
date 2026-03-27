@@ -241,8 +241,10 @@ export default function RootLayout({ children }) {
 
                     <AuthProvider>
                         <CurrencyProvider>
-                            <Navbar />
-                            <OfferMarquee />
+                            <div className="sticky top-0 z-[100] w-full flex flex-col">
+                                <Navbar />
+                                <OfferMarquee />
+                            </div>
                             <main>{children}</main>
                             <FloatingContact />
                             <LiveChatWidget />
