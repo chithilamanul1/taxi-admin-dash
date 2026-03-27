@@ -101,7 +101,7 @@ export default function HomeClient() {
                         ].map((item, i) => (
                             <div key={i} className="group relative">
                                 <div 
-                                    className="bg-white p-4 border-4 border-black transition-transform hover:scale-105 hover:rotate-0 duration-500 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+                                    className="bg-white p-4 border-4 border-black transition-transform hover:scale-105 hover:rotate-0 duration-500"
                                     style={{ transform: `rotate(${item.rotate})` }}
                                 >
                                     <div className="relative aspect-square overflow-hidden mb-4 border-4 border-black">
@@ -182,7 +182,7 @@ export default function HomeClient() {
                                     });
                                     setIsBookingOpen(true);
                                 }}
-                                className="group p-8 bg-white dark:bg-black border-4 border-black dark:border-white/20 hover:border-[#FACC15] dark:hover:border-[#FACC15] transition-all duration-300 text-left flex flex-col justify-between h-64 shrink-0 w-[280px] md:w-auto snap-start shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(250,204,21,0.2)] hover:translate-y-[-4px]"
+                                className="group p-8 bg-white dark:bg-black border-4 border-black dark:border-white/20 hover:border-[#FACC15] dark:hover:border-[#FACC15] transition-all duration-300 text-left flex flex-col justify-between h-64 shrink-0 w-[280px] md:w-auto snap-start hover:translate-y-[-4px]"
                             >
                                 <div>
                                     <div className="flex items-center gap-3 text-[#FACC15] mb-4">

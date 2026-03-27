@@ -116,11 +116,11 @@ const Hero = () => {
                                                 animate={{ 
                                                     rotate: dest.rotate
                                                 }}
-                                                className="relative bg-white border-[8px] border-black p-4 pb-16 w-full shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] group select-none"
+                                                className="relative bg-white border-[8px] border-black p-4 pb-16 w-full group select-none"
                                             >
                                                 {/* Card Number & Price Ticker */}
                                                 <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-1">
-                                                    <div className="w-10 h-10 bg-[#FACC15] border-4 border-black rounded-full flex items-center justify-center font-black italic text-sm shadow-[4px_4px_0px_0px_#000]">
+                                                    <div className="w-10 h-10 bg-[#FACC15] border-4 border-black rounded-full flex items-center justify-center font-black italic text-sm">
                                                         0{dest.id}
                                                     </div>
                                                     <div className="bg-black text-white px-3 py-0.5 font-black italic text-[10px] border-2 border-black -rotate-2">
@@ -138,7 +138,7 @@ const Hero = () => {
                                                         priority={i === 1}
                                                     />
                                                     
-                                                    <div className="absolute bottom-2 left-2 z-10 bg-[#FACC15] border-2 border-black px-2 py-0.5 font-black text-[9px] uppercase italic tracking-tighter shadow-[2px_2px_0px_0px_#000]">
+                                                    <div className="absolute bottom-2 left-2 z-10 bg-[#FACC15] border-2 border-black px-2 py-0.5 font-black text-[9px] uppercase italic tracking-tighter">
                                                         HOT DEAL
                                                     </div>
                                                 </div>
@@ -166,13 +166,13 @@ const Hero = () => {
                         {/* Navigation Buttons - Smaller and more compact */}
                         <button 
                             onClick={handlePrev}
-                            className="absolute left-[-20px] lg:-left-24 z-50 w-12 h-12 bg-white border-4 border-black flex items-center justify-center hover:bg-[#FACC15] transition-all shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none hidden md:flex"
+                            className="absolute left-[-20px] lg:-left-24 z-50 w-12 h-12 bg-white border-4 border-black flex items-center justify-center hover:bg-[#FACC15] transition-all active:translate-x-1 active:translate-y-1 hidden md:flex"
                         >
                             <ArrowLeft size={24} strokeWidth={5} />
                         </button>
                         <button 
                             onClick={handleNext}
-                            className="absolute right-[-20px] lg:-right-24 z-50 w-12 h-12 bg-[#FACC15] border-4 border-black flex items-center justify-center hover:bg-black hover:text-[#FACC15] transition-all shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none hidden md:flex"
+                            className="absolute right-[-20px] lg:-right-24 z-50 w-12 h-12 bg-[#FACC15] border-4 border-black flex items-center justify-center hover:bg-black hover:text-[#FACC15] transition-all active:translate-x-1 active:translate-y-1 hidden md:flex"
                         >
                             <ArrowRight size={24} strokeWidth={5} />
                         </button>
