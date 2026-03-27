@@ -47,15 +47,15 @@ export default function BookingStatusClient({ booking }) {
                                 <Car size={32} className="text-black" strokeWidth={3} />
                             </div>
                             <div className="text-center md:text-left">
-                                <h3 className="text-2xl font-black uppercase italic tracking-tighter text-[#FACC15] leading-none mb-2">Chauffeur Locked & Loaded</h3>
-                                <p className="text-white/70 font-bold uppercase text-xs tracking-widest leading-relaxed max-w-xl">Your journey is mission-ready. Agent {booking.driver.name} is standing by for your arrival.</p>
+                                <h3 className="text-2xl font-black uppercase italic tracking-tighter text-[#FACC15] leading-none mb-2">Chauffeur Assigned</h3>
+                                <p className="text-white/70 font-bold uppercase text-xs tracking-widest leading-relaxed max-w-xl">Your journey is ready for pickup. Driver {booking.driver.name} is standing by for your arrival.</p>
                             </div>
                         </div>
                     )}
 
                     {/* Trip Status Timeline - Clean Black/Yellow */}
                     <div className="px-6 py-12 bg-slate-50 border-[4px] border-black relative">
-                        <div className="absolute top-0 left-8 px-4 bg-black text-white text-[10px] font-black uppercase tracking-[.3em] -translate-y-1/2">Trip Evolution</div>
+                        <div className="absolute top-0 left-8 px-4 bg-black text-white text-[10px] font-black uppercase tracking-[.3em] -translate-y-1/2">Booking Progress</div>
                         <div className="flex justify-between relative">
                             {/* Connecting Lines */}
                             <div className="absolute top-6 left-0 right-0 h-2 bg-black/10 -z-0"></div>
@@ -170,7 +170,7 @@ export default function BookingStatusClient({ booking }) {
                                             <span className="text-sm font-black italic">{booking.driver.ratings || 5.0}</span>
                                         </div>
                                         <div className="w-2 h-2 bg-black rotate-45"></div>
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">{booking.driver.totalRides || 0}+ Missions</span>
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">{booking.driver.totalRides || 0}+ Total Rides</span>
                                     </div>
                                 </div>
                             </div>
@@ -203,7 +203,7 @@ export default function BookingStatusClient({ booking }) {
                     {/* Technical Grid */}
                     <div className="grid md:grid-cols-2 gap-16 pt-10">
                         <div className="space-y-8">
-                            <h3 className="text-xs font-black text-black uppercase tracking-[.4em] italic mb-6 border-l-[6px] border-[#FACC15] pl-4">Route Manifest</h3>
+                            <h3 className="text-xs font-black text-black uppercase tracking-[.4em] italic mb-6 border-l-[6px] border-[#FACC15] pl-4">Route Details</h3>
                             <div className="space-y-12">
                                 <div className="relative pl-10 border-l-[4px] border-black/10">
                                     <div className="absolute left-[-12px] top-0 w-6 h-6 bg-black flex items-center justify-center">
@@ -223,21 +223,21 @@ export default function BookingStatusClient({ booking }) {
                                     <div className="absolute left-[-12px] top-0 w-6 h-6 bg-red-600 flex items-center justify-center">
                                         <div className="w-2 h-2 bg-white animate-pulse"></div>
                                     </div>
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 italic">Termination</p>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 italic">Destination</p>
                                     <p className="font-black text-black text-lg uppercase italic leading-tight">{booking.dropoffLocation?.address}</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className="space-y-10">
-                            <h3 className="text-xs font-black text-black uppercase tracking-[.4em] italic mb-6 border-l-[6px] border-black pl-4">Mission Specs</h3>
+                            <h3 className="text-xs font-black text-black uppercase tracking-[.4em] italic mb-6 border-l-[6px] border-black pl-4">Trip Details</h3>
                             <div className="grid grid-cols-1 gap-6">
                                 <div className="flex items-center gap-6 group">
                                     <div className="w-16 h-16 bg-[#FACC15] border-[3px] border-black flex items-center justify-center text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] group-hover:bg-black group-hover:text-white transition-colors">
                                         <Calendar size={28} strokeWidth={3} />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic mb-1">Deployment Date</p>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic mb-1">Scheduled Date</p>
                                         <p className="font-black text-2xl italic tracking-tighter text-black">{booking.scheduledDate ? new Date(booking.scheduledDate).toLocaleDateString() : 'TBD'}</p>
                                     </div>
                                 </div>
@@ -246,7 +246,7 @@ export default function BookingStatusClient({ booking }) {
                                         <Clock size={28} strokeWidth={3} />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic mb-1">Pickup Windows</p>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic mb-1">Pickup Time</p>
                                         <p className="font-black text-2xl italic tracking-tighter text-black">{booking.scheduledTime || 'TBD'}</p>
                                     </div>
                                 </div>
@@ -255,7 +255,7 @@ export default function BookingStatusClient({ booking }) {
                                         <Car size={28} strokeWidth={3} />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic mb-1">Asset Category</p>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic mb-1">Vehicle Category</p>
                                         <p className="font-black text-2xl italic tracking-tighter text-black uppercase underline decoration-4 decoration-[#FACC15]">{booking.vehicleType?.replace('-', ' ') || 'STANDARD'}</p>
                                     </div>
                                 </div>
@@ -266,8 +266,8 @@ export default function BookingStatusClient({ booking }) {
                     {/* Financial Block */}
                     <div className="bg-black p-12 flex flex-col md:flex-row justify-between items-center border-[8px] border-black shadow-[25px_25px_0px_0px_rgba(0,0,0,0.1)] gap-10">
                         <div className="text-center md:text-left space-y-2">
-                            <p className="text-[#FACC15] font-black text-[12px] uppercase tracking-[.5em] italic">Settlement Total</p>
-                            <p className="text-white/30 font-black uppercase text-[10px] tracking-widest">{booking.paymentMethod === 'card' ? 'DIGITAL CLEARANCE COMPLETE' : 'UPON MISSION COMPLETION'}</p>
+                            <p className="text-[#FACC15] font-black text-[12px] uppercase tracking-[.5em] italic">Total Price</p>
+                            <p className="text-white/30 font-black uppercase text-[10px] tracking-widest">{booking.paymentMethod === 'card' ? 'PAYMENT PROCESSED' : 'PAYMENT DUE UPON ARRIVAL'}</p>
                         </div>
                         <div className="flex items-baseline gap-6">
                             <span className="text-2xl font-black text-white/20 italic uppercase tracking-widest">{booking.currency || 'LKR'}</span>
@@ -280,7 +280,7 @@ export default function BookingStatusClient({ booking }) {
                     {/* Rating Focus */}
                     {booking.status === 'completed' && !booking.rating && (
                         <div className="py-10 border-y-[6px] border-black bg-slate-50">
-                            <p className="text-center text-[10px] font-black uppercase tracking-[.6em] mb-8 italic">Mission Review Required</p>
+                            <p className="text-center text-[10px] font-black uppercase tracking-[.6em] mb-8 italic">Rate Your Experience</p>
                             <RatingSystem 
                                 bookingId={booking._id} 
                                 initialRating={booking.rating} 
@@ -294,13 +294,13 @@ export default function BookingStatusClient({ booking }) {
                     <div className="text-center pt-16">
                         <Link href="/" className="inline-flex items-center justify-center w-full md:w-auto gap-4 bg-white text-black px-14 py-6 border-[6px] border-black font-black text-sm uppercase italic tracking-[.3em] transition-all hover:bg-black hover:text-[#FACC15] shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-4px] group">
                             <ArrowRight size={20} className="rotate-180 group-hover:translate-x-[-8px] transition-transform" />
-                            Return to Base
+                            Return to Home
                         </Link>
                     </div>
                 </div>
             </div>
             
-            <p className="text-center mt-12 text-[10px] font-black uppercase tracking-[.8em] text-black/10">AIRPORT TAXI TOURS • MISSION CRITICAL INFRASTRUCTURE</p>
+            <p className="text-center mt-12 text-[10px] font-black uppercase tracking-[.8em] text-black/10">AIRPORT TAXI TOURS • PREMIUM TRANSPORTATION SERVICES</p>
         </div>
     );
 }
