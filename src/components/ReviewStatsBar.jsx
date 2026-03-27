@@ -56,14 +56,14 @@ const ReviewStatsBar = () => {
                         href="https://www.tripadvisor.com/Attraction_Review-g293962-d33986804-Reviews-Airport_Taxis_Pvt_Ltd_Sri_Lanka-Colombo_Western_Province.html"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-between p-4 md:p-8 bg-slate-50 dark:bg-white/[0.03] border-l-8 border-[#00AA6C] hover:bg-white dark:hover:bg-white/[0.05] transition-all group shadow-sm hover:shadow-xl hover:-translate-y-1 rounded-r-3xl"
+                        className="flex-1 flex items-center justify-between p-4 md:p-8 bg-slate-50 dark:bg-white/[0.03] border-l-8 border-[#00AA6C] hover:bg-white dark:hover:bg-white/[0.05] transition-all group shadow-sm hover:shadow-xl hover:-translate-y-1 rounded-none"
                     >
                         <div className="flex items-center gap-3 md:gap-6">
-                            <div className="w-12 h-12 md:w-16 md:h-16 bg-white dark:bg-black flex items-center justify-center text-[#00AA6C] shrink-0 rounded-2xl border-2 border-[#00AA6C]/20 shadow-lg group-hover:scale-110 transition-transform p-2 md:p-3">
+                            <div className="w-12 h-12 md:w-16 md:h-16 bg-white dark:bg-black flex items-center justify-center text-[#00AA6C] shrink-0 rounded-none border-2 border-[#00AA6C]/20 shadow-lg group-hover:scale-110 transition-transform p-2 md:p-3">
                                 <svg className="w-full h-full" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm10 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z" /><circle cx="7" cy="12" r="1" /><circle cx="17" cy="12" r="1" /></svg>
                             </div>
                             <div>
-                                <h3 className="font-black text-black dark:text-white uppercase italic tracking-tighter leading-none text-xl md:text-3xl mb-1 md:mb-2">TripAdvisor <span className="text-[#00AA6C] text-lg md:text-xl not-italic ml-1">5.0</span></h3>
+                                <h3 className="font-black text-black dark:text-white uppercase tracking-tighter leading-none text-xl md:text-3xl mb-1 md:mb-2">TripAdvisor <span className="text-[#00AA6C] text-lg md:text-xl ml-1">5.0</span></h3>
                                 <p className="text-[8px] md:text-[10px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-[0.2em] md:tracking-[0.4em] leading-tight break-words max-w-[120px] md:max-w-full">Excellent Rated • Guaranteed</p>
                             </div>
                         </div>
@@ -82,10 +82,10 @@ const ReviewStatsBar = () => {
                         href="https://g.page/r/YOUR_GOOGLE_REVIEW_LINK"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-between p-4 md:p-8 bg-slate-50 dark:bg-white/[0.03] border-l-8 border-[#4285F4] hover:bg-white dark:hover:bg-white/[0.05] transition-all group shadow-sm hover:shadow-xl hover:-translate-y-1 rounded-r-3xl"
+                        className="flex-1 flex items-center justify-between p-4 md:p-8 bg-slate-50 dark:bg-white/[0.03] border-l-8 border-[#4285F4] hover:bg-white dark:hover:bg-white/[0.05] transition-all group shadow-sm hover:shadow-xl hover:-translate-y-1 rounded-none"
                     >
                         <div className="flex items-center gap-3 md:gap-6">
-                            <div className="w-12 h-12 md:w-16 md:h-16 bg-white dark:bg-black flex items-center justify-center shrink-0 p-2 md:p-3.5 rounded-2xl border-2 border-[#4285F4]/20 shadow-lg group-hover:scale-110 transition-transform">
+                            <div className="w-12 h-12 md:w-16 md:h-16 bg-white dark:bg-black flex items-center justify-center shrink-0 p-2 md:p-3.5 rounded-none border-2 border-[#4285F4]/20 shadow-lg group-hover:scale-110 transition-transform">
                                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
                                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
                                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
@@ -94,7 +94,7 @@ const ReviewStatsBar = () => {
                                 </svg>
                             </div>
                             <div>
-                                <h3 className="font-black text-black dark:text-white uppercase italic tracking-tighter leading-none text-xl md:text-3xl mb-1 md:mb-2">Google Reviews <span className="text-[#4285F4] text-lg md:text-xl not-italic ml-1">5.0</span></h3>
+                                <h3 className="font-black text-black dark:text-white uppercase tracking-tighter leading-none text-xl md:text-3xl mb-1 md:mb-2">Google Reviews <span className="text-[#4285F4] text-lg md:text-xl ml-1">5.0</span></h3>
                                 <p className="text-[8px] md:text-[10px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-[0.2em] md:tracking-[0.4em] leading-tight break-words max-w-[120px] md:max-w-full">Top Rated • 100% Verified</p>
                             </div>
                         </div>

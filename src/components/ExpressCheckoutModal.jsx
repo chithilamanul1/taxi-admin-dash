@@ -79,10 +79,10 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-0 sm:p-4 md:p-8 overflow-hidden touch-none no-scrollbar">
             <div className="absolute inset-0 bg-black/60 backdrop-blur-md animate-fade-in" onClick={onClose}></div>
 
-            <div className="relative w-full h-full sm:h-auto sm:max-h-[95vh] max-w-4xl bg-white sm:rounded-[2rem] md:rounded-[3rem] shadow-2xl overflow-hidden animate-zoom-in flex flex-col">
+            <div className="relative w-full h-full sm:h-auto sm:max-h-[95vh] max-w-4xl bg-white rounded-none shadow-2xl overflow-hidden animate-zoom-in flex flex-col">
                 {/* Header */}
                 <div className="bg-emerald-900 p-6 md:p-12 text-white relative flex-shrink-0 pt-10 sm:pt-6">
-                    <button onClick={onClose} className="absolute top-4 right-4 md:top-8 md:right-10 p-2.5 bg-white/10 hover:bg-white/20 rounded-full transition-colors z-[101]">
+                    <button onClick={onClose} className="absolute top-4 right-4 md:top-8 md:right-10 p-2.5 bg-white/10 hover:bg-white/20 rounded-none transition-colors z-[101]">
                         <X size={26} />
                     </button>
                     <div className="flex items-center gap-2 text-emerald-400 text-[9px] md:text-[10px] font-bold uppercase tracking-widest mb-2 md:mb-5">
@@ -94,7 +94,7 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
                             <p className="text-[10px] md:text-lg text-emerald-200/80 font-medium">{product?.title}</p>
                         </div>
 
-                        <div className="flex flex-col items-end gap-2 bg-white/5 w-fit px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl border border-white/10 backdrop-blur-md">
+                        <div className="flex flex-col items-end gap-2 bg-white/5 w-fit px-4 md:px-6 py-2 md:py-3 rounded-none border border-white/10 backdrop-blur-md">
                             <div className="flex items-baseline gap-2">
                                 <span className="text-2xl md:text-6xl font-black text-white">
                                     {getCurrencySymbol(product?.currency)}
@@ -105,13 +105,13 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
                                 </span>
                             </div>
                             {product?.allowedPaymentMode === 'both' && (
-                                <div className="flex bg-black/20 p-1 rounded-xl border border-white/5">
+                                <div className="flex bg-black/20 p-1 rounded-none border border-white/5">
                                     {['full', 'partial'].map(t => (
                                         <button
                                             key={t}
                                             type="button"
                                             onClick={() => setSelectedPaymentType(t)}
-                                            className={`px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest transition-all ${selectedPaymentType === t ? 'bg-emerald-500 text-white shadow-lg' : 'text-emerald-300 hover:text-white hover:bg-white/5'}`}
+                                            className={`px-3 py-1 rounded-none text-[8px] font-black uppercase tracking-widest transition-all ${selectedPaymentType === t ? 'bg-emerald-500 text-white shadow-lg' : 'text-emerald-300 hover:text-white hover:bg-white/5'}`}
                                         >
                                             {t === 'full' ? '100%' : '50%'}
                                         </button>
@@ -139,7 +139,7 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
                                         type={field.type}
                                         value={formData[field.key]}
                                         onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
-                                        className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-bold text-emerald-900 placeholder:text-slate-300"
+                                        className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-200 rounded-none focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all font-bold text-emerald-900 placeholder:text-slate-300"
                                         placeholder={field.placeholder}
                                     />
                                 </div>
@@ -153,7 +153,7 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
                                 rows="2"
                                 value={formData.billingAddress}
                                 onChange={(e) => setFormData({ ...formData, billingAddress: e.target.value })}
-                                className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all resize-none font-bold text-emerald-900 placeholder:text-slate-300"
+                                className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-200 rounded-none focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all resize-none font-bold text-emerald-900 placeholder:text-slate-300"
                                 placeholder="123 Street Name, Apartment, Suite"
                             ></textarea>
                         </div>
@@ -162,7 +162,7 @@ const ExpressCheckoutModal = ({ isOpen, onClose, product }) => {
                             <button
                                 disabled={loading}
                                 type="submit"
-                                className="w-full py-6 md:py-7 bg-emerald-900 text-white rounded-[2rem] md:rounded-[2.5rem] font-black text-xl md:text-2xl hover:bg-emerald-800 transition-all shadow-2xl shadow-emerald-900/20 flex items-center justify-center gap-4 group disabled:opacity-70"
+                                className="w-full py-6 md:py-7 bg-emerald-900 text-white rounded-none font-black text-xl md:text-2xl hover:bg-emerald-800 transition-all shadow-2xl shadow-emerald-900/20 flex items-center justify-center gap-4 group disabled:opacity-70"
                             >
                                 {loading ? (
                                     <Loader2 className="animate-spin" size={28} />

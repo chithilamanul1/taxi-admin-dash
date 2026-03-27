@@ -27,7 +27,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                 <div className="p-6 md:p-8 pb-4 flex items-center justify-between border-b border-slate-100 dark:border-white/10 shrink-0">
                     <div>
                         <div className="yellow-badge mb-1 md:mb-4 scale-75 md:scale-100 origin-left">Elite Fleet</div>
-                        <h2 className="text-xl md:text-5xl font-black text-black dark:text-white uppercase italic tracking-tighter">SELECT YOUR <span className="text-[#FACC15]">RIDE</span></h2>
+                        <h2 className="text-xl md:text-5xl font-black text-black dark:text-white uppercase tracking-tighter">SELECT YOUR <span className="text-[#FACC15]">RIDE</span></h2>
                     </div>
                     <button 
                         onClick={onClose}
@@ -44,7 +44,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 gap-6">
                             <div className="w-16 h-16 border-8 border-[#FACC15] border-t-transparent rounded-full animate-spin"></div>
-                            <p className="font-black text-black/40 uppercase tracking-widest italic">Calculating Best Rates...</p>
+                            <p className="font-black text-black/40 uppercase tracking-widest">Calculating Best Rates...</p>
                         </div>
                     ) : vehicles && vehicles.length > 0 ? (
                         <div className="space-y-6 max-w-5xl mx-auto pb-10">
@@ -59,7 +59,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                             
                             {/* Boxy Feature Highlight */}
                             <div className="p-10 bg-black text-[#FACC15] rounded-none border-4 border-[#FACC15] shadow-[15px_15px_0px_0px_rgba(250,204,21,0.2)]">
-                                <h3 className="text-2xl font-black uppercase italic tracking-tight mb-4 flex items-center gap-3">
+                                <h3 className="text-2xl font-black uppercase tracking-tight mb-4 flex items-center gap-3">
                                     <ShieldCheck size={28} strokeWidth={3} />
                                     ALL-INCLUSIVE SERVICE
                                 </h3>
@@ -79,7 +79,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                                 <X size={40} />
                             </div>
                             <div>
-                                <h4 className="text-2xl font-black text-black dark:text-white uppercase italic tracking-tight">No Vehicles Available</h4>
+                                <h4 className="text-2xl font-black text-black dark:text-white uppercase tracking-tight">No Vehicles Available</h4>
                                 <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mt-2 px-10">We couldn't find any vehicles for this route. Please contact support.</p>
                             </div>
                         </div>

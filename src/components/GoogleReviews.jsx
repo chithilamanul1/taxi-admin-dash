@@ -117,7 +117,7 @@ const GoogleReviews = () => {
                             {[...Array(5)].map((_, i) => <Star key={i} size={20} fill="currentColor" strokeWidth={0} />)}
                             <span className="ml-2 font-black text-black dark:text-white uppercase tracking-[0.2em] text-xs">Testimonials</span>
                         </div>
-                        <h2 className="text-5xl md:text-7xl font-black text-black dark:text-white uppercase italic tracking-tighter leading-none mb-6">
+                        <h2 className="text-5xl md:text-7xl font-black text-black dark:text-white uppercase tracking-tighter leading-none mb-6">
                             CLIENT <span className="text-[#FACC15]">STORIES</span>
                         </h2>
                         <p className="text-black/50 dark:text-white/50 font-black uppercase tracking-[0.1em] text-sm md:text-base pr-4">
@@ -242,7 +242,7 @@ const GoogleReviews = () => {
                                 <div className="flex-1 flex flex-col">
                                     <p 
                                         onClick={() => toggleReview(idx)}
-                                        className={`text-black/80 dark:text-white/80 text-[15px] font-medium leading-relaxed italic cursor-pointer transition-all ${isExpanded ? '' : 'line-clamp-4 hover:opacity-70'}`}
+                                        className={`text-black/80 dark:text-white/80 text-[15px] font-medium leading-relaxed cursor-pointer transition-all ${isExpanded ? '' : 'line-clamp-4 hover:opacity-70'}`}
                                     >
                                         "{review.text}"
                                     </p>
@@ -258,7 +258,7 @@ const GoogleReviews = () => {
                             </div>
                         );
                     }) : (
-                        <div className="w-full text-center py-24 font-black text-black/20 dark:text-white/20 uppercase tracking-[0.2em] italic">
+                        <div className="w-full text-center py-24 font-black text-black/20 dark:text-white/20 uppercase tracking-[0.2em]">
                             Loading {activeSource} reviews...
                         </div>
                     )}
@@ -267,7 +267,7 @@ const GoogleReviews = () => {
                 <div className="mt-8">
                     <a
                         href="/reviews"
-                        className="inline-flex items-center gap-4 text-black dark:text-white hover:text-[#FACC15] dark:hover:text-[#FACC15] font-black text-xl md:text-3xl uppercase italic tracking-tighter transition-all group"
+                        className="inline-flex items-center gap-4 text-black dark:text-white hover:text-[#FACC15] dark:hover:text-[#FACC15] font-black text-xl md:text-3xl uppercase tracking-tighter transition-all group"
                     >
                         <span className="border-b-4 border-transparent group-hover:border-[#FACC15] pb-1 transition-all">READ ALL REVIEWS</span> 
                         <span className="w-10 h-10 bg-black text-[#FACC15] border-2 border-black flex items-center justify-center group-hover:bg-[#FACC15] group-hover:text-black transition-all">

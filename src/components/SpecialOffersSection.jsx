@@ -66,7 +66,7 @@ export default function SpecialOffersSection() {
                                 <Tag size={14} className="text-[#FACC15]" strokeWidth={3} />
                                 <span className="text-xs font-black text-[#FACC15] uppercase tracking-[0.2em]">Exclusive Deals</span>
                             </div>
-                            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-black mb-6 leading-none uppercase italic tracking-tighter">
+                            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-black mb-6 leading-none uppercase tracking-tighter">
                                 SAVE ON YOUR <br />
                                 <span className="text-white">NEXT JOURNEY</span>
                             </h2>
@@ -123,9 +123,9 @@ export default function SpecialOffersSection() {
 
                                         {/* Discount */}
                                         <div className="mb-4">
-                                            <h3 className="text-4xl md:text-5xl font-black text-black tracking-tighter leading-none uppercase italic">
+                                            <h3 className="text-4xl md:text-5xl font-black text-black tracking-tighter leading-none uppercase">
                                                 {coupon.discountType === 'percentage' ? `${coupon.value}%` : `Rs. ${coupon.value}`}
-                                                <span className="text-lg ml-2 text-black/40 font-black not-italic">OFF</span>
+                                                <span className="text-lg ml-2 text-black/40 font-black">OFF</span>
                                             </h3>
                                         </div>
 

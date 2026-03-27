@@ -121,11 +121,9 @@ const LocationInput = ({
 
     return (
         <div className={`relative group ${zIndex || 'z-20'}`} ref={wrapperRef}>
-            {/* Icon - Boxy Style */}
-            <div className={`absolute left-5 top-1/2 -translate-y-1/2 transition-colors z-10 ${isFocused ? 'text-black' : 'text-black/50'}`}>
-                <div className={`p-2 rounded-none border-2 border-black transition-all ${isFocused ? 'bg-[#FACC15]' : 'bg-white'}`}>
-                    <Icon size={20} className="dark:text-black" strokeWidth={3} />
-                </div>
+            {/* Icon - Sharp Styled */}
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 transition-colors z-10">
+                <Icon size={24} className="text-[#FACC15]" strokeWidth={3} />
             </div>
 
             <input
@@ -134,7 +132,7 @@ const LocationInput = ({
                 onFocus={() => { if (onFocus) onFocus(); setIsFocused(true); }}
                 disabled={disabled}
                 placeholder={googleLoaded ? placeholder : 'Loading maps...'}
-                className={`w-full pl-16 sm:pl-20 pr-10 sm:pr-14 h-14 rounded-none text-base sm:text-lg font-black bg-white dark:bg-[#1a1a1a] border-[3px] transition-all outline-none text-black dark:text-white uppercase tracking-widest italic
+                className={`w-full pl-16 sm:pl-20 pr-10 sm:pr-14 h-14 rounded-none text-base sm:text-lg font-black bg-white dark:bg-[#1a1a1a] border-[3px] transition-all outline-none text-black dark:text-white uppercase tracking-widest
                 ${isFocused && !disabled ? 'border-black -translate-y-0.5' : 'border-black'}
                 ${disabled ? 'cursor-not-allowed opacity-75 bg-slate-50 dark:bg-white/5 grayscale-[0.5]' : 'hover:-translate-y-0.5'}`}
             />
@@ -150,13 +148,13 @@ const LocationInput = ({
                 </button>
             )}
 
-            {/* Suggestions Dropdown - Boxy Style */}
+            {/* Suggestions Dropdown - Sharp UI */}
             {isFocused && (suggestions.length > 0 || isLoading) && (
-                <div className="absolute top-[110%] left-0 right-0 bg-white dark:bg-[#111] rounded-none border-[3px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_#FACC15] p-0 z-[100] animate-fade-in overflow-hidden">
+                <div className="absolute top-[110%] left-0 right-0 bg-white dark:bg-[#111] rounded-none border-[3px] border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-0 z-[100] animate-fade-in overflow-hidden">
                     <div className="max-h-[350px] overflow-y-auto custom-scrollbar">
                         {isLoading ? (
                             <div className="p-8 flex items-center justify-center">
-                                <div className="w-8 h-8 border-4 border-[#FACC15] border-t-transparent rounded-full animate-spin"></div>
+                                <div className="w-8 h-8 border-4 border-[#FACC15] border-t-transparent animate-spin"></div>
                             </div>
                         ) : (
                             suggestions.map((s, i) => (
@@ -169,7 +167,7 @@ const LocationInput = ({
                                         <MapPin size={18} className="text-black dark:text-[#FACC15] group-hover:text-[#FACC15]" />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="font-black text-black dark:text-white group-hover:text-black text-sm uppercase italic tracking-wider truncate mb-1 transition-colors">
+                                        <p className="font-black text-black dark:text-white group-hover:text-black text-sm uppercase tracking-wider truncate mb-1 transition-colors">
                                             {s.structured_formatting?.main_text || s.description.split(',')[0]}
                                         </p>
                                         <p className="text-[10px] font-bold text-black/50 dark:text-slate-400 group-hover:text-black/70 uppercase tracking-widest truncate transition-colors">

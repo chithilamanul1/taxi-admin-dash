@@ -44,7 +44,7 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <Link href="/" className="flex items-center gap-2 group">
                     <div className="flex flex-col">
-                        <span className="font-black text-2xl sm:text-3xl md:text-4xl tracking-tighter leading-none text-black dark:text-white uppercase italic">
+                        <span className="font-black text-2xl sm:text-3xl md:text-4xl tracking-tighter leading-none text-black dark:text-white uppercase">
                             AIRPORT <span className="text-[#FACC15]">TAXIS</span>
                         </span>
                         <span className="text-[8px] md:text-xs font-black uppercase tracking-[0.4em] text-black/30 dark:text-white/30">Sri Lanka</span>
@@ -155,7 +155,7 @@ export default function Navbar() {
                         <div className="pt-6 border-t border-white/10 space-y-4">
                             <a
                                 href="tel:+94716885880"
-                                className="flex items-center justify-center gap-3 w-full py-5 bg-[#FDD12C] text-navy font-black uppercase tracking-widest text-xs rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all"
+                                className="flex items-center justify-center gap-3 w-full py-5 bg-[#FDD12C] text-navy font-black uppercase tracking-widest text-xs rounded-none shadow-lg hover:scale-[1.02] active:scale-95 transition-all"
                                 aria-label="Call support specialist"
                             >
                                 <Phone size={18} /> Call Specialist

@@ -17,7 +17,7 @@ export default function MobileAppSection() {
                                 <span className="text-xs font-black text-black uppercase tracking-[0.2em]">Coming Soon</span>
                             </div>
 
-                            <h2 className="text-5xl md:text-7xl font-black text-black dark:text-white mb-8 leading-none uppercase italic tracking-tighter">
+                            <h2 className="text-5xl md:text-7xl font-black text-black dark:text-white mb-8 leading-none uppercase tracking-tighter">
                                 YOUR PREMIUM JOURNEY, <br />
                                 <span className="text-[#FACC15]">IN YOUR POCKET.</span>
                             </h2>
@@ -70,7 +70,7 @@ export default function MobileAppSection() {
                                         <div className="w-20 h-20 bg-[#FACC15] border-4 border-black flex items-center justify-center mb-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
                                             <Smartphone size={36} className="text-black" strokeWidth={3} />
                                         </div>
-                                        <h3 className="text-2xl font-black text-black dark:text-white mb-3 uppercase italic tracking-tighter">Experience Sri Lanka</h3>
+                                        <h3 className="text-2xl font-black text-black dark:text-white mb-3 uppercase tracking-tighter">Experience Sri Lanka</h3>
                                         <p className="text-black/40 dark:text-white/40 text-xs font-black uppercase tracking-[0.2em] max-w-[200px]">Coming soon to your favorite app store</p>
                                     </div>
 

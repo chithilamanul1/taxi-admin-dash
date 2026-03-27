@@ -648,7 +648,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 <Zap size={24} className="text-black sm:w-8 sm:h-8" strokeWidth={3} fill="currentColor" />
                             </div>
                             <div className="min-w-0">
-                                <h2 className="text-xl sm:text-2xl md:text-4xl font-black tracking-tighter text-black dark:text-white leading-none truncate uppercase italic">
+                                <h2 className="text-xl sm:text-2xl md:text-4xl font-black tracking-tighter text-black dark:text-white leading-none truncate uppercase">
                                     SECURE <span className="text-[#FACC15]">BOOKING</span>
                                 </h2>
                                 <p className="text-[8px] sm:text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] sm:tracking-[0.4em] mt-1 sm:mt-3">Elite Tier Encryption</p>
@@ -677,18 +677,18 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             {/* Trip Header */}
                             <div className="flex flex-wrap bg-slate-100 dark:bg-white/5 p-2 rounded-none border-4 border-black w-full md:w-fit gap-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                                 {['one-way', 'round-trip'].map(t => (
-                                    <button key={t} onClick={() => setFormData({ ...formData, tripType: t })} className={`flex-1 md:flex-none px-8 py-4 rounded-none text-[10px] font-black uppercase tracking-[0.2em] transition-all whitespace-nowrap italic border-4 ${formData.tripType === t ? 'bg-[#FACC15] border-black text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'border-transparent text-slate-400 hover:text-black dark:hover:text-white'}`}>{t.replace('-', ' ')}</button>
+                                    <button key={t} onClick={() => setFormData({ ...formData, tripType: t })} className={`flex-1 md:flex-none px-8 py-4 rounded-none text-[10px] font-black uppercase tracking-[0.2em] transition-all whitespace-nowrap border-4 ${formData.tripType === t ? 'bg-[#FACC15] border-black text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'border-transparent text-slate-400 hover:text-black dark:hover:text-white'}`}>{t.replace('-', ' ')}</button>
                                 ))}
                             </div>
 
                             {/* Location Inputs - Premium Sharp Card */}
                             <div className="premium-box bg-slate-50 dark:bg-[#0a0a0a] p-8 md:p-12 space-y-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-4 border-black rounded-none">
                                 <div className="flex items-center justify-between mb-2">
-                                    <h3 className="text-[10px] font-black text-black dark:text-white uppercase tracking-[0.4em] flex items-center gap-4 italic font-black">
+                                    <h3 className="text-[10px] font-black text-black dark:text-white uppercase tracking-[0.4em] flex items-center gap-4 font-black">
                                         <div className="w-3 h-3 rounded-none bg-[#FACC15] animate-pulse border-2 border-black"></div>
                                         ROUTING LOGISTICS
                                     </h3>
-                                    <div className="px-6 py-2 bg-black text-[#FACC15] rounded-none text-[9px] font-black uppercase tracking-widest italic border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                    <div className="px-6 py-2 bg-black text-[#FACC15] rounded-none text-[9px] font-black uppercase tracking-widest border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                                         {formData.tripType.replace('-', ' ')}
                                     </div>
                                 </div>
@@ -746,13 +746,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 <div className="space-y-8">
                                     <div className="space-y-6">
                                         <div className="flex items-center justify-between pl-4">
-                                            <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] leading-none italic">
+                                            <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] leading-none">
                                                 {isVehicleExpanded ? 'Select Fleet Tier' : 'Your Selected Fleet'}
                                             </label>
                                             {formData.vehicle && (
                                                 <button 
                                                     onClick={() => setIsVehicleExpanded(!isVehicleExpanded)}
-                                                    className="text-[9px] font-black uppercase tracking-widest text-[#FACC15] bg-black px-4 py-2 border-2 border-black hover:translate-y-[-2px] active:translate-y-0 transition-all italic"
+                                                    className="text-[9px] font-black uppercase tracking-widest text-[#FACC15] bg-black px-4 py-2 border-2 border-black hover:translate-y-[-2px] active:translate-y-0 transition-all font-black"
                                                 >
                                                     {isVehicleExpanded ? 'Collapse List' : 'Change Vehicle'}
                                                 </button>
@@ -797,13 +797,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     <Clock size={20} className="sm:w-7 sm:h-7" strokeWidth={3} />
                                                 </div>
                                                 <div>
-                                                    <p className="text-[9px] sm:text-[10px] font-black text-black dark:text-white uppercase tracking-[0.2em] sm:tracking-[0.4em] leading-none mb-1 sm:mb-2 italic">Schedule Details</p>
+                                                    <p className="text-[9px] sm:text-[10px] font-black text-black dark:text-white uppercase tracking-[0.2em] sm:tracking-[0.4em] leading-none mb-1 sm:mb-2">Schedule Details</p>
                                                     <p className="text-[8px] sm:text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Time-Critical Dispatch</p>
                                                 </div>
                                             </div>
                                             <div className="grid grid-cols-1 gap-6 sm:gap-8 relative z-10">
                                                 <div className="space-y-3 sm:space-y-4">
-                                                    <label className="text-[8px] sm:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none italic">Flight Number (Optional)</label>
+                                                    <label className="text-[8px] sm:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none">Flight Number (Optional)</label>
                                                     <div className="relative group">
                                                         <div className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 text-[#FACC15] group-focus-within:text-black dark:group-focus-within:text-[#FACC15] transition-colors"><Zap size={16} className="sm:w-[18px] sm:h-[18px]" strokeWidth={3} fill="currentColor" /></div>
                                                         <input
@@ -817,7 +817,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-3 sm:gap-6">
                                                     <div className="space-y-3 sm:space-y-4">
-                                                         <label className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none italic ${errors.date ? 'text-red-500' : 'text-slate-400 dark:text-slate-500'}`}>Target Date</label>
+                                                         <label className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none ${errors.date ? 'text-red-500' : 'text-slate-400 dark:text-slate-500'}`}>Target Date</label>
                                                          <input
                                                              id="field-date"
                                                              type="date"
@@ -832,7 +832,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                          />
                                                      </div>
                                                      <div className="space-y-3 sm:space-y-4">
-                                                         <label className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none italic ${errors.time ? 'text-red-500' : 'text-slate-400 dark:text-slate-500'}`}>Target Time</label>
+                                                         <label className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none ${errors.time ? 'text-red-500' : 'text-slate-400 dark:text-slate-500'}`}>Target Time</label>
                                                          <input
                                                              id="field-time"
                                                              type="time"
@@ -875,7 +875,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         <Signpost size={32} strokeWidth={3} fill="currentColor" />
                                                     </div>
                                                     <div className="flex flex-col">
-                                                        <h4 className={`text-2xl font-black uppercase italic tracking-tighter ${formData.hasNameBoard ? 'text-white' : 'text-black dark:text-white'}`}>Airport Greeting</h4>
+                                                        <h4 className={`text-2xl font-black uppercase tracking-tighter ${formData.hasNameBoard ? 'text-white' : 'text-black dark:text-white'}`}>Airport Greeting</h4>
                                                         <p className={`text-[10px] font-black uppercase tracking-widest ${formData.hasNameBoard ? 'text-[#FACC15]' : 'text-slate-400'}`}>Arrival Hall Meeting Service</p>
                                                     </div>
                                                 </div>
@@ -931,10 +931,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <div className="relative z-10 space-y-10">
                                         <div className="flex items-center gap-3 text-black dark:text-[#FACC15] mb-2">
                                             <Zap size={16} fill="currentColor" className="animate-pulse" />
-                                            <span className="text-[11px] font-black uppercase tracking-[0.4em] italic">{formData.paymentType === 'partial' ? 'Deposit Payment' : 'Immediate Payment'}</span>
+                                            <span className="text-[11px] font-black uppercase tracking-[0.4em]">{formData.paymentType === 'partial' ? 'Deposit Payment' : 'Immediate Payment'}</span>
                                         </div>
-                                        <div className="text-5xl md:text-8xl font-black leading-none tracking-tighter flex items-center gap-4 italic uppercase">
-                                            <span className="text-2xl md:text-3xl font-black text-slate-400 not-italic">
+                                        <div className="text-5xl md:text-8xl font-black leading-none tracking-tighter flex items-center gap-4 uppercase">
+                                            <span className="text-2xl md:text-3xl font-black text-slate-400">
                                                 {(rates?.[currency]) ? currentSymbol : 'Rs'}
                                             </span>
                                             <span className="text-black dark:text-white">
@@ -993,7 +993,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 {detailedBreakdown.appliedCoupons?.length > 0 ? `Code applied` : 'Special Discount'}
                                             </span>
                                         </div>
-                                        <span className="font-black italic">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
+                                        <span className="font-black">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
                                     </div>
                                 )}
 
@@ -1024,8 +1024,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                         <div className="animate-slide-up">
                             <div className="flex items-center justify-between mb-12">
                                 <div>
-                                    <h3 className="text-3xl md:text-5xl font-black text-black dark:text-white tracking-tighter uppercase italic leading-none mb-3">Final <span className="text-slate-400 dark:text-yellow-400">Checkout</span></h3>
-                                    <p className="text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] italic">Instant Confirmation • Secure Payment</p>
+                                    <h3 className="text-3xl md:text-5xl font-black text-black dark:text-white tracking-tighter uppercase leading-none mb-3">Final <span className="text-slate-400 dark:text-yellow-400">Checkout</span></h3>
+                                    <p className="text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em]">Instant Confirmation • Secure Payment</p>
                                 </div>
                             </div>
 
@@ -1038,11 +1038,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <div className="flex items-center gap-6 relative z-10">
                                                 <div className="w-14 h-14 rounded-none border-2 border-black bg-black flex items-center justify-center text-[#FACC15] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><User size={28} /></div>
                                                 <div>
-                                                    <p className="text-sm font-black text-black uppercase tracking-widest italic">Personal Account?</p>
+                                                    <p className="text-sm font-black text-black uppercase tracking-widest">Personal Account?</p>
                                                     <p className="text-[10px] font-black text-black/40 uppercase tracking-[0.2em] mt-1">Unlock priority support & booking history.</p>
                                                 </div>
                                             </div>
-                                            <button onClick={() => signIn()} className="relative z-10 px-10 py-4 bg-black rounded-none border-4 border-black text-xs font-black text-[#FACC15] hover:scale-105 active:scale-95 transition-all uppercase tracking-widest italic">Sign In</button>
+                                            <button onClick={() => signIn()} className="relative z-10 px-10 py-4 bg-black rounded-none border-4 border-black text-xs font-black text-[#FACC15] hover:scale-105 active:scale-95 transition-all uppercase tracking-widest">Sign In</button>
                                         </div>
                                     )}
 
@@ -1133,7 +1133,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                             <div className="relative z-10 space-y-8">
                                                 <div className="flex items-center justify-between pb-6 border-b-2 border-black/5 dark:border-white/10">
-                                                    <div className="px-5 py-2 bg-black text-[#FACC15] rounded-none border-2 border-black text-[10px] font-black uppercase tracking-widest italic shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                                                    <div className="px-5 py-2 bg-black text-[#FACC15] rounded-none border-2 border-black text-[10px] font-black uppercase tracking-widest shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                                                         Route Confirmed
                                                     </div>
                                                     <div className="text-[10px] font-black text-black/40 dark:text-white/40 uppercase tracking-[0.3em]">
@@ -1146,14 +1146,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         <div className="w-10 h-10 rounded-none bg-black text-[#FACC15] flex items-center justify-center shrink-0 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><MapPin size={20} /></div>
                                                         <div className="min-w-0">
                                                             <p className="text-[9px] font-black text-black/30 dark:text-white/40 uppercase tracking-[0.4em] mb-1.5">Pick up</p>
-                                                            <p className="text-xs font-black text-black dark:text-white leading-tight uppercase italic">{formData.pickup}</p>
+                                                            <p className="text-xs font-black text-black dark:text-white leading-tight uppercase font-black">{formData.pickup}</p>
                                                         </div>
                                                     </div>
                                                     <div className="flex gap-5">
                                                         <div className="w-10 h-10 rounded-none bg-[#FACC15] text-black flex items-center justify-center shrink-0 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><Navigation size={20} /></div>
                                                         <div className="min-w-0">
                                                             <p className="text-[9px] font-black text-black/30 dark:text-white/40 uppercase tracking-[0.4em] mb-1.5">Drop off</p>
-                                                            <p className="text-xs font-black text-black dark:text-white leading-tight uppercase italic">{formData.dropoff}</p>
+                                                            <p className="text-xs font-black text-black dark:text-white leading-tight uppercase font-black">{formData.dropoff}</p>
                                                         </div>
                                                     </div>
                                                     {formData.hasNameBoard && (
@@ -1163,7 +1163,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                              </div>
                                                             <div className="min-w-0">
                                                                 <p className="text-[9px] font-black text-black dark:text-[#FACC15] uppercase tracking-[0.4em] mb-1">Airport Greeting</p>
-                                                                <p className="text-[10px] font-black text-black dark:text-white uppercase italic truncate">"{formData.nameBoardText || 'Elite Greeting'}"</p>
+                                                                <p className="text-[10px] font-black text-black dark:text-white uppercase truncate">"{formData.nameBoardText || 'Elite Greeting'}"</p>
                                                             </div>
                                                         </div>
                                                     )}
@@ -1191,17 +1191,17 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                                     <div className="pt-8 mt-4 border-t-4 border-black flex justify-between items-end">
                                                         <div>
-                                                            <p className="text-[11px] font-black text-[#FACC15] dark:text-yellow-400 bg-black px-3 py-1 mb-3 italic w-fit">
+                                                            <p className="text-[11px] font-black text-[#FACC15] dark:text-yellow-400 bg-black px-3 py-1 mb-3 w-fit">
                                                                 {formData.paymentType === 'partial' ? 'Secure Deposit (50%)' : 'Total Amount'}
                                                             </p>
-                                                            <p className="text-6xl font-black tracking-tighter text-black dark:text-white italic leading-none">
-                                                                <span className="text-xl font-black mr-2 not-italic text-slate-400">{currentSymbol}</span>
+                                                            <p className="text-6xl font-black tracking-tighter text-black dark:text-white leading-none">
+                                                                <span className="text-xl font-black mr-2 text-slate-400">{currentSymbol}</span>
                                                                 {payNow.toLocaleString()}
                                                             </p>
                                                         </div>
                                                         <div className="text-right">
                                                             <p className="text-[9px] font-black text-black/30 dark:text-white/40 uppercase tracking-[0.3em] mb-2">Fleet Tier</p>
-                                                            <p className="text-xs font-black text-black dark:text-white uppercase italic tracking-tighter">{displayVehicleName(selectedVehicle?.name)}</p>
+                                                            <p className="text-xs font-black text-black dark:text-white uppercase tracking-tighter">{displayVehicleName(selectedVehicle?.name)}</p>
                                                         </div>
                                                     </div>
                                                     
@@ -1295,7 +1295,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-6 md:gap-6">
                         <button
                             onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                            className="flex items-center justify-center gap-2 md:gap-4 px-6 md:px-10 py-2.5 md:py-5 bg-white dark:bg-white/5 rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-slate-50 dark:hover:bg-white/10 transition-all text-black dark:text-white border-4 border-black w-full md:w-auto md:min-w-[180px] italic active:scale-95"
+                            className="flex items-center justify-center gap-2 md:gap-4 px-6 md:px-10 py-2.5 md:py-5 bg-white dark:bg-white/5 rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-slate-50 dark:hover:bg-white/10 transition-all text-black dark:text-white border-4 border-black w-full md:w-auto md:min-w-[180px] active:scale-95"
                         >
                             <ChevronLeft size={16} className="md:w-4 md:h-4" /> {step === 1 ? 'Cancel Trip' : 'Return Back'}
                         </button>
@@ -1311,7 +1311,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                      }
                                  }}
                                  disabled={isOverCapacity}
-                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-2.5 md:py-5 bg-[#FACC15] text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-[#EAB308] hover:scale-105 transition-all outline-none border-4 border-black disabled:opacity-30 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[220px] italic active:scale-95"
+                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-2.5 md:py-5 bg-[#FACC15] text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-[#EAB308] hover:scale-105 transition-all outline-none border-4 border-black disabled:opacity-30 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[220px] active:scale-95"
                             >
                                 Review & Checkout <ChevronRight size={16} className="md:w-4 md:h-4 group-hover:translate-x-2 transition-transform" />
                             </button>
@@ -1319,7 +1319,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <button
                                 onClick={handleSubmit}
                                  disabled={loading || isOverCapacity}
-                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-2.5 md:py-5 bg-[#FACC15] text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:scale-105 transition-all border-4 border-black disabled:opacity-30 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[240px] italic active:scale-95"
+                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-2.5 md:py-5 bg-[#FACC15] text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:scale-105 transition-all border-4 border-black disabled:opacity-30 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto md:min-w-[240px] active:scale-95"
                             >
                                 {loading ? <Loader2 className="animate-spin" size={16} /> : <Zap size={16} className="md:w-4 md:h-4" fill="currentColor" />}
                                 {loading ? 'Securing Spot...' : 'Confirm My Order'}

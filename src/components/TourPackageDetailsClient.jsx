@@ -160,7 +160,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                 {tour.type || 'Verified Premium'}
                             </div>
                         </div>
-                        <h1 className="text-4xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-[1.1] tracking-tight max-w-5xl uppercase italic drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">
+                        <h1 className="text-4xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-[1.1] tracking-tight max-w-5xl uppercase drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">
                             {tour.title}
                         </h1>
                         <div className="flex flex-wrap items-center gap-4">
@@ -336,7 +336,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                             <span className="text-sm font-black uppercase tracking-tight">{item}</span>
                                         </li>
                                     )) : (
-                                        <li className="text-slate-400 text-xs italic">No inclusions specified</li>
+                                        <li className="text-slate-400 text-xs text-black/40">No inclusions specified</li>
                                     )}
                                 </ul>
                             </section>
@@ -352,7 +352,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                             <span className="text-sm font-black uppercase tracking-tight line-through opacity-70">{item}</span>
                                         </li>
                                     )) : (
-                                        <li className="text-slate-400 text-xs italic">No exclusions specified</li>
+                                        <li className="text-slate-400 text-xs text-black/40">No exclusions specified</li>
                                     )}
                                 </ul>
                             </section>
@@ -412,7 +412,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                         <ShieldCheck size={24} />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-sm font-black text-black uppercase italic">100% Secure Tour</span>
+                                        <span className="text-sm font-black text-black uppercase">100% Secure Tour</span>
                                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Insurance Included</span>
                                     </div>
                                 </div>
@@ -421,7 +421,7 @@ export default function TourPackageDetailsClient({ tour }) {
                                         <Users size={24} />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-sm font-black text-black uppercase italic">Private Transit</span>
+                                        <span className="text-sm font-black text-black uppercase">Private Transit</span>
                                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Multi-lingual support</span>
                                     </div>
                                 </div>

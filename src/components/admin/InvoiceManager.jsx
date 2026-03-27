@@ -136,9 +136,9 @@ export default function InvoiceManager() {
 
     return (
         <div className="space-y-6">
-            <div className="bg-white dark:bg-emerald-900 rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-sm">
+            <div className="bg-white dark:bg-emerald-900 rounded-none p-6 border border-slate-200 dark:border-white/10 shadow-sm">
                 <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-600">
+                    <div className="w-10 h-10 bg-emerald-500/10 rounded-none flex items-center justify-center text-emerald-600">
                         <FileText size={20} />
                     </div>
                     <div>
@@ -156,7 +156,7 @@ export default function InvoiceManager() {
                                 <input
                                     required
                                     type="text"
-                                    className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                                    className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-none text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
                                     placeholder="John Doe"
                                     value={formData.customerName}
                                     onChange={e => setFormData({ ...formData, customerName: e.target.value })}
@@ -171,7 +171,7 @@ export default function InvoiceManager() {
                                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                                     <input
                                         type="email"
-                                        className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm outline-none"
+                                        className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-none text-sm outline-none"
                                         placeholder="john@example.com"
                                         value={formData.customerEmail}
                                         onChange={e => setFormData({ ...formData, customerEmail: e.target.value })}
@@ -184,7 +184,7 @@ export default function InvoiceManager() {
                                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                                     <input
                                         type="text"
-                                        className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm outline-none"
+                                        className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-none text-sm outline-none"
                                         placeholder="+94 7X XXX XXXX"
                                         value={formData.customerPhone}
                                         onChange={e => setFormData({ ...formData, customerPhone: e.target.value })}
@@ -199,7 +199,7 @@ export default function InvoiceManager() {
                                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                                 <input
                                     type="text"
-                                    className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm outline-none"
+                                    className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-none text-sm outline-none"
                                     placeholder="Enter pickup location"
                                     value={formData.pickupAddress}
                                     onChange={e => setFormData({ ...formData, pickupAddress: e.target.value })}
@@ -231,7 +231,7 @@ export default function InvoiceManager() {
                                     <input
                                         required
                                         type="number"
-                                        className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none font-bold"
+                                        className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-none text-sm focus:ring-2 focus:ring-emerald-500 outline-none font-bold"
                                         placeholder="0.00"
                                         value={formData.amount}
                                         onChange={e => setFormData({ ...formData, amount: e.target.value })}
@@ -241,7 +241,7 @@ export default function InvoiceManager() {
                             <div className="space-y-1">
                                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Currency</label>
                                 <select
-                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm outline-none font-bold"
+                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-none text-sm outline-none font-bold"
                                     value={formData.currency}
                                     onChange={e => setFormData({ ...formData, currency: e.target.value })}
                                 >
@@ -264,7 +264,7 @@ export default function InvoiceManager() {
                                         key={type.id}
                                         type="button"
                                         onClick={() => setFormData({ ...formData, paymentType: type.id })}
-                                        className={`flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all border ${formData.paymentType === type.id ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-slate-800 text-slate-400'}`}
+                                        className={`flex-1 py-3 rounded-none text-xs font-bold uppercase tracking-widest transition-all border ${formData.paymentType === type.id ? 'bg-emerald-600 border-emerald-600 text-white' : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-slate-800 text-slate-400'}`}
                                     >
                                         {type.label}
                                     </button>
@@ -284,13 +284,13 @@ export default function InvoiceManager() {
                                     <input
                                         required
                                         type="number"
-                                        className="w-full pl-10 pr-4 py-3 bg-emerald-500/5 border border-emerald-500/20 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-emerald-600"
+                                        className="w-full pl-10 pr-4 py-3 bg-emerald-500/5 border border-emerald-500/20 rounded-none text-sm focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-emerald-600"
                                         placeholder="Enter manual payment amount"
                                         value={formData.customAmount || ''}
                                         onChange={e => setFormData({ ...formData, customAmount: e.target.value })}
                                     />
                                 </div>
-                                <p className="text-[9px] text-emerald-600/70 pl-1 italic">* This is the amount the customer will pay now.</p>
+                                <p className="text-[9px] text-emerald-600/70 pl-1 ">* This is the amount the customer will pay now.</p>
                             </motion.div>
                         )}
 
@@ -302,7 +302,7 @@ export default function InvoiceManager() {
                                     <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                                     <input
                                         type="date"
-                                        className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm outline-none"
+                                        className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-none text-sm outline-none"
                                         value={formData.scheduledDate}
                                         onChange={e => setFormData({ ...formData, scheduledDate: e.target.value })}
                                     />
@@ -314,7 +314,7 @@ export default function InvoiceManager() {
                                     <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                                     <input
                                         type="time"
-                                        className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm outline-none"
+                                        className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-none text-sm outline-none"
                                         value={formData.scheduledTime}
                                         onChange={e => setFormData({ ...formData, scheduledTime: e.target.value })}
                                     />
@@ -325,7 +325,7 @@ export default function InvoiceManager() {
                         <div className="space-y-1">
                             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Admin Notes</label>
                             <textarea
-                                className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-xl text-sm outline-none resize-none h-20"
+                                className="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-slate-800 rounded-none text-sm outline-none resize-none h-20"
                                 placeholder="Additional details for the admin..."
                                 value={formData.notes}
                                 onChange={e => setFormData({ ...formData, notes: e.target.value })}
@@ -336,7 +336,7 @@ export default function InvoiceManager() {
                     <div className="md:col-span-2 pt-4">
                         <button
                             disabled={loading}
-                            className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50 shadow-lg shadow-emerald-500/20"
+                            className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-none font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50 shadow-lg shadow-emerald-500/20"
                         >
                             {loading ? <Loader2 className="animate-spin" size={20} /> : <Zap size={20} />}
                             {loading ? 'Creating...' : 'Generate Payment Link'}
@@ -350,15 +350,15 @@ export default function InvoiceManager() {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="mt-8 p-6 bg-emerald-900 border border-slate-800 rounded-3xl text-white space-y-4 overflow-hidden"
+                            className="mt-8 p-6 bg-emerald-900 border border-slate-800 rounded-none text-white space-y-4 overflow-hidden"
                         >
                             <div className="flex items-center justify-between">
                                 <h3 className="text-sm font-bold uppercase tracking-widest text-emerald-400">Success! Payment Link Ready</h3>
                                 <div className="flex flex-col items-end gap-1">
-                                    <span className="text-[10px] font-bold px-2 py-1 bg-emerald-500/10 text-emerald-500 rounded-lg">
+                                    <span className="text-[10px] font-bold px-2 py-1 bg-emerald-500/10 text-emerald-500 rounded-none">
                                         Total: {formData.currency} {formData.amount}
                                     </span>
-                                    <span className="text-[14px] font-black px-3 py-1 bg-emerald-500 text-white rounded-lg shadow-lg shadow-emerald-500/20">
+                                    <span className="text-[14px] font-black px-3 py-1 bg-emerald-500 text-white rounded-none shadow-lg shadow-emerald-500/20">
                                         Pay Now: {formData.currency} {
                                             formData.paymentType === 'full' ? formData.amount :
                                                 formData.paymentType === 'partial' ? (formData.amount / 2).toFixed(2) :
@@ -368,12 +368,12 @@ export default function InvoiceManager() {
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-2 bg-white/5 p-4 rounded-xl border border-white/10 group">
+                            <div className="flex items-center gap-2 bg-white/5 p-4 rounded-none border border-white/10 group">
                                 <LinkIcon size={16} className="text-slate-500" />
                                 <span className="flex-1 text-xs font-medium text-slate-300 truncate">{result.paymentLink}</span>
                                 <button
                                     onClick={copyToClipboard}
-                                    className="p-2 hover:bg-white/10 rounded-lg transition-colors text-emerald-400"
+                                    className="p-2 hover:bg-white/10 rounded-none transition-colors text-emerald-400"
                                 >
                                     {copied ? <Check size={18} /> : <Copy size={18} />}
                                 </button>
@@ -385,17 +385,17 @@ export default function InvoiceManager() {
                                         const url = `https://wa.me/?text=${encodeURIComponent(`Hi ${formData.customerName}, here is your invoice for ${formData.currency} ${formData.amount}: ${result.paymentLink}`)}`;
                                         window.open(url, '_blank');
                                     }}
-                                    className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center gap-2 transition-all"
+                                    className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-none text-xs font-bold border border-white/10 flex items-center justify-center gap-2 transition-all"
                                 >
                                     <Send size={14} /> Send via WhatsApp
                                 </button>
                                 <button
                                     onClick={handleDownloadPDF}
-                                    className="px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center gap-2 transition-all"
+                                    className="px-4 py-3 bg-white/10 hover:bg-white/20 rounded-none text-xs font-bold border border-white/10 flex items-center justify-center gap-2 transition-all"
                                 >
                                     <FileText size={14} /> Download PDF
                                 </button>
-                                <button className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-600/20">
+                                <button className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 rounded-none text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-600/20">
                                     <Mail size={14} /> Email Invoice
                                 </button>
                             </div>

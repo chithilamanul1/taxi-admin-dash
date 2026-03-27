@@ -59,7 +59,7 @@ const FAQSection = () => {
                         <HelpCircle size={32} className="text-black" strokeWidth={2.5} />
                     </div>
                     <div>
-                        <h2 className="text-4xl md:text-6xl font-black text-black dark:text-white uppercase italic tracking-tighter leading-none">
+                        <h2 className="text-4xl md:text-6xl font-black text-black dark:text-white uppercase tracking-tighter leading-none">
                             COMMON <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FACC15] to-amber-500">QUESTIONS</span>
                         </h2>
                         <p className="text-black/40 dark:text-white/40 font-black uppercase tracking-widest text-xs mt-2">Everything you need to know</p>
@@ -78,7 +78,7 @@ const FAQSection = () => {
                                     onClick={() => setOpenIndex(isOpen ? -1 : index)}
                                     className="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none"
                                 >
-                                    <h3 className={`text-lg md:text-xl font-black uppercase italic tracking-wide pr-8 transition-colors ${isOpen ? 'text-black dark:text-[#FACC15]' : 'text-black dark:text-white group-hover:text-black/70 dark:group-hover:text-white/70'}`}>
+                                    <h3 className={`text-lg md:text-xl font-black uppercase tracking-wide pr-8 transition-colors ${isOpen ? 'text-black dark:text-[#FACC15]' : 'text-black dark:text-white group-hover:text-black/70 dark:group-hover:text-white/70'}`}>
                                         {faq.question}
                                     </h3>
                                     <div className={`shrink-0 w-10 h-10 border-2 flex items-center justify-center transition-all ${isOpen ? 'bg-[#FACC15] border-[#FACC15] text-black rotate-180' : 'bg-black/5 dark:bg-white/5 border-black dark:border-white/20 text-black dark:text-white'}`}>

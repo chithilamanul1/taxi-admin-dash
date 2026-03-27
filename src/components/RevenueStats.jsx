@@ -84,9 +84,9 @@ const RevenueStats = ({ bookings = [] }) => {
         <div className="space-y-6">
             <div className="grid md:grid-cols-3 gap-6">
                 {/* Total Revenue */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all">
+                <div className="bg-white p-6 rounded-none shadow-sm border border-slate-100 hover:shadow-md transition-all">
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center">
+                        <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-none flex items-center justify-center">
                             <DollarSign size={24} />
                         </div>
                         <div>
@@ -103,9 +103,9 @@ const RevenueStats = ({ bookings = [] }) => {
                 </div>
 
                 {/* Estimate Fuel Cost */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all">
+                <div className="bg-white p-6 rounded-none shadow-sm border border-slate-100 hover:shadow-md transition-all">
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center">
+                        <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-none flex items-center justify-center">
                             <Fuel size={24} />
                         </div>
                         <div>
@@ -121,9 +121,9 @@ const RevenueStats = ({ bookings = [] }) => {
                 </div>
 
                 {/* Net Profit */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all">
+                <div className="bg-white p-6 rounded-none shadow-sm border border-slate-100 hover:shadow-md transition-all">
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
+                        <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-none flex items-center justify-center">
                             <TrendingUp size={24} />
                         </div>
                         <div>
@@ -133,7 +133,7 @@ const RevenueStats = ({ bookings = [] }) => {
                             </h3>
                         </div>
                     </div>
-                    <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div className="w-full bg-slate-100 h-2 rounded-none overflow-hidden">
                         <div
                             className="bg-blue-500 h-full transition-all duration-1000"
                             style={{ width: `${Math.min(stats.profitMargin, 100)}%` }}
@@ -147,7 +147,7 @@ const RevenueStats = ({ bookings = [] }) => {
 
             <div className="grid md:grid-cols-2 gap-6">
                 {/* Chart Section */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div className="bg-white p-6 rounded-none shadow-sm border border-slate-100">
                     <h4 className="text-sm font-bold text-slate-800 mb-6 font-mono tracking-tighter uppercase">Revenue Trend <span className="text-emerald-500">(Last 7 Days)</span></h4>
                     <div className="h-48 flex items-end justify-between gap-2 px-2 border-b border-slate-100 pb-2">
                         {dailyData.map((val, i) => {
@@ -164,7 +164,7 @@ const RevenueStats = ({ bookings = [] }) => {
                             return (
                                 <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
                                     <div
-                                        className={`w-full ${barColor}/80 group-hover:${barColor} rounded-t-lg transition-all duration-500 relative shadow-sm`}
+                                        className={`w-full ${barColor}/80 group-hover:${barColor} rounded-none transition-all duration-500 relative shadow-sm`}
                                         style={{ height: `${Math.max(height, val > 0 ? 4 : 0)}%` }}
                                     >
                                         <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-emerald-900 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-xl border border-white/10">
@@ -179,7 +179,7 @@ const RevenueStats = ({ bookings = [] }) => {
                 </div>
 
                 {/* Parameters Section */}
-                <div className="bg-emerald-900 text-white p-6 rounded-2xl shadow-2xl flex flex-col justify-center">
+                <div className="bg-emerald-900 text-white p-6 rounded-none shadow-2xl flex flex-col justify-center">
                     <div className="flex items-center gap-3 mb-6">
                         <Calculator className="text-emerald-400" size={20} />
                         <h4 className="font-bold">Calculation Strategy</h4>
@@ -202,8 +202,8 @@ const RevenueStats = ({ bookings = [] }) => {
                             <p className="font-mono text-blue-400">{stats.totalDistance.toFixed(0)} KM</p>
                         </div>
                     </div>
-                    <div className="mt-8 p-3 bg-white/5 rounded-xl border border-white/10">
-                        <p className="text-[10px] text-slate-500 italic">
+                    <div className="mt-8 p-3 bg-white/5 rounded-none border border-white/10">
+                        <p className="text-[10px] text-slate-500">
                             Formula: Total Price - ((Distance / Efficiency) * FuelPrice)
                         </p>
                     </div>
@@ -211,7 +211,7 @@ const RevenueStats = ({ bookings = [] }) => {
             </div>
 
             {/* Detailed Profit Breakdown Table */}
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="bg-white rounded-none shadow-sm border border-slate-100 overflow-hidden">
                 <div className="px-6 py-4 border-b border-slate-100">
                     <h3 className="font-bold text-slate-800">Verified Trip-by-Trip Profit Breakdown</h3>
                 </div>
@@ -246,7 +246,7 @@ const RevenueStats = ({ bookings = [] }) => {
                                         <tr key={idx} className="hover:bg-slate-50">
                                             <td className="px-6 py-3 text-slate-600">{b.scheduledDate || 'N/A'}</td>
                                             <td className="px-6 py-3">
-                                                <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${isPackage ? 'bg-purple-100 text-purple-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                                                <span className={`px-2 py-1 rounded-none text-[10px] font-bold uppercase ${isPackage ? 'bg-purple-100 text-purple-700' : 'bg-emerald-100 text-emerald-700'}`}>
                                                     {isTour ? 'Tour / Package' : isDayTrip ? 'Day Trip' : 'Transfer'}
                                                 </span>
                                             </td>

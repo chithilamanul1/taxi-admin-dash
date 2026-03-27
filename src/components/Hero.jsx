@@ -73,7 +73,7 @@ const Hero = () => {
     };
 
     return (
-        <section className="relative h-[450px] md:h-[550px] bg-white dark:bg-[#0a0a0a] overflow-hidden pt-24 md:pt-32 pb-12 flex items-center justify-center border-b-8 border-black">
+        <section className="relative h-[350px] md:h-[450px] bg-white dark:bg-[#0a0a0a] overflow-hidden pt-4 pb-12 flex items-center justify-center border-b-8 border-black">
             
             {/* Minimal Background Elements */}
             <div className="absolute top-10 left-10 w-32 h-32 border-[2px] border-black/5 -rotate-12 -z-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.03)_10px,rgba(0,0,0,0.03)_20px)]"></div>
@@ -120,10 +120,10 @@ const Hero = () => {
                                             >
                                                 {/* Card Number & Price Ticker */}
                                                 <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-1">
-                                                    <div className="w-10 h-10 bg-[#FACC15] border-6 border-black rounded-full flex items-center justify-center font-black italic text-sm">
+                                                    <div className="w-10 h-10 bg-[#FACC15] border-6 border-black rounded-none flex items-center justify-center font-black text-sm">
                                                         0{dest.id}
                                                     </div>
-                                                    <div className="bg-black text-white px-3 py-0.5 font-black italic text-[10px] border-4 border-black -rotate-2">
+                                                    <div className="bg-black text-white px-3 py-0.5 font-black text-[10px] border-4 border-black -rotate-2">
                                                         LKR {price.toLocaleString()}
                                                     </div>
                                                 </div>
@@ -138,20 +138,20 @@ const Hero = () => {
                                                         priority={i === 1}
                                                     />
                                                     
-                                                    <div className="absolute bottom-2 left-2 z-10 bg-[#FACC15] border-2 border-black px-2 py-0.5 font-black text-[9px] uppercase italic tracking-tighter">
+                                                    <div className="absolute bottom-2 left-2 z-10 bg-[#FACC15] border-2 border-black px-2 py-0.5 font-black text-[9px] uppercase tracking-tighter">
                                                         HOT DEAL
                                                     </div>
                                                 </div>
 
                                                 {/* Info Section - Smaller fonts */}
                                                 <div className="mt-6 flex items-center justify-between">
-                                                    <h3 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-black leading-none">
+                                                    <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter text-black leading-none">
                                                         {dest.name.split(' ')[0]}<br/>
                                                         <span className="text-[#FACC15] stroke-black stroke-1">{dest.name.split(' ')[1] || ''}</span>
                                                     </h3>
                                                     <div className="text-right">
                                                         <div className="text-[10px] font-bold uppercase opacity-50">Economy</div>
-                                                        <div className="text-lg font-black italic leading-none">Rs {price.toLocaleString()}</div>
+                                                        <div className="text-lg font-black leading-none">Rs {price.toLocaleString()}</div>
                                                     </div>
                                                 </div>
 

@@ -68,9 +68,9 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                         </div>
                     )}
 
-                    <h3 className="text-xl md:text-2xl font-black text-black dark:text-white flex flex-wrap items-center gap-3 md:gap-4 uppercase italic tracking-tighter">
+                    <h3 className="text-xl md:text-2xl font-black text-black dark:text-white flex flex-wrap items-center gap-3 md:gap-4 uppercase tracking-tighter">
                         {isCondensed ? 'SELECTED VEHICLE' : 'VEHICLE OPTIONS'}
-                        <span className="text-[9px] md:text-[10px] bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black px-4 md:px-6 py-1.5 rounded-none border-2 border-black not-italic tracking-[0.2em] font-black">
+                        <span className="text-[9px] md:text-[10px] bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black px-4 md:px-6 py-1.5 rounded-none border-2 border-black tracking-[0.2em] font-black">
                             {displayVehicles.length} {displayVehicles.length === 1 ? 'UNIT' : 'MODELS'}
                         </span>
                     </h3>
@@ -105,7 +105,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                     <div className="w-16 h-16 bg-red-600 rounded-none mb-6 flex items-center justify-center border-4 border-black">
                                         <Lock size={28} className="text-white" strokeWidth={3} />
                                     </div>
-                                    <p className="text-xl font-black text-white uppercase italic tracking-tighter leading-tight">{reason}</p>
+                                    <p className="text-xl font-black text-white uppercase tracking-tighter leading-tight">{reason}</p>
                                     <p className="text-[10px] text-white font-black mt-4 uppercase tracking-[0.3em] bg-red-700 px-6 py-2.5 rounded-none border-2 border-black">SELECT LARGER VEHICLE</p>
                                 </div>
                             )}
@@ -119,7 +119,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                             <div className="p-6 md:p-8 pb-4 relative flex flex-col items-center flex-1 h-full">
 
                                 {/* Faint background index number */}
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[160px] font-black text-black/[0.03] dark:text-white/[0.02] italic tracking-tighter pointer-events-none select-none">
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[160px] font-black text-black/[0.03] dark:text-white/[0.02] tracking-tighter pointer-events-none select-none">
                                     {displayIdx}
                                 </div>
 
@@ -131,7 +131,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 {vehicle.calculatedTotal >= 0 && (
                                     <div className="text-center relative z-10 min-h-[80px] flex flex-col justify-end">
                                         {!(passengerCount.distance > 0) && (
-                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Starting from</p>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Starting from</p>
                                         )}
                                         <div className="flex items-center justify-center gap-3">
                                             {(vehicle.hasAC !== false) && (

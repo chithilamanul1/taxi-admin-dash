@@ -57,22 +57,22 @@ const About = () => {
 
                 {/* Values Section */}
                 <div className="grid md:grid-cols-3 gap-8">
-                    <div className="bg-slate-50 dark:bg-emerald-900 p-8 rounded-3xl border border-slate-100 dark:border-white/5 hover:shadow-xl transition-all hover:-translate-y-1">
-                        <div className="w-12 h-12 bg-emerald-900 dark:bg-white/5 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mb-4 text-2xl border border-white/5">
+                    <div className="bg-slate-50 dark:bg-emerald-900 p-8 rounded-none border border-slate-100 dark:border-white/5 hover:shadow-xl transition-all hover:-translate-y-1">
+                        <div className="w-12 h-12 bg-emerald-900 dark:bg-white/5 text-emerald-600 dark:text-emerald-400 rounded-none flex items-center justify-center mb-4 text-2xl border border-white/5">
                             <Shield size={24} />
                         </div>
                         <h3 className="font-bold text-lg text-emerald-900 dark:text-white mb-2">Safety First</h3>
                         <p className="text-sm text-gray-500 dark:text-white/60">All our vehicles are regularly inspected and sanitized. Our drivers are licensed professionals.</p>
                     </div>
-                    <div className="bg-slate-50 dark:bg-emerald-900 p-8 rounded-3xl border border-slate-100 dark:border-white/5 hover:shadow-xl transition-all hover:-translate-y-1">
-                        <div className="w-12 h-12 bg-emerald-900 dark:bg-white/5 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mb-4 text-2xl border border-white/5">
+                    <div className="bg-slate-50 dark:bg-emerald-900 p-8 rounded-none border border-slate-100 dark:border-white/5 hover:shadow-xl transition-all hover:-translate-y-1">
+                        <div className="w-12 h-12 bg-emerald-900 dark:bg-white/5 text-emerald-600 dark:text-emerald-400 rounded-none flex items-center justify-center mb-4 text-2xl border border-white/5">
                             <Clock size={24} />
                         </div>
                         <h3 className="font-bold text-lg text-emerald-900 dark:text-white mb-2">Punctual Service</h3>
                         <p className="text-sm text-gray-500 dark:text-white/60">We track flights in real-time. We'll be there waiting for you, even if your flight is delayed.</p>
                     </div>
-                    <div className="bg-slate-50 dark:bg-emerald-900 p-8 rounded-3xl border border-slate-100 dark:border-white/5 hover:shadow-xl transition-all hover:-translate-y-1">
-                        <div className="w-12 h-12 bg-emerald-900 dark:bg-white/5 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mb-4 text-2xl border border-white/5">
+                    <div className="bg-slate-50 dark:bg-emerald-900 p-8 rounded-none border border-slate-100 dark:border-white/5 hover:shadow-xl transition-all hover:-translate-y-1">
+                        <div className="w-12 h-12 bg-emerald-900 dark:bg-white/5 text-emerald-600 dark:text-emerald-400 rounded-none flex items-center justify-center mb-4 text-2xl border border-white/5">
                             <Award size={24} />
                         </div>
                         <h3 className="font-bold text-lg text-emerald-900 dark:text-white mb-2">Best Price Guarantee</h3>

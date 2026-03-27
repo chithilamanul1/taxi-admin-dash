@@ -113,7 +113,7 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
         };
     }, [driverId]);
 
-    if (!isLoaded) return <div className="w-full h-64 bg-slate-100 animate-pulse rounded-none border-4 border-black flex items-center justify-center font-black italic uppercase tracking-widest text-[10px]">Loading Map...</div>;
+    if (!isLoaded) return <div className="w-full h-64 bg-slate-100 animate-pulse rounded-none border-4 border-black flex items-center justify-center font-black uppercase tracking-widest text-[10px]">Loading Map...</div>;
 
     return (
         <div className="space-y-4">
@@ -143,17 +143,18 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
                         />
                     )}
                 </GoogleMap>
-                
+                {/* Decorative Background Glow */}
+                <div className="absolute top-0 right-0 w-72 h-72 bg-[#FACC15]/10 rounded-none blur-3xl -mr-36 -mt-36"></div>
                 {/* Overlay Indicators */}
                 <div className="absolute top-4 left-4 flex flex-col gap-2">
                     {driverId && (
-                        <div className="bg-black text-[#FACC15] px-4 py-2 border-2 border-[#FACC15] text-[10px] font-black uppercase tracking-widest italic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center gap-2">
-                            <div className="w-2 h-2 bg-[#FACC15] rounded-full animate-ping"></div>
+                        <div className="bg-black text-[#FACC15] px-4 py-2 border-2 border-[#FACC15] text-[10px] font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center gap-2">
+                            <div className="w-2 h-2 bg-[#FACC15] rounded-none animate-ping"></div>
                             LIVE TRACKING ACTIVE
                         </div>
                     )}
                     {eta && (
-                        <div className="bg-white text-black px-4 py-2 border-2 border-black text-[10px] font-black uppercase tracking-widest italic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center gap-2">
+                        <div className="bg-white text-black px-4 py-2 border-2 border-black text-[10px] font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center gap-2">
                             <Navigation size={14} className="text-[#006064]" />
                             EST. JOURNEY: {eta}
                         </div>
@@ -161,7 +162,7 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
                 </div>
 
                 {!driverId && (
-                    <div className="absolute bottom-4 left-4 right-4 bg-white/90 dark:bg-black/90 backdrop-blur-md p-3 rounded-none border-2 border-black text-[10px] text-center font-black uppercase tracking-widest text-black dark:text-[#FACC15] italic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    <div className="absolute bottom-4 left-4 right-4 bg-white/90 dark:bg-black/90 backdrop-blur-md p-3 rounded-none border-2 border-black text-[10px] text-center font-black uppercase tracking-widest text-black dark:text-[#FACC15] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                         Driver will appear on map once assigned.
                     </div>
                 )}
@@ -171,12 +172,12 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
             {driverData && (
                 <div className="bg-[#FACC15] border-4 border-black p-4 rounded-none flex items-center justify-between shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-fade-in">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-black rounded-none border-2 border-black flex items-center justify-center text-[#FACC15] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-black text-xl italic">
+                        <div className="w-12 h-12 bg-black rounded-none border-2 border-black flex items-center justify-center text-[#FACC15] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-black text-xl">
                             {driverData.name?.charAt(0)}
                         </div>
                         <div>
-                            <p className="text-[10px] text-black/60 font-black uppercase tracking-widest italic leading-none mb-1">Live Chauffeur Status</p>
-                            <p className="text-black font-black text-xl uppercase italic leading-tight">{driverData.name}</p>
+                            <p className="text-[10px] text-black/60 font-black uppercase tracking-widest leading-none mb-1">Live Chauffeur Status</p>
+                            <p className="text-black font-black text-xl uppercase leading-tight">{driverData.name}</p>
                             <div className="flex items-center gap-2 mt-1">
                                 <span className="bg-black text-white text-[9px] px-2 py-0.5 font-mono">{driverData.vehicleNumber}</span>
                                 {lastUpdate && <span className="text-[8px] font-bold text-black/40 uppercase">Updated {lastUpdate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>}
@@ -184,7 +185,7 @@ const TrackingMap = ({ pickup, dropoff, driverId }) => {
                         </div>
                     </div>
                     <div className="flex flex-col items-end">
-                        <span className="bg-black text-[#FACC15] text-[10px] uppercase font-black px-3 py-1.5 border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] italic">Active Now</span>
+                        <span className="bg-black text-[#FACC15] text-[10px] uppercase font-black px-3 py-1.5 border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">Active Now</span>
                     </div>
                 </div>
             )}

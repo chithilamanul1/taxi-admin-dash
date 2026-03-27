@@ -165,7 +165,7 @@ const AdminDashboard = () => {
                             <span className={`${!sidebarOpen && 'hidden'}`}>Bookings</span>
                         </div>
                         {bookings.filter(b => b.status === 'pending' && new Date(b.createdAt || b.date) > lastViewedBookings).length > 0 && (
-                            <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full animate-pulse shadow-lg">
+                            <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-none animate-pulse shadow-lg">
                                 {bookings.filter(b => b.status === 'pending' && new Date(b.createdAt || b.date) > lastViewedBookings).length}
                             </span>
                         )}
@@ -189,7 +189,7 @@ const AdminDashboard = () => {
             <div className="flex-1 overflow-auto">
                 <header className="bg-white/80 dark:bg-emerald-900/80 backdrop-blur-md shadow-sm p-4 flex justify-between items-center border-b border-white/5 sticky top-0 z-40">
                     <div className="flex items-center gap-4">
-                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-emerald-900 dark:text-emerald-400 font-bold hover:bg-emerald-50 dark:hover:bg-white/5 p-2 rounded-lg transition-colors">
+                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-emerald-900 dark:text-emerald-400 font-bold hover:bg-emerald-50 dark:hover:bg-white/5 p-2 rounded-none transition-colors">
                             ☰
                         </button>
                         <div className="flex flex-col">
@@ -211,7 +211,7 @@ const AdminDashboard = () => {
                         </div>
                         <div className="h-8 w-px bg-slate-200 dark:bg-slate-800 hidden md:block"></div>
                         <Bell className="text-slate-500 cursor-pointer hover:text-emerald-900 transition-colors" />
-                        <div className="w-10 h-10 bg-gradient-to-br from-emerald-800 to-emerald-900 rounded-xl text-white flex items-center justify-center font-bold shadow-lg shadow-emerald-900/20 text-sm">A</div>
+                        <div className="w-10 h-10 bg-gradient-to-br from-emerald-800 to-emerald-900 rounded-none text-white flex items-center justify-center font-bold shadow-lg shadow-emerald-900/20 text-sm">A</div>
                     </div>
                 </header>
 
@@ -223,7 +223,7 @@ const AdminDashboard = () => {
                             {/* Stats Grid */}
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                                 {stats.map((stat, index) => (
-                                    <div key={index} className="bg-white dark:bg-emerald-900 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-white/5">
+                                    <div key={index} className="bg-white dark:bg-emerald-900 p-6 rounded-none shadow-sm hover:shadow-md transition-shadow border border-white/5">
                                         <div className="flex items-center justify-between">
                                             <div>
                                                 <p className="text-sm text-slate-500 dark:text-slate-400">{stat.title}</p>
@@ -238,7 +238,7 @@ const AdminDashboard = () => {
                             {/* Recent Bookings & Map Placeholder */}
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                                 {/* Bookings Table */}
-                                <div className="lg:col-span-2 bg-white dark:bg-emerald-900 rounded-xl shadow-sm p-6 border border-white/5">
+                                <div className="lg:col-span-2 bg-white dark:bg-emerald-900 rounded-none shadow-sm p-6 border border-white/5">
                                     <h3 className="text-lg font-bold text-emerald-900 dark:text-white mb-4">Recent Bookings</h3>
                                     <div className="overflow-x-auto">
                                         <table className="w-full">
@@ -289,11 +289,11 @@ const AdminDashboard = () => {
                                 </div>
 
                                 {/* Live Map Stub */}
-                                <div className="bg-emerald-900 text-white rounded-xl shadow-sm p-6 flex flex-col justify-center items-center text-center">
+                                <div className="bg-emerald-900 text-white rounded-none shadow-sm p-6 flex flex-col justify-center items-center text-center">
                                     <MapPin size={48} className="mb-4 text-emerald-600 animate-bounce" />
                                     <h3 className="text-lg font-bold">God's Eye Map</h3>
                                     <p className="text-white/60 text-sm mt-2">Real-time driver tracking will be rendered here via Socket.io.</p>
-                                    <button className="mt-6 px-4 py-2 bg-emerald-600 text-emerald-900 font-bold rounded-lg hover:brightness-110 transition-all">
+                                    <button className="mt-6 px-4 py-2 bg-emerald-600 text-emerald-900 font-bold rounded-none hover:brightness-110 transition-all">
                                         Launch Map View
                                     </button>
                                 </div>
@@ -302,7 +302,7 @@ const AdminDashboard = () => {
                     )}
 
                     {currentView === 'bookings' && (
-                        <div className="bg-white dark:bg-emerald-900 rounded-xl shadow-sm p-8 border border-white/5">
+                        <div className="bg-white dark:bg-emerald-900 rounded-none shadow-sm p-8 border border-white/5">
                             <h3 className="text-lg font-bold text-emerald-900 dark:text-white mb-4">All Bookings</h3>
                             <div className="overflow-x-auto">
                                 <table className="w-full">
@@ -384,21 +384,21 @@ const AdminDashboard = () => {
                     )}
 
                     {currentView === 'pricing' && (
-                        <div className="bg-white dark:bg-emerald-900 rounded-xl shadow-sm p-8 border border-white/5">
+                        <div className="bg-white dark:bg-emerald-900 rounded-none shadow-sm p-8 border border-white/5">
                             <h2 className="text-2xl font-bold text-emerald-900 dark:text-white mb-6">Pricing Configuration</h2>
                             <p className="text-gray-500 dark:text-slate-400 mb-6">Manage vehicle rates and tiers dynamically across different service categories.</p>
 
                             {isLoading ? <p>Loading...</p> : (
                                 <div className="grid gap-6">
                                     {vehiclePricing.map((v) => (
-                                        <div key={v._id} className="border dark:border-white/5 p-4 rounded-xl hover:border-emerald-600 transition-colors">
+                                        <div key={v._id} className="border dark:border-white/5 p-4 rounded-none hover:border-emerald-600 transition-colors">
                                             <div className="flex justify-between items-start mb-4">
                                                 <div className="flex items-center gap-4">
                                                     <img src={v.image} alt={v.name} className="w-16 h-10 object-contain bg-slate-50 dark:bg-white/5 rounded" />
                                                     <div>
                                                         <h3 className="font-bold text-lg text-emerald-900 dark:text-white flex items-center gap-2">
                                                             {v.name}
-                                                            <span className="text-[10px] px-2 py-0.5 bg-emerald-900 dark:bg-emerald-600 text-white rounded-full uppercase tracking-tighter">
+                                                            <span className="text-[10px] px-2 py-0.5 bg-emerald-900 dark:bg-emerald-600 text-white rounded-none uppercase tracking-tighter">
                                                                 {v.category || 'Legacy'}
                                                             </span>
                                                         </h3>
@@ -442,7 +442,7 @@ const AdminDashboard = () => {
                     )}
 
                     {currentView === 'support' && (
-                        <div className="bg-white dark:bg-emerald-900 rounded-xl shadow-sm p-8 border border-white/5 h-[calc(100vh-140px)] flex flex-col">
+                        <div className="bg-white dark:bg-emerald-900 rounded-none shadow-sm p-8 border border-white/5 h-[calc(100vh-140px)] flex flex-col">
                             <h2 className="text-2xl font-bold text-emerald-900 dark:text-white mb-6 flex items-center gap-2">
                                 <MessageSquare className="text-emerald-600" /> Support Tickets
                             </h2>
@@ -472,7 +472,7 @@ const AdminDashboard = () => {
                     {/* EDIT MODAL OVERLAY */}
                     {editingVehicle && (
                         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                            <div className="bg-white dark:bg-emerald-900 rounded-2xl shadow-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-white/5">
+                            <div className="bg-white dark:bg-emerald-900 rounded-none shadow-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-white/5">
                                 <h2 className="text-xl font-bold text-emerald-900 dark:text-white mb-4">Edit Configuration: {editingVehicle.name}</h2>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">

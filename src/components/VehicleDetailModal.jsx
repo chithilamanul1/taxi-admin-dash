@@ -30,7 +30,7 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
                         >
                             <X size={20} strokeWidth={3} />
                         </button>
-                        <div className="absolute bottom-4 left-4 bg-black text-[#FACC15] px-4 py-1.5 rounded-none text-xs font-black uppercase italic tracking-widest border-2 border-black">
+                        <div className="absolute bottom-4 left-4 bg-black text-[#FACC15] px-4 py-1.5 rounded-none text-xs font-black uppercase tracking-widest border-2 border-black">
                             {displayName(vehicle.name)}
                         </div>
                     </div>
@@ -38,7 +38,7 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
                     <div className="p-8">
                         <div className="flex justify-between items-start mb-6">
                             <div>
-                                <h3 className="text-3xl font-black text-black uppercase italic tracking-tighter leading-none">{displayName(vehicle.name)}</h3>
+                                <h3 className="text-3xl font-black text-black uppercase tracking-tighter leading-none">{displayName(vehicle.name)}</h3>
                                 <p className="text-black/40 font-bold uppercase tracking-widest text-xs mt-2">{vehicle.vehicleType}</p>
                             </div>
                             <div className="text-right flex flex-col items-end">

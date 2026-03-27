@@ -62,8 +62,8 @@ const FleetSection = () => {
             <div className="container mx-auto px-6">
                 <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
                     <div>
-                        <div className="bg-black text-[#FACC15] w-fit px-4 py-1 text-[10px] font-black uppercase tracking-[0.3em] italic mb-6 border-2 border-[#FACC15]">OUR PREMIUM FLEET</div>
-                        <h2 className="text-5xl md:text-8xl font-black text-black dark:text-white uppercase italic tracking-tighter leading-none">
+                        <div className="bg-black text-[#FACC15] w-fit px-4 py-1 text-[10px] font-black uppercase tracking-[0.3em] mb-6 border-2 border-[#FACC15]">OUR PREMIUM FLEET</div>
+                        <h2 className="text-5xl md:text-8xl font-black text-black dark:text-white uppercase tracking-tighter leading-none">
                             SELECT YOUR <span className="text-[#FACC15]">COMFORT</span>
                         </h2>
                     </div>
@@ -73,14 +73,14 @@ const FleetSection = () => {
                     {vehicles.map((vehicle, idx) => (
                         <div key={vehicle._id} className="flex flex-col border-[12px] border-black bg-white dark:bg-[#111] hover:bg-slate-50 transition-all duration-300">
 
-                            {/* Category Header - Minimalist White */}
-                            <div className="bg-white text-black p-2 text-center border-b-8 border-black font-black uppercase tracking-[0.4em] text-[10px] italic">
+                            {/* Category Header - Yellow & White */}
+                            <div className="bg-[#FACC15] text-white p-2 text-center border-b-8 border-black font-black uppercase tracking-[0.4em] text-[10px]">
                                 {vehicle.category.replace('-', ' ')}
                             </div>
 
                             {/* Image Box - Bigger Images, still compact */}
                             <div className="p-2 h-60 md:h-80 flex items-center justify-center bg-slate-50 dark:bg-white/5 border-b-8 border-black relative overflow-hidden">
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[140px] font-black text-black/[0.05] italic tracking-tighter select-none pointer-events-none uppercase">
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[140px] font-black text-black/[0.05] tracking-tighter select-none pointer-events-none uppercase">
                                     {vehicle.vehicleType.split('-')[0]}
                                 </div>
                                 <div className="relative w-full h-full transform group-hover:scale-110 transition-transform duration-700">
@@ -96,7 +96,7 @@ const FleetSection = () => {
 
                             {/* Description Box - Tighter */}
                             <div className="p-4 md:p-8 flex-1 border-b-8 border-black">
-                                <h3 className="text-xl md:text-2xl font-black text-black dark:text-white mb-4 uppercase italic tracking-tighter leading-none">{vehicle.name}</h3>
+                                <h3 className="text-xl md:text-2xl font-black text-black dark:text-white mb-4 uppercase tracking-tighter leading-none">{vehicle.name}</h3>
                                 <div className="grid grid-cols-2 gap-3 md:gap-6">
                                     <div className="flex items-center gap-3 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500">
                                         <div className="w-8 h-8 bg-black/5 dark:bg-white/5 border-2 border-black flex items-center justify-center shrink-0">
@@ -143,8 +143,13 @@ const FleetSection = () => {
                                         const displayUSD = (converted && typeof converted.value === 'number') ? converted.value.toFixed(0) : '0';
                                         
                                         return (
-                                            <div key={`${point}-${i}`} className="inline-flex flex-col items-center justify-center min-w-[140px] px-6 border-r-8 border-black py-3 h-20 md:h-24">
-                                                <span className="text-[8px] font-black uppercase tracking-widest mb-1 text-black/40 italic">{point}</span>
+                                            <div key={`${point}-${i}`} className="inline-flex flex-col items-center justify-center min-w-[140px] px-6 relative py-3 h-20 md:h-24">
+                                                {/* Double Line Divider */}
+                                                <div className="absolute right-0 inset-y-0 w-[12px] flex justify-center gap-[3px] pointer-events-none translate-x-1/2">
+                                                    <div className="w-[3px] h-full bg-black"></div>
+                                                    <div className="w-[3px] h-full bg-black"></div>
+                                                </div>
+                                                <span className="text-[8px] font-black uppercase tracking-widest mb-1 text-black/40">{point}</span>
                                                 <div className="flex flex-col items-center">
                                                     <span className="text-xs md:text-sm font-black text-black">Rs {priceLKR.toLocaleString()}</span>
                                                     <span className="text-[10px] md:text-xs font-black text-black">

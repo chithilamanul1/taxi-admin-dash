@@ -134,7 +134,7 @@ export default function LocationSearchInput({
     return (
         <div className="relative space-y-3" ref={wrapperRef}>
             {label && (
-                <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none italic">
+                <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">
                     {label}
                 </label>
             )}
@@ -157,7 +157,7 @@ export default function LocationSearchInput({
                     disabled={!googleLoaded}
                     placeholder={googleLoaded ? placeholder : 'Loading Maps API...'}
                     required={required}
-                    className={`w-full pl-16 sm:pl-20 pr-14 h-14 rounded-none text-base sm:text-lg font-black bg-white dark:bg-[#1a1a1a] border-4 transition-all outline-none text-black dark:text-white uppercase tracking-widest italic
+                    className={`w-full pl-16 sm:pl-20 pr-14 h-14 rounded-none text-base sm:text-lg font-black bg-white dark:bg-[#1a1a1a] border-4 transition-all outline-none text-black dark:text-white uppercase tracking-widest
                     ${isFocused ? 'border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-y-0.5' : 'border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,0.5)]'}
                     ${!googleLoaded ? 'cursor-not-allowed opacity-50 grayscale' : 'hover:border-black active:translate-y-0'}`}
                 />
@@ -194,7 +194,7 @@ export default function LocationSearchInput({
                                     <MapPin size={18} className="text-black dark:text-[#FACC15] group-hover:text-[#FACC15]" strokeWidth={3} />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="font-black text-black dark:text-white group-hover:text-black text-sm uppercase italic tracking-widest truncate mb-0.5">
+                                    <p className="font-black text-black dark:text-white group-hover:text-black text-sm uppercase tracking-widest truncate mb-0.5">
                                         {item.structured_formatting?.main_text || item.description.split(',')[0]}
                                     </p>
                                     <p className="text-[10px] font-bold text-black/50 dark:text-slate-400 group-hover:text-black/70 uppercase tracking-[0.2em] truncate">

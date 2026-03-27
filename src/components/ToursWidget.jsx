@@ -189,7 +189,7 @@ const ToursWidget = () => {
                                         <div className="bg-slate-50 border-4 border-black rounded-none p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                                             {validInc.length > 0 && (
                                                 <div className="mb-6">
-                                                    <h4 className="text-sm font-black text-navy uppercase tracking-widest mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#FDD12C]"></div> Included</h4>
+                                                    <h4 className="text-sm font-black text-navy uppercase tracking-widest mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-none bg-[#FDD12C]"></div> Included</h4>
                                                     <ul className="space-y-2">
                                                         {validInc.map((inc, i) => (
                                                             <li key={i} className="text-sm text-slate-600 flex items-start gap-2"><span className="text-navy mt-0.5">✓</span> {inc}</li>
@@ -199,7 +199,7 @@ const ToursWidget = () => {
                                             )}
                                             {validExc.length > 0 && (
                                                 <div>
-                                                    <h4 className="text-sm font-black text-red-500 uppercase tracking-widest mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500"></div> Excluded</h4>
+                                                    <h4 className="text-sm font-black text-red-500 uppercase tracking-widest mb-3 flex items-center gap-2"><div className="w-2 h-2 rounded-none bg-red-500"></div> Excluded</h4>
                                                     <ul className="space-y-2">
                                                         {validExc.map((exc, i) => (
                                                             <li key={i} className="text-sm text-slate-500 flex items-start gap-2"><span className="text-red-400 mt-0.5">✕</span> {exc}</li>
@@ -271,7 +271,7 @@ const ToursWidget = () => {
                                         {tour.highlights && tour.highlights.length > 0 && (
                                             <div className="flex flex-wrap gap-1">
                                                 {tour.highlights.slice(0, 2).map((h, i) => (
-                                                    <span key={i} className="text-[9px] font-bold bg-white/20 backdrop-blur-md text-white px-2 py-0.5 rounded-full border border-white/10">{h}</span>
+                                                    <span key={i} className="text-[9px] font-bold bg-white/20 backdrop-blur-md text-white px-2 py-0.5 rounded-none border border-white/10">{h}</span>
                                                 ))}
                                             </div>
                                         )}

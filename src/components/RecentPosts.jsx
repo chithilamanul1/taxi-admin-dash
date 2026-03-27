@@ -66,7 +66,7 @@ export default function RecentPosts() {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60"></div>
                                     <div className="absolute top-4 left-4">
-                                        <div className="flex items-center gap-2 text-[9px] font-black text-black uppercase tracking-[0.1em] bg-[#FACC15] px-4 py-2 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] italic">
+                                        <div className="flex items-center gap-2 text-[9px] font-black text-black uppercase tracking-[0.1em] bg-[#FACC15] px-4 py-2 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                                             <Calendar size={12} strokeWidth={2} />
                                             {new Date(post.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                                         </div>

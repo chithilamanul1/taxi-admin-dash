@@ -31,11 +31,11 @@ export default function TourPackagesClient() {
         <main className="min-h-screen bg-white dark:bg-black pt-32 pb-20 text-black dark:text-white transition-colors duration-300">
             <div className="container mx-auto px-6">
                 <div className="text-center mb-16">
-                    <div className="inline-flex items-center gap-2 px-6 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-[0.3em] mb-8 italic">
+                    <div className="inline-flex items-center gap-2 px-6 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-[0.3em] mb-8">
                         <Plane size={14} />
                         Multi-Day Adventures
                     </div>
-                    <h1 className="text-5xl md:text-8xl font-black text-black dark:text-white mb-6 uppercase tracking-tighter italic leading-none">
+                    <h1 className="text-5xl md:text-8xl font-black text-black dark:text-white mb-6 uppercase tracking-tighter leading-none">
                         TOUR <span className="text-[#FACC15]">PACKAGES</span>
                     </h1>
                     <p className="text-black/60 dark:text-white/60 max-w-2xl mx-auto text-sm font-medium uppercase tracking-widest leading-relaxed">
@@ -71,7 +71,7 @@ export default function TourPackagesClient() {
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
                             className={`px-10 py-4 text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 border-2 ${activeCategory === cat
-                                ? 'bg-[#FACC15] text-black border-[#FACC15] italic scale-105'
+                                ? 'bg-[#FACC15] text-black border-[#FACC15] scale-105'
                                 : 'bg-transparent text-black/50 dark:text-white/50 border-black/20 dark:border-white/20 hover:border-[#FACC15] hover:text-black dark:hover:text-white'
                                 }`}
                         >
@@ -107,13 +107,13 @@ export default function TourPackagesClient() {
                                                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
                                                 />
                                             ) : (
-                                                <div className="absolute inset-0 bg-black/10 dark:bg-white/10 flex items-center justify-center text-black/20 dark:text-white/20 uppercase font-black italic">No Image</div>
+                                                <div className="absolute inset-0 bg-black/10 dark:bg-white/10 flex items-center justify-center text-black/20 dark:text-white/20 uppercase font-black">No Image</div>
                                             )}
                                             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
                                             <div className="absolute top-6 left-6 flex flex-wrap gap-2">
                                                 {tour.tags?.slice(0, 1).map((tag, i) => (
-                                                    <span key={i} className="px-4 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-widest italic">
+                                                    <span key={i} className="px-4 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-widest">
                                                         {tag}
                                                     </span>
                                                 ))}
@@ -131,7 +131,7 @@ export default function TourPackagesClient() {
 
                                         {/* Content Section */}
                                         <div className="p-10 flex flex-col flex-1">
-                                            <h3 className="text-3xl font-black text-black dark:text-white mb-6 uppercase italic tracking-tighter leading-none group-hover:text-[#FACC15] transition-colors">
+                                            <h3 className="text-3xl font-black text-black dark:text-white mb-6 uppercase tracking-tighter leading-none group-hover:text-[#FACC15] transition-colors">
                                                 {tour.title}
                                             </h3>
 
@@ -151,7 +151,7 @@ export default function TourPackagesClient() {
                                                     <span className="text-[9px] font-black text-black/30 dark:text-white/30 uppercase tracking-[0.3em] mb-2">Price From</span>
                                                     <div className="flex items-baseline gap-2">
                                                         <span className="text-xs font-black text-[#FACC15] uppercase">{typeof tour.price === 'object' ? (tour.price?.currency || 'USD') : (tour.currency || 'USD')}</span>
-                                                        <span className="text-4xl font-black text-black dark:text-white tracking-tighter italic">
+                                                        <span className="text-4xl font-black text-black dark:text-white tracking-tighter">
                                                             {(() => {
                                                                 const amount = typeof tour.price === 'object' ? tour.price?.amount : tour.price;
                                                                 return amount && amount > 0 ? (amount.toLocaleString()) : "REQ";
@@ -176,7 +176,7 @@ export default function TourPackagesClient() {
                 <div className="max-w-6xl mx-auto mt-32">
                     <div className="bg-[#FACC15] p-8 md:p-16 lg:p-24 relative overflow-hidden border-b-[20px] border-black">
                         <div className="relative z-10 text-black">
-                            <h2 className="text-4xl md:text-6xl lg:text-8xl font-black mb-6 md:mb-8 leading-none uppercase italic tracking-tighter">
+                            <h2 className="text-4xl md:text-6xl lg:text-8xl font-black mb-6 md:mb-8 leading-none uppercase tracking-tighter">
                                 TAILOR-MADE <br className="hidden md:block" />
                                 <div className="mt-2 md:mt-0 inline-block"><span className="bg-black text-[#FACC15] px-4">JOURNEYS</span></div>
                             </h2>
@@ -185,7 +185,7 @@ export default function TourPackagesClient() {
                             </p>
                             <Link
                                 href="/contact"
-                                className="inline-flex items-center gap-4 px-12 py-6 bg-black text-[#FACC15] font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all italic shadow-2xl"
+                                className="inline-flex items-center gap-4 px-12 py-6 bg-black text-[#FACC15] font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all shadow-2xl"
                             >
                                 Start Designing <ArrowRight size={20} />
                             </Link>
@@ -202,7 +202,7 @@ export default function TourPackagesClient() {
                             { val: "100%", lbl: "Flexible" }
                         ].map((stat, i) => (
                             <div key={i} className="bg-black/5 dark:bg-white/5 p-6 md:p-8 lg:p-12 text-center border-l-4 border-[#FACC15] flex flex-col justify-center">
-                                <div className="text-3xl sm:text-4xl md:text-5xl font-black text-[#FACC15] mb-2 md:mb-4 italic tracking-tighter">{stat.val}</div>
+                                <div className="text-3xl sm:text-4xl md:text-5xl font-black text-[#FACC15] mb-2 md:mb-4 tracking-tighter">{stat.val}</div>
                                 <div className="text-black/40 dark:text-white/40 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.4em] leading-tight break-words">{stat.lbl}</div>
                             </div>
                         ))}

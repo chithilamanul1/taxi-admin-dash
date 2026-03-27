@@ -17,7 +17,7 @@ const Footer = () => {
                     <div className="lg:col-span-2 space-y-8">
                         <div className="flex items-center gap-3">
                             <div className="flex flex-col">
-                                <span className="text-4xl font-black tracking-tighter uppercase italic leading-none text-black dark:text-white">
+                                <span className="text-4xl font-black tracking-tighter uppercase leading-none text-black dark:text-white">
                                     AIRPORT <span className="text-[#FACC15]">TAXIS</span>
                                 </span>
                                 <span className="text-[10px] font-black text-[#FACC15]/60 uppercase tracking-[0.4em] mt-2">Premier Transfer Service</span>

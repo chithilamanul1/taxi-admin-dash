@@ -101,14 +101,14 @@ export default function AdminTourManager() {
 
     if (isEditing) {
         return (
-            <div className="bg-white dark:bg-emerald-900 rounded-xl shadow-lg p-6 border border-white/10">
+            <div className="bg-white dark:bg-emerald-900 rounded-none shadow-lg p-6 border border-white/10">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold text-emerald-900 dark:text-white">
                         {formData._id ? 'Edit Tour' : 'Create New Tour'}
                     </h2>
                     <div className="flex gap-2">
-                        <button onClick={() => setIsEditing(false)} className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-100 dark:border-white/10 dark:hover:bg-white/5 text-slate-600 dark:text-slate-300 font-bold">Cancel</button>
-                        <button onClick={handleSave} className="px-6 py-2 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700 shadow-lg">Save Tour</button>
+                        <button onClick={() => setIsEditing(false)} className="px-4 py-2 rounded-none border border-slate-200 hover:bg-slate-100 dark:border-white/10 dark:hover:bg-white/5 text-slate-600 dark:text-slate-300 font-bold">Cancel</button>
+                        <button onClick={handleSave} className="px-6 py-2 rounded-none bg-emerald-600 text-white font-bold hover:bg-emerald-700 shadow-lg">Save Tour</button>
                     </div>
                 </div>
 
@@ -121,7 +121,7 @@ export default function AdminTourManager() {
                                 <input
                                     value={formData.title}
                                     onChange={e => updateField('title', e.target.value)}
-                                    className="w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10 font-bold outline-none focus:border-emerald-500"
+                                    className="w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-none border border-slate-200 dark:border-white/10 font-bold outline-none focus:border-emerald-500"
                                     placeholder="e.g. 7 Day Island Paradise"
                                 />
                             </div>
@@ -130,7 +130,7 @@ export default function AdminTourManager() {
                                 <input
                                     value={formData.slug}
                                     onChange={e => updateField('slug', e.target.value)}
-                                    className="w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10 outline-none focus:border-emerald-500 text-sm font-mono"
+                                    className="w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-none border border-slate-200 dark:border-white/10 outline-none focus:border-emerald-500 text-sm font-mono"
                                     placeholder="e.g. 7-day-island-paradise"
                                 />
                             </div>
@@ -141,7 +141,7 @@ export default function AdminTourManager() {
                             <textarea
                                 value={formData.description}
                                 onChange={e => updateField('description', e.target.value)}
-                                className="w-full p-3 h-40 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10 outline-none focus:border-emerald-500"
+                                className="w-full p-3 h-40 bg-slate-50 dark:bg-slate-800 rounded-none border border-slate-200 dark:border-white/10 outline-none focus:border-emerald-500"
                                 placeholder="Full tour description..."
                             />
                         </div>
@@ -158,13 +158,13 @@ export default function AdminTourManager() {
                                         newItin.push({ day: newItin.length + 1, title: '', description: '', activities: [] });
                                         updateField('itinerary', newItin);
                                     }}
-                                    className="text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-bold hover:bg-emerald-200"
+                                    className="text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-none font-bold hover:bg-emerald-200"
                                 >+ Add Day</button>
                             </div>
 
                             <div className="space-y-4">
                                 {formData.itinerary?.map((day, idx) => (
-                                    <div key={idx} className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-white/5">
+                                    <div key={idx} className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-none border border-slate-100 dark:border-white/5">
                                         <div className="flex gap-4 mb-2">
                                             <div className="w-16">
                                                 <label className="text-[10px] font-bold text-slate-400 uppercase">Day</label>
@@ -260,7 +260,7 @@ export default function AdminTourManager() {
                                             newIncl.push('');
                                             updateField('inclusions', newIncl);
                                         }}
-                                        className="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-bold"
+                                        className="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-1 rounded-none font-bold"
                                     >+ Add Item</button>
                                 </div>
                                 <div className="space-y-2">
@@ -293,7 +293,7 @@ export default function AdminTourManager() {
                                             newExcl.push('');
                                             updateField('exclusions', newExcl);
                                         }}
-                                        className="text-[10px] bg-rose-100 text-rose-700 px-2 py-1 rounded-full font-bold"
+                                        className="text-[10px] bg-rose-100 text-rose-700 px-2 py-1 rounded-none font-bold"
                                     >+ Add Item</button>
                                 </div>
                                 <div className="space-y-2">
@@ -324,13 +324,13 @@ export default function AdminTourManager() {
                                                     newExp.push({ heading: '', text: '' });
                                                     updateField('experience', newExp);
                                                 }}
-                                                className="text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-bold hover:bg-emerald-200"
+                                                className="text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-none font-bold hover:bg-emerald-200"
                                             >+ Add Stop</button>
                                         </div>
 
                                         <div className="space-y-4">
                                             {formData.experience?.map((exp, idx) => (
-                                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-white/5">
+                                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-none border border-slate-100 dark:border-white/5">
                                                     <div className="flex gap-4 mb-2">
                                                         <div className="flex-1">
                                                             <label className="text-[10px] font-bold text-slate-400 uppercase">Heading (e.g. Galle Fort)</label>
@@ -406,7 +406,7 @@ export default function AdminTourManager() {
 
                     {/* Right Column: Settings, Pricing, Images */}
                     <div className="space-y-6">
-                        <div className="bg-slate-50 dark:bg-white/5 p-4 rounded-xl border border-slate-100 dark:border-white/10">
+                        <div className="bg-slate-50 dark:bg-white/5 p-4 rounded-none border border-slate-100 dark:border-white/10">
                             <h3 className="font-bold text-sm uppercase text-slate-500 mb-4">Settings</h3>
                             <div className="space-y-3">
                                 <div>
@@ -453,7 +453,7 @@ export default function AdminTourManager() {
                             </div>
                         </div>
 
-                        <div className="bg-slate-50 dark:bg-white/5 p-4 rounded-xl border border-slate-100 dark:border-white/10">
+                        <div className="bg-slate-50 dark:bg-white/5 p-4 rounded-none border border-slate-100 dark:border-white/10">
                             <h3 className="font-bold text-sm uppercase text-slate-500 mb-4">Suitability & Restrictions</h3>
                             <div className="space-y-6">
                                 <div>
@@ -465,7 +465,7 @@ export default function AdminTourManager() {
                                                 newSuit.push('');
                                                 updateField('notSuitableFor', newSuit);
                                             }}
-                                            className="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold"
+                                            className="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-none font-bold"
                                         >+ Add</button>
                                     </div>
                                     <div className="space-y-2">
@@ -496,7 +496,7 @@ export default function AdminTourManager() {
                                                 newAllow.push('');
                                                 updateField('notAllowed', newAllow);
                                             }}
-                                            className="text-[10px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-bold"
+                                            className="text-[10px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded-none font-bold"
                                         >+ Add</button>
                                     </div>
                                     <div className="space-y-2">
@@ -520,7 +520,7 @@ export default function AdminTourManager() {
                             </div>
                         </div>
 
-                        <div className="bg-slate-50 dark:bg-white/5 p-4 rounded-xl border border-slate-100 dark:border-white/10">
+                        <div className="bg-slate-50 dark:bg-white/5 p-4 rounded-none border border-slate-100 dark:border-white/10">
                             <h3 className="font-bold text-sm uppercase text-slate-500 mb-4">Pricing (From)</h3>
                             <div className="flex gap-2">
                                 <span className="bg-emerald-100 text-emerald-800 px-3 py-2 rounded font-bold text-sm flex items-center">{formData.price?.currency || 'USD'}</span>
@@ -533,7 +533,7 @@ export default function AdminTourManager() {
                             </div>
                         </div>
 
-                        <div className="bg-slate-50 dark:bg-white/5 p-4 rounded-xl border border-slate-100 dark:border-white/10">
+                        <div className="bg-slate-50 dark:bg-white/5 p-4 rounded-none border border-slate-100 dark:border-white/10">
                             <h3 className="font-bold text-sm uppercase text-slate-500 mb-4">Images</h3>
                             <div className="space-y-4">
                                 <div>
@@ -545,7 +545,7 @@ export default function AdminTourManager() {
                                         placeholder="https://..."
                                     />
                                     {formData.heroImage && (
-                                        <img src={formData.heroImage} className="mt-2 w-full h-32 object-cover rounded-lg border dark:border-white/10" alt="Preview" />
+                                        <img src={formData.heroImage} className="mt-2 w-full h-32 object-cover rounded-none border dark:border-white/10" alt="Preview" />
                                     )}
                                 </div>
 
@@ -558,7 +558,7 @@ export default function AdminTourManager() {
                                                 newImages.push('');
                                                 updateField('images', newImages);
                                             }}
-                                            className="text-[10px] bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full font-bold"
+                                            className="text-[10px] bg-sky-100 text-sky-700 px-2 py-0.5 rounded-none font-bold"
                                         >+ Add Image</button>
                                     </div>
                                     <div className="space-y-2">
@@ -595,12 +595,12 @@ export default function AdminTourManager() {
 
     // LIST VIEW
     return (
-        <div className="bg-white dark:bg-emerald-900 rounded-xl shadow-sm p-8 border border-white/5">
+        <div className="bg-white dark:bg-emerald-900 rounded-none shadow-sm p-8 border border-white/5">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-emerald-900 dark:text-white">Tour Management</h2>
                 <button
                     onClick={handleCreateNew}
-                    className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20"
+                    className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-none font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20"
                 >
                     <Plus size={18} /> New Tour
                 </button>
@@ -608,25 +608,25 @@ export default function AdminTourManager() {
 
             {isLoading ? (
                 <div className="text-center py-20">
-                    <div className="animate-spin w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+                    <div className="animate-spin w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-none mx-auto mb-4"></div>
                     <p className="text-slate-400">Loading tours...</p>
                 </div>
             ) : tours.length === 0 ? (
-                <div className="text-center py-20 bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-dashed border-slate-200 dark:border-white/10">
+                <div className="text-center py-20 bg-slate-50 dark:bg-slate-800 rounded-none border-2 border-dashed border-slate-200 dark:border-white/10">
                     <p className="text-slate-500 font-medium">No tours found. Create your first one!</p>
                 </div>
             ) : (
                 <div className="grid gap-4">
                     {tours.map(tour => (
-                        <div key={tour._id} className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-white/5 flex items-center gap-4 hover:shadow-md transition-shadow group">
+                        <div key={tour._id} className="bg-white dark:bg-slate-800 p-4 rounded-none border border-slate-100 dark:border-white/5 flex items-center gap-4 hover:shadow-md transition-shadow group">
                             <img
                                 src={tour.heroImage || '/placeholder.png'}
                                 alt={tour.title}
-                                className="w-24 h-16 object-cover rounded-lg bg-slate-200"
+                                className="w-24 h-16 object-cover rounded-none bg-slate-200"
                             />
                             <div className="flex-1">
                                 <div className="flex items-center gap-2 mb-1">
-                                    <span className={`text-[10px] px-2 py-0.5 rounded-full uppercase font-black tracking-widest ${tour.category === 'safari' ? 'bg-orange-100 text-orange-700' :
+                                    <span className={`text-[10px] px-2 py-0.5 rounded-none uppercase font-black tracking-widest ${tour.category === 'safari' ? 'bg-orange-100 text-orange-700' :
                                         tour.category === 'day-trip' ? 'bg-blue-100 text-blue-700' :
                                             'bg-purple-100 text-purple-700'
                                         }`}>
@@ -641,10 +641,10 @@ export default function AdminTourManager() {
                                 </div>
                             </div>
                             <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onClick={() => handleEdit(tour)} className="p-2 text-slate-500 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors">
+                                <button onClick={() => handleEdit(tour)} className="p-2 text-slate-500 hover:text-blue-500 hover:bg-blue-50 rounded-none transition-colors">
                                     <Edit2 size={18} />
                                 </button>
-                                <button onClick={() => handleDelete(tour._id)} className="p-2 text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                                <button onClick={() => handleDelete(tour._id)} className="p-2 text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-none transition-colors">
                                     <Trash2 size={18} />
                                 </button>
                             </div>

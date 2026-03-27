@@ -42,7 +42,7 @@ export default function RatingSystem({ bookingId, initialRating, initialReview, 
                 <div className="w-16 h-16 bg-black rounded-none border-2 border-emerald-400 flex items-center justify-center mx-auto mb-4 shadow-[4px_4px_0px_0px_#10b981]">
                     <CheckCircle className="text-emerald-400" size={32} strokeWidth={3} />
                 </div>
-                <h3 className="text-xl font-black uppercase italic tracking-tighter text-black mb-2">THANK YOU FOR YOUR FEEDBACK!</h3>
+                <h3 className="text-xl font-black uppercase tracking-tighter text-black mb-2">THANK YOU FOR YOUR FEEDBACK!</h3>
                 <div className="flex justify-center gap-1 mb-4">
                     {[1, 2, 3, 4, 5].map((star) => (
                         <Star 
@@ -55,7 +55,7 @@ export default function RatingSystem({ bookingId, initialRating, initialReview, 
                     ))}
                 </div>
                 {review && (
-                    <p className="text-slate-600 font-bold italic text-sm border-t-2 border-emerald-100 pt-4 mt-2 max-w-md mx-auto">
+                    <p className="text-slate-600 font-bold text-sm border-t-2 border-emerald-100 pt-4 mt-2 max-w-md mx-auto">
                         "{review}"
                     </p>
                 )}
@@ -65,11 +65,11 @@ export default function RatingSystem({ bookingId, initialRating, initialReview, 
 
     return (
         <div className="bg-white border-4 border-black p-8 md:p-12 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
-            <div className="absolute top-0 right-0 bg-black text-[#FACC15] text-[8px] font-black px-4 py-1 uppercase italic tracking-widest border-b-4 border-l-4 border-black">POST-TRIP REVIEW</div>
+            <div className="absolute top-0 right-0 bg-black text-[#FACC15] text-[8px] font-black px-4 py-1 uppercase tracking-widest border-b-4 border-l-4 border-black">POST-TRIP REVIEW</div>
             
             <div className="text-center mb-8">
-                <h3 className="text-3xl font-black uppercase italic tracking-tighter text-black mb-3 leading-none">HOW WAS YOUR RIDE?</h3>
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 italic">Rate your Chauffeur and Service</p>
+                <h3 className="text-3xl font-black uppercase tracking-tighter text-black mb-3 leading-none">HOW WAS YOUR RIDE?</h3>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Rate your Chauffeur and Service</p>
             </div>
 
             <div className="flex justify-center gap-4 mb-10">
@@ -100,14 +100,14 @@ export default function RatingSystem({ bookingId, initialRating, initialReview, 
                         value={review}
                         onChange={(e) => setReview(e.target.value)}
                         placeholder="TELL US ABOUT YOUR EXPERIENCE (OPTIONAL)..."
-                        className="w-full bg-slate-50 border-4 border-black p-6 pl-16 rounded-none font-black uppercase text-xs tracking-widest italic focus:bg-white focus:shadow-[4px_4px_0px_0px_#FACC15] transition-all min-h-[120px] outline-none placeholder:text-slate-300"
+                        className="w-full bg-slate-50 border-4 border-black p-6 pl-16 rounded-none font-black uppercase text-xs tracking-widest focus:bg-white focus:shadow-[4px_4px_0px_0px_#FACC15] transition-all min-h-[120px] outline-none placeholder:text-slate-300"
                     />
                 </div>
 
                 <button
                     onClick={handleSubmit}
                     disabled={rating === 0 || isSubmitting}
-                    className={`w-full py-6 font-black uppercase italic tracking-[0.3em] border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-4 ${
+                    className={`w-full py-6 font-black uppercase tracking-[0.3em] border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-4 ${
                         rating === 0 || isSubmitting 
                         ? 'bg-slate-100 text-slate-400 cursor-not-allowed' 
                         : 'bg-[#FACC15] text-black hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]'

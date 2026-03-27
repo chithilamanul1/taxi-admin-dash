@@ -225,7 +225,7 @@ const DriversFleetView = ({ bookings = [] }) => {
         >
             <button
                 onClick={onClose}
-                className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-[110]"
+                className="absolute top-6 right-6 w-12 h-12 rounded-none bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-[110]"
             >
                 <X size={28} />
             </button>
@@ -241,7 +241,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                     <img
                         src={url}
                         alt={title}
-                        className="max-w-full max-h-full object-contain rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-500"
+                        className="max-w-full max-h-full object-contain rounded-none shadow-[0_0_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-500"
                     />
                 </div>
                 <div className="flex gap-4">
@@ -249,14 +249,14 @@ const DriversFleetView = ({ bookings = [] }) => {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-full text-sm font-bold backdrop-blur-sm transition-all border border-white/10"
+                        className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-none text-sm font-bold backdrop-blur-sm transition-all border border-white/10"
                     >
                         Open in New Tab
                     </a>
                     <a
                         href={url}
                         download
-                        className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg transition-all"
+                        className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded-none text-sm font-bold shadow-lg transition-all"
                     >
                         Download Image
                     </a>
@@ -273,24 +273,24 @@ const DriversFleetView = ({ bookings = [] }) => {
                     <p className="text-gray-500 dark:text-slate-400">Manage drivers and approvals</p>
                 </div>
                 <div className="flex gap-3">
-                    <div className="flex bg-slate-100 p-1 rounded-xl">
+                    <div className="flex bg-slate-100 p-1 rounded-none">
                         <button
                             onClick={() => setActiveTab('active')}
-                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'active' ? 'bg-white text-emerald-900 shadow-sm' : 'text-gray-500 hover:text-emerald-900'}`}
+                            className={`px-4 py-2 rounded-none text-sm font-bold transition-all ${activeTab === 'active' ? 'bg-white text-emerald-900 shadow-sm' : 'text-gray-500 hover:text-emerald-900'}`}
                         >
                             Active Fleet ({activeDrivers.length})
                         </button>
                         <button
                             onClick={() => setActiveTab('pending')}
-                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'pending' ? 'bg-white text-emerald-900 shadow-sm flex items-center gap-2' : 'text-gray-500 hover:text-emerald-900 flex items-center gap-2'}`}
+                            className={`px-4 py-2 rounded-none text-sm font-bold transition-all ${activeTab === 'pending' ? 'bg-white text-emerald-900 shadow-sm flex items-center gap-2' : 'text-gray-500 hover:text-emerald-900 flex items-center gap-2'}`}
                         >
                             Requests
-                            {pendingDrivers.length > 0 && <span className="bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center">{pendingDrivers.length}</span>}
+                            {pendingDrivers.length > 0 && <span className="bg-red-500 text-white text-[10px] w-5 h-5 rounded-none flex items-center justify-center">{pendingDrivers.length}</span>}
                         </button>
                     </div>
                     <button
                         onClick={() => setShowAddModal(true)}
-                        className="flex items-center gap-2 bg-orange-600 text-white px-6 py-2.5 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-orange-700 transition-all shadow-lg shadow-orange-600/20 active:scale-95 shrink-0"
+                        className="flex items-center gap-2 bg-orange-600 text-white px-6 py-2.5 rounded-none font-black uppercase text-xs tracking-widest hover:bg-orange-700 transition-all shadow-lg shadow-orange-600/20 active:scale-95 shrink-0"
                     >
                         <Plus size={18} strokeWidth={3} /> Add Driver
                     </button>
@@ -308,23 +308,23 @@ const DriversFleetView = ({ bookings = [] }) => {
                         </div>
                     ) : (
                         pendingDrivers.map(driver => (
-                            <div key={driver._id} className="bg-white p-6 rounded-3xl shadow-sm border border-orange-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-all hover:shadow-md">
+                            <div key={driver._id} className="bg-white p-6 rounded-none shadow-sm border border-orange-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-all hover:shadow-md">
                                 <div className="flex items-center gap-4 flex-1">
-                                    <div className="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600 font-black text-2xl border border-orange-100 shadow-sm shrink-0">
+                                    <div className="w-16 h-16 bg-orange-50 rounded-none flex items-center justify-center text-orange-600 font-black text-2xl border border-orange-100 shadow-sm shrink-0">
                                         {driver.name.charAt(0)}
                                     </div>
                                     <div className="min-w-0">
                                         <h4 className="font-black text-xl text-emerald-900 truncate">{driver.name}</h4>
                                         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 mt-1 font-bold">
                                             <span className="flex items-center gap-1.5"><Phone size={14} className="text-emerald-500" /> {driver.phone}</span>
-                                            <span className="flex items-center gap-1.5"><Car size={14} className="text-emerald-500" /> {driver.vehicleModel} <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded uppercase">{driver.vehicleNumber}</span></span>
+                                            <span className="flex items-center gap-1.5"><Car size={14} className="text-emerald-500" /> {driver.vehicleModel} <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded-none uppercase">{driver.vehicleNumber}</span></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="w-full md:w-auto shrink-0 mt-2 md:mt-0">
                                     <button
                                         onClick={() => setApprovalModal(driver)}
-                                        className="w-full md:w-auto px-8 py-4 bg-emerald-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-emerald-900 transition-all shadow-xl shadow-emerald-900/10 active:scale-95"
+                                        className="w-full md:w-auto px-8 py-4 bg-emerald-900 text-white rounded-none text-xs font-black uppercase tracking-widest hover:bg-emerald-900 transition-all shadow-xl shadow-emerald-900/10 active:scale-95"
                                     >
                                         Review Application
                                     </button>
@@ -339,10 +339,10 @@ const DriversFleetView = ({ bookings = [] }) => {
             {activeTab === 'active' && (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in-up">
                     {activeDrivers.map(driver => (
-                        <div key={driver._id} className="bg-white dark:bg-emerald-900 rounded-2xl p-5 shadow-sm border border-white/5 hover:shadow-md transition-shadow relative group">
+                        <div key={driver._id} className="bg-white dark:bg-emerald-900 rounded-none p-5 shadow-sm border border-white/5 hover:shadow-md transition-shadow relative group">
                             <div className="flex items-start justify-between mb-4">
                                 <div className="flex items-center gap-3">
-                                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${driver.isOnline ? 'bg-green-100' : 'bg-gray-100'}`}>
+                                    <div className={`w-12 h-12 rounded-none flex items-center justify-center ${driver.isOnline ? 'bg-green-100' : 'bg-gray-100'}`}>
                                         <User size={24} className={driver.isOnline ? 'text-green-600' : 'text-gray-400'} />
                                     </div>
                                     <div>
@@ -350,24 +350,24 @@ const DriversFleetView = ({ bookings = [] }) => {
                                         <p className="text-xs text-gray-500 uppercase">{driver.vehicleType}</p>
                                     </div>
                                 </div>
-                                <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-bold ${driver.isOnline ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-500'}`}>
-                                    <span className={`w-2 h-2 rounded-full ${driver.isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+                                <div className={`flex items-center gap-1.5 px-2 py-1 rounded-none text-xs font-bold ${driver.isOnline ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-500'}`}>
+                                    <span className={`w-2 h-2 rounded-none ${driver.isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
                                     {driver.isOnline ? 'Online' : 'Offline'}
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-2 text-sm mb-4">
-                                <div className="bg-slate-50 dark:bg-white/5 rounded-lg p-2">
+                                <div className="bg-slate-50 dark:bg-white/5 rounded-none p-2">
                                     <p className="text-xs text-gray-500">Vehicle</p>
                                     <p className="font-bold text-emerald-900">{driver.vehicleNumber}</p>
                                 </div>
-                                <div className="bg-slate-50 dark:bg-white/5 rounded-lg p-2">
+                                <div className="bg-slate-50 dark:bg-white/5 rounded-none p-2">
                                     <p className="text-xs text-gray-500">Status</p>
                                     <p className={`font-bold capitalize ${driver.status === 'free' ? 'text-green-600' : 'text-orange-600'}`}>{driver.status}</p>
                                 </div>
                             </div>
 
                             {/* Wallet Section */}
-                            <div className="mb-4 bg-emerald-50/50 dark:bg-emerald-900/10 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/20 flex justify-between items-center">
+                            <div className="mb-4 bg-emerald-50/50 dark:bg-emerald-900/10 p-3 rounded-none border border-emerald-100 dark:border-emerald-900/20 flex justify-between items-center">
                                 <div>
                                     <p className="text-[10px] text-emerald-800 dark:text-emerald-400 font-bold uppercase tracking-wider">Wallet Balance</p>
                                     <p className={`font-mono font-bold text-lg ${driver.walletBalance < 5000 ? 'text-red-600' : 'text-emerald-900 dark:text-emerald-300'}`}>
@@ -376,26 +376,26 @@ const DriversFleetView = ({ bookings = [] }) => {
                                 </div>
                                 <button
                                     onClick={() => setTopupModal(driver)}
-                                    className="bg-emerald-900 text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-emerald-800"
+                                    className="bg-emerald-900 text-white text-xs px-3 py-1.5 rounded-none font-bold hover:bg-emerald-800"
                                 >
                                     + Top Up
                                 </button>
                             </div>
                             <div className="flex gap-2">
-                                <a href={`tel:${driver.phone}`} className="flex-1 flex items-center justify-center gap-2 bg-emerald-50 text-emerald-700 py-2 rounded-lg text-sm font-bold hover:bg-emerald-100 transition-colors">
+                                <a href={`tel:${driver.phone}`} className="flex-1 flex items-center justify-center gap-2 bg-emerald-50 text-emerald-700 py-2 rounded-none text-sm font-bold hover:bg-emerald-100 transition-colors">
                                     <Phone size={14} /> Call
                                 </a>
                                 <a
                                     href={`https://wa.me/${driver.phone?.replace(/\D/g, '')}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex-1 flex items-center justify-center gap-2 bg-green-50 text-green-600 py-2 rounded-lg text-sm font-bold hover:bg-green-100 transition-colors border border-green-200"
+                                    className="flex-1 flex items-center justify-center gap-2 bg-green-50 text-green-600 py-2 rounded-none text-sm font-bold hover:bg-green-100 transition-colors border border-green-200"
                                 >
                                     <MessageCircle size={14} /> Chat
                                 </a>
                                 <button
                                     onClick={() => handleDeleteDriver(driver._id)}
-                                    className="w-10 flex items-center justify-center bg-red-50 text-red-500 rounded-lg hover:bg-red-100 transition-colors border border-red-100"
+                                    className="w-10 flex items-center justify-center bg-red-50 text-red-500 rounded-none hover:bg-red-100 transition-colors border border-red-100"
                                     title="Delete Driver"
                                 >
                                     <Trash2 size={16} />
@@ -409,10 +409,10 @@ const DriversFleetView = ({ bookings = [] }) => {
             {/* Approval Modal */}
             {approvalModal && (
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-slide-up">
+                    <div className="bg-white rounded-none shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-slide-up">
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center sticky top-0 bg-white z-10">
                             <h3 className="text-xl font-bold text-emerald-900">Review Application</h3>
-                            <button onClick={() => setApprovalModal(null)} className="p-2 hover:bg-gray-100 rounded-full"><X size={20} /></button>
+                            <button onClick={() => setApprovalModal(null)} className="p-2 hover:bg-gray-100 rounded-none"><X size={20} /></button>
                         </div>
                         <div className="p-6 space-y-6">
                             <div className="grid md:grid-cols-2 gap-6">
@@ -437,11 +437,11 @@ const DriversFleetView = ({ bookings = [] }) => {
                                     {approvalModal.documents && Object.entries(approvalModal.documents).map(([key, url]) => (
                                         <div
                                             key={key}
-                                            className="border rounded-xl p-3 hover:border-emerald-500 transition-colors cursor-pointer group relative bg-slate-50/50"
+                                            className="border rounded-none p-3 hover:border-emerald-500 transition-colors cursor-pointer group relative bg-slate-50/50"
                                             onClick={() => url && setLightbox({ open: true, url, title: key.replace(/([A-Z])/g, ' $1').trim() })}
                                         >
                                             <p className="text-xs font-bold text-gray-500 capitalize mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</p>
-                                            <div className="aspect-video bg-white rounded-lg flex items-center justify-center overflow-hidden border border-gray-100 shadow-inner">
+                                            <div className="aspect-video bg-white rounded-none flex items-center justify-center overflow-hidden border border-gray-100 shadow-inner">
                                                 {url && url !== 'placeholder' ? (
                                                     <img
                                                         src={url.startsWith('https') || url.startsWith('http') || url.startsWith('/') ? url : `/api/upload?path=${url}`}
@@ -461,7 +461,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                                                 )}
                                             </div>
                                             {url && (
-                                                <div className="absolute inset-0 bg-emerald-900/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white font-bold text-xs transition-opacity rounded-xl z-10 backdrop-blur-[2px]">
+                                                <div className="absolute inset-0 bg-emerald-900/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white font-bold text-xs transition-opacity rounded-none z-10 backdrop-blur-[2px]">
                                                     <Plus size={20} className="mb-1" />
                                                     Click to view
                                                 </div>
@@ -478,20 +478,20 @@ const DriversFleetView = ({ bookings = [] }) => {
                                     <Wallet size={16} /> Initial Deposit Verification
                                 </h4>
                                 <div className="grid grid-cols-2 gap-6">
-                                    <div className="bg-white p-4 rounded-xl border border-emerald-100 shadow-sm">
+                                    <div className="bg-white p-4 rounded-none border border-emerald-100 shadow-sm">
                                         <p className="text-xs text-gray-400 font-bold uppercase mb-1">Declared Amount</p>
                                         <p className="text-2xl font-mono font-bold text-emerald-900">Rs {approvalModal.initialDeposit.amount.toLocaleString()}</p>
-                                        <div className="mt-2 text-xs text-emerald-700 bg-emerald-100 px-2 py-1 rounded inline-block font-bold">
+                                        <div className="mt-2 text-xs text-emerald-700 bg-emerald-100 px-2 py-1 rounded-none inline-block font-bold">
                                             Status: {approvalModal.initialDeposit.status}
                                         </div>
                                     </div>
 
                                     <div
-                                        className="border rounded-xl p-3 bg-white hover:border-emerald-500 transition-colors group relative cursor-pointer"
+                                        className="border rounded-none p-3 bg-white hover:border-emerald-500 transition-colors group relative cursor-pointer"
                                         onClick={() => approvalModal.initialDeposit.receipt && setLightbox({ open: true, url: approvalModal.initialDeposit.receipt, title: 'Initial Deposit Receipt' })}
                                     >
                                         <p className="text-xs font-bold text-gray-500 mb-2">Receipt Proof</p>
-                                        <div className="aspect-video bg-gray-50 rounded-lg flex items-center justify-center overflow-hidden border border-gray-100">
+                                        <div className="aspect-video bg-gray-50 rounded-none flex items-center justify-center overflow-hidden border border-gray-100">
                                             {approvalModal.initialDeposit.receipt ? (
                                                 <img
                                                     src={approvalModal.initialDeposit.receipt}
@@ -511,14 +511,14 @@ const DriversFleetView = ({ bookings = [] }) => {
                                             )}
                                         </div>
                                         {approvalModal.initialDeposit.receipt && (
-                                            <div className="absolute inset-0 bg-emerald-900/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white font-bold text-xs transition-opacity rounded-xl z-10 backdrop-blur-[2px]">
+                                            <div className="absolute inset-0 bg-emerald-900/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white font-bold text-xs transition-opacity rounded-none z-10 backdrop-blur-[2px]">
                                                 <Plus size={20} className="mb-1" />
                                                 Click to view
                                             </div>
                                         )}
                                     </div>
                                 </div>
-                                <p className="text-xs text-gray-500 mt-4 italic">
+                                <p className="text-xs text-gray-500 mt-4">
                                     * Approving this driver will automatically credit <strong>Rs {approvalModal.initialDeposit.amount.toLocaleString()}</strong> to their wallet.
                                 </p>
                             </div>
@@ -526,14 +526,14 @@ const DriversFleetView = ({ bookings = [] }) => {
                         <div className="p-6 border-t border-gray-100 bg-gray-50 flex gap-4">
                             <button
                                 onClick={() => handleApprove(approvalModal._id, 'reject')}
-                                className="flex-1 py-3 bg-white border border-red-200 text-red-600 rounded-xl font-bold hover:bg-red-50 transition-colors"
+                                className="flex-1 py-3 bg-white border border-red-200 text-red-600 rounded-none font-bold hover:bg-red-50 transition-colors"
                             >
                                 Reject
                             </button>
                             <button
                                 onClick={() => handleApprove(approvalModal._id, 'approve')}
                                 disabled={isSubmitting}
-                                className="flex-[2] py-3 bg-emerald-900 text-white rounded-xl font-bold hover:bg-emerald-800 transition-colors flex items-center justify-center gap-2"
+                                className="flex-[2] py-3 bg-emerald-900 text-white rounded-none font-bold hover:bg-emerald-800 transition-colors flex items-center justify-center gap-2"
                             >
                                 {isSubmitting ? <Loader2 className="animate-spin" /> : <ShieldCheck size={18} />}
                                 Approve & Create Account
@@ -546,7 +546,7 @@ const DriversFleetView = ({ bookings = [] }) => {
             {/* Top Up Modal */}
             {topupModal && (
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-white dark:bg-emerald-900 rounded-2xl shadow-2xl w-full max-w-sm p-6 animate-slide-up">
+                    <div className="bg-white dark:bg-emerald-900 rounded-none shadow-2xl w-full max-w-sm p-6 animate-slide-up">
                         <h3 className="text-lg font-bold text-emerald-900 dark:text-white mb-4">Top Up Wallet</h3>
                         <p className="text-sm text-gray-500 mb-4">Adding funds for <strong>{topupModal.name}</strong></p>
 
@@ -555,7 +555,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                                 <label className="block text-xs font-bold text-gray-400 uppercase mb-1">Amount (LKR)</label>
                                 <input
                                     type="number"
-                                    className="w-full p-3 border rounded-xl font-mono text-lg font-bold outline-none ring-emerald-500 focus:ring-2"
+                                    className="w-full p-3 border rounded-none font-mono text-lg font-bold outline-none ring-emerald-500 focus:ring-2"
                                     placeholder="5000"
                                     value={topupAmount}
                                     onChange={e => setTopupAmount(e.target.value)}
@@ -566,7 +566,7 @@ const DriversFleetView = ({ bookings = [] }) => {
 
                             <div className="mb-6">
                                 <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Proof of Transfer (Receipt)</label>
-                                <div className="border-2 border-dashed border-gray-200 dark:border-white/10 rounded-xl p-4 text-center hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer relative">
+                                <div className="border-2 border-dashed border-gray-200 dark:border-white/10 rounded-none p-4 text-center hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer relative">
                                     <input
                                         type="file"
                                         accept="image/*"
@@ -581,7 +581,7 @@ const DriversFleetView = ({ bookings = [] }) => {
                                     />
                                     {receiptPreview ? (
                                         <div className="relative">
-                                            <img src={receiptPreview} className="h-32 mx-auto rounded-lg object-contain" />
+                                            <img src={receiptPreview} className="h-32 mx-auto rounded-none object-contain" />
                                             <button
                                                 type="button"
                                                 onClick={(e) => {
@@ -604,8 +604,8 @@ const DriversFleetView = ({ bookings = [] }) => {
                             </div>
 
                             <div className="flex gap-3">
-                                <button type="button" onClick={() => setTopupModal(null)} className="flex-1 py-3 bg-gray-100 dark:bg-white/10 rounded-xl font-bold text-gray-500">Cancel</button>
-                                <button type="submit" disabled={isSubmitting} className="flex-1 py-3 bg-emerald-900 text-white rounded-xl font-bold flex justify-center items-center gap-2">
+                                <button type="button" onClick={() => setTopupModal(null)} className="flex-1 py-3 bg-gray-100 dark:bg-white/10 rounded-none font-bold text-gray-500">Cancel</button>
+                                <button type="submit" disabled={isSubmitting} className="flex-1 py-3 bg-emerald-900 text-white rounded-none font-bold flex justify-center items-center gap-2">
                                     {isSubmitting ? <Loader2 className="animate-spin" size={18} /> : <span>Confirm</span>}
                                 </button>
                             </div>
@@ -618,14 +618,14 @@ const DriversFleetView = ({ bookings = [] }) => {
             {showAddModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                     {/* Simplified manual add for brevity - same as before */}
-                    <div className="bg-white p-6 rounded-xl w-96">
+                    <div className="bg-white p-6 rounded-none w-96">
                         <h3 className="font-bold mb-4">Quick Add Driver</h3>
                         <form onSubmit={createDriver} className="space-y-3">
-                            <input className="w-full border p-2 rounded text-sm" placeholder="Driver Name" value={newDriver.name} onChange={e => setNewDriver({ ...newDriver, name: e.target.value })} required />
-                            <input className="w-full border p-2 rounded text-sm" placeholder="Phone (e.g. 9477...)" value={newDriver.phone} onChange={e => setNewDriver({ ...newDriver, phone: e.target.value })} required />
+                            <input className="w-full border p-2 rounded-none text-sm" placeholder="Driver Name" value={newDriver.name} onChange={e => setNewDriver({ ...newDriver, name: e.target.value })} required />
+                            <input className="w-full border p-2 rounded-none text-sm" placeholder="Phone (e.g. 9477...)" value={newDriver.phone} onChange={e => setNewDriver({ ...newDriver, phone: e.target.value })} required />
                             <div className="grid grid-cols-2 gap-2">
                                 <select
-                                    className="w-full border p-2 rounded text-sm bg-white"
+                                    className="w-full border p-2 rounded-none text-sm bg-white"
                                     value={newDriver.vehicleType}
                                     onChange={e => setNewDriver({ ...newDriver, vehicleType: e.target.value })}
                                 >
@@ -634,15 +634,15 @@ const DriversFleetView = ({ bookings = [] }) => {
                                     <option value="minibus">Mini Bus</option>
                                     <option value="bus">Large Bus</option>
                                 </select>
-                                <input className="w-full border p-2 rounded text-sm" placeholder="Model (e.g. Toyota KDH)" value={newDriver.vehicleModel} onChange={e => setNewDriver({ ...newDriver, vehicleModel: e.target.value })} required />
+                                <input className="w-full border p-2 rounded-none text-sm" placeholder="Model (e.g. Toyota KDH)" value={newDriver.vehicleModel} onChange={e => setNewDriver({ ...newDriver, vehicleModel: e.target.value })} required />
                             </div>
                             <div className="grid grid-cols-2 gap-2">
-                                <input className="w-full border p-2 rounded text-sm" placeholder="Number Plate" value={newDriver.vehicleNumber} onChange={e => setNewDriver({ ...newDriver, vehicleNumber: e.target.value })} required />
-                                <input className="w-full border p-2 rounded text-sm" placeholder="Year" value={newDriver.vehicleYear} onChange={e => setNewDriver({ ...newDriver, vehicleYear: e.target.value })} />
+                                <input className="w-full border p-2 rounded-none text-sm" placeholder="Number Plate" value={newDriver.vehicleNumber} onChange={e => setNewDriver({ ...newDriver, vehicleNumber: e.target.value })} required />
+                                <input className="w-full border p-2 rounded-none text-sm" placeholder="Year" value={newDriver.vehicleYear} onChange={e => setNewDriver({ ...newDriver, vehicleYear: e.target.value })} />
                             </div>
                             <div className="flex gap-2 pt-2">
-                                <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 p-2 bg-gray-100 rounded font-bold text-sm">Cancel</button>
-                                <button type="submit" disabled={isSubmitting} className="flex-1 p-2 bg-emerald-900 text-white rounded font-bold text-sm flex items-center justify-center gap-2">
+                                <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 p-2 bg-gray-100 rounded-none font-bold text-sm">Cancel</button>
+                                <button type="submit" disabled={isSubmitting} className="flex-1 p-2 bg-emerald-900 text-white rounded-none font-bold text-sm flex items-center justify-center gap-2">
                                     {isSubmitting && <Loader2 size={14} className="animate-spin" />}
                                     Add Driver
                                 </button>
