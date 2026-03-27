@@ -147,7 +147,7 @@ const FleetSection = () => {
                                                 <span className="text-[8px] font-black uppercase tracking-widest mb-1 text-black/40 italic">{point}</span>
                                                 <div className="flex flex-col items-center">
                                                     <span className="text-xs md:text-sm font-black text-black">Rs {priceLKR.toLocaleString()}</span>
-                                                    <span className="text-[9px] font-black text-black/50">
+                                                    <span className="text-[10px] md:text-xs font-black text-black">
                                                         $ {displayUSD}
                                                     </span>
                                                 </div>
