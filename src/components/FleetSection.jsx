@@ -73,8 +73,8 @@ const FleetSection = () => {
                     {vehicles.map((vehicle, idx) => (
                         <div key={vehicle._id} className="flex flex-col border-8 border-black bg-white dark:bg-[#111] hover:bg-slate-50 transition-all duration-300">
 
-                            {/* Category Header - Slimmer */}
-                            <div className="bg-black text-[#FACC15] p-2 text-center border-b-4 border-black font-black uppercase tracking-[0.4em] text-[10px] italic">
+                            {/* Category Header - Minimalist White */}
+                            <div className="bg-white text-black p-2 text-center border-b-4 border-black font-black uppercase tracking-[0.4em] text-[10px] italic">
                                 {vehicle.category.replace('-', ' ')}
                             </div>
 
