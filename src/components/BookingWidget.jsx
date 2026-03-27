@@ -523,7 +523,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     return (
         <div className="w-full max-w-6xl mx-auto pt-28 md:pt-36 relative z-40 px-3 sm:px-4">
             {/* Tab Navigation - Boxy Style */}
-            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-8 border-[6px] border-black transition-all overflow-hidden divide-x-[4px] divide-black" role="tablist">
+            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-8 border-[10px] border-black transition-all overflow-hidden divide-x-[6px] divide-black" role="tablist">
 
                 <div className="grid grid-cols-4 w-full sm:w-auto">
                     {[
