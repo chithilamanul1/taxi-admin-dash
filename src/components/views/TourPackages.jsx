@@ -51,7 +51,7 @@ const TourPackages = () => {
                 ) : (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                         {tours.map((pkg) => (
-                            <div key={pkg._id || pkg.id} className="premium-box bg-white dark:bg-[#111] overflow-hidden group hover:scale-[1.02] transition-all duration-500 border-4 border-black flex flex-col h-full rounded-none">
+                            <div key={pkg._id || pkg.id} className="premium-box bg-white dark:bg-[#111] overflow-hidden group hover:scale-[1.02] transition-all duration-500 border-[10px] border-black flex flex-col h-full rounded-none">
                                 {/* Image */}
                                 <Link href={`/tour-packages/${pkg.slug || pkg.id}`} className="block h-64 overflow-hidden relative">
                                     <img

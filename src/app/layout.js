@@ -1,5 +1,6 @@
 import './globals.css'
 import Navbar from '../components/Navbar'
+import OfferMarquee from '../components/OfferMarquee'
 import FloatingContact from '../components/FloatingContact'
 import Footer from '../components/Footer'
 import AuthProvider from '../components/AuthProvider'
@@ -240,6 +241,7 @@ export default function RootLayout({ children }) {
 
                     <AuthProvider>
                         <CurrencyProvider>
+                            <OfferMarquee />
                             <Navbar />
                             <main>{children}</main>
                             <FloatingContact />

@@ -61,25 +61,14 @@ const ToursWidget = () => {
                 ))}
             </div>
 
-            <div className="grid md:grid-cols-[1fr,300px] gap-6 items-center bg-white p-1.5 rounded-none border-[6px] border-black">
-                <div className="flex items-center gap-6 px-8 py-4">
+            <div className="grid md:grid-cols-[1fr] gap-6 items-center bg-white p-1.5 rounded-none border-[6px] border-black">
+                <div className="flex items-center justify-between px-8 py-4">
                     <div className="flex flex-col gap-1">
-                        <span className="text-[10px] font-black text-navy/40 uppercase tracking-widest pl-1">Arrival Date</span>
-                        <input
-                            type="date"
-                            value={selectedDate}
-                            onChange={(e) => setSelectedDate(e.target.value)}
-                            className="bg-transparent border-none outline-none font-black text-navy text-base cursor-pointer"
-                        />
-                    </div>
-                </div>
-                <div className="hidden md:flex items-center justify-between border-l-[6px] border-black px-8">
-                    <div className="flex flex-col gap-1">
-                        <span className="text-[10px] font-black text-navy/40 uppercase tracking-widest">Duration</span>
-                        <div className="flex items-center gap-4">
-                            <button onClick={() => setTourDuration(Math.max(1, tourDuration - 1))} className="text-black transition-colors"><Clock size={16} /></button>
-                            <span className="font-black text-black text-base">{tourDuration} Days</span>
-                            <button onClick={() => setTourDuration(tourDuration + 1)} className="text-black transition-colors"><Zap size={16} /></button>
+                        <span className="text-[10px] font-black text-navy/40 uppercase tracking-widest pl-1">Tour Duration</span>
+                        <div className="flex items-center gap-6 mt-2">
+                            <button onClick={() => setTourDuration(Math.max(1, tourDuration - 1))} className="w-10 h-10 bg-slate-100 border-2 border-black flex items-center justify-center hover:bg-black hover:text-white transition-all"><Clock size={16} /></button>
+                            <span className="font-black text-black text-xl italic tracking-tighter uppercase underline decoration-4 decoration-[#FACC15]">{tourDuration} Days</span>
+                            <button onClick={() => setTourDuration(tourDuration + 1)} className="w-10 h-10 bg-black text-[#FACC15] border-2 border-black flex items-center justify-center hover:bg-[#FACC15] hover:text-black transition-all"><Zap size={16} /></button>
                         </div>
                     </div>
                 </div>

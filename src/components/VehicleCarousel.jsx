@@ -92,8 +92,8 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                             className={`
                                 relative flex-shrink-0 w-full max-w-[420px] mx-auto snap-start transition-all duration-300 group/card flex flex-col
                                 ${isSelected 
-                                    ? 'border-[4px] border-black bg-[#FACC15]/5 -translate-y-2' 
-                                    : 'border-[4px] border-black hover:-translate-y-1'}
+                                    ? 'border-[8px] border-black bg-[#FACC15]/5 -translate-y-2' 
+                                    : 'border-[8px] border-black hover:-translate-y-1'}
                                 ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
                                 bg-white dark:bg-[#111] rounded-none
                                 overflow-visible h-full
@@ -189,7 +189,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                             </div>
 
                             {/* Bottom Accent Bar */}
-                            <div className={`h-3 w-full transition-colors duration-500 relative z-30 shrink-0 ${isSelected ? 'bg-[#FACC15]' : 'bg-black dark:bg-[#FACC15]/40'}`}></div>
+                            <div className={`h-1.5 w-full transition-colors duration-500 relative z-30 shrink-0 ${isSelected ? 'bg-[#FACC15]' : 'bg-black dark:bg-[#FACC15]/40'}`}></div>
 
                             {/* Capacity Stats - Relocated below everything */}
                             <div className="px-5 md:px-8 pb-10 mt-6 relative z-40 shrink-0">
