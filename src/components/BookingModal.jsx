@@ -1141,7 +1141,22 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     </div>
                                                 </div>
 
-                                                <div className="space-y-6">
+                                                 <div className="space-y-6">
+                                                    {/* Compact Vehicle Summary in Step 2 */}
+                                                    <div className="flex items-center gap-4 bg-slate-50 dark:bg-white/5 p-4 border-4 border-black group/v-summary animate-slide-in">
+                                                        <div className="w-16 h-12 bg-white dark:bg-white/10 border-2 border-black flex items-center justify-center p-1 overflow-hidden shrink-0">
+                                                            <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full h-full object-contain scale-110" />
+                                                        </div>
+                                                        <div className="min-w-0 flex-1">
+                                                            <p className="text-[10px] font-black text-black dark:text-white uppercase truncate">{displayVehicleName(selectedVehicle?.name)}</p>
+                                                            <div className="flex items-center gap-2 mt-1">
+                                                                <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">{selectedVehicle?.capacity || 4} Pax</span>
+                                                                <span className="w-1 h-1 bg-black/20 dark:bg-white/20 rounded-full"></span>
+                                                                <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">{selectedVehicle?.luggage || 2} Bags</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div className="flex gap-5">
                                                          <div className="w-10 h-10 rounded-none bg-black text-[#FACC15] flex items-center justify-center shrink-0 border-4 border-black"><MapPin size={20} /></div>
                                                          <div className="min-w-0">
@@ -1200,7 +1215,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             </p>
                                                         </div>
                                                         <div className="text-right">
-                                                            <p className="text-[9px] font-black text-black/30 dark:text-white/40 uppercase tracking-[0.3em] mb-2">Fleet Tier</p>
+                                                            <p className="text-[9px] font-black text-[#FACC15] dark:text-yellow-400 uppercase tracking-[0.3em] mb-2">Fleet Verified</p>
                                                             <p className="text-xs font-black text-black dark:text-white uppercase tracking-tighter">{displayVehicleName(selectedVehicle?.name)}</p>
                                                         </div>
                                                     </div>

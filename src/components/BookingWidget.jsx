@@ -911,36 +911,36 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             <div className="">
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
-                                    className="w-full h-24 px-6 flex items-center justify-between bg-white dark:bg-white/5 border-2 border-black rounded-none hover:-translate-y-0.5 transition-all group overflow-hidden relative mt-4"
+                                    className="w-full h-16 px-6 flex items-center justify-between bg-white dark:bg-white/5 border-2 border-black rounded-none hover:-translate-y-0.5 transition-all group overflow-hidden relative mt-4"
                                     aria-label="Select Vehicle"
                                 >
-                                    <div className="flex items-center gap-6">
-                                        <div className="w-16 h-14 bg-white dark:bg-white/10 rounded-none flex items-center justify-center p-1 border-2 border-black">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-10 bg-white dark:bg-white/10 rounded-none flex items-center justify-center p-1 border-2 border-black">
                                             {vehiclePricing[vehicle]?.image ? (
                                                 <div className="relative w-full h-full">
                                                     <Image
                                                         src={vehiclePricing[vehicle].image}
                                                         alt={vehiclePricing[vehicle]?.name || "Vehicle"}
                                                         fill
-                                                        className="object-contain"
-                                                        sizes="64px"
+                                                        className="object-contain scale-110"
+                                                        sizes="48px"
                                                     />
                                                 </div>
                                             ) : (
-                                                <Car className="text-black dark:text-white" />
+                                                <Car className="text-black dark:text-white" size={16} />
                                             )}
                                         </div>
                                         <div className="text-left">
-                                            <p className="font-black text-lg text-black dark:text-white uppercase tracking-tight">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
-                                            <div className="flex items-center gap-3 text-[10px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-widest mt-1">
+                                            <p className="font-black text-sm text-black dark:text-white uppercase tracking-tight leading-none">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
+                                            <div className="flex items-center gap-2 text-[8px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-widest mt-1">
                                                 <span>{vehiclePricing[vehicle]?.capacity || 4} Pax</span>
                                                 <span className="w-1 h-1 bg-black dark:bg-white/20 rounded-full"></span>
                                                 <span>{vehiclePricing[vehicle]?.luggage || 2} Luggage</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="w-10 h-10 rounded-none bg-[#FACC15] dark:bg-[#FACC15]/20 text-black dark:text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform border-2 border-black">
-                                        <ChevronDown size={20} />
+                                    <div className="w-8 h-8 rounded-none bg-[#FACC15] dark:bg-[#FACC15]/20 text-black dark:text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform border-2 border-black shrink-0">
+                                        <ChevronDown size={16} />
                                     </div>
                                 </button>
                             </div>
@@ -990,9 +990,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                     <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
                                         <span className="text-slate-500 dark:text-slate-400">Vehicle Type</span>
-                                        <span className="text-black dark:text-yellow-400">
-                                            {vehiclePricing[vehicle]?.name || 'Select Vehicle'}
-                                        </span>
+                                        <div className="flex items-center gap-3 text-black dark:text-yellow-400">
+                                            {vehiclePricing[vehicle]?.image && (
+                                                <div className="w-8 h-6 bg-white dark:bg-white/10 border border-black p-0.5 overflow-hidden shrink-0">
+                                                    <img src={vehiclePricing[vehicle].image} alt="" className="w-full h-full object-contain" />
+                                                </div>
+                                            )}
+                                            <span>{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</span>
+                                        </div>
                                     </div>
 
                                     {/* Detailed Price Breakdown */}

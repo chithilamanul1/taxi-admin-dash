@@ -54,6 +54,50 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
         return { suitable: true };
     };
 
+    if (isCondensed && selectedId) {
+        const vehicle = displayVehicles[0];
+        if (!vehicle) return null;
+
+        return (
+            <div 
+                className="relative bg-white dark:bg-[#111] border-[4px] border-black p-4 flex items-center gap-6 animate-slide-up group/condensed"
+                onClick={() => onSelect(null)} // Hidden hint to expand? Or maybe just display
+            >
+                <div className="w-24 h-20 bg-slate-50 dark:bg-white/5 border-2 border-black flex items-center justify-center p-2 shrink-0 overflow-hidden">
+                    <img 
+                        src={vehicle.image} 
+                        alt={vehicle.name} 
+                        className="w-full h-full object-contain scale-125"
+                    />
+                </div>
+                <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-black text-black dark:text-white uppercase tracking-widest truncate">{displayName(vehicle.name)}</h4>
+                    <div className="flex items-center gap-3 mt-1.5 overflow-hidden">
+                        {[
+                            { icon: Users, val: vehicle.capacity || 4 },
+                            { icon: Briefcase, val: vehicle.suitcases || 2 },
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                                <item.icon size={12} strokeWidth={3} />
+                                <span className="text-[10px] font-black">{item.val}</span>
+                            </div>
+                        ))}
+                        <div className="h-3 w-[1.5px] bg-black/10 dark:bg-white/10 mx-1"></div>
+                        <span className="text-[10px] font-black text-[#FACC15] uppercase tracking-widest whitespace-nowrap">
+                            Selected Fleet
+                        </span>
+                    </div>
+                </div>
+                <div className="text-right shrink-0 pr-2">
+                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Total Fare</p>
+                    <p className="text-lg font-black text-black dark:text-white leading-none">
+                        {convertPrice(vehicle.calculatedTotal).symbol} {convertPrice(vehicle.calculatedTotal).value.toLocaleString()}
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="relative group/carousel">
             <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-8 md:mb-10 px-2 lg:px-0">
@@ -69,9 +113,9 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                     )}
 
                     <h3 className="text-xl md:text-2xl font-black text-black dark:text-white flex flex-wrap items-center gap-3 md:gap-4 uppercase tracking-tighter">
-                        {isCondensed ? 'SELECTED VEHICLE' : 'VEHICLE OPTIONS'}
+                        VEHICLE OPTIONS
                         <span className="text-[9px] md:text-[10px] bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black px-4 md:px-6 py-1.5 rounded-none border-2 border-black tracking-[0.2em] font-black">
-                            {displayVehicles.length} {displayVehicles.length === 1 ? 'UNIT' : 'MODELS'}
+                            {displayVehicles.length} UNITS
                         </span>
                     </h3>
                 </div>
@@ -92,7 +136,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                             className={`
                                 relative flex-shrink-0 w-full max-w-[420px] mx-auto snap-start transition-all duration-300 group/card flex flex-col
                                 ${isSelected 
-                                    ? 'border-[8px] border-black bg-[#FACC15]/5 -translate-y-2' 
+                                    ? 'border-[8px] border-black bg-[#FACC15]/5 -translate-y-2 font-black' 
                                     : 'border-[8px] border-black hover:-translate-y-1'}
                                 ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
                                 bg-white dark:bg-[#111] rounded-none
@@ -110,15 +154,12 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 </div>
                             )}
 
-                            {/* Selected indicator — thin top bar instead of full border */}
                             {isSelected && (
                                 <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#FACC15] z-10 pointer-events-none" />
                             )}
 
-                            {/* ───── Card top: price + name area ───── */}
                             <div className="p-6 md:p-8 pb-4 relative flex flex-col items-center flex-1 h-full">
 
-                                {/* Faint background index number */}
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[160px] font-black text-black/[0.03] dark:text-white/[0.02] tracking-tighter pointer-events-none select-none">
                                     {displayIdx}
                                 </div>
@@ -152,25 +193,9 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                                 {convertPrice(vehicle.calculatedTotal).symbol} {convertPrice(vehicle.calculatedTotal).value.toLocaleString()}
                                             </span>
                                         </div>
-                                        {/* Secondary currency display */}
-                                        {currency === 'LKR' ? (
-                                            <div className="flex justify-center gap-4 mt-2">
-                                                <div className="text-[14px] font-semibold text-slate-500 dark:text-white/50 tracking-tight">
-                                                    ~ $ {(vehicle.calculatedTotal * (rates['USD'] || 0.0032)).toFixed(2)}
-                                                </div>
-                                                <div className="text-[14px] font-semibold text-slate-500 dark:text-white/50 tracking-tight">
-                                                    ~ € {(vehicle.calculatedTotal * (rates['EUR'] || 0.003)).toFixed(2)}
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div className="text-[14px] font-semibold text-slate-500 dark:text-white/50 mt-1 tracking-tight">
-                                                ~ Rs {vehicle.calculatedTotal.toLocaleString()}
-                                            </div>
-                                        )}
                                     </div>
                                 )}
 
-                                {/* ───── Vehicle image — now in flow to stay below details ───── */}
                                 <div className="w-full flex justify-center items-end py-2 relative z-10 mt-auto min-h-[160px] md:min-h-[200px]">
                                     <img
                                         src={vehicle.image}
@@ -188,10 +213,8 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
 
                             </div>
 
-                            {/* Bottom Accent Bar */}
                             <div className={`h-1.5 w-full transition-colors duration-500 relative z-30 shrink-0 ${isSelected ? 'bg-[#FACC15]' : 'bg-black dark:bg-[#FACC15]/40'}`}></div>
 
-                            {/* Capacity Stats - Relocated below everything */}
                             <div className="px-5 md:px-8 pb-10 mt-6 relative z-40 shrink-0">
                                 <div className="grid grid-cols-3 gap-2 md:gap-3">
                                     {[
