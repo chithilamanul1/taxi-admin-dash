@@ -73,14 +73,14 @@ const FleetSection = () => {
                     {vehicles.map((vehicle, idx) => (
                         <div key={vehicle._id} className="flex flex-col border-8 border-black bg-white dark:bg-[#111] hover:bg-slate-50 transition-all duration-300">
 
-                            {/* Category Header */}
-                            <div className="bg-black text-[#FACC15] p-5 text-center border-b-8 border-black font-black uppercase tracking-[0.4em] text-xs italic">
+                            {/* Category Header - Slimmer */}
+                            <div className="bg-black text-[#FACC15] p-2 text-center border-b-4 border-black font-black uppercase tracking-[0.4em] text-[10px] italic">
                                 {vehicle.category.replace('-', ' ')}
                             </div>
 
-                            {/* Image Box */}
-                            <div className="p-12 h-80 flex items-center justify-center bg-slate-50 dark:bg-white/5 border-b-8 border-black relative overflow-hidden">
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[150px] font-black text-black/[0.05] italic tracking-tighter select-none pointer-events-none uppercase">
+                            {/* Image Box - Shorter */}
+                            <div className="p-6 h-48 md:h-64 flex items-center justify-center bg-slate-50 dark:bg-white/5 border-b-4 border-black relative overflow-hidden">
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[100px] font-black text-black/[0.05] italic tracking-tighter select-none pointer-events-none uppercase">
                                     {vehicle.vehicleType.split('-')[0]}
                                 </div>
                                 <div className="relative w-full h-full transform group-hover:scale-110 transition-transform duration-700">
@@ -94,39 +94,39 @@ const FleetSection = () => {
                                 </div>
                             </div>
 
-                            {/* Description Box */}
-                            <div className="p-10 flex-1 border-b-8 border-black">
-                                <h3 className="text-3xl font-black text-black dark:text-white mb-8 uppercase italic tracking-tighter leading-none">{vehicle.name}</h3>
-                                <div className="grid grid-cols-2 gap-8">
-                                    <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                                        <div className="w-10 h-10 bg-black/5 dark:bg-white/5 border-4 border-black flex items-center justify-center shrink-0">
-                                            <Users size={18} className="text-black dark:text-[#FACC15]" />
+                            {/* Description Box - Tighter */}
+                            <div className="p-4 md:p-8 flex-1 border-b-4 border-black">
+                                <h3 className="text-xl md:text-2xl font-black text-black dark:text-white mb-4 uppercase italic tracking-tighter leading-none">{vehicle.name}</h3>
+                                <div className="grid grid-cols-2 gap-3 md:gap-6">
+                                    <div className="flex items-center gap-3 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                        <div className="w-8 h-8 bg-black/5 dark:bg-white/5 border-2 border-black flex items-center justify-center shrink-0">
+                                            <Users size={16} className="text-black dark:text-[#FACC15]" />
                                         </div>
                                         {vehicle.capacity} PAX
                                     </div>
-                                    <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                                        <div className="w-10 h-10 bg-black/5 dark:bg-white/5 border-4 border-black flex items-center justify-center shrink-0">
-                                            <Briefcase size={18} className="text-black dark:text-[#FACC15]" />
+                                    <div className="flex items-center gap-3 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                        <div className="w-8 h-8 bg-black/5 dark:bg-white/5 border-2 border-black flex items-center justify-center shrink-0">
+                                            <Briefcase size={16} className="text-black dark:text-[#FACC15]" />
                                         </div>
                                         {vehicle.luggage} LUG
                                     </div>
-                                    <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                                        <div className="w-10 h-10 bg-black/5 dark:bg-white/5 border-4 border-black flex items-center justify-center shrink-0">
-                                            <ShoppingBag size={18} className="text-black dark:text-[#FACC15]" />
+                                    <div className="flex items-center gap-3 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                        <div className="w-8 h-8 bg-black/5 dark:bg-white/5 border-2 border-black flex items-center justify-center shrink-0">
+                                            <ShoppingBag size={16} className="text-black dark:text-[#FACC15]" />
                                         </div>
                                         {vehicle.handLuggage} HAND
                                     </div>
-                                    <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-[#00A99D]">
-                                        <div className="w-10 h-10 bg-black/5 dark:bg-white/5 border-4 border-black flex items-center justify-center shrink-0">
-                                            <Wind size={18} className="animate-pulse" />
+                                    <div className="flex items-center gap-3 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-[#00A99D]">
+                                        <div className="w-8 h-8 bg-black/5 dark:bg-white/5 border-2 border-black flex items-center justify-center shrink-0">
+                                            <Wind size={16} className="animate-pulse" />
                                         </div>
                                         AC ON
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Auto-Sliding Dynamic Pricing Ticker */}
-                            <div className="bg-[#FACC15] border-t-0 p-0 overflow-hidden relative h-24 flex items-center">
+                            {/* Auto-Sliding Dynamic Pricing Ticker - Slimmer */}
+                            <div className="bg-[#FACC15] border-t-0 p-0 overflow-hidden relative h-20 md:h-24 flex items-center">
                                 <motion.div 
                                     animate={{ x: ["0%", "-50%"] }}
                                     transition={{ 
@@ -143,11 +143,11 @@ const FleetSection = () => {
                                         const displayUSD = (converted && typeof converted.value === 'number') ? converted.value.toFixed(0) : '0';
                                         
                                         return (
-                                            <div key={`${point}-${i}`} className="inline-flex flex-col items-center justify-center min-w-[160px] px-8 border-r-4 border-black/10 py-4 h-24">
-                                                <span className="text-[9px] font-black uppercase tracking-widest mb-1 text-black/40 italic">{point}</span>
+                                            <div key={`${point}-${i}`} className="inline-flex flex-col items-center justify-center min-w-[140px] px-6 border-r-4 border-black/10 py-3 h-20 md:h-24">
+                                                <span className="text-[8px] font-black uppercase tracking-widest mb-1 text-black/40 italic">{point}</span>
                                                 <div className="flex flex-col items-center">
-                                                    <span className="text-sm font-black text-black">Rs {priceLKR.toLocaleString()}</span>
-                                                    <span className="text-[10px] font-black text-black/50">
+                                                    <span className="text-xs md:text-sm font-black text-black">Rs {priceLKR.toLocaleString()}</span>
+                                                    <span className="text-[9px] font-black text-black/50">
                                                         $ {displayUSD}
                                                     </span>
                                                 </div>
