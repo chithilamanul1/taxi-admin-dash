@@ -116,20 +116,20 @@ const Hero = () => {
                                                 animate={{ 
                                                     rotate: dest.rotate
                                                 }}
-                                                className="relative bg-white border-[8px] border-black p-4 pb-16 w-full group select-none"
+                                                className="relative bg-white border-[16px] border-black p-4 pb-16 w-full group select-none"
                                             >
                                                 {/* Card Number & Price Ticker */}
                                                 <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-1">
-                                                    <div className="w-10 h-10 bg-[#FACC15] border-4 border-black rounded-full flex items-center justify-center font-black italic text-sm">
+                                                    <div className="w-10 h-10 bg-[#FACC15] border-6 border-black rounded-full flex items-center justify-center font-black italic text-sm">
                                                         0{dest.id}
                                                     </div>
-                                                    <div className="bg-black text-white px-3 py-0.5 font-black italic text-[10px] border-2 border-black -rotate-2">
+                                                    <div className="bg-black text-white px-3 py-0.5 font-black italic text-[10px] border-4 border-black -rotate-2">
                                                         LKR {price.toLocaleString()}
                                                     </div>
                                                 </div>
 
                                                 {/* Image Container - Slimmer aspect ratio */}
-                                                <div className="relative aspect-[3/2] overflow-hidden border-4 border-black bg-slate-200 pointer-events-none">
+                                                <div className="relative aspect-[3/2] overflow-hidden border-10 border-black bg-slate-200 pointer-events-none">
                                                     <Image
                                                         src={dest.image}
                                                         alt={dest.name}

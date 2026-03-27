@@ -71,15 +71,15 @@ const FleetSection = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-6xl mx-auto">
                     {vehicles.map((vehicle, idx) => (
-                        <div key={vehicle._id} className="flex flex-col border-8 border-black bg-white dark:bg-[#111] hover:bg-slate-50 transition-all duration-300">
+                        <div key={vehicle._id} className="flex flex-col border-[12px] border-black bg-white dark:bg-[#111] hover:bg-slate-50 transition-all duration-300">
 
                             {/* Category Header - Minimalist White */}
-                            <div className="bg-white text-black p-2 text-center border-b-4 border-black font-black uppercase tracking-[0.4em] text-[10px] italic">
+                            <div className="bg-white text-black p-2 text-center border-b-8 border-black font-black uppercase tracking-[0.4em] text-[10px] italic">
                                 {vehicle.category.replace('-', ' ')}
                             </div>
 
                             {/* Image Box - Bigger Images, still compact */}
-                            <div className="p-2 h-60 md:h-80 flex items-center justify-center bg-slate-50 dark:bg-white/5 border-b-4 border-black relative overflow-hidden">
+                            <div className="p-2 h-60 md:h-80 flex items-center justify-center bg-slate-50 dark:bg-white/5 border-b-8 border-black relative overflow-hidden">
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[140px] font-black text-black/[0.05] italic tracking-tighter select-none pointer-events-none uppercase">
                                     {vehicle.vehicleType.split('-')[0]}
                                 </div>
@@ -95,7 +95,7 @@ const FleetSection = () => {
                             </div>
 
                             {/* Description Box - Tighter */}
-                            <div className="p-4 md:p-8 flex-1 border-b-4 border-black">
+                            <div className="p-4 md:p-8 flex-1 border-b-8 border-black">
                                 <h3 className="text-xl md:text-2xl font-black text-black dark:text-white mb-4 uppercase italic tracking-tighter leading-none">{vehicle.name}</h3>
                                 <div className="grid grid-cols-2 gap-3 md:gap-6">
                                     <div className="flex items-center gap-3 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500">
@@ -126,7 +126,7 @@ const FleetSection = () => {
                             </div>
 
                             {/* Auto-Sliding Dynamic Pricing Ticker - Slimmer */}
-                            <div className="bg-[#FACC15] border-t-0 p-0 overflow-hidden relative h-20 md:h-24 flex items-center">
+                            <div className="bg-[#FACC15] border-t-8 border-black p-0 overflow-hidden relative h-20 md:h-24 flex items-center">
                                 <motion.div 
                                     animate={{ x: ["0%", "-50%"] }}
                                     transition={{ 
@@ -143,7 +143,7 @@ const FleetSection = () => {
                                         const displayUSD = (converted && typeof converted.value === 'number') ? converted.value.toFixed(0) : '0';
                                         
                                         return (
-                                            <div key={`${point}-${i}`} className="inline-flex flex-col items-center justify-center min-w-[140px] px-6 border-r-4 border-black/10 py-3 h-20 md:h-24">
+                                            <div key={`${point}-${i}`} className="inline-flex flex-col items-center justify-center min-w-[140px] px-6 border-r-8 border-black py-3 h-20 md:h-24">
                                                 <span className="text-[8px] font-black uppercase tracking-widest mb-1 text-black/40 italic">{point}</span>
                                                 <div className="flex flex-col items-center">
                                                     <span className="text-xs md:text-sm font-black text-black">Rs {priceLKR.toLocaleString()}</span>

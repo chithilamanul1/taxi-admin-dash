@@ -101,10 +101,10 @@ export default function HomeClient() {
                         ].map((item, i) => (
                             <div key={i} className="group relative">
                                 <div 
-                                    className="bg-white p-4 border-4 border-black transition-transform hover:scale-105 hover:rotate-0 duration-500"
+                                    className="bg-white p-4 border-[12px] border-black transition-transform hover:scale-105 hover:rotate-0 duration-500"
                                     style={{ transform: `rotate(${item.rotate})` }}
                                 >
-                                    <div className="relative aspect-square overflow-hidden mb-4 border-4 border-black">
+                                    <div className="relative aspect-square overflow-hidden mb-4 border-8 border-black">
                                         <Image src={item.img} alt={item.name} fill className="object-cover" loading="lazy" sizes="(max-width: 768px) 50vw, 25vw" />
                                     </div>
                                     <div className="text-[10px] font-black uppercase tracking-tighter text-black italic">{item.name}</div>
