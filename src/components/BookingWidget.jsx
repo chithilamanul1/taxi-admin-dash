@@ -1064,24 +1064,29 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                 </div>
                                 
-                                <div className="pt-4 text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider flex items-center gap-2">
-                                    * Note: Highway tickets are not included and must be paid by the customer.
+                                <div className="mt-6 p-4 bg-yellow-400/20 border-2 border-black rounded-none flex items-start gap-3 animate-pulse">
+                                    <div className="w-5 h-5 bg-black rounded-none flex items-center justify-center text-[#FACC15] shrink-0 mt-0.5">
+                                        <Info size={14} strokeWidth={3} />
+                                    </div>
+                                    <p className="text-[11px] font-black text-black dark:text-yellow-400 uppercase tracking-tight leading-tight">
+                                        Note: Highway tickets are not included and must be paid by the customer.
+                                    </p>
                                 </div>
 
                                 <div className="flex flex-col sm:flex-row gap-6 pt-4">
                                     <button
                                         onClick={handleBook}
                                         disabled={!distance}
-                                        className="w-full bg-[#006ce4] text-white h-20 md:h-24 rounded-none border-4 border-black font-black uppercase tracking-[0.2em] text-lg md:text-xl hover:translate-y-[-4px] active:translate-y-0 shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center"
+                                        className="w-full bg-[#FACC15] text-black h-20 md:h-24 rounded-none border-4 border-black font-black uppercase tracking-[0.2em] text-lg md:text-xl hover:translate-y-[-4px] active:translate-y-0 shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center"
                                     >
                                         {isLoadingPricing ? (
-                                            <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                                            <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
                                         ) : (
                                             <div className="flex items-center justify-between w-full px-4 sm:px-6">
                                                 <div className="flex-1 text-center ml-8 sm:ml-12 text-[18px] sm:text-2xl">
                                                     BOOK TRIP NOW
                                                 </div>
-                                                <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 bg-white border-2 border-black rounded-none flex items-center justify-center text-[#006ce4] group-hover:scale-110 transition-transform">
+                                                <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 bg-black border-2 border-black rounded-none flex items-center justify-center text-[#FACC15] group-hover:scale-110 transition-transform">
                                                     <ArrowRight size={20} className="sm:w-6 sm:h-6" strokeWidth={4} />
                                                 </div>
                                             </div>
