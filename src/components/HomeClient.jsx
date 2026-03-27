@@ -68,6 +68,8 @@ export default function HomeClient() {
         <div className="bg-white dark:bg-black overflow-hidden transition-colors duration-300">
             <BookingWidget />
             
+            <div className="h-10 md:h-20" /> {/* Spacing to prevent clash */}
+
             <Hero onBookClick={handleHeroBook} />
 
             <FleetSection />

@@ -73,7 +73,7 @@ const Hero = () => {
     };
 
     return (
-        <section className="relative h-[350px] md:h-[450px] bg-white dark:bg-[#0a0a0a] overflow-hidden pt-4 pb-12 flex items-center justify-center border-b-8 border-black">
+        <section className="relative h-[400px] md:h-[550px] bg-white dark:bg-[#0a0a0a] overflow-hidden pt-16 md:pt-24 pb-12 flex items-center justify-center border-b-8 border-black">
             
             {/* Minimal Background Elements */}
             <div className="absolute top-10 left-10 w-32 h-32 border-[2px] border-black/5 -rotate-12 -z-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.03)_10px,rgba(0,0,0,0.03)_20px)]"></div>
