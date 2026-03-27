@@ -3,7 +3,7 @@ import Booking from '@/models/Booking';
 import User from '@/models/User'; // Ensure User is registered
 import Driver from '@/models/Driver'; // Ensure Driver is registered
 import { notFound } from 'next/navigation';
-import { CheckCircle, MapPin, Calendar, Clock, Car, Star, Phone, MessageSquare, ArrowRight, ShieldCheck, Zap, AlertCircle, Info } from 'lucide-react';
+import { CheckCircle, MapPin, Calendar, Clock, Car, Star, Phone, MessageSquare, ArrowRight, ShieldCheck, Zap, AlertCircle, Info, User as UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import BookingActions from '@/components/BookingActions';
 import TrackingMap from '@/components/TrackingMap';
@@ -89,7 +89,7 @@ export default async function BookingStatusPage({ params }) {
 
                             {[
                                 { id: 'pending', label: 'Booked', icon: CheckCircle },
-                                { id: 'confirmed', label: 'Assigned', icon: User },
+                                { id: 'confirmed', label: 'Assigned', icon: UserIcon },
                                 { id: 'ongoing', label: 'En Route', icon: Car },
                                 { id: 'completed', label: 'Finished', icon: Star }
                             ].map((s, idx) => {
@@ -229,7 +229,7 @@ export default async function BookingStatusPage({ params }) {
                         <TrackingMap
                             pickup={booking.pickupLocation}
                             dropoff={booking.dropoffLocation}
-                            driverId={booking.driver?.toString()}
+                            driverId={booking.driver?._id}
                         />
                     </div>
 
