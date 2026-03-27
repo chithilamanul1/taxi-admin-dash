@@ -865,61 +865,61 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     )}
 
                                     <div className="pt-4 space-y-6">
-                                         <label className={`text-[10px] font-black uppercase tracking-[0.3em] pl-3 leading-none ${errors.hasNameBoard ? 'text-red-500' : 'text-slate-400 dark:text-slate-500'}`}>Greeting Service / Name Board</label>
-                                         <div id="field-hasNameBoard" className={`relative overflow-hidden group rounded-none border-4 transition-all ${errors.hasNameBoard ? 'border-red-500 animate-shake' : ''} ${formData.hasNameBoard ? 'border-black dark:border-[#FACC15] bg-white dark:bg-[#111]' : 'border-black bg-white dark:bg-white/5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'}`}>
+                                         <label className={`text-[10px] font-black uppercase tracking-[0.3em] pl-3 leading-none ${errors.hasNameBoard ? 'text-red-500' : 'text-black dark:text-white'}`}>Greeting Service / Name Board</label>
+                                         <div id="field-hasNameBoard" className={`relative overflow-hidden group rounded-none border-4 transition-all ${errors.hasNameBoard ? 'border-red-500 animate-shake' : ''} ${formData.hasNameBoard ? 'border-black dark:border-[#FACC15] bg-white dark:bg-[#111]' : 'border-black bg-white dark:bg-white/5'}`}>
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/10 rounded-none blur-3xl -mr-16 -mt-16"></div>
                                             
                                             <div className="relative z-10 p-6 md:p-8 flex flex-col items-start gap-6">
                                                 <div className="flex items-center gap-5">
-                                                    <div className={`w-16 h-16 rounded-none flex items-center justify-center border-4 transition-colors overflow-hidden shrink-0 ${formData.hasNameBoard ? 'bg-[#FACC15] border-black text-black' : 'bg-white dark:bg-white/5 border-black text-slate-400'}`}>
-                                                        <Signpost size={32} strokeWidth={3} fill="currentColor" />
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <h4 className={`text-2xl font-black uppercase tracking-tighter ${formData.hasNameBoard ? 'text-white' : 'text-black dark:text-white'}`}>Airport Greeting</h4>
-                                                        <p className={`text-[10px] font-black uppercase tracking-widest ${formData.hasNameBoard ? 'text-[#FACC15]' : 'text-slate-400'}`}>Arrival Hall Meeting Service</p>
-                                                    </div>
+                                                     <div className={`w-16 h-16 rounded-none flex items-center justify-center border-4 transition-colors overflow-hidden shrink-0 ${formData.hasNameBoard ? 'bg-[#FACC15] border-black text-black' : 'bg-white dark:bg-white/5 border-black text-black/20 dark:text-white/20'}`}>
+                                                         <Signpost size={32} strokeWidth={3} fill="currentColor" />
+                                                     </div>
+                                                     <div className="flex flex-col">
+                                                         <h4 className={`text-2xl font-black uppercase tracking-tighter ${formData.hasNameBoard ? 'text-black dark:text-[#FACC15]' : 'text-black dark:text-white'}`}>Airport Greeting</h4>
+                                                         <p className={`text-[10px] font-black uppercase tracking-widest ${formData.hasNameBoard ? 'text-[#FACC15]' : 'text-black dark:text-white'}`}>Arrival Hall Meeting Service</p>
+                                                     </div>
                                                 </div>
  
                                                 <div className="flex flex-wrap items-center gap-4 w-full">
-                                                    <span className={`px-4 py-2 rounded-none text-[10px] font-black uppercase tracking-widest border-4 ${formData.hasNameBoard ? 'bg-white/10 border-white/20 text-[#FACC15]' : 'bg-[#FACC15]/20 border-black text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'}`}>
-                                                        + Rs {(pricingSettings?.nameBoardPrice || 2000).toLocaleString()}
-                                                    </span>
-                                                    <p className={`text-[9px] font-bold uppercase tracking-tight flex-1 min-w-[200px] ${formData.hasNameBoard ? 'text-white/40' : 'text-slate-400'}`}>
-                                                        Our driver will wait with a name sign at the arrival hall.
-                                                    </p>
+                                                     <span className={`px-4 py-2 rounded-none text-[10px] font-black uppercase tracking-widest border-4 ${formData.hasNameBoard ? 'bg-black text-[#FACC15] border-black' : 'bg-[#FACC15] border-black text-black'}`}>
+                                                         + Rs {(pricingSettings?.nameBoardPrice || 2000).toLocaleString()}
+                                                     </span>
+                                                     <p className={`text-[9px] font-bold uppercase tracking-tight flex-1 min-w-[200px] ${formData.hasNameBoard ? 'text-black/60 dark:text-white/60' : 'text-black dark:text-white'}`}>
+                                                         Our driver will wait with a name sign at the arrival hall.
+                                                     </p>
                                                 </div>
                                                 
                                                 <div className="grid grid-cols-2 gap-4 w-full">
-                                                    <button
-                                                        onClick={() => setFormData({ ...formData, hasNameBoard: true })}
-                                                        className={`p-4 rounded-none border-4 transition-all flex items-center justify-center gap-3 ${formData.hasNameBoard === true ? 'border-black bg-[#FACC15] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-black/40 backdrop-blur-md border-black text-white hover:border-black'}`}
-                                                    >
-                                                        <Check size={18} strokeWidth={4} />
-                                                        <span className="text-[10px] font-black uppercase tracking-widest">Add Service</span>
-                                                    </button>
-                                                    <button
-                                                        onClick={() => setFormData({ ...formData, hasNameBoard: false, nameBoardText: '' })}
-                                                        className={`p-4 rounded-none border-4 transition-all flex items-center justify-center gap-3 ${formData.hasNameBoard === false ? 'border-black bg-red-500 text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'bg-black/40 backdrop-blur-md border-black text-white hover:border-black'}`}
-                                                    >
-                                                        <X size={18} strokeWidth={4} />
-                                                        <span className="text-[10px] font-black uppercase tracking-widest">Skip Service</span>
-                                                    </button>
+                                                     <button
+                                                         onClick={() => setFormData({ ...formData, hasNameBoard: true })}
+                                                         className={`p-4 rounded-none border-4 transition-all flex items-center justify-center gap-3 ${formData.hasNameBoard === true ? 'border-black bg-[#FACC15] text-black' : 'bg-white dark:bg-white/10 border-black text-black dark:text-white hover:bg-[#FACC15] hover:text-black'}`}
+                                                     >
+                                                         <Check size={18} strokeWidth={4} />
+                                                         <span className="text-[10px] font-black uppercase tracking-widest">Add Service</span>
+                                                     </button>
+                                                     <button
+                                                         onClick={() => setFormData({ ...formData, hasNameBoard: false, nameBoardText: '' })}
+                                                         className={`p-4 rounded-none border-4 transition-all flex items-center justify-center gap-3 ${formData.hasNameBoard === false ? 'border-black bg-red-500 text-white' : 'bg-white dark:bg-white/10 border-black text-black dark:text-white hover:bg-black hover:text-white'}`}
+                                                     >
+                                                         <X size={18} strokeWidth={4} />
+                                                         <span className="text-[10px] font-black uppercase tracking-widest">Skip Service</span>
+                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     {formData.hasNameBoard && (
-                                        <div className="space-y-3 mt-6 animate-slide-up">
-                                            <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] pl-3 leading-none">Name Board Content</label>
-                                            <input
-                                                type="text"
-                                                value={formData.nameBoardText}
-                                                onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
-                                                className="w-full h-14 bg-slate-50 dark:bg-white/5 border-4 border-black px-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-xs text-black dark:text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-widest"
-                                                placeholder="Enter pickup name or greeting..."
-                                            />
-                                        </div>
+                                         <div className="space-y-3 mt-6 animate-slide-up">
+                                             <label className="text-[10px] font-black text-black dark:text-white uppercase tracking-[0.3em] pl-3 leading-none">Name Board Content</label>
+                                             <input
+                                                 type="text"
+                                                 value={formData.nameBoardText}
+                                                 onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
+                                                 className="w-full h-14 bg-slate-50 dark:bg-white/5 border-4 border-black px-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-xs text-black dark:text-white uppercase tracking-widest placeholder:text-black/20 dark:placeholder:text-white/20"
+                                                 placeholder="Enter pickup name or greeting..."
+                                             />
+                                         </div>
                                     )}
                                 </div>
                             </div>
