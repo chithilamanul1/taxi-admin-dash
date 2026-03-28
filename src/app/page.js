@@ -5,12 +5,12 @@ export const metadata = {
     description: 'Instant Booking! Reliable 24/7 airport transfers from Colombo Airport (CMB) to any destination in Sri Lanka. Fixed rates for Kandy, Galle, Sigiriya and more. Professional English-speaking drivers and premium vehicles.',
     keywords: 'Airport Taxi Sri Lanka, Colombo Airport Transfer, CMB Taxi Service, Bandaranaike Airport Taxi, Airport Pickup Sri Lanka, Sri Lanka Private Tours, KDH Van Rental Sri Lanka, Reliable Taxi Colombo, 24/7 Airport Taxi Sri Lanka, Sri Lanka Travel Transport',
     alternates: {
-        canonical: 'https://airporttaxis.lk',
+        canonical: 'https://srilankantaxi.lk',
     },
     openGraph: {
         title: '🚖 Airport Taxis Sri Lanka - Trusted Airport Transfers & Multi-Day Tours',
         description: 'Reliable 24/7 airport transfers from Colombo Airport (CMB). Professional drivers, comfortable vehicles, instant confirmation. Best rates guaranteed.',
-        url: 'https://airporttaxis.lk',
+        url: 'https://srilankantaxi.lk',
         siteName: 'Airport Taxis Pvt (Ltd)',
         images: [
             {
@@ -45,7 +45,7 @@ export default function Home() {
                         "publisher": {
                             "@type": "Organization",
                             "name": "Airport Taxis Pvt (Ltd)",
-                            "logo": "https://airporttaxis.lk/logo.png"
+                            "logo": "https://srilankantaxi.lk/logo.png"
                         }
                     })
                 }}
