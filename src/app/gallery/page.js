@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, MapPin, ArrowRight, Expand, X, Loader2 } from 'lucide-react';
-import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export default function GalleryPage() {
@@ -31,7 +30,6 @@ export default function GalleryPage() {
 
     return (
         <main className="bg-white dark:bg-black min-h-screen transition-colors duration-500">
-            <Navbar />
 
             {/* Hero Section */}
             <section className="pt-32 pb-20 border-b-[16px] border-black">

@@ -64,7 +64,7 @@ export const dayTrips = [
         price: { amount: 50.63, currency: 'USD' },
         category: 'Culture & Nature',
         tags: ['Sacred', 'Wildlife', 'Historical'],
-        image: 'https://images.unsplash.com/photo-1546708973-b339540b5162?q=80&w=1600&auto=format&fit=crop',
+        image: '/destinations/kandy.png',
         pickupLocations: ['Colombo', 'Negombo', 'Wadduwa', 'Mount Lavinia'],
         destinations: ['Pinnawala', 'Kandy', 'Peradeniya'],
         highlights: [
@@ -118,7 +118,7 @@ export const dayTrips = [
         price: { amount: 69, currency: 'USD' },
         category: 'History & Heritage',
         tags: ['UNESCO', 'Adventure', 'Culture'],
-        image: 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop',
+        image: '/destinations/sigiriya.png',
         pickupLocations: ['Colombo', 'Negombo', 'Kalutara', 'Bentota', 'Hikkaduwa', 'Galle'],
         destinations: ['Sigiriya', 'Dambulla', 'Minneriya/Kaudulla'],
         highlights: [
@@ -592,7 +592,7 @@ export const dayTrips = [
         price: { amount: 105, currency: 'USD' },
         category: 'Nature & Beach',
         tags: ['Coastal', 'Scenic', 'Private'],
-        image: 'https://images.unsplash.com/photo-1580881761697-359f47bc57c0?q=80&w=1600&auto=format&fit=crop',
+        image: '/destinations/mirissa.png',
         pickupLocations: ['Colombo', 'Negombo', 'Katunayake'],
         destinations: ['Madu River', 'Kosgoda', 'Galle Fort', 'Mirissa'],
         highlights: [
@@ -681,7 +681,7 @@ export const dayTrips = [
         price: { amount: 39, currency: 'USD' },
         category: 'Adventure & Scenic',
         tags: ['Hiking', 'Iconic', 'Adventure'],
-        image: 'https://images.unsplash.com/photo-1554593455-83f089304323?q=80&w=1600&auto=format&fit=crop',
+        image: '/destinations/ella.png',
         pickupLocations: ['Colombo', 'Negombo', 'Kandy'],
         destinations: ['Ella', 'Nine Arch Bridge', 'Little Adams Peak', 'Rawana Falls'],
         highlights: [
