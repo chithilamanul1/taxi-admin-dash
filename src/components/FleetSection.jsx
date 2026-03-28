@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React from 'react';
 import Image from 'next/image';
-import { Users, Briefcase, ShoppingBag, Wind, ArrowRight, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Users, Briefcase, ShoppingBag, Wind, ArrowRight, Loader2 } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
 import { destinations as allDestinations } from '@/lib/destinations';
 import { calculateBasePrice } from '@/lib/pricing-util';
@@ -49,15 +49,6 @@ const FleetSection = () => {
         return dest ? parseInt(dest.distance) : 0;
     };
 
-    const scrollRef = useRef(null);
-
-    const scroll = (direction) => {
-        if (scrollRef.current) {
-            const { current } = scrollRef;
-            const scrollAmount = window.innerWidth < 768 ? window.innerWidth * 0.8 : 500;
-            current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
-        }
-    };
 
     if (loading) {
         return (
@@ -78,22 +69,6 @@ const FleetSection = () => {
                         </h2>
                     </div>
 
-                    <div className="flex gap-4">
-                        <button 
-                            onClick={() => scroll('left')}
-                            className="w-14 h-14 bg-white border-4 border-black flex items-center justify-center text-black hover:bg-[#FACC15] transition-all"
-                            aria-label="Scroll left"
-                        >
-                            <ChevronLeft size={24} strokeWidth={3} />
-                        </button>
-                        <button 
-                            onClick={() => scroll('right')}
-                            className="w-14 h-14 bg-black border-4 border-black flex items-center justify-center text-[#FACC15] hover:bg-white hover:text-black transition-all"
-                            aria-label="Scroll right"
-                        >
-                            <ChevronRight size={24} strokeWidth={3} />
-                        </button>
-                    </div>
                 </div>
 
                 <div 
