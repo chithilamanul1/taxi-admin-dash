@@ -310,7 +310,7 @@ export const metadata = {
     "KDH Van Taxi Sri Lanka",
     "Colombo to Kandy taxi",
     "Colombo to Galle taxi",
-    "Bandaranaike International Airport taxi"
+    "Bandaranaike International Airport taxi",
     "7 seater taxi",
     "8 seater taxi",
     "affordable airport transfer",
@@ -666,7 +666,7 @@ export const metadata = {
     "wheelchair taxi",
     "wheelchair taxi near me",
     "wheelchair taxi service near me",
-    "yala national park taxi"
+    "yala national park taxi",
     "24/7 airport pickup sri lanka",
     "adangama private taxi",
     "airport greeting service colombo",
