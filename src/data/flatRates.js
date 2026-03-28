@@ -4,7 +4,7 @@ export const flatRates = {
         title: "Airport to Mirissa",
         price: 59,
         badge: "Top Choice",
-        img: "/mirissa.jpg",
+        img: "/mirissa-new-fix.png",
         meta: "Whale Watching Hub",
         allowedPaymentMode: "both"
     },
@@ -13,7 +13,7 @@ export const flatRates = {
         title: "Airport to Ahangama",
         price: 58,
         badge: "Deep South",
-        img: "/ahangama.jpg",
+        img: "/ahangama-new.png",
         meta: "Surfing & Yoga Hub",
         allowedPaymentMode: "both"
     },
@@ -22,7 +22,7 @@ export const flatRates = {
         title: "Airport to Sigiriya",
         price: 90,
         badge: "Historic",
-        img: "/sigiriya.jpg",
+        img: "/sigiriya-new-hero.png",
         meta: "Ancient Rock Fortress",
         allowedPaymentMode: "both"
     },

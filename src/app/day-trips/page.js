@@ -14,7 +14,7 @@ export const metadata = {
         siteName: 'Airport Taxis Pvt (Ltd)',
         images: [
             {
-                url: '/sigiriya.jpg',
+                url: '/sigiriya-new-hero.png',
                 width: 1200,
                 height: 630,
                 alt: 'Sigiriya Rock Fortress Day Trip Sri Lanka',
@@ -27,7 +27,7 @@ export const metadata = {
         card: 'summary_large_image',
         title: 'Explore Sri Lanka: 7 Must-See Day Trips',
         description: 'Daily private tours to Galle, Kandy, and Sigiriya starting from Colombo Airport or Negombo.',
-        images: ['/sigiriya.jpg'],
+        images: ['/sigiriya-new-hero.png'],
     }
 }
 

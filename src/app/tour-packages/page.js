@@ -14,7 +14,7 @@ export const metadata = {
         siteName: 'Airport Taxis Pvt (Ltd)',
         images: [
             {
-                url: '/sigiriya.jpg',
+                url: '/sigiriya-new-hero.png',
                 width: 1200,
                 height: 630,
                 alt: 'Sri Lanka Multi-Day Tour Package',
@@ -27,7 +27,7 @@ export const metadata = {
         card: 'summary_large_image',
         title: 'Book Your Dream Sri Lanka Tour',
         description: 'Customizable 5-14 day tour packages exploring Kandy, Nuwara Eliya, Ella, and the South Coast.',
-        images: ['/sigiriya.jpg'],
+        images: ['/sigiriya-new-hero.png'],
     }
 }
 

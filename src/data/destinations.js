@@ -2,7 +2,7 @@ export const destinations = {
     mirissa: {
         title: "Mirissa",
         description: "Mirissa is a small town on the south coast of Sri Lanka, located in the Matara District of the Southern Province. It is a popular tourist destination, known for its beaches, whale watching, and nightlife.",
-        image: "/mirissa.jpg",
+        image: "/mirissa-new-fix.png",
         badge: "Top Choice",
         meta: "Whale Watching Hub",
         activities: [
@@ -36,7 +36,7 @@ export const destinations = {
     sigiriya: {
         title: "Sigiriya",
         description: "Sigiriya or Sinhagiri is an ancient rock fortress located in the northern Matale District near the town of Dambulla in the Central Province, Sri Lanka.",
-        image: "/sigiriya.jpg",
+        image: "/sigiriya-new-hero.png",
         badge: "Historic",
         meta: "Ancient Rock Fortress",
         activities: [
