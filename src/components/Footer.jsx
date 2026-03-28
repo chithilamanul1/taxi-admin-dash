@@ -93,6 +93,32 @@ const Footer = () => {
                     </div>
                 </div>
 
+                {/* Service Directory - SEO Keyword Cloud (Subtle) */}
+                <div className="pt-8 border-t border-black/5 dark:border-white/5 mt-12">
+                    <div className="flex flex-wrap gap-x-4 gap-y-2 text-[8px] font-black uppercase tracking-widest text-black/20 dark:text-white/20">
+                        <span>Airport Taxi Service</span>
+                        <span>Taxi Booking Sri Lanka</span>
+                        <span>Colombo Airport Transfer</span>
+                        <span>Airport Cab Booking</span>
+                        <span>Airport Taxi Transfers</span>
+                        <span>Airport Shuttle Service</span>
+                        <span>Airport Car Service</span>
+                        <span>Taxi Van to Airport</span>
+                        <span>Sri Lanka Airport Taxi Price</span>
+                        <span>Airport Transfer Service</span>
+                        <span>Taxi for Airport Transfer</span>
+                        <span>Katunayake Airport Taxi</span>
+                        <span>Airport Pickup Service</span>
+                        <span>Cheap Airport Taxi</span>
+                        <span>Private Taxi Hire</span>
+                        <span>Minivan Taxi Sri Lanka</span>
+                        <span>One-Way Taxi Sri Lanka</span>
+                        <span>Airport Drop Service</span>
+                        <span>Colombo City Taxi</span>
+                        <span>KDH Van Rental</span>
+                    </div>
+                </div>
+
                 {/* Bottom Bar */}
                 <div className="pt-12 border-t-2 border-black/10 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
                     <p className="text-[10px] text-black/40 dark:text-white/40 font-black uppercase tracking-[0.3em]">

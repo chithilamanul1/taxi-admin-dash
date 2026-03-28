@@ -4,12 +4,11 @@ export default function robots() {
             {
                 userAgent: '*',
                 allow: '/',
-                disallow: ['/admin/', '/api/', '/driver/', '/checkout/', '/my-bookings/'],
+                disallow: ['/admin/', '/api/admin/'],
             },
             {
-                userAgent: ['GPTBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-Web', 'PerplexityBot'],
-                allow: ['/', '/llms.txt'],
-                disallow: ['/admin/', '/api/'],
+                userAgent: ['GPTBot', 'ChatGPT-User', 'Google-Extended', 'Anthropic-AI', 'Claude-Web', 'CCBot'],
+                allow: '/',
             }
         ],
         sitemap: 'https://srilankantaxi.lk/sitemap.xml',

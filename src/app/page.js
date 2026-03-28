@@ -2,8 +2,13 @@ import HomeClient from '../components/HomeClient'
 
 export const metadata = {
     title: '🚖 Airport Taxis Sri Lanka - #1 Trusted Airport Transfers & Multi-Day Tours',
-    description: 'Instant Booking! Reliable 24/7 airport transfers from Colombo Airport (CMB) to any destination in Sri Lanka. Fixed rates for Kandy, Galle, Sigiriya and more. Professional English-speaking drivers and premium vehicles.',
-    keywords: 'Airport Taxi Sri Lanka, Colombo Airport Transfer, CMB Taxi Service, Bandaranaike Airport Taxi, Airport Pickup Sri Lanka, Sri Lanka Private Tours, KDH Van Rental Sri Lanka, Reliable Taxi Colombo, 24/7 Airport Taxi Sri Lanka, Sri Lanka Travel Transport',
+    description: 'Book your Airport Taxi in Sri Lanka with instant confirmation. 24/7 Colombo Airport (CMB) transfers, private chauffeurs, and luxury KDH vans. Fixed rates, no hidden fees. Trusted by 10,000+ happy travelers for airport pickups and all-island tours.',
+    keywords: [
+        'Sri Lanka Airport Taxi', 'Airport Transfer Sri Lanka', 'Colombo Airport Taxi', 'Taxi Service Sri Lanka',
+        'Airport Cab Booking', 'Airport Shuttle Sri Lanka', 'CMB Airport Taxi', 'Private Taxi Sri Lanka',
+        'Airport Taxi Service near me', 'Airport Pickup Colombo', 'Taxi Booking Colombo Airport',
+        'Sri Lanka Private Tours', 'KDH Van Rental Sri Lanka', 'Reliable Taxi Colombo', '24/7 Airport Taxi Sri Lanka', 'Sri Lanka Travel Transport'
+    ],
     alternates: {
         canonical: 'https://srilankantaxi.lk',
     },

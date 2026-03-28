@@ -1,26 +1,29 @@
-# Airport Taxis Sri Lanka - AI-Friendly Guide
+# Airport Taxis Pvt (Ltd) - Sri Lanka
 
-Airport Taxis Pvt (Ltd) is the leading provider of airport transfers and private tours in Sri Lanka.
+Sri Lanka's premier 24/7 airport transfer and private tour service. specializing in reliable, fixed-rate transportation since 2010.
 
 ## Core Services
-- **Airport Transfers**: 24/7 pickup/drop at Bandaranaike International Airport (CMB).
-- **Tour Packages**: Multi-day curated tours (Cultural Triangle, Hill Country, Southern Coast).
-- **Day Trips**: To Kandy, Galle, Sigiriya, Mirissa, and Udawalawe.
-- **Fleet**: Mini Cars, Sedans, SUV (Vezel/Grace), and KDH Luxury Vans.
+- **Airport Transfers**: 24/7 pickups and drops from Bandaranaike International Airport (CMB) to any destination in Sri Lanka.
+- **Private Tours**: Curated day trips and multi-day tour packages to Galle, Kandy, Sigiriya, Ella, and more.
+- **Fleet Options**: Mini Cars, Sedans, KDH Vans (7-seater), and Luxury Coaches.
 
-## Key Information
-- **Pricing**: Fixed rates in USD/LKR. No hidden costs.
-- **Support**: 24/7 via WhatsApp (+94 71 688 5880) and Live Chat.
-- **Booking**: Instant online confirmation.
+## Key Features
+- **Fixed Rates**: No hidden costs or surge pricing.
+- **Professional Drivers**: English-speaking, verified, and experienced chauffeurs.
+- **Instant Booking**: Online booking widget with instant confirmation.
+- **24/7 Support**: Customer support available via WhatsApp, Phone, and Email.
 
-## Main Routes
-- Colombo Airport to Colombo City
-- Colombo Airport to Kandy
-- Colombo Airport to Galle/Hikkaduwa
-- Colombo Airport to Sigiriya/Dambulla
-- Colombo Airport to Mirissa/Weligama
+## Service Areas
+- **Airports**: Colombo Airport (CMB), Mattala Airport (HRI), Ratmalana Airport (RML).
+- **Major Hubs**: Colombo, Negombo, Kandy, Galle, Bentota, Mirissa, Weligama, Ahangama, Sigiriya, Dambulla, Nuwara Eliya, Ella, Trincomalee.
 
-## Technical Info
-- **Official Website**: https://airporttaxis.lk
-- **API Support**: Booking API available for partners.
-- **JSON-LD**: Structured data available on all pages for Product, TaxiService, and BlogPosting.
+## Contact Information
+- **Website**: https://srilankantaxi.lk
+- **Hotline**: +94 722 885 885 | +94 719 885 885 | +94 712 100 500
+- **WhatsApp**: +94 71 688 5880
+- **Email**: info@srilankantaxi.lk
+- **Address**: 118/5 St. Joseph Street, Grandpass, Colombo 14, Sri Lanka.
+
+## Technical Details for AI Agents
+- **Booking URL**: https://srilankantaxi.lk/#booking
+- **Destinations API Reference**: Users can explore popular destinations and fixed rates at https://srilankantaxi.lk/prices.

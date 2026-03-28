@@ -13,14 +13,19 @@ export const metadata = {
         default: 'Airport Taxis Pvt (Ltd) - Sri Lanka\'s #1 Airport Transfer & Tour Service',
         template: '%s | Airport Taxis Pvt (Ltd)'
     },
-    description: '🚕 Sri Lanka\'s most trusted 24/7 Airport Taxi & Tour service. Book Colombo Airport (CMB) transfers, luxury KDH vans, and curated Sri Lanka tour packages. Fixed rates, professional English-speaking drivers, and instant online booking. Trusted by 10,000+ travelers for Colombo, Kandy, Galle, and Sigiriya transfers.',
+    description: '🚕 Sri Lanka\'s most trusted 24/7 Airport Taxi & Tour service. Book Colombo Airport (CMB) transfers, luxury KDH vans, and curated Sri Lanka tour packages. Fixed rates, professional English-speaking drivers, and instant online booking. Trusted by 10,000+ travelers for Colombo, Kandy, Galle, Sigiriya, and Mirissa transfers. Premium airport shuttle and private car service for all-island travel.',
     keywords: [
-        'Airport Taxi Sri Lanka', 'Colombo Airport Transfer', 'CMB Airport Taxi', 'Sri Lanka Day Trips', 'Sri Lanka Tour Packages',
-        'Private Chauffeur Sri Lanka', 'Airport Pickup Colombo', 'Travel Sri Lanka Transport', 'Taxi service Colombo',
-        'Cheap airport taxi Sri Lanka', 'Book taxi Colombo airport', 'Sri Lanka airport car hire with driver',
-        'Colombo to Kandy taxi', 'Colombo to Galle taxi', 'Bandaranaike International Airport taxi', 'Sri Lanka transport guide',
-        'taxi service', 'taxi sri lanka', 'kangaroo cabs', 'airport taxis', 'taxi near me', 'uber taxi',
-        'airport transfer sri lanka', 'sri lanka private tours', 'sri lanka driver for 10 days', 'best taxi service sri lanka'
+        'Airport Taxi Sri Lanka', 'Airport Taxi Service', 'Taxi Service Sri Lanka', 'Airport Cab Booking', 'Airport Taxi Transfers', 
+        'Airport Transfers Sri Lanka', 'Booking Airport Transfers', 'Airport Cab Service', 'Cab Booking Sri Lanka', 
+        'Airport Shuttle Sri Lanka', 'Airport Shuttle Service', 'Taxi Transfer Sri Lanka', 'Airport Transfer Service', 
+        'Airport Car Service', 'Airport Transport Service', 'Taxi Service to the Airport', 'Shuttle Transfers Sri Lanka', 
+        'Best Airport Transfers Sri Lanka', 'Cab Service to Airport', 'Airport Chauffeur Service', 'Taxi Van to Airport', 
+        'Sri Lanka Airport Taxi Price', 'Airport Transfer Sri Lanka', 'Airport Taxi Service near me', 'Taxi Airport Booking', 
+        'Airport Pick Up Service', 'Airport Taxi Price List', 'Cheap Airport Taxi Sri Lanka', 'Airport Transfer Shuttle', 
+        'Cab Service Colombo', 'Airport Transfer Colombo Sri Lanka', 'Taxi Service Sri Lanka', 'Taxi in Sri Lanka', 
+        'Airport Shuttle Service near me', 'Taxi for Airport Transfer', 'Katunayake airport taxi prices', 'Airport taxi fare',
+        'Colombo Airport Transfer', 'CMB Airport Taxi', 'Private Chauffeur Sri Lanka', 'KDH Van Taxi Sri Lanka',
+        'Colombo to Kandy taxi', 'Colombo to Galle taxi', 'Bandaranaike International Airport taxi'
     ],
 
     authors: [{ name: 'Airport Taxis Pvt (Ltd)' }],
