@@ -553,7 +553,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             </div>
 
             {/* Widget Main Content - Booking.com Sharp Style */}
-            <div className="bg-white dark:bg-[#111] border-[16px] border-[#FACC15] p-4 md:p-12 animate-slide-up relative z-10 rounded-none w-full box-border">
+            <div className="bg-white dark:bg-[#111] border-[8px] border-[#FACC15] p-4 md:p-12 animate-slide-up relative z-10 rounded-none w-full box-border">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">

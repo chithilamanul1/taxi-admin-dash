@@ -10,6 +10,7 @@ import BookingWidget from './BookingWidget'
 // Dynamic imports for heavy components
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
 const FleetSection = dynamic(() => import('./FleetSection'), { ssr: false })
+const DestinationsSection = dynamic(() => import('./DestinationsSection'), { ssr: false })
 const Features = dynamic(() => import('./Features'), { ssr: false })
 const ReviewStatsBar = dynamic(() => import('./ReviewStatsBar'), { ssr: false })
 import { destinations } from '@/lib/destinations'
@@ -66,6 +67,17 @@ export default function HomeClient() {
     return (
         <div className="bg-white dark:bg-black overflow-hidden transition-colors duration-300">
             <BookingWidget />
+
+            {/* Floating Check Availability Sidebar - Brutalist Style */}
+            <button
+                onClick={() => setIsBookingOpen(true)}
+                className="fixed right-0 top-1/2 -translate-y-1/2 z-[100] bg-black text-[#FACC15] px-4 py-8 rounded-l-3xl border-l-[6px] border-y-[6px] border-black hover:bg-[#FACC15] hover:text-black transition-all group flex flex-col items-center gap-4 hidden md:flex shadow-[-10px_0px_20px_rgba(0,0,0,0.2)]"
+            >
+                <span className="[writing-mode:vertical-lr] rotate-180 uppercase font-black tracking-[0.3em] text-[10px]">
+                    CHECK AVAILABILITY
+                </span>
+                <ArrowRight size={20} className="rotate-90 group-hover:translate-y-2 transition-transform" />
+            </button>
             
             <div className="h-10 md:h-20" /> {/* Spacing to prevent clash */}
 
@@ -109,57 +121,7 @@ export default function HomeClient() {
 
             <SpecialOffersSection />
 
-            <section className="py-20 md:py-32 px-6 border-t-[16px] border-black">
-                <div className="max-w-7xl mx-auto">
-                    <div className="flex flex-col md:flex-row items-end justify-between mb-16 md:mb-24 gap-10">
-                        <div className="max-w-3xl">
-                            <h2 className="text-4xl sm:text-5xl md:text-8xl font-black mb-6 md:mb-8 text-black dark:text-white uppercase tracking-tighter leading-tight md:leading-none break-words">
-                                CURATED <span className="text-[#FACC15]">DESTINATIONS</span>
-                            </h2>
-                            <p className="text-black/40 dark:text-white/40 text-xs md:text-sm font-black uppercase tracking-[0.2em] leading-relaxed pr-4">Explore the most iconic locations in Sri Lanka with our specialized airport transfer services.</p>
-                        </div>
-                        <Link href="/prices" className="flex items-center gap-4 text-[#FACC15] font-black uppercase tracking-[0.2em] text-[10px] hover:text-black dark:hover:text-white transition-all underline decoration-2 underline-offset-8">
-                            VIEW ALL RATES <ArrowRight size={18} />
-                        </Link>
-                    </div>
-
-                    <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide">
-                        {destinations.slice(0, 16).map((route, i) => (
-                            <button
-                                key={i}
-                                onClick={() => {
-                                    setBookingInitialData({
-                                        pickup: 'Bandaranaike International Airport (CMB)',
-                                        pickupCoords: { lat: 7.1804, lon: 79.8837 },
-                                        dropoff: route.fullAddress || route.title.replace('Airport to ', ''),
-                                        dropoffCoords: route.coords || null,
-                                        tripType: 'one-way',
-                                        couponCode: 'SAVE10'
-                                    });
-                                    setIsBookingOpen(true);
-                                }}
-                                className="group p-8 bg-white dark:bg-black border-[6px] border-black dark:border-white/20 hover:border-[#FACC15] dark:hover:border-[#FACC15] transition-all duration-300 text-left flex flex-col justify-between h-64 shrink-0 w-[280px] md:w-auto snap-start"
-                            >
-                                <div>
-                                    <div className="flex items-center gap-3 text-[#FACC15] mb-4">
-                                        <MapPin size={14} />
-                                        <span className="text-[9px] font-black uppercase tracking-[0.3em] truncate">{route.meta}</span>
-                                    </div>
-                                    <h3 className="text-2xl font-black text-black dark:text-white leading-tight uppercase tracking-tighter group-hover:text-[#FACC15] transition-colors line-clamp-2">
-                                        {route.name || route.title.replace('Airport to ', '')}
-                                    </h3>
-                                </div>
-                                <div className="flex items-center justify-between mt-6">
-                                    <span className="text-[9px] font-black text-black/40 dark:text-white/40 uppercase tracking-[0.3em]">INSTANT QUOTE</span>
-                                    <div className="w-12 h-12 bg-[#FACC15] text-black border-4 border-black flex items-center justify-center group-hover:bg-black group-hover:text-[#FACC15] transition-all">
-                                        <ArrowRight size={20} className="transform group-hover:translate-x-2 transition-transform" />
-                                    </div>
-                                </div>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            </section >
+            <DestinationsSection />
 
             <ReviewStatsBar />
             <MobileAppSection />

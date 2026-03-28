@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useRef } from 'react';
 import Image from 'next/image';
-import { Users, Briefcase, ShoppingBag, Wind, ArrowRight, Loader2 } from 'lucide-react';
+import { Users, Briefcase, ShoppingBag, Wind, ArrowRight, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
 import { destinations as allDestinations } from '@/lib/destinations';
 import { calculateBasePrice } from '@/lib/pricing-util';
@@ -49,6 +49,16 @@ const FleetSection = () => {
         return dest ? parseInt(dest.distance) : 0;
     };
 
+    const scrollRef = useRef(null);
+
+    const scroll = (direction) => {
+        if (scrollRef.current) {
+            const { current } = scrollRef;
+            const scrollAmount = window.innerWidth < 768 ? window.innerWidth * 0.8 : 500;
+            current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+        }
+    };
+
     if (loading) {
         return (
             <div className="py-24 flex items-center justify-center bg-white dark:bg-[#0a0a0a]">
@@ -58,7 +68,7 @@ const FleetSection = () => {
     }
 
     return (
-        <section className="py-24 bg-white dark:bg-[#0a0a0a] border-t-8 border-black overflow-hidden">
+        <section className="py-24 bg-white dark:bg-[#0a0a0a] border-t-8 border-black overflow-hidden relative group/section">
             <div className="container mx-auto px-6">
                 <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
                     <div>
@@ -67,11 +77,34 @@ const FleetSection = () => {
                             SELECT YOUR <span className="text-[#FACC15]">COMFORT</span>
                         </h2>
                     </div>
+
+                    <div className="flex gap-4">
+                        <button 
+                            onClick={() => scroll('left')}
+                            className="w-14 h-14 bg-white border-4 border-black flex items-center justify-center text-black hover:bg-[#FACC15] transition-all"
+                            aria-label="Scroll left"
+                        >
+                            <ChevronLeft size={24} strokeWidth={3} />
+                        </button>
+                        <button 
+                            onClick={() => scroll('right')}
+                            className="w-14 h-14 bg-black border-4 border-black flex items-center justify-center text-[#FACC15] hover:bg-white hover:text-black transition-all"
+                            aria-label="Scroll right"
+                        >
+                            <ChevronRight size={24} strokeWidth={3} />
+                        </button>
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-6xl mx-auto">
+                <div 
+                    ref={scrollRef}
+                    className="flex overflow-x-auto gap-8 md:gap-12 pb-12 snap-x snap-mandatory no-scrollbar cursor-grab active:cursor-grabbing"
+                >
                     {vehicles.map((vehicle, idx) => (
-                        <div key={vehicle._id} className="flex flex-col border-[16px] border-black bg-white dark:bg-[#111] hover:bg-slate-50 transition-all duration-300">
+                        <div 
+                            key={vehicle._id} 
+                            className="flex-shrink-0 w-[85vw] md:w-[480px] snap-center flex flex-col border-[16px] border-black bg-white dark:bg-[#111] hover:bg-slate-50 transition-all duration-300"
+                        >
 
                             {/* Category Header - Sharp UI (White & Black) */}
                             <div className="bg-white text-black p-2 text-center border-b-[10px] border-black font-black uppercase tracking-[0.4em] text-[10px]">
