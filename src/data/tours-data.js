@@ -64,7 +64,7 @@ export const dayTrips = [
         price: { amount: 50.63, currency: 'USD' },
         category: 'Culture & Nature',
         tags: ['Sacred', 'Wildlife', 'Historical'],
-        image: '/destinations/kandy.png',
+        image: '/kandy-new.png',
         pickupLocations: ['Colombo', 'Negombo', 'Wadduwa', 'Mount Lavinia'],
         destinations: ['Pinnawala', 'Kandy', 'Peradeniya'],
         highlights: [
@@ -118,7 +118,7 @@ export const dayTrips = [
         price: { amount: 69, currency: 'USD' },
         category: 'History & Heritage',
         tags: ['UNESCO', 'Adventure', 'Culture'],
-        image: '/destinations/sigiriya.png',
+        image: '/sigiriya-new-hero.png',
         pickupLocations: ['Colombo', 'Negombo', 'Kalutara', 'Bentota', 'Hikkaduwa', 'Galle'],
         destinations: ['Sigiriya', 'Dambulla', 'Minneriya/Kaudulla'],
         highlights: [
@@ -592,7 +592,7 @@ export const dayTrips = [
         price: { amount: 105, currency: 'USD' },
         category: 'Nature & Beach',
         tags: ['Coastal', 'Scenic', 'Private'],
-        image: '/destinations/mirissa.png',
+        image: '/mirissa-new-fix.png',
         pickupLocations: ['Colombo', 'Negombo', 'Katunayake'],
         destinations: ['Madu River', 'Kosgoda', 'Galle Fort', 'Mirissa'],
         highlights: [
@@ -681,7 +681,7 @@ export const dayTrips = [
         price: { amount: 39, currency: 'USD' },
         category: 'Adventure & Scenic',
         tags: ['Hiking', 'Iconic', 'Adventure'],
-        image: '/destinations/ella.png',
+        image: '/Hero/ella.jpg',
         pickupLocations: ['Colombo', 'Negombo', 'Kandy'],
         destinations: ['Ella', 'Nine Arch Bridge', 'Little Adams Peak', 'Rawana Falls'],
         highlights: [
