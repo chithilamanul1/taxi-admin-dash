@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 
 const FleetSection = () => {
     const { convertPrice, rates } = useCurrency();
+    const scrollRef = React.useRef(null);
     const [vehicles, setVehicles] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const [dynamicDestinations, setDynamicDestinations] = React.useState([]);
@@ -68,7 +69,23 @@ const FleetSection = () => {
                             SELECT YOUR <span className="text-[#FACC15]">COMFORT</span>
                         </h2>
                     </div>
-
+                    
+                    <div className="flex gap-4">
+                        <button 
+                            onClick={() => scrollRef.current?.scrollBy({ left: -400, behavior: 'smooth' })}
+                            className="w-16 h-16 bg-black dark:bg-white/10 flex items-center justify-center hover:bg-[#FACC15] hover:text-black transition-all border-4 border-black group"
+                            aria-label="Slide Left"
+                        >
+                            <ArrowRight className="rotate-180 transform group-hover:-translate-x-1 transition-transform" size={24} />
+                        </button>
+                        <button 
+                            onClick={() => scrollRef.current?.scrollBy({ left: 400, behavior: 'smooth' })}
+                            className="w-16 h-16 bg-[#FACC15] text-black flex items-center justify-center hover:bg-black hover:text-[#FACC15] transition-all border-4 border-black group"
+                            aria-label="Slide Right"
+                        >
+                            <ArrowRight className="transform group-hover:translate-x-1 transition-transform" size={24} />
+                        </button>
+                    </div>
                 </div>
 
                 <div 
