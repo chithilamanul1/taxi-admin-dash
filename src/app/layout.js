@@ -784,7 +784,7 @@ export const metadata = {
     "vantage airport taxi sri lanka",
     "weligama to colombo airport taxi",
     "whatsapp taxi booking sri lanka",
-    "yala to airport private transfer"
+    "yala to airport private transfer",
     "24/7 airport pickup sri lanka",
     "adangama private taxi",
     "airport greeting service colombo",
@@ -902,7 +902,7 @@ export const metadata = {
     "vantage airport taxi sri lanka",
     "weligama to colombo airport taxi",
     "whatsapp taxi booking sri lanka",
-    "yala to airport private transfer"
+    "yala to airport private transfer",
     "24/7 airport pickup sri lanka",
     "accessible taxi sri lanka",
     "affordable airport transfer",
