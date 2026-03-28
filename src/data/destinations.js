@@ -2,7 +2,7 @@ export const destinations = {
     mirissa: {
         title: "Mirissa",
         description: "Mirissa is a small town on the south coast of Sri Lanka, located in the Matara District of the Southern Province. It is a popular tourist destination, known for its beaches, whale watching, and nightlife.",
-        image: "/mirissa-new-fix.png",
+        image: "https://images.unsplash.com/photo-1544644181-1484b3fdfc63?q=80&w=1600&auto=format&fit=crop",
         badge: "Top Choice",
         meta: "Whale Watching Hub",
         activities: [
@@ -19,7 +19,7 @@ export const destinations = {
     ella: {
         title: "Ella",
         description: "Ella is a small town in the Badulla District of Uva Province, Sri Lanka. It is approximately 200 kilometres east of Colombo and is situated at an elevation of 1,041 metres above sea level.",
-        image: "/ella.jpg",
+        image: "https://images.unsplash.com/photo-1590603740183-980e7f6920eb?q=80&w=1600&auto=format&fit=crop",
         badge: "Scenic Route",
         meta: "Highlands Escape",
         activities: [
@@ -36,7 +36,7 @@ export const destinations = {
     sigiriya: {
         title: "Sigiriya",
         description: "Sigiriya or Sinhagiri is an ancient rock fortress located in the northern Matale District near the town of Dambulla in the Central Province, Sri Lanka.",
-        image: "/sigiriya-new-hero.png",
+        image: "https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop",
         badge: "Historic",
         meta: "Ancient Rock Fortress",
         activities: [

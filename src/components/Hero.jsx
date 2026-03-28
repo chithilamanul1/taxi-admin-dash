@@ -14,12 +14,12 @@ const Hero = () => {
     const baselineVehicle = useMemo(() => FLEET.find(v => v.id === 'v3') || FLEET[0], []);
 
     const destinations = useMemo(() => [
-        { id: 1, name: 'MIRISSA BEACH', image: '/Hero/mirissa_illust.jpg', distance: 150, rotate: -3 },
-        { id: 2, name: 'YALA SAFARI', image: '/Hero/safari_tour.png', distance: 245, rotate: 2 },
-        { id: 3, name: 'ELLA NINE ARCH', image: '/Hero/ella.jpg', distance: 210, rotate: -2 },
-        { id: 4, name: 'SIGIRIYA ROCK', image: '/Hero/sigiriya_illust.jpg', distance: 150, rotate: 3 },
-        { id: 5, name: 'ARUGAM BAY', image: '/Hero/arugam_surf.jpg', distance: 320, rotate: -1 },
-        { id: 6, name: 'ANURADHAPURA', image: '/Hero/izanuradapura.jpg', distance: 170, rotate: 2 },
+        { id: 1, name: 'MIRISSA BEACH', image: 'https://images.unsplash.com/photo-1544644181-1484b3fdfc63?q=80&w=1600&auto=format&fit=crop', distance: 150, rotate: -3 },
+        { id: 2, name: 'YALA SAFARI', image: 'https://images.unsplash.com/photo-1554593455-83f089304323?q=80&w=1600&auto=format&fit=crop', distance: 245, rotate: 2 },
+        { id: 3, name: 'ELLA NINE ARCH', image: 'https://images.unsplash.com/photo-1590603740183-980e7f6920eb?q=80&w=1600&auto=format&fit=crop', distance: 210, rotate: -2 },
+        { id: 4, name: 'SIGIRIYA ROCK', image: 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop', distance: 150, rotate: 3 },
+        { id: 5, name: 'ARUGAM BAY', image: 'https://images.unsplash.com/photo-1549488398-aa66870ac45b?q=80&w=1600&auto=format&fit=crop', distance: 320, rotate: -1 },
+        { id: 6, name: 'ANURADHAPURA', image: 'https://images.unsplash.com/photo-1582239454124-7186104bc7a0?q=80&w=1600&auto=format&fit=crop', distance: 170, rotate: 2 },
     ], []);
 
     // For infinite loop, we clone the first and last slides

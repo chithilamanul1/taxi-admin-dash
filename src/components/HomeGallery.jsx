@@ -24,9 +24,9 @@ export default function HomeGallery() {
 
     // Fallback if no images uploaded yet
     const fallbackImages = [
-        { url: '/sigiriya-1.png', caption: 'Sigiriya Rock Fortress', category: 'Sigiriya' },
-        { url: '/sigiriya-2.png', caption: 'Ancient Royal Gardens', category: 'Sigiriya' },
-        { url: '/nuwara-eliya-new.png', caption: 'Tea Trails of Nuwara Eliya', category: 'Highlands' }
+        { url: 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop', caption: 'Sigiriya Rock Fortress', category: 'Sigiriya' },
+        { url: 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop', caption: 'Ancient Royal Gardens', category: 'Sigiriya' },
+        { url: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=1600&auto=format&fit=crop', caption: 'Tea Trails of Nuwara Eliya', category: 'Highlands' }
     ];
 
     const displayImages = images.length > 0 ? images : fallbackImages;
