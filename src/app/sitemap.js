@@ -1,5 +1,5 @@
 export default function sitemap() {
-    const baseUrl = 'https://airporttaxis.lk';
+    const baseUrl = 'https://srilankantaxi.lk';
 
     const staticRoutes = [
         '',

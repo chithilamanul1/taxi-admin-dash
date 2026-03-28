@@ -33,7 +33,7 @@ export async function generateMetadata({ params }) {
         openGraph: {
             title: tour.title,
             description: tour.description || '',
-            url: `https://airporttaxis.lk/day-trips/${slug}`,
+            url: `https://srilankantaxi.lk/day-trips/${slug}`,
             images: [{ url: tour.heroImage || tour.images?.[0], width: 1200, height: 630, alt: tour.title }]
         }
     };
@@ -58,7 +58,7 @@ export default async function DayTripPage({ params }) {
             "price": tour.price,
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "url": `https://airporttaxis.lk/day-trips/${slug}`
+            "url": `https://srilankantaxi.lk/day-trips/${slug}`
         },
         "brand": {
             "@type": "Brand",

@@ -7,8 +7,8 @@ import { sendEmail, templates } from "./email"
 
 const SUPER_ADMINS = [
     'chithilamanul1@gmail.com',
-    'airporttaxis.lk@gmail.com',
-    'airporttaxis@gmail.com'
+    'srilankantaxilk@gmail.com',
+    'srilankantaxi@gmail.com'
 ];
 
 export const authOptions = {

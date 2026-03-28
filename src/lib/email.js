@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 
-const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxis <info@airporttaxis.lk>';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxis <info@srilankantaxi.lk>';
 
 export const sendEmail = async ({ to, subject, html, text }) => {
     try {

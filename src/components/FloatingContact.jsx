@@ -45,7 +45,7 @@ export default function FloatingContact() {
                     </a>
 
                     <a
-                        href="mailto:info@airporttaxis.lk"
+                        href="mailto:info@srilankantaxi.lk"
                         className="group flex items-center gap-3"
                         aria-label="Send us an email"
                     >

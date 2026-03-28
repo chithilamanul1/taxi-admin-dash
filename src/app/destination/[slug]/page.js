@@ -11,7 +11,7 @@ export async function generateMetadata({ params }) {
 
     if (!destination) return { title: 'Destination Not Found' };
 
-    const baseUrl = 'https://airporttaxis.lk';
+    const baseUrl = 'https://srilankantaxi.lk';
     const city = destination.name;
 
     return {
@@ -62,13 +62,13 @@ export default async function DestinationPage({ params }) {
         "@type": "Product",
         "name": `Airport Transfer to ${destination.name}`,
         "description": destination.longDescription || destination.description,
-        "image": `https://airporttaxis.lk${destination.img}`,
+        "image": `https://srilankantaxi.lk${destination.img}`,
         "offers": {
             "@type": "Offer",
             "price": destination.price,
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "url": `https://airporttaxis.lk/destination/${slug}`
+            "url": `https://srilankantaxi.lk/destination/${slug}`
         },
         "brand": {
             "@type": "Brand",

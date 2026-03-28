@@ -87,7 +87,7 @@ const Footer = () => {
                                 <div className="w-10 h-10 bg-[#FACC15] text-black flex items-center justify-center shrink-0" aria-hidden="true">
                                     <Mail size={18} />
                                 </div>
-                                <a href="mailto:info@airporttaxis.lk" className="hover:text-[#FACC15] pt-2">info@airporttaxis.lk</a>
+                                <a href="mailto:info@srilankantaxi.lk" className="hover:text-[#FACC15] pt-2">info@srilankantaxi.lk</a>
                             </li>
                         </ul>
                     </div>

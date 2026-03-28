@@ -7,12 +7,12 @@ export const metadata = {
     description: 'Calculate your exact taxi fare from Colombo Airport (CMB) to any city in Sri Lanka. Transparent pricing, no hidden costs, and instant quotes for Mini Cars, Sedans, and KDH Vans. Best price guarantee.',
     keywords: 'Sri Lanka Taxi Fare Calculator, Airport Taxi Rates Sri Lanka, Colombo Airport Taxi Cost, Sri Lanka Transfer Prices, Taxi Price List Sri Lanka, Fixed Price Airport Taxi, Cheapest Airport Transfer Sri Lanka',
     alternates: {
-        canonical: 'https://airporttaxis.lk/prices',
+        canonical: 'https://srilankantaxi.lk/prices',
     },
     openGraph: {
         title: 'Transparent Taxi Rates & Fare Calculator - Sri Lanka',
         description: 'Get an instant quote for your airport transfer. No hidden fees, all-inclusive rates for all destinations in Sri Lanka.',
-        url: 'https://airporttaxis.lk/prices',
+        url: 'https://srilankantaxi.lk/prices',
         siteName: 'Airport Taxis Pvt (Ltd)',
         images: [
             {

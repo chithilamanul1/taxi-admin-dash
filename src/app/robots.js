@@ -12,6 +12,6 @@ export default function robots() {
                 disallow: ['/admin/', '/api/'],
             }
         ],
-        sitemap: 'https://airporttaxis.lk/sitemap.xml',
+        sitemap: 'https://srilankantaxi.lk/sitemap.xml',
     }
 }

@@ -100,7 +100,7 @@ export default function RefundPolicyPage() {
                                         <span className="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold shrink-0">1</span>
                                         <div>
                                             <p className="font-bold text-emerald-900">Contact Us</p>
-                                            <p className="text-slate-600">Email us at <a href="mailto:info@airporttaxis.lk" className="text-emerald-600">info@airporttaxis.lk</a> or call <span className="text-emerald-600">+94 722 885 885 | 0719 885 885 | 0712 100 500</span></p>
+                                            <p className="text-slate-600">Email us at <a href="mailto:info@srilankantaxi.lk" className="text-emerald-600">info@srilankantaxi.lk</a> or call <span className="text-emerald-600">+94 722 885 885 | 0719 885 885 | 0712 100 500</span></p>
                                         </div>
                                     </li>
                                     <li className="flex gap-4">

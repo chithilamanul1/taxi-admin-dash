@@ -14,9 +14,9 @@ const getTransporter = () => {
     });
 };
 
-const OWNER_EMAIL = process.env.OWNER_EMAIL || 'airporttaxis.lk@gmail.com';
-const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxis <noreply@airporttaxis.lk>';
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://airporttaxis.lk';
+const OWNER_EMAIL = process.env.OWNER_EMAIL || 'srilankantaxilk@gmail.com';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxis <noreply@srilankantaxi.lk>';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://srilankantaxi.lk';
 
 // ============================================
 // PREMIUM EMAIL TEMPLATE SYSTEM
@@ -192,7 +192,7 @@ const getPrintFriendlyTemplate = (content, title = 'Booking Details') => `
                     Airport Taxis Pvt (Ltd) · 118/5 St. Joseph Street, Grandpass, Colombo 14
                 </p>
                 <p style="margin: 2px 0 0; font-size: 9px; color: #9ca3af;">
-                    📞 +94 722 885 885 · 0719 885 885 · 0712 100 500 · ✉️ info@airporttaxis.lk · 🌐 airporttaxis.lk
+                    📞 +94 722 885 885 · 0719 885 885 · 0712 100 500 · ✉️ info@srilankantaxi.lk · 🌐 srilankantaxi.lk
                 </p>
             </td>
         </tr>

@@ -5,12 +5,12 @@ export const metadata = {
     description: 'Get in touch with Airport Taxis Pvt (Ltd) for instant bookings, inquiries, and 24/7 customer support. Reach us via WhatsApp (+94 71 688 5880), phone, or email for your Sri Lanka travel needs.',
     keywords: 'Contact Airport Taxis Sri Lanka, WhatsApp Taxi Booking Sri Lanka, Airport Taxi Phone Number, 24/7 Taxi Support Sri Lanka, Book Taxi Colombo Airport, Sri Lanka Chauffeur Contact',
     alternates: {
-        canonical: 'https://airporttaxis.lk/contact',
+        canonical: 'https://srilankantaxi.lk/contact',
     },
     openGraph: {
         title: 'Contact Airport Taxis Sri Lanka - Available 24/7',
         description: 'Need a ride? Contact us anytime for reliable airport pickups and custom tours in Sri Lanka.',
-        url: 'https://airporttaxis.lk/contact',
+        url: 'https://srilankantaxi.lk/contact',
         siteName: 'Airport Taxis Pvt (Ltd)',
         images: [
             {
@@ -36,7 +36,7 @@ export default function ContactPage() {
                             "@type": "Organization",
                             "name": "Airport Taxis Pvt (Ltd)",
                             "telephone": "+94716885880",
-                            "email": "info@airporttaxis.lk",
+                            "email": "info@srilankantaxi.lk",
                             "contactPoint": {
                                 "@type": "ContactPoint",
                                 "telephone": "+94716885880",

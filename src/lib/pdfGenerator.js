@@ -43,7 +43,7 @@ export const generateBookingPDF = (booking) => {
     doc.setFontSize(8);
     doc.text("118/5 St. Joseph Street, Grandpass, Colombo 14", 15, 43);
     doc.text("Hotline: +94 722 885 885 | 0719 885 885 | 0712 100 500", 15, 48);
-    doc.text("Email: info@airporttaxis.lk | Web: www.airporttaxis.lk", 15, 53);
+    doc.text("Email: info@srilankantaxi.lk | Web: www.srilankantaxi.lk", 15, 53);
 
     // -- Accent Line --
     doc.setDrawColor(...COLORS.emerald);
@@ -221,7 +221,7 @@ export const generateBookingPDF = (booking) => {
     doc.text("Thank you for traveling with Airport Taxis!", 105, 288, { align: 'center' });
     doc.setFontSize(7);
     doc.setFont(undefined, 'normal');
-    doc.text("24/7 Hotline: +94 722 885 885 | 0719 885 885 | 0712 100 500 | info@airporttaxis.lk", 105, 292, { align: 'center' });
+    doc.text("24/7 Hotline: +94 722 885 885 | 0719 885 885 | 0712 100 500 | info@srilankantaxi.lk", 105, 292, { align: 'center' });
 
     // Save
     const fileName = `${isCash ? 'Receipt' : 'Invoice'}_${booking._id.slice(-8).toUpperCase()}.pdf`;
