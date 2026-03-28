@@ -266,7 +266,7 @@ export const metadata = {
     "the airport taxi",
     "transfer booking",
     "transportation to airport",
-    "travel to airport"
+    "travel to airport",
     "Airport Taxi Sri Lanka",
     "Airport Taxi Service",
     "Taxi Service Sri Lanka",
@@ -1087,10 +1087,8 @@ export const metadata = {
     "whatsapp taxi booking sri lanka",
     "wheelchair taxi sri lanka",
     "yala national park taxi",
-    "yala to airport private transfer"
-  ]
-
-
+    "yala to airport private transfer",
+    ],
     authors: [{ name: 'Airport Taxis Pvt (Ltd)' }],
     creator: 'Airport Taxis Pvt (Ltd)',
     publisher: 'Airport Taxis Pvt (Ltd)',

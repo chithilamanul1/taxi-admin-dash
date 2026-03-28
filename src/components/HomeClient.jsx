@@ -11,6 +11,7 @@ import BookingWidget from './BookingWidget'
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
 const FleetSection = dynamic(() => import('./FleetSection'), { ssr: false })
 const DestinationsSection = dynamic(() => import('./DestinationsSection'), { ssr: false })
+const HomeGallery = dynamic(() => import('./HomeGallery'), { ssr: false })
 const Features = dynamic(() => import('./Features'), { ssr: false })
 const ReviewStatsBar = dynamic(() => import('./ReviewStatsBar'), { ssr: false })
 import { destinations } from '@/lib/destinations'
@@ -122,6 +123,7 @@ export default function HomeClient() {
             <SpecialOffersSection />
 
             <DestinationsSection />
+            <HomeGallery />
 
             <ReviewStatsBar />
             <MobileAppSection />

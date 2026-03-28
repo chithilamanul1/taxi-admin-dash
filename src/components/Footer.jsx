@@ -55,6 +55,7 @@ const Footer = () => {
                                 <li><Link href="/day-trips" className="hover:text-[#FACC15] transition-colors">Day Trips</Link></li>
                                 <li><Link href="/tour-packages" className="hover:text-[#FACC15] transition-colors">Tour Packages</Link></li>
                                 <li><Link href="/prices" className="hover:text-[#FACC15] transition-colors">Taxi Rates</Link></li>
+                                <li><Link href="/gallery" className="hover:text-[#FACC15] transition-colors">Gallery</Link></li>
                             </ul>
                         </div>
                         <div className="space-y-8">

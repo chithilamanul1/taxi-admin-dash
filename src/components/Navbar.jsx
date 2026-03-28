@@ -106,6 +106,7 @@ export default function Navbar() {
                                 { label: 'Day Tours', href: '/day-trips', icon: '🌴', id: 'm-day' },
                                 { label: 'City Tours', href: '/tours', icon: '🏙️', id: 'm-city' },
                                 { label: 'Tour Packages', href: '/tour-packages', icon: '🗺️', id: 'm-pkg' },
+                                { label: 'Gallery', href: '/gallery', icon: '📸', id: 'm-gallery' },
                                 { label: 'Rates', href: '/prices', icon: '💰', id: 'm-rates' },
                                 {
                                     label: 'More',
@@ -116,6 +117,7 @@ export default function Navbar() {
                                         { label: 'Custom Trip', href: '/custom-trip' },
                                         { label: 'Offers', href: '/offers' },
                                         { label: 'Reviews', href: '/reviews' },
+                                        { label: 'Gallery', href: '/gallery' },
                                         { label: 'Blog', href: '/blog' },
                                         { label: 'AI Trip Planner', href: '/trip-planner' },
                                         { label: 'Contact', href: '/contact' }

@@ -14,6 +14,7 @@ import PushNotificationManager from '@/components/PushNotificationManager'
 import RevenueStats from '@/components/RevenueStats'
 import InvoiceManager from '@/components/admin/InvoiceManager'
 import DestinationManager from '@/components/admin/DestinationManager'
+import GalleryManager from '@/components/admin/GalleryManager'
 
 export default function AdminDashboard() {
     const { data: session, status } = useSession()
@@ -561,6 +562,10 @@ export default function AdminDashboard() {
                         <FileText size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Invoices</span>
                     </button>
+                    <button onClick={() => { setCurrentView('gallery'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'gallery' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <ImageIcon size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Gallery</span>
+                    </button>
                 </nav>
 
                 <div className="p-3 border-t border-white/10">
@@ -787,6 +792,12 @@ export default function AdminDashboard() {
                     {currentView === 'rates' && (
                         <div className="animate-fade-in-up">
                             <DestinationManager />
+                        </div>
+                    )}
+
+                    {currentView === 'gallery' && (
+                        <div className="animate-fade-in-up">
+                            <GalleryManager />
                         </div>
                     )}
 
