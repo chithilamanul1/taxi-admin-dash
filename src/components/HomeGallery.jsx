@@ -73,16 +73,8 @@ export default function HomeGallery() {
                                     />
                                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                                     
-                                    <div className="absolute top-6 right-6">
-                                        <div className="bg-[#FACC15] text-black px-3 py-1 text-[10px] font-black uppercase tracking-widest border-2 border-black">
-                                            {img.category}
-                                        </div>
-                                    </div>
-
-                                    <div className="absolute bottom-0 left-0 right-0 p-8 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                                        <div className="bg-white p-4 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                                            <p className="text-black font-black uppercase tracking-tight text-sm line-clamp-1">{img.caption}</p>
-                                        </div>
+                                    <div className="absolute bottom-0 left-0 right-0 p-8 translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black/60 to-transparent">
+                                        <p className="text-white font-black uppercase tracking-tight text-xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] line-clamp-2">{img.caption}</p>
                                     </div>
                                 </div>
                             </div>

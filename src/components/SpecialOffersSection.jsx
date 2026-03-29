@@ -72,15 +72,7 @@ export default function SpecialOffersSection() {
                             </h2>
                         </div>
                         
-                        {/* Custom Navigation for Mobile/Desktop */}
-                        <div className="flex gap-4 mb-6 md:mb-0">
-                            <button onClick={prev} className="w-12 h-12 bg-[#FACC15] text-black flex items-center justify-center border-4 border-black hover:bg-black hover:text-[#FACC15] transition-all">
-                                <ChevronLeft size={24} strokeWidth={3} />
-                            </button>
-                            <button onClick={next} className="w-12 h-12 bg-[#FACC15] text-black flex items-center justify-center border-4 border-black hover:bg-black hover:text-[#FACC15] transition-all">
-                                <ChevronRight size={24} strokeWidth={3} />
-                            </button>
-                        </div>
+                        {/* Navigation removed as requested */}
                     </div>
 
                     {/* Coupon Slider */}
