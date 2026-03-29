@@ -37,8 +37,8 @@ export default function HomeGallery() {
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
                     <div>
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 bg-black dark:bg-[#FACC15] flex items-center justify-center border-4 border-black rotate-3">
-                                <Camera size={24} className="text-[#FACC15] dark:text-black" />
+                            <div className="w-12 h-12 bg-red-600 flex items-center justify-center border-4 border-red-600 rotate-3 shadow-lg">
+                                <Camera size={24} className="text-white" />
                             </div>
                             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-black/40 dark:text-white/40">Travel Memories</span>
                         </div>
@@ -49,7 +49,7 @@ export default function HomeGallery() {
                     
                     <Link 
                         href="/gallery"
-                        className="group flex items-center gap-4 bg-black text-[#FACC15] px-8 py-4 font-black uppercase tracking-widest text-xs border-4 border-black shadow-[8px_8px_0px_0px_rgba(250,204,21,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+                        className="group flex items-center gap-4 bg-red-600 text-white px-8 py-4 font-black uppercase tracking-widest text-xs border-4 border-red-600 shadow-[8px_8px_0px_0px_rgba(250,204,21,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
                     >
                         VIEW FULL GALLERY <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                     </Link>
