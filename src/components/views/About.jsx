@@ -74,7 +74,7 @@ const About = () => {
                         <div className="absolute -top-10 -left-10 w-40 h-40 bg-amber-400/20 rounded-full blur-3xl"></div>
                         <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-blue-400/10 rounded-full blur-3xl"></div>
                         
-                        <div className="relative z-10 aspect-[4/5] rounded-[3rem] overflow-hidden border-8 border-white dark:border-slate-800 shadow-2xl">
+                        <div className="relative z-10 aspect-[4/5] rounded-[3rem] overflow-hidden border-8 border-white dark:border-slate-800 shadow-2xl bg-slate-200 dark:bg-slate-800">
                             <img
                                 src="src/assets/images/about-team.jpg" 
                                 alt="Our Local Team"
@@ -83,7 +83,7 @@ const About = () => {
                                     e.target.src = "https://images.pexels.com/photos/1643330/pexels-photo-1643330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                                 }}
                             />
-                            <div className="absolute bottom-6 left-6 right-6 bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-[2rem]">
+                            <div className="absolute bottom-6 left-6 right-6 bg-black/60 backdrop-blur-xl border border-white/10 p-6 rounded-[2rem]">
                                 <div className="flex gap-4 items-center">
                                     <div className="w-12 h-12 bg-amber-400 rounded-full flex items-center justify-center text-black font-black italic shadow-lg">5★</div>
                                     <div>
