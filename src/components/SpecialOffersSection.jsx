@@ -79,7 +79,7 @@ export default function SpecialOffersSection() {
                     <div className="relative overflow-hidden mb-12">
                         <motion.div 
                             className="flex gap-6 md:gap-8"
-                            animate={{ x: `-${currentIndex * (100 / (typeof window !== 'undefined' && window.innerWidth < 768 ? 1 : (window.innerWidth < 1024 ? 2 : 3)))}%` }}
+                            animate={{ x: `-${currentIndex * (100 / (typeof window !== 'undefined' && window.innerWidth < 768 ? 1 : 2))}%` }}
                             transition={{ type: "spring", stiffness: 100, damping: 20 }}
                         >
                             {loading ? (
@@ -97,7 +97,7 @@ export default function SpecialOffersSection() {
                                         }
                                         window.location.href = `/?${params.toString()}#booking`;
                                     }}
-                                    className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(33.33%-21px)] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-8 md:p-10 hover:shadow-2xl transition-all cursor-pointer group/card relative overflow-visible flex flex-col h-full min-h-[480px] shadow-xl group-hover:translate-y-[-8px]"
+                                    className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(50%-16px)] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-6 md:p-8 hover:shadow-2xl transition-all cursor-pointer group/card relative overflow-visible flex flex-col h-full min-h-[380px] shadow-xl group-hover:translate-y-[-8px]"
                                 >
                                     {/* Ticket Notches */}
                                     <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-8 h-8 bg-white dark:bg-black rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
@@ -105,7 +105,7 @@ export default function SpecialOffersSection() {
 
                                     <div className="relative z-10 flex flex-col h-full">
                                         {/* Header: Icon & Badge */}
-                                        <div className="flex justify-between items-start mb-8">
+                                        <div className="flex justify-between items-start mb-6">
                                             <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-orange-500/20 rotate-3 group-hover/card:rotate-0 transition-transform">
                                                 <Percent size={28} strokeWidth={3} />
                                             </div>
@@ -129,16 +129,16 @@ export default function SpecialOffersSection() {
                                         </div>
 
                                         {/* Description */}
-                                        <p className="text-sm font-bold text-slate-600 dark:text-slate-400 mb-8 mt-4 leading-relaxed line-clamp-2">
+                                        <p className="text-sm font-bold text-slate-600 dark:text-slate-400 mb-6 mt-2 leading-relaxed line-clamp-2">
                                             {coupon.description || `Valid for rides to/from ${coupon.applicableLocations?.[0] || 'selected locations'}`}
                                         </p>
 
                                         {/* Dashed Separator */}
-                                        <div className="w-full border-t-2 border-dashed border-slate-100 dark:border-slate-800 mb-8 mx-0" />
+                                        <div className="w-full border-t-2 border-dashed border-slate-100 dark:border-slate-800 mb-6 mx-0" />
 
                                         {/* Code Bar - Pushed to Bottom */}
                                         <div className="mt-auto space-y-6">
-                                            <div className="bg-slate-50 dark:bg-slate-800/50 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 flex items-center justify-between group-hover/card:border-orange-500/30 transition-all">
+                                            <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 flex items-center justify-between group-hover/card:border-orange-500/30 transition-all">
                                                 <div>
                                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Use Code</p>
                                                     <p className="text-2xl font-black text-orange-600 tracking-tight">{coupon.code}</p>
