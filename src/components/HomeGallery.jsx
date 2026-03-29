@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, Camera, Instagram } from 'lucide-react';
+import { ArrowRight, Camera, Instagram, Plane, MapPin } from 'lucide-react';
 
 export default function HomeGallery() {
     const [images, setImages] = useState([]);
@@ -73,9 +73,23 @@ export default function HomeGallery() {
                                     />
                                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                                     
+                                    {img.category && img.category.toLowerCase() !== 'general' && (
+                                        <div className="absolute top-6 right-6">
+                                            <div className="bg-[#FACC15] text-black px-3 py-2 text-[10px] font-black uppercase tracking-widest border-2 border-black flex items-center gap-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                                {img.category.toLowerCase().includes('airport') ? (
+                                                    <Plane size={14} className="text-black" />
+                                                ) : (
+                                                    <MapPin size={14} className="text-black" />
+                                                )}
+                                                {img.category}
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <div className="absolute bottom-0 left-0 right-0 p-8 translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black/60 to-transparent">
                                         <p className="text-white font-black uppercase tracking-tight text-xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] line-clamp-2">{img.caption}</p>
                                     </div>
+
                                 </div>
                             </div>
                         </motion.div>

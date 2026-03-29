@@ -327,18 +327,13 @@ export default function GalleryManager() {
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Category</label>
-                                            <select
-                                                className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none cursor-pointer focus:ring-4 focus:ring-emerald-500/10 transition-all"
+                                            <input
+                                                type="text"
+                                                placeholder="e.g. Airport, Sigiriya, Ella..."
+                                                className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all text-slate-700"
                                                 value={newImage.category}
                                                 onChange={e => setNewImage({ ...newImage, category: e.target.value })}
-                                            >
-                                                <option>General</option>
-                                                <option>Sigiriya</option>
-                                                <option>Destination</option>
-                                                <option>Vehicles</option>
-                                                <option>Tours</option>
-                                                <option>Customer Memories</option>
-                                            </select>
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -410,26 +405,15 @@ export default function GalleryManager() {
                                         placeholder="Add a beautiful caption..."
                                     />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    {['General', 'Destination', 'Vehicle', 'Tour'].map(cat => (
-                                        <label
-                                            key={cat}
-                                            className={`flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition-all ${editImage.category === cat ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-indigo-300'}`}
-                                        >
-                                            <input
-                                                type="radio"
-                                                name="editCategory"
-                                                value={cat}
-                                                checked={editImage.category === cat}
-                                                onChange={(e) => setEditImage({ ...editImage, category: e.target.value })}
-                                                className="hidden"
-                                            />
-                                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${editImage.category === cat ? 'border-indigo-500 bg-indigo-500' : 'border-slate-300'}`}>
-                                                {editImage.category === cat && <Check size={12} className="text-white" />}
-                                            </div>
-                                            <span className="font-bold text-sm tracking-wide">{cat}</span>
-                                        </label>
-                                    ))}
+                                <div>
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 drop-shadow-sm">Location / Category</label>
+                                    <input
+                                        type="text"
+                                        value={editImage.category}
+                                        onChange={(e) => setEditImage({ ...editImage, category: e.target.value })}
+                                        className="w-full bg-slate-50 border-2 border-slate-200 px-6 py-4 rounded-2xl block text-slate-700 font-bold mt-2 outline-none focus:border-red-500 focus:bg-white transition-all"
+                                        placeholder="e.g. Airport, Sigiriya, Ella..."
+                                    />
                                 </div>
 
                                 <button
