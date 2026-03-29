@@ -97,70 +97,77 @@ export default function SpecialOffersSection() {
                                         }
                                         window.location.href = `/?${params.toString()}#booking`;
                                     }}
-                                    className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(33.33%-21px)] bg-[#FACC15] border-4 border-black p-6 md:p-8 hover:translate-y-[-8px] transition-all cursor-pointer group/card relative overflow-hidden flex flex-col justify-between h-full min-h-[400px] shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]"
+                                    className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(33.33%-21px)] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-8 md:p-10 hover:shadow-2xl transition-all cursor-pointer group/card relative overflow-visible flex flex-col h-full min-h-[480px] shadow-xl group-hover:translate-y-[-8px]"
                                 >
-                                    <div className="relative z-10">
+                                    {/* Ticket Notches */}
+                                    <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-8 h-8 bg-white dark:bg-black rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
+                                    <div className="absolute top-1/2 -translate-y-1/2 -right-4 w-8 h-8 bg-white dark:bg-black rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
+
+                                    <div className="relative z-10 flex flex-col h-full">
                                         {/* Header: Icon & Badge */}
-                                        <div className="flex justify-between items-start mb-6">
-                                            <div className="w-12 h-12 bg-red-600 border-2 border-red-600 flex items-center justify-center text-white">
-                                                <Tag size={22} strokeWidth={3} />
+                                        <div className="flex justify-between items-start mb-8">
+                                            <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-orange-500/20 rotate-3 group-hover/card:rotate-0 transition-transform">
+                                                <Percent size={28} strokeWidth={3} />
                                             </div>
                                             {coupon.applicableLocations && coupon.applicableLocations.length > 0 && (
-                                                <span className="inline-flex items-center gap-1 bg-white text-black px-3 py-1 text-[10px] font-black uppercase tracking-wider border-2 border-black">
-                                                    <MapPin size={10} />
+                                                <span className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-600 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full border border-orange-100">
+                                                    <MapPin size={10} strokeWidth={3} />
                                                     {coupon.applicableLocations[0]}
                                                 </span>
                                             )}
                                         </div>
 
-                                        {/* Discount */}
-                                        <div className="mb-4">
-                                            <h3 className="text-4xl md:text-5xl font-black text-black tracking-tighter leading-none uppercase">
-                                                {coupon.discountType === 'percentage' ? `${coupon.value}%` : `Rs. ${coupon.value}`}
-                                                <span className="text-lg ml-2 text-black/40 font-black">OFF</span>
-                                            </h3>
+                                        {/* Discount Info */}
+                                        <div className="mb-2">
+                                            <div className="flex items-baseline gap-1">
+                                                <h3 className="text-6xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                                                    {coupon.discountType === 'percentage' ? `${coupon.value}%` : `${coupon.value}`}
+                                                </h3>
+                                                <span className="text-xl font-black text-slate-400 uppercase">{coupon.discountType === 'percentage' ? 'OFF' : 'LKR OFF'}</span>
+                                            </div>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-2">Discount Coupon</p>
                                         </div>
 
                                         {/* Description */}
-                                        <p className="text-xs font-bold text-black/80 mb-6 leading-relaxed uppercase tracking-wider">
+                                        <p className="text-sm font-bold text-slate-600 dark:text-slate-400 mb-8 mt-4 leading-relaxed line-clamp-2">
                                             {coupon.description || `Valid for rides to/from ${coupon.applicableLocations?.[0] || 'selected locations'}`}
                                         </p>
-                                    </div>
 
-                                    <div className="relative z-10 w-full">
-                                        {/* Code Bar */}
-                                        <div className="bg-red-600 p-3 flex items-center justify-between mb-4 border-2 border-red-600">
-                                            <div>
-                                                <p className="text-lg font-black text-white tracking-wider">{coupon.code}</p>
-                                            </div>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    navigator.clipboard.writeText(coupon.code);
-                                                    setCopiedCode(coupon.code);
-                                                    setTimeout(() => setCopiedCode(null), 2000);
-                                                }}
-                                                className={`px-4 py-2 font-black text-xs flex items-center gap-2 transition-all border-2 border-white uppercase tracking-widest ${copiedCode === coupon.code ? 'bg-white text-red-600' : 'bg-transparent text-white hover:bg-white hover:text-red-600'}`}
-                                                aria-label={copiedCode === coupon.code ? "Coupon code copied" : "Copy coupon code"}
-                                            >
-                                                {copiedCode === coupon.code ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
-                                                {copiedCode === coupon.code ? 'COPIED' : 'COPY'}
-                                            </button>
-                                        </div>
+                                        {/* Dashed Separator */}
+                                        <div className="w-full border-t-2 border-dashed border-slate-100 dark:border-slate-800 mb-8 mx-0" />
 
-                                        {/* Footer */}
-                                        <div className="flex items-center justify-between">
-                                            {coupon.expiryDate && (
-                                                <div className="flex items-center gap-2 text-[10px] font-black text-black/40 uppercase tracking-[0.15em]">
-                                                    <Calendar size={12} />
-                                                    <span>EXP: {new Date(coupon.expiryDate).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' })}</span>
+                                        {/* Code Bar - Pushed to Bottom */}
+                                        <div className="mt-auto space-y-6">
+                                            <div className="bg-slate-50 dark:bg-slate-800/50 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 flex items-center justify-between group-hover/card:border-orange-500/30 transition-all">
+                                                <div>
+                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Use Code</p>
+                                                    <p className="text-2xl font-black text-orange-600 tracking-tight">{coupon.code}</p>
                                                 </div>
-                                            )}
-                                            <div 
-                                                className="bg-red-600 border-2 border-red-600 px-4 py-2 text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2 group-hover/card:bg-white group-hover/card:text-red-600 transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
-                                                aria-label={`Book now using coupon ${coupon.code}`}
-                                            >
-                                                BOOK <ArrowRight size={12} aria-hidden="true" />
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        navigator.clipboard.writeText(coupon.code);
+                                                        setCopiedCode(coupon.code);
+                                                        setTimeout(() => setCopiedCode(null), 2000);
+                                                    }}
+                                                    className={`px-6 py-3 rounded-2xl font-black text-xs flex items-center gap-2 transition-all shadow-lg uppercase tracking-widest ${copiedCode === coupon.code ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-orange-500 text-white hover:bg-orange-600 shadow-orange-500/20'}`}
+                                                >
+                                                    {copiedCode === coupon.code ? <Check size={16} strokeWidth={3} /> : <Copy size={16} strokeWidth={3} />}
+                                                    {copiedCode === coupon.code ? 'COPIED' : 'COPY'}
+                                                </button>
+                                            </div>
+
+                                            {/* Final Footer Row */}
+                                            <div className="flex items-center justify-between px-2">
+                                                {coupon.expiryDate ? (
+                                                    <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                                        <Calendar size={12} />
+                                                        <span>Valid until {new Date(coupon.expiryDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                                    </div>
+                                                ) : <div />}
+                                                <div className="text-[10px] font-black text-orange-600 uppercase tracking-widest flex items-center gap-1 group-hover/card:gap-3 transition-all">
+                                                    BOOK NOW <ArrowRight size={14} />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
