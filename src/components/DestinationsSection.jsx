@@ -44,7 +44,7 @@ const DestinationsSection = () => {
                             className="group relative cursor-pointer"
                         >
                             {/* Card Wrapper */}
-                            <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-[2.5rem] border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-300">
+                            <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-[2.5rem] border-4 border-black shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
                                 {/* Destination Image */}
                                 <Image
                                     src={dest.img || '/placeholder-destination.jpg'}

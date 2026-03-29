@@ -1,14 +1,18 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 const OfferMarquee = () => {
+    const pathname = usePathname();
     const [timeLeft, setTimeLeft] = useState({
         days: 1,
         hours: 5,
         minutes: 2,
         seconds: 3
     });
+
+    if (pathname?.startsWith('/admin')) return null;
 
     useEffect(() => {
         // Target date: 48 hours from now for a persistent "limited time" feel

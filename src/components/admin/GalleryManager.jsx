@@ -44,15 +44,69 @@ export default function GalleryManager() {
         }
     };
 
+    const compressImage = async (file) => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new window.Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    // Start compression
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // Calculate new dimensions (max 1920x1920)
+                    const MAX_SIZE = 1920;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height && width > MAX_SIZE) {
+                        height *= MAX_SIZE / width;
+                        width = MAX_SIZE;
+                    } else if (height > MAX_SIZE) {
+                        width *= MAX_SIZE / height;
+                        height = MAX_SIZE;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Convert back to blob
+                    canvas.toBlob(
+                        (blob) => {
+                            if (!blob) {
+                                resolve(file); // fail safe, return original
+                                return;
+                            }
+                            const compressedFile = new File([blob], file.name, {
+                                type: 'image/jpeg',
+                                lastModified: Date.now(),
+                            });
+                            resolve(compressedFile);
+                        },
+                        'image/jpeg',
+                        0.85 // 85% quality
+                    );
+                };
+            };
+        });
+    };
+
     const handleUpload = async (e) => {
         e.preventDefault();
         if (!newImage.file) return alert('Please select an image');
 
         setUploading(true);
         try {
+            // Compress 'real' high-res images to avoid Vercel 4.5MB payload limits
+            const compressedFile = await compressImage(newImage.file);
+
             // 1. Upload to Cloudinary via our upload API
             const formData = new FormData();
-            formData.append('file', newImage.file);
+            formData.append('file', compressedFile);
             formData.append('folder', 'gallery');
 
             const uploadRes = await fetch('/api/upload', {

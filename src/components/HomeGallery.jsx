@@ -64,7 +64,7 @@ export default function HomeGallery() {
                             viewport={{ once: true }}
                             className={`group relative ${idx % 2 === 1 ? 'md:mt-12' : ''}`}
                         >
-                            <div className="bg-black border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] dark:shadow-[10px_10px_0px_0px_rgba(250,204,21,0.5)] overflow-hidden transition-all group-hover:shadow-[15px_15px_0px_0px_rgba(250,204,21,1)] group-hover:-translate-y-2">
+                            <div className="bg-black border-4 border-black rounded-[2rem] shadow-xl overflow-hidden transition-all group-hover:shadow-2xl group-hover:-translate-y-2">
                                 <div className="aspect-[4/5] relative">
                                     <img 
                                         src={img.url} 

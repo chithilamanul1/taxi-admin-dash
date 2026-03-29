@@ -4,13 +4,18 @@ import React from 'react';
 import Link from 'next/link';
 import { Plane, Map, Compass, User } from 'lucide-react';
 
+import { usePathname } from 'next/navigation';
+
 const CategoryBar = () => {
+    const pathname = usePathname();
     const categories = [
         { name: 'Airport Taxis', icon: Plane, href: '/', active: true },
         { name: 'Tour Packages', icon: Map, href: '/tour-packages' },
         { name: 'Day Trips', icon: Compass, href: '/day-trips' },
         { name: 'Driver Portal', icon: User, href: '/driver/login' },
     ];
+
+    if (pathname?.startsWith('/admin')) return null;
 
     return (
         <div className="bg-black py-3 px-6 overflow-x-auto scrollbar-hide border-b border-white/10 flex justify-center items-center">
