@@ -32,7 +32,7 @@ export default function HomeGallery() {
     const displayImages = images.length > 0 ? images : fallbackImages;
 
     return (
-        <section className="py-24 bg-white dark:bg-black border-t-8 border-black">
+        <section className="py-24 bg-white dark:bg-black">
             <div className="container mx-auto px-6">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
                     <div>
