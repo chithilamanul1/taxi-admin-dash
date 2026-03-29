@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
     role: { type: String, enum: ['admin', 'user', 'customer', 'driver'], default: 'user' },
     isAdmin: { type: Boolean, default: false },
     permissions: { type: [String], default: [] }, // For granular access control
-    pushSubscription: { type: Object } // For Web Push Notifications
+    pushSubscription: { type: Object }, // For Web Push Notifications
+    marketingConsent: { type: Boolean, default: true } // For Email Marketing
 }, {
     timestamps: true
 });
