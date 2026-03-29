@@ -62,9 +62,9 @@ export default function SpecialOffersSection() {
                     {/* Header */}
                     <div className="mb-10 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
                         <div>
-                            <div className="inline-flex items-center gap-2 bg-black px-4 py-1.5 mb-6">
-                                <Tag size={14} className="text-[#FACC15]" strokeWidth={3} />
-                                <span className="text-xs font-black text-[#FACC15] uppercase tracking-[0.2em]">Exclusive Deals</span>
+                            <div className="inline-flex items-center gap-2 bg-red-600 px-4 py-1.5 mb-6 border-2 border-red-600">
+                                <Tag size={14} className="text-white" strokeWidth={3} />
+                                <span className="text-xs font-black text-white uppercase tracking-[0.2em]">Exclusive Deals</span>
                             </div>
                             <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-black mb-6 leading-none uppercase tracking-tighter">
                                 SAVE ON YOUR <br />
@@ -102,7 +102,7 @@ export default function SpecialOffersSection() {
                                     <div className="relative z-10">
                                         {/* Header: Icon & Badge */}
                                         <div className="flex justify-between items-start mb-6">
-                                            <div className="w-12 h-12 bg-black border-2 border-black flex items-center justify-center text-[#FACC15]">
+                                            <div className="w-12 h-12 bg-red-600 border-2 border-red-600 flex items-center justify-center text-white">
                                                 <Tag size={22} strokeWidth={3} />
                                             </div>
                                             {coupon.applicableLocations && coupon.applicableLocations.length > 0 && (
@@ -129,9 +129,9 @@ export default function SpecialOffersSection() {
 
                                     <div className="relative z-10 w-full">
                                         {/* Code Bar */}
-                                        <div className="bg-black p-3 flex items-center justify-between mb-4">
+                                        <div className="bg-red-600 p-3 flex items-center justify-between mb-4 border-2 border-red-600">
                                             <div>
-                                                <p className="text-lg font-black text-[#FACC15] tracking-wider">{coupon.code}</p>
+                                                <p className="text-lg font-black text-white tracking-wider">{coupon.code}</p>
                                             </div>
                                             <button
                                                 onClick={(e) => {
@@ -140,7 +140,7 @@ export default function SpecialOffersSection() {
                                                     setCopiedCode(coupon.code);
                                                     setTimeout(() => setCopiedCode(null), 2000);
                                                 }}
-                                                className={`px-4 py-2 font-black text-xs flex items-center gap-2 transition-all border-2 border-[#FACC15] uppercase tracking-widest ${copiedCode === coupon.code ? 'bg-[#FACC15] text-black' : 'bg-transparent text-[#FACC15] hover:bg-[#FACC15] hover:text-black'}`}
+                                                className={`px-4 py-2 font-black text-xs flex items-center gap-2 transition-all border-2 border-white uppercase tracking-widest ${copiedCode === coupon.code ? 'bg-white text-red-600' : 'bg-transparent text-white hover:bg-white hover:text-red-600'}`}
                                                 aria-label={copiedCode === coupon.code ? "Coupon code copied" : "Copy coupon code"}
                                             >
                                                 {copiedCode === coupon.code ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
@@ -157,7 +157,7 @@ export default function SpecialOffersSection() {
                                                 </div>
                                             )}
                                             <div 
-                                                className="bg-black border-2 border-black px-4 py-2 text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2 group-hover/card:bg-white group-hover/card:text-black transition-all"
+                                                className="bg-red-600 border-2 border-red-600 px-4 py-2 text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2 group-hover/card:bg-white group-hover/card:text-red-600 transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                                                 aria-label={`Book now using coupon ${coupon.code}`}
                                             >
                                                 BOOK <ArrowRight size={12} aria-hidden="true" />
@@ -173,7 +173,7 @@ export default function SpecialOffersSection() {
                     <div className="text-center">
                         <Link
                             href="/offers"
-                            className="inline-flex items-center gap-4 bg-black text-[#FACC15] px-10 py-5 border-4 border-black font-black uppercase tracking-[0.2em] text-sm hover:translate-y-[-4px] active:translate-y-0 transition-all group"
+                            className="inline-flex items-center gap-4 bg-red-600 text-white px-10 py-5 border-4 border-red-600 font-black uppercase tracking-[0.2em] text-sm hover:translate-y-[-4px] active:translate-y-0 transition-all group shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
                         >
                             VIEW ALL OFFERS
                             <ArrowRight size={20} strokeWidth={3} className="group-hover:translate-x-2 transition-transform" />
