@@ -75,11 +75,11 @@ export default function HomeGallery() {
                                     
                                     {img.category && img.category.toLowerCase() !== 'general' && (
                                         <div className="absolute top-6 right-6">
-                                            <div className="bg-[#FACC15] text-black px-3 py-2 text-[10px] font-black uppercase tracking-widest border-2 border-black flex items-center gap-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                            <div className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] px-3 py-2 text-[11px] font-black uppercase tracking-widest flex items-center gap-2">
                                                 {img.category.toLowerCase().includes('airport') ? (
-                                                    <Plane size={14} className="text-black" />
+                                                    <Plane size={16} className="text-[#FACC15] drop-shadow-md" />
                                                 ) : (
-                                                    <MapPin size={14} className="text-black" />
+                                                    <MapPin size={16} className="text-[#FACC15] drop-shadow-md" />
                                                 )}
                                                 {img.category}
                                             </div>
