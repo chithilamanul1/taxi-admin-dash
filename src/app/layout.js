@@ -7,10 +7,7 @@ import Footer from '../components/Footer'
 import AuthProvider from '../components/AuthProvider'
 import { ThemeProvider } from '../components/ThemeProvider'
 import dynamic from 'next/dynamic'
-
-const LiveChatWidget = dynamic(() => import('../components/LiveChatWidget'), {
-    ssr: false,
-})
+import ClientSideWidgets from '../components/ClientSideWidgets'
 
 export const metadata = {
     title: {
@@ -1327,7 +1324,7 @@ export default function RootLayout({ children }) {
                             </div>
                             <main>{children}</main>
                             <FloatingContact />
-                            <LiveChatWidget />
+                            <ClientSideWidgets />
                             <Footer />
                         </CurrencyProvider>
                     </AuthProvider>
