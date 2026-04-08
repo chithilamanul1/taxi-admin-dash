@@ -1,7 +1,7 @@
 export default function sitemap() {
     const baseUrl = 'https://srilankantaxi.lk';
 
-    const { routes } = require('./lib/routes');
+    const { routes } = require('../lib/routes');
 
     const taxiRoutes = routes.map(r => ({
         url: `${baseUrl}/taxi-routes/${r.slug}`,

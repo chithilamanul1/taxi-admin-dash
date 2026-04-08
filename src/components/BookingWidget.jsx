@@ -5,15 +5,14 @@ import dynamic from 'next/dynamic'
 import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X, ArrowRight, PlaneTakeoff, PlaneLanding } from 'lucide-react'
 
 import Image from 'next/image'
-import ToursWidget from './ToursWidget'
-import RentalsWidget from './RentalsWidget'
-import BookingModal from './BookingModal'
-import { useCurrency } from '../context/CurrencyContext'
-import VehicleSelectionDrawer from './VehicleSelectionDrawer'
-import VehicleCarousel from './VehicleCarousel'
-import LocationInput from './LocationInput'
-import SmartOfferNudge from './SmartOfferNudge'
-import TripMap from './TripMap'
+const ToursWidget = dynamic(() => import('./ToursWidget'), { ssr: false })
+const RentalsWidget = dynamic(() => import('./RentalsWidget'), { ssr: false })
+const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
+const VehicleSelectionDrawer = dynamic(() => import('./VehicleSelectionDrawer'), { ssr: false })
+const VehicleCarousel = dynamic(() => import('./VehicleCarousel'), { ssr: false })
+const LocationInput = dynamic(() => import('./LocationInput'), { ssr: false })
+const SmartOfferNudge = dynamic(() => import('./SmartOfferNudge'), { ssr: false })
+const TripMap = dynamic(() => import('./TripMap'), { ssr: false })
 
 
 import { calculateBasePrice, calculateSurcharges } from '@/lib/pricing-util';
@@ -660,11 +659,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             <div className="flex items-center gap-2">
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: Math.max(0, (w.waitingTime || 0) - 1) } : w)); }}
+                                                    aria-label="Decrease waiting time"
                                                     className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-white dark:bg-white/10 text-black dark:text-white text-[10px] sm:text-xs font-black hover:bg-slate-100 transition-colors border border-black"
                                                 >−</button>
                                                 <span className="text-[10px] sm:text-sm font-black text-black dark:text-white w-4 sm:w-6 text-center">{wp.waitingTime || 0}h</span>
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: (w.waitingTime || 0) + 1 } : w)); }}
+                                                    aria-label="Increase waiting time"
                                                     className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-black dark:bg-yellow-400 text-white dark:text-black text-[10px] sm:text-xs font-black hover:bg-slate-800 transition-colors border border-black"
                                                 >+</button>
                                             </div>

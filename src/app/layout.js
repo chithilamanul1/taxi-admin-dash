@@ -6,7 +6,11 @@ import FloatingContact from '../components/FloatingContact'
 import Footer from '../components/Footer'
 import AuthProvider from '../components/AuthProvider'
 import { ThemeProvider } from '../components/ThemeProvider'
-import LiveChatWidget from '../components/LiveChatWidget'
+import dynamic from 'next/dynamic'
+
+const LiveChatWidget = dynamic(() => import('../components/LiveChatWidget'), {
+    ssr: false,
+})
 
 export const metadata = {
     title: {

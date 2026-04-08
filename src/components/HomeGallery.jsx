@@ -49,9 +49,10 @@ export default function HomeGallery() {
                     
                     <Link 
                         href="/gallery"
+                        aria-label="View our photo gallery of Sri Lankan travel memories"
                         className="group flex items-center gap-4 bg-red-600 text-white px-8 py-4 font-black uppercase tracking-widest text-xs border-4 border-red-600 shadow-[8px_8px_0px_0px_rgba(250,204,21,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
                     >
-                        VIEW FULL GALLERY <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                        VIEW FULL GALLERY <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                     </Link>
                 </div>
 
@@ -66,10 +67,12 @@ export default function HomeGallery() {
                         >
                             <div className="bg-black border-4 border-black rounded-[2rem] shadow-xl overflow-hidden transition-all group-hover:shadow-2xl group-hover:-translate-y-2">
                                 <div className="aspect-[4/5] relative">
-                                    <img 
+                                    <Image 
                                         src={img.url} 
-                                        alt={img.caption}
+                                        alt={img.caption || 'Sri Lanka Travel Memory'}
+                                        fill
                                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     />
                                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                                     

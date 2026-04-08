@@ -24,6 +24,7 @@ const CategoryBar = () => {
                     <Link
                         key={cat.name}
                         href={cat.href}
+                        aria-label={`Navigate to ${cat.name}`}
                         className={`flex items-center gap-2 px-4 py-1.5 rounded-full border-2 transition-all group ${
                             cat.active 
                                 ? 'bg-white border-white text-black' 

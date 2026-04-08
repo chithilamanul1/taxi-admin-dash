@@ -138,6 +138,7 @@ const Hero = () => {
                                                         fill
                                                         className="object-cover group-hover:scale-110 transition-transform duration-1000"
                                                         priority={i === 1}
+                                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 450px"
                                                     />
                                                     
                                                     <div className="absolute bottom-2 left-2 z-10 bg-[#FACC15] border-2 border-black px-2 py-0.5 font-black text-[9px] uppercase tracking-tighter">
@@ -168,15 +169,17 @@ const Hero = () => {
                         {/* Navigation Buttons - Smaller and more compact */}
                         <button 
                             onClick={handlePrev}
+                            aria-label="Previous destination"
                             className="absolute left-[-20px] lg:-left-24 z-50 w-12 h-12 bg-white border-4 border-black flex items-center justify-center hover:bg-[#FACC15] transition-all active:translate-x-1 active:translate-y-1 hidden md:flex"
                         >
-                            <ArrowLeft size={24} strokeWidth={5} />
+                            <ArrowLeft size={24} strokeWidth={5} aria-hidden="true" />
                         </button>
                         <button 
                             onClick={handleNext}
+                            aria-label="Next destination"
                             className="absolute right-[-20px] lg:-right-24 z-50 w-12 h-12 bg-[#FACC15] border-4 border-black flex items-center justify-center hover:bg-black hover:text-[#FACC15] transition-all active:translate-x-1 active:translate-y-1 hidden md:flex"
                         >
-                            <ArrowRight size={24} strokeWidth={5} />
+                            <ArrowRight size={24} strokeWidth={5} aria-hidden="true" />
                         </button>
                     </div>
 
