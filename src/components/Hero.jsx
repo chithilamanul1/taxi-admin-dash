@@ -137,8 +137,8 @@ const Hero = () => {
                                                         alt={dest.name}
                                                         fill
                                                         className="object-cover group-hover:scale-110 transition-transform duration-1000"
-                                                        priority={i === 1}
-                                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 450px"
+                                                        priority={i === currentIndex}
+                                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                                                     />
                                                     
                                                     <div className="absolute bottom-2 left-2 z-10 bg-[#FACC15] border-2 border-black px-2 py-0.5 font-black text-[9px] uppercase tracking-tighter">

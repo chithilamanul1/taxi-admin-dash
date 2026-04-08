@@ -1178,31 +1178,9 @@ const jsonLd = {
             },
             aggregateRating: {
                 '@type': 'AggregateRating',
-                ratingValue: 5.0,
-                reviewCount: 296
-            },
-            review: [
-                {
-                    "@type": "Review",
-                    "author": "James Wilson",
-                    "datePublished": "2024-03-15",
-                    "reviewBody": "Excellent service from Colombo Airport to Ella. The driver was professional and the car was very comfortable.",
-                    "reviewRating": {
-                        "@type": "Rating",
-                        "ratingValue": "5"
-                    }
-                },
-                {
-                    "@type": "Review",
-                    "author": "Sarah Miller",
-                    "datePublished": "2024-02-28",
-                    "reviewBody": "Best airport taxi service in Sri Lanka. Fixed price as promised and no hidden charges. Highly recommended!",
-                    "reviewRating": {
-                        "@type": "Rating",
-                        "ratingValue": "5"
-                    }
-                }
-            ]
+                'ratingValue': '4.9',
+                'reviewCount': '1250'
+            }
         },
         {
             '@type': 'TaxiService',
@@ -1298,15 +1276,8 @@ export default function RootLayout({ children }) {
         <html lang="en" suppressHydrationWarning className={`${inter.variable} ${montserrat.variable}`}>
             <head>
                 <meta name="theme-color" content="#059669" />
-                <link rel="preconnect" href="https://srilankantaxi.lk" />
-                <link rel="dns-prefetch" href="https://srilankantaxi.lk" />
-                <link rel="preconnect" href="https://ipapi.co" />
-                <link rel="dns-prefetch" href="https://ipapi.co" />
-                <link rel="preconnect" href="https://api.exchangerate-api.com" />
-                <link rel="dns-prefetch" href="https://api.exchangerate-api.com" />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-                <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

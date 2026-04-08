@@ -7,23 +7,55 @@ import Image from 'next/image'
 import { ArrowRight, MapPin, Star, Compass } from 'lucide-react'
 import BookingWidget from './BookingWidget'
 
-// Dynamic imports for heavy components
+// Dynamic imports with loading placeholders to prevent CLS
+const LoadingBox = () => <div className="w-full h-40 bg-slate-100 dark:bg-white/5 animate-pulse border-2 border-black" />;
+
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
-const FleetSection = dynamic(() => import('./FleetSection'), { ssr: false })
-const DestinationsSection = dynamic(() => import('./DestinationsSection'), { ssr: false })
-const HomeGallery = dynamic(() => import('./HomeGallery'), { ssr: false })
-const Features = dynamic(() => import('./Features'), { ssr: false })
-const ReviewStatsBar = dynamic(() => import('./ReviewStatsBar'), { ssr: false })
+const FleetSection = dynamic(() => import('./FleetSection'), { 
+    ssr: false,
+    loading: () => <div className="py-24"><LoadingBox /></div>
+})
+const DestinationsSection = dynamic(() => import('./DestinationsSection'), { 
+    ssr: false,
+    loading: () => <div className="py-24"><LoadingBox /></div>
+})
+const HomeGallery = dynamic(() => import('./HomeGallery'), { 
+    ssr: false,
+    loading: () => <div className="py-24"><LoadingBox /></div>
+})
+const Features = dynamic(() => import('./Features'), { 
+    ssr: false,
+    loading: () => <div className="py-24"><LoadingBox /></div>
+})
+const ReviewStatsBar = dynamic(() => import('./ReviewStatsBar'), { 
+    ssr: false,
+    loading: () => <div className="h-20 bg-black animate-pulse" />
+})
 import { destinations } from '@/lib/destinations'
 
 // Dynamic imports for components below the fold
-const GoogleReviews = dynamic(() => import('./GoogleReviews'), { ssr: false })
-const RecentPosts = dynamic(() => import('./RecentPosts'), { ssr: false })
-const SpecialOffersSection = dynamic(() => import('./SpecialOffersSection'), { ssr: false })
-const MobileAppSection = dynamic(() => import('./MobileAppSection'), { ssr: false })
+const GoogleReviews = dynamic(() => import('./GoogleReviews'), { 
+    ssr: false,
+    loading: () => <LoadingBox />
+})
+const RecentPosts = dynamic(() => import('./RecentPosts'), { 
+    ssr: false,
+    loading: () => <LoadingBox />
+})
+const SpecialOffersSection = dynamic(() => import('./SpecialOffersSection'), { 
+    ssr: false,
+    loading: () => <LoadingBox />
+})
+const MobileAppSection = dynamic(() => import('./MobileAppSection'), { 
+    ssr: false,
+    loading: () => <LoadingBox />
+})
 const MarketingPopup = dynamic(() => import('./MarketingPopup'), { ssr: false })
 const ExpressCheckoutModal = dynamic(() => import('./ExpressCheckoutModal'), { ssr: false })
-const FAQSection = dynamic(() => import('./FAQSection'), { ssr: false })
+const FAQSection = dynamic(() => import('./FAQSection'), { 
+    ssr: false,
+    loading: () => <LoadingBox />
+})
 
 export default function HomeClient() {
     const [isBookingOpen, setIsBookingOpen] = useState(false);

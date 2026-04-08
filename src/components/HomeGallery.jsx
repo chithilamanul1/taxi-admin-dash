@@ -72,7 +72,7 @@ export default function HomeGallery() {
                                         alt={img.caption || 'Sri Lanka Travel Memory'}
                                         fill
                                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 384px"
                                     />
                                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                                     

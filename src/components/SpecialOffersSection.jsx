@@ -150,7 +150,7 @@ export default function SpecialOffersSection() {
                                                         setCopiedCode(coupon.code);
                                                         setTimeout(() => setCopiedCode(null), 2000);
                                                     }}
-                                                    className={`px-6 py-3 rounded-2xl font-black text-xs flex items-center gap-2 transition-all shadow-lg uppercase tracking-widest ${copiedCode === coupon.code ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-orange-500 text-white hover:bg-orange-600 shadow-orange-500/20'}`}
+                                                    className={`px-6 py-3 rounded-2xl font-black text-xs flex items-center gap-2 transition-all shadow-lg uppercase tracking-widest ${copiedCode === coupon.code ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-orange-500 text-black hover:bg-orange-600 shadow-orange-500/20'}`}
                                                 >
                                                     {copiedCode === coupon.code ? <Check size={16} strokeWidth={3} /> : <Copy size={16} strokeWidth={3} />}
                                                     {copiedCode === coupon.code ? 'COPIED' : 'COPY'}
