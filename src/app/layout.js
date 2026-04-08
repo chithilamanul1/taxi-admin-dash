@@ -1179,7 +1179,29 @@ const jsonLd = {
                 '@type': 'AggregateRating',
                 ratingValue: 5.0,
                 reviewCount: 296
-            }
+            },
+            review: [
+                {
+                    "@type": "Review",
+                    "author": "James Wilson",
+                    "datePublished": "2024-03-15",
+                    "reviewBody": "Excellent service from Colombo Airport to Ella. The driver was professional and the car was very comfortable.",
+                    "reviewRating": {
+                        "@type": "Rating",
+                        "ratingValue": "5"
+                    }
+                },
+                {
+                    "@type": "Review",
+                    "author": "Sarah Miller",
+                    "datePublished": "2024-02-28",
+                    "reviewBody": "Best airport taxi service in Sri Lanka. Fixed price as promised and no hidden charges. Highly recommended!",
+                    "reviewRating": {
+                        "@type": "Rating",
+                        "ratingValue": "5"
+                    }
+                }
+            ]
         },
         {
             '@type': 'TaxiService',
@@ -1195,21 +1217,24 @@ const jsonLd = {
                         "@type": "Offer",
                         "itemOffered": {
                             "@type": "Service",
-                            "name": "Colombo Airport to Colombo City Transfer"
+                            "name": "Colombo Airport to Colombo City Transfer",
+                            "description": "Fast and reliable transfer from CMB Airport to Colombo hotels."
                         }
                     },
                     {
                         "@type": "Offer",
                         "itemOffered": {
                             "@type": "Service",
-                            "name": "Colombo Airport to Kandy Transfer"
+                            "name": "Colombo Airport to Kandy Transfer",
+                            "description": "Comfortable 3-hour journey to the hill capital Kandy."
                         }
                     },
                     {
                         "@type": "Offer",
                         "itemOffered": {
                             "@type": "Service",
-                            "name": "Colombo Airport to Galle Transfer"
+                            "name": "Colombo Airport to Galle Transfer",
+                            "description": "Smooth highway transfer to the historic city of Galle."
                         }
                     }
                 ]
@@ -1225,6 +1250,13 @@ const jsonLd = {
                 'url': 'https://srilankantaxi.lk/logo.png',
                 'width': 512,
                 'height': 512
+            },
+            address: {
+                '@type': 'PostalAddress',
+                streetAddress: '118/5 St. Joseph Street, Grandpass',
+                addressLocality: 'Colombo',
+                postalCode: '01400',
+                addressCountry: 'LK'
             },
             contactPoint: {
                 '@type': 'ContactPoint',

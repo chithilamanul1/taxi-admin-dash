@@ -25,6 +25,14 @@ const faqs = [
     {
         question: "How do I find my driver at Bandaranaike International Airport?",
         answer: "Once you clear customs and enter the Arrivals Hall, look for your driver holding a personalized name board. You will also receive your driver's contact details via WhatsApp/email prior to your arrival for seamless communication."
+    },
+    {
+        question: "Do you offer taxis for 6 passengers with luggage in Sri Lanka?",
+        answer: "Yes, we have a specialized fleet of 6-seater mini vans and larger KDH luxury vans. These are ideal for groups of 6 passengers, providing comfortable seating and ample boot space for 6+ large suitcases. All our group vehicles are dual air-conditioned."
+    },
+    {
+        question: "How can I avoid common taxi scams at Colombo Airport?",
+        answer: "The best way to avoid scams is to pre-book a fixed-price transfer. Avoid unofficial representatives inside the hall and never agree to a price that hasn't been confirmed in writing. Our service provides instant confirmation and fixed all-inclusive rates to protect you from overcharging."
     }
 ];
 

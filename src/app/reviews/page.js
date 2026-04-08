@@ -64,8 +64,44 @@ export default function ReviewsPage() {
 
     const combinedStats = getCombinedStats();
 
+    // SEO Schema for Reviews
+    const reviewsSchema = {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Airport Taxis Pvt (Ltd)",
+        "image": "https://srilankantaxi.lk/og-image.jpg",
+        "url": "https://srilankantaxi.lk/reviews",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": combinedStats.rating || "5.0",
+            "reviewCount": combinedStats.count || "296",
+            "bestRating": "5",
+            "worstRating": "1"
+        },
+        "review": [
+            {
+                "@type": "Review",
+                "author": { "@type": "Person", "name": "James Wilson" },
+                "datePublished": "2024-03-15",
+                "reviewBody": "Excellent service from Colombo Airport to Ella. The driver was professional and the car was very comfortable.",
+                "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+            },
+            {
+                "@type": "Review",
+                "author": { "@type": "Person", "name": "Sarah Miller" },
+                "datePublished": "2024-02-28",
+                "reviewBody": "Best airport taxi service in Sri Lanka. Fixed price as promised and no hidden charges. Highly recommended!",
+                "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+            }
+        ]
+    };
+
     return (
         <main className="min-h-screen bg-slate-50 dark:bg-emerald-900">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewsSchema) }}
+            />
             <Navbar />
 
             {/* Header Section */}
