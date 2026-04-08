@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { ArrowRight, Camera, Instagram, Plane, MapPin } from 'lucide-react';
 
 export default function HomeGallery() {
