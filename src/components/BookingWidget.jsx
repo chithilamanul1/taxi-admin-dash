@@ -14,7 +14,7 @@ const LocationInput = dynamic(() => import('./LocationInput'), { ssr: false })
 const SmartOfferNudge = dynamic(() => import('./SmartOfferNudge'), { ssr: false })
 const TripMap = dynamic(() => import('./TripMap'), { ssr: false })
 
-
+import { useCurrency } from '../context/CurrencyContext'
 import { calculateBasePrice, calculateSurcharges } from '@/lib/pricing-util';
 
 // (Helper to calculate price)
