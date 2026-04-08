@@ -24,15 +24,22 @@ const LocationInput = ({
     const autocompleteService = useRef(null);
     const placesService = useRef(null);
 
-    useEffect(() => {
-        loadGoogleMapsScript().then(() => {
+    const initGoogleMaps = async () => {
+        if (googleLoaded) return;
+        setIsLoading(true);
+        try {
+            await loadGoogleMapsScript();
             if (window.google) {
                 setGoogleLoaded(true);
                 autocompleteService.current = new window.google.maps.places.AutocompleteService();
                 placesService.current = new window.google.maps.places.PlacesService(document.createElement('div'));
             }
-        }).catch(err => console.error("Google Maps Load Error:", err));
-    }, []);
+        } catch (err) {
+            console.error("Google Maps Load Error:", err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
         if (value !== undefined && value !== query) {
@@ -129,7 +136,11 @@ const LocationInput = ({
             <input
                 value={query}
                 onChange={(e) => handleSearch(e.target.value)}
-                onFocus={() => { if (onFocus) onFocus(); setIsFocused(true); }}
+                onFocus={() => { 
+                    if (onFocus) onFocus(); 
+                    setIsFocused(true); 
+                    initGoogleMaps();
+                }}
                 disabled={disabled}
                 placeholder={googleLoaded ? placeholder : 'Loading maps...'}
                 className={`w-full pl-16 sm:pl-20 pr-10 sm:pr-14 h-14 rounded-none text-base sm:text-lg font-black bg-white dark:bg-[#1a1a1a] border-[3px] transition-all outline-none text-black dark:text-white uppercase tracking-widest
