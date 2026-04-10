@@ -8,6 +8,7 @@ import AuthProvider from '../components/AuthProvider'
 import { ThemeProvider } from '../components/ThemeProvider'
 import dynamic from 'next/dynamic'
 import ClientSideWidgets from '../components/ClientSideWidgets'
+import DestinationBar from '../components/DestinationBar'
 
 export const metadata = {
     title: {
@@ -1291,6 +1292,7 @@ export default function RootLayout({ children }) {
                             <div className="sticky top-0 z-[100] w-full flex flex-col">
                                 <CategoryBar />
                                 <Navbar />
+                                <DestinationBar />
                                 <OfferMarquee />
                             </div>
                             <main>{children}</main>

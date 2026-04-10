@@ -15,8 +15,8 @@ export default function HomeGallery() {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    // Take first 6 images or a few featured ones
-                    setImages(data.data.slice(0, 6));
+                    // Limit to 5 images for home page as requested
+                    setImages(data.data.slice(0, 5));
                 }
                 setLoading(false);
             })
@@ -41,7 +41,7 @@ export default function HomeGallery() {
                             <div className="w-12 h-12 bg-red-600 flex items-center justify-center border-4 border-red-600 rotate-3 shadow-lg">
                                 <Camera size={24} className="text-white" />
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-black/40 dark:text-white/40">Travel Memories</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-800 dark:text-slate-200">Travel Memories</span>
                         </div>
                         <h2 className="text-5xl md:text-8xl font-black text-black dark:text-white uppercase tracking-tighter leading-none">
                             EXPERIENCE <br /><span className="text-[#FACC15]">SRI LANKA</span>
@@ -64,7 +64,7 @@ export default function HomeGallery() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className={`group relative ${idx % 2 === 1 ? 'md:mt-12' : ''}`}
+                            className={`group relative ${idx === 0 ? 'md:col-span-2' : ''} ${idx % 2 === 1 && idx !== 0 ? 'md:mt-12' : ''}`}
                         >
                             <div className="bg-black border-4 border-black rounded-[2rem] shadow-xl overflow-hidden transition-all group-hover:shadow-2xl group-hover:-translate-y-2">
                                 <div className="aspect-[4/5] relative">
