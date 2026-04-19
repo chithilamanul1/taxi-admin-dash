@@ -881,7 +881,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                 )}
                             </div>
-                        </div>
 
                             {/* Counters Section with Label */}
                             <div className="mt-6 lg:mt-8 space-y-3">
@@ -1166,6 +1165,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 isLoading={isLoadingPricing}
             />
         </div>
+    </div>
     );
 }
 
