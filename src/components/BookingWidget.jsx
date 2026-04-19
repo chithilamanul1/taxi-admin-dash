@@ -878,6 +878,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     )}
                                                 </button>
                                             ))}
+                                        </div>
                                     </div>
                                 )}
                             </div>
@@ -1165,7 +1166,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 isLoading={isLoadingPricing}
             />
         </div>
-    </div>
     );
 }
 
