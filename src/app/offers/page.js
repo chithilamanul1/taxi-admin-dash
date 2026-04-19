@@ -37,10 +37,8 @@ export default function OffersPage() {
 
     return (
         <main className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-500 pb-20">
-            <Navbar />
-
             {/* Cinematic Hero */}
-            <div className="relative h-[50vh] flex items-center justify-center overflow-hidden bg-slate-900 border-b-8 border-amber-400/20">
+            <div className="relative h-[40vh] flex items-center justify-center overflow-hidden bg-slate-900 border-b-8 border-amber-400/20">
                 <div className="absolute inset-0 z-0">
                     <img
                         src="https://images.pexels.com/photos/2166559/pexels-photo-2166559.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1"
@@ -62,23 +60,65 @@ export default function OffersPage() {
                     <motion.h1 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-5xl md:text-8xl font-black text-white mb-6 uppercase tracking-tighter leading-none"
+                        className="text-4xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter leading-none"
                     >
                         OFFERS & <span className="text-amber-400">DISCOUNTS</span>
                     </motion.h1>
-                    <motion.p 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-xl text-white/70 max-w-2xl mx-auto font-medium"
-                    >
-                        Apply these exclusive Sri Lankan Taxi Coupons during checkout to unlock the island's best rates.
-                    </motion.p>
                 </div>
             </div>
 
-            {/* Offers Grid */}
-            <div className="container mx-auto px-6 py-24 max-w-7xl relative">
+            {/* Offers Grid Area */}
+            <div className="container mx-auto px-6 py-12 max-w-7xl relative">
+                
+                {/* Today's Special Offer Section */}
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-20 bg-white dark:bg-slate-900 rounded-[2.5rem] border-4 border-black shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] p-8 md:p-12 relative overflow-hidden group"
+                >
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-amber-400/10 rounded-full translate-x-1/2 -translate-y-1/2"></div>
+                    
+                    <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
+                        {/* Image/Logo Side */}
+                        <div className="w-full md:w-1/3 flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-slate-800 rounded-3xl border-2 border-black rotate-[-2deg]">
+                            <span className="text-xl font-black text-[#7c3aed] leading-none mb-1 uppercase tracking-tighter">
+                                TODAY'S
+                            </span>
+                            <span className="text-5xl md:text-6xl font-black text-amber-400 leading-none uppercase italic drop-shadow-[4px_4px_0px_#7c3aed] tracking-tighter">
+                                OFFER
+                            </span>
+                        </div>
+
+                        {/* Content Side */}
+                        <div className="flex-1 text-center md:text-left">
+                            <h2 className="text-3xl md:text-5xl font-black text-black dark:text-white mb-4 uppercase tracking-tighter">
+                                FLAT 25% OFF <span className="text-[#7c3aed]">TODAY!</span>
+                            </h2>
+                            <p className="text-slate-600 dark:text-slate-400 text-lg font-bold mb-8 uppercase tracking-wide">
+                                Use the code below for any airport transfer booked today. Valid for all vehicle types!
+                            </p>
+                            
+                            <div className="flex flex-wrap items-center gap-4 justify-center md:justify-start">
+                                <div className="bg-slate-100 dark:bg-slate-800 px-8 py-4 rounded-2xl border-2 border-black border-dashed flex items-center gap-4">
+                                    <code className="text-3xl font-black text-[#7c3aed] tracking-widest uppercase">TODAY25</code>
+                                    <button 
+                                        onClick={() => copyToClipboard('TODAY25')}
+                                        className={`p-2 rounded-lg transition-all ${copiedCode === 'TODAY25' ? 'bg-emerald-500 text-white' : 'hover:bg-slate-200 text-slate-500'}`}
+                                    >
+                                        {copiedCode === 'TODAY25' ? <Check size={20} strokeWidth={3} /> : <Copy size={20} strokeWidth={3} />}
+                                    </button>
+                                </div>
+                                <Link 
+                                    href="/#booking"
+                                    className="bg-black text-amber-400 px-10 py-5 font-black uppercase tracking-widest text-sm hover:translate-y-[-4px] active:translate-y-0 transition-all border-4 border-black"
+                                >
+                                    BOOK WITH OFFER
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+
                 <div className="absolute top-0 right-0 w-64 h-64 bg-amber-400/5 rounded-full blur-3xl -z-10"></div>
                 
                 {loading ? (
