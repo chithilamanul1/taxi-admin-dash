@@ -13,7 +13,7 @@ export const metadata = {
 export default function SixPassengerTaxiPage() {
     return (
         <main className="min-h-screen bg-slate-50">
-            <Navbar />
+            
             
             {/* Hero Section */}
             <div className="bg-emerald-900 pt-32 pb-24 text-white">
@@ -114,7 +114,7 @@ export default function SixPassengerTaxiPage() {
                 </div>
             </section>
 
-            <Footer />
+            
         </main>
     );
 }

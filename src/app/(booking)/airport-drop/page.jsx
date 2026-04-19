@@ -15,7 +15,7 @@ export default function AirportDropPage() {
                 </div>
                 <BookingWidget defaultTab="drop" />
             </div>
-            <Footer />
+            
         </main>
     )
 }

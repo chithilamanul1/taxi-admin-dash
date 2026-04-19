@@ -221,7 +221,7 @@ export default function OffersPage() {
                 </div>
             </div>
 
-            <Footer />
+            
         </main>
     );
 }

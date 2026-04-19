@@ -102,7 +102,7 @@ export default function ReviewsPage() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewsSchema) }}
             />
-            <Navbar />
+            
 
             {/* Header Section */}
             <div className="pt-32 pb-16 bg-emerald-900 relative overflow-hidden">
@@ -282,7 +282,7 @@ export default function ReviewsPage() {
                 </div>
             </div>
 
-            <Footer />
+            
         </main>
     );
 }

@@ -28,11 +28,11 @@ export const metadata = {
 export default function PricesPage() {
     return (
         <main className="bg-slate-50 dark:bg-emerald-900 min-h-screen">
-            <Navbar />
+            
             <div className="pt-10 pb-20">
                 <Prices />
             </div>
-            <Footer />
+            
         </main>
     )
 }

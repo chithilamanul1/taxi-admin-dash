@@ -15,7 +15,7 @@ export default function DayToursPage() {
                 </div>
                 <BookingWidget defaultTab="tours" />
             </div>
-            <Footer />
+            
         </main>
     )
 }

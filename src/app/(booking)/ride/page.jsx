@@ -20,7 +20,7 @@ export default function RidePage() {
                 </div>
                 <BookingWidget defaultTab="ride" />
             </div>
-            <Footer />
+            
         </main>
     )
 }

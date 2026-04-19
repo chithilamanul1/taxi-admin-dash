@@ -15,7 +15,7 @@ export default function SafariPage() {
                 </div>
                 <BookingWidget defaultTab="tours" />
             </div>
-            <Footer />
+            
         </main>
     )
 }

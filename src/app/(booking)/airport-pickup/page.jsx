@@ -15,7 +15,7 @@ export default function AirportPickupPage() {
                 </div>
                 <BookingWidget defaultTab="pickup" />
             </div>
-            <Footer />
+            
         </main>
     )
 }

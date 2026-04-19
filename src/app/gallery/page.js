@@ -181,7 +181,7 @@ export default function GalleryPage() {
                 )}
             </AnimatePresence>
 
-            <Footer />
+            
         </main>
     );
 }
