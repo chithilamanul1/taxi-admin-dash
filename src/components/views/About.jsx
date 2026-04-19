@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 
 const About = () => {
     return (
-        <div className="pb-32 bg-slate-50 dark:bg-slate-950 transition-colors duration-500 overflow-hidden">
+        <div className="pt-32 pb-32 bg-slate-50 dark:bg-slate-950 transition-colors duration-500 overflow-hidden">
             {/* Cinematic Hero */}
             <div className="relative h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 z-0 scale-105 overflow-hidden">
@@ -28,7 +28,7 @@ const About = () => {
                         <History size={14} className="text-black" strokeWidth={3} />
                         <span className="text-xs font-black text-black uppercase tracking-[0.2em]">Our Legacy Since 2010</span>
                     </div>
-                    <h1 className="text-5xl md:text-8xl font-black text-white mb-8 tracking-tighter uppercase leading-[0.9]">
+                    <h1 className="text-3xl sm:text-5xl md:text-8xl font-black text-white mb-8 tracking-tighter uppercase leading-[0.9]">
                         Elevating <span className="text-amber-400">Sri Lanka's </span> <br /> 
                         Travel Experience
                     </h1>
@@ -76,7 +76,7 @@ const About = () => {
                         
                         <div className="relative z-10 aspect-[4/5] rounded-[3rem] overflow-hidden border-8 border-white dark:border-slate-800 shadow-2xl bg-slate-200 dark:bg-slate-800">
                             <img
-                                src="src/assets/images/about-team.jpg" 
+                                src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800" 
                                 alt="Our Local Team"
                                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                                 onError={(e) => {

@@ -73,7 +73,17 @@ export default function SpecialOffersSection() {
                             </h2>
                         </div>
                         
-                        {/* Navigation removed as requested */}
+                        {/* Today's Offer Quick Badge (Mobile focus) */}
+                        <div className="md:hidden flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border-2 border-black rotate-[1deg] shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
+                            <div className="flex flex-col items-center px-3 py-1 bg-white border border-black rounded-lg">
+                                <span className="text-[8px] font-black text-[#7c3aed] leading-none mb-[1px]">TODAY'S</span>
+                                <span className="text-sm font-black text-[#fbbf24] leading-none italic uppercase drop-shadow-[1px_1px_0px_#7c3aed]">OFFER</span>
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-black uppercase text-black leading-tight">FLAT 25% OFF</p>
+                                <p className="text-[10px] font-bold text-slate-500">CODE: TODAY25</p>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Coupon Slider */}

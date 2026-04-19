@@ -29,6 +29,12 @@ body {
     overflow-x: hidden;
 }
 
+@media (max-width: 768px) {
+    main {
+        padding-bottom: 5rem; /* Space for MobileBottomNav */
+    }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 6px;

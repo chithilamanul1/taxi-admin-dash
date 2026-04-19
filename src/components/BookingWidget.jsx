@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
-import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X, ArrowRight, PlaneTakeoff, PlaneLanding } from 'lucide-react'
+import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X, ArrowRight, PlaneTakeoff, PlaneLanding, CircleDot, Route } from 'lucide-react'
 
 import Image from 'next/image'
 const ToursWidget = dynamic(() => import('./ToursWidget'), { ssr: false })
@@ -522,7 +522,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     return (
         <div className="w-full max-w-6xl mx-auto pt-28 md:pt-36 relative z-40 px-3 sm:px-4">
             {/* Tab Navigation - Boxy Style */}
-            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-8 border-[10px] border-black transition-all overflow-hidden divide-x-[6px] divide-black" role="tablist">
+            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-6 border-[6px] border-black transition-all overflow-hidden divide-x-[4px] divide-black" role="tablist">
 
                 <div className="grid grid-cols-4 w-full sm:w-auto">
                     {[
@@ -552,12 +552,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             </div>
 
             {/* Widget Main Content - Booking.com Sharp Style */}
-            <div className="bg-white dark:bg-[#111] border-[8px] border-[#FACC15] p-4 md:p-12 animate-slide-up relative z-10 rounded-none w-full box-border">
+            <div className="bg-white dark:bg-[#111] border-[6px] border-[#FACC15] p-4 md:p-8 animate-slide-up relative z-10 rounded-none w-full box-border">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
-                    <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,420px] gap-8 lg:gap-12 min-w-0">
+                    <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,380px] gap-8 lg:gap-10 min-w-0">
                         <div className="flex-1 text-center lg:text-left">
-                            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-8">
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-6">
                                 <div className="flex bg-white dark:bg-[#111] rounded-none border-[6px] border-black w-full sm:w-auto overflow-hidden p-1 divide-x-2 divide-black">
                                     <button 
                                         onClick={() => setTripType('one-way')} 
@@ -729,10 +729,19 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 {/* Dropoff Input */}
                                 <div className="relative">
-                                    {/* Uber-style vertical connecting line */}
-                                    <div className="absolute left-[22px] top-[-36px] bottom-[28px] w-[2px] bg-black dark:bg-white/30 z-0">
-                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-none border-2 border-black bg-white dark:bg-black z-10"></div>
-                                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-none border-2 border-black bg-[#FACC15] z-10"></div>
+                                    <div className="absolute left-[20px] top-[-32px] bottom-[24px] w-[3px] z-0 flex flex-col items-center">
+                                        {/* Curved Path Look - Dashed Vertical Line */}
+                                        <div className="flex-1 border-l-2 border-dashed border-black/30 dark:border-white/20"></div>
+                                        
+                                        {/* Pickup Node */}
+                                        <div className="absolute top-0 -translate-y-1/2 bg-white dark:bg-black p-0.5 rounded-full border-2 border-black z-10 text-emerald-500">
+                                            <CircleDot size={18} strokeWidth={3} />
+                                        </div>
+                                        
+                                        {/* Dropoff Node */}
+                                        <div className="absolute bottom-0 translate-y-1/2 bg-[#FACC15] p-1 rounded-full border-2 border-black z-10 text-black shadow-lg">
+                                            <MapPin size={18} strokeWidth={3} fill="currentColor" />
+                                        </div>
                                     </div>
                                     <LocationInput
                                         placeholder="Drop-off Location"
@@ -869,13 +878,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     )}
                                                 </button>
                                             ))}
-                                        </div>
                                     </div>
                                 )}
                             </div>
+                        </div>
 
                             {/* Counters Section with Label */}
-                            <div className="mt-8 lg:mt-10 space-y-4">
+                            <div className="mt-6 lg:mt-8 space-y-3">
                                 <label className="text-[11px] font-black text-black dark:text-[#FACC15] uppercase tracking-[0.3em] pl-1 leading-none block mb-4">Passenger & Luggage</label>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                                     {[
@@ -884,7 +893,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     { id: 'luggage', label: 'Luggage' },
                                     { id: 'handLuggage', label: 'Hand Luggage' }
                                 ].map(c => (
-                                    <div key={c.id} className="bg-white dark:bg-white/5 border-2 border-black p-3 rounded-none flex items-center justify-between transition-all group/counter h-20">
+                                    <div key={c.id} className="bg-white dark:bg-white/5 border-2 border-black p-3 rounded-none flex items-center justify-between transition-all group/counter h-14 sm:h-16">
                                         <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest w-20 flex-shrink-0 leading-tight pr-2">{c.label}</span>
                                         <div className="flex items-center gap-3 shrink-0">
                                             <button
@@ -912,11 +921,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             <div className="">
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
-                                    className="w-full h-16 px-6 flex items-center justify-between bg-white dark:bg-white/5 border-2 border-black rounded-none hover:-translate-y-0.5 transition-all group overflow-hidden relative mt-4"
+                                    className="w-full h-14 px-6 flex items-center justify-between bg-white dark:bg-white/5 border-2 border-black rounded-none hover:-translate-y-0.5 transition-all group overflow-hidden relative mt-4"
                                     aria-label="Select Vehicle"
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-10 bg-white dark:bg-white/10 rounded-none flex items-center justify-center p-1 border-2 border-black">
+                                        <div className="w-16 h-12 sm:w-20 sm:h-14 bg-white dark:bg-white/10 rounded-none flex items-center justify-center p-1 border-2 border-black">
                                             {vehiclePricing[vehicle]?.image ? (
                                                 <div className="relative w-full h-full">
                                                     <Image
@@ -948,10 +957,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         </div>
 
                         {/* Section 2: Summary & Checkout */}
-                        <div className="bg-slate-50 dark:bg-[#0a0a0a] border-4 border-black rounded-none p-6 lg:p-8 flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-8 lg:gap-0 transition-colors">
+                        <div className="bg-slate-50 dark:bg-[#0a0a0a] border-[4px] border-black rounded-none p-5 lg:p-6 flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-6 lg:gap-0 transition-colors">
                             <div className="space-y-6 flex-1 flex flex-col">
-                                <div className="flex justify-between items-center">
-                                    <h2 className="text-xl font-black text-black dark:text-white uppercase tracking-tight">Trip Summary</h2>
+                                <div className="flex justify-between items-center mb-2">
+                                    <h2 className="text-lg font-black text-black dark:text-white uppercase tracking-tight">Trip Summary</h2>
 
                                     {/* Quick Currency Selector */}
                                     <div className="relative group">
@@ -980,12 +989,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 </div>
 
                                 {/* Map Container - Refined styling for dual theme */}
-                                <div className="h-64 lg:flex-1 w-full rounded-none overflow-hidden relative isolate min-h-[300px] lg:min-h-[300px] border border-black/5 dark:border-white/10 flex-shrink-0 lg:flex-shrink group transition-all duration-500 hover:border-black dark:hover:border-yellow-400">
+                                <div className="h-48 lg:flex-1 w-full rounded-none overflow-hidden relative isolate min-h-[200px] lg:min-h-[220px] border border-black/5 dark:border-white/10 flex-shrink-0 lg:flex-shrink group transition-all duration-500 hover:border-black dark:hover:border-yellow-400">
                                     <TripMap pickup={pickup} dropoff={dropoff} waypoints={waypoints} onRouteCalculated={handleRouteCalculated} />
                                 </div>
 
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
+                                <div className="space-y-3">
+                                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
                                         <span className="text-slate-500 dark:text-slate-400">Est. Distance</span>
                                         <span className="text-black dark:text-white">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
                                     </div>
@@ -1023,15 +1032,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 </div>
                             </div>
 
-                            <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex-shrink-0">
-                                <div className="flex justify-between items-end mb-8">
+                            <div className="pt-6 border-t border-slate-200 dark:border-white/10 flex-shrink-0">
+                                <div className="flex justify-between items-end mb-6">
                                     <div className="flex flex-col">
-                                        <div className="flex items-center gap-2 mb-2">
+                                        <div className="flex items-center gap-2 mb-1">
                                             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                                            <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.3em]">Total Payable</span>
+                                            <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">Total Payable</span>
                                         </div>
                                         <div className="flex items-baseline gap-2">
-                                            <span className="text-4xl lg:text-5xl font-black text-black dark:text-white tracking-tighter">
+                                            <span className="text-3xl lg:text-4xl font-black text-black dark:text-white tracking-tighter">
                                                 {distance && finalTotal > 0 ? (
                                                     <>
                                                         <span className="text-lg align-top mr-1">{convertPrice(finalTotal).symbol}</span>
@@ -1070,7 +1079,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                 </div>
                                 
-                                <div className="mt-6 p-4 bg-yellow-400/20 border-2 border-black rounded-none flex items-start gap-3 animate-pulse">
+                                <div className="mt-4 p-4 bg-yellow-400/20 border-2 border-black rounded-none flex items-start gap-3 animate-pulse">
                                     <div className="w-5 h-5 bg-black rounded-none flex items-center justify-center text-[#FACC15] shrink-0 mt-0.5">
                                         <Info size={14} strokeWidth={3} />
                                     </div>
@@ -1079,11 +1088,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </p>
                                 </div>
 
-                                <div className="flex flex-col sm:flex-row gap-6 pt-4">
+                                <div className="flex flex-col sm:flex-row gap-4 pt-3">
                                     <button
                                         onClick={handleBook}
                                         disabled={!distance}
-                                        className="w-full bg-[#FACC15] text-black h-20 md:h-24 rounded-none border-4 border-black font-black uppercase tracking-[0.2em] text-lg md:text-xl hover:translate-y-[-4px] active:translate-y-0 transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center"
+                                        className="w-full bg-[#FACC15] text-black h-16 md:h-20 rounded-none border-4 border-black font-black uppercase tracking-[0.2em] text-lg md:text-xl hover:translate-y-[-4px] active:translate-y-0 transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center"
                                     >
                                         {isLoadingPricing ? (
                                             <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin"></div>

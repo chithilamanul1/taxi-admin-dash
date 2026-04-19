@@ -9,6 +9,7 @@ import { ThemeProvider } from '../components/ThemeProvider'
 import dynamic from 'next/dynamic'
 import ClientSideWidgets from '../components/ClientSideWidgets'
 import DestinationBar from '../components/DestinationBar'
+import MobileBottomNav from '../components/MobileBottomNav'
 
 export const metadata = {
     title: {
@@ -1299,6 +1300,7 @@ export default function RootLayout({ children }) {
                             <FloatingContact />
                             <ClientSideWidgets />
                             <Footer />
+                            <MobileBottomNav />
                         </CurrencyProvider>
                     </AuthProvider>
                 </ThemeProvider>
