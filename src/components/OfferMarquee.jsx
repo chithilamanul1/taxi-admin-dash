@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 
 const OfferMarquee = () => {
     const pathname = usePathname();
+    if (pathname?.startsWith('/admin')) return null;
     const [timeLeft, setTimeLeft] = useState({
         days: 1,
         hours: 5,
