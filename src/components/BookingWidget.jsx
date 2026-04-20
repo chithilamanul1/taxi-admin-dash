@@ -520,9 +520,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const pricingCategory = isAirportService ? 'airport-transfer' : 'ride-now';
 
     return (
-        <div className="w-full max-w-6xl mx-auto pt-28 md:pt-36 relative z-40 px-3 sm:px-4">
+        <div className="w-full max-w-6xl mx-auto pt-24 sm:pt-28 md:pt-36 relative z-40 px-2 sm:px-4">
             {/* Tab Navigation - Boxy Style */}
-            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-6 border-[6px] border-black transition-all overflow-hidden divide-x-[4px] divide-black" role="tablist">
+            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-4 sm:mb-6 border-4 sm:border-[6px] border-black transition-all overflow-hidden divide-x-[4px] divide-black" role="tablist">
 
                 <div className="grid grid-cols-4 w-full sm:w-auto">
                     {[
@@ -552,13 +552,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             </div>
 
             {/* Widget Main Content - Booking.com Sharp Style */}
-            <div className="bg-white dark:bg-[#111] border-[6px] border-[#FACC15] p-4 md:p-8 animate-slide-up relative z-10 rounded-none w-full box-border">
+            <div className="bg-white dark:bg-[#111] border-[4px] sm:border-[6px] border-[#FACC15] p-3 sm:p-4 md:p-8 animate-slide-up relative z-10 rounded-none w-full box-border">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,380px] gap-8 lg:gap-10 min-w-0">
-                        <div className="flex-1 text-center lg:text-left">
-                            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-6">
-                                <div className="flex bg-white dark:bg-[#111] rounded-none border-[6px] border-black w-full sm:w-auto overflow-hidden p-1 divide-x-2 divide-black">
+                        <div className="flex-1 text-center lg:text-left min-w-0">
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 mb-6">
+                                <div className="flex bg-white dark:bg-[#111] rounded-none border-4 sm:border-[6px] border-black w-full sm:w-auto overflow-hidden p-1 divide-x-2 divide-black">
                                     <button 
                                         onClick={() => setTripType('one-way')} 
                                         aria-label="One Way Trip" 
@@ -582,14 +582,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </button>
                                 </div>
 
-                                <div className="flex items-center gap-2 w-full sm:w-auto">
+                                 <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto sm:overflow-visible pb-1 sm:pb-0 hide-scrollbar">
                                     {/* Currency Selector */}
-                                    <div className="relative group z-[110]">
+                                    <div className="relative group z-[110] shrink-0">
                                         <button 
-                                            className="flex items-center gap-2 bg-white dark:bg-[#1a1a1a] border-2 border-black rounded-none px-4 py-2.5 text-xs font-black text-black dark:text-white hover:-translate-y-0.5 transition-all"
+                                            className="flex items-center gap-2 bg-white dark:bg-[#1a1a1a] border-2 border-black rounded-none px-3 sm:px-4 py-2 sm:py-2.5 text-[10px] sm:text-xs font-black text-black dark:text-white hover:-translate-y-0.5 transition-all"
                                             aria-label="Select Currency"
                                         >
-                                            <div className="w-5 h-5 overflow-hidden rounded-none border-[1.5px] border-black">
+                                            <div className="w-4 h-4 sm:w-5 sm:h-5 overflow-hidden rounded-none border-[1.5px] border-black">
                                                 <img 
                                                     src={SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag} 
                                                     alt={`${currency} flag`} 
@@ -599,15 +599,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             <span className="uppercase text-black dark:text-white">{currency}</span>
                                             <ChevronDown size={14} className="opacity-100 text-black dark:text-white" aria-hidden="true" />
                                         </button>
-                                        <div className="absolute top-full left-0 mt-3 w-40 bg-white dark:bg-[#111] rounded-none border-[3px] border-black overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200">
+                                        <div className="absolute top-full left-0 mt-2 w-36 sm:w-40 bg-white dark:bg-[#111] rounded-none border-[3px] border-black overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200 z-[200]">
                                             <div className="py-0">
                                                 {SUPPORTED_CURRENCIES.map(c => (
                                                     <button
                                                         key={c.code}
                                                         onClick={() => changeCurrency(c.code)}
-                                                        className={`w-full text-left px-5 py-3 text-xs font-black flex items-center gap-3 hover:bg-[#FACC15] hover:text-black transition-colors ${currency === c.code ? 'text-black bg-[#FACC15] border-l-[4px] border-black' : 'text-black dark:text-white border-b-[3px] border-black last:border-0'}`}
+                                                        className={`w-full text-left px-4 sm:px-5 py-2.5 sm:py-3 text-[10px] sm:text-xs font-black flex items-center gap-3 hover:bg-[#FACC15] hover:text-black transition-colors ${currency === c.code ? 'text-black bg-[#FACC15] border-l-[4px] border-black' : 'text-black dark:text-white border-b-[3px] border-black last:border-0'}`}
                                                     >
-                                                        <div className="w-5 h-5 rounded-none overflow-hidden border-2 border-black">
+                                                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-none overflow-hidden border-2 border-black">
                                                             <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
                                                         </div>
                                                         <span>{c.code}</span>
@@ -617,11 +617,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                     </div>
 
-                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 text-black text-[10px] md:text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 bg-[#FACC15] px-4 md:px-6 py-2.5 md:py-3 rounded-none border-2 border-black hover:-translate-y-0.5 justify-center whitespace-nowrap">
+                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 sm:flex-none text-black text-[9px] sm:text-[10px] md:text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 bg-[#FACC15] px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-none border-2 border-black hover:-translate-y-0.5 justify-center whitespace-nowrap min-w-fit">
 
-                                        {isLocating ? <Loader2 size={14} className="animate-spin" /> : <Zap size={14} className="fill-current" />}
-                                        <span className="hidden sm:inline">Auto Detect</span>
-                                        <span className="sm:hidden uppercase">Detect</span>
+                                        {isLocating ? <Loader2 size={12} className="animate-spin" /> : <Zap size={12} className="fill-current" />}
+                                        <span className="hidden xs:inline sm:inline">Auto Detect</span>
+                                        <span className="xs:hidden uppercase">Detect</span>
                                     </button>
                                 </div>
                             </div>
@@ -642,44 +642,47 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 />
 
 
-                                {/* Waypoints List */}
+                                 {/* Waypoints List */}
                                 {waypoints.map((wp, idx) => (
-                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-white/5 rounded-none border-2 border-black p-1 flex items-center overflow-hidden">
-                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none z-10 bg-black p-1 border border-[#FACC15] rounded-none">
-                                            <Navigation size={16} />
-                                        </div>
-                                        <input
-                                            type="text"
-                                            readOnly
-                                            value={wp.name}
-                                            className="flex-1 min-w-0 pl-14 pr-2 sm:pr-4 h-12 bg-transparent border-none text-[10px] sm:text-sm font-black text-black dark:text-white outline-none truncate"
-                                        />
-
-                                        <div className="flex flex-col items-center border-l-2 border-black/20 px-1 sm:px-3 min-w-[60px] sm:min-w-[100px] justify-center">
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: Math.max(0, (w.waitingTime || 0) - 1) } : w)); }}
-                                                    aria-label="Decrease waiting time"
-                                                    className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-white dark:bg-white/10 text-black dark:text-white text-[10px] sm:text-xs font-black hover:bg-slate-100 transition-colors border border-black"
-                                                >−</button>
-                                                <span className="text-[10px] sm:text-sm font-black text-black dark:text-white w-4 sm:w-6 text-center">{wp.waitingTime || 0}h</span>
-                                                <button
-                                                    onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: (w.waitingTime || 0) + 1 } : w)); }}
-                                                    aria-label="Increase waiting time"
-                                                    className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-black dark:bg-yellow-400 text-white dark:text-black text-[10px] sm:text-xs font-black hover:bg-slate-800 transition-colors border border-black"
-                                                >+</button>
+                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-white/5 rounded-none border-2 border-black p-0.5 sm:p-1 flex flex-col sm:flex-row items-stretch sm:items-center overflow-hidden gap-1">
+                                        <div className="flex items-center flex-1 min-w-0">
+                                            <div className="flex items-center justify-center text-[#FACC15] shrink-0 bg-black p-1 sm:p-1.5 border border-[#FACC15] rounded-none ml-1 sm:ml-2">
+                                                <Navigation size={14} sm:size={16} />
                                             </div>
-                                            <span className="text-[9px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider mt-1">Wait Time</span>
+                                            <input
+                                                type="text"
+                                                readOnly
+                                                value={wp.name}
+                                                className="flex-1 min-w-0 pl-3 sm:pl-4 pr-2 sm:pr-4 h-10 sm:h-12 bg-transparent border-none text-[9px] sm:text-sm font-black text-black dark:text-white outline-none truncate"
+                                            />
                                         </div>
 
-                                        <button
-                                            onClick={() => setWaypoints(prev => prev.filter((_, i) => i !== idx))}
-                                            className="ml-0 sm:ml-2 mr-1 sm:mr-3 p-1 sm:p-2 text-black hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-none transition-all"
-                                            aria-label="Remove stop"
-                                        >
-                                            <X size={14} className="sm:hidden" />
-                                            <X size={18} className="hidden sm:block" />
-                                        </button>
+                                        <div className="flex items-center justify-between sm:justify-end border-t sm:border-t-0 sm:border-l-2 border-black/10 dark:border-white/10 px-2 sm:px-3 py-1 sm:py-0 min-h-[40px] sm:min-h-0">
+                                            <div className="flex items-center flex-col sm:flex-row gap-0 sm:gap-2 mr-auto sm:mr-3">
+                                                 <span className="text-[8px] sm:text-[9px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider mb-0.5 sm:mb-0">Wait Time</span>
+                                                 <div className="flex items-center gap-2">
+                                                    <button
+                                                        onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: Math.max(0, (w.waitingTime || 0) - 1) } : w)); }}
+                                                        aria-label="Decrease waiting time"
+                                                        className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-white dark:bg-white/10 text-black dark:text-white text-[10px] sm:text-xs font-black transition-colors border border-black active:bg-slate-100"
+                                                    >−</button>
+                                                    <span className="text-[10px] sm:text-sm font-black text-black dark:text-white w-4 sm:w-6 text-center">{wp.waitingTime || 0}h</span>
+                                                    <button
+                                                        onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: (w.waitingTime || 0) + 1 } : w)); }}
+                                                        aria-label="Increase waiting time"
+                                                        className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-black dark:bg-[#FACC15] text-white dark:text-black text-[10px] sm:text-xs font-black transition-colors border border-black active:bg-slate-800"
+                                                    >+</button>
+                                                </div>
+                                            </div>
+                                            
+                                            <button
+                                                onClick={() => setWaypoints(prev => prev.filter((_, i) => i !== idx))}
+                                                className="p-1.5 sm:p-2 text-black hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-none transition-all flex items-center justify-center"
+                                                aria-label="Remove stop"
+                                            >
+                                                <X size={14} className="sm:size-18" />
+                                            </button>
+                                        </div>
                                     </div>
                                 ))}
 

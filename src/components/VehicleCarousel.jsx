@@ -60,10 +60,10 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
 
         return (
             <div 
-                className="relative bg-white dark:bg-[#111] border-[4px] border-black p-4 flex items-center gap-6 animate-slide-up group/condensed"
-                onClick={() => onSelect(null)} // Hidden hint to expand? Or maybe just display
+                className="relative bg-white dark:bg-[#111] border-[4px] border-black p-3 sm:p-4 flex items-center gap-3 sm:gap-6 animate-slide-up group/condensed"
+                onClick={() => onSelect(null)}
             >
-                <div className="w-24 h-20 bg-slate-50 dark:bg-white/5 border-2 border-black flex items-center justify-center p-2 shrink-0 overflow-hidden">
+                <div className="w-20 sm:w-24 h-16 sm:h-20 bg-slate-50 dark:bg-white/5 border-2 border-black flex items-center justify-center p-1 sm:p-2 shrink-0 overflow-hidden">
                     <img 
                         src={vehicle.image} 
                         alt={vehicle.name} 
@@ -71,26 +71,26 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                     />
                 </div>
                 <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-black text-black dark:text-white uppercase tracking-widest truncate">{displayName(vehicle.name)}</h4>
-                    <div className="flex items-center gap-3 mt-1.5 overflow-hidden">
+                    <h4 className="text-[10px] sm:text-xs md:text-sm font-black text-black dark:text-white uppercase tracking-widest truncate">{displayName(vehicle.name)}</h4>
+                    <div className="flex items-center gap-2 sm:gap-3 mt-1 sm:mt-1.5 overflow-hidden">
                         {[
                             { icon: Users, val: vehicle.capacity || 4 },
                             { icon: Briefcase, val: vehicle.suitcases || 2 },
                         ].map((item, i) => (
-                            <div key={i} className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
-                                <item.icon size={12} strokeWidth={3} />
-                                <span className="text-[10px] font-black">{item.val}</span>
+                            <div key={i} className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
+                                <item.icon size={10} sm:size={12} strokeWidth={3} />
+                                <span className="text-[8px] sm:text-[10px] font-black">{item.val}</span>
                             </div>
                         ))}
-                        <div className="h-3 w-[1.5px] bg-black/10 dark:bg-white/10 mx-1"></div>
-                        <span className="text-[10px] font-black text-[#FACC15] uppercase tracking-widest whitespace-nowrap">
-                            Selected Fleet
+                        <div className="h-3 w-[1px] bg-black/10 dark:bg-white/10 mx-0.5"></div>
+                        <span className="text-[8px] sm:text-[10px] font-black text-[#FACC15] uppercase tracking-widest truncate">
+                            Selected
                         </span>
                     </div>
                 </div>
-                <div className="text-right shrink-0 pr-2">
-                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Total Fare</p>
-                    <p className="text-lg font-black text-black dark:text-white leading-none">
+                <div className="text-right shrink-0 pr-1 sm:pr-2">
+                    <p className="text-[7px] sm:text-[8px] font-black text-slate-400 uppercase tracking-widest mb-0">Fare</p>
+                    <p className="text-sm sm:text-lg font-black text-black dark:text-white leading-none">
                         {convertPrice(vehicle.calculatedTotal).symbol} {convertPrice(vehicle.calculatedTotal).value.toLocaleString()}
                     </p>
                 </div>

@@ -671,7 +671,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 </div>
 
                 {/* Main Viewport */}
-                <div ref={modalContentRef} className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 custom-scrollbar overscroll-contain">
+                <div ref={modalContentRef} className="flex-1 overflow-y-auto px-4 sm:px-8 md:px-12 py-8 sm:py-10 md:py-12 custom-scrollbar overscroll-contain relative z-10">
                     {step === 1 && (
                         <div className="space-y-8 md:space-y-10 animate-slide-up">
                             {/* Trip Header */}
@@ -682,7 +682,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             </div>
 
                             {/* Location Inputs - Premium Sharp Card */}
-                            <div className="premium-box bg-slate-50 dark:bg-[#0a0a0a] p-8 md:p-12 space-y-8 border-4 border-black rounded-none">
+                            <div className="premium-box bg-slate-50 dark:bg-[#0a0a0a] p-4 sm:p-8 md:p-12 space-y-6 sm:space-y-8 border-4 border-black rounded-none">
                                 <div className="flex items-center justify-between mb-2">
                                     <h3 className="text-[10px] font-black text-black dark:text-white uppercase tracking-[0.4em] flex items-center gap-4 font-black">
                                         <div className="w-3 h-3 rounded-none bg-[#FACC15] animate-pulse border-2 border-black"></div>
@@ -790,32 +790,32 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                 <div className="space-y-6">
                                     {pricingCategory !== 'ride-now' && (
-                                        <div className="premium-box bg-slate-50 dark:bg-[#0a0a0a] p-8 md:p-10 space-y-10 overflow-hidden relative border-4 border-black">
+                                        <div className="premium-box bg-slate-50 dark:bg-[#0a0a0a] p-4 sm:p-8 md:p-10 space-y-8 sm:space-y-10 overflow-hidden relative border-4 border-black">
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-[#FACC15]/10 rounded-none -mr-16 -mt-16 rotate-45 border-4 border-black/10"></div>
-                                            <div className="flex items-center gap-4 sm:gap-6 relative z-10">
-                                                <div className="w-10 h-10 sm:w-14 sm:h-14 bg-black dark:bg-[#FACC15] rounded-none border-4 border-black flex items-center justify-center text-[#FACC15] dark:text-black transition-transform hover:rotate-6">
-                                                    <Clock size={20} className="sm:w-7 sm:h-7" strokeWidth={3} />
+                                            <div className="flex items-center gap-3 sm:gap-6 relative z-10">
+                                                <div className="w-10 h-10 sm:w-14 sm:h-14 bg-black dark:bg-[#FACC15] rounded-none border-4 border-black flex items-center justify-center text-[#FACC15] dark:text-black transition-transform hover:rotate-6 shrink-0">
+                                                    <Clock size={18} className="sm:w-7 sm:h-7" strokeWidth={3} />
                                                 </div>
                                                 <div>
                                                     <p className="text-[9px] sm:text-[10px] font-black text-black dark:text-white uppercase tracking-[0.2em] sm:tracking-[0.4em] leading-none mb-1 sm:mb-2">Schedule Details</p>
                                                     <p className="text-[8px] sm:text-[11px] font-black text-black dark:text-[#FACC15] uppercase tracking-widest">Time-Critical Dispatch</p>
                                                 </div>
                                             </div>
-                                            <div className="grid grid-cols-1 gap-6 sm:gap-8 relative z-10">
-                                                <div className="space-y-3 sm:space-y-4">
-                                                    <label className="text-[8px] sm:text-[10px] font-black text-black dark:text-white uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none">Flight Number (Optional)</label>
-                                                    <div className="relative group">
-                                                        <div className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 text-[#FACC15] group-focus-within:text-black dark:group-focus-within:text-[#FACC15] transition-colors"><Zap size={16} className="sm:w-[18px] sm:h-[18px]" strokeWidth={3} fill="currentColor" /></div>
-                                                        <input
-                                                            type="text"
-                                                            value={formData.flightNumber || ''}
-                                                            onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                            className="w-full h-12 sm:h-16 bg-white dark:bg-white/5 border-4 border-black pl-12 sm:pl-16 pr-6 sm:pr-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-[10px] sm:text-xs text-black dark:text-white uppercase tracking-widest placeholder:text-black/20 dark:placeholder:text-white/20"
-                                                            placeholder="e.g. UL 101"
-                                                        />
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 relative z-10">
+                                                    <div className="space-y-2 sm:space-y-4">
+                                                        <label className="text-[8px] sm:text-[10px] font-black text-black dark:text-white uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-1 sm:pl-4 leading-none">Flight Number (Optional)</label>
+                                                        <div className="relative group">
+                                                            <div className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 text-[#FACC15] group-focus-within:text-black dark:group-focus-within:text-[#FACC15] transition-colors"><Zap size={14} className="sm:w-[18px] sm:h-[18px]" strokeWidth={3} fill="currentColor" /></div>
+                                                            <input
+                                                                type="text"
+                                                                value={formData.flightNumber || ''}
+                                                                onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
+                                                                className="w-full h-12 sm:h-16 bg-white dark:bg-white/5 border-4 border-black pl-10 sm:pl-16 pr-4 sm:pr-8 rounded-none outline-none focus:bg-[#FACC15]/5 transition-all font-black text-[10px] sm:text-xs text-black dark:text-white uppercase tracking-widest placeholder:text-black/20 dark:placeholder:text-white/20"
+                                                                placeholder="e.g. UL 101"
+                                                            />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="grid grid-cols-2 gap-3 sm:gap-6">
+                                                    <div className="grid grid-cols-2 gap-2 sm:gap-6">
                                                     <div className="space-y-3 sm:space-y-4">
                                                          <label className={`text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-2 sm:pl-4 leading-none ${errors.date ? 'text-red-500' : 'text-black dark:text-white'}`}>Target Date</label>
                                                          <input
@@ -869,8 +869,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                          <div id="field-hasNameBoard" className={`relative overflow-hidden group rounded-none border-4 transition-all ${errors.hasNameBoard ? 'border-red-500 animate-shake' : ''} ${formData.hasNameBoard ? 'border-black dark:border-[#FACC15] bg-white dark:bg-[#111]' : 'border-black bg-white dark:bg-white/5'}`}>
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/20 rounded-none -mr-16 -mt-16 rotate-45 border-b-4 border-l-4 border-black/10"></div>
                                             
-                                            <div className="relative z-10 p-6 md:p-8 flex flex-col items-start gap-6">
-                                                <div className="flex items-center gap-5">
+                                            <div className="relative z-10 p-4 sm:p-6 md:p-8 flex flex-col items-start gap-6">
+                                                <div className="flex items-center gap-3 sm:gap-5">
                                                      <div className={`w-16 h-16 rounded-none flex items-center justify-center border-4 transition-colors overflow-hidden shrink-0 ${formData.hasNameBoard ? 'bg-[#FACC15] border-black text-black' : 'bg-white dark:bg-white/5 border-black text-black/20 dark:text-white/20'}`}>
                                                          <Signpost size={32} strokeWidth={3} fill="currentColor" />
                                                      </div>
@@ -889,7 +889,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                      </p>
                                                 </div>
                                                 
-                                                <div className="grid grid-cols-2 gap-4 w-full">
+                                                <div className="grid grid-cols-2 gap-2 sm:gap-4 w-full">
                                                      <button
                                                          onClick={() => setFormData({ ...formData, hasNameBoard: true })}
                                                          className={`p-4 rounded-none border-4 transition-all flex items-center justify-center gap-3 ${formData.hasNameBoard === true ? 'border-black bg-[#FACC15] text-black' : 'bg-white dark:bg-white/10 border-black text-black dark:text-white hover:bg-[#FACC15] hover:text-black'}`}
@@ -924,7 +924,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
                             </div>
 
-                                <div className="p-8 md:p-10 bg-white dark:bg-[#111] rounded-none text-black dark:text-white flex flex-col gap-10 relative overflow-hidden group border-4 border-black transition-all">
+                                <div className="p-5 sm:p-8 md:p-10 bg-white dark:bg-[#111] rounded-none text-black dark:text-white flex flex-col gap-6 sm:gap-10 relative overflow-hidden group border-4 border-black transition-all">
                                     {/* Decorative Background Block */}
                                     <div className="absolute top-0 right-0 w-72 h-72 bg-[#FACC15]/10 rounded-none -mr-36 -mt-36 rotate-12 border-4 border-black/5"></div>
 
@@ -933,8 +933,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <Zap size={16} fill="currentColor" className="animate-pulse" />
                                             <span className="text-[11px] font-black uppercase tracking-[0.4em]">{formData.paymentType === 'partial' ? 'Deposit Payment' : 'Immediate Payment'}</span>
                                         </div>
-                                        <div className="text-5xl md:text-8xl font-black leading-none tracking-tighter flex items-center gap-4 uppercase">
-                                            <span className="text-2xl md:text-3xl font-black text-slate-400">
+                                        <div className="text-4xl xs:text-5xl md:text-8xl font-black leading-none tracking-tighter flex items-center gap-2 sm:gap-4 uppercase">
+                                            <span className="text-xl sm:text-2xl md:text-3xl font-black text-slate-400">
                                                 {(rates?.[currency]) ? currentSymbol : 'Rs'}
                                             </span>
                                             <span className="text-black dark:text-white">
