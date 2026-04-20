@@ -647,7 +647,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <div key={idx} className="relative group animate-slide-up bg-white dark:bg-white/5 rounded-none border-2 border-black p-0.5 sm:p-1 flex flex-col sm:flex-row items-stretch sm:items-center overflow-hidden gap-1">
                                         <div className="flex items-center flex-1 min-w-0">
                                             <div className="flex items-center justify-center text-[#FACC15] shrink-0 bg-black p-1 sm:p-1.5 border border-[#FACC15] rounded-none ml-1 sm:ml-2">
-                                                <Navigation size={14} sm:size={16} />
+                                                <Navigation size={14} />
                                             </div>
                                             <input
                                                 type="text"

@@ -78,7 +78,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                             { icon: Briefcase, val: vehicle.suitcases || 2 },
                         ].map((item, i) => (
                             <div key={i} className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
-                                <item.icon size={10} sm:size={12} strokeWidth={3} />
+                                <item.icon size={11} strokeWidth={3} />
                                 <span className="text-[8px] sm:text-[10px] font-black">{item.val}</span>
                             </div>
                         ))}
