@@ -26,7 +26,7 @@ const MobileBottomNav = () => {
                         <Link 
                             key={i}
                             href={item.href}
-                            className="flex flex-col items-center justify-center -mt-4 transform transition-transform active:scale-95"
+                            className="flex flex-col items-center justify-center -mt-2 transform transition-transform active:scale-95"
                         >
                             <div className="relative group">
                                 {/* Stylized "TODAY'S OFFER" Bubbled Sticker Look */}
