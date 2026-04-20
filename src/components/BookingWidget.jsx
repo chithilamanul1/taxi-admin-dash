@@ -1095,17 +1095,17 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <button
                                         onClick={handleBook}
                                         disabled={!distance}
-                                        className="w-full bg-[#FACC15] text-black h-16 md:h-20 rounded-none border-4 border-black font-black uppercase tracking-[0.2em] text-lg md:text-xl hover:translate-y-[-4px] active:translate-y-0 transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center"
+                                        className="w-full bg-[#FACC15] text-black min-h-16 sm:h-20 py-2 sm:py-0 rounded-none border-4 border-black font-black uppercase tracking-[0.2em] hover:translate-y-[-4px] active:translate-y-0 transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center"
                                     >
                                         {isLoadingPricing ? (
                                             <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
                                         ) : (
-                                            <div className="flex items-center justify-between w-full px-4 sm:px-6">
-                                                <div className="flex-1 text-center ml-8 sm:ml-12 text-[18px] sm:text-2xl">
+                                            <div className="flex items-center justify-between w-full px-4 sm:px-6 gap-2">
+                                                <div className="flex-1 text-center text-base sm:text-2xl leading-tight">
                                                     BOOK TRIP NOW
                                                 </div>
                                                 <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 bg-black border-2 border-black rounded-none flex items-center justify-center text-[#FACC15] group-hover:scale-110 transition-transform">
-                                                    <ArrowRight size={20} className="sm:w-6 sm:h-6" strokeWidth={4} />
+                                                    <ArrowRight size={18} className="sm:size-6" strokeWidth={4} />
                                                 </div>
                                             </div>
                                         )}
