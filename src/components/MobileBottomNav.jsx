@@ -1,12 +1,25 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Home, Compass, Map, Briefcase } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 const MobileBottomNav = () => {
     const pathname = usePathname();
+    const [activeOfferDay, setActiveOfferDay] = useState('Everyday');
+
+    useEffect(() => {
+        fetch('/api/settings')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const setting = data.data.find(s => s.key === 'OFFER_DAY');
+                    if (setting) setActiveOfferDay(setting.value);
+                }
+            })
+            .catch(console.error);
+    }, []);
 
     if (pathname?.startsWith('/admin')) return null;
 
@@ -18,10 +31,20 @@ const MobileBottomNav = () => {
         { name: 'Trips', icon: Briefcase, href: '/my-bookings', badge: 0 },
     ];
 
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const todayName = days[new Date().getDay()];
+
+    const visibleItems = navItems.filter(item => {
+        if (item.isSpecial) {
+            return activeOfferDay === 'Everyday' || activeOfferDay === todayName;
+        }
+        return true;
+    });
+
     return (
         <div className="md:hidden fixed bottom-0 left-0 right-0 z-[1000] bg-white border-t border-slate-200 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] px-2 pb-safe">
             <div className="flex justify-between items-center h-16 max-w-lg mx-auto">
-                {navItems.map((item, i) => (
+                {visibleItems.map((item, i) => (
                     item.isSpecial ? (
                         <Link 
                             key={i}

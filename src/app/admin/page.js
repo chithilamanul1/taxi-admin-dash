@@ -846,27 +846,66 @@ export default function AdminDashboard() {
                                                 <p className="text-[10px] text-slate-400 mt-2 italic">This date is used for the countdown timer in the red scrolling marquee.</p>
                                             </div>
 
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Active Offer Day (Weekly)</label>
+                                                <select
+                                                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-600/20 font-medium"
+                                                    value={settings.find(s => s.key === 'OFFER_DAY')?.value || 'Everyday'}
+                                                    onChange={async (e) => {
+                                                        const newValue = e.target.value;
+                                                        setSettings(prev => {
+                                                            const exists = prev.find(s => s.key === 'OFFER_DAY');
+                                                            if (exists) return prev.map(s => s.key === 'OFFER_DAY' ? { ...s, value: newValue } : s);
+                                                            return [...prev, { key: 'OFFER_DAY', value: newValue }];
+                                                        });
+                                                    }}
+                                                >
+                                                    <option value="Everyday">Active Everyday</option>
+                                                    <option value="Sunday">Sunday</option>
+                                                    <option value="Monday">Monday</option>
+                                                    <option value="Tuesday">Tuesday</option>
+                                                    <option value="Wednesday">Wednesday</option>
+                                                    <option value="Thursday">Thursday</option>
+                                                    <option value="Friday">Friday</option>
+                                                    <option value="Saturday">Saturday</option>
+                                                </select>
+                                                <p className="text-[10px] text-slate-400 mt-2 italic">Select 'Everyday' to keep the offer active always, or a specific day to restrict it.</p>
+                                            </div>
+
                                             <button
                                                 onClick={async () => {
                                                     const expiry = settings.find(s => s.key === 'OFFER_EXPIRY')?.value;
-                                                    if (!expiry) return alert('Please select a date');
+                                                    const offerDay = settings.find(s => s.key === 'OFFER_DAY')?.value || 'Everyday';
                                                     
                                                     setIsLoading(true);
-                                                    const res = await fetch('/api/settings', {
-                                                        method: 'POST',
-                                                        headers: { 'Content-Type': 'application/json' },
-                                                        body: JSON.stringify({ key: 'OFFER_EXPIRY', value: expiry, group: 'marketing' })
-                                                    });
-                                                    const data = await res.json();
-                                                    setIsLoading(false);
-                                                    if (data.success) alert('Offer expiry updated successfully!');
-                                                    else alert('Failed to update: ' + data.error);
+                                                    try {
+                                                        // Save Expiry
+                                                        if (expiry) {
+                                                            await fetch('/api/settings', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({ key: 'OFFER_EXPIRY', value: expiry, group: 'marketing' })
+                                                            });
+                                                        }
+                                                        // Save Offer Day
+                                                        await fetch('/api/settings', {
+                                                            method: 'POST',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({ key: 'OFFER_DAY', value: offerDay, group: 'marketing' })
+                                                        });
+                                                        
+                                                        alert('Marketing settings updated successfully!');
+                                                    } catch (err) {
+                                                        alert('Failed to update settings');
+                                                    } finally {
+                                                        setIsLoading(false);
+                                                    }
                                                 }}
                                                 disabled={isLoading}
                                                 className="w-full bg-emerald-900 text-white py-3 rounded-xl font-bold hover:bg-emerald-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                                             >
                                                 {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Check size={18} />}
-                                                Save Offer Settings
+                                                Save Marketing Settings
                                             </button>
                                         </div>
                                     </div>

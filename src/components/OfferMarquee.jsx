@@ -12,28 +12,30 @@ const OfferMarquee = () => {
         seconds: 3
     });
 
+    const [activeOfferDay, setActiveOfferDay] = useState('Everyday');
+
     useEffect(() => {
-        const fetchExpiry = async () => {
+        const fetchSettings = async () => {
             try {
                 const res = await fetch('/api/settings');
                 const result = await res.json();
                 if (result.success) {
                     const expirySetting = result.data.find(s => s.key === 'OFFER_EXPIRY');
-                    if (expirySetting) {
-                        return new Date(expirySetting.value);
-                    }
+                    const daySetting = result.data.find(s => s.key === 'OFFER_DAY');
+                    
+                    if (daySetting) setActiveOfferDay(daySetting.value);
+                    if (expirySetting) return new Date(expirySetting.value);
                 }
             } catch (err) {
-                console.error('Failed to fetch offer expiry:', err);
+                console.error('Failed to fetch offer settings:', err);
             }
-            // Fallback: 48h from now
             const fallback = new Date();
             fallback.setHours(fallback.getHours() + 48);
             return fallback;
         };
 
         let timer;
-        fetchExpiry().then(targetDate => {
+        fetchSettings().then(targetDate => {
             timer = setInterval(() => {
                 const now = new Date().getTime();
                 const distance = targetDate.getTime() - now;
@@ -54,6 +56,13 @@ const OfferMarquee = () => {
 
         return () => timer && clearInterval(timer);
     }, []);
+
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const todayName = days[new Date().getDay()];
+
+    if (activeOfferDay !== 'Everyday' && activeOfferDay !== todayName) {
+        return null;
+    }
 
     const formatNum = (num) => num.toString().padStart(2, '0');
 
