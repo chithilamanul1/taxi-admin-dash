@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { Users, Car, MapPin, Map as MapIcon, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink, Plus, XCircle, Image as ImageIcon } from 'lucide-react'
+import { Users, Car, MapPin, Map as MapIcon, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink, Plus, XCircle, Image as ImageIcon, Settings as SettingsIcon, Tag } from 'lucide-react'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -98,12 +98,13 @@ export default function AdminDashboard() {
         scheduledDate: '',
         scheduledTime: '',
         vehicleType: 'sedan',
-        distanceKm: '',
+        distanceKm: 0,
         totalPrice: '',
         paymentStatus: 'pending',
         paymentMethod: 'cash',
         type: 'transfer'
     });
+    const [settings, setSettings] = useState([])
     const [isSavingManual, setIsSavingManual] = useState(false);
 
     // Filter bookings based on search
@@ -364,6 +365,14 @@ export default function AdminDashboard() {
                     }
                 })
                 .catch(console.error)
+
+            // Fetch Settings
+            fetch('/api/settings')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) setSettings(data.data)
+                })
+                .catch(console.error)
         }
 
         // Initial fetch
@@ -565,6 +574,10 @@ export default function AdminDashboard() {
                     <button onClick={() => { setCurrentView('gallery'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'gallery' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <ImageIcon size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Gallery</span>
+                    </button>
+                    <button onClick={() => { setCurrentView('global-settings'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'global-settings' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <SettingsIcon size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Site Settings</span>
                     </button>
                 </nav>
 
@@ -792,6 +805,91 @@ export default function AdminDashboard() {
                     {currentView === 'rates' && (
                         <div className="animate-fade-in-up">
                             <DestinationManager />
+                        </div>
+                    )}
+
+                    {currentView === 'global-settings' && (
+                        <div className="space-y-6">
+                            <div className="bg-white rounded-xl shadow-sm p-8">
+                                <div className="flex items-center gap-3 mb-8 pb-4 border-b">
+                                    <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600">
+                                        <SettingsIcon size={24} />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-emerald-900">Global Site Settings</h2>
+                                        <p className="text-sm text-slate-500">Manage global banners, offers, and site-wide configurations.</p>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                    {/* Offer Expiry Configuration */}
+                                    <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                                        <h3 className="text-lg font-bold text-emerald-900 mb-4 flex items-center gap-2">
+                                            <Clock size={20} className="text-emerald-600" /> Offer Ticker & Countdown
+                                        </h3>
+                                        <div className="space-y-4">
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Offer Expiry Date & Time</label>
+                                                <input
+                                                    type="datetime-local"
+                                                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-600/20 font-medium"
+                                                    value={settings.find(s => s.key === 'OFFER_EXPIRY')?.value || ''}
+                                                    onChange={async (e) => {
+                                                        const newValue = e.target.value;
+                                                        setSettings(prev => {
+                                                            const exists = prev.find(s => s.key === 'OFFER_EXPIRY');
+                                                            if (exists) return prev.map(s => s.key === 'OFFER_EXPIRY' ? { ...s, value: newValue } : s);
+                                                            return [...prev, { key: 'OFFER_EXPIRY', value: newValue }];
+                                                        });
+                                                    }}
+                                                />
+                                                <p className="text-[10px] text-slate-400 mt-2 italic">This date is used for the countdown timer in the red scrolling marquee.</p>
+                                            </div>
+
+                                            <button
+                                                onClick={async () => {
+                                                    const expiry = settings.find(s => s.key === 'OFFER_EXPIRY')?.value;
+                                                    if (!expiry) return alert('Please select a date');
+                                                    
+                                                    setIsLoading(true);
+                                                    const res = await fetch('/api/settings', {
+                                                        method: 'POST',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify({ key: 'OFFER_EXPIRY', value: expiry, group: 'marketing' })
+                                                    });
+                                                    const data = await res.json();
+                                                    setIsLoading(false);
+                                                    if (data.success) alert('Offer expiry updated successfully!');
+                                                    else alert('Failed to update: ' + data.error);
+                                                }}
+                                                disabled={isLoading}
+                                                className="w-full bg-emerald-900 text-white py-3 rounded-xl font-bold hover:bg-emerald-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                            >
+                                                {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Check size={18} />}
+                                                Save Offer Settings
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Visual Banner Preview (Placeholder card) */}
+                                    <div className="bg-emerald-900 text-white rounded-2xl p-6 relative overflow-hidden flex flex-col justify-center">
+                                        <div className="absolute top-0 right-0 p-4 opacity-10">
+                                            <Tag size={120} />
+                                        </div>
+                                        <h3 className="text-xl font-bold mb-2">Banner Preview</h3>
+                                        <p className="text-emerald-100/70 text-sm mb-6">This is how your live banners will appear to customers.</p>
+                                        
+                                        <div className="space-y-3">
+                                            <div className="bg-[#FACC15] text-black px-4 py-2 rounded-lg font-black text-[10px] uppercase tracking-widest shadow-lg">
+                                                (Yellow) Welcome Offer & Destinations
+                                            </div>
+                                            <div className="bg-red-600 text-white px-4 py-2 rounded-lg font-black italic text-[10px] uppercase tracking-widest shadow-lg">
+                                                (Red) Scrolling Offers & Countdown
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     )}
 

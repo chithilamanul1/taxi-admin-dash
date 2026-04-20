@@ -12,7 +12,7 @@ export default function FloatingContact() {
     if (isAdminRoute) return null
 
     return (
-        <div className="live-chat-trigger fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[100] flex flex-col items-end gap-3 md:gap-4 scale-75 sm:scale-90 md:scale-100 origin-bottom-right">
+        <div className="live-chat-trigger fixed bottom-24 right-6 md:bottom-8 md:right-8 z-[100] flex flex-col items-end gap-3 md:gap-4 scale-75 sm:scale-90 md:scale-100 origin-bottom-right">
             {/* Action Buttons */}
             {isOpen && (
                 <div className="flex flex-col gap-3 animate-slide-up">

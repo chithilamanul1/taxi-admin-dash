@@ -12,32 +12,47 @@ const OfferMarquee = () => {
         seconds: 3
     });
 
-    if (pathname?.startsWith('/admin')) return null;
-
     useEffect(() => {
-        // Target date: 48 hours from now for a persistent "limited time" feel
-        const targetDate = new Date();
-        targetDate.setHours(targetDate.getHours() + 48);
-
-        const timer = setInterval(() => {
-            const now = new Date().getTime();
-            const distance = targetDate.getTime() - now;
-
-            if (distance < 0) {
-                // Reset to another 48 hours if it ends, to keep the "offer" alive for demo
-                targetDate.setHours(targetDate.getHours() + 48);
-                return;
+        const fetchExpiry = async () => {
+            try {
+                const res = await fetch('/api/settings');
+                const result = await res.json();
+                if (result.success) {
+                    const expirySetting = result.data.find(s => s.key === 'OFFER_EXPIRY');
+                    if (expirySetting) {
+                        return new Date(expirySetting.value);
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to fetch offer expiry:', err);
             }
+            // Fallback: 48h from now
+            const fallback = new Date();
+            fallback.setHours(fallback.getHours() + 48);
+            return fallback;
+        };
 
-            setTimeLeft({
-                days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-                hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-                minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-                seconds: Math.floor((distance % (1000 * 60)) / 1000)
-            });
-        }, 1000);
+        let timer;
+        fetchExpiry().then(targetDate => {
+            timer = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetDate.getTime() - now;
 
-        return () => clearInterval(timer);
+                if (distance < 0) {
+                    setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+                    return;
+                }
+
+                setTimeLeft({
+                    days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+                    hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                    minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+                    seconds: Math.floor((distance % (1000 * 60)) / 1000)
+                });
+            }, 1000);
+        });
+
+        return () => timer && clearInterval(timer);
     }, []);
 
     const formatNum = (num) => num.toString().padStart(2, '0');

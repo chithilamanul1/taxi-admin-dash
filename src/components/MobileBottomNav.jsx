@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Home, LayoutGrid, Tag, ShoppingCart } from 'lucide-react';
+import { Home, Compass, Map, Briefcase } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 const MobileBottomNav = () => {
@@ -12,10 +12,10 @@ const MobileBottomNav = () => {
 
     const navItems = [
         { name: 'Home', icon: Home, href: '/' },
-        { name: 'Category', icon: LayoutGrid, href: '/categories' },
+        { name: 'Services', icon: Compass, href: '/services' },
         { name: 'Today Offer', isSpecial: true, href: '/offers' },
-        { name: 'Brands', icon: Tag, href: '/tour-packages' }, // Using tour-packages for 'Brands' context
-        { name: 'Cart', icon: ShoppingCart, href: '/bookings', badge: 0 }, // Using bookings for 'Cart' context
+        { name: 'Tours', icon: Map, href: '/tour-packages' },
+        { name: 'Trips', icon: Briefcase, href: '/my-bookings', badge: 0 },
     ];
 
     return (
@@ -26,16 +26,16 @@ const MobileBottomNav = () => {
                         <Link 
                             key={i}
                             href={item.href}
-                            className="flex flex-col items-center justify-center -mt-6 transform transition-transform active:scale-90"
+                            className="flex flex-col items-center justify-center -mt-4 transform transition-transform active:scale-95"
                         >
                             <div className="relative group">
-                                {/* Stylized "TODAY'S OFFER" Logo Lookalike */}
-                                <div className="flex flex-col items-center select-none">
-                                    <span className="text-[10px] font-black text-[#7c3aed] leading-none mb-[-2px] uppercase">
+                                {/* Stylized "TODAY'S OFFER" Bubbled Sticker Look */}
+                                <div className="flex flex-col items-center select-none scale-110 md:scale-125">
+                                    <span className="text-[8px] font-black text-[#7c3aed] leading-none mb-0.5 uppercase tracking-tighter">
                                         TODAY'S
                                     </span>
-                                    <div className="bg-[#fbbf24] border-2 border-[#7c3aed] px-2 py-0.5 rounded-sm transform rotate-[-2deg] shadow-[2px_2px_0px_#7c3aed]">
-                                        <span className="text-sm font-black text-[#7c3aed] leading-none uppercase italic">
+                                    <div className="bg-[#fbbf24] border-[3px] border-[#7c3aed] px-3 py-1 rounded-[14px] transform rotate-[-1deg] shadow-[3px_3px_0px_#7c3aed,5px_5px_15px_rgba(124,58,237,0.3)]">
+                                        <span className="text-sm font-black text-[#7c3aed] leading-none uppercase italic tracking-tight">
                                             OFFER
                                         </span>
                                     </div>
