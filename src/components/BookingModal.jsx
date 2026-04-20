@@ -1105,7 +1105,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                      type="text"
                                                      value={formData.billingName || ''}
                                                      onChange={e => setFormData({ ...formData, billingName: e.target.value })}
-                                                     className={`w-full h-14 bg-white dark:bg-white/5 border-4 px-8 rounded-none text-sm font-black text-black dark:text-white placeholder:text-black/20 dark:placeholder:text-white/20 uppercase tracking-widest outline-none focus:border-[#FACC15] border-black`}
+                                                     className={`w-full h-12 sm:h-14 bg-white dark:bg-white/5 border-2 sm:border-4 px-4 sm:px-8 rounded-none text-[10px] sm:text-sm font-black text-black dark:text-white placeholder:text-black/20 dark:placeholder:text-white/20 uppercase tracking-widest outline-none focus:border-[#FACC15] border-black`}
                                                      placeholder="Billing Name"
                                                  />
                                                  <input
@@ -1306,13 +1306,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 </div>
 
                 {/* Modal Footer */}
-                 <div className="p-4 pb-6 md:p-10 md:pb-10 pt-3 md:pt-6 border-t-[12px] border-black bg-white/80 dark:bg-black/80 shrink-0 transition-colors">
-                    <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-6 md:gap-6">
+                 <div className="p-4 pb-8 sm:p-10 md:p-10 pt-4 md:pt-6 border-t-[8px] sm:border-t-[12px] border-black bg-white dark:bg-black shrink-0 transition-colors">
+                    <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-6">
                         <button
                             onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                            className="flex items-center justify-center gap-2 md:gap-4 px-6 md:px-10 py-2.5 md:py-5 bg-white dark:bg-white/5 rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-slate-50 dark:hover:bg-white/10 transition-all text-black dark:text-white border-4 border-black w-full md:w-auto md:min-w-[180px] active:scale-95"
+                            className="flex items-center justify-center gap-2 px-6 py-3.5 sm:py-5 bg-white dark:bg-white/5 rounded-none text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] hover:bg-slate-50 dark:hover:bg-white/10 transition-all text-black dark:text-white border-4 border-black w-full sm:w-auto sm:min-w-[180px] active:scale-95"
                         >
-                            <ChevronLeft size={16} className="md:w-4 md:h-4" /> {step === 1 ? 'Cancel Trip' : 'Return Back'}
+                            <ChevronLeft size={16} /> {step === 1 ? 'Cancel Trip' : 'Return'}
                         </button>
  
                         {step < 2 ? (
@@ -1326,17 +1326,17 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                      }
                                  }}
                                  disabled={isOverCapacity}
-                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-2.5 md:py-5 bg-[#FACC15] text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-[#EAB308] transition-all outline-none border-4 border-black disabled:opacity-30 w-full md:w-auto md:min-w-[220px] active:scale-95"
+                                 className="group flex items-center justify-center gap-2 px-6 py-3.5 sm:py-5 bg-[#FACC15] text-black rounded-none text-[11px] sm:text-[12px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] hover:bg-[#EAB308] transition-all outline-none border-4 border-black disabled:opacity-30 w-full sm:w-auto sm:min-w-[220px] active:scale-95"
                             >
-                                Review & Checkout <ChevronRight size={16} className="md:w-4 md:h-4 group-hover:translate-x-2 transition-transform" />
+                                Review & Checkout <ChevronRight size={16} className="group-hover:translate-x-2 transition-transform" />
                             </button>
                         ) : (
                             <button
                                 onClick={handleSubmit}
                                  disabled={loading || isOverCapacity}
-                                 className="group flex items-center justify-center gap-2 md:gap-4 px-6 md:px-12 py-2.5 md:py-5 bg-[#FACC15] text-black rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] transition-all border-4 border-black disabled:opacity-30 w-full md:w-auto md:min-w-[240px] active:scale-95"
+                                 className="group flex items-center justify-center gap-2 px-6 py-3.5 sm:py-5 bg-[#FACC15] text-black rounded-none text-[11px] sm:text-[12px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] transition-all border-4 border-black disabled:opacity-30 w-full sm:w-auto sm:min-w-[240px] active:scale-95"
                             >
-                                {loading ? <Loader2 className="animate-spin" size={16} /> : <Zap size={16} className="md:w-4 md:h-4" fill="currentColor" />}
+                                {loading ? <Loader2 className="animate-spin" size={16} /> : <Zap size={16} fill="currentColor" />}
                                 {loading ? 'Securing Spot...' : 'Confirm My Order'}
                             </button>
                         )}
