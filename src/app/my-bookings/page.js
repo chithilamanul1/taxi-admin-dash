@@ -131,9 +131,8 @@ export default function MyBookingsPage() {
 
                                         <div className="space-y-4">
                                             <div className="flex items-start gap-4">
-                                                <div className="flex flex-col items-center gap-1 mt-1">
+                                                <div className="flex flex-col items-center justify-between mt-1 h-12 py-1">
                                                     <div className="w-3 h-3 bg-[#00A99D] border-2 border-black" />
-                                                    <div className="w-1 h-8 bg-slate-100" />
                                                     <div className="w-3 h-3 bg-rose-500 border-2 border-black" />
                                                 </div>
                                                 <div className="space-y-6 flex-1">
@@ -150,7 +149,7 @@ export default function MyBookingsPage() {
                                         </div>
                                     </div>
 
-                                    <div className="mt-8 pt-6 border-t-4 border-slate-50 flex items-center justify-between">
+                                    <div className="mt-8 pt-6 flex items-center justify-between">
                                         <div className="flex items-center gap-6">
                                             <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest italic text-slate-800"><Calendar size={14} strokeWidth={3} /> {booking.scheduledDate}</span>
                                             <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest italic text-slate-800"><Clock size={14} strokeWidth={3} /> {booking.scheduledTime}</span>
