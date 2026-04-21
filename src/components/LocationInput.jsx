@@ -145,8 +145,8 @@ const LocationInput = ({
                 placeholder={googleLoaded ? placeholder : 'Loading maps...'}
                 className={`w-full pl-16 sm:pl-20 pr-10 sm:pr-14 h-14 rounded-none text-base sm:text-lg font-black transition-all outline-none uppercase tracking-widest border-[3px]
                 ${disabled 
-                    ? 'bg-slate-100 dark:bg-black/40 border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500 cursor-not-allowed grayscale-[0.5]' 
-                    : 'bg-white dark:bg-[#1a1a1a] border-black text-black dark:text-white hover:-translate-y-0.5 focus:border-black focus:-translate-y-0.5'}`}
+                    ? 'bg-slate-50 border-slate-200 text-slate-300 cursor-not-allowed' 
+                    : 'bg-white border-black text-black hover:-translate-y-0.5 focus:border-black focus:-translate-y-0.5'}`}
             />
 
             {/* Clear Button */}

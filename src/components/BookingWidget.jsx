@@ -654,7 +654,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                  {/* Waypoints List */}
                                 {waypoints.map((wp, idx) => (
-                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-white/5 rounded-none border-2 border-black p-0.5 sm:p-1 flex flex-col sm:flex-row items-stretch sm:items-center overflow-hidden gap-1">
+                                    <div key={idx} className="relative group animate-slide-up bg-white rounded-none border-2 border-black p-0.5 sm:p-1 flex flex-col sm:flex-row items-stretch sm:items-center overflow-hidden gap-1">
                                         <div className="flex items-center flex-1 min-w-0">
                                             <div className="flex items-center justify-center text-[#FACC15] shrink-0 bg-black p-1 sm:p-1.5 border border-[#FACC15] rounded-none ml-1 sm:ml-2">
                                                 <Navigation size={14} />
@@ -663,7 +663,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 type="text"
                                                 readOnly
                                                 value={wp.name}
-                                                className="flex-1 min-w-0 pl-3 sm:pl-4 pr-2 sm:pr-4 h-10 sm:h-12 bg-transparent border-none text-[9px] sm:text-sm font-black text-black dark:text-white outline-none truncate"
+                                                className="flex-1 min-w-0 pl-3 sm:pl-4 pr-2 sm:pr-4 h-10 sm:h-12 bg-transparent border-none text-[9px] sm:text-sm font-black text-black outline-none truncate"
                                             />
                                         </div>
 
@@ -706,8 +706,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 <button
                                                     onClick={() => setWaypointSearches([{ active: true }])}
                                                     aria-label="Add Stop"
-                                                    className="text-black bg-white dark:bg-[#111] dark:text-[#FACC15] text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 py-2 px-3 rounded-none border-2 border-black hover:-translate-y-0.5 transition-all"
-
+                                                    className="text-black bg-white text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 py-2 px-3 rounded-none border-2 border-black hover:-translate-y-0.5 transition-all"
                                                 >
                                                     <Plus size={14} strokeWidth={3} /> ADD STOP ({waypoints.length}/4)
                                                 </button>
