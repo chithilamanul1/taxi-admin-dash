@@ -14,6 +14,7 @@ const OfferMarquee = () => {
     });
 
     const [activeOfferDay, setActiveOfferDay] = useState('Everyday');
+    const [todayOffer, setTodayOffer] = useState({ percent: '25', code: 'TODAY25' });
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -25,6 +26,16 @@ const OfferMarquee = () => {
                     const daySetting = result.data.find(s => s.key === 'OFFER_DAY');
                     
                     if (daySetting) setActiveOfferDay(daySetting.value);
+
+                    const percentSetting = result.data.find(s => s.key === 'TODAY_OFFER_PERCENT');
+                    const codeSetting = result.data.find(s => s.key === 'TODAY_OFFER_CODE');
+                    if (percentSetting || codeSetting) {
+                        setTodayOffer({
+                            percent: percentSetting?.value || '25',
+                            code: codeSetting?.value || 'TODAY25'
+                        });
+                    }
+
                     if (expirySetting) return new Date(expirySetting.value);
                 }
             } catch (err) {
@@ -70,9 +81,9 @@ const OfferMarquee = () => {
     const countdownStr = `PRICE WILL BE REVISED IN ${formatNum(timeLeft.days)} : ${formatNum(timeLeft.hours)} : ${formatNum(timeLeft.minutes)} : ${formatNum(timeLeft.seconds)}`;
 
     const offers = [
-        "26% OFF TO SELECTED DESTINATIONS - LIMITED TIME!",
+        `${todayOffer.percent}% OFF TO SELECTED DESTINATIONS - LIMITED TIME!`,
         countdownStr,
-        "10% OFF TO GALLE - USE CODE: GALLE10",
+        `EXTRA ${todayOffer.percent}% OFF - USE CODE: ${todayOffer.code}`,
         "AIRPORT PICKUP STARTING FROM RS 4,500",
         "PRICE WILL BE REVISED SOON - BOOK NOW!"
     ];

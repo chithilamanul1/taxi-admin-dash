@@ -62,13 +62,14 @@ export async function POST(req) {
             expiryDate: body.expiryDate ? new Date(body.expiryDate) : null
         };
 
-        const coupon = await Coupon.create(couponData);
+        const coupon = await Coupon.findOneAndUpdate(
+            { code: couponData.code },
+            couponData,
+            { new: true, upsert: true }
+        );
         return NextResponse.json(coupon);
     } catch (error) {
-        console.error("Coupons API: Create Error:", error);
-        if (error.code === 11000) {
-            return NextResponse.json({ error: 'A coupon with this code already exists' }, { status: 400 });
-        }
+        console.error("Coupons API: Upsert Error:", error);
         return NextResponse.json({ error: error.message }, { status: 400 });
     }
 }

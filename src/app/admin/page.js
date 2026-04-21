@@ -872,6 +872,85 @@ export default function AdminDashboard() {
                                                 <p className="text-[10px] text-slate-400 mt-2 italic">Select 'Everyday' to keep the offer active always, or a specific day to restrict it.</p>
                                             </div>
 
+                                            <div className="pt-4 border-t border-slate-200">
+                                                <h4 className="text-xs font-black text-emerald-700 uppercase tracking-[0.2em] mb-4">Today's Offer Settings</h4>
+                                                <div className="grid grid-cols-2 gap-4 mb-4">
+                                                    <div>
+                                                        <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Discount %</label>
+                                                        <input
+                                                            type="number"
+                                                            className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-600/20 font-bold"
+                                                            placeholder="25"
+                                                            value={settings.find(s => s.key === 'TODAY_OFFER_PERCENT')?.value || ''}
+                                                            onChange={(e) => {
+                                                                const val = e.target.value;
+                                                                setSettings(prev => {
+                                                                    const exists = prev.find(s => s.key === 'TODAY_OFFER_PERCENT');
+                                                                    if (exists) return prev.map(s => s.key === 'TODAY_OFFER_PERCENT' ? { ...s, value: val } : s);
+                                                                    return [...prev, { key: 'TODAY_OFFER_PERCENT', value: val }];
+                                                                });
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Coupon Code</label>
+                                                        <input
+                                                            type="text"
+                                                            className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-600/20 font-bold uppercase"
+                                                            placeholder="TODAY25"
+                                                            value={settings.find(s => s.key === 'TODAY_OFFER_CODE')?.value || ''}
+                                                            onChange={(e) => {
+                                                                const val = e.target.value.toUpperCase();
+                                                                setSettings(prev => {
+                                                                    const exists = prev.find(s => s.key === 'TODAY_OFFER_CODE');
+                                                                    if (exists) return prev.map(s => s.key === 'TODAY_OFFER_CODE' ? { ...s, value: val } : s);
+                                                                    return [...prev, { key: 'TODAY_OFFER_CODE', value: val }];
+                                                                });
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div className="mb-4">
+                                                    <label className="flex items-center gap-2 cursor-pointer group">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                                                            checked={settings.find(s => s.key === 'TODAY_OFFER_GLOBAL')?.value === 'true' || settings.find(s => s.key === 'TODAY_OFFER_GLOBAL')?.value === true}
+                                                            onChange={(e) => {
+                                                                const val = e.target.checked;
+                                                                setSettings(prev => {
+                                                                    const exists = prev.find(s => s.key === 'TODAY_OFFER_GLOBAL');
+                                                                    if (exists) return prev.map(s => s.key === 'TODAY_OFFER_GLOBAL' ? { ...s, value: val } : s);
+                                                                    return [...prev, { key: 'TODAY_OFFER_GLOBAL', value: val }];
+                                                                });
+                                                            }}
+                                                        />
+                                                        <span className="text-[10px] font-black text-slate-600 uppercase group-hover:text-emerald-700 transition-colors">Apply to ALL Locations (Global)</span>
+                                                    </label>
+                                                </div>
+
+                                                {!(settings.find(s => s.key === 'TODAY_OFFER_GLOBAL')?.value === 'true' || settings.find(s => s.key === 'TODAY_OFFER_GLOBAL')?.value === true) && (
+                                                    <div className="animate-fade-in">
+                                                        <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Specific Locations (Comma separated)</label>
+                                                        <input
+                                                            type="text"
+                                                            className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-600/20 font-medium"
+                                                            placeholder="Galle, Kandy, Colombo"
+                                                            value={settings.find(s => s.key === 'TODAY_OFFER_LOCATIONS')?.value || ''}
+                                                            onChange={(e) => {
+                                                                const val = e.target.value;
+                                                                setSettings(prev => {
+                                                                    const exists = prev.find(s => s.key === 'TODAY_OFFER_LOCATIONS');
+                                                                    if (exists) return prev.map(s => s.key === 'TODAY_OFFER_LOCATIONS' ? { ...s, value: val } : s);
+                                                                    return [...prev, { key: 'TODAY_OFFER_LOCATIONS', value: val }];
+                                                                });
+                                                            }}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
+
                                             <button
                                                 onClick={async () => {
                                                     const expiry = settings.find(s => s.key === 'OFFER_EXPIRY')?.value;
@@ -893,6 +972,46 @@ export default function AdminDashboard() {
                                                             headers: { 'Content-Type': 'application/json' },
                                                             body: JSON.stringify({ key: 'OFFER_DAY', value: offerDay, group: 'marketing' })
                                                         });
+
+                                                        // Save Today's Offer Settings
+                                                        const todayPercent = settings.find(s => s.key === 'TODAY_OFFER_PERCENT')?.value;
+                                                        const todayCode = settings.find(s => s.key === 'TODAY_OFFER_CODE')?.value;
+                                                        const todayGlobal = settings.find(s => s.key === 'TODAY_OFFER_GLOBAL')?.value || false;
+                                                        const todayLocs = settings.find(s => s.key === 'TODAY_OFFER_LOCATIONS')?.value || '';
+
+                                                        const updates = [
+                                                            { key: 'TODAY_OFFER_PERCENT', value: todayPercent },
+                                                            { key: 'TODAY_OFFER_CODE', value: todayCode },
+                                                            { key: 'TODAY_OFFER_GLOBAL', value: todayGlobal },
+                                                            { key: 'TODAY_OFFER_LOCATIONS', value: todayLocs }
+                                                        ];
+
+                                                        for (const update of updates) {
+                                                            if (update.value !== undefined) {
+                                                                await fetch('/api/settings', {
+                                                                    method: 'POST',
+                                                                    headers: { 'Content-Type': 'application/json' },
+                                                                    body: JSON.stringify({ ...update, group: 'marketing' })
+                                                                });
+                                                            }
+                                                        }
+
+                                                        // Sync with Coupons
+                                                        if (todayCode && todayPercent) {
+                                                            await fetch('/api/coupons', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({
+                                                                    code: todayCode,
+                                                                    value: todayPercent,
+                                                                    discountType: 'percentage',
+                                                                    displayInWidget: true,
+                                                                    isActive: true,
+                                                                    description: `Today's Special Offer! ${todayPercent}% OFF`,
+                                                                    applicableLocations: todayGlobal ? [] : todayLocs.split(',').map(s => s.trim()).filter(Boolean)
+                                                                })
+                                                            });
+                                                        }
                                                         
                                                         alert('Marketing settings updated successfully!');
                                                     } catch (err) {

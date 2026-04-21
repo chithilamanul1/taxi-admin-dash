@@ -12,8 +12,14 @@ export default function SpecialOffersSection() {
     const [copiedCode, setCopiedCode] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
+    const [todayOffer, setTodayOffer] = useState({
+        percent: '25',
+        code: 'TODAY25',
+        isActive: true
+    });
 
     useEffect(() => {
+        // Fetch Coupons
         fetch('/api/coupons?public=true')
             .then(res => res.json())
             .then(data => {
@@ -27,6 +33,31 @@ export default function SpecialOffersSection() {
             })
             .catch(console.error)
             .finally(() => setLoading(false));
+
+        // Fetch Today's Offer Settings
+        fetch('/api/settings')
+            .then(res => res.json())
+            .then(result => {
+                if (result.success) {
+                    const settings = result.data;
+                    const percent = settings.find(s => s.key === 'TODAY_OFFER_PERCENT')?.value;
+                    const code = settings.find(s => s.key === 'TODAY_OFFER_CODE')?.value;
+                    const offerDay = settings.find(s => s.key === 'OFFER_DAY')?.value || 'Everyday';
+                    
+                    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    const todayName = days[new Date().getDay()];
+                    const isActive = offerDay === 'Everyday' || offerDay === todayName;
+
+                    if (percent || code) {
+                        setTodayOffer({
+                            percent: percent || '25',
+                            code: code || 'TODAY25',
+                            isActive: isActive
+                        });
+                    }
+                }
+            })
+            .catch(err => console.error('Failed to fetch today offer settings:', err));
     }, []);
 
     const next = useCallback(() => {
@@ -73,17 +104,29 @@ export default function SpecialOffersSection() {
                             </h2>
                         </div>
                         
-                        {/* Today's Offer Quick Badge (Mobile focus) */}
-                        <div className="md:hidden flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border-2 border-black rotate-[1deg] shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]">
-                            <div className="flex flex-col items-center px-3 py-1 bg-white border border-black rounded-lg">
-                                <span className="text-[8px] font-black text-[#7c3aed] leading-none mb-[1px]">TODAY'S</span>
-                                <span className="text-sm font-black text-[#fbbf24] leading-none italic uppercase drop-shadow-[1px_1px_0px_#7c3aed]">OFFER</span>
+                        {/* Today's Offer Quick Badge */}
+                        {todayOffer.isActive && (
+                            <div 
+                                onClick={() => {
+                                    const params = new URLSearchParams();
+                                    params.set('coupon', todayOffer.code);
+                                    window.location.href = `/?${params.toString()}#booking`;
+                                }}
+                                className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border-2 border-black rotate-[1deg] shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] cursor-pointer hover:translate-y-[-2px] transition-all group"
+                            >
+                                <div className="flex flex-col items-center px-3 py-1 bg-white border border-black rounded-lg">
+                                    <span className="text-[8px] font-black text-[#7c3aed] leading-none mb-[1px]">TODAY'S</span>
+                                    <span className="text-sm font-black text-[#fbbf24] leading-none italic uppercase drop-shadow-[1px_1px_0px_#7c3aed]">OFFER</span>
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black uppercase text-black leading-tight">FLAT {todayOffer.percent}% OFF</p>
+                                    <p className="text-[10px] font-bold text-slate-500">CODE: {todayOffer.code}</p>
+                                </div>
+                                <div className="ml-2 w-8 h-8 bg-black rounded-full flex items-center justify-center text-[#FACC15] group-hover:scale-110 transition-transform">
+                                    <Check size={16} strokeWidth={3} />
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-[10px] font-black uppercase text-black leading-tight">FLAT 25% OFF</p>
-                                <p className="text-[10px] font-bold text-slate-500">CODE: TODAY25</p>
-                            </div>
-                        </div>
+                        )}
                     </div>
 
                     {/* Coupon Slider */}
