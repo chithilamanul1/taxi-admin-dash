@@ -1044,8 +1044,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             </div>
                                             <button onClick={() => signIn()} className="relative z-10 px-10 py-4 bg-black rounded-none border-4 border-black text-xs font-black text-[#FACC15] hover:bg-black/90 active:scale-95 transition-all uppercase tracking-widest">Sign In</button>
                                         </div>
-                                    )}
-
                                     {/* Redundant Logistics Adjustment Removed as per User Request */}
 
                                     <div className="space-y-10">
@@ -1056,9 +1054,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX', icon: Phone },
                                                 { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver chat', icon: MessageSquare },
                                             ].map(f => (
-                                                <div key={f.key} className="space-y-3">
-                                                     <label className={`text-[10px] font-black uppercase tracking-[0.3em] pl-3 flex items-center gap-2 ${errors[f.key] ? 'text-red-500' : 'text-black dark:text-white'}`}>
-                                                         <f.icon size={12} /> {f.label}
+                                                <div key={f.key} className="space-y-1.5 md:space-y-3">
+                                                     <label className={`text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] pl-1 flex items-center gap-2 ${errors[f.key] ? 'text-red-500' : 'text-black dark:text-white'}`}>
+                                                         <f.icon size={11} /> {f.label}
                                                      </label>
                                                      {f.type === 'tel' ? (
                                                          <PhoneInput
@@ -1069,15 +1067,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                  setFormData({ ...formData, [f.key]: phone });
                                                                  if (errors[f.key]) setErrors(prev => ({ ...prev, [f.key]: false }));
                                                              }}
-                                                             inputClassName="!w-full !h-14 !bg-transparent !border-none !px-4 !outline-none focus:!ring-0 !font-black !text-black dark:!text-white placeholder:!text-black/20 dark:placeholder:!text-white/20 !text-sm !uppercase !tracking-widest"
+                                                             inputClassName="!w-full !h-12 md:!h-14 !bg-transparent !border-none !px-4 !outline-none focus:!ring-0 !font-black !text-black dark:!text-white placeholder:!text-black/10 dark:placeholder:!text-white/10 !text-[11px] md:!text-sm !uppercase !tracking-widest"
                                                              countrySelectorStyleProps={{
-                                                                 buttonClassName: '!h-14 !bg-slate-50 dark:!bg-white/5 !border-r-4 !border-black !px-4 !flex !items-center !justify-center !min-w-[70px] !rounded-none',
-                                                                 flagClassName: '!w-8 !h-auto !shadow-sm',
+                                                                 buttonClassName: '!h-12 md:!h-14 !bg-slate-50 dark:!bg-white/5 !border-r-2 !border-black/10 !px-3 md:!px-4 !flex !items-center !justify-center !min-w-[60px] md:!min-w-[70px] !rounded-none',
+                                                                 flagClassName: '!w-6 md:!w-8 !h-auto !shadow-sm',
                                                                  dropdownStyleProps: {
                                                                      className: '!z-[20000] !min-w-[200px] !max-h-[300px] !rounded-none !border-4 !border-black !bg-white dark:!bg-black dark:!text-white'
                                                                  }
                                                              }}
-                                                             className={`w-full bg-white dark:bg-white/5 border-4 rounded-none flex focus-within:border-[#FACC15] transition-all overflow-visible ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-black'}`}
+                                                             className={`w-full bg-white dark:bg-white/5 border-[3px] rounded-none flex focus-within:border-[#FACC15] transition-all overflow-visible ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-black'}`}
                                                          />
                                                      ) : (
                                                          <input
@@ -1088,7 +1086,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                  setFormData({ ...formData, [f.key]: e.target.value });
                                                                  if (errors[f.key]) setErrors(prev => ({ ...prev, [f.key]: false }));
                                                              }}
-                                                             className={`w-full h-14 bg-white dark:bg-white/5 border-4 px-8 rounded-none outline-none focus:border-[#FACC15] transition-all font-black text-black dark:text-white placeholder:text-black/20 dark:placeholder:text-white/20 text-sm uppercase tracking-widest ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-black'}`}
+                                                             className={`w-full h-12 md:h-14 bg-white dark:bg-white/5 border-[3px] px-6 md:px-8 rounded-none outline-none focus:border-[#FACC15] transition-all font-black text-black dark:text-white placeholder:text-black/10 dark:placeholder:text-white/10 text-[11px] md:text-sm uppercase tracking-widest ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-black'}`}
                                                              placeholder={f.placeholder}
                                                          />
                                                      )}
