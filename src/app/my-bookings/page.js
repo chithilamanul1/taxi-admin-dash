@@ -112,11 +112,11 @@ export default function MyBookingsPage() {
                     <div className="grid md:grid-cols-2 gap-8">
                         {displayedBookings.map(booking => (
                             <Link key={booking._id} href={`/booking/${booking._id}`} className="block group">
-                                <div className="bg-white rounded-none p-8 border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] group-hover:shadow-[15px_15px_0px_0px_#006064] group-hover:translate-y-[-4px] transition-all cursor-pointer h-full flex flex-col justify-between">
+                                <div className="bg-white rounded-none p-8 border border-slate-200 hover:border-[#006064] transition-all cursor-pointer h-full flex flex-col justify-between">
                                     <div className="space-y-6">
                                         <div className="flex justify-between items-start">
                                             <div className="flex items-center gap-4">
-                                                <span className={`px-4 py-1.5 rounded-none border-2 border-black text-[10px] font-black uppercase tracking-[0.2em] italic shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${booking.status === 'confirmed' ? 'bg-emerald-400 text-black' :
+                                                <span className={`px-4 py-1.5 rounded-none border border-black/10 text-[10px] font-black uppercase tracking-[0.2em] italic ${booking.status === 'confirmed' ? 'bg-emerald-400 text-black' :
                                                     booking.status === 'pending' ? 'bg-[#FACC15] text-black' :
                                                         booking.status === 'cancelled' ? 'bg-rose-500 text-white' : 'bg-slate-200 text-black'
                                                     }`}>
@@ -124,7 +124,7 @@ export default function MyBookingsPage() {
                                                 </span>
                                                 <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">#{booking._id.slice(-6).toUpperCase()}</span>
                                             </div>
-                                            <p className="font-black text-black bg-[#FACC15] px-4 py-2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm italic tracking-tighter">
+                                            <p className="font-black text-black bg-[#FACC15] px-4 py-2 border border-black/10 text-sm italic tracking-tighter">
                                                 Rs {booking.totalPrice.toLocaleString()}
                                             </p>
                                         </div>
@@ -154,7 +154,7 @@ export default function MyBookingsPage() {
                                             <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest italic text-slate-800"><Calendar size={14} strokeWidth={3} /> {booking.scheduledDate}</span>
                                             <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest italic text-slate-800"><Clock size={14} strokeWidth={3} /> {booking.scheduledTime}</span>
                                         </div>
-                                        <div className="w-10 h-10 bg-[#006064] border-2 border-black flex items-center justify-center text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:translate-x-1 group-hover:translate-y-[-1px] transition-all">
+                                        <div className="w-10 h-10 bg-[#006064] border border-black/10 flex items-center justify-center text-white group-hover:translate-x-1 transition-all">
                                             <ArrowRight size={20} strokeWidth={3} />
                                         </div>
                                     </div>
