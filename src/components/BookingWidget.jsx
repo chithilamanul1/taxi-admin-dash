@@ -626,20 +626,30 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 </div>
                             </div>
 
-                            <div className="space-y-4 md:space-y-3">
-                                {/* Pickup Input */}
-                                <LocationInput
-                                    placeholder="Pick-up Location"
-                                    value={pickupSearch}
-                                    icon={activeTab === 'pickup' ? PlaneTakeoff : MapPin}
-                                    disabled={activeTab === 'pickup'}
-                                    onChange={(val) => setPickupSearch(val)}
-                                    zIndex={100}
-                                    onSelect={(loc) => {
-                                        setPickup({ name: loc.address, lat: loc.lat, lng: loc.lng });
-                                        setPickupSearch(loc.address);
-                                    }}
-                                />
+                            <div className="relative">
+                                {/* Flow Connection Line - Decorative Stepper Style */}
+                                <div className="absolute left-[26px] top-7 bottom-7 w-0.5 z-0 flex flex-col items-center pointer-events-none">
+                                    <div className="flex-1 border-l-2 border-dashed border-black/20 dark:border-white/10"></div>
+                                </div>
+
+                                <div className="space-y-4 md:space-y-3 relative z-10">
+                                    <div className="relative">
+                                        <div className="absolute left-[18px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-black bg-white dark:bg-black z-20 flex items-center justify-center text-emerald-500">
+                                            <CircleDot size={10} strokeWidth={4} />
+                                        </div>
+                                        <LocationInput
+                                            placeholder="Pick-up Location"
+                                            value={pickupSearch}
+                                            icon={activeTab === 'pickup' ? PlaneTakeoff : MapPin}
+                                            disabled={activeTab === 'pickup'}
+                                            onChange={(val) => setPickupSearch(val)}
+                                            zIndex={100}
+                                            onSelect={(loc) => {
+                                                setPickup({ name: loc.address, lat: loc.lat, lng: loc.lng });
+                                                setPickupSearch(loc.address);
+                                            }}
+                                        />
+                                    </div>
 
 
                                  {/* Waypoints List */}
@@ -732,19 +742,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 {/* Dropoff Input */}
                                 <div className="relative">
-                                    <div className="absolute left-[20px] top-[-32px] bottom-[24px] w-[3px] z-0 flex flex-col items-center">
-                                        {/* Curved Path Look - Dashed Vertical Line */}
-                                        <div className="flex-1 border-l-2 border-dashed border-black/30 dark:border-white/20"></div>
-                                        
-                                        {/* Pickup Node */}
-                                        <div className="absolute top-0 -translate-y-1/2 bg-white dark:bg-black p-0.5 rounded-full border-2 border-black z-10 text-emerald-500">
-                                            <CircleDot size={18} strokeWidth={3} />
-                                        </div>
-                                        
-                                        {/* Dropoff Node */}
-                                        <div className="absolute bottom-0 translate-y-1/2 bg-[#FACC15] p-1 rounded-full border-2 border-black z-10 text-black shadow-lg">
-                                            <MapPin size={18} strokeWidth={3} fill="currentColor" />
-                                        </div>
+                                    <div className="absolute left-[18px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-black bg-[#FACC15] z-20 flex items-center justify-center text-black shadow-sm">
+                                        <MapPin size={10} strokeWidth={4} />
                                     </div>
                                     <LocationInput
                                         placeholder="Drop-off Location"
@@ -760,6 +759,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     />
                                 </div>
                             </div>
+                        </div>
 
                                 {/* Extra Options Grid - Refined Spacing & Alignment */}
                                 <div className="flex flex-col xl:flex-row gap-6 lg:gap-8 mt-12 lg:mt-8 mb-6 lg:mb-4">

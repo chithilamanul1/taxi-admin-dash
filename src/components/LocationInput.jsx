@@ -143,9 +143,10 @@ const LocationInput = ({
                 }}
                 disabled={disabled}
                 placeholder={googleLoaded ? placeholder : 'Loading maps...'}
-                className={`w-full pl-16 sm:pl-20 pr-10 sm:pr-14 h-14 rounded-none text-base sm:text-lg font-black bg-white dark:bg-[#1a1a1a] border-[3px] transition-all outline-none text-black dark:text-white uppercase tracking-widest
-                ${isFocused && !disabled ? 'border-black -translate-y-0.5' : 'border-black'}
-                ${disabled ? 'cursor-not-allowed opacity-75 bg-slate-50 dark:bg-white/5 grayscale-[0.5]' : 'hover:-translate-y-0.5'}`}
+                className={`w-full pl-16 sm:pl-20 pr-10 sm:pr-14 h-14 rounded-none text-base sm:text-lg font-black transition-all outline-none uppercase tracking-widest border-[3px]
+                ${disabled 
+                    ? 'bg-slate-100 dark:bg-black/40 border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500 cursor-not-allowed grayscale-[0.5]' 
+                    : 'bg-white dark:bg-[#1a1a1a] border-black text-black dark:text-white hover:-translate-y-0.5 focus:border-black focus:-translate-y-0.5'}`}
             />
 
             {/* Clear Button */}
