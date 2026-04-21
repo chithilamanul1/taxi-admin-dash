@@ -7,7 +7,7 @@ import { Phone, Mail, MapPin, Instagram, Twitter, Facebook, ArrowUpRight } from 
 
 const Footer = () => {
     return (
-        <footer className="bg-white dark:bg-black pt-32 pb-12 relative overflow-hidden text-black dark:text-white border-t-8 border-[#FACC15]">
+        <footer className="bg-white dark:bg-black pt-32 pb-24 md:pb-12 relative overflow-hidden text-black dark:text-white border-t-8 border-[#FACC15]">
             {/* Background elements - Sharp lines */}
             <div className="absolute top-0 left-0 w-full h-[1px] bg-black/10 dark:bg-[#FACC15]/20"></div>
 
