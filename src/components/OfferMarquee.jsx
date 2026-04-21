@@ -42,7 +42,7 @@ const OfferMarquee = () => {
                 console.error('Failed to fetch offer settings:', err);
             }
             const fallback = new Date();
-            fallback.setHours(fallback.getHours() + 48);
+            fallback.setHours(24, 0, 0, 0);
             return fallback;
         };
 

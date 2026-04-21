@@ -17,6 +17,7 @@ export default function SpecialOffersSection() {
         code: 'TODAY25',
         isActive: true
     });
+    const [timeLeft, setTimeLeft] = useState({ h: 0, m: 0, s: 0 });
 
     useEffect(() => {
         // Fetch Coupons
@@ -58,6 +59,21 @@ export default function SpecialOffersSection() {
                 }
             })
             .catch(err => console.error('Failed to fetch today offer settings:', err));
+    }, []);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            const now = new Date();
+            const midnight = new Date();
+            midnight.setHours(24, 0, 0, 0);
+            const diff = midnight - now;
+            setTimeLeft({
+                h: Math.floor(diff / (1000 * 60 * 60)),
+                m: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+                s: Math.floor((diff % (1000 * 60)) / 1000)
+            });
+        }, 1000);
+        return () => clearInterval(timer);
     }, []);
 
     const next = useCallback(() => {
@@ -120,7 +136,13 @@ export default function SpecialOffersSection() {
                                 </div>
                                 <div>
                                     <p className="text-[10px] font-black uppercase text-black leading-tight">FLAT {todayOffer.percent}% OFF</p>
-                                    <p className="text-[10px] font-bold text-slate-500">CODE: {todayOffer.code}</p>
+                                    <p className="text-[10px] font-bold text-slate-500 mb-1">CODE: {todayOffer.code}</p>
+                                    <div className="flex items-center gap-1 bg-red-50 px-2 py-0.5 rounded border border-red-100 mt-1">
+                                        <Clock size={10} className="text-red-500 animate-pulse" />
+                                        <span className="text-[9px] font-black text-red-600 tabular-nums">
+                                            EXPIRES IN {timeLeft.h.toString().padStart(2, '0')}:{timeLeft.m.toString().padStart(2, '0')}:{timeLeft.s.toString().padStart(2, '0')}
+                                        </span>
+                                    </div>
                                 </div>
                                 <div className="ml-2 w-8 h-8 bg-black rounded-full flex items-center justify-center text-[#FACC15] group-hover:scale-110 transition-transform">
                                     <Check size={16} strokeWidth={3} />
