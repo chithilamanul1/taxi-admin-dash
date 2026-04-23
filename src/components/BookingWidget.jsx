@@ -923,23 +923,23 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             <div className="">
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
-                                    className="w-full h-14 px-6 flex items-center justify-between bg-white dark:bg-white/5 border-2 border-black rounded-none hover:-translate-y-0.5 transition-all group overflow-hidden relative mt-4"
+                                    className="w-full min-h-[4rem] sm:min-h-[5rem] py-2 px-6 flex items-center justify-between bg-white dark:bg-white/5 border-2 border-black rounded-none hover:-translate-y-0.5 transition-all group overflow-hidden relative mt-4"
                                     aria-label="Select Vehicle"
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className="w-16 h-12 sm:w-20 sm:h-14 bg-white dark:bg-white/10 rounded-none flex items-center justify-center p-1 border-2 border-black">
+                                        <div className="w-20 h-16 sm:w-24 sm:h-20 rounded-none flex items-center justify-center p-0 shrink-0">
                                             {vehiclePricing[vehicle]?.image ? (
                                                 <div className="relative w-full h-full">
                                                     <Image
                                                         src={vehiclePricing[vehicle].image}
                                                         alt={vehiclePricing[vehicle]?.name || "Vehicle"}
                                                         fill
-                                                        className="object-contain scale-110"
-                                                        sizes="48px"
+                                                        className="object-contain scale-[1.35] sm:scale-150 drop-shadow-md group-hover:scale-150 sm:group-hover:scale-[1.75] transition-transform duration-500"
+                                                        sizes="(max-width: 640px) 80px, 96px"
                                                     />
                                                 </div>
                                             ) : (
-                                                <Car className="text-black dark:text-white" size={16} />
+                                                <Car className="text-black dark:text-white opacity-50" size={24} />
                                             )}
                                         </div>
                                         <div className="text-left">
