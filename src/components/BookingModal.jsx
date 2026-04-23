@@ -1044,6 +1044,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             </div>
                                             <button onClick={() => signIn()} className="relative z-10 px-10 py-4 bg-black rounded-none border-4 border-black text-xs font-black text-[#FACC15] hover:bg-black/90 active:scale-95 transition-all uppercase tracking-widest">Sign In</button>
                                         </div>
+                                    )}
                                     {/* Redundant Logistics Adjustment Removed as per User Request */}
 
                                     <div className="space-y-10">
