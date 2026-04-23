@@ -323,20 +323,20 @@ const Prices = ({ initialDestination }) => {
     }, [pickup, dropoff])
 
     return (
-        <div className="pt-32 pb-20 max-w-6xl mx-auto px-6 dark:bg-emerald-900 transition-colors">
+        <div className="pt-32 pb-20 max-w-6xl mx-auto px-6  transition-colors">
             <div id="prices" className="py-12 text-center scroll-mt-32">
-                <h1 className="text-4xl md:text-5xl font-black text-black mb-4 uppercase tracking-tighter">Price <span className="text-[#FACC15] outline-black">Calculator</span></h1>
-                <p className="text-black/60 max-w-2xl mx-auto font-bold uppercase text-xs tracking-widest">Select your pickup and destination points for an instant, transparent quote.</p>
+                <h1 className="text-4xl md:text-5xl font-black text-emerald-950 mb-4 tracking-tight">Price <span className="text-[#FACC15] ">Calculator</span></h1>
+                <p className="text-gray-500 max-w-2xl mx-auto font-medium text-sm">Select your pickup and destination points for an instant, transparent quote.</p>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-12 mt-8">
                 {/* Left: Input Controls */}
-                <div className="space-y-8 bg-white p-8 md:p-12 rounded-none border-4 border-black">
+                <div className="space-y-8 bg-white p-8 md:p-12 rounded-[2rem] border border-gray-100 shadow-2xl">
 
                     {/* Pickup Search */}
                     <div className="relative">
-                        <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                            <MapPin size={16} className="text-emerald-600 dark:text-emerald-400" /> Pickup Point
+                        <label className="flex items-center gap-2 text-xs font-bold text-gray-400  uppercase tracking-widest mb-3">
+                            <MapPin size={16} className="text-emerald-600 " /> Pickup Point
                         </label>
                         <input
                             type="text"
@@ -346,10 +346,10 @@ const Prices = ({ initialDestination }) => {
                                 debouncedSearchPickup(e.target.value)
                             }}
                             placeholder="Start searching..."
-                            className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none text-black placeholder:text-gray-400 font-bold"
+                            className="w-full bg-slate-50/50 border border-gray-200 px-6 py-4 rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#FACC15]/30 focus:border-[#FACC15] outline-none text-emerald-950 placeholder:text-gray-400 font-medium transition-all shadow-sm"
                         />
                         {pickupResults.length > 0 && (
-                            <div className="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-gray-100 dark:border-white/10 overflow-hidden">
+                            <div className="absolute z-20 w-full mt-2 bg-white  shadow-2xl rounded-2xl border border-gray-100  overflow-hidden">
                                 {pickupResults.map((r, i) => (
                                     <button
                                         key={i}
@@ -358,7 +358,7 @@ const Prices = ({ initialDestination }) => {
                                             setPickupSearch(r.name)
                                             setPickupResults([])
                                         }}
-                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-gray-50 dark:border-white/5 last:border-none flex items-center gap-3 text-emerald-900 dark:text-white"
+                                        className="w-full text-left px-6 py-4 hover:bg-slate-50  border-b border-gray-50  last:border-none flex items-center gap-3 text-emerald-900 "
                                     >
                                         <Navigation size={14} className="text-gray-400" />
                                         <span>{r.name}</span>
@@ -370,8 +370,8 @@ const Prices = ({ initialDestination }) => {
 
                     {/* Dropoff Search */}
                     <div className="relative">
-                        <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                            <MapPin size={16} className="text-emerald-900 dark:text-emerald-400" /> Destination
+                        <label className="flex items-center gap-2 text-xs font-bold text-gray-400  uppercase tracking-widest mb-3">
+                            <MapPin size={16} className="text-emerald-900 " /> Destination
                         </label>
                         <input
                             type="text"
@@ -381,10 +381,10 @@ const Prices = ({ initialDestination }) => {
                                 debouncedSearchDropoff(e.target.value)
                             }}
                             placeholder="Where are you going?"
-                            className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none text-black placeholder:text-gray-400 font-bold"
+                            className="w-full bg-slate-50/50 border border-gray-200 px-6 py-4 rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#FACC15]/30 focus:border-[#FACC15] outline-none text-emerald-950 placeholder:text-gray-400 font-medium transition-all shadow-sm"
                         />
                         {dropoffResults.length > 0 && (
-                            <div className="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 shadow-2xl rounded-2xl border border-gray-100 dark:border-white/10 overflow-hidden">
+                            <div className="absolute z-20 w-full mt-2 bg-white  shadow-2xl rounded-2xl border border-gray-100  overflow-hidden">
                                 {dropoffResults.map((r, i) => (
                                     <button
                                         key={i}
@@ -393,7 +393,7 @@ const Prices = ({ initialDestination }) => {
                                             setDropoffSearch(r.name)
                                             setDropoffResults([])
                                         }}
-                                        className="w-full text-left px-6 py-4 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-gray-50 dark:border-white/5 last:border-none flex items-center gap-3 text-emerald-900 dark:text-white"
+                                        className="w-full text-left px-6 py-4 hover:bg-slate-50  border-b border-gray-50  last:border-none flex items-center gap-3 text-emerald-900 "
                                     >
                                         <Navigation size={14} className="text-gray-400" />
                                         <span>{r.name}</span>
@@ -406,23 +406,23 @@ const Prices = ({ initialDestination }) => {
                     {/* Passengers & Trip Type Row */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                                <Users size={16} className="text-emerald-600 dark:text-emerald-400" /> Passengers
+                            <label className="flex items-center gap-2 text-xs font-bold text-gray-400  uppercase tracking-widest mb-3">
+                                <Users size={16} className="text-emerald-600 " /> Passengers
                             </label>
-                            <div className="flex items-center justify-between bg-slate-50 px-4 py-3 rounded-none border-4 border-black">
-                                <span className="text-xs font-black text-black uppercase tracking-wider mr-2">Count:</span>
+                            <div className="flex items-center justify-between bg-slate-50/50 px-4 py-3 rounded-2xl border border-gray-100 shadow-inner">
+                                <span className="text-xs font-black text-emerald-950 uppercase tracking-wider mr-2">Count:</span>
                                 <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => setPassengers(Math.max(1, passengers - 1))}
-                                        className="w-10 h-10 flex items-center justify-center bg-white border-2 border-black rounded-none text-black font-black hover:bg-[#FACC15] active:translate-y-1 transition-all text-xl"
+                                        className="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-xl text-emerald-950 font-bold hover:bg-[#FACC15]/10 hover:border-[#FACC15] active:translate-y-1 transition-all text-xl"
                                         aria-label="Decrease passengers"
                                     >
                                         -
                                     </button>
-                                    <span className="font-black text-black text-xl w-6 text-center">{passengers}</span>
+                                    <span className="font-black text-emerald-950 text-xl w-6 text-center">{passengers}</span>
                                     <button
                                         onClick={() => setPassengers(Math.min(15, passengers + 1))}
-                                        className="w-10 h-10 flex items-center justify-center bg-white border-2 border-black rounded-none text-black font-black hover:bg-[#FACC15] active:translate-y-1 transition-all text-xl"
+                                        className="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-xl text-emerald-950 font-bold hover:bg-[#FACC15]/10 hover:border-[#FACC15] active:translate-y-1 transition-all text-xl"
                                         aria-label="Increase passengers"
                                     >
                                         +
@@ -431,15 +431,15 @@ const Prices = ({ initialDestination }) => {
                             </div>
                         </div>
                         <div>
-                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                                <ArrowRightLeft size={16} className="text-emerald-900 dark:text-emerald-400" /> Trip Type
+                            <label className="flex items-center gap-2 text-xs font-bold text-gray-400  uppercase tracking-widest mb-3">
+                                <ArrowRightLeft size={16} className="text-emerald-900 " /> Trip Type
                             </label>
-                            <div className="flex bg-slate-50 p-1.5 rounded-none border-4 border-black">
+                            <div className="flex bg-slate-50/50 p-1.5 rounded-2xl border border-gray-100 shadow-inner">
                                 {['one-way', 'round-trip'].map(t => (
                                     <button
                                         key={t}
                                         onClick={() => setTripType(t)}
-                                        className={`flex-1 py-2.5 rounded-none text-sm font-black uppercase tracking-widest transition-all ${tripType === t ? 'bg-black text-[#FACC15]' : 'text-black/40 hover:text-black'}`}
+                                        className={`flex-1 py-2.5 rounded-2xl text-sm font-black uppercase tracking-widest transition-all ${tripType === t ? 'bg-[#FACC15] text-emerald-950 shadow-md' : 'text-gray-400 hover:text-emerald-950'}`}
                                     >
                                         {t === 'one-way' ? 'One Way' : 'Return'}
                                     </button>
@@ -451,7 +451,7 @@ const Prices = ({ initialDestination }) => {
                     {/* Contact Details (Email & WhatsApp) */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
+                            <label className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
                                 <span className="text-emerald-600">✉️</span> Your Email
                             </label>
                             <input
@@ -459,11 +459,11 @@ const Prices = ({ initialDestination }) => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="name@example.com"
-                                className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none text-black font-bold"
+                                className="w-full bg-slate-50 border-2 border-black px-6 py-4 rounded-2xl focus:ring-0 outline-none text-black font-bold"
                             />
                         </div>
                         <div>
-                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
+                            <label className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
                                 <span className="text-emerald-600">📱</span> WhatsApp No.
                             </label>
                             <input
@@ -471,7 +471,7 @@ const Prices = ({ initialDestination }) => {
                                 value={whatsapp}
                                 onChange={(e) => setWhatsapp(e.target.value)}
                                 placeholder="+1 66 77 88 99 ..."
-                                className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none text-black font-bold"
+                                className="w-full bg-slate-50 border-2 border-black px-6 py-4 rounded-2xl focus:ring-0 outline-none text-black font-bold"
                             />
                         </div>
                     </div>
@@ -479,35 +479,35 @@ const Prices = ({ initialDestination }) => {
                     {/* Date, Time & Payment Method */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
+                            <label className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
                                 <span className="text-emerald-600">📅</span> Date
                             </label>
                             <input
                                 type="date"
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
-                                className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none text-black font-bold"
+                                className="w-full bg-slate-50 border-2 border-black px-6 py-4 rounded-2xl focus:ring-0 outline-none text-black font-bold"
                             />
                         </div>
                         <div>
-                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
+                            <label className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
                                 <span className="text-emerald-600">⏰</span> Time
                             </label>
                             <input
                                 type="time"
                                 value={time}
                                 onChange={(e) => setTime(e.target.value)}
-                                className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none text-black font-bold"
+                                className="w-full bg-slate-50 border-2 border-black px-6 py-4 rounded-2xl focus:ring-0 outline-none text-black font-bold"
                             />
                         </div>
                         <div>
-                            <label className="flex items-center gap-2 text-sm font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-3">
-                                <span className="text-emerald-600 dark:text-emerald-400">💳</span> Payment
+                            <label className="flex items-center gap-2 text-xs font-bold text-gray-400  uppercase tracking-widest mb-3">
+                                <span className="text-emerald-600 ">💳</span> Payment
                             </label>
                             <select
                                 value={paymentMethod}
                                 onChange={(e) => setPaymentMethod(e.target.value)}
-                                className="w-full bg-slate-50 border-4 border-black px-6 py-4 rounded-none focus:ring-0 outline-none cursor-pointer text-black font-bold"
+                                className="w-full bg-slate-50/50 border border-gray-200 px-6 py-4 rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#FACC15]/30 focus:border-[#FACC15] outline-none cursor-pointer text-emerald-950 font-medium transition-all shadow-sm"
                             >
                                 <option value="cash">Cash to Driver</option>
                                 <option value="card">Card Payment</option>
@@ -516,14 +516,14 @@ const Prices = ({ initialDestination }) => {
                     </div>
 
                     {/* Airport Greeting (Board Show) Option */}
-                    <div className="bg-white p-6 rounded-none border-4 border-black flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:bg-slate-50 mb-8">
+                    <div className="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 transition-all hover:bg-slate-50 hover:shadow-md mb-8">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 bg-emerald-900/10 dark:bg-white/5 rounded-full flex items-center justify-center text-2xl">
                                 🛫
                             </div>
                             <div>
-                                <h4 className="text-emerald-900 dark:text-white font-bold text-lg">Airport Greeting (NAME BOARD)</h4>
-                                <p className="text-gray-500 dark:text-slate-400 text-xs max-w-xs">Our driver will wait for you at the arrival terminal hall with your name on a NAME BOARD.</p>
+                                <h4 className="text-emerald-900  font-bold text-lg">Airport Greeting (NAME BOARD)</h4>
+                                <p className="text-gray-500  text-xs max-w-xs">Our driver will wait for you at the arrival terminal hall with your name on a NAME BOARD.</p>
                             </div>
                         </div>
                         <div className="flex flex-col items-end gap-3">
@@ -557,7 +557,7 @@ const Prices = ({ initialDestination }) => {
                                             value={boardName}
                                             onChange={(e) => setBoardName(e.target.value)}
                                             placeholder="e.g. Mr. John Doe"
-                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
+                                            className="w-full bg-white border border-gray-200 px-4 py-3 rounded-xl text-sm focus:ring-2 focus:ring-[#FACC15]/30 focus:border-[#FACC15] outline-none shadow-sm transition-all"
                                         />
                                     </div>
                                     <div>
@@ -567,7 +567,7 @@ const Prices = ({ initialDestination }) => {
                                             value={flightNumber}
                                             onChange={(e) => setFlightNumber(e.target.value)}
                                             placeholder="e.g. UL 504"
-                                            className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
+                                            className="w-full bg-white border border-gray-200 px-4 py-3 rounded-xl text-sm focus:ring-2 focus:ring-[#FACC15]/30 focus:border-[#FACC15] outline-none shadow-sm transition-all"
                                         />
                                     </div>
                                     <div className="grid grid-cols-2 gap-3">
@@ -577,7 +577,7 @@ const Prices = ({ initialDestination }) => {
                                                 type="date"
                                                 value={arrivalDate}
                                                 onChange={(e) => setArrivalDate(e.target.value)}
-                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
+                                                className="w-full bg-white border border-gray-200 px-4 py-3 rounded-xl text-sm focus:ring-2 focus:ring-[#FACC15]/30 focus:border-[#FACC15] outline-none shadow-sm transition-all"
                                             />
                                         </div>
                                         <div>
@@ -586,7 +586,7 @@ const Prices = ({ initialDestination }) => {
                                                 type="time"
                                                 value={arrivalTime}
                                                 onChange={(e) => setArrivalTime(e.target.value)}
-                                                className="w-full bg-slate-50 border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-emerald-900/20 outline-none"
+                                                className="w-full bg-white border border-gray-200 px-4 py-3 rounded-xl text-sm focus:ring-2 focus:ring-[#FACC15]/30 focus:border-[#FACC15] outline-none shadow-sm transition-all"
                                             />
                                         </div>
                                     </div>
@@ -598,7 +598,7 @@ const Prices = ({ initialDestination }) => {
                     {/* Vehicle Selection */}
                     <div>
                         <div className="flex items-center justify-between mb-3">
-                            <label className="text-sm font-bold text-gray-400 uppercase tracking-widest">Select Vehicle</label>
+                            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Select Vehicle</label>
                             {!isVehicleListExpanded && (
                                 <button
                                     onClick={() => setIsVehicleListExpanded(true)}
@@ -613,7 +613,7 @@ const Prices = ({ initialDestination }) => {
                         {!isVehicleListExpanded && (
                             <div
                                 onClick={() => setIsVehicleListExpanded(true)}
-                                className="relative w-full overflow-hidden rounded-none border-4 border-black cursor-pointer group"
+                                className="relative w-full overflow-hidden rounded-3xl border border-black cursor-pointer group"
                             >
                                 <div className="aspect-[21/9] w-full relative">
                                     <img
@@ -623,7 +623,7 @@ const Prices = ({ initialDestination }) => {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/40 to-transparent"></div>
                                     <div className="absolute inset-0 p-6 flex flex-col justify-center text-white">
-                                        <div className="bg-[#FACC15] text-black text-[10px] font-black px-3 py-1 rounded-none w-fit mb-2 border-2 border-black">SELECTED</div>
+                                        <div className="bg-[#FACC15] text-black text-[10px] font-black px-3 py-1 rounded-2xl w-fit mb-2 border border-emerald-800/30">SELECTED</div>
                                         <div className="font-bold text-2xl mb-1">{VEHICLE_PRICING[vehicle].name}</div>
                                         <div className="text-sm text-white/80 mb-2">{VEHICLE_PRICING[vehicle].model}</div>
                                         {VEHICLE_PRICING[vehicle].specs && (
@@ -669,12 +669,12 @@ const Prices = ({ initialDestination }) => {
                                                 }
                                             }}
                                             disabled={isLocked}
-                                            className={`relative w-full overflow-hidden rounded-none border-4 transition-all group text-left bg-white p-8
+                                            className={`relative w-full overflow-hidden rounded-3xl border transition-all group text-left bg-white p-8
                                                 ${vehicle === key
-                                                    ? 'border-black bg-[#FACC15]/10 scale-[1.02]'
+                                                    ? 'border-black bg-white shadow-2xl border-[#FACC15] scale-[1.02] ring-4 ring-[#FACC15]/10'
                                                     : isLocked
-                                                        ? 'border-gray-100 dark:border-white/5 opacity-60 cursor-not-allowed grayscale'
-                                                        : 'border-black hover:border-black shadow-none'
+                                                        ? 'border-gray-100  opacity-60 cursor-not-allowed grayscale'
+                                                        : 'border-gray-100 hover:border-[#FACC15] hover:shadow-xl shadow-none'
                                                 }`}
                                         >
                                             <div className="flex justify-between items-start mb-6">
@@ -684,14 +684,14 @@ const Prices = ({ initialDestination }) => {
                                                         if (match) {
                                                             return (
                                                                 <>
-                                                                    <h3 className="font-black text-black dark:text-white text-3xl md:text-4xl leading-tight uppercase tracking-tight">{match[1].trim()}</h3>
-                                                                    <span className="inline-block mt-1 px-3 py-0.5 bg-slate-50 text-black text-xs font-black border-2 border-black rounded-none uppercase tracking-wide">{match[2]}</span>
+                                                                    <h3 className="font-black text-emerald-950  text-3xl md:text-4xl leading-tight uppercase tracking-tight">{match[1].trim()}</h3>
+                                                                    <span className="inline-block mt-1 px-3 py-0.5 bg-slate-50 text-black text-xs font-black border border-emerald-800/30 rounded-2xl uppercase tracking-wide">{match[2]}</span>
                                                                 </>
                                                             );
                                                         }
-                                                        return <h3 className="font-black text-black dark:text-white text-3xl md:text-4xl leading-tight pb-1 uppercase tracking-tight">{v.name}</h3>;
+                                                        return <h3 className="font-black text-emerald-950  text-3xl md:text-4xl leading-tight pb-1 uppercase tracking-tight">{v.name}</h3>;
                                                     })()}
-                                                    <p className="text-sm text-gray-400 dark:text-slate-500 font-bold mt-1">{v.model}</p>
+                                                    <p className="text-sm text-gray-400  font-bold mt-1">{v.model}</p>
                                                 </div>
                                             </div>
 
@@ -730,7 +730,7 @@ const Prices = ({ initialDestination }) => {
                                             </div>
 
                                             {distance > 0 && (
-                                                <div className="space-y-1 mb-6 rounded-none overflow-hidden border-2 border-black font-black">
+                                                <div className="space-y-1 mb-6 rounded-2xl overflow-hidden border border-emerald-800/30 font-black">
                                                     {(() => {
                                                         const basePrice = calculateBasePrice(distance, { ...v, vehicleType: key }, tripType, pickupSearch, dropoffSearch, [...staticDestinations, ...dynamicDestinations]);
                                                         const usdVal = Number((basePrice * (rates?.USD || 0.0033)).toFixed(2));
@@ -753,9 +753,9 @@ const Prices = ({ initialDestination }) => {
                                             )}
 
                                             <div
-                                                className={`w-full py-4 text-center rounded-none font-black text-xl uppercase tracking-widest transition-all
+                                                className={`w-full py-4 text-center rounded-2xl font-black text-xl uppercase tracking-widest transition-all
                                                     ${vehicle === key
-                                                        ? 'bg-black text-[#FACC15]'
+                                                        ? 'bg-[#FACC15] text-emerald-950 shadow-md'
                                                         : 'bg-[#FACC15] text-black hover:bg-black hover:text-[#FACC15]'}`}
                                             >
                                                 {vehicle === key ? 'Selected ✓' : 'Select'}
@@ -763,7 +763,7 @@ const Prices = ({ initialDestination }) => {
 
                                             {isLocked && (
                                                 <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center z-10">
-                                                    <div className="bg-red-600 text-white px-4 py-2 rounded-none text-sm font-black flex items-center gap-2 border-2 border-black">
+                                                    <div className="bg-red-600 text-white px-4 py-2 rounded-2xl text-sm font-black flex items-center gap-2 border border-emerald-800/30">
                                                         <Lock size={14} /> Too Small
                                                     </div>
                                                 </div>
@@ -777,8 +777,8 @@ const Prices = ({ initialDestination }) => {
                 </div>
 
                 {/* Right: Summary & Quote */}
-                <div ref={quoteRef} className="bg-black rounded-none p-8 md:p-14 text-white lg:sticky lg:top-28 flex flex-col h-fit border-4 border-black">
-                    <h3 className="text-[#FACC15] text-2xl font-black mb-8 flex items-center gap-3 uppercase tracking-tighter">
+                <div ref={quoteRef} className="bg-emerald-950 rounded-[2.5rem] p-8 md:p-12 text-white lg:sticky lg:top-28 flex flex-col h-fit shadow-2xl relative overflow-hidden">
+                    <h3 className="text-[#FACC15] text-2xl font-bold mb-8 flex items-center gap-3 tracking-tight">
                         Trip Quote
                     </h3>
 
@@ -818,7 +818,7 @@ const Prices = ({ initialDestination }) => {
                                         </div>
 
                                         {/* Highway Toll Notice */}
-                                        <div className="p-4 rounded-none bg-[#FACC15]/10 border-4 border-[#FACC15] flex items-start gap-3">
+                                        <div className="p-4 rounded-2xl bg-[#FACC15]/10 border border-[#FACC15]/30 flex items-start gap-3">
                                             <Info size={16} className="text-black shrink-0 mt-0.5" />
                                             <p className="text-[11px] font-bold text-black/90 leading-relaxed uppercase tracking-wider">
                                                 Note: Highway tolls must be paid by the customer during the journey.
@@ -831,16 +831,16 @@ const Prices = ({ initialDestination }) => {
                                                     key={c.code}
                                                     type="button"
                                                     onClick={() => changeCurrency(c.code)}
-                                                    className={`p-3 rounded-none border-4 transition-all flex flex-col gap-1 text-left cursor-pointer group/card ${currency === c.code
+                                                    className={`p-3 rounded-3xl border transition-all flex flex-col gap-1 text-left cursor-pointer group/card ${currency === c.code
                                                         ? 'bg-[#FACC15]/20 border-[#FACC15]'
-                                                        : 'bg-white/5 border-white/5 hover:border-white/20 hover:bg-white/10'
+                                                        : 'bg-white/5 border-emerald-800/30 hover:border-[#FACC15]/50 hover:bg-white/5'
                                                         }`}
                                                 >
                                                     <div className="flex items-center justify-between">
                                                         <span className="text-[10px] font-black text-white/40 uppercase tracking-widest flex items-center gap-1.5">
                                                             <span className="text-xs">{c.flag}</span> {c.code}
                                                         </span>
-                                                        {currency === c.code && <div className="w-1.5 h-1.5 rounded-none bg-[#FACC15] border border-black"></div>}
+                                                        {currency === c.code && <div className="w-1.5 h-1.5 rounded-2xl bg-[#FACC15] border border-black"></div>}
                                                     </div>
                                                     <div className={`text-sm md:text-base font-black ${currency === c.code ? 'text-[#FACC15]' : 'text-white'}`}>
                                                         <span className="text-[10px] font-bold mr-1 opacity-60">{c.symbol}</span>
@@ -853,13 +853,13 @@ const Prices = ({ initialDestination }) => {
                                 </div>
 
                                 {/* Important Notices */}
-                                <div className="bg-red-500/10 border-4 border-dashed border-red-500 rounded-none p-4 mb-4 text-sm text-white space-y-2 animate-pulse">
+                                <div className="bg-red-500/10 border-2 border-dashed border-red-500 rounded-2xl p-4 mb-4 text-sm text-white space-y-2 animate-pulse">
                                     <div className="flex items-start gap-2 font-bold text-red-200">
                                         <Info size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
                                         <p className="uppercase tracking-wide">Highway tickets needed for the trip must be paid by the customer.</p>
                                     </div>
                                 </div>
-                                <div className="bg-white/10 rounded-none p-4 mb-8 text-xs text-white/80 space-y-2">
+                                <div className="bg-white/10 rounded-2xl p-4 mb-8 text-xs text-white/80 space-y-2">
                                     <div className="flex items-start gap-2 font-bold text-white">
                                         <Info size={14} className="text-black flex-shrink-0 mt-0.5" />
                                         <p>IMPORTANT: We accept card payments (Visa/Mastercard).</p>
@@ -981,7 +981,7 @@ const Prices = ({ initialDestination }) => {
                                             setLoading(false); // Reset loading state
                                         }
                                     }}
-                                    className="w-full bg-[#FACC15] text-black font-black py-6 rounded-none text-xl hover:bg-white transition-all border-4 border-black disabled:opacity-50 disabled:grayscale"
+                                    className="w-full bg-[#FACC15] text-black font-black py-6 rounded-2xl text-xl hover:bg-white transition-all border-2 border-black disabled:opacity-50 disabled:grayscale"
                                 >
                                     {loading ? <Loader2 className="animate-spin mx-auto" /> : 'Book This Trip Now'}
                                 </button>
