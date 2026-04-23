@@ -175,7 +175,7 @@ export default function LiveChatWidget() {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-[90vw] md:w-[380px] h-[70vh] md:h-[500px] bg-white dark:bg-emerald-900 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-800 z-[70] flex flex-col overflow-hidden animate-fade-in-up">
+        <div className="fixed bottom-20 right-4 md:bottom-8 md:right-8 w-[92vw] md:w-[380px] h-[70vh] md:h-[500px] bg-white dark:bg-emerald-900 rounded-[2rem] shadow-2xl border border-slate-200 dark:border-slate-800 z-[9999] flex flex-col overflow-hidden animate-fade-in-up">
             {/* Header */}
             <div className="bg-emerald-900 p-5 flex justify-between items-center shrink-0">
                 <div className="flex items-center gap-3">
