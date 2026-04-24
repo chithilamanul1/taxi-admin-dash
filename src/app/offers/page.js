@@ -74,7 +74,7 @@ export default function OffersPage() {
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-20 bg-white dark:bg-slate-900 rounded-[2.5rem] border-4 border-black shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] p-8 md:p-12 relative overflow-hidden group"
+                    className="mb-20 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-xl p-8 md:p-12 relative overflow-hidden group"
                 >
                     <div className="absolute top-0 right-0 w-64 h-64 bg-amber-400/10 rounded-full translate-x-1/2 -translate-y-1/2"></div>
                     
@@ -110,7 +110,7 @@ export default function OffersPage() {
                                 </div>
                                 <Link 
                                     href="/#booking"
-                                    className="bg-black text-amber-400 px-10 py-5 font-black uppercase tracking-widest text-sm hover:translate-y-[-4px] active:translate-y-0 transition-all border-4 border-black"
+                                    className="bg-black text-amber-400 px-10 py-4 rounded-full font-black uppercase tracking-widest text-sm hover:-translate-y-1 active:translate-y-0 transition-all shadow-md hover:shadow-lg"
                                 >
                                     BOOK WITH OFFER
                                 </Link>
