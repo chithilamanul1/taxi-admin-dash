@@ -765,9 +765,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex-1 space-y-4">
                                     <button
                                         onClick={() => setIsCouponOpen(!isCouponOpen)}
-                                        className={`flex items-center gap-3 text-[10px] lg:text-[9px] font-black h-full min-h-[4rem] sm:min-h-[5rem] lg:min-h-[3.5rem] transition-all px-4 sm:px-8 lg:px-6 py-3 sm:py-4 lg:py-2 rounded-none w-full justify-center uppercase tracking-[0.2em] lg:tracking-[0.15em] border-[3px] border-black ${isCouponOpen ? 'bg-[#FACC15] text-black' : 'bg-white text-black hover:bg-slate-50'}`}
+                                        className={`flex items-center gap-3 text-xs lg:text-[11px] font-bold h-full min-h-[3.5rem] transition-all px-4 sm:px-6 py-3 rounded-2xl w-full justify-center uppercase tracking-widest border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md ${isCouponOpen ? 'bg-amber-50 dark:bg-amber-500/20 text-amber-900 dark:text-amber-400 border-amber-200 dark:border-amber-500/30' : 'bg-white dark:bg-zinc-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-zinc-700'}`}
                                     >
-                                        <Tag size={18} className={`${isCouponOpen ? 'text-black' : 'text-[#FACC15]'} w-4 h-4 sm:w-5 sm:h-5 lg:w-4 lg:h-4`} fill="currentColor" />
+                                        <Tag size={16} className={`${isCouponOpen ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400 dark:text-slate-500'} shrink-0`} fill="currentColor" />
                                         {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
                                     </button>
 
@@ -775,15 +775,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     {appliedOffers.length > 0 && (
                                         <div className="flex flex-wrap gap-2 animate-fade-in">
                                             {appliedOffers.map((offer, i) => (
-                                                <div key={i} className="flex items-center gap-1.5 bg-[#FACC15] text-black px-3 py-1.5 rounded-none border-2 border-black">
-                                                    <Tag size={12} className="fill-black/10" />
-                                                    <span className="text-[10px] font-black uppercase">{offer.name}</span>
-                                                    <span className="text-[10px] font-black opacity-60">
+                                                <div key={i} className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 px-3 py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-500/20 shadow-sm">
+                                                    <Tag size={12} className="text-emerald-600 dark:text-emerald-500" />
+                                                    <span className="text-[10px] font-bold uppercase tracking-widest">{offer.name}</span>
+                                                    <span className="text-[10px] font-bold opacity-70">
                                                         (-{offer.discountPercentage > 0 ? `${offer.discountPercentage}%` : `Rs ${offer.discountAmount}`})
                                                     </span>
                                                     <button
                                                         onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))}
-                                                        className="ml-1 p-0.5 hover:bg-black hover:text-white rounded-none transition-colors border border-transparent hover:border-black"
+                                                        className="ml-1 p-0.5 hover:bg-emerald-200 dark:hover:bg-emerald-500/30 rounded-md transition-colors"
                                                     >
                                                         <X size={12} />
                                                     </button>
@@ -1049,15 +1049,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         {convertPrice(finalTotal).value.toLocaleString()}
                                                     </>
                                                 ) : (
-                                                    <span className="text-slate-200 dark:text-white/10">Rates</span>
+                                                    <span className="text-slate-300 dark:text-slate-700">Rates</span>
                                                 )}
                                             </span>
                                         </div>
                                         {/* Multi-Currency Price Summary Block */}
                                         {distance && finalTotal > 0 && (
-                                            <div className="mt-4 border-2 border-dashed border-black/20 dark:border-white/10 rounded-none overflow-hidden">
-                                                <div className="grid grid-cols-2 bg-slate-100/50 dark:bg-white/5 p-3 gap-2">
-                                                    <div className="flex flex-col items-center justify-center p-2 rounded-none bg-white dark:bg-zinc-900 border border-black/5">
+                                            <div className="mt-4 border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden">
+                                                <div className="grid grid-cols-2 bg-slate-50/50 dark:bg-white/5 p-3 gap-2">
+                                                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/5 shadow-sm">
                                                         <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">USD Estimate</span>
                                                         <span className="text-sm font-black text-black dark:text-white">
                                                             $ {(() => {
@@ -1066,7 +1066,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                             })()}
                                                         </span>
                                                     </div>
-                                                    <div className="flex flex-col items-center justify-center p-2 rounded-none bg-white dark:bg-zinc-900 border border-black/5 shadow-sm">
+                                                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/5 shadow-sm">
                                                         <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">EUR Estimate</span>
                                                         <span className="text-sm font-black text-black dark:text-white">
                                                             € {(() => {
@@ -1081,30 +1081,30 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                 </div>
                                 
-                                <div className="mt-4 p-4 bg-yellow-400/20 border-2 border-black rounded-none flex items-start gap-3 animate-pulse">
-                                    <div className="w-5 h-5 bg-black rounded-none flex items-center justify-center text-[#FACC15] shrink-0 mt-0.5">
-                                        <Info size={14} strokeWidth={3} />
+                                <div className="mt-4 p-4 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-2xl flex items-start gap-3">
+                                    <div className="w-6 h-6 bg-amber-100 dark:bg-amber-500/20 rounded-full flex items-center justify-center text-amber-600 shrink-0 mt-0.5">
+                                        <Info size={14} strokeWidth={2.5} />
                                     </div>
-                                    <p className="text-[11px] font-black text-black dark:text-yellow-400 uppercase tracking-tight leading-tight">
+                                    <p className="text-[11px] font-bold text-amber-800 dark:text-amber-400 uppercase tracking-widest leading-relaxed">
                                         Note: Highway tickets are not included and must be paid by the customer.
                                     </p>
                                 </div>
 
-                                <div className="flex flex-col sm:flex-row gap-4 pt-3">
+                                <div className="flex flex-col sm:flex-row gap-4 pt-4">
                                     <button
                                         onClick={handleBook}
                                         disabled={!distance}
-                                        className="w-full bg-[#FACC15] text-black min-h-16 sm:h-20 py-2 sm:py-0 rounded-none border-4 border-black font-black uppercase tracking-[0.2em] hover:translate-y-[-4px] active:translate-y-0 transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center"
+                                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white min-h-16 sm:h-[72px] py-2 sm:py-0 rounded-2xl shadow-md hover:shadow-lg hover:shadow-emerald-600/20 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center border border-emerald-500/20"
                                     >
                                         {isLoadingPricing ? (
-                                            <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
+                                            <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
                                         ) : (
                                             <div className="flex items-center justify-between w-full px-4 sm:px-6 gap-2">
-                                                <div className="flex-1 text-center text-base sm:text-2xl leading-tight">
+                                                <div className="flex-1 text-center text-base sm:text-lg font-black tracking-widest uppercase">
                                                     BOOK TRIP NOW
                                                 </div>
-                                                <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 bg-black border-2 border-black rounded-none flex items-center justify-center text-[#FACC15] group-hover:scale-110 transition-transform">
-                                                    <ArrowRight size={18} className="sm:size-6" strokeWidth={4} />
+                                                <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 bg-white/20 rounded-full flex items-center justify-center text-white group-hover:translate-x-1 transition-transform">
+                                                    <ArrowRight size={18} className="sm:size-6" strokeWidth={2.5} />
                                                 </div>
                                             </div>
                                         )}

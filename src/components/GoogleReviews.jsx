@@ -109,42 +109,42 @@ const GoogleReviews = () => {
     };
 
     return (
-        <section className="py-24 bg-white dark:bg-[#0a0a0a] overflow-hidden relative border-t-4 border-black transition-colors duration-300">
+        <section className="py-24 bg-white dark:bg-[#0a0a0a] overflow-hidden relative transition-colors duration-300">
             <div className="container mx-auto px-4 relative z-10 max-w-7xl">
                 <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-8">
                     <div className="max-w-2xl">
-                        <div className="flex items-center gap-2 mb-6 text-[#FACC15]">
-                            {[...Array(5)].map((_, i) => <Star key={i} size={20} fill="currentColor" strokeWidth={0} />)}
-                            <span className="ml-2 font-black text-black dark:text-white uppercase tracking-[0.2em] text-xs">Testimonials</span>
+                        <div className="flex items-center gap-2 mb-6 text-emerald-500">
+                            {[...Array(5)].map((_, i) => <Star key={i} size={18} fill="currentColor" strokeWidth={0} />)}
+                            <span className="ml-2 font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest text-xs">Testimonials</span>
                         </div>
-                        <h2 className="text-5xl md:text-7xl font-black text-black dark:text-white uppercase tracking-tighter leading-none mb-6">
-                            CLIENT <span className="text-[#FACC15]">STORIES</span>
+                        <h2 className="text-4xl md:text-6xl font-black text-emerald-950 dark:text-white leading-tight tracking-tight mb-6">
+                            Client <span className="text-emerald-600 dark:text-emerald-400">Stories</span>
                         </h2>
-                        <p className="text-black/50 dark:text-white/50 font-black uppercase tracking-[0.1em] text-sm md:text-base pr-4">
+                        <p className="text-slate-500 dark:text-slate-400 text-base md:text-lg leading-relaxed max-w-xl pr-4">
                             Don't just take our word for it. Read honest reviews from travelers who experienced Sri Lanka with us.
                         </p>
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <button onClick={() => scroll('left')} className="w-14 h-14 bg-white dark:bg-black border-2 border-black dark:border-white/20 hover:border-[#FACC15] dark:hover:border-[#FACC15] text-black dark:text-white hover:text-[#FACC15] flex items-center justify-center transition-all group shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(250,204,21,0.2)] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-none">
-                            <ChevronLeft size={24} strokeWidth={3} className="group-hover:-translate-x-1 transition-transform" />
+                        <button onClick={() => scroll('left')} className="w-12 h-12 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 dark:hover:bg-emerald-500/10 text-slate-600 dark:text-white flex items-center justify-center transition-all shadow-sm rounded-full active:scale-95">
+                            <ChevronLeft size={24} strokeWidth={2} />
                         </button>
-                        <button onClick={() => scroll('right')} className="w-14 h-14 bg-[#FACC15] text-black border-2 border-black flex items-center justify-center transition-all group shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(250,204,21,0.5)] hover:bg-black hover:text-[#FACC15] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-none">
-                            <ChevronRight size={24} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+                        <button onClick={() => scroll('right')} className="w-12 h-12 bg-emerald-600 text-white border border-transparent flex items-center justify-center transition-all hover:bg-emerald-700 shadow-md hover:shadow-lg rounded-full active:scale-95">
+                            <ChevronRight size={24} strokeWidth={2} />
                         </button>
                     </div>
                 </div>
 
                 {/* Source Selection Tabs */}
-                <div className="flex flex-wrap items-center gap-6 mb-16">
+                <div className="flex flex-wrap items-center gap-4 mb-12">
                     <button
                         onClick={() => setActiveSource('google')}
-                        className={`group flex items-center gap-4 p-4 pr-8 border-4 transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-none ${activeSource === 'google'
-                            ? 'bg-[#FACC15] border-black text-black'
-                            : 'bg-white dark:bg-black border-black dark:border-white/20 text-black dark:text-white hover:border-[#FACC15] dark:hover:border-[#FACC15] hover:-translate-y-1'
+                        className={`group flex items-center gap-4 p-3 pr-6 border transition-all rounded-2xl ${activeSource === 'google'
+                            ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-500/30 text-blue-900 dark:text-blue-400 shadow-sm'
+                            : 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-blue-200 dark:hover:border-blue-500/30 hover:bg-slate-50 dark:hover:bg-zinc-800'
                             }`}
                     >
-                        <div className="w-10 h-10 shrink-0 bg-white border-2 border-black flex items-center justify-center p-2 rounded-none">
+                        <div className="w-10 h-10 shrink-0 bg-white dark:bg-zinc-800 rounded-xl flex items-center justify-center p-2 shadow-sm border border-slate-100 dark:border-white/5">
                             <svg viewBox="0 0 24 24" className="w-full h-full">
                                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
@@ -153,19 +153,19 @@ const GoogleReviews = () => {
                             </svg>
                         </div>
                         <div className="text-left">
-                            <div className="font-black uppercase tracking-widest text-sm">Google Reviews</div>
-                            <div className="text-xs font-bold opacity-70 mt-1">{stats.google.rating} / 5.0 • {stats.google.total}+ Reviews</div>
+                            <div className="font-bold uppercase tracking-widest text-xs">Google Reviews</div>
+                            <div className="text-[10px] font-bold opacity-70 mt-0.5">{stats.google.rating} / 5.0 • {stats.google.total}+ Reviews</div>
                         </div>
                     </button>
 
                     <button
                         onClick={() => setActiveSource('tripadvisor')}
-                        className={`group flex items-center gap-4 p-4 pr-8 border-4 transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rounded-none ${activeSource === 'tripadvisor'
-                            ? 'bg-[#00AA6C] border-black text-white'
-                            : 'bg-white dark:bg-black border-black dark:border-white/20 text-black dark:text-white hover:border-[#00AA6C] dark:hover:border-[#00AA6C] hover:-translate-y-1'
+                        className={`group flex items-center gap-4 p-3 pr-6 border transition-all rounded-2xl ${activeSource === 'tripadvisor'
+                            ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-500/30 text-emerald-900 dark:text-emerald-400 shadow-sm'
+                            : 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-emerald-200 dark:hover:border-emerald-500/30 hover:bg-slate-50 dark:hover:bg-zinc-800'
                             }`}
                     >
-                        <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-white border-2 border-black p-2 text-[#00AA6C] rounded-none">
+                        <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-white dark:bg-zinc-800 border border-slate-100 dark:border-white/5 p-2 text-[#00AA6C] rounded-xl shadow-sm">
                             <svg className="w-full h-full" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm10 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z" />
                                 <circle cx="7" cy="12" r="1.5" />
@@ -173,8 +173,8 @@ const GoogleReviews = () => {
                             </svg>
                         </div>
                         <div className="text-left">
-                            <div className="font-black uppercase tracking-widest text-sm">TripAdvisor</div>
-                            <div className="text-xs font-bold opacity-70 mt-1">{stats.tripadvisor.rating} / 5.0 • {stats.tripadvisor.total}+ Reviews</div>
+                            <div className="font-bold uppercase tracking-widest text-xs">TripAdvisor</div>
+                            <div className="text-[10px] font-bold opacity-70 mt-0.5">{stats.tripadvisor.rating} / 5.0 • {stats.tripadvisor.total}+ Reviews</div>
                         </div>
                     </button>
                 </div>
@@ -182,7 +182,7 @@ const GoogleReviews = () => {
                 {/* Slider */}
                 <div
                     ref={scrollContainerRef}
-                    className="flex overflow-x-auto snap-x snap-mandatory gap-8 pb-12 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0"
+                    className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0"
                     style={{ scrollBehavior: 'smooth' }}
                 >
                     {reviews.length > 0 ? reviews.map((review, idx) => {
@@ -190,19 +190,19 @@ const GoogleReviews = () => {
                         return (
                             <div
                                 key={idx}
-                                className="snap-center shrink-0 w-[300px] md:w-[400px] bg-white dark:bg-[#111] border-4 border-black dark:border-white/20 rounded-none p-8 hover:border-[#FACC15] dark:hover:border-[#FACC15] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(250,204,21,0.2)] relative group hover:translate-y-[-4px] transition-all duration-300 flex flex-col"
+                                className="snap-center shrink-0 w-[300px] md:w-[380px] bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-white/10 rounded-3xl p-8 hover:shadow-xl relative group hover:-translate-y-1 transition-all duration-300 flex flex-col"
                             >
-                                <Quote size={48} strokeWidth={1} className="absolute top-6 right-6 text-black/5 dark:text-white/5 group-hover:text-[#FACC15]/20 transition-colors" />
+                                <Quote size={40} strokeWidth={1} className="absolute top-6 right-6 text-slate-200 dark:text-white/5 group-hover:text-emerald-100 dark:group-hover:text-emerald-500/20 transition-colors" />
 
-                                <div className="flex items-center gap-4 mb-8">
+                                <div className="flex items-center gap-4 mb-6">
                                     <div className="relative">
-                                        <div className="w-14 h-14 rounded-none overflow-hidden bg-[#FACC15] flex items-center justify-center text-black font-black text-2xl border-2 border-black">
+                                        <div className="w-12 h-12 rounded-full overflow-hidden bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold text-xl border border-emerald-200 dark:border-emerald-500/20 shadow-sm">
                                             {review.profile_photo_url ? (
                                                 <Image
                                                     src={review.profile_photo_url}
                                                     alt={review.author_name}
-                                                    width={56}
-                                                    height={56}
+                                                    width={48}
+                                                    height={48}
                                                     className="w-full h-full object-cover"
                                                 />
                                             ) : (
@@ -210,15 +210,15 @@ const GoogleReviews = () => {
                                             )}
                                         </div>
                                         {/* Source Badge */}
-                                        <div className="absolute -bottom-2 -right-2 bg-white rounded-none border-2 border-black w-8 h-8 flex items-center justify-center z-10">
+                                        <div className="absolute -bottom-1 -right-1 bg-white dark:bg-zinc-800 rounded-full border border-slate-100 dark:border-white/10 w-6 h-6 flex items-center justify-center z-10 shadow-sm">
                                             {review.source === 'tripadvisor' ? (
                                                 <div className="text-[#00AA6C]">
-                                                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
                                                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm10 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z" />
                                                     </svg>
                                                 </div>
                                             ) : (
-                                                <svg viewBox="0 0 24 24" className="w-4 h-4">
+                                                <svg viewBox="0 0 24 24" className="w-3 h-3">
                                                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                                                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                                                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
@@ -228,28 +228,28 @@ const GoogleReviews = () => {
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 className="font-black text-black dark:text-white uppercase tracking-widest text-sm">{review.author_name}</h4>
-                                        <p className="text-xs font-bold text-black/40 dark:text-white/40 uppercase tracking-widest mt-1">{review.relative_time_description}</p>
+                                        <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs">{review.author_name}</h4>
+                                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-0.5">{review.relative_time_description}</p>
                                     </div>
                                 </div>
 
-                                <div className="flex gap-1 mb-6 text-[#FACC15]">
+                                <div className="flex gap-1 mb-5 text-amber-400">
                                     {[...Array(5)].map((_, i) => (
-                                        <Star key={i} size={18} fill={i < review.rating ? "currentColor" : "none"} className={i < review.rating ? "" : "text-black/10 dark:text-white/10"} />
+                                        <Star key={i} size={14} fill={i < review.rating ? "currentColor" : "none"} className={i < review.rating ? "" : "text-slate-200 dark:text-white/10"} />
                                     ))}
                                 </div>
 
                                 <div className="flex-1 flex flex-col">
                                     <p 
                                         onClick={() => toggleReview(idx)}
-                                        className={`text-black/80 dark:text-white/80 text-[15px] font-medium leading-relaxed cursor-pointer transition-all ${isExpanded ? '' : 'line-clamp-4 hover:opacity-70'}`}
+                                        className={`text-slate-600 dark:text-slate-300 text-sm font-medium leading-relaxed cursor-pointer transition-all ${isExpanded ? '' : 'line-clamp-4 hover:opacity-80'}`}
                                     >
                                         "{review.text}"
                                     </p>
                                     {!isExpanded && review.text.length > 120 && (
                                         <button 
                                             onClick={() => toggleReview(idx)}
-                                            className="mt-4 self-start text-xs font-black uppercase tracking-widest text-black/40 dark:text-white/40 hover:text-[#FACC15] dark:hover:text-[#FACC15] transition-colors"
+                                            className="mt-3 self-start text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 transition-colors"
                                         >
                                             Read More
                                         </button>
@@ -258,21 +258,19 @@ const GoogleReviews = () => {
                             </div>
                         );
                     }) : (
-                        <div className="w-full text-center py-24 font-black text-black/20 dark:text-white/20 uppercase tracking-[0.2em]">
+                        <div className="w-full text-center py-24 font-bold text-slate-400 uppercase tracking-widest text-sm">
                             Loading {activeSource} reviews...
                         </div>
                     )}
                 </div>
 
-                <div className="mt-8">
+                <div className="mt-8 flex justify-center md:justify-start">
                     <a
                         href="/reviews"
-                        className="inline-flex items-center gap-4 text-black dark:text-white hover:text-[#FACC15] dark:hover:text-[#FACC15] font-black text-xl md:text-3xl uppercase tracking-tighter transition-all group"
+                        className="inline-flex items-center gap-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 px-8 py-4 rounded-full font-bold text-sm uppercase tracking-widest transition-all shadow-sm hover:shadow-md group"
                     >
-                        <span className="border-b-4 border-transparent group-hover:border-[#FACC15] pb-1 transition-all">READ ALL REVIEWS</span> 
-                        <span className="w-10 h-10 bg-black text-[#FACC15] border-2 border-black flex items-center justify-center group-hover:bg-[#FACC15] group-hover:text-black transition-all">
-                            <ChevronRight size={24} strokeWidth={3} />
-                        </span>
+                        <span>Read All Reviews</span> 
+                        <ChevronRight size={18} strokeWidth={2.5} className="group-hover:translate-x-1 transition-transform" />
                     </a>
                 </div>
             </div>

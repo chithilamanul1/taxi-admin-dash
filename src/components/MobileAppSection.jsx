@@ -5,81 +5,85 @@ import { FaApple, FaGooglePlay } from 'react-icons/fa';
 
 export default function MobileAppSection() {
     return (
-        <section className="py-24 px-6 relative overflow-hidden bg-white dark:bg-[#0a0a0a] transition-colors duration-300 border-t-4 border-black">
+        <section className="py-24 px-6 relative overflow-hidden bg-slate-50 dark:bg-[#050505] transition-colors duration-300">
             <div className="max-w-7xl mx-auto">
-                <div className="relative overflow-hidden bg-white dark:bg-[#111] border-4 border-black shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] dark:shadow-[15px_15px_0px_0px_rgba(250,204,21,0.15)] transition-colors duration-300">
+                <div className="relative overflow-hidden bg-white dark:bg-[#111] rounded-[2.5rem] shadow-xl border border-slate-200 dark:border-white/10 transition-colors duration-300">
+                    
+                    {/* Background Gradients */}
+                    <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-emerald-100/50 dark:bg-emerald-900/20 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-amber-50 dark:bg-amber-900/10 rounded-full blur-3xl"></div>
 
                     <div className="relative z-10 p-8 md:p-16 lg:p-24 flex flex-col lg:flex-row items-center gap-16">
                         {/* Content */}
                         <div className="flex-1 text-center lg:text-left">
-                            <div className="inline-flex items-center gap-2 bg-[#FACC15] border-4 border-black px-4 py-1.5 mb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                <Smartphone size={14} className="text-black" strokeWidth={3} />
-                                <span className="text-xs font-black text-black uppercase tracking-[0.2em]">Coming Soon</span>
+                            <div className="inline-flex items-center gap-2 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 rounded-full px-4 py-1.5 mb-8">
+                                <Smartphone size={14} className="text-emerald-600 dark:text-emerald-400" />
+                                <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-widest">Coming Soon</span>
                             </div>
 
-                            <h2 className="text-5xl md:text-7xl font-black text-black dark:text-white mb-8 leading-none uppercase tracking-tighter">
-                                YOUR PREMIUM JOURNEY, <br />
-                                <span className="text-[#FACC15]">IN YOUR POCKET.</span>
+                            <h2 className="text-4xl md:text-6xl font-black text-emerald-950 dark:text-white mb-6 leading-tight tracking-tight">
+                                Your Premium Journey, <br />
+                                <span className="text-emerald-600 dark:text-emerald-400">In Your Pocket.</span>
                             </h2>
 
-                            <p className="text-black/50 dark:text-white/50 font-black uppercase tracking-[0.1em] text-sm md:text-base mb-12 max-w-xl mx-auto lg:mx-0">
+                            <p className="text-slate-500 dark:text-slate-400 text-base md:text-lg mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                                 We're building the ultimate travel companion for your Sri Lankan adventures. Get instant bookings, real-time driver tracking, and exclusive app-only deals.
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center lg:justify-start">
-                                <button className="flex items-center justify-center gap-3 bg-white dark:bg-white text-black px-6 py-3.5 rounded-none border-4 border-black hover:-translate-y-1 transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] group">
-                                    <FaApple size={36} className="text-black" />
+                                <button className="flex items-center justify-center gap-3 bg-white dark:bg-zinc-800 text-slate-800 dark:text-white px-8 py-4 rounded-2xl border border-slate-200 dark:border-white/10 hover:shadow-md hover:border-slate-300 dark:hover:border-white/20 hover:-translate-y-0.5 transition-all group">
+                                    <FaApple size={32} className="text-slate-800 dark:text-white" />
                                     <div className="text-left font-sans">
-                                        <div className="text-[10px] uppercase tracking-[0.2em] text-black/50 font-black mb-0.5">Download on the</div>
-                                        <div className="text-xl leading-none font-black text-black tracking-tighter">App Store</div>
+                                        <div className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-0.5">Download on the</div>
+                                        <div className="text-xl leading-none font-bold tracking-tight">App Store</div>
                                     </div>
                                 </button>
-                                <button className="flex items-center justify-center gap-3 bg-black text-[#FACC15] px-6 py-3.5 rounded-none border-4 border-black hover:-translate-y-1 hover:bg-[#111] transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] group">
-                                    <FaGooglePlay size={32} className="text-[#FACC15]" />
+                                <button className="flex items-center justify-center gap-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-8 py-4 rounded-2xl hover:shadow-lg hover:shadow-slate-900/20 hover:-translate-y-0.5 transition-all group border border-transparent">
+                                    <FaGooglePlay size={28} className="text-white dark:text-slate-900" />
                                     <div className="text-left font-sans">
-                                        <div className="text-[10px] uppercase tracking-[0.2em] text-white/50 font-black mb-0.5">Get it on</div>
-                                        <div className="text-xl leading-none font-black text-white tracking-tighter">Google Play</div>
+                                        <div className="text-[10px] uppercase tracking-widest text-slate-300 dark:text-slate-600 font-bold mb-0.5">Get it on</div>
+                                        <div className="text-xl leading-none font-bold tracking-tight">Google Play</div>
                                     </div>
                                 </button>
                             </div>
 
-                            {/* App Features Preview - Boxy Separator */}
-                            <div className="mt-12 flex flex-wrap justify-center lg:justify-start gap-6 pt-12 border-t-4 border-black w-full">
-                                <div className="flex items-center gap-3 bg-black/5 dark:bg-white/5 px-4 py-2 border-2 border-black">
-                                    <ShieldCheck className="text-black dark:text-[#FACC15]" size={18} strokeWidth={3} />
-                                    <span className="text-[10px] font-black text-black dark:text-white uppercase tracking-[0.2em]">Safe Rides</span>
+                            {/* App Features Preview */}
+                            <div className="mt-12 flex flex-wrap justify-center lg:justify-start gap-4 pt-10 border-t border-slate-100 dark:border-white/5 w-full">
+                                <div className="flex items-center gap-2.5 bg-slate-50 dark:bg-white/5 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm">
+                                    <ShieldCheck className="text-emerald-600 dark:text-emerald-400" size={16} />
+                                    <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Safe Rides</span>
                                 </div>
-                                <div className="flex items-center gap-3 bg-black/5 dark:bg-white/5 px-4 py-2 border-2 border-black">
-                                    <Zap className="text-black dark:text-[#FACC15]" size={18} strokeWidth={3} />
-                                    <span className="text-[10px] font-black text-black dark:text-white uppercase tracking-[0.2em]">Quick Booking</span>
+                                <div className="flex items-center gap-2.5 bg-slate-50 dark:bg-white/5 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm">
+                                    <Zap className="text-amber-500 dark:text-amber-400" size={16} />
+                                    <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Quick Booking</span>
                                 </div>
-                                <div className="flex items-center gap-3 bg-black/5 dark:bg-white/5 px-4 py-2 border-2 border-black">
-                                    <Star className="text-black dark:text-[#FACC15]" size={18} strokeWidth={3} />
-                                    <span className="text-[10px] font-black text-black dark:text-white uppercase tracking-[0.2em]">Premium Fleet</span>
+                                <div className="flex items-center gap-2.5 bg-slate-50 dark:bg-white/5 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm">
+                                    <Star className="text-emerald-600 dark:text-emerald-400" size={16} />
+                                    <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">Premium Fleet</span>
                                 </div>
                             </div>
                         </div>
 
                         {/* Visual Representation (Phone Mockup Aesthetic) */}
-                        <div className="w-full lg:w-2/5 relative">
-                            <div className="relative z-10 w-full aspect-[4/5] bg-black/5 dark:bg-white/5 border-4 border-black rounded-none p-2 flex items-center justify-center shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] dark:shadow-[10px_10px_0px_0px_rgba(250,204,21,0.15)] relative overflow-hidden group">
+                        <div className="w-full lg:w-2/5 relative max-w-sm mx-auto lg:max-w-none">
+                            <div className="relative z-10 w-full aspect-[4/5] bg-slate-100 dark:bg-zinc-800 rounded-[2.5rem] p-3 flex items-center justify-center shadow-2xl border border-white dark:border-white/10 overflow-hidden group">
 
                                 {/* App Screen Content */}
-                                <div className="relative w-full h-full overflow-hidden bg-white dark:bg-[#0a0a0a] border-2 border-black">
+                                <div className="relative w-full h-full overflow-hidden bg-white dark:bg-[#0a0a0a] rounded-[2rem] shadow-inner border border-slate-200 dark:border-white/5">
                                     <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center z-20">
-                                        <div className="w-20 h-20 bg-[#FACC15] border-4 border-black flex items-center justify-center mb-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                                            <Smartphone size={36} className="text-black" strokeWidth={3} />
+                                        <div className="w-20 h-20 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-emerald-100 dark:border-emerald-500/20">
+                                            <Smartphone size={32} className="text-emerald-600 dark:text-emerald-400" />
                                         </div>
-                                        <h3 className="text-2xl font-black text-black dark:text-white mb-3 uppercase tracking-tighter">Experience Sri Lanka</h3>
-                                        <p className="text-black/40 dark:text-white/40 text-xs font-black uppercase tracking-[0.2em] max-w-[200px]">Coming soon to your favorite app store</p>
+                                        <h3 className="text-xl font-black text-emerald-950 dark:text-white mb-2">Experience Sri Lanka</h3>
+                                        <p className="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-widest max-w-[200px] leading-relaxed">Coming soon to your favorite app store</p>
                                     </div>
 
                                     {/* Top bar mockup */}
-                                    <div className="absolute top-4 left-4 right-4 h-8 bg-black/5 dark:bg-white/5 border-2 border-black flex items-center px-4 justify-between z-30">
-                                        <div className="w-8 h-1 bg-black/20 dark:bg-white/20"></div>
-                                        <div className="flex gap-2">
-                                            <div className="w-2 h-2 bg-[#FACC15] border border-black"></div>
-                                            <div className="w-2 h-2 bg-[#FACC15] border border-black"></div>
+                                    <div className="absolute top-0 left-0 right-0 h-12 bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-md border-b border-slate-100 dark:border-white/5 flex items-center px-6 justify-between z-30">
+                                        <div className="w-10 h-1.5 rounded-full bg-slate-200 dark:bg-white/10"></div>
+                                        <div className="flex gap-1.5">
+                                            <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                            <div className="w-2 h-2 rounded-full bg-amber-400"></div>
                                         </div>
                                     </div>
                                 </div>
