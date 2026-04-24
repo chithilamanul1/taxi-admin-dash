@@ -102,7 +102,7 @@ export default function SpecialOffersSection() {
 
     return (
         <section id="offers" className="py-0 relative transition-colors duration-300">
-            <section className="relative py-16 md:py-32 overflow-hidden bg-white border-t-8 border-black transition-colors duration-300"
+            <section className="relative py-16 md:py-32 overflow-hidden bg-white border-t border-slate-200 transition-colors duration-300"
                      onMouseEnter={() => setIsPaused(true)}
                      onMouseLeave={() => setIsPaused(false)}>
 
@@ -110,7 +110,7 @@ export default function SpecialOffersSection() {
                     {/* Header */}
                     <div className="mb-10 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
                         <div>
-                            <div className="inline-flex items-center gap-2 bg-red-600 px-4 py-1.5 mb-6 border-2 border-red-600">
+                            <div className="inline-flex items-center gap-2 bg-red-600 px-4 py-1.5 mb-6 rounded-md">
                                 <Tag size={14} className="text-white" strokeWidth={3} />
                                 <span className="text-xs font-black text-white uppercase tracking-[0.2em]">Exclusive Deals</span>
                             </div>
@@ -128,11 +128,11 @@ export default function SpecialOffersSection() {
                                     params.set('coupon', todayOffer.code);
                                     window.location.href = `/?${params.toString()}#booking`;
                                 }}
-                                className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border-2 border-black rotate-[1deg] shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] cursor-pointer hover:translate-y-[-2px] transition-all group"
+                                className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 rotate-[1deg] shadow-sm cursor-pointer hover:-translate-y-1 transition-all group"
                             >
-                                <div className="flex flex-col items-center px-3 py-1 bg-white border border-black rounded-lg">
-                                    <span className="text-[8px] font-black text-[#7c3aed] leading-none mb-[1px]">TODAY'S</span>
-                                    <span className="text-sm font-black text-[#fbbf24] leading-none italic uppercase drop-shadow-[1px_1px_0px_#7c3aed]">OFFER</span>
+                                <div className="flex flex-col items-center px-3 py-1 bg-white border border-slate-200 rounded-lg">
+                                    <span className="text-[8px] font-black text-black leading-none mb-[1px]">TODAY'S</span>
+                                    <span className="text-sm font-black text-[#FACC15] leading-none italic uppercase">OFFER</span>
                                 </div>
                                 <div>
                                     <p className="text-[10px] font-black uppercase text-black leading-tight">FLAT {todayOffer.percent}% OFF</p>
@@ -160,7 +160,7 @@ export default function SpecialOffersSection() {
                         >
                             {loading ? (
                                 Array(3).fill(0).map((_, i) => (
-                                    <div key={i} className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(33.33%-21px)] h-64 bg-black/5 border-4 border-black animate-pulse"></div>
+                                    <div key={i} className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(33.33%-21px)] h-64 bg-black/5 border border-slate-200 rounded-[2.5rem] animate-pulse"></div>
                                 ))
                             ) : coupons.map((coupon) => (
                                 <div
@@ -256,7 +256,7 @@ export default function SpecialOffersSection() {
                     <div className="text-center">
                         <Link
                             href="/offers"
-                            className="inline-flex items-center gap-4 bg-red-600 text-white px-10 py-5 border-4 border-red-600 font-black uppercase tracking-[0.2em] text-sm hover:translate-y-[-4px] active:translate-y-0 transition-all group shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+                            className="inline-flex items-center gap-4 bg-red-600 text-white px-10 py-4 rounded-full border border-red-600 font-black uppercase tracking-[0.2em] text-sm hover:-translate-y-1 active:translate-y-0 transition-all group shadow-md hover:shadow-lg"
                         >
                             VIEW ALL OFFERS
                             <ArrowRight size={20} strokeWidth={3} className="group-hover:translate-x-2 transition-transform" />

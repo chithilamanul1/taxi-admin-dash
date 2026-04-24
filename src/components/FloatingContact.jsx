@@ -12,7 +12,7 @@ export default function FloatingContact() {
     if (isAdminRoute) return null
 
     return (
-        <div className="live-chat-trigger fixed bottom-24 right-6 md:bottom-8 md:right-8 z-[100] flex flex-col items-end gap-3 md:gap-4 scale-75 sm:scale-90 md:scale-100 origin-bottom-right">
+        <div className="live-chat-trigger fixed bottom-24 right-6 md:bottom-8 md:right-8 z-[9999] flex flex-col items-end gap-3 md:gap-4 scale-75 sm:scale-90 md:scale-100 origin-bottom-right">
             {/* Action Buttons */}
             {isOpen && (
                 <div className="flex flex-col gap-3 animate-slide-up">
@@ -59,7 +59,7 @@ export default function FloatingContact() {
 
             {/* Animated Prompt */}
             {!isOpen && (
-                <div className="absolute bottom-5 right-20 bg-black text-[#FACC15] text-[10px] font-black tracking-widest px-3 py-2 border-2 border-black whitespace-nowrap animate-bounce z-[90] flex items-center">
+                <div className="absolute bottom-5 right-20 bg-black text-[#FACC15] text-[10px] font-black tracking-widest px-3 py-2 border-2 border-black whitespace-nowrap animate-bounce z-[9999] flex items-center">
                     LIVE CHAT
                     <div className="absolute top-1/2 -translate-y-1/2 -right-1 w-2 h-2 bg-black rotate-45"></div>
                 </div>
@@ -68,7 +68,7 @@ export default function FloatingContact() {
             {/* Main Toggle */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-16 h-16 flex items-center justify-center transition-all duration-500 hover:scale-105 active:scale-95 z-[100] border-4 border-black ${isOpen ? 'bg-white text-black rotate-90' : 'bg-[#FACC15] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'}`}
+                className={`w-16 h-16 flex items-center justify-center transition-all duration-500 hover:scale-105 active:scale-95 z-[9999] border-4 border-black ${isOpen ? 'bg-white text-black rotate-90' : 'bg-[#FACC15] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'}`}
                 aria-label={isOpen ? "Close contact menu" : "Open contact menu"}
             >
                 {isOpen ? <X size={28} strokeWidth={3} /> : (

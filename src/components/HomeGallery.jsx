@@ -51,22 +51,22 @@ export default function HomeGallery() {
                     <Link 
                         href="/gallery"
                         aria-label="View our photo gallery of Sri Lankan travel memories"
-                        className="group flex items-center gap-4 bg-red-600 text-white px-8 py-4 font-black uppercase tracking-widest text-xs border-4 border-red-600 shadow-[8px_8px_0px_0px_rgba(250,204,21,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+                        className="group flex items-center gap-4 bg-red-600 text-white px-8 py-4 rounded-full font-black uppercase tracking-widest text-xs border border-red-600 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all"
                     >
                         VIEW FULL GALLERY <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                     </Link>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 scrollbar-hide">
                     {displayImages.map((img, idx) => (
                         <motion.div
                             key={idx}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className={`group relative ${idx === 0 ? 'md:col-span-2' : ''} ${idx % 2 === 1 && idx !== 0 ? 'md:mt-12' : ''}`}
+                            className={`group relative min-w-[85vw] md:min-w-[calc(33.333%-16px)] snap-start shrink-0 ${idx > 2 ? 'opacity-60 hover:opacity-100 transition-opacity' : ''}`}
                         >
-                            <div className="bg-black border-4 border-black rounded-[2rem] shadow-xl overflow-hidden transition-all group-hover:shadow-2xl group-hover:-translate-y-2">
+                            <div className="bg-black border border-slate-200 dark:border-slate-800 rounded-[2rem] shadow-lg overflow-hidden transition-all group-hover:shadow-xl group-hover:-translate-y-1">
                                 <div className="aspect-[4/5] relative">
                                     <Image 
                                         src={img.url} 

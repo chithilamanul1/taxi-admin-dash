@@ -41,7 +41,7 @@ const DestinationBar = () => {
                                 <Link
                                     key={loc}
                                     href={`/?destination=${loc}#booking`}
-                                    className="bg-white text-[#1e1e1e] px-4 py-1.5 rounded-full font-black text-[9px] md:text-[10px] uppercase tracking-wider whitespace-nowrap shadow-sm border border-transparent hover:border-black/10 hover:shadow-md transition-all active:scale-95"
+                                    className="bg-white text-[#1e1e1e] px-3 py-1 rounded-full font-bold text-[8px] md:text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm border border-transparent hover:border-black/10 hover:shadow-md transition-all active:scale-95"
                                 >
                                     {loc}
                                 </Link>
