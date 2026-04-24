@@ -17,9 +17,9 @@ export async function GET(req) {
         // 1. Check Cache Status (Smart Sync)
         const lastSyncReview = await Review.findOne({ source: 'google' }).sort({ updatedAt: -1 });
         const lastSyncTime = lastSyncReview ? new Date(lastSyncReview.updatedAt).getTime() : 0;
-        const twelveHours = 12 * 60 * 60 * 1000;
+        const oneHour = 1 * 60 * 60 * 1000; // Reduced to 1 hour for fresher data
         // Force refresh if cache is old OR if the latest review is missing the real 'reviewDate' (legacy data fix)
-        const isStale = (Date.now() - lastSyncTime) > twelveHours || (lastSyncReview && !lastSyncReview.reviewDate);
+        const isStale = (Date.now() - lastSyncTime) > oneHour || (lastSyncReview && !lastSyncReview.reviewDate);
 
         // 2. Fetch from Google if Key exists AND Cache is Stale
         if (apiKey && (isStale || !lastSyncReview)) {

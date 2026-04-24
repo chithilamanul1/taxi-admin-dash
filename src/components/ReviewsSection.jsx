@@ -5,16 +5,21 @@ import { Star, MapPin, Quote, ChevronLeft, ChevronRight, Verified } from 'lucide
 
 export default function ReviewsSection() {
     const [reviews, setReviews] = useState([])
+    const [stats, setStats] = useState({ totalReviews: 500, rating: 5.0 })
     const [loading, setLoading] = useState(true)
     const [currentIndex, setCurrentIndex] = useState(0)
 
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const res = await fetch('/api/reviews?homepage=true&limit=10')
+                const res = await fetch('/api/reviews/google')
                 const data = await res.json()
-                if (data.success && data.reviews.length > 0) {
-                    setReviews(data.reviews)
+                if (data.success && data.data && data.data.reviews.length > 0) {
+                    setReviews(data.data.reviews)
+                    setStats({
+                        totalReviews: data.data.totalReviews || 500,
+                        rating: data.data.rating || 5.0
+                    })
                 } else {
                     // Fallback reviews if none in database
                     setReviews(defaultReviews)
@@ -198,11 +203,11 @@ export default function ReviewsSection() {
                 {/* Stats */}
                 <div className="max-w-3xl mx-auto mt-16 grid grid-cols-3 gap-8 text-center">
                     <div>
-                        <div className="text-4xl font-black text-emerald-600 dark:text-emerald-400 mb-2">500+</div>
+                        <div className="text-4xl font-black text-emerald-600 dark:text-emerald-400 mb-2">{stats.totalReviews}+</div>
                         <div className="text-slate-600 dark:text-slate-400 text-sm">Happy Customers</div>
                     </div>
                     <div>
-                        <div className="text-4xl font-black text-emerald-600 dark:text-emerald-400 mb-2">5.0</div>
+                        <div className="text-4xl font-black text-emerald-600 dark:text-emerald-400 mb-2">{stats.rating}</div>
                         <div className="text-slate-600 dark:text-slate-400 text-sm">Average Rating</div>
                     </div>
                     <div>
