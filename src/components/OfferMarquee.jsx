@@ -89,19 +89,35 @@ const OfferMarquee = () => {
     ];
 
     return (
-        <div className="bg-red-600 py-3 border-b-2 border-black overflow-hidden whitespace-nowrap relative z-[9999] shadow-[0px_4px_10px_rgba(0,0,0,0.1)]">
-            <div className="flex animate-marquee-slower items-center">
+        <div className="bg-red-600 py-3 border-b border-white/20 overflow-hidden whitespace-nowrap relative z-[9999] shadow-sm">
+            <div className="flex animate-marquee-slower items-center pr-[120px] md:pr-[200px]">
                 {[...offers, ...offers].map((offer, i) => (
                     <div 
                         key={i} 
                         className="flex items-center gap-6 px-12"
                     >
-                        <span className="text-white font-black italic uppercase text-[11px] md:text-sm tracking-[0.2em] inline-block">
+                        <span className="text-white font-bold uppercase text-[10px] md:text-xs tracking-[0.2em] inline-block">
                             {offer}
                         </span>
                         <div className="w-2 h-2 bg-white rotate-45 shrink-0"></div>
                     </div>
                 ))}
+            </div>
+            
+            {/* Fixed Timer */}
+            <div className="absolute top-0 right-0 h-full flex items-center bg-red-700/90 backdrop-blur-sm px-4 md:px-8 border-l border-white/10 z-10">
+                <div className="flex items-center gap-2 md:gap-3">
+                    <span className="text-white/80 font-bold text-[8px] md:text-[10px] uppercase tracking-widest hidden sm:block">
+                        OFFER ENDS IN:
+                    </span>
+                    <div className="flex items-center gap-1 text-white font-black text-xs md:text-sm tracking-wider">
+                        <span className="w-6 md:w-8 text-center bg-black/20 rounded py-0.5">{formatNum(timeLeft.hours)}</span>
+                        <span className="text-white/50">:</span>
+                        <span className="w-6 md:w-8 text-center bg-black/20 rounded py-0.5">{formatNum(timeLeft.minutes)}</span>
+                        <span className="text-white/50">:</span>
+                        <span className="w-6 md:w-8 text-center bg-black/20 rounded py-0.5 text-[#FACC15]">{formatNum(timeLeft.seconds)}</span>
+                    </div>
+                </div>
             </div>
             
             <style jsx>{`
