@@ -45,7 +45,7 @@ export default function Navbar() {
                 <Link href="/" className="flex items-center gap-2 group">
                     <div className="flex flex-col">
                         <span className="font-black text-2xl sm:text-3xl md:text-4xl tracking-tighter leading-none text-white uppercase group-hover:text-[#FACC15] transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-[#FACC15] after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:origin-left">
-                            AIRPORT <span className="text-[#FACC15]">TAXIS</span>
+                            AIRPORT TAXIS
                         </span>
                         <span className="text-[8px] md:text-xs font-black uppercase tracking-[0.4em] text-white/50">Sri Lanka</span>
                     </div>
