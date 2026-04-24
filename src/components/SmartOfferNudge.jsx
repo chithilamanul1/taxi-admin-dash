@@ -1,5 +1,6 @@
 import React from 'react';
-import { Tag, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Tag, Sparkles, X, ChevronRight } from 'lucide-react';
 
 const SmartOfferNudge = ({ offer, onClose }) => {
     React.useEffect(() => {

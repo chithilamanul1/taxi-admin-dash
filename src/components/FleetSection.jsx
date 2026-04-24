@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
-import { Users, Briefcase, ShoppingBag, Wind, ArrowRight, Loader2 } from 'lucide-react';
+import { Users, Briefcase, ShoppingBag, Wind, ArrowRight, Loader2, ChevronRight, Car, Settings, CheckCircle2, Shield, Calendar, CreditCard, ChevronLeft } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
 import { destinations as allDestinations } from '@/lib/destinations';
 import { calculateBasePrice } from '@/lib/pricing-util';
