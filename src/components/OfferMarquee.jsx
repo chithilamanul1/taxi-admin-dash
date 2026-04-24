@@ -72,50 +72,52 @@ const OfferMarquee = () => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const todayName = days[new Date().getDay()];
 
-    if (activeOfferDay !== 'Everyday' && activeOfferDay !== todayName) {
-        return null;
-    }
+    // Removed day restriction to ensure visibility on landing page as requested
+    // if (activeOfferDay !== 'Everyday' && activeOfferDay !== todayName) {
+    //     return null;
+    // }
 
     const formatNum = (num) => num.toString().padStart(2, '0');
 
-    const countdownStr = `PRICE WILL BE REVISED IN ${formatNum(timeLeft.days)} : ${formatNum(timeLeft.hours)} : ${formatNum(timeLeft.minutes)} : ${formatNum(timeLeft.seconds)}`;
+    const countdownStr = `PREMIUM OFFER REVISED IN ${formatNum(timeLeft.days)}d : ${formatNum(timeLeft.hours)}h : ${formatNum(timeLeft.minutes)}m : ${formatNum(timeLeft.seconds)}s`;
 
     const offers = [
-        `${todayOffer.percent}% OFF TO SELECTED DESTINATIONS - LIMITED TIME!`,
+        `${todayOffer.percent}% LUXURY DISCOUNT APPLIED - LIMITED TIME!`,
         countdownStr,
         `EXTRA ${todayOffer.percent}% OFF - USE CODE: ${todayOffer.code}`,
         "AIRPORT PICKUP STARTING FROM RS 4,500",
-        "PRICE WILL BE REVISED SOON - BOOK NOW!"
+        "PRICE REVISION IMMINENT - BOOK YOUR RIDE NOW!"
     ];
 
     return (
-        <div className="bg-red-600 py-3 border-b border-white/20 overflow-hidden whitespace-nowrap relative z-[9999] shadow-sm">
+        <div className="bg-red-600 py-2.5 border-b border-white/10 overflow-hidden whitespace-nowrap relative z-[9999] shadow-inner">
             <div className="flex animate-marquee-slower items-center pr-[120px] md:pr-[200px]">
                 {[...offers, ...offers].map((offer, i) => (
                     <div 
                         key={i} 
-                        className="flex items-center gap-6 px-12"
+                        className="flex items-center gap-8 px-16"
                     >
-                        <span className="text-white font-bold uppercase text-[10px] md:text-xs tracking-[0.2em] inline-block">
+                        <span className="text-white font-black uppercase text-[9px] md:text-[11px] tracking-[0.3em] inline-block">
                             {offer}
                         </span>
-                        <div className="w-2 h-2 bg-white rotate-45 shrink-0"></div>
+                        <div className="w-1.5 h-1.5 bg-white/40 rounded-full shrink-0"></div>
                     </div>
                 ))}
             </div>
             
             {/* Fixed Timer */}
-            <div className="absolute top-0 right-0 h-full flex items-center bg-red-700/90 backdrop-blur-sm px-4 md:px-8 border-l border-white/10 z-10">
-                <div className="flex items-center gap-2 md:gap-3">
-                    <span className="text-white/80 font-bold text-[8px] md:text-[10px] uppercase tracking-widest hidden sm:block">
-                        OFFER ENDS IN:
+            <div className="absolute top-0 right-0 h-full flex items-center bg-red-700/95 backdrop-blur-md px-6 md:px-10 border-l border-white/10 z-10">
+                <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                    <span className="text-white font-black text-[8px] md:text-[10px] uppercase tracking-[0.2em] hidden sm:block">
+                        EXPIRES IN:
                     </span>
-                    <div className="flex items-center gap-1 text-white font-black text-xs md:text-sm tracking-wider">
-                        <span className="w-6 md:w-8 text-center bg-black/20 rounded py-0.5">{formatNum(timeLeft.hours)}</span>
-                        <span className="text-white/50">:</span>
-                        <span className="w-6 md:w-8 text-center bg-black/20 rounded py-0.5">{formatNum(timeLeft.minutes)}</span>
-                        <span className="text-white/50">:</span>
-                        <span className="w-6 md:w-8 text-center bg-black/20 rounded py-0.5 text-[#FACC15]">{formatNum(timeLeft.seconds)}</span>
+                    <div className="flex items-center gap-1.5 text-white font-black text-xs md:text-sm tracking-widest">
+                        <span className="bg-black/30 rounded-lg px-2 py-1 min-w-[32px] text-center">{formatNum(timeLeft.hours)}</span>
+                        <span className="text-white/30">:</span>
+                        <span className="bg-black/30 rounded-lg px-2 py-1 min-w-[32px] text-center">{formatNum(timeLeft.minutes)}</span>
+                        <span className="text-white/30">:</span>
+                        <span className="bg-black/30 rounded-lg px-2 py-1 min-w-[32px] text-center text-emerald-400">{formatNum(timeLeft.seconds)}</span>
                     </div>
                 </div>
             </div>

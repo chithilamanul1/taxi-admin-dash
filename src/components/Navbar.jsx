@@ -40,14 +40,14 @@ export default function Navbar() {
     const needsSolidBg = isScrolled || !isTransparentPage
 
     return (
-        <nav className={`relative w-full z-[150] transition-all duration-500 py-3 md:py-5 bg-black border-b border-white/10`}>
+        <nav className={`relative w-full z-[150] transition-all duration-500 py-3 md:py-4 bg-white border-b border-slate-100 shadow-sm`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <Link href="/" className="flex items-center gap-2 group">
                     <div className="flex flex-col">
-                        <span className="font-black text-2xl sm:text-3xl md:text-4xl tracking-tighter leading-none text-white uppercase group-hover:text-[#FACC15] transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-[#FACC15] after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:origin-left">
+                        <span className="font-black text-2xl sm:text-3xl md:text-4xl tracking-tighter leading-none text-emerald-950 uppercase group-hover:text-emerald-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-emerald-600 after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:origin-left">
                             AIRPORT TAXIS
                         </span>
-                        <span className="text-[8px] md:text-xs font-black uppercase tracking-[0.4em] text-white/50">Sri Lanka</span>
+                        <span className="text-[8px] md:text-xs font-black uppercase tracking-[0.4em] text-slate-400">Sri Lanka</span>
                     </div>
                 </Link>
 
@@ -56,7 +56,7 @@ export default function Navbar() {
                     {/* Live Chat Toggle */}
                     <button 
                         onClick={() => window.dispatchEvent(new CustomEvent('open-live-chat'))}
-                        className="w-9 h-9 md:w-14 md:h-14 bg-[#FACC15] border border-[#FACC15] flex items-center justify-center text-black hover:bg-yellow-400 transition-all shadow-md hover:-translate-y-1"
+                        className="w-9 h-9 md:w-14 md:h-14 bg-[#FACC15] rounded-2xl flex items-center justify-center text-black hover:bg-yellow-400 transition-all shadow-lg shadow-yellow-100 hover:-translate-y-1"
                         aria-label="Open Live Chat"
                     >
                         <MessageCircle size={20} strokeWidth={3} />
@@ -65,17 +65,17 @@ export default function Navbar() {
                     {/* Currency Selector (Always Visible) */}
                     <div className="relative group hidden sm:block">
                         <button 
-                            className="w-10 h-10 md:w-14 md:h-14 bg-black border border-white/20 flex items-center justify-center text-white hover:bg-white/10 hover:-translate-y-1 transition-all"
+                            className="w-10 h-10 md:w-14 md:h-14 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-center text-emerald-950 hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all"
                             aria-label="Toggle Currency Selector"
                         >
                             <Globe size={20} strokeWidth={3} />
                         </button>
-                        <div className="absolute top-full right-0 mt-4 w-48 bg-white dark:bg-black border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                        <div className="absolute top-full right-0 mt-4 w-48 bg-white border border-slate-100 rounded-3xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 p-2 overflow-hidden">
                              {SUPPORTED_CURRENCIES.map(c => (
                                 <button
                                     key={c.code}
                                     onClick={() => changeCurrency(c.code)}
-                                    className={`w-full text-left px-4 py-3 hover:bg-[#FACC15] hover:text-black transition-all text-xs font-black uppercase tracking-widest ${currency === c.code ? 'bg-[#FACC15] text-black' : 'text-white'}`}
+                                    className={`w-full text-left px-5 py-3 rounded-2xl hover:bg-emerald-50 hover:text-emerald-600 transition-all text-xs font-black uppercase tracking-widest ${currency === c.code ? 'bg-emerald-600 text-white' : 'text-emerald-950'}`}
                                 >
                                     {c.code}
                                 </button>
@@ -85,7 +85,7 @@ export default function Navbar() {
 
                     {/* Menu Toggle */}
                     <button
-                        className="w-10 h-10 md:w-16 md:h-16 flex items-center justify-center bg-black text-white border border-white/20 hover:bg-white/10 hover:-translate-y-1 transition-all"
+                        className="w-10 h-10 md:w-16 md:h-16 flex items-center justify-center bg-emerald-950 text-white rounded-2xl hover:bg-black hover:shadow-2xl hover:-translate-y-1 transition-all"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
                     >
@@ -96,7 +96,7 @@ export default function Navbar() {
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
-                <div className="lg:hidden absolute top-full left-0 w-full bg-black border-t border-white/10 shadow-2xl max-h-[85vh] overflow-y-auto animate-slide-up backdrop-blur-lg">
+                <div className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-slate-100 shadow-2xl max-h-[85vh] overflow-y-auto animate-slide-up backdrop-blur-lg">
                     <div className="p-6 space-y-4">
                         <div className="grid grid-cols-1 gap-4">
                             {[
@@ -126,7 +126,7 @@ export default function Navbar() {
                             ].map(item => (
                                 item.isDropdown ? (
                                     <div key={item.id} className="space-y-3">
-                                        <div className="p-4 bg-white/5 border-l-2 border-[#FDD12C] text-[#FDD12C] font-black uppercase tracking-widest text-[10px]">
+                                        <div className="p-4 bg-slate-50 border-l-4 border-emerald-600 text-emerald-950 font-black uppercase tracking-widest text-[10px] rounded-r-2xl">
                                             {item.label}
                                         </div>
                                         <div className="grid grid-cols-2 gap-2">
@@ -134,7 +134,7 @@ export default function Navbar() {
                                                 <Link
                                                     key={sub.label}
                                                     href={sub.href}
-                                                    className="p-4 bg-white/5 hover:bg-white/10 hover:text-[#FACC15] transition-all text-white font-bold uppercase tracking-widest text-[10px] text-center rounded-lg border border-white/5"
+                                                    className="p-4 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-600 transition-all text-emerald-950 font-bold uppercase tracking-widest text-[10px] text-center rounded-2xl border border-slate-100"
                                                 >
                                                     {sub.label}
                                                 </Link>
@@ -145,20 +145,20 @@ export default function Navbar() {
                                     <Link
                                         key={item.id}
                                         href={item.href}
-                                        className="relative p-4 border-b border-white/5 hover:text-[#FACC15] transition-all text-white font-bold uppercase tracking-widest text-xs flex items-center justify-between group"
+                                        className="relative p-4 border-b border-slate-50 hover:text-emerald-600 transition-all text-emerald-950 font-bold uppercase tracking-widest text-xs flex items-center justify-between group"
                                     >
                                         <span className="relative z-10 group-hover:pl-2 transition-all">{item.label}</span>
-                                        <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#FACC15] scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                                        <span className="absolute bottom-0 left-0 w-full h-[2px] bg-emerald-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
                                         <span className="text-lg group-hover:scale-110 transition-transform relative z-10">{item.icon}</span>
                                     </Link>
                                 )
                             ))}
                         </div>
 
-                        <div className="pt-6 border-t border-white/10 space-y-4">
+                        <div className="pt-6 border-t border-slate-100 space-y-4">
                             <a
                                 href="tel:+94716885880"
-                                className="flex items-center justify-center gap-3 w-full py-5 bg-[#FDD12C] text-navy font-black uppercase tracking-widest text-xs rounded-none shadow-lg hover:scale-[1.02] active:scale-95 transition-all"
+                                className="flex items-center justify-center gap-3 w-full py-5 bg-emerald-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-xl shadow-emerald-100 hover:scale-[1.02] active:scale-95 transition-all"
                                 aria-label="Call support specialist"
                             >
                                 <Phone size={18} /> Call Specialist

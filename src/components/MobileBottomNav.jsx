@@ -32,16 +32,17 @@ const MobileBottomNav = () => {
                         >
                             <div className="relative group">
                                 {/* Stylized "TODAY'S OFFER" Bubbled Sticker Look */}
-                                <div className="flex flex-col items-center select-none scale-110 md:scale-125">
-                                    <span className="text-[8px] font-black text-black leading-none mb-0.5 uppercase tracking-tighter">
-                                        TODAY'S
-                                    </span>
-                                    <div className="bg-[#FACC15] border border-black px-3 py-1 rounded-[14px] transform rotate-[-1deg] shadow-sm">
-                                        <span className="text-sm font-black text-black leading-none uppercase italic tracking-tight">
-                                            OFFER
-                                        </span>
-                                    </div>
-                                </div>
+                                 <div className="flex flex-col items-center select-none scale-110 md:scale-125">
+                                     <span className="text-[7px] font-black text-slate-400 leading-none mb-1 uppercase tracking-tighter">
+                                         TODAY'S
+                                     </span>
+                                     <div className="bg-emerald-950 px-3 py-1.5 rounded-full shadow-lg shadow-emerald-100 flex items-center gap-1.5">
+                                         <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse"></div>
+                                         <span className="text-xs font-black text-white leading-none uppercase tracking-tight">
+                                             OFFER
+                                         </span>
+                                     </div>
+                                 </div>
                             </div>
                         </Link>
                     ) : (

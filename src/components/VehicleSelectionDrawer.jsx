@@ -21,33 +21,37 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                 onClick={onClose}
             />
 
-            {/* Drawer Content - Boxy Style */}
-            <div className={`absolute inset-0 max-h-screen bg-white dark:bg-[#111] rounded-none transform transition-transform duration-500 ease-out z-50 overflow-hidden flex flex-col ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+            {/* Drawer Content - Luxury Modern Style */}
+            <div className={`absolute bottom-0 left-0 right-0 max-h-[90vh] bg-white dark:bg-zinc-900 rounded-t-[3rem] transform transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] z-50 overflow-hidden flex flex-col shadow-2xl ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}>
                 {/* Header */}
-                <div className="p-6 md:p-8 pb-4 flex items-center justify-between border-b border-slate-100 dark:border-white/10 shrink-0">
+                <div className="p-8 md:p-10 pb-6 flex items-center justify-between border-b border-slate-100 dark:border-white/5 shrink-0">
                     <div>
-                        <div className="yellow-badge mb-1 md:mb-4 scale-75 md:scale-100 origin-left">Elite Fleet</div>
-                        <h2 className="text-xl md:text-5xl font-black text-black dark:text-white uppercase tracking-tighter">SELECT YOUR <span className="text-[#FACC15]">RIDE</span></h2>
+                        <div className="inline-flex items-center gap-2 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest mb-3 border border-emerald-100 dark:border-emerald-500/20">
+                            <ShieldCheck size={14} /> Elite Fleet Selection
+                        </div>
+                        <h2 className="text-2xl md:text-5xl font-black text-emerald-950 dark:text-white uppercase tracking-tight">Select Your <span className="text-emerald-600">Ride</span></h2>
                     </div>
                     <button 
                         onClick={onClose}
-                        className="w-10 h-10 md:w-20 md:h-20 rounded-none bg-black dark:bg-[#FACC15] text-[#FACC15] dark:text-black flex items-center justify-center hover:bg-black/80 transition-all border-2 border-black"
+                        className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all shadow-sm border border-slate-200 dark:border-white/10"
                         aria-label="Close drawer"
                     >
-                        <X size={20} strokeWidth={3} className="md:hidden" />
-                        <X size={32} strokeWidth={4} className="hidden md:block" />
+                        <X size={24} strokeWidth={2.5} />
                     </button>
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto p-6 md:p-10 custom-scrollbar">
                     {isLoading ? (
-                        <div className="flex flex-col items-center justify-center py-20 gap-6">
-                            <div className="w-16 h-16 border-8 border-[#FACC15] border-t-transparent rounded-none animate-spin"></div>
-                            <p className="font-black text-black/40 uppercase tracking-widest">Calculating Best Rates...</p>
+                        <div className="flex flex-col items-center justify-center py-32 gap-6">
+                            <div className="relative">
+                                <div className="w-20 h-20 border-4 border-emerald-100 dark:border-white/5 rounded-full"></div>
+                                <div className="absolute top-0 left-0 w-20 h-20 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+                            </div>
+                            <p className="font-bold text-slate-400 uppercase tracking-widest text-xs">Calculating Luxury Rates...</p>
                         </div>
                     ) : vehicles && vehicles.length > 0 ? (
-                        <div className="space-y-6 max-w-5xl mx-auto pb-10">
+                        <div className="space-y-10 max-w-6xl mx-auto pb-12">
                             <VehicleCarousel 
                                 vehicles={vehicles} 
                                 selectedId={selectedId} 
@@ -57,30 +61,33 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                                 dropoffLocation={dropoffLocation}
                             />
                             
-                            {/* Boxy Feature Highlight */}
-                            <div className="p-10 bg-black text-[#FACC15] rounded-none border-4 border-[#FACC15]">
-                                <h3 className="text-2xl font-black uppercase tracking-tight mb-4 flex items-center gap-3">
-                                    <ShieldCheck size={28} strokeWidth={3} />
-                                    ALL-INCLUSIVE SERVICE
+                            {/* Modern Feature Highlight */}
+                            <div className="p-8 md:p-12 bg-emerald-950 dark:bg-zinc-800 rounded-[2.5rem] text-white relative overflow-hidden group shadow-2xl">
+                                <div className="absolute top-0 right-0 -mr-12 -mt-12 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl group-hover:bg-emerald-500/20 transition-colors"></div>
+                                <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-6 flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-900/40">
+                                        <ShieldCheck size={28} />
+                                    </div>
+                                    All-Inclusive Service
                                 </h3>
-                                <div className="space-y-2">
-                                    <p className="text-xs font-black uppercase tracking-[0.2em] leading-relaxed opacity-80">
-                                        Fuel, Insurance, Chauffeur & Tax Included. No Hidden Surprises.
+                                <div className="space-y-4 relative z-10">
+                                    <p className="text-base md:text-lg font-medium text-emerald-50/80 leading-relaxed">
+                                        Fuel, Comprehensive Insurance, Professional Chauffeur & Government Tax are all included in your quote. No hidden fees or surprises at your destination.
                                     </p>
-                                    <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-white/60">
-                                        * Note: Highway tickets are not included and must be paid by the customer.
-                                    </p>
+                                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-emerald-400/60 bg-emerald-900/50 dark:bg-white/5 w-fit px-4 py-2 rounded-lg border border-emerald-800/30">
+                                        <Info size={14} /> Highway tickets are not included
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-20 text-center gap-6">
-                            <div className="w-20 h-20 bg-slate-50 dark:bg-white/5 rounded-none border-2 border-black flex items-center justify-center text-black/20">
-                                <X size={40} />
+                        <div className="flex flex-col items-center justify-center py-32 text-center gap-8">
+                            <div className="w-24 h-24 bg-slate-50 dark:bg-white/5 rounded-[2rem] border border-slate-100 dark:border-white/10 flex items-center justify-center text-slate-300">
+                                <X size={48} strokeWidth={1.5} />
                             </div>
                             <div>
-                                <h4 className="text-2xl font-black text-black dark:text-white uppercase tracking-tight">No Vehicles Available</h4>
-                                <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mt-2 px-10">We couldn't find any vehicles for this route. Please contact support.</p>
+                                <h4 className="text-3xl font-black text-emerald-950 dark:text-white uppercase tracking-tight">No Vehicles Available</h4>
+                                <p className="text-slate-500 dark:text-slate-400 font-medium mt-3 max-w-sm mx-auto">We couldn't find any vehicles matching your criteria for this route. Please try adjusting your passenger count or contact our concierge.</p>
                             </div>
                         </div>
                     )}
