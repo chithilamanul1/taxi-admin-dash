@@ -93,8 +93,12 @@ export default function GalleryPage() {
                                             onClick={() => setSelectedImage(img)}
                                         >
                                             <img
-                                                src={img.url}
+                                                src={img.url || 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop'}
                                                 alt={img.caption}
+                                                onError={(e) => {
+                                                    e.target.onerror = null;
+                                                    e.target.src = 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop';
+                                                }}
                                                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
                                             />
                                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -154,7 +158,11 @@ export default function GalleryPage() {
                             
                             <div className="bg-[#FACC15] p-2 border-4 border-black shadow-[20px_20px_0px_0px_rgba(255,255,255,0.1)]">
                                 <img
-                                    src={selectedImage.url}
+                                    src={selectedImage.url || 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop'}
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop';
+                                    }}
                                     className="max-h-[70vh] w-auto border-4 border-black object-contain"
                                     alt={selectedImage.caption}
                                 />
