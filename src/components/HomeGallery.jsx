@@ -9,6 +9,7 @@ import { ArrowRight, Camera, Instagram, Plane, MapPin } from 'lucide-react';
 export default function HomeGallery() {
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
+    const scrollContainerRef = React.useRef(null);
 
     useEffect(() => {
         fetch('/api/public/gallery')
@@ -23,11 +24,33 @@ export default function HomeGallery() {
             .catch(() => setLoading(false));
     }, []);
 
+    // Auto-slider logic
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (scrollContainerRef.current) {
+                const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+                
+                // If we reached the end, scroll back to 0
+                if (scrollLeft + clientWidth >= scrollWidth - 10) {
+                    scrollContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    // Scroll by approx one item width
+                    const itemWidth = window.innerWidth < 768 ? window.innerWidth * 0.85 : window.innerWidth / 3;
+                    scrollContainerRef.current.scrollBy({ left: itemWidth, behavior: 'smooth' });
+                }
+            }
+        }, 3500); // 3.5 seconds
+        
+        return () => clearInterval(interval);
+    }, []);
+
     // Fallback if no images uploaded yet
     const fallbackImages = [
         { url: 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop', caption: 'Sigiriya Rock Fortress', category: 'Sigiriya' },
         { url: 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop', caption: 'Ancient Royal Gardens', category: 'Sigiriya' },
-        { url: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=1600&auto=format&fit=crop', caption: 'Tea Trails of Nuwara Eliya', category: 'Highlands' }
+        { url: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=1600&auto=format&fit=crop', caption: 'Tea Trails of Nuwara Eliya', category: 'Highlands' },
+        { url: 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?q=80&w=1600&auto=format&fit=crop', caption: 'Kandy Temple of Tooth', category: 'Cultural' },
+        { url: 'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=1600&auto=format&fit=crop', caption: 'Mirissa Beach', category: 'Coastal' }
     ];
 
     const displayImages = images.length > 0 ? images : fallbackImages;
@@ -57,7 +80,10 @@ export default function HomeGallery() {
                     </Link>
                 </div>
 
-                <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 scrollbar-hide">
+                <div 
+                    ref={scrollContainerRef}
+                    className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 scrollbar-hide scroll-smooth"
+                >
                     {displayImages.map((img, idx) => (
                         <motion.div
                             key={idx}

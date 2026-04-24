@@ -18,7 +18,7 @@ const CategoryBar = () => {
     if (pathname?.startsWith('/admin')) return null;
 
     return (
-        <div className="bg-black py-3 px-6 overflow-x-auto scrollbar-hide border-b border-white/10 flex justify-center items-center">
+        <div className="bg-black py-3 px-4 md:px-6 overflow-x-auto scrollbar-hide border-b border-white/10 flex justify-start md:justify-center items-center">
             <div className="flex items-center gap-3 md:gap-6 min-w-max">
                 {categories.map((cat) => (
                     <Link

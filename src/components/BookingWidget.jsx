@@ -521,10 +521,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
     return (
         <div className="w-full max-w-6xl mx-auto pt-24 sm:pt-28 md:pt-36 relative z-40 px-2 sm:px-4">
-            {/* Tab Navigation - Boxy Style */}
-            <div className="flex bg-white dark:bg-[#111] rounded-none w-full sm:w-fit mx-auto lg:mx-0 mb-4 sm:mb-6 border-4 sm:border-[6px] border-black transition-all overflow-hidden divide-x-[4px] divide-black" role="tablist">
-
-                <div className="grid grid-cols-4 w-full sm:w-auto">
+            {/* Tab Navigation - Luxury Pill Style */}
+            <div className="flex bg-slate-100 dark:bg-zinc-900 rounded-2xl w-full sm:w-fit mx-auto lg:mx-0 mb-6 p-1.5 shadow-inner" role="tablist">
+                <div className="grid grid-cols-4 w-full sm:w-auto gap-1">
                     {[
                         { id: 'pickup', label: 'Airport Pickup', icon: PlaneTakeoff },
                         { id: 'drop', label: 'Airport Drop', icon: PlaneLanding },
@@ -539,30 +538,30 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             id={`tab-${tab.id}`}
                             aria-label={`Switch to ${tab.label} tab`}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex flex-col sm:flex-row items-center justify-center gap-1 md:gap-3 px-2 sm:px-6 py-3.5 md:py-4 rounded-none text-[8px] sm:text-xs md:text-sm font-black transition-all ${activeTab === tab.id
-                                ? 'bg-[#FACC15] text-black'
-                                : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5'
+                            className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 md:gap-2.5 px-2 sm:px-6 py-3 rounded-xl text-[9px] sm:text-xs md:text-sm font-bold transition-all duration-300 ${activeTab === tab.id
+                                ? 'bg-white dark:bg-zinc-800 text-black dark:text-white shadow-sm border border-slate-200/60 dark:border-white/5'
+                                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-white/5'
                                 }`}
                         >
-                            <tab.icon size={16} className={activeTab === tab.id ? 'text-black' : 'text-slate-400'} aria-hidden="true" />
-                            <span className="uppercase tracking-widest">{tab.label}</span>
+                            <tab.icon size={16} className={activeTab === tab.id ? 'text-[#FACC15]' : 'text-slate-400'} aria-hidden="true" />
+                            <span className="uppercase tracking-wider">{tab.label}</span>
                         </button>
                     ))}
                 </div>
             </div>
 
-            {/* Widget Main Content - Booking.com Sharp Style */}
-            <div className="bg-white dark:bg-[#111] border-[4px] sm:border-[6px] border-[#FACC15] p-3 sm:p-4 md:p-8 animate-slide-up relative z-10 rounded-none w-full box-border">
+            {/* Widget Main Content - Modern Flat Luxury Style */}
+            <div className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-slate-200 dark:border-white/10 p-4 sm:p-6 md:p-8 animate-slide-up relative z-10 w-full box-border shadow-xl shadow-slate-200/50 dark:shadow-none">
 
                 {activeTab === 'tours' ? <ToursWidget /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,380px] gap-8 lg:gap-10 min-w-0">
                         <div className="flex-1 text-center lg:text-left min-w-0">
-                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 mb-6">
-                                <div className="flex bg-white dark:bg-[#111] rounded-none border-4 sm:border-[6px] border-black w-full sm:w-auto overflow-hidden p-1 divide-x-2 divide-black">
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 mb-8">
+                                <div className="flex bg-slate-100 dark:bg-zinc-800 rounded-xl p-1 w-full sm:w-auto shadow-inner">
                                     <button 
                                         onClick={() => setTripType('one-way')} 
                                         aria-label="One Way Trip" 
-                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-2.5 rounded-none text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all ${tripType === 'one-way' ? 'bg-[#FACC15] text-black border-2 border-black' : 'text-slate-400 hover:text-black dark:hover:text-[#FACC15]'}`}
+                                        className={`flex-1 sm:flex-none px-4 sm:px-8 py-2.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${tripType === 'one-way' ? 'bg-white dark:bg-zinc-700 text-black dark:text-white shadow-sm' : 'text-slate-500 hover:text-black dark:hover:text-white'}`}
                                     >
                                         One Way
                                     </button>
@@ -570,14 +569,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         onClick={() => (activeTab !== 'pickup' && activeTab !== 'drop') && setTripType('round-trip')}
                                         disabled={activeTab === 'pickup' || activeTab === 'drop'}
                                         aria-label="Round Trip"
-                                        className={`flex-1 sm:flex-none px-3 sm:px-8 py-2.5 rounded-none text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-widest transition-all relative flex items-center justify-center gap-1 sm:gap-2
-                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-black dark:bg-[#FACC15] text-white dark:text-black border-2 border-black' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5'}
-                                            ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-40 cursor-not-allowed' : ''}
+                                        className={`flex-1 sm:flex-none px-4 sm:px-8 py-2.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all duration-300 relative flex items-center justify-center gap-1.5
+                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-white dark:bg-zinc-700 text-black dark:text-white shadow-sm' : 'text-slate-500 hover:text-black dark:hover:text-white'}
+                                            ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-50 cursor-not-allowed' : ''}
                                         `}
                                     >
                                         Round Trip
                                         {(activeTab === 'pickup' || activeTab === 'drop') && (
-                                            <span className="w-4 h-4 bg-emerald-500 dark:bg-[#FACC15] flex items-center justify-center text-[8px] text-white dark:text-black rounded-none border border-black">🔒</span>
+                                            <span className="flex items-center justify-center text-[10px] text-emerald-500 opacity-70">🔒</span>
                                         )}
                                     </button>
                                 </div>
