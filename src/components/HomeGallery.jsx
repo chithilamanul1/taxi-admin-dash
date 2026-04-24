@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -9,7 +9,7 @@ import { ArrowRight, Camera, Instagram, Plane, MapPin } from 'lucide-react';
 export default function HomeGallery() {
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
-    const scrollContainerRef = React.useRef(null);
+    const scrollContainerRef = useRef(null);
 
     useEffect(() => {
         fetch('/api/public/gallery')

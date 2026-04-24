@@ -128,9 +128,9 @@ const LocationInput = ({
 
     return (
         <div className={`relative group ${zIndex || 'z-20'}`} ref={wrapperRef}>
-            {/* Icon - Sharp Styled */}
-            <div className="absolute left-6 top-1/2 -translate-y-1/2 transition-colors z-10">
-                <Icon size={24} className="text-[#FACC15]" strokeWidth={3} />
+            {/* Icon - Modern Styled */}
+            <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 transition-colors z-10 flex items-center justify-center">
+                <Icon size={20} className={disabled ? "text-slate-400" : "text-emerald-600 dark:text-[#FACC15]"} strokeWidth={2.5} />
             </div>
 
             <input
@@ -143,50 +143,49 @@ const LocationInput = ({
                 }}
                 disabled={disabled}
                 placeholder={googleLoaded ? placeholder : 'Loading maps...'}
-                className={`w-full pl-16 sm:pl-20 pr-10 sm:pr-14 h-14 rounded-none text-base sm:text-lg font-black transition-all outline-none uppercase tracking-widest border-[3px]
+                className={`w-full pl-12 sm:pl-14 pr-10 sm:pr-14 h-14 rounded-2xl text-sm sm:text-base font-medium transition-all outline-none border
                 ${disabled 
-                    ? 'bg-slate-50 border-slate-200 text-slate-300 cursor-not-allowed' 
-                    : 'bg-white border-black text-black hover:-translate-y-0.5 focus:border-black focus:-translate-y-0.5'}`}
+                    ? 'bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-white/5 text-slate-400 cursor-not-allowed shadow-inner' 
+                    : 'bg-white dark:bg-zinc-800 border-slate-200 dark:border-white/10 text-slate-800 dark:text-white shadow-sm hover:border-slate-300 dark:hover:border-white/20 focus:border-emerald-500 dark:focus:border-[#FACC15] focus:ring-4 focus:ring-emerald-500/10 dark:focus:ring-[#FACC15]/10'}`}
             />
 
             {/* Clear Button */}
             {!disabled && query && (
                 <button
                     onClick={clearInput}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-red-500 p-2 z-10"
+                    className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-red-500 p-2 z-10 bg-white dark:bg-zinc-800 rounded-full hover:bg-slate-100 dark:hover:bg-zinc-700 transition-colors"
                     type="button"
                 >
                     <X size={16} />
                 </button>
             )}
 
-            {/* Suggestions Dropdown - Sharp UI */}
+            {/* Suggestions Dropdown - Modern UI */}
             {isFocused && (suggestions.length > 0 || isLoading) && (
-                <div className="absolute top-[110%] left-0 right-0 bg-white dark:bg-[#111] rounded-none border-[3px] border-black p-0 z-[100] animate-fade-in overflow-hidden">
-                    <div className="max-h-[350px] overflow-y-auto custom-scrollbar">
+                <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white dark:bg-zinc-800 rounded-2xl border border-slate-200 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-none p-2 z-[100] animate-fade-in overflow-hidden">
+                    <div className="max-h-[300px] overflow-y-auto custom-scrollbar pr-1">
                         {isLoading ? (
                             <div className="p-8 flex items-center justify-center">
-                                <div className="w-8 h-8 border-4 border-[#FACC15] border-t-transparent animate-spin"></div>
+                                <Loader2 className="w-6 h-6 text-emerald-500 dark:text-[#FACC15] animate-spin" />
                             </div>
                         ) : (
                             suggestions.map((s, i) => (
                                 <button
                                     key={i}
                                     onMouseDown={() => handleSelect(s)}
-                                    className="w-full flex items-center gap-6 p-6 hover:bg-[#FACC15] group transition-all rounded-none text-left border-b-2 border-black last:border-0"
+                                    className="w-full flex items-center gap-4 p-3 hover:bg-slate-50 dark:hover:bg-zinc-700/50 rounded-xl group transition-all text-left mb-1 last:mb-0"
                                 >
-                                    <div className="w-10 h-10 bg-white dark:bg-black rounded-none border-2 border-black flex items-center justify-center group-hover:bg-black transition-colors">
-                                        <MapPin size={18} className="text-black dark:text-[#FACC15] group-hover:text-[#FACC15]" />
+                                    <div className="w-10 h-10 bg-slate-100 dark:bg-zinc-900 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-white dark:group-hover:bg-zinc-800 group-hover:shadow-sm transition-all">
+                                        <MapPin size={18} className="text-slate-500 dark:text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-[#FACC15] transition-colors" />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="font-black text-black dark:text-white group-hover:text-black text-sm uppercase tracking-wider truncate mb-1 transition-colors">
+                                        <p className="font-semibold text-slate-800 dark:text-white text-sm truncate mb-0.5 transition-colors">
                                             {s.structured_formatting?.main_text || s.description.split(',')[0]}
                                         </p>
-                                        <p className="text-[10px] font-bold text-black/50 dark:text-slate-400 group-hover:text-black/70 uppercase tracking-widest truncate transition-colors">
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate transition-colors">
                                             {s.structured_formatting?.secondary_text || s.description.split(',').slice(1).join(',')}
                                         </p>
                                     </div>
-                                    <ArrowRight size={16} className="text-[#FACC15] group-hover:text-black opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all" />
                                 </button>
                             ))
                         )}

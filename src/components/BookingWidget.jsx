@@ -585,20 +585,20 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     {/* Currency Selector */}
                                     <div className="relative group z-[110] shrink-0">
                                         <button 
-                                            className="flex items-center gap-2 bg-white dark:bg-[#1a1a1a] border-2 border-black rounded-none px-3 sm:px-4 py-2 sm:py-2.5 text-[10px] sm:text-xs font-black text-black dark:text-white hover:-translate-y-0.5 transition-all"
+                                            className="flex items-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-[10px] sm:text-xs font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
                                             aria-label="Select Currency"
                                         >
-                                            <div className="w-4 h-4 sm:w-5 sm:h-5 overflow-hidden rounded-none border-[1.5px] border-black">
+                                            <div className="w-4 h-4 sm:w-5 sm:h-5 overflow-hidden rounded-full border border-slate-200 dark:border-white/20">
                                                 <img 
                                                     src={SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag} 
                                                     alt={`${currency} flag`} 
                                                     className="w-full h-full object-cover scale-150" 
                                                 />
                                             </div>
-                                            <span className="uppercase text-black dark:text-white">{currency}</span>
-                                            <ChevronDown size={14} className="opacity-100 text-black dark:text-white" aria-hidden="true" />
+                                            <span className="uppercase text-slate-700 dark:text-white">{currency}</span>
+                                            <ChevronDown size={14} className="opacity-70 text-slate-700 dark:text-white" aria-hidden="true" />
                                         </button>
-                                        <div className="absolute top-full left-0 mt-2 w-36 sm:w-40 bg-white dark:bg-[#111] rounded-none border-[3px] border-black overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200 z-[200]">
+                                        <div className="absolute top-[calc(100%+8px)] left-0 mt-2 w-36 sm:w-40 bg-white dark:bg-zinc-800 rounded-xl border border-slate-200 dark:border-white/10 shadow-xl overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200 z-[200]">
                                             <div className="py-0">
                                                 {SUPPORTED_CURRENCIES.map(c => (
                                                     <button
@@ -616,11 +616,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                     </div>
 
-                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 sm:flex-none text-black text-[9px] sm:text-[10px] md:text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 bg-[#FACC15] px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-none border-2 border-black hover:-translate-y-0.5 justify-center whitespace-nowrap min-w-fit">
+                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 sm:flex-none text-black text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 bg-white hover:bg-slate-50 dark:bg-zinc-800 px-4 sm:px-6 py-2 sm:py-2.5 md:py-3 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 justify-center whitespace-nowrap min-w-fit">
 
-                                        {isLocating ? <Loader2 size={12} className="animate-spin" /> : <Zap size={12} className="fill-current" />}
-                                        <span className="hidden xs:inline sm:inline">Auto Detect</span>
-                                        <span className="xs:hidden uppercase">Detect</span>
+                                        {isLocating ? <Loader2 size={12} className="animate-spin text-emerald-500" /> : <Zap size={14} className="text-emerald-500" />}
+                                        <span className="hidden xs:inline sm:inline text-slate-700 dark:text-white">Auto Detect</span>
+                                        <span className="xs:hidden uppercase text-slate-700 dark:text-white">Detect</span>
                                     </button>
                                 </div>
                             </div>
@@ -653,16 +653,16 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                  {/* Waypoints List */}
                                 {waypoints.map((wp, idx) => (
-                                    <div key={idx} className="relative group animate-slide-up bg-white rounded-none border-2 border-black p-0.5 sm:p-1 flex flex-col sm:flex-row items-stretch sm:items-center overflow-hidden gap-1">
+                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-zinc-800 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-1 sm:p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-1 mb-3">
                                         <div className="flex items-center flex-1 min-w-0">
-                                            <div className="flex items-center justify-center text-[#FACC15] shrink-0 bg-black p-1 sm:p-1.5 border border-[#FACC15] rounded-none ml-1 sm:ml-2">
-                                                <Navigation size={14} />
+                                            <div className="flex items-center justify-center text-slate-500 dark:text-slate-400 shrink-0 bg-slate-100 dark:bg-zinc-900 p-2 rounded-full ml-1 sm:ml-2">
+                                                <Navigation size={16} />
                                             </div>
                                             <input
                                                 type="text"
                                                 readOnly
                                                 value={wp.name}
-                                                className="flex-1 min-w-0 pl-3 sm:pl-4 pr-2 sm:pr-4 h-10 sm:h-12 bg-transparent border-none text-[9px] sm:text-sm font-black text-black outline-none truncate"
+                                                className="flex-1 min-w-0 pl-3 sm:pl-4 pr-2 sm:pr-4 h-10 sm:h-12 bg-transparent border-none text-[11px] sm:text-sm font-medium text-slate-800 dark:text-white outline-none truncate"
                                             />
                                         </div>
 
@@ -701,13 +701,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <>
                                         {/* "Add Stop" Button - Aligned with icons */}
                                         {waypointSearches.length === 0 && (
-                                            <div className="flex justify-start pl-12 py-1">
+                                            <div className="flex justify-start pl-14 py-2">
                                                 <button
                                                     onClick={() => setWaypointSearches([{ active: true }])}
                                                     aria-label="Add Stop"
-                                                    className="text-black bg-white text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 py-2 px-3 rounded-none border-2 border-black hover:-translate-y-0.5 transition-all"
+                                                    className="text-slate-600 dark:text-slate-300 bg-white dark:bg-zinc-800 text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 py-2.5 px-4 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
                                                 >
-                                                    <Plus size={14} strokeWidth={3} /> ADD STOP ({waypoints.length}/4)
+                                                    <Plus size={14} strokeWidth={2.5} className="text-emerald-500" /> ADD STOP ({waypoints.length}/4)
                                                 </button>
                                             </div>
                                         )}
@@ -739,9 +739,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
 
                                 {/* Dropoff Input */}
-                                <div className="relative">
-                                    <div className="absolute left-[18px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-black bg-[#FACC15] z-20 flex items-center justify-center text-black shadow-sm">
-                                        <MapPin size={10} strokeWidth={4} />
+                                <div className="relative mt-2">
+                                    <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 transition-colors z-10 flex items-center justify-center">
+                                        <MapPin size={20} className="text-red-500" strokeWidth={2.5} />
                                     </div>
                                     <LocationInput
                                         placeholder="Drop-off Location"
@@ -885,8 +885,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             </div>
 
                             {/* Counters Section with Label */}
-                            <div className="mt-6 lg:mt-8 space-y-3">
-                                <label className="text-[11px] font-black text-black dark:text-[#FACC15] uppercase tracking-[0.3em] pl-1 leading-none block mb-4">Passenger & Luggage</label>
+                            <div className="mt-8 lg:mt-10 space-y-4">
+                                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest pl-1 leading-none block mb-4">Passenger & Luggage</label>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                                     {[
                                     { id: 'adults', label: 'Adults' },
@@ -894,23 +894,23 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     { id: 'luggage', label: 'Luggage' },
                                     { id: 'handLuggage', label: 'Hand Luggage' }
                                 ].map(c => (
-                                    <div key={c.id} className="bg-white dark:bg-white/5 border-2 border-black p-3 rounded-none flex items-center justify-between transition-all group/counter h-14 sm:h-16">
-                                        <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest w-20 flex-shrink-0 leading-tight pr-2">{c.label}</span>
-                                        <div className="flex items-center gap-3 shrink-0">
+                                    <div key={c.id} className="bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm p-4 rounded-2xl flex items-center justify-between transition-all group/counter h-16 sm:h-18">
+                                        <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest w-24 flex-shrink-0 leading-tight pr-2">{c.label}</span>
+                                        <div className="flex items-center gap-3 shrink-0 bg-slate-50 dark:bg-zinc-900 rounded-xl p-1 border border-slate-100 dark:border-white/5">
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, (Number(p[c.id]) || 0) - 1) }))}
-                                                className="w-8 h-8 rounded-none bg-white dark:bg-white/10 border-2 border-black flex items-center justify-center hover:bg-slate-100 transition-all text-black dark:text-white active:scale-95"
+                                                className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center hover:bg-slate-50 transition-all text-slate-600 dark:text-white active:scale-95"
                                                 aria-label={`Decrease ${c.label}`}
                                             >
-                                                <Minus size={12} strokeWidth={3} />
+                                                <Minus size={14} strokeWidth={2.5} />
                                             </button>
-                                            <span className="font-black text-lg text-black dark:text-white min-w-[20px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
+                                            <span className="font-bold text-base text-slate-800 dark:text-white min-w-[20px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))}
-                                                className="w-8 h-8 rounded-none bg-black dark:bg-[#FACC15] border-2 border-black flex items-center justify-center transition-all text-white dark:text-black active:scale-95"
+                                                className="w-8 h-8 rounded-lg bg-emerald-500 dark:bg-emerald-600 border border-transparent flex items-center justify-center transition-all text-white shadow-sm active:scale-95"
                                                 aria-label={`Increase ${c.label}`}
                                             >
-                                                <Plus size={12} strokeWidth={3} />
+                                                <Plus size={14} strokeWidth={2.5} />
                                             </button>
                                         </div>
                                     </div>
@@ -919,67 +919,68 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         </div>
 
                             {/* Vehicle Selection - Unified for Desktop & Mobile */}
-                            <div className="">
+                            <div className="mt-4 sm:mt-6">
+                                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest pl-1 leading-none block mb-3">Vehicle Type</label>
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
-                                    className="w-full min-h-[4rem] sm:min-h-[5rem] py-2 px-6 flex items-center justify-between bg-white dark:bg-white/5 border-2 border-black rounded-none hover:-translate-y-0.5 transition-all group overflow-hidden relative mt-4"
+                                    className="w-full min-h-[4.5rem] sm:min-h-[5.5rem] py-3 px-4 sm:px-6 flex items-center justify-between bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all group overflow-hidden relative"
                                     aria-label="Select Vehicle"
                                 >
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-20 h-16 sm:w-24 sm:h-20 rounded-none flex items-center justify-center p-0 shrink-0">
+                                    <div className="flex items-center gap-4 sm:gap-6">
+                                        <div className="w-20 h-14 sm:w-24 sm:h-16 rounded-xl flex items-center justify-center p-0 shrink-0 bg-slate-50 dark:bg-zinc-900 border border-slate-100 dark:border-white/5">
                                             {vehiclePricing[vehicle]?.image ? (
                                                 <div className="relative w-full h-full">
                                                     <Image
                                                         src={vehiclePricing[vehicle].image}
                                                         alt={vehiclePricing[vehicle]?.name || "Vehicle"}
                                                         fill
-                                                        className="object-contain scale-[1.35] sm:scale-150 drop-shadow-md group-hover:scale-150 sm:group-hover:scale-[1.75] transition-transform duration-500"
+                                                        className="object-contain scale-[1.25] sm:scale-125 drop-shadow-md group-hover:scale-125 sm:group-hover:scale-150 transition-transform duration-500"
                                                         sizes="(max-width: 640px) 80px, 96px"
                                                     />
                                                 </div>
                                             ) : (
-                                                <Car className="text-black dark:text-white opacity-50" size={24} />
+                                                <Car className="text-slate-300 dark:text-slate-600" size={24} />
                                             )}
                                         </div>
                                         <div className="text-left">
-                                            <p className="font-black text-sm text-black dark:text-white uppercase tracking-tight leading-none">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
-                                            <div className="flex items-center gap-2 text-[8px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-widest mt-1">
+                                            <p className="font-bold text-sm sm:text-base text-slate-800 dark:text-white uppercase tracking-wider leading-none mb-1.5">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
+                                            <div className="flex items-center gap-2 text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest">
                                                 <span>{vehiclePricing[vehicle]?.capacity || 4} Pax</span>
-                                                <span className="w-1 h-1 bg-black dark:bg-white/20 rounded-full"></span>
+                                                <span className="w-1 h-1 bg-slate-300 dark:bg-slate-600 rounded-full"></span>
                                                 <span>{vehiclePricing[vehicle]?.luggage || 2} Luggage</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="w-8 h-8 rounded-none bg-[#FACC15] dark:bg-[#FACC15]/20 text-black dark:text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform border-2 border-black shrink-0">
-                                        <ChevronDown size={16} />
+                                    <div className="w-10 h-10 rounded-full bg-slate-50 dark:bg-zinc-900 text-slate-400 flex items-center justify-center group-hover:bg-slate-100 dark:group-hover:bg-zinc-700 transition-colors shrink-0">
+                                        <ChevronDown size={20} />
                                     </div>
                                 </button>
                             </div>
                         </div>
 
                         {/* Section 2: Summary & Checkout */}
-                        <div className="bg-slate-50 dark:bg-[#0a0a0a] border-[4px] border-black rounded-none p-5 lg:p-6 flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-6 lg:gap-0 transition-colors">
+                        <div className="bg-slate-50/50 dark:bg-[#0a0a0a] border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm p-5 lg:p-6 flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-6 lg:gap-0 transition-colors">
                             <div className="space-y-6 flex-1 flex flex-col">
                                 <div className="flex justify-between items-center mb-2">
-                                    <h2 className="text-lg font-black text-black dark:text-white uppercase tracking-tight">Trip Summary</h2>
+                                    <h2 className="text-lg font-bold text-slate-800 dark:text-white tracking-wide">Trip Summary</h2>
 
                                     {/* Quick Currency Selector */}
                                     <div className="relative group">
                                         <button
-                                            className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-none bg-[#FACC15] text-black border-2 border-black transition-transform hover:translate-y-[-2px] active:translate-y-0"
+                                            className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-xl bg-white dark:bg-zinc-800 text-slate-600 dark:text-white border border-slate-200 dark:border-white/10 shadow-sm transition-transform hover:-translate-y-0.5 active:translate-y-0"
                                             aria-label="Select currency"
                                         >
                                             <span>{currency}</span>
-                                            <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
+                                            <ChevronDown size={14} className="group-hover:rotate-180 transition-transform opacity-70" />
                                         </button>
-                                        <div className="absolute top-full right-0 mt-3 w-32 bg-white dark:bg-[#111] rounded-none py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border-4 border-black z-[120] overflow-hidden">
+                                        <div className="absolute top-[calc(100%+8px)] right-0 mt-2 w-32 bg-white dark:bg-zinc-800 rounded-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-slate-200 dark:border-white/10 shadow-xl z-[120] overflow-hidden">
                                             {SUPPORTED_CURRENCIES.map(c => (
                                                 <button
                                                     key={c.code}
                                                     onClick={() => changeCurrency(c.code)}
-                                                    className={`w-full text-left px-4 py-3 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors text-xs font-black flex items-center gap-3 ${currency === c.code ? 'bg-slate-50 dark:bg-white/5 text-black dark:text-yellow-400' : 'text-slate-500 dark:text-slate-400'}`}
+                                                    className={`w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors text-xs font-bold flex items-center gap-3 ${currency === c.code ? 'bg-slate-50 dark:bg-white/5 text-emerald-600 dark:text-yellow-400' : 'text-slate-500 dark:text-slate-400'}`}
                                                 >
-                                                    <div className="w-4 h-4 rounded-full overflow-hidden border border-black/10 dark:border-white/20">
+                                                    <div className="w-4 h-4 rounded-full overflow-hidden border border-slate-200 dark:border-white/20">
                                                         <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
                                                     </div>
                                                     <span>{c.code}</span>
@@ -989,8 +990,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                 </div>
 
-                                {/* Map Container - Refined styling for dual theme */}
-                                <div className="h-48 lg:flex-1 w-full rounded-none overflow-hidden relative isolate min-h-[200px] lg:min-h-[220px] border border-black/5 dark:border-white/10 flex-shrink-0 lg:flex-shrink group transition-all duration-500 hover:border-black dark:hover:border-yellow-400">
+                                {/* Map Container - Refined styling */}
+                                <div className="h-48 lg:flex-1 w-full rounded-2xl overflow-hidden relative isolate min-h-[200px] lg:min-h-[220px] border border-slate-200 dark:border-white/10 shadow-inner flex-shrink-0 lg:flex-shrink group transition-all duration-500">
                                     <TripMap pickup={pickup} dropoff={dropoff} waypoints={waypoints} onRouteCalculated={handleRouteCalculated} />
                                 </div>
 
