@@ -30,18 +30,17 @@ const SmartOfferNudge = ({ offer, onClose }) => {
                 <div className="absolute -top-12 -right-12 w-32 h-32 bg-orange-500/10 rounded-full blur-[40px] pointer-events-none"></div>
 
                 {/* Icon Section */}
-                <div className="w-14 h-14 bg-[#FF5C00] rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-orange-200 dark:shadow-none animate-bounce-slow">
-                    <CheckCircle2 size={28} className="text-white" />
+                <div className="w-14 h-14 bg-[#FACC15] rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-yellow-200 dark:shadow-none animate-bounce-slow">
+                    <CheckCircle2 size={28} className="text-black" />
                 </div>
-
                 {/* Content */}
                 <div className="relative z-10 flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-black text-[#FF5C00] uppercase tracking-widest bg-orange-50 dark:bg-orange-500/10 px-2 py-0.5 rounded-full">Active Offer</span>
+                        <span className="text-[10px] font-black text-black uppercase tracking-widest bg-yellow-400 px-2 py-0.5 rounded-full">Active Offer</span>
                     </div>
                     
                     <h4 className="font-black text-slate-900 dark:text-white leading-tight mb-1 text-xl tracking-tight">
-                        {offer.name} <span className="text-[#FF5C00]">Applied!</span>
+                        {offer.name} <span className="text-emerald-600">Applied!</span>
                     </h4>
 
                     <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-bold opacity-80 mb-4">
@@ -49,7 +48,7 @@ const SmartOfferNudge = ({ offer, onClose }) => {
                     </p>
 
                     <div className="flex items-center gap-3">
-                        <div className="px-4 py-2 bg-[#FF5C00] rounded-xl shadow-md">
+                        <div className="px-4 py-2 bg-[#FACC15] rounded-xl shadow-md">
                             <span className="text-xs font-black text-white uppercase tracking-wider">
                                 {offer.discountPercentage > 0 ? `${offer.discountPercentage}% OFF` : `Save Rs. ${offer.discountAmount}`}
                             </span>

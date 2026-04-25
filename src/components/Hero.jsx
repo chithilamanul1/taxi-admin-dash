@@ -150,7 +150,7 @@ const Hero = () => {
                                                 <div className="mt-6 flex items-center justify-between">
                                                     <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter text-black leading-none">
                                                         {dest.name.split(' ')[0]}<br/>
-                                                        <span className="text-emerald-600">{dest.name.split(' ')[1] || ''}</span>
+                                                        <span className="text-emerald-400">{dest.name.split(' ')[1] || ''}</span>
                                                     </h3>
                                                      <div className="text-right">
                                                         <div className="text-[10px] font-black uppercase text-black/40">Economy</div>

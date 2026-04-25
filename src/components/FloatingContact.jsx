@@ -41,9 +41,9 @@ export default function FloatingContact() {
 
             {/* Animated Prompt */}
             {!isOpen && (
-                <div className="absolute bottom-4 right-16 bg-[#FF5C00] text-white text-[9px] font-black tracking-widest px-3 py-2 rounded-xl whitespace-nowrap animate-bounce z-[9999] flex items-center shadow-lg shadow-orange-600/20">
+                <div className="absolute bottom-4 right-16 bg-[#FACC15] text-black text-[9px] font-black tracking-widest px-3 py-2 rounded-xl whitespace-nowrap animate-bounce z-[9999] flex items-center shadow-lg shadow-yellow-600/20">
                     NEED HELP?
-                    <div className="absolute top-1/2 -translate-y-1/2 -right-1.5 w-3 h-3 bg-[#FF5C00] rotate-45 rounded-sm"></div>
+                    <div className="absolute top-1/2 -translate-y-1/2 -right-1.5 w-3 h-3 bg-[#FACC15] rotate-45 rounded-sm"></div>
                 </div>
             )}
 
@@ -56,7 +56,7 @@ export default function FloatingContact() {
                 {isOpen ? <X size={28} strokeWidth={2.5} /> : (
                     <div className="relative flex items-center justify-center">
                         <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
-                        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#FF5C00] rounded-full border-2 border-white flex items-center justify-center">
+                        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#FACC15] rounded-full border-2 border-white flex items-center justify-center">
                             <div className="w-1 h-1 bg-white rounded-full animate-ping"></div>
                         </span>
                     </div>
