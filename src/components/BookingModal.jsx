@@ -636,7 +636,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             `}</style>
 
             {/* Modal Container */}
-            <div id="modal-container" className="bg-white dark:bg-zinc-950 w-full h-full sm:h-auto sm:max-h-[95vh] rounded-none sm:rounded-[3rem] shadow-[0_30px_100px_rgba(0,0,0,0.4)] sm:max-w-4xl overflow-hidden flex flex-col animate-slide-up relative transition-all duration-500 border border-slate-100 dark:border-white/5">
+            <div id="modal-container" className="bg-white dark:bg-zinc-950 w-full h-full sm:h-auto sm:max-h-[95vh] rounded-none sm:rounded-[3rem] shadow-[0_30px_100px_rgba(0,0,0,0.4)] sm:max-w-4xl overflow-x-hidden overflow-y-hidden flex flex-col animate-slide-up relative transition-all duration-500 border border-slate-100 dark:border-white/5">
                 {/* Header - Hidden in Step 2 */}
                 {step !== 2 && (
                     <div className="p-6 sm:p-10 pb-4 flex items-center justify-between shrink-0 pt-8 sm:pt-10 bg-white dark:bg-zinc-950 transition-colors duration-500">
@@ -668,7 +668,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 </div>
 
                 {/* Main Viewport */}
-                <div ref={modalContentRef} className="flex-1 overflow-y-auto px-4 sm:px-8 md:px-12 py-8 sm:py-10 md:py-12 custom-scrollbar overscroll-contain relative z-10">
+                <div ref={modalContentRef} className="flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-8 md:px-12 py-8 sm:py-10 md:py-12 custom-scrollbar overscroll-contain relative z-10">
                     {step === 1 && (
                         <div className="space-y-8 md:space-y-10 animate-slide-up">
                             {/* Trip Header */}
@@ -1045,7 +1045,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <div className="flex flex-col items-center justify-center gap-3 mt-6">
                                 <div className="flex items-center gap-2 text-emerald-600/60">
                                     <ShieldCheck size={18} />
-                                    <span className="text-[10px] font-black uppercase tracking-[0.3em]">Taxes Included • Tolls Excluded</span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest">Taxes Included • Tolls Excluded</span>
                                 </div>
                             </div>
                         </div>
@@ -1274,7 +1274,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     </div>
                                                     
                                                     {/* Disclaimer Section */}
-                                                    <div className="pt-8 mt-6 text-[9px] text-slate-400 font-bold uppercase tracking-[0.3em] leading-relaxed flex items-center gap-4">
+                                                    <div className="pt-8 mt-6 text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-relaxed flex items-center gap-4">
                                                         <div className="w-2 h-2 rounded-full bg-emerald-500/30 shrink-0"></div>
                                                         Fixed price includes taxes & fuel. Highway tolls excluded.
                                                     </div>
