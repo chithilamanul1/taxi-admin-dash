@@ -658,11 +658,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 )}
 
                 {/* Progress Indicators */}
-                <div className="px-6 sm:px-12 py-4 md:py-6 flex gap-4 md:gap-6">
+                <div className="px-4 sm:px-12 py-4 md:py-6 flex gap-2 md:gap-6 shrink-0">
                     {STEPS.map((s) => (
-                        <div key={s.id} className="flex-1 flex flex-col gap-3">
+                        <div key={s.id} className="flex-1 flex flex-col gap-2">
                             <div className={`h-1.5 md:h-2 rounded-full transition-all duration-1000 ${step >= s.id ? 'bg-emerald-600 shadow-sm shadow-emerald-600/30' : 'bg-slate-100 dark:bg-white/5'}`}></div>
-                            <span className={`text-[8px] md:text-[10px] font-black uppercase tracking-widest text-center ${step >= s.id ? 'text-emerald-950 dark:text-emerald-400' : 'text-slate-500'}`}>{s.title}</span>
+                            <span className={`text-[7px] md:text-[10px] font-black uppercase tracking-normal md:tracking-widest text-center leading-tight ${step >= s.id ? 'text-emerald-950 dark:text-emerald-400' : 'text-slate-500'}`}>{s.title}</span>
                         </div>
                     ))}
                 </div>
@@ -677,7 +677,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <button 
                                         key={t} 
                                         onClick={() => setFormData({ ...formData, tripType: t })} 
-                                        className={`flex-1 md:flex-none px-8 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${formData.tripType === t ? 'bg-white dark:bg-zinc-800 text-emerald-600 shadow-md border border-slate-100 dark:border-white/5' : 'text-slate-400 hover:text-emerald-600'}`}
+                                        className={`flex-1 md:flex-none px-4 md:px-8 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-wider md:tracking-widest transition-all whitespace-nowrap ${formData.tripType === t ? 'bg-white dark:bg-zinc-800 text-emerald-600 shadow-md border border-slate-100 dark:border-white/5' : 'text-slate-400 hover:text-emerald-600'}`}
                                     >
                                         {t.replace('-', ' ')}
                                     </button>
