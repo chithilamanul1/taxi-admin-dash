@@ -461,7 +461,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             if (!formData.name) newErrors.name = true;
             if (!formData.phone) newErrors.phone = true;
             if (!formData.email) newErrors.email = true;
-            if (isAirportService && !formData.flightNumber) newErrors.flightNumber = true;
+            // Removed flightNumber requirement to make it optional as requested
             if (formData.hasNameBoard && !formData.nameBoardText) newErrors.nameBoardText = true;
         }
 
