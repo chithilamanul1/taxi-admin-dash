@@ -33,7 +33,7 @@ const DestinationsSection = () => {
                 </div>
 
                 {/* Destinations Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
                     {displayDestinations.map((dest, idx) => (
                         <motion.div
                             key={dest.id}
@@ -44,7 +44,7 @@ const DestinationsSection = () => {
                             className="group relative cursor-pointer"
                         >
                             {/* Card Wrapper */}
-                            <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-[2.5rem] border-4 border-black shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] md:rounded-[2.5rem] border-2 md:border-4 border-black shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                                 {/* Destination Image */}
                                 <Image
                                     src={dest.img || '/placeholder-destination.jpg'}
@@ -57,27 +57,27 @@ const DestinationsSection = () => {
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
                                 {/* Content Overlay */}
-                                <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                                    <div className="flex items-center gap-2 text-white/80 text-[10px] font-black uppercase tracking-[0.2em] mb-2">
-                                        <MapPin size={12} className="text-[#FACC15]" />
+                                <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end">
+                                    <div className="flex items-center gap-1.5 text-white/80 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-1 md:mb-2">
+                                        <MapPin size={10} className="text-[#FACC15] md:w-3 md:h-3" />
                                         SRI LANKA
                                     </div>
                                     
-                                    <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-2">
+                                    <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter mb-1 md:mb-2">
                                         {dest.name}
                                     </h3>
                                     
-                                    <p className="text-white/60 text-sm font-medium line-clamp-2 mb-6">
+                                    <p className="hidden md:block text-white/60 text-xs font-medium line-clamp-2 mb-4">
                                         {dest.meta || dest.description}
                                     </p>
 
                                     <div className="flex items-center justify-between">
-                                        <div className="bg-[#FF5C00] text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:shadow-none transition-all">
+                                        <div className="bg-[#FF5C00] text-white px-3 md:px-5 py-1.5 md:py-2 rounded-full text-[9px] md:text-xs font-black uppercase tracking-widest border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] group-hover:shadow-none transition-all">
                                             {Math.floor(Math.random() * 15) + 5}+ Deals
                                         </div>
                                         
-                                        <div className="w-10 h-10 bg-white border-2 border-black flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0">
-                                            <ArrowRight size={20} className="text-black" />
+                                        <div className="hidden md:flex w-8 h-8 md:w-10 md:h-10 bg-white border-2 border-black items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0">
+                                            <ArrowRight size={16} className="text-black md:w-5 md:h-5" />
                                         </div>
                                     </div>
                                 </div>
