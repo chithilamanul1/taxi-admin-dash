@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
+import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X, ArrowRight, PlaneTakeoff, PlaneLanding, CircleDot, Route } from 'lucide-react'
 
 import Image from 'next/image'
@@ -165,6 +166,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
     // Tab Logic - reset fields based on mode
     useEffect(() => {
+        console.log("BookingWidget: Active Tab changed to:", activeTab);
         if (activeTab === 'pickup') {
             setPickup({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lng: 79.8837 })
             setPickupSearch('Bandaranaike International Airport (CMB)')
@@ -487,6 +489,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             value: offer.discountPercentage > 0 ? offer.discountPercentage : offer.discountAmount
         }));
 
+        console.log("BookingWidget: Initiating Booking with data:", {
+            pickup: pickup.name,
+            dropoff: dropoff.name,
+            vehicle,
+            tripType,
+            verifiedCoupons
+        });
         setBookingInitialData({
             pickup: pickup.name,
             pickupCoords: { lat: pickup.lat, lng: pickup.lng },
@@ -520,7 +529,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const pricingCategory = isAirportService ? 'airport-transfer' : 'ride-now';
 
     return (
-        <div className="w-full max-w-6xl mx-auto pt-24 sm:pt-28 md:pt-36 relative z-40 px-2 sm:px-4">
+        <div className="w-full max-w-6xl mx-auto pt-28 md:pt-36 pb-24 md:pb-0 relative z-40 px-3 sm:px-4">
             {/* Tab Navigation - Luxury Pill Style */}
             <div className="flex bg-slate-100 dark:bg-zinc-900 rounded-2xl w-full sm:w-fit mx-auto lg:mx-0 mb-6 p-1.5 shadow-inner" role="tablist">
                 <div className="grid grid-cols-4 w-full sm:w-auto gap-1">
@@ -604,9 +613,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     <button
                                                         key={c.code}
                                                         onClick={() => changeCurrency(c.code)}
-                                                        className={`w-full text-left px-4 sm:px-5 py-2.5 sm:py-3 text-[10px] sm:text-xs font-black flex items-center gap-3 hover:bg-[#FACC15] hover:text-black transition-colors ${currency === c.code ? 'text-black bg-[#FACC15] border-l-[4px] border-black' : 'text-black dark:text-white border-b-[3px] border-black last:border-0'}`}
+                                                        className={`w-full text-left px-4 sm:px-5 py-2.5 sm:py-3 text-[10px] sm:text-xs font-black flex items-center gap-3 hover:bg-emerald-50 hover:text-emerald-600 transition-colors ${currency === c.code ? 'text-white bg-emerald-600 border-l-[4px] border-emerald-800' : 'text-slate-700 dark:text-white border-b border-slate-100 last:border-0'}`}
                                                     >
-                                                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-none overflow-hidden border-2 border-black">
+                                                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full overflow-hidden border border-slate-200">
                                                             <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
                                                         </div>
                                                         <span>{c.code}</span>
@@ -626,14 +635,53 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             </div>
 
                             <div className="relative">
-                                {/* Flow Connection Line - Decorative Stepper Style */}
-                                <div className="absolute left-[26px] top-7 bottom-7 w-0.5 z-0 flex flex-col items-center pointer-events-none">
-                                    <div className="flex-1 border-l-2 border-dashed border-black/20 dark:border-white/10"></div>
+                                {/* Flow Connection Line - Premium Curved Animated Style */}
+                                <div className="absolute left-[16px] top-10 bottom-10 w-5 z-0 pointer-events-none overflow-visible">
+                                    <svg 
+                                        className="w-full h-full"
+                                        viewBox="0 0 20 100"
+                                        preserveAspectRatio="none"
+                                    >
+                                        <motion.path
+                                            d="M 10 0 Q 0 50 10 100"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeDasharray="4 6"
+                                            strokeLinecap="round"
+                                            className="text-emerald-500/30 dark:text-[#FACC15]/20"
+                                            initial={{ pathLength: 0, opacity: 0 }}
+                                            animate={{ pathLength: 1, opacity: 1 }}
+                                            transition={{ 
+                                                duration: 2, 
+                                                ease: "easeInOut",
+                                                repeat: Infinity,
+                                                repeatType: "reverse",
+                                                repeatDelay: 1
+                                            }}
+                                        />
+                                        <motion.path
+                                            d="M 10 0 Q 0 50 10 100"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeDasharray="4 6"
+                                            strokeLinecap="round"
+                                            className="text-emerald-500 dark:text-[#FACC15]"
+                                            initial={{ pathLength: 0, pathOffset: 1 }}
+                                            animate={{ pathOffset: 0, pathLength: 0.2 }}
+                                            transition={{ 
+                                                duration: 3, 
+                                                ease: "linear",
+                                                repeat: Infinity,
+                                            }}
+                                        />
+                                    </svg>
                                 </div>
 
                                 <div className="space-y-4 md:space-y-3 relative z-10">
                                     <div className="relative">
-                                        <div className="absolute left-[18px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-black bg-white dark:bg-black z-20 flex items-center justify-center text-emerald-500">
+                                        <div className="absolute left-[18px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-emerald-500 bg-white dark:bg-zinc-800 z-20 flex items-center justify-center text-emerald-500">
                                             <CircleDot size={10} strokeWidth={4} />
                                         </div>
                                         <LocationInput
@@ -673,20 +721,20 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     <button
                                                         onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: Math.max(0, (w.waitingTime || 0) - 1) } : w)); }}
                                                         aria-label="Decrease waiting time"
-                                                        className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-white dark:bg-white/10 text-black dark:text-white text-[10px] sm:text-xs font-black transition-colors border border-black active:bg-slate-100"
+                                                        className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-white/10 text-slate-700 dark:text-white text-[10px] sm:text-xs font-black transition-colors hover:bg-slate-200 active:scale-95"
                                                     >−</button>
-                                                    <span className="text-[10px] sm:text-sm font-black text-black dark:text-white w-4 sm:w-6 text-center">{wp.waitingTime || 0}h</span>
+                                                    <span className="text-[10px] sm:text-sm font-black text-slate-700 dark:text-white w-4 sm:w-6 text-center">{wp.waitingTime || 0}h</span>
                                                     <button
                                                         onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: (w.waitingTime || 0) + 1 } : w)); }}
                                                         aria-label="Increase waiting time"
-                                                        className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-none bg-black dark:bg-[#FACC15] text-white dark:text-black text-[10px] sm:text-xs font-black transition-colors border border-black active:bg-slate-800"
+                                                        className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 text-[10px] sm:text-xs font-black transition-colors hover:bg-emerald-200 active:scale-95"
                                                     >+</button>
                                                 </div>
                                             </div>
                                             
                                             <button
                                                 onClick={() => setWaypoints(prev => prev.filter((_, i) => i !== idx))}
-                                                className="p-1.5 sm:p-2 text-black hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-none transition-all flex items-center justify-center"
+                                                className="p-1.5 sm:p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all flex items-center justify-center active:scale-95"
                                                 aria-label="Remove stop"
                                             >
                                                 <X size={14} className="sm:size-18" />
@@ -793,22 +841,38 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     )}
 
                                     {isCouponOpen && (
-                                        <div className="relative h-16 animate-slide-up">
-                                            <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-black dark:text-white" size={20} />
+                                        <div className="relative h-14 animate-slide-up">
+                                            <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                                             <input
                                                 type="text"
                                                 placeholder="ENTER COUPON CODE"
                                                 value={couponCode}
                                                 onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                                className="w-full h-full pl-14 pr-24 rounded-none bg-white dark:bg-white/5 border-2 border-black text-base font-black outline-none transition-all uppercase text-black dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 tracking-widest focus:border-black focus:ring-0"
+                                                className="w-full h-full pl-14 pr-24 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm font-bold outline-none transition-all uppercase text-emerald-950 dark:text-white placeholder:text-slate-400 tracking-widest focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner"
                                                 aria-label="Coupon code"
                                             />
                                             <button
                                                 onClick={async () => {
-                                                    /* apply logic */
+                                                    if (!couponCode) return;
+                                                    // Simple frontend validation for known public codes
+                                                    const known = availableCoupons.find(c => c.code === couponCode);
+                                                    if (known) {
+                                                        const couponOffer = {
+                                                            _id: 'coupon-' + known.code,
+                                                            name: known.code,
+                                                            discountPercentage: known.discountType === 'percentage' ? known.value : 0,
+                                                            discountAmount: known.discountType === 'flat' ? known.value : 0,
+                                                            type: 'coupon'
+                                                        };
+                                                        setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]);
+                                                        setCouponCode('');
+                                                        setIsCouponOpen(false);
+                                                    } else {
+                                                        alert("Invalid or expired coupon code.");
+                                                    }
                                                 }}
                                                 aria-label="Apply Coupon"
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 bg-black text-[#FACC15] px-4 py-2 rounded-none border-2 border-black text-xs font-black uppercase hover:bg-[#FACC15] hover:text-black transition-all"
+                                                className="absolute right-2 top-2 bottom-2 bg-emerald-600 text-white px-6 rounded-xl text-[10px] font-black uppercase hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20"
                                             >
                                                 Apply
                                             </button>
@@ -818,12 +882,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 {/* Visual Coupon Selector */}
                                 {filteredCoupons.length > 0 && isCouponOpen && (
-                                    <div className="lg:col-span-2 space-y-3 animate-fade-in">
-                                        <div className="flex items-center gap-2 px-1">
-                                            <Tag size={12} className="text-emerald-600" />
-                                            <span className="text-[10px] font-bold text-emerald-900/50 uppercase tracking-widest">Available Offers</span>
+                                    <div className="lg:col-span-2 space-y-4 animate-fade-in mt-4">
+                                        <div className="flex items-center gap-3 px-1">
+                                            <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                                            <span className="text-[10px] font-black text-emerald-900/40 dark:text-white/40 uppercase tracking-[0.3em]">Exclusive Offers</span>
                                         </div>
-                                        <div className="flex overflow-x-auto pb-4 gap-4 no-scrollbar snap-x touch-pan-x">
+                                        <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar snap-x touch-pan-x">
                                             {filteredCoupons.map((c) => (
                                                 <button
                                                     key={c._id}
@@ -832,7 +896,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         if (isApplied) {
                                                             setAppliedOffers(prev => prev.filter(o => o.name !== c.code));
                                                         } else {
-                                                            setCouponCode(c.code);
                                                             const couponOffer = {
                                                                 _id: 'coupon-' + c.code,
                                                                 name: c.code,
@@ -840,30 +903,30 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                                 discountAmount: c.discountType === 'flat' ? c.value : 0,
                                                                 type: 'coupon'
                                                             };
-                                                            setAppliedOffers(prev => [...prev, couponOffer]);
+                                                            setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]);
                                                         }
                                                     }}
-                                                    className={`snap-start min-w-[280px] sm:min-w-[320px] group relative flex items-center justify-between gap-4 p-5 rounded-none border-2 transition-all text-left flex-shrink-0 ${appliedOffers.some(o => o.name === c.code) ? 'border-black bg-[#FACC15]' : 'border-black bg-white hover:bg-slate-50'}`}
+                                                    className={`snap-start min-w-[280px] sm:min-w-[320px] group relative flex items-center justify-between gap-4 p-5 rounded-[2rem] border transition-all text-left flex-shrink-0 shadow-lg hover:shadow-xl hover:-translate-y-1 ${appliedOffers.some(o => o.name === c.code) ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-800'}`}
                                                 >
-                                                    <div className="flex items-center gap-4 min-w-0">
-                                                        <div className="w-14 h-14 rounded-none bg-white dark:bg-black flex-shrink-0 flex items-center justify-center overflow-hidden border-2 border-black">
+                                                    <div className="flex items-center gap-5 min-w-0">
+                                                        <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-900 flex-shrink-0 flex items-center justify-center overflow-hidden border border-slate-100 dark:border-white/5">
                                                             {c.imageUrl ? (
                                                                 <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" />
                                                             ) : (
-                                                                <span className="text-xl font-bold text-emerald-600">%</span>
+                                                                <Tag size={24} className="text-emerald-600" />
                                                             )}
                                                         </div>
                                                         <div className="flex-1 min-w-0">
                                                             <div className="flex flex-col">
-                                                                <span className="text-2xl font-black text-emerald-900 dark:text-white leading-tight">
+                                                                <span className="text-2xl font-black text-emerald-950 dark:text-white leading-tight tracking-tight">
                                                                     {c.value}{c.discountType === 'percentage' ? '%' : ''}
-                                                                    <span className="font-bold text-emerald-950 uppercase">OFF</span>
+                                                                    <span className="text-emerald-600 ml-1">OFF</span>
                                                                 </span>
                                                                 <div className="flex items-center gap-2 mt-2">
-                                                                    <div className="px-3 py-1.5 rounded-none bg-white dark:bg-white/5 border-2 border-black flex items-center gap-2">
-                                                                        <span className="text-xs font-black text-emerald-700 dark:text-emerald-500 uppercase tracking-wider">{c.code}</span>
-                                                                        <div className="h-3 w-px bg-slate-300 dark:bg-white/10"></div>
-                                                                        <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1 group-hover:text-emerald-500 transition-colors">
+                                                                    <div className="px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 flex items-center gap-2 shadow-sm">
+                                                                        <span className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-widest">{c.code}</span>
+                                                                        <div className="h-3 w-px bg-slate-200 dark:bg-white/10"></div>
+                                                                        <span className="text-[9px] font-bold text-slate-400 flex items-center gap-1">
                                                                             {appliedOffers.some(o => o.name === c.code) ? 'Applied' : 'Apply'}
                                                                         </span>
                                                                     </div>
@@ -871,10 +934,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    {appliedOffers.some(o => o.name === c.code) && (
-                                                        <div className="flex-shrink-0 w-8 h-8 bg-black border-2 border-white rounded-none flex items-center justify-center text-[#FACC15]">
-                                                            <Check size={18} strokeWidth={3} />
+                                                    
+                                                    {appliedOffers.some(o => o.name === c.code) ? (
+                                                        <div className="flex-shrink-0 w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white shadow-lg animate-scale-in">
+                                                            <Check size={16} strokeWidth={4} />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex-shrink-0 w-8 h-8 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-300 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-600 transition-all">
+                                                            <Plus size={16} strokeWidth={3} />
                                                         </div>
                                                     )}
                                                 </button>
@@ -978,7 +1045,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 <button
                                                     key={c.code}
                                                     onClick={() => changeCurrency(c.code)}
-                                                    className={`w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors text-xs font-bold flex items-center gap-3 ${currency === c.code ? 'bg-slate-50 dark:bg-white/5 text-emerald-600 dark:text-yellow-400' : 'text-slate-500 dark:text-slate-400'}`}
+                                                    className={`w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors text-xs font-bold flex items-center gap-3 ${currency === c.code ? 'bg-slate-50 dark:bg-white/5 text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'}`}
                                                 >
                                                     <div className="w-4 h-4 rounded-full overflow-hidden border border-slate-200 dark:border-white/20">
                                                         <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
@@ -1002,9 +1069,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     </div>
                                     <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
                                         <span className="text-slate-500 dark:text-slate-400">Vehicle Type</span>
-                                        <div className="flex items-center gap-3 text-black dark:text-yellow-400">
+                                        <div className="flex items-center gap-3 text-black dark:text-emerald-400">
                                             {vehiclePricing[vehicle]?.image && (
-                                                <div className="w-8 h-6 bg-white dark:bg-white/10 border border-black p-0.5 overflow-hidden shrink-0">
+                                                <div className="w-8 h-6 bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 p-0.5 rounded-lg overflow-hidden shrink-0">
                                                     <img src={vehiclePricing[vehicle].image} alt="" className="w-full h-full object-contain" />
                                                 </div>
                                             )}
@@ -1020,7 +1087,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
 
                                         {discountAmount > 0 && (
-                                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.15em] text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-400/10 p-3 rounded-none border border-yellow-200 dark:border-yellow-400/20">
+                                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-400/10 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-600/20">
                                                 <div className="flex items-center gap-2">
                                                     <Tag size={12} className="shrink-0" />
                                                     <span className="truncate max-w-[150px]">

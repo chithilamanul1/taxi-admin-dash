@@ -1291,10 +1291,10 @@ export default function RootLayout({ children }) {
                     <AuthProvider>
                         <CurrencyProvider>
                             <div className="sticky top-0 z-[100] w-full flex flex-col">
+                                <OfferMarquee />
                                 <Navbar />
                                 <CategoryBar />
                                 <DestinationBar />
-                                <OfferMarquee />
                             </div>
                             <main>{children}</main>
                             <FloatingContact />

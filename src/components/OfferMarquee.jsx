@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 
 const OfferMarquee = () => {
     const pathname = usePathname();
-    if (pathname?.startsWith('/admin')) return null;
     const [timeLeft, setTimeLeft] = useState({
         days: 1,
         hours: 5,
@@ -16,34 +15,66 @@ const OfferMarquee = () => {
     const [activeOfferDay, setActiveOfferDay] = useState('Everyday');
     const [todayOffer, setTodayOffer] = useState({ percent: '25', code: 'TODAY25' });
 
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const todayName = days[new Date().getDay()];
+
+    // Debug logging for visibility
+    useEffect(() => {
+        console.log("OfferMarquee: Current Pathname:", pathname);
+        console.log("OfferMarquee: Visibility Check - activeOfferDay:", activeOfferDay, "todayName:", todayName);
+    }, [pathname, activeOfferDay, todayName]);
+
+    if (pathname?.startsWith('/admin')) {
+        console.log("OfferMarquee: Hidden because path starts with /admin");
+        return null;
+    }
+    if (pathname === '/driver/login') {
+        console.log("OfferMarquee: Hidden because path is /driver/login");
+        return null;
+    }
+    if (pathname === '/driver/register') {
+        console.log("OfferMarquee: Hidden because path is /driver/register");
+        return null;
+    }
+
     useEffect(() => {
         const fetchSettings = async () => {
+            let targetDate = new Date();
+            targetDate.setHours(24, 0, 0, 0); // Default to end of today
+
             try {
-                const res = await fetch('/api/settings');
-                const result = await res.json();
-                if (result.success) {
-                    const expirySetting = result.data.find(s => s.key === 'OFFER_EXPIRY');
-                    const daySetting = result.data.find(s => s.key === 'OFFER_DAY');
-                    
-                    if (daySetting) setActiveOfferDay(daySetting.value);
-
-                    const percentSetting = result.data.find(s => s.key === 'TODAY_OFFER_PERCENT');
-                    const codeSetting = result.data.find(s => s.key === 'TODAY_OFFER_CODE');
-                    if (percentSetting || codeSetting) {
-                        setTodayOffer({
-                            percent: percentSetting?.value || '25',
-                            code: codeSetting?.value || 'TODAY25'
-                        });
+                console.log("OfferMarquee: Fetching marketing settings...");
+                const res = await fetch('/api/settings', { cache: 'no-store' });
+                
+                if (!res.ok) {
+                    console.warn(`OfferMarquee: Fetch failed with status ${res.status}. Using defaults.`);
+                } else {
+                    const result = await res.json();
+                    if (result.success && result.data) {
+                        console.log("OfferMarquee: Settings received", result.data);
+                        
+                        // Handle both array and object formats if the API varies
+                        const settingsData = Array.isArray(result.data) ? result.data : result.data;
+                        
+                        if (Array.isArray(settingsData)) {
+                            const expirySetting = settingsData.find(s => s.key === 'OFFER_EXPIRY');
+                            if (expirySetting && expirySetting.value) {
+                                targetDate = new Date(expirySetting.value);
+                            }
+                        } else if (settingsData.marqueeDiscount) {
+                            setTodayOffer({
+                                percent: settingsData.marqueeDiscount || '25',
+                                code: settingsData.marqueeCode || 'TODAY25'
+                            });
+                            setActiveOfferDay(settingsData.activeOfferDay || 'Everyday');
+                        }
                     }
-
-                    if (expirySetting) return new Date(expirySetting.value);
                 }
             } catch (err) {
-                console.error('Failed to fetch offer settings:', err);
+                console.error('OfferMarquee: Critical fetch error:', err);
             }
-            const fallback = new Date();
-            fallback.setHours(24, 0, 0, 0);
-            return fallback;
+            
+            return targetDate;
         };
 
         let timer;
@@ -68,14 +99,6 @@ const OfferMarquee = () => {
 
         return () => timer && clearInterval(timer);
     }, []);
-
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const todayName = days[new Date().getDay()];
-
-    // Removed day restriction to ensure visibility on landing page as requested
-    // if (activeOfferDay !== 'Everyday' && activeOfferDay !== todayName) {
-    //     return null;
-    // }
 
     const formatNum = (num) => num.toString().padStart(2, '0');
 
@@ -122,16 +145,6 @@ const OfferMarquee = () => {
                 </div>
             </div>
             
-            <style jsx>{`
-                @keyframes marquee-slower {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(-50%); }
-                }
-                .animate-marquee-slower {
-                    display: inline-flex;
-                    animation: marquee-slower 45s linear infinite;
-                }
-            `}</style>
         </div>
     );
 };

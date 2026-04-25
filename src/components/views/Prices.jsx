@@ -7,6 +7,8 @@ import { useCurrency } from '@/context/CurrencyContext'
 import { calculateBasePrice } from '@/lib/pricing-util'
 import { destinations as staticDestinations } from '@/lib/destinations'
 
+const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
+
 // Tiered Pricing Configuration (in LKR - Sri Lankan Rupees)
 const VEHICLE_PRICING = {
     'mini-car': {
@@ -414,7 +416,7 @@ const Prices = ({ initialDestination }) => {
                                 <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => setPassengers(Math.max(1, passengers - 1))}
-                                        className="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-xl text-emerald-950 font-bold hover:bg-[#FACC15]/10 hover:border-[#FACC15] active:translate-y-1 transition-all text-xl"
+                                        className="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-xl text-emerald-950 font-bold hover:bg-emerald-600/10 hover:border-emerald-600 active:translate-y-1 transition-all text-xl"
                                         aria-label="Decrease passengers"
                                     >
                                         -
@@ -422,7 +424,7 @@ const Prices = ({ initialDestination }) => {
                                     <span className="font-black text-emerald-950 text-xl w-6 text-center">{passengers}</span>
                                     <button
                                         onClick={() => setPassengers(Math.min(15, passengers + 1))}
-                                        className="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-xl text-emerald-950 font-bold hover:bg-[#FACC15]/10 hover:border-[#FACC15] active:translate-y-1 transition-all text-xl"
+                                        className="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-xl text-emerald-950 font-bold hover:bg-emerald-600/10 hover:border-emerald-600 active:translate-y-1 transition-all text-xl"
                                         aria-label="Increase passengers"
                                     >
                                         +
@@ -439,7 +441,7 @@ const Prices = ({ initialDestination }) => {
                                     <button
                                         key={t}
                                         onClick={() => setTripType(t)}
-                                        className={`flex-1 py-2.5 rounded-2xl text-sm font-black uppercase tracking-widest transition-all ${tripType === t ? 'bg-[#FACC15] text-emerald-950 shadow-md' : 'text-gray-400 hover:text-emerald-950'}`}
+                                        className={`flex-1 py-2.5 rounded-2xl text-sm font-black uppercase tracking-widest transition-all ${tripType === t ? 'bg-emerald-600 text-white' : 'text-gray-400 hover:text-emerald-950'}`}
                                     >
                                         {t === 'one-way' ? 'One Way' : 'Return'}
                                     </button>
@@ -916,7 +918,7 @@ const Prices = ({ initialDestination }) => {
                                                             { name: "Vehicle", value: VEHICLE_PRICING[vehicle].name, inline: true },
                                                             { name: "Distance", value: distance.toFixed(1) + " km", inline: true },
                                                             { name: "Passengers", value: String(passengers), inline: true },
-                                                            { name: "Total Price", value: "Rs " + total.toLocaleString(), inline: true },
+                                                            { name: "Total Price", value: "Rs " + totalLKR.toLocaleString(), inline: true },
                                                             { name: "Contact", value: "Email: " + (email || 'N/A') + "\nWA: " + (whatsapp || 'N/A'), inline: false },
                                                             { name: "Date & Time", value: date + " @ " + time, inline: true },
                                                             { name: "Payment", value: paymentMethod.toUpperCase(), inline: true },

@@ -75,11 +75,11 @@ const Hero = () => {
     };
 
     return (
-        <section className="relative h-[400px] md:h-[550px] bg-white dark:bg-[#0a0a0a] overflow-hidden pt-16 md:pt-24 pb-12 flex items-center justify-center border-b-8 border-black">
+        <section className="relative h-[400px] md:h-[550px] bg-slate-50 dark:bg-[#0a0a0a] overflow-hidden pt-16 md:pt-24 pb-12 flex items-center justify-center">
             
             {/* Minimal Background Elements */}
-            <div className="absolute top-10 left-10 w-32 h-32 border-[2px] border-black/5 -rotate-12 -z-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.03)_10px,rgba(0,0,0,0.03)_20px)]"></div>
-            <div className="absolute bottom-10 right-10 w-48 h-48 border-[2px] border-black/5 rotate-12 -z-10 rounded-none"></div>
+            <div className="absolute top-10 left-10 w-32 h-32 border border-slate-200 dark:border-white/5 rounded-[2rem] -rotate-12 -z-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.02)_10px,rgba(0,0,0,0.02)_20px)]"></div>
+            <div className="absolute bottom-10 right-10 w-48 h-48 border border-slate-200 dark:border-white/5 rotate-12 -z-10 rounded-[3rem]"></div>
 
             <div className="container mx-auto px-6 relative z-10" 
                  onMouseEnter={() => setIsPaused(true)}
@@ -118,20 +118,20 @@ const Hero = () => {
                                                 animate={{ 
                                                     rotate: dest.rotate
                                                 }}
-                                                 className="relative bg-white border-4 border-black p-4 pb-16 w-full group select-none"
+                                                 className="relative bg-white p-4 pb-16 w-full group select-none rounded-[2rem] shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-white/5"
                                             >
                                                 {/* Card Number & Price Ticker */}
                                                 <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-1">
-                                                    <div className="w-10 h-10 bg-[#FACC15] border-2 border-black rounded-none flex items-center justify-center font-black text-sm">
+                                                    <div className="w-10 h-10 bg-emerald-600 text-white shadow-lg shadow-emerald-600/20 rounded-xl flex items-center justify-center font-black text-sm">
                                                         0{dest.id}
                                                     </div>
-                                                    <div className="bg-black text-white px-3 py-0.5 font-black text-[10px] border-2 border-black -rotate-2">
+                                                    <div className="bg-emerald-950 text-white px-3 py-0.5 font-black text-[10px] rounded-lg shadow-md -rotate-2">
                                                         {convertPrice(price).symbol} {convertPrice(price).value.toLocaleString()}
                                                     </div>
                                                 </div>
 
                                                 {/* Image Container - Slimmer aspect ratio */}
-                                                 <div className="relative aspect-[3/2] overflow-hidden border-4 border-black bg-slate-200 pointer-events-none">
+                                                 <div className="relative aspect-[3/2] overflow-hidden rounded-2xl bg-slate-100 pointer-events-none shadow-inner">
                                                     <Image
                                                         src={dest.image}
                                                         alt={dest.name}
@@ -141,7 +141,7 @@ const Hero = () => {
                                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                                                     />
                                                     
-                                                    <div className="absolute bottom-2 left-2 z-10 bg-[#FACC15] border-2 border-black px-2 py-0.5 font-black text-[9px] uppercase tracking-tighter">
+                                                    <div className="absolute bottom-3 left-3 z-10 bg-white text-emerald-600 shadow-md rounded-lg px-2.5 py-1 font-black text-[9px] uppercase tracking-tighter">
                                                         HOT DEAL
                                                     </div>
                                                 </div>
@@ -150,7 +150,7 @@ const Hero = () => {
                                                 <div className="mt-6 flex items-center justify-between">
                                                     <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter text-black leading-none">
                                                         {dest.name.split(' ')[0]}<br/>
-                                                        <span className="text-[#FACC15] stroke-black stroke-1">{dest.name.split(' ')[1] || ''}</span>
+                                                        <span className="text-emerald-600">{dest.name.split(' ')[1] || ''}</span>
                                                     </h3>
                                                      <div className="text-right">
                                                         <div className="text-[10px] font-black uppercase text-black/40">Economy</div>
@@ -170,16 +170,16 @@ const Hero = () => {
                         <button 
                             onClick={handlePrev}
                             aria-label="Previous destination"
-                            className="absolute left-[-20px] lg:-left-24 z-50 w-12 h-12 bg-white border-4 border-black flex items-center justify-center hover:bg-[#FACC15] transition-all active:translate-x-1 active:translate-y-1 hidden md:flex"
+                            className="absolute left-[-20px] lg:-left-24 z-50 w-14 h-14 bg-white rounded-2xl shadow-xl shadow-slate-200/50 flex items-center justify-center hover:bg-emerald-50 text-slate-400 hover:text-emerald-600 transition-all active:scale-95 hidden md:flex border border-slate-100 dark:border-white/10 dark:bg-zinc-900"
                         >
-                            <ArrowLeft size={24} strokeWidth={5} aria-hidden="true" />
+                            <ArrowLeft size={24} strokeWidth={3} aria-hidden="true" />
                         </button>
                         <button 
                             onClick={handleNext}
                             aria-label="Next destination"
-                            className="absolute right-[-20px] lg:-right-24 z-50 w-12 h-12 bg-[#FACC15] border-4 border-black flex items-center justify-center hover:bg-black hover:text-[#FACC15] transition-all active:translate-x-1 active:translate-y-1 hidden md:flex"
+                            className="absolute right-[-20px] lg:-right-24 z-50 w-14 h-14 bg-emerald-600 rounded-2xl shadow-xl shadow-emerald-600/20 flex items-center justify-center text-white hover:bg-emerald-700 transition-all active:scale-95 hidden md:flex border border-emerald-500"
                         >
-                            <ArrowRight size={24} strokeWidth={5} aria-hidden="true" />
+                            <ArrowRight size={24} strokeWidth={3} aria-hidden="true" />
                         </button>
                     </div>
 
@@ -191,7 +191,7 @@ const Hero = () => {
                             <button
                                 key={i}
                                 onClick={() => setCurrentIndex(i + 1)}
-                                className={`h-2 border-2 border-black transition-all ${i === displayIndex ? 'w-10 bg-[#FACC15]' : 'w-4 bg-white hover:w-6'}`}
+                                className={`h-2 rounded-full transition-all ${i === displayIndex ? 'w-10 bg-emerald-600 shadow-md shadow-emerald-600/20' : 'w-4 bg-slate-300 dark:bg-slate-700 hover:w-6'}`}
                                 aria-label={`View Slide ${i + 1}`}
                             />
                         );
