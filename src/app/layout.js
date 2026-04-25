@@ -1291,8 +1291,8 @@ export default function RootLayout({ children }) {
                     <AuthProvider>
                         <CurrencyProvider>
                             <div className="sticky top-0 z-[500] w-full flex flex-col">
-                                <OfferMarquee />
                                 <Navbar />
+                                <OfferMarquee />
                                 <CategoryBar />
                                 <DestinationBar />
                             </div>
