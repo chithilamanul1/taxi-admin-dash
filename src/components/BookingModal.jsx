@@ -623,7 +623,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
 
     return (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 p-0 sm:p-4 overflow-hidden touch-none overscroll-none backdrop-blur-xl transition-all duration-500">
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 p-0 sm:p-4 overflow-hidden touch-none overscroll-none backdrop-blur-xl transition-all duration-500">
             {/* Prevent Body Scroll Shadow Overlay */}
             <div className="absolute inset-0" onClick={onClose}></div>
 
@@ -1368,7 +1368,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 </div>
 
                 {/* Modal Footer */}
-                 <div className="p-6 sm:p-10 pt-4 border-t border-slate-100 dark:border-white/10 bg-white dark:bg-zinc-950 shrink-0 transition-colors">
+                 <div className="p-6 sm:p-10 pt-4 pb-20 sm:pb-10 border-t border-slate-100 dark:border-white/10 bg-white dark:bg-zinc-950 shrink-0 transition-colors">
                     <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-4">
                         <button
                             onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
