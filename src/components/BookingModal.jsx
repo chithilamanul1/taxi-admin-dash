@@ -662,7 +662,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     {STEPS.map((s) => (
                         <div key={s.id} className="flex-1 flex flex-col gap-3">
                             <div className={`h-1.5 md:h-2 rounded-full transition-all duration-1000 ${step >= s.id ? 'bg-emerald-600 shadow-sm shadow-emerald-600/30' : 'bg-slate-100 dark:bg-white/5'}`}></div>
-                            <span className={`text-[8px] md:text-[10px] font-black uppercase tracking-widest text-center ${step >= s.id ? 'text-emerald-950 dark:text-emerald-400' : 'text-slate-400'}`}>{s.title}</span>
+                            <span className={`text-[8px] md:text-[10px] font-black uppercase tracking-widest text-center ${step >= s.id ? 'text-emerald-950 dark:text-emerald-400' : 'text-slate-500'}`}>{s.title}</span>
                         </div>
                     ))}
                 </div>
@@ -685,16 +685,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             </div>
 
                             {/* Location Inputs - Premium Luxury Card */}
-                            <div className="bg-white dark:bg-zinc-900/50 p-6 sm:p-10 space-y-8 border border-slate-100 dark:border-white/10 rounded-[2.5rem] shadow-xl">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] flex items-center gap-4">
-                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                                        ROUTING LOGISTICS
-                                    </h3>
-                                    <div className="px-5 py-2 bg-emerald-600/10 text-emerald-600 rounded-full text-[9px] font-black uppercase tracking-widest border border-emerald-600/20">
-                                        {formData.tripType.replace('-', ' ')}
-                                    </div>
-                                </div>
+                            <div className="bg-white dark:bg-zinc-900/50 p-6 sm:p-10 space-y-8 border border-slate-100 dark:border-white/10 rounded-[2.5rem] shadow-xl relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
                                 <div className="space-y-8 relative">
                                     {/* Flow Connection Line - Premium Curved Animated Style */}
                                     <div className="absolute left-[20px] top-12 bottom-12 w-5 z-0 pointer-events-none overflow-visible hidden sm:block">
@@ -913,35 +905,35 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                          <Signpost size={32} strokeWidth={3} fill="currentColor" />
                                                      </div>
                                                      <div className="flex flex-col">
-                                                         <h4 className={`text-2xl font-black uppercase tracking-tight ${formData.hasNameBoard ? 'text-emerald-950 dark:text-white' : 'text-slate-400'}`}>Airport Greeting</h4>
-                                                         <p className={`text-[10px] font-black uppercase tracking-widest ${formData.hasNameBoard ? 'text-emerald-600' : 'text-slate-300'}`}>Arrival Hall Meeting Service</p>
+                                                         <h4 className={`text-2xl font-black uppercase tracking-tight ${formData.hasNameBoard ? 'text-emerald-950 dark:text-white' : 'text-slate-700 dark:text-slate-200'}`}>Airport Greeting</h4>
+                                                         <p className={`text-[10px] font-black uppercase tracking-widest ${formData.hasNameBoard ? 'text-emerald-600' : 'text-slate-500'}`}>Arrival Hall Meeting Service</p>
                                                      </div>
                                                 </div>
  
-                                                <div className="flex flex-wrap items-center gap-4 w-full">
-                                                     <span className="px-5 py-2 bg-emerald-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-md">
+                                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full bg-slate-50 dark:bg-white/5 p-5 rounded-2xl border border-slate-100 dark:border-white/10">
+                                                     <span className="px-5 py-2 bg-emerald-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-md shrink-0">
                                                          + Rs {(pricingSettings?.nameBoardPrice || 2000).toLocaleString()}
                                                      </span>
-                                                     <p className={`text-[10px] font-bold uppercase tracking-tight flex-1 min-w-[200px] ${formData.hasNameBoard ? 'text-slate-600 dark:text-slate-400' : 'text-slate-400'}`}>
+                                                     <p className={`text-[10px] font-bold uppercase tracking-tight flex-1 ${formData.hasNameBoard ? 'text-slate-600 dark:text-slate-400' : 'text-slate-600 dark:text-slate-300'}`}>
                                                          Our driver will wait with a name sign at the arrival hall.
                                                      </p>
                                                 </div>
                                                 
                                                 <div className="grid grid-cols-2 gap-4 w-full">
-                                                     <button
-                                                         onClick={() => setFormData({ ...formData, hasNameBoard: true })}
-                                                         className={`p-5 rounded-2xl border transition-all flex items-center justify-center gap-3 ${formData.hasNameBoard === true ? 'border-emerald-600 bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-400 hover:border-emerald-600 hover:text-emerald-600'}`}
-                                                     >
-                                                         <Check size={18} strokeWidth={4} />
-                                                         <span className="text-[10px] font-black uppercase tracking-widest">Add Service</span>
-                                                     </button>
-                                                     <button
-                                                         onClick={() => setFormData({ ...formData, hasNameBoard: false, nameBoardText: '' })}
-                                                         className={`p-5 rounded-2xl border transition-all flex items-center justify-center gap-3 ${formData.hasNameBoard === false ? 'border-red-500 bg-red-500 text-white shadow-lg shadow-red-500/20' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-400 hover:border-red-500 hover:text-red-500'}`}
-                                                     >
-                                                         <X size={18} strokeWidth={4} />
-                                                         <span className="text-[10px] font-black uppercase tracking-widest">Skip Service</span>
-                                                     </button>
+                                                    <button
+                                                        onClick={() => setFormData({ ...formData, hasNameBoard: true })}
+                                                        className={`p-5 rounded-2xl border transition-all flex items-center justify-center gap-3 ${formData.hasNameBoard === true ? 'border-emerald-600 bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-500 hover:border-emerald-600 hover:text-emerald-600'}`}
+                                                    >
+                                                        <Check size={18} strokeWidth={4} />
+                                                        <span className="text-[10px] font-black uppercase tracking-widest">Add Service</span>
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setFormData({ ...formData, hasNameBoard: false, nameBoardText: '' })}
+                                                        className={`p-5 rounded-2xl border transition-all flex items-center justify-center gap-3 ${formData.hasNameBoard === false ? 'border-red-500 bg-red-500 text-white shadow-lg shadow-red-500/20' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:border-red-500 hover:text-red-500'}`}
+                                                    >
+                                                        <X size={18} strokeWidth={4} />
+                                                        <span className="text-[10px] font-black uppercase tracking-widest">Skip Service</span>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -1064,7 +1056,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
                                 <div>
                                     <h3 className="text-4xl md:text-6xl font-black text-emerald-950 dark:text-white tracking-tight uppercase leading-none mb-3">Passenger <span className="text-emerald-600">Details</span></h3>
-                                    <p className="text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em]">Seamless Journey Planning</p>
+                                    <p className="text-[10px] md:text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.4em]">Seamless Journey Planning</p>
                                 </div>
                                 <div className="flex items-center gap-4 bg-emerald-50 dark:bg-emerald-500/10 px-6 py-3 rounded-2xl border border-emerald-100 dark:border-emerald-500/20 shadow-sm">
                                     <Zap size={18} className="text-emerald-600" />
@@ -1096,7 +1088,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver chat', icon: MessageSquare },
                                         ].map(f => (
                                                 <div key={f.key} className="group/field">
-                                                    <label className={`text-[9px] font-black uppercase tracking-[0.2em] mb-3 ml-6 flex items-center gap-2 transition-colors ${errors[f.key] ? 'text-red-500' : 'text-slate-400 group-focus-within/field:text-emerald-600'}`}>
+                                                    <label className={`text-[9px] font-black uppercase tracking-[0.2em] mb-3 ml-6 flex items-center gap-2 transition-colors ${errors[f.key] ? 'text-red-500' : 'text-slate-600 dark:text-slate-400 group-focus-within/field:text-emerald-600'}`}>
                                                         <f.icon size={11} className={errors[f.key] ? 'text-red-500' : 'text-emerald-600'} /> {f.label}
                                                     </label>
                                                     {f.type === 'tel' ? (
@@ -1108,7 +1100,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                 setFormData({ ...formData, [f.key]: phone });
                                                                 if (errors[f.key]) setErrors(prev => ({ ...prev, [f.key]: false }));
                                                             }}
-                                                            inputClassName="!w-full !h-16 !bg-transparent !border-none !px-6 !outline-none focus:!ring-0 !font-black !text-emerald-950 dark:!text-white placeholder:!text-slate-300 !text-sm !uppercase !tracking-widest"
+                                                            inputClassName="!w-full !h-16 !bg-transparent !border-none !px-6 !outline-none focus:!ring-0 !font-black !text-emerald-950 dark:!text-white placeholder:!text-slate-400 !text-sm !uppercase !tracking-widest"
                                                             countrySelectorStyleProps={{
                                                                 buttonClassName: '!h-16 !bg-slate-50 dark:!bg-white/5 !border-r !border-slate-100 dark:!border-white/10 !px-4 !flex !items-center !justify-center !min-w-[80px] !rounded-l-3xl',
                                                                 flagClassName: '!w-8 !h-auto',
@@ -1127,7 +1119,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                 setFormData({ ...formData, [f.key]: e.target.value });
                                                                 if (errors[f.key]) setErrors(prev => ({ ...prev, [f.key]: false }));
                                                             }}
-                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-8 rounded-3xl outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-black text-emerald-950 dark:text-white placeholder:text-slate-300 text-sm uppercase tracking-widest shadow-sm group-hover/field:border-emerald-200 dark:group-hover/field:border-emerald-500/20 ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-8 rounded-3xl outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-black text-emerald-950 dark:text-white placeholder:text-slate-400 text-sm uppercase tracking-widest shadow-sm group-hover/field:border-emerald-200 dark:group-hover/field:border-emerald-500/20 ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
                                                             placeholder={f.placeholder}
                                                         />
                                                     )}
