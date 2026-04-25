@@ -72,37 +72,41 @@ export default function MyBookingsPage() {
     const displayedBookings = activeTab === 'upcoming' ? activeBookings : pastBookings;
 
     return (
-        <div className="min-h-screen bg-slate-50 pt-32 pb-20 px-4">
+        <div className="min-h-screen bg-slate-50/50 pt-32 pb-20 px-4 dark:bg-zinc-950">
             <div className="max-w-5xl mx-auto">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                     <div>
-                        <h1 className="text-5xl font-black text-black uppercase italic tracking-tighter leading-none mb-2">MY BOOKINGS</h1>
-                        <p className="text-[#00A99D] font-black uppercase tracking-[0.3em] text-[10px] italic">Manage and track your journeys across Sri Lanka.</p>
+                        <h1 className="text-4xl md:text-6xl font-black text-black dark:text-white uppercase tracking-tighter leading-none mb-3">
+                            My <span className="text-emerald-600">Bookings</span>
+                        </h1>
+                        <p className="text-gray-500 dark:text-gray-400 font-medium tracking-tight text-sm">Manage and track your journeys across the paradise island.</p>
                     </div>
                     {session && (
-                        <div className="flex items-center gap-4 bg-white px-6 py-3 rounded-none border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                            <div className="w-10 h-10 bg-[#006064] rounded-none border-2 border-black flex items-center justify-center text-white font-black italic">
+                        <div className="flex items-center gap-4 bg-white dark:bg-zinc-900 px-6 py-3 rounded-[2rem] border border-slate-100 dark:border-zinc-800 shadow-xl shadow-black/5">
+                            <div className="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center text-white font-black">
                                 {session.user.name?.[0].toUpperCase()}
                             </div>
-                            <span className="text-xs font-black text-black uppercase tracking-widest italic">{session.user.name}</span>
+                            <span className="text-xs font-black text-black dark:text-white uppercase tracking-widest">{session.user.name}</span>
                         </div>
                     )}
                 </div>
 
-                {/* Tabs */}
-                <div className="flex gap-4 mb-12 border-b-4 border-black">
-                    <button
-                        onClick={() => setActiveTab('upcoming')}
-                        className={`px-8 py-4 font-black text-xs uppercase tracking-[0.2em] italic border-b-8 transition-all ${activeTab === 'upcoming' ? 'border-[#006064] text-black bg-slate-100/50' : 'border-transparent text-slate-400 hover:text-black hover:bg-slate-50'}`}
-                    >
-                        Upcoming ({activeBookings.length})
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('history')}
-                        className={`px-8 py-4 font-black text-xs uppercase tracking-[0.2em] italic border-b-8 transition-all ${activeTab === 'history' ? 'border-[#006064] text-black bg-slate-100/50' : 'border-transparent text-slate-400 hover:text-black hover:bg-slate-50'}`}
-                    >
-                        History ({pastBookings.length})
-                    </button>
+                {/* Tabs - Luxury Pill Style */}
+                <div className="flex bg-slate-100 dark:bg-zinc-900 rounded-2xl w-full sm:w-fit mb-12 p-1.5 shadow-inner">
+                    <div className="grid grid-cols-2 w-full sm:w-auto gap-1">
+                        <button
+                            onClick={() => setActiveTab('upcoming')}
+                            className={`px-8 py-3 rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all duration-500 ${activeTab === 'upcoming' ? 'bg-white dark:bg-zinc-800 text-emerald-600 shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
+                        >
+                            Upcoming ({activeBookings.length})
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('history')}
+                            className={`px-8 py-3 rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all duration-500 ${activeTab === 'history' ? 'bg-white dark:bg-zinc-800 text-emerald-600 shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
+                        >
+                            History ({pastBookings.length})
+                        </button>
+                    </div>
                 </div>
 
                 {/* Content */}
@@ -112,19 +116,20 @@ export default function MyBookingsPage() {
                     <div className="grid md:grid-cols-2 gap-8">
                         {displayedBookings.map(booking => (
                             <Link key={booking._id} href={`/booking/${booking._id}`} className="block group">
-                                <div className="bg-white rounded-none p-8 border border-slate-200 hover:border-[#006064] transition-all cursor-pointer h-full flex flex-col justify-between">
+                                <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-6 md:p-8 border border-slate-100 dark:border-zinc-800 hover:border-emerald-600/30 transition-all cursor-pointer h-full flex flex-col justify-between shadow-xl shadow-black/[0.02] hover:shadow-emerald-600/10 hover:-translate-y-1">
                                     <div className="space-y-6">
                                         <div className="flex justify-between items-start">
-                                            <div className="flex items-center gap-4">
-                                                <span className={`px-4 py-1.5 rounded-none border border-black/10 text-[10px] font-black uppercase tracking-[0.2em] italic ${booking.status === 'confirmed' ? 'bg-emerald-400 text-black' :
-                                                    booking.status === 'pending' ? 'bg-[#FACC15] text-black' :
-                                                        booking.status === 'cancelled' ? 'bg-rose-500 text-white' : 'bg-slate-200 text-black'
-                                                    }`}>
+                                            <div className="flex items-center gap-3">
+                                                <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] ${
+                                                    booking.status === 'confirmed' ? 'bg-emerald-100 text-emerald-700' :
+                                                    booking.status === 'pending' ? 'bg-orange-100 text-orange-700' :
+                                                    booking.status === 'cancelled' ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-700'
+                                                }`}>
                                                     {booking.status}
                                                 </span>
-                                                <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">#{booking._id.slice(-6).toUpperCase()}</span>
+                                                <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest opacity-60">#{booking._id.slice(-6).toUpperCase()}</span>
                                             </div>
-                                            <p className="font-black text-black bg-[#FACC15] px-4 py-2 border border-black/10 text-sm italic tracking-tighter">
+                                            <p className="font-black text-black dark:text-white bg-slate-50 dark:bg-zinc-800 px-4 py-2 rounded-xl border border-slate-100 dark:border-zinc-700 text-sm tracking-tighter">
                                                 Rs {booking.totalPrice.toLocaleString()}
                                             </p>
                                         </div>
@@ -132,30 +137,31 @@ export default function MyBookingsPage() {
                                         <div className="space-y-4">
                                             <div className="flex items-start gap-4">
                                                 <div className="flex flex-col items-center justify-between mt-1 h-12 py-1">
-                                                    <div className="w-3 h-3 bg-[#00A99D] border-2 border-black" />
-                                                    <div className="w-3 h-3 bg-rose-500 border-2 border-black" />
+                                                    <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full ring-4 ring-emerald-50" />
+                                                    <div className="w-0.5 h-full bg-slate-100 dark:bg-zinc-800" />
+                                                    <div className="w-2.5 h-2.5 bg-rose-500 rounded-full ring-4 ring-rose-50" />
                                                 </div>
                                                 <div className="space-y-6 flex-1">
                                                     <div>
-                                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 italic">PICKUP</p>
-                                                        <p className="text-xs font-black text-black uppercase italic line-clamp-1">{booking.pickupLocation.address}</p>
+                                                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">PICKUP</p>
+                                                        <p className="text-[11px] md:text-xs font-bold text-black dark:text-white uppercase line-clamp-1">{booking.pickupLocation.address}</p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 italic">DROPOFF</p>
-                                                        <p className="text-xs font-black text-black uppercase italic line-clamp-1">{booking.dropoffLocation.address}</p>
+                                                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">DROPOFF</p>
+                                                        <p className="text-[11px] md:text-xs font-bold text-black dark:text-white uppercase line-clamp-1">{booking.dropoffLocation.address}</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="mt-8 pt-6 flex items-center justify-between">
-                                        <div className="flex items-center gap-6">
-                                            <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest italic text-slate-800"><Calendar size={14} strokeWidth={3} /> {booking.scheduledDate}</span>
-                                            <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest italic text-slate-800"><Clock size={14} strokeWidth={3} /> {booking.scheduledTime}</span>
+                                    <div className="mt-8 pt-6 border-t border-slate-50 dark:border-zinc-800 flex items-center justify-between">
+                                        <div className="flex items-center gap-5">
+                                            <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500"><Calendar size={14} className="text-emerald-600" /> {booking.scheduledDate}</span>
+                                            <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500"><Clock size={14} className="text-emerald-600" /> {booking.scheduledTime}</span>
                                         </div>
-                                        <div className="w-10 h-10 bg-[#006064] border border-black/10 flex items-center justify-center text-white group-hover:translate-x-1 transition-all">
-                                            <ArrowRight size={20} strokeWidth={3} />
+                                        <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-600/20 group-hover:scale-110 transition-all">
+                                            <ArrowRight size={18} strokeWidth={3} />
                                         </div>
                                     </div>
                                 </div>
