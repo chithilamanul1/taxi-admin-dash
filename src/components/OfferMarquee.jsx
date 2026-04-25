@@ -105,25 +105,25 @@ const OfferMarquee = () => {
     const countdownStr = `PREMIUM OFFER REVISED IN ${formatNum(timeLeft.days)}d : ${formatNum(timeLeft.hours)}h : ${formatNum(timeLeft.minutes)}m : ${formatNum(timeLeft.seconds)}s`;
 
     const offers = [
-        `${todayOffer.percent}% LUXURY DISCOUNT APPLIED - LIMITED TIME!`,
-        countdownStr,
-        `EXTRA ${todayOffer.percent}% OFF - USE CODE: ${todayOffer.code}`,
-        "AIRPORT PICKUP STARTING FROM RS 4,500",
-        "PRICE REVISION IMMINENT - BOOK YOUR RIDE NOW!"
+        "SELECTED DESTINATIONS - LIMITED TIME!",
+        `PRICE WILL BE REVISED IN ${formatNum(timeLeft.days)}d : ${formatNum(timeLeft.hours)}h : ${formatNum(timeLeft.minutes)}m : ${formatNum(timeLeft.seconds)}s`,
+        "GET 10% OFF ON YOUR FIRST BOOKING ♦ BOOK NOW!",
+        "24/7 AIRPORT TRANSFERS STARTING FROM RS 4,500 ♦",
+        "LIMITED SEATS AVAILABLE FOR UPCOMING HOLIDAYS"
     ];
 
     return (
-        <div className="bg-red-600 py-2.5 border-b border-white/10 overflow-hidden whitespace-nowrap relative z-[9999] shadow-inner">
+        <div className="bg-[#EF4444] py-3.5 border-b border-white/20 overflow-hidden whitespace-nowrap relative z-[100] shadow-xl">
             <div className="flex animate-marquee-slower items-center pr-[120px] md:pr-[200px]">
                 {[...offers, ...offers].map((offer, i) => (
                     <div 
                         key={i} 
                         className="flex items-center gap-8 px-16"
                     >
-                        <span className="text-white font-black uppercase text-[9px] md:text-[11px] tracking-[0.3em] inline-block">
+                        <span className="text-white font-black uppercase text-[10px] md:text-[12px] tracking-[0.25em] inline-block">
                             {offer}
                         </span>
-                        <div className="w-1.5 h-1.5 bg-white/40 rounded-full shrink-0"></div>
+                        <span className="text-white/80 font-black text-lg shrink-0">♦</span>
                     </div>
                 ))}
             </div>
