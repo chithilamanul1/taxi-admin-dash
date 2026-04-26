@@ -138,9 +138,12 @@ export default function HomeClient() {
             />
 
             <div id="calculator" className="py-24 md:py-48 relative border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2">
-                <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
-                    <h2 className="text-6xl md:text-9xl font-black text-emerald-950 dark:text-white mb-10 uppercase tracking-normal md:tracking-tighter leading-none px-4">
-                        SEAMLESS <br /><span className="text-emerald-400">AIRPORT TRANSFERS</span>
+                <div className="max-w-6xl mx-auto px-4 text-center relative z-10">
+                    <h2 className="text-5xl xs:text-6xl md:text-9xl font-black text-emerald-950 dark:text-white mb-10 uppercase tracking-tighter leading-[0.9] px-2">
+                        SEAMLESS <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FACC15] to-[#FF5C00]">
+                            AIRPORT TRANSFERS
+                        </span>
                     </h2>
                     <p className="text-slate-500 dark:text-slate-400 mb-14 text-sm md:text-base font-bold uppercase tracking-[0.4em] max-w-2xl mx-auto opacity-80">Predictable pricing • Premium vehicles • Professional chauffeurs</p>
                     <button
