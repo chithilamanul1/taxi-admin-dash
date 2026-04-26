@@ -616,7 +616,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         className={`w-full text-left px-4 sm:px-5 py-2.5 sm:py-3 text-[10px] sm:text-xs font-black flex items-center gap-3 hover:bg-emerald-50 hover:text-emerald-600 transition-colors ${currency === c.code ? 'text-white bg-emerald-600 border-l-[4px] border-emerald-800' : 'text-slate-700 dark:text-white border-b border-slate-100 last:border-0'}`}
                                                     >
                                                         <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full overflow-hidden border border-slate-200">
-                                                            <img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" />
+                                                            <img src={c.flag} alt={`${c.code} flag`} className="w-full h-full object-cover scale-150" />
                                                         </div>
                                                         <span>{c.code}</span>
                                                     </button>

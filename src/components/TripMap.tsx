@@ -48,13 +48,15 @@ export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalcul
 
     // 1. Load Google Maps Script
     useEffect(() => {
+        if (!pickup?.name && !dropoff?.name) return;
+        
         loadGoogleMapsScript().then(() => {
             setGoogleLoaded(true);
         }).catch(err => {
             console.error("TripMap: Failed to load Google Maps script", err);
             setError("Failed to load Maps API");
         });
-    }, []);
+    }, [pickup?.name, dropoff?.name]);
 
     // 2. Initialize Map components
     useEffect(() => {

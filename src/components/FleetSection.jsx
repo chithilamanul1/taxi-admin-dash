@@ -97,6 +97,7 @@ const FleetSection = () => {
                                         src={vehicle.image || "/vehicles/minicar.png"} 
                                         alt={vehicle.name} 
                                         fill
+                                        priority={idx < 2}
                                         className="object-contain" 
                                         sizes="(max-width: 768px) 100vw, 50vw"
                                     />

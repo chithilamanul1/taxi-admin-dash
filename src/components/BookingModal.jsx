@@ -1143,22 +1143,25 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     type="text"
                                                     value={formData.billingName || ''}
                                                     onChange={e => setFormData({ ...formData, billingName: e.target.value })}
-                                                    className="w-full h-16 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl text-sm font-black text-emerald-950 dark:text-white placeholder:text-slate-500 uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
+                                                    className="w-full h-16 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl text-sm font-black text-emerald-950 dark:text-white placeholder:text-slate-600 uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
                                                     placeholder="Full Billing Name"
+                                                    aria-label="Full Billing Name"
                                                 />
                                                 <input
                                                     type="text"
                                                     value={formData.billingCountry || ''}
                                                     onChange={e => setFormData({ ...formData, billingCountry: e.target.value })}
-                                                    className="w-full h-16 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl text-sm font-black text-emerald-950 dark:text-white placeholder:text-slate-300 uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
+                                                    className="w-full h-16 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl text-sm font-black text-emerald-950 dark:text-white placeholder:text-slate-600 uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
                                                     placeholder="Country of Residence"
+                                                    aria-label="Country of Residence"
                                                 />
                                                 <textarea
                                                     rows="3"
                                                     value={formData.billingAddress}
                                                     onChange={e => setFormData({ ...formData, billingAddress: e.target.value })}
-                                                    className="md:col-span-2 w-full p-8 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-[2.5rem] text-sm font-black text-emerald-950 dark:text-white placeholder:text-slate-300 resize-none uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
+                                                    className="md:col-span-2 w-full p-8 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-[2.5rem] text-sm font-black text-emerald-950 dark:text-white placeholder:text-slate-600 resize-none uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
                                                     placeholder="Full Billing Address"
+                                                    aria-label="Full Billing Address"
                                                 ></textarea>
                                             </div>
                                         </div>

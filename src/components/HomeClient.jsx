@@ -110,6 +110,7 @@ export default function HomeClient() {
                     <button
                         onClick={() => setIsBookingOpen(true)}
                         className="bg-emerald-600 text-white px-16 py-7 rounded-3xl font-black text-sm uppercase tracking-[0.2em] transition-all inline-flex items-center gap-4 group shadow-2xl shadow-emerald-200 dark:shadow-none hover:bg-emerald-700 hover:-translate-y-1"
+                        aria-label="Book Your Trip Now"
                     >
                         BOOK YOUR TRIP NOW
                         <ArrowRight size={22} className="group-hover:translate-x-4 transition-transform" />

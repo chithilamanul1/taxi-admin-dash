@@ -17,7 +17,8 @@ export default function LocationSearchInput({
     const autocompleteService = useRef(null)
     const placesService = useRef(null)
 
-    useEffect(() => {
+    const initGoogleMaps = () => {
+        if (googleLoaded) return;
         loadGoogleMapsScript().then(() => {
             if (window.google) {
                 setGoogleLoaded(true)
@@ -25,7 +26,7 @@ export default function LocationSearchInput({
                 placesService.current = new window.google.maps.places.PlacesService(document.createElement('div'))
             }
         }).catch(err => console.error('Google Maps Load Error:', err))
-    }, [])
+    };
 
     useEffect(() => {
         if (initialValue && initialValue !== inputValue) {
