@@ -10,6 +10,10 @@ const BookingWidget = dynamic(() => import('./BookingWidget'), {
     loading: () => <div className="h-[400px] bg-slate-50 dark:bg-zinc-900 animate-pulse rounded-[2rem]" />
 })
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
+
+// Dynamic imports with loading placeholders to prevent CLS
+const LoadingBox = () => <div className="w-full h-40 bg-slate-100 dark:bg-white/5 animate-pulse border-2 border-black" />;
+
 const FleetSection = dynamic(() => import('./FleetSection'), { 
     ssr: false,
     loading: () => <div className="py-24"><LoadingBox /></div>
