@@ -648,7 +648,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-emerald-950 dark:text-white leading-none truncate uppercase">
                                     SECURE <span className="text-emerald-600">BOOKING</span>
                                 </h2>
-                                <p className="text-[9px] sm:text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mt-2">Elite Tier Encryption</p>
+                                <p className="text-[9px] sm:text-[10px] md:text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.3em] mt-2">Elite Tier Encryption</p>
                             </div>
                         </div>
                         <button onClick={onClose} className="w-12 h-12 sm:w-14 sm:h-14 bg-slate-50 dark:bg-white/5 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-white/10 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all z-[101] group">
@@ -677,7 +677,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <button 
                                         key={t} 
                                         onClick={() => setFormData({ ...formData, tripType: t })} 
-                                        className={`flex-1 md:flex-none px-4 md:px-8 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-wider md:tracking-widest transition-all whitespace-nowrap ${formData.tripType === t ? 'bg-white dark:bg-zinc-800 text-emerald-600 shadow-md border border-slate-100 dark:border-white/5' : 'text-slate-400 hover:text-emerald-600'}`}
+                                        className={`flex-1 md:flex-none px-4 md:px-8 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-wider md:tracking-widest transition-all whitespace-nowrap ${formData.tripType === t ? 'bg-white dark:bg-zinc-800 text-emerald-600 shadow-md border border-slate-100 dark:border-white/5' : 'text-slate-600 dark:text-slate-400 hover:text-emerald-600'}`}
                                     >
                                         {t.replace('-', ' ')}
                                     </button>
@@ -1060,8 +1060,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                         <div className="animate-slide-up">
                             <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
                                 <div>
-                                    <h3 className="text-4xl md:text-6xl font-black text-emerald-950 dark:text-white tracking-tight uppercase leading-none mb-3">Passenger <span className="text-emerald-600">Details</span></h3>
-                                    <p className="text-[10px] md:text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.4em]">Seamless Journey Planning</p>
+                                    <h3 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#FACC15] to-[#FF5C00] tracking-tight uppercase leading-none mb-3">
+                                        Passenger <span className="text-emerald-950 dark:text-white">Details</span>
+                                    </h3>
+                                    <p className="text-[10px] md:text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.4em]">Seamless Journey Planning</p>
                                 </div>
                                 <div className="flex items-center gap-4 bg-emerald-50 dark:bg-emerald-500/10 px-6 py-3 rounded-2xl border border-emerald-100 dark:border-emerald-500/20 shadow-sm">
                                     <Zap size={18} className="text-emerald-600" />
@@ -1124,7 +1126,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                 setFormData({ ...formData, [f.key]: e.target.value });
                                                                 if (errors[f.key]) setErrors(prev => ({ ...prev, [f.key]: false }));
                                                             }}
-                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-8 rounded-3xl outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-black text-emerald-950 dark:text-white placeholder:text-slate-400 text-sm uppercase tracking-widest shadow-sm group-hover/field:border-emerald-200 dark:group-hover/field:border-emerald-500/20 ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-8 rounded-3xl outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-black text-emerald-950 dark:text-white placeholder:text-slate-500 text-sm uppercase tracking-widest shadow-sm group-hover/field:border-emerald-200 dark:group-hover/field:border-emerald-500/20 ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
                                                             placeholder={f.placeholder}
                                                         />
                                                     )}
@@ -1134,14 +1136,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                         <div className="space-y-8 pt-12 mt-12 border-t border-slate-100 dark:border-white/5">
                                             <h4 className="text-[11px] font-black text-emerald-950 dark:text-white uppercase tracking-[0.4em] pl-6 flex items-center gap-4">
-                                                <div className="w-10 h-10 rounded-xl bg-emerald-600/10 flex items-center justify-center text-emerald-600 shadow-sm"><CreditCard size={18} /></div> Billing Details <span className="text-slate-400 opacity-50">(Optional)</span>
+                                                <div className="w-10 h-10 rounded-xl bg-emerald-600/10 flex items-center justify-center text-emerald-600 shadow-sm"><CreditCard size={18} /></div> Billing Details <span className="text-slate-600 dark:text-slate-400">(Optional)</span>
                                             </h4>
                                             <div className="grid md:grid-cols-2 gap-8 px-2">
                                                 <input
                                                     type="text"
                                                     value={formData.billingName || ''}
                                                     onChange={e => setFormData({ ...formData, billingName: e.target.value })}
-                                                    className="w-full h-16 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl text-sm font-black text-emerald-950 dark:text-white placeholder:text-slate-300 uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
+                                                    className="w-full h-16 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl text-sm font-black text-emerald-950 dark:text-white placeholder:text-slate-500 uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
                                                     placeholder="Full Billing Name"
                                                 />
                                                 <input
@@ -1373,7 +1375,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 </div>
 
                 {/* Modal Footer */}
-                 <div className="p-6 sm:p-10 pt-4 pb-20 sm:pb-10 border-t border-slate-100 dark:border-white/10 bg-white dark:bg-zinc-950 shrink-0 transition-colors">
+                 <div className="p-6 sm:p-10 pt-4 pb-28 sm:pb-10 border-t border-slate-100 dark:border-white/10 bg-white dark:bg-zinc-950 shrink-0 transition-colors">
                     <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-4">
                         <button
                             onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
@@ -1393,7 +1395,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                      }
                                  }}
                                  disabled={isOverCapacity}
-                                 className="group flex items-center justify-center gap-3 px-8 py-4.5 bg-emerald-600 text-white rounded-2xl text-[11px] sm:text-[12px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 disabled:opacity-30 w-full sm:w-auto sm:min-w-[220px] active:scale-95"
+                                 className="group flex items-center justify-center gap-3 px-8 py-5 bg-gradient-to-r from-[#FACC15] to-[#FF5C00] text-white rounded-2xl text-[11px] sm:text-[12px] font-black uppercase tracking-widest hover:brightness-110 transition-all shadow-xl shadow-orange-500/20 disabled:opacity-30 w-full sm:w-auto sm:min-w-[220px] active:scale-95"
                             >
                                 {step === 1 ? 'Review & Checkout' : 'Final Step: Review & Pay'} <ChevronRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
                             </button>
@@ -1401,7 +1403,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <button
                                 onClick={handleSubmit}
                                  disabled={loading || isOverCapacity}
-                                 className="group flex items-center justify-center gap-3 px-8 py-4.5 bg-emerald-600 text-white rounded-2xl text-[11px] sm:text-[12px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 disabled:opacity-30 w-full sm:w-auto sm:min-w-[240px] active:scale-95"
+                                 className="group flex items-center justify-center gap-3 px-8 py-5 bg-gradient-to-r from-[#FACC15] to-[#FF5C00] text-white rounded-2xl text-[11px] sm:text-[12px] font-black uppercase tracking-widest hover:brightness-110 transition-all shadow-xl shadow-orange-500/20 disabled:opacity-30 w-full sm:w-auto sm:min-w-[240px] active:scale-95"
                             >
                                 {loading ? <Loader2 className="animate-spin" size={16} /> : <Zap size={16} fill="currentColor" />}
                                 {loading ? 'Securing Spot...' : 'Confirm My Order'}
