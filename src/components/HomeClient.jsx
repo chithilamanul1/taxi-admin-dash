@@ -102,6 +102,8 @@ export default function HomeClient() {
 
     return (
         <div className="bg-white dark:bg-black overflow-hidden transition-colors duration-300">
+            <BookingWidget />
+
             <div id="calculator" className="py-24 md:py-48 relative border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2">
                 <div className="max-w-6xl mx-auto px-4 text-center relative z-10">
                     <h2 className="text-5xl xs:text-6xl md:text-9xl font-black text-emerald-950 dark:text-white mb-10 uppercase tracking-tighter leading-[0.9] px-2">
@@ -121,8 +123,6 @@ export default function HomeClient() {
                     </button>
                 </div>
             </div>
-
-            <BookingWidget />
 
             {/* Floating Check Availability Sidebar - Luxury Style */}
             <button
