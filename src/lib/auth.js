@@ -87,12 +87,6 @@ export const authOptions = {
                     // Check if user exists in DB
                     let existingUser = await User.findOne({ email: user.email })
 
-                    // STRICT WHITELIST: If not a super admin AND not already an existing admin in DB, reject
-                    if (!isAdminByEmail && (!existingUser || existingUser.role !== 'admin')) {
-                        console.log(`[Auth] BLOCKED Google login attempt (Not Whitelisted): ${user.email}`);
-                        return false; // Blocks the sign-in
-                    }
-
                     let isNewUser = false
                     if (!existingUser) {
                         isNewUser = true;
@@ -100,26 +94,22 @@ export const authOptions = {
                             name: user.name,
                             email: user.email,
                             image: user.image,
-                            role: 'admin', // Since we only allow admins to sign in via Google now
-                            isAdmin: true,
+                            role: isAdminByEmail ? 'admin' : 'user', 
+                            isAdmin: isAdminByEmail,
                             provider: 'google',
                             password: 'google-oauth-' + Date.now()
                         });
 
                         await sendEmail({
                             to: user.email,
-                            subject: 'Welcome to Airport Taxis Tours Admin Panel',
+                            subject: 'Welcome to Airport Taxis Tours',
                             html: templates.welcome(user.name)
                         })
                     } else {
-                        // Ensure super admins or established admins have the correct role and isAdmin flag
+                        // Ensure super admins have the correct role and isAdmin flag
                         let updated = false;
                         if (isAdminByEmail && existingUser.role !== 'admin') {
                             existingUser.role = 'admin';
-                            existingUser.isAdmin = true;
-                            updated = true;
-                        }
-                        if (existingUser.role === 'admin' && !existingUser.isAdmin) {
                             existingUser.isAdmin = true;
                             updated = true;
                         }

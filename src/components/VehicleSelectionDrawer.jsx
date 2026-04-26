@@ -1,12 +1,21 @@
 'use client';
-import React from 'react';
-import { X, Users, Briefcase, Lock, Loader2, Info, Wind, ShieldCheck, Backpack, Check, ArrowRight } from 'lucide-react';
-import VehicleCarousel from './VehicleCarousel';
+import React, { useState } from 'react';
+import { X, Users, Briefcase, Lock, Loader2, Info, Wind, ShieldCheck, Backpack, Check, ArrowRight, MessageCircle } from 'lucide-react';
+import VehicleList from './VehicleList';
+import VehicleDetailModal from './VehicleDetailModal';
 
 // Strip the word 'KDH' from display names only (keeps DB IDs intact)
 const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
 
 const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocation, vehicles, selectedId, onSelect, passengerCount, isLoading }) => {
+    const [inspectingVehicle, setInspectingVehicle] = useState(null);
+
+    const openLiveChat = () => {
+        if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('open-live-chat'));
+        }
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -31,13 +40,22 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                         </div>
                         <h2 className="text-2xl md:text-5xl font-black text-emerald-950 dark:text-white uppercase tracking-tight">Select Your <span className="text-emerald-600">Ride</span></h2>
                     </div>
-                    <button 
-                        onClick={onClose}
-                        className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all shadow-sm border border-slate-200 dark:border-white/10"
-                        aria-label="Close drawer"
-                    >
-                        <X size={24} strokeWidth={2.5} />
-                    </button>
+                    <div className="flex items-center gap-3">
+                        {/* Live Chat Button */}
+                        <button 
+                            onClick={openLiveChat}
+                            className="hidden md:flex items-center gap-2 px-6 py-4 rounded-2xl bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest hover:bg-amber-100 dark:hover:bg-amber-500/20 transition-all border border-amber-200 dark:border-amber-500/30 shadow-sm"
+                        >
+                            <MessageCircle size={18} /> Live Support
+                        </button>
+                        <button 
+                            onClick={onClose}
+                            className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 flex items-center justify-center hover:bg-emerald-50 dark:hover:bg-emerald-500/10 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all shadow-sm border border-slate-200 dark:border-white/10"
+                            aria-label="Close drawer"
+                        >
+                            <X size={24} strokeWidth={2.5} />
+                        </button>
+                    </div>
                 </div>
 
                 {/* Content */}
@@ -52,13 +70,20 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                         </div>
                     ) : vehicles && vehicles.length > 0 ? (
                         <div className="space-y-10 max-w-6xl mx-auto pb-12">
-                            <VehicleCarousel 
+                            {/* Mobile Chat Button */}
+                            <button 
+                                onClick={openLiveChat}
+                                className="md:hidden w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest border border-amber-200 dark:border-amber-500/30 mb-6"
+                            >
+                                <MessageCircle size={16} /> Need help? Chat with Support
+                            </button>
+
+                            <VehicleList 
                                 vehicles={vehicles} 
                                 selectedId={selectedId} 
                                 onSelect={(id) => { onSelect(id); onClose(); }}
+                                onInspect={(vehicle) => setInspectingVehicle(vehicle)}
                                 passengerCount={passengerCount}
-                                pickupLocation={pickupLocation}
-                                dropoffLocation={dropoffLocation}
                             />
                             
                             {/* Modern Feature Highlight */}
@@ -93,6 +118,14 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                     )}
                 </div>
             </div>
+
+            {/* Inspection Modal */}
+            <VehicleDetailModal 
+                isOpen={!!inspectingVehicle}
+                onClose={() => setInspectingVehicle(null)}
+                vehicle={inspectingVehicle}
+                onSelect={onSelect}
+            />
         </div>
     );
 };

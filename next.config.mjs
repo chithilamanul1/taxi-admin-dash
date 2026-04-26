@@ -27,18 +27,41 @@ const nextConfig = {
         formats: ['image/avif', 'image/webp'],
         // unoptimized: true, // Commented out to enable Vercel Image Optimization
     },
-    productionBrowserSourceMaps: false, // Disabled to reduce deployment payload size
-    // Keep Express backend separate
-    /*
-    async rewrites() {
+    productionBrowserSourceMaps: false,
+    compiler: {
+        removeConsole: process.env.NODE_ENV === 'production',
+    },
+    async headers() {
         return [
             {
-                source: '/api/:path*',
-                destination: 'http://localhost:5000/api/:path*',
+                source: '/(.*)',
+                headers: [
+                    {
+                        key: 'X-DNS-Prefetch-Control',
+                        value: 'on'
+                    }
+                ]
+            },
+            {
+                source: '/fonts/(.*)',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=31536000, immutable',
+                    },
+                ],
+            },
+            {
+                source: '/images/(.*)',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=31536000, immutable',
+                    },
+                ],
             },
         ];
     },
-    */
     eslint: {
         ignoreDuringBuilds: true,
     },

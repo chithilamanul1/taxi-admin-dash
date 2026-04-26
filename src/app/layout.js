@@ -1280,6 +1280,15 @@ export default function RootLayout({ children }) {
                 <meta name="theme-color" content="#059669" />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+                <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+                
+                {/* Google Maps Preconnect */}
+                <link rel="preconnect" href="https://maps.googleapis.com" />
+                <link rel="preconnect" href="https://maps.gstatic.com" crossOrigin="anonymous" />
+                <link rel="dns-prefetch" href="https://maps.googleapis.com" />
+                <link rel="dns-prefetch" href="https://maps.gstatic.com" />
+
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
