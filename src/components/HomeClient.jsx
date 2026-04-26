@@ -5,11 +5,10 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, MapPin, Star, Compass } from 'lucide-react'
-import BookingWidget from './BookingWidget'
-
-// Dynamic imports with loading placeholders to prevent CLS
-const LoadingBox = () => <div className="w-full h-40 bg-slate-100 dark:bg-white/5 animate-pulse border-2 border-black" />;
-
+const BookingWidget = dynamic(() => import('./BookingWidget'), { 
+    ssr: false,
+    loading: () => <div className="h-[400px] bg-slate-50 dark:bg-zinc-900 animate-pulse rounded-[2rem]" />
+})
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
 const FleetSection = dynamic(() => import('./FleetSection'), { 
     ssr: false,
@@ -99,6 +98,25 @@ export default function HomeClient() {
 
     return (
         <div className="bg-white dark:bg-black overflow-hidden transition-colors duration-300">
+            <div id="calculator" className="py-24 md:py-48 relative border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2">
+                <div className="max-w-6xl mx-auto px-4 text-center relative z-10">
+                    <h2 className="text-5xl xs:text-6xl md:text-9xl font-black text-emerald-950 dark:text-white mb-10 uppercase tracking-tighter leading-[0.9] px-2">
+                        SEAMLESS <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FACC15] to-[#FF5C00]">
+                            AIRPORT TRANSFERS
+                        </span>
+                    </h2>
+                    <p className="text-slate-500 dark:text-slate-400 mb-14 text-sm md:text-base font-bold uppercase tracking-[0.4em] max-w-2xl mx-auto opacity-80">Predictable pricing • Premium vehicles • Professional chauffeurs</p>
+                    <button
+                        onClick={() => setIsBookingOpen(true)}
+                        className="bg-emerald-600 text-white px-16 py-7 rounded-3xl font-black text-sm uppercase tracking-[0.2em] transition-all inline-flex items-center gap-4 group shadow-2xl shadow-emerald-200 dark:shadow-none hover:bg-emerald-700 hover:-translate-y-1"
+                    >
+                        BOOK YOUR TRIP NOW
+                        <ArrowRight size={22} className="group-hover:translate-x-4 transition-transform" />
+                    </button>
+                </div>
+            </div>
+
             <BookingWidget />
 
             {/* Floating Check Availability Sidebar - Luxury Style */}
@@ -116,7 +134,6 @@ export default function HomeClient() {
             <div className="h-4 md:h-10" /> {/* Spacing */}
 
             <FleetSection />
-
 
             <BookingModal
                 isOpen={isBookingOpen}
@@ -136,25 +153,6 @@ export default function HomeClient() {
                 onClose={() => setIsExpressOpen(false)}
                 product={selectedExpressProduct}
             />
-
-            <div id="calculator" className="py-24 md:py-48 relative border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2">
-                <div className="max-w-6xl mx-auto px-4 text-center relative z-10">
-                    <h2 className="text-5xl xs:text-6xl md:text-9xl font-black text-emerald-950 dark:text-white mb-10 uppercase tracking-tighter leading-[0.9] px-2">
-                        SEAMLESS <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FACC15] to-[#FF5C00]">
-                            AIRPORT TRANSFERS
-                        </span>
-                    </h2>
-                    <p className="text-slate-500 dark:text-slate-400 mb-14 text-sm md:text-base font-bold uppercase tracking-[0.4em] max-w-2xl mx-auto opacity-80">Predictable pricing • Premium vehicles • Professional chauffeurs</p>
-                    <button
-                        onClick={() => setIsBookingOpen(true)}
-                        className="bg-emerald-600 text-white px-16 py-7 rounded-3xl font-black text-sm uppercase tracking-[0.2em] transition-all inline-flex items-center gap-4 group shadow-2xl shadow-emerald-200 dark:shadow-none hover:bg-emerald-700 hover:-translate-y-1"
-                    >
-                        BOOK YOUR TRIP NOW
-                        <ArrowRight size={22} className="group-hover:translate-x-4 transition-transform" />
-                    </button>
-                </div>
-            </div>
 
             <SpecialOffersSection />
 
