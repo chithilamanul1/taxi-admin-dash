@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
     Wand2, MapPin, Calendar, Users, ArrowRight, Loader2,
     CheckCircle, MessageCircle, Navigation, Info, Clock,
-    ChevronRight, Mountain, Landmark, Waves, Camera
+    ChevronRight, Mountain, Landmark, Waves, Camera, Compass
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import TripMap from '@/components/TripMap';
