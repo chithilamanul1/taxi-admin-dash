@@ -208,6 +208,14 @@ export default function TripPlannerClient() {
                     <p className="text-slate-500 text-xl font-medium max-w-2xl mx-auto leading-relaxed">
                         Tell our AI about your dream vacation in Sri Lanka, and we'll craft a personalized itinerary just for you in seconds.
                     </p>
+                    <div className="mt-8 flex justify-center">
+                        <Link 
+                            href="/custom-trip"
+                            className="inline-flex items-center gap-2 text-xs font-black text-emerald-600 uppercase tracking-widest hover:text-emerald-700 transition-colors"
+                        >
+                            <Compass size={14} /> Prefer to plan it manually? Build your own trip
+                        </Link>
+                    </div>
                 </div>
 
                 <div className="bg-white rounded-[3rem] p-10 md:p-16 shadow-2xl shadow-slate-200 border border-slate-100 relative overflow-hidden">
