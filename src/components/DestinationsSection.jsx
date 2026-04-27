@@ -41,6 +41,9 @@ const DestinationsSection = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: idx * 0.1 }}
                             viewport={{ once: true }}
+                            onClick={() => {
+                                window.location.href = `/?destination=${dest.name}#booking`;
+                            }}
                             className="group relative cursor-pointer"
                         >
                             {/* Card Wrapper */}

@@ -156,6 +156,23 @@ export default function Navbar() {
                         </div>
 
                         <div className="pt-6 border-t border-slate-100 space-y-4">
+                            {session ? (
+                                <button
+                                    onClick={() => signOut()}
+                                    className="flex items-center justify-center gap-3 w-full py-4 bg-slate-100 text-slate-700 font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-slate-200 transition-all"
+                                >
+                                    <LogOut size={18} /> Sign Out ({session.user?.name?.split(' ')[0]})
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => signIn('google')}
+                                    className="flex items-center justify-center gap-3 w-full py-4 bg-white border-2 border-slate-200 text-slate-700 font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-slate-50 transition-all shadow-sm"
+                                >
+                                    <img src="https://www.google.com/favicon.ico" alt="Google" className="w-4 h-4" />
+                                    Sign in with Google
+                                </button>
+                            )}
+
                             <a
                                 href="tel:+94716885880"
                                 className="flex items-center justify-center gap-3 w-full py-5 bg-emerald-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-xl shadow-emerald-100 hover:scale-[1.02] active:scale-95 transition-all"

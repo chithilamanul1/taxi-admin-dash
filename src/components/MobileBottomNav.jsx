@@ -33,10 +33,10 @@ const MobileBottomNav = () => {
                             <div className="relative group">
                                 {/* Stylized "TODAY'S OFFER" Bubbled Sticker Look */}
                                  <div className="flex flex-col items-center select-none scale-110 md:scale-125">
-                                     <span className="text-[7px] font-black text-slate-400 leading-none mb-1 uppercase tracking-tighter">
+                                     <span className="text-[10px] font-black text-black leading-none mb-1 uppercase tracking-tighter">
                                          TODAY'S
                                      </span>
-                                     <div className="bg-emerald-950 px-3 py-1.5 rounded-full shadow-lg shadow-emerald-100 flex items-center gap-1.5">
+                                     <div className="bg-emerald-950 px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
                                          <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse"></div>
                                          <span className="text-xs font-black text-white leading-none uppercase tracking-tight">
                                              OFFER

@@ -668,8 +668,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             strokeDasharray="4 6"
                                             strokeLinecap="round"
                                             className="text-emerald-500 dark:text-[#FACC15]"
-                                            initial={{ pathLength: 0, pathOffset: 1 }}
-                                            animate={{ pathOffset: 0, pathLength: 0.2 }}
+                                            initial={{ pathLength: 0.2, pathOffset: 0 }}
+                                            animate={{ pathOffset: 1 }}
                                             transition={{ 
                                                 duration: 3, 
                                                 ease: "linear",

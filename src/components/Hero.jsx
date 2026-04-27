@@ -118,7 +118,10 @@ const Hero = () => {
                                                 animate={{ 
                                                     rotate: dest.rotate
                                                 }}
-                                                 className="relative bg-white p-4 pb-16 w-full group select-none rounded-[2rem] shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-white/5"
+                                                onClick={() => {
+                                                    window.location.href = `/?destination=${dest.name}#booking`;
+                                                }}
+                                                 className="relative bg-white p-4 pb-16 w-full group select-none rounded-[2rem] shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-white/5 cursor-pointer"
                                             >
                                                 {/* Card Number & Price Ticker */}
                                                 <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-1">
