@@ -530,6 +530,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
     return (
         <div className="w-full max-w-6xl mx-auto pt-28 md:pt-36 pb-24 md:pb-0 relative z-40 px-3 sm:px-4">
+            <h1 className="sr-only">Book Airport Taxis & Transfers in Sri Lanka - Fixed Rates</h1>
             {/* Tab Navigation - Luxury Pill Style */}
             <div className="flex bg-slate-100 dark:bg-zinc-900 rounded-2xl w-full sm:w-fit mx-auto lg:mx-0 mb-6 p-1.5 shadow-inner" role="tablist">
                 <div className="grid grid-cols-4 w-full sm:w-auto gap-1">
@@ -625,11 +626,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                     </div>
 
-                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect Location" className="flex-1 sm:flex-none text-black text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 bg-white hover:bg-slate-50 dark:bg-zinc-800 px-4 sm:px-6 py-2 sm:py-2.5 md:py-3 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 justify-center whitespace-nowrap min-w-fit">
+                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect My Location" className="flex-1 sm:flex-none text-black text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 bg-white hover:bg-slate-50 dark:bg-zinc-800 px-4 sm:px-6 py-2 sm:py-2.5 md:py-3 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 justify-center whitespace-nowrap min-w-fit">
 
                                         {isLocating ? <Loader2 size={12} className="animate-spin text-emerald-500" /> : <Zap size={14} className="text-emerald-500" />}
-                                        <span className="hidden xs:inline sm:inline text-slate-700 dark:text-white">Auto Detect</span>
-                                        <span className="xs:hidden uppercase text-slate-700 dark:text-white">Detect</span>
+                                        <span className="hidden xs:inline sm:inline text-slate-800 dark:text-white">Auto Detect</span>
+                                        <span className="xs:hidden uppercase text-slate-800 dark:text-white">Detect</span>
                                     </button>
                                 </div>
                             </div>

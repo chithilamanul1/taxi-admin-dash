@@ -140,7 +140,9 @@ const Hero = () => {
                                                         alt={dest.name}
                                                         fill
                                                         className="object-cover group-hover:scale-110 transition-transform duration-1000"
-                                                        priority={i === currentIndex}
+                                                        priority={i === 1} // Prioritize first real slide
+                                                        loading="eager"
+                                                        fetchPriority={i === 1 ? "high" : "auto"}
                                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                                                     />
                                                     
@@ -156,7 +158,7 @@ const Hero = () => {
                                                         <span className="text-emerald-400">{dest.name.split(' ')[1] || ''}</span>
                                                     </h3>
                                                      <div className="text-right">
-                                                        <div className="text-[10px] font-black uppercase text-black/40">Economy</div>
+                                                        <div className="text-[10px] font-black uppercase text-black/60">Economy</div>
                                                         <div className="text-lg font-black leading-none text-black">{convertPrice(price).symbol} {convertPrice(price).value.toLocaleString()}</div>
                                                     </div>
                                                 </div>

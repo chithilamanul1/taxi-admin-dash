@@ -59,7 +59,7 @@ export default function Navbar() {
                         className="w-9 h-9 md:w-14 md:h-14 bg-black rounded-2xl flex items-center justify-center text-white hover:bg-zinc-800 transition-all shadow-lg shadow-black/10 hover:-translate-y-1"
                         aria-label="Open Live Chat"
                     >
-                        <MessageCircle size={20} strokeWidth={3} className="text-emerald-500" />
+                        <MessageCircle size={20} strokeWidth={3} className="text-emerald-400" />
                     </button>
 
                     {/* Currency Selector (Always Visible) */}
@@ -166,9 +166,9 @@ export default function Navbar() {
                             ) : (
                                 <button
                                     onClick={() => signIn('google')}
-                                    className="flex items-center justify-center gap-3 w-full py-4 bg-white border-2 border-slate-200 text-slate-700 font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-slate-50 transition-all shadow-sm"
+                                    className="flex items-center justify-center gap-3 w-full py-4 bg-white border-2 border-slate-200 text-slate-800 font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-slate-50 transition-all shadow-sm"
                                 >
-                                    <img src="https://www.google.com/favicon.ico" alt="Google" className="w-4 h-4" />
+                                    <img src="https://www.google.com/favicon.ico" alt="" className="w-4 h-4" aria-hidden="true" />
                                     Sign in with Google
                                 </button>
                             )}

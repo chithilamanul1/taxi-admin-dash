@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { ArrowRight, MapPin, Star, Compass } from 'lucide-react'
 const BookingWidget = dynamic(() => import('./BookingWidget'), { 
     ssr: false,
-    loading: () => <div className="h-[400px] bg-slate-50 dark:bg-zinc-900 animate-pulse rounded-[2rem]" />
+    loading: () => <div className="min-h-[650px] md:min-h-[750px] bg-slate-50 dark:bg-zinc-900 animate-pulse rounded-[2rem]" />
 })
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
 
@@ -15,49 +15,39 @@ const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
 const LoadingBox = () => <div className="w-full h-40 bg-slate-100 dark:bg-white/5 animate-pulse border-2 border-black" />;
 
 const FleetSection = dynamic(() => import('./FleetSection'), { 
-    ssr: false,
-    loading: () => <div className="py-24"><LoadingBox /></div>
+    loading: () => <div className="min-h-[800px] bg-white dark:bg-zinc-900 border-t-8 border-black animate-pulse" />
 })
 const DestinationsSection = dynamic(() => import('./DestinationsSection'), { 
-    ssr: false,
-    loading: () => <div className="py-24"><LoadingBox /></div>
+    loading: () => <div className="min-h-[1200px] bg-white dark:bg-zinc-900 animate-pulse" />
 })
 const HomeGallery = dynamic(() => import('./HomeGallery'), { 
-    ssr: false,
-    loading: () => <div className="py-24"><LoadingBox /></div>
+    loading: () => <div className="min-h-[600px] bg-white dark:bg-zinc-900 animate-pulse" />
 })
 const Features = dynamic(() => import('./Features'), { 
-    ssr: false,
-    loading: () => <div className="py-24"><LoadingBox /></div>
+    loading: () => <div className="min-h-[400px] bg-white dark:bg-zinc-900 animate-pulse" />
 })
 const ReviewStatsBar = dynamic(() => import('./ReviewStatsBar'), { 
-    ssr: false,
     loading: () => <div className="h-20 bg-black animate-pulse" />
 })
 import { destinations } from '@/lib/destinations'
 
 // Dynamic imports for components below the fold
 const GoogleReviews = dynamic(() => import('./GoogleReviews'), { 
-    ssr: false,
-    loading: () => <LoadingBox />
+    loading: () => <div className="min-h-[400px] bg-white dark:bg-[#0a0a0a] animate-pulse" />
 })
 const RecentPosts = dynamic(() => import('./RecentPosts'), { 
-    ssr: false,
-    loading: () => <LoadingBox />
+    loading: () => <div className="min-h-[400px] bg-white dark:bg-[#0a0a0a] animate-pulse" />
 })
 const SpecialOffersSection = dynamic(() => import('./SpecialOffersSection'), { 
-    ssr: false,
-    loading: () => <LoadingBox />
+    loading: () => <div className="min-h-[500px] bg-white dark:bg-[#0a0a0a] animate-pulse" />
 })
 const MobileAppSection = dynamic(() => import('./MobileAppSection'), { 
-    ssr: false,
-    loading: () => <LoadingBox />
+    loading: () => <div className="min-h-[600px] bg-white dark:bg-[#0a0a0a] animate-pulse" />
 })
 const MarketingPopup = dynamic(() => import('./MarketingPopup'), { ssr: false })
 const ExpressCheckoutModal = dynamic(() => import('./ExpressCheckoutModal'), { ssr: false })
 const FAQSection = dynamic(() => import('./FAQSection'), { 
-    ssr: false,
-    loading: () => <LoadingBox />
+    loading: () => <div className="min-h-[500px] bg-white dark:bg-[#0a0a0a] animate-pulse" />
 })
 
 export default function HomeClient() {

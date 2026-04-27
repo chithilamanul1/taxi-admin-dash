@@ -50,7 +50,7 @@ const Footer = () => {
                     <div className="grid grid-cols-2 gap-8 lg:col-span-1">
                         <div className="space-y-8">
                             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600 border-b-2 border-emerald-600/20 pb-2 inline-block">Explore</h3>
-                            <ul className="space-y-4 text-black/50 dark:text-white/50 text-[11px] font-black uppercase tracking-widest">
+                            <ul className="space-y-4 text-black/70 dark:text-white/60 text-[11px] font-black uppercase tracking-widest">
                                 <li><Link href="/" className="hover:text-emerald-600 transition-colors">Home</Link></li>
                                 <li><Link href="/day-trips" className="hover:text-emerald-600 transition-colors">Day Trips</Link></li>
                                 <li><Link href="/tour-packages" className="hover:text-emerald-600 transition-colors">Tour Packages</Link></li>
@@ -60,7 +60,7 @@ const Footer = () => {
                         </div>
                         <div className="space-y-8">
                             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600 border-b-2 border-emerald-600/20 pb-2 inline-block">Legal</h3>
-                            <ul className="space-y-4 text-black/50 dark:text-white/50 text-[11px] font-black uppercase tracking-widest">
+                            <ul className="space-y-4 text-black/70 dark:text-white/60 text-[11px] font-black uppercase tracking-widest">
                                 <li><Link href="/privacy-policy" className="hover:text-emerald-600 transition-colors">Privacy</Link></li>
                                 <li><Link href="/terms" className="hover:text-emerald-600 transition-colors">Terms</Link></li>
                                 <li><Link href="/refund-policy" className="hover:text-emerald-600 transition-colors">Refunds</Link></li>
@@ -122,10 +122,10 @@ const Footer = () => {
 
                 {/* Bottom Bar */}
                 <div className="pt-12 border-t-2 border-black/10 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <p className="text-[10px] text-black/40 dark:text-white/40 font-black uppercase tracking-[0.3em]">
+                    <p className="text-[10px] text-black/60 dark:text-white/60 font-black uppercase tracking-[0.3em]">
                         © 2026 Airport Taxis Pvt (Ltd). Sri Lankan Excellence.
                     </p>
-                    <a href="https://seranex.org" target="_blank" className="group flex items-center gap-1.5 text-[10px] text-black/40 dark:text-white/40 font-black hover:text-emerald-600 transition-all uppercase tracking-[0.2em]">
+                    <a href="https://seranex.org" target="_blank" className="group flex items-center gap-1.5 text-[10px] text-black/60 dark:text-white/60 font-black hover:text-emerald-600 transition-all uppercase tracking-[0.2em]">
                         Developed by <span className="text-black dark:text-white group-hover:text-emerald-600">Chithila Manul</span>
                         <ArrowUpRight size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </a>

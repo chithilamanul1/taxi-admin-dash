@@ -35,7 +35,7 @@ const Features = () => {
                     <h2 className="text-5xl md:text-8xl font-black mb-6 text-black dark:text-white uppercase tracking-tighter leading-none">
                         WHY <span className="text-[#FACC15]">CHOOSE US?</span>
                     </h2>
-                    <p className="text-black/40 dark:text-white/40 max-w-2xl mx-auto text-sm font-black uppercase tracking-[0.2em]">
+                    <p className="text-black/60 dark:text-white/60 max-w-2xl mx-auto text-sm font-black uppercase tracking-[0.2em]">
                         Setting the standard for luxury transportation since 2012.
                     </p>
                 </div>
@@ -51,7 +51,7 @@ const Features = () => {
                                 {feature.icon}
                             </div>
                             <h3 className="text-3xl font-black mb-6 text-black dark:text-white group-hover:text-black transition-colors uppercase tracking-tighter leading-none">{feature.title}</h3>
-                            <p className="text-black/40 dark:text-white/40 group-hover:text-black/60 text-xs font-black uppercase tracking-widest leading-relaxed transition-colors">
+                            <p className="text-black/60 dark:text-white/60 group-hover:text-black/80 text-xs font-black uppercase tracking-widest leading-relaxed transition-colors">
                                 {feature.description}
                             </p>
                         </div>

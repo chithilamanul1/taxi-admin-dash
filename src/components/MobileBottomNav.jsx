@@ -50,7 +50,7 @@ const MobileBottomNav = () => {
                             key={i}
                             href={item.href}
                             className={`flex flex-col items-center justify-center w-1/5 py-1 transition-colors ${
-                                pathname === item.href ? 'text-black' : 'text-slate-500'
+                                pathname === item.href ? 'text-black' : 'text-slate-600'
                             }`}
                         >
                             <div className="relative">
