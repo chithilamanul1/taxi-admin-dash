@@ -74,7 +74,7 @@ export default function ReviewsPage() {
         "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": combinedStats.rating || "5.0",
-            "reviewCount": combinedStats.count || "296",
+            "reviewCount": combinedStats.count || "316",
             "bestRating": "5",
             "worstRating": "1"
         },
@@ -125,7 +125,7 @@ export default function ReviewsPage() {
                             </div>
                             <div className="text-left leading-tight">
                                 <div className="font-bold text-xl">{combinedStats.rating} / 5.0</div>
-                                <div className="text-xs text-white/70">{combinedStats.count > 0 ? combinedStats.count : '296'}+ Verified Reviews</div>
+                                <div className="text-xs text-white/70">{combinedStats.count > 0 ? combinedStats.count : '316'}+ Verified Reviews</div>
                             </div>
                         </div>
                     )}

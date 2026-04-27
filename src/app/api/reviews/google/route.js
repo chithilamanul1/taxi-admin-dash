@@ -11,7 +11,7 @@ export async function GET(req) {
             console.error('GOOGLE_PLACE_ID is not defined in .env');
         }
 
-        let googleStats = { rating: 5.0, totalReviews: 296 }; // Fallback defaults
+        let googleStats = { rating: 5.0, totalReviews: 300 }; // Fallback defaults
         let latestGoogleReviews = [];
 
         // 1. Check Cache Status (Smart Sync)
@@ -37,6 +37,22 @@ export async function GET(req) {
                     googleStats.rating = place.rating;
                     googleStats.totalReviews = place.user_ratings_total;
                     latestGoogleReviews = place.reviews || [];
+
+                    // Save to Settings for persistence
+                    try {
+                        const Settings = (await import('@/models/Settings')).default;
+                        await Settings.findOneAndUpdate(
+                            { key: 'google_review_stats' },
+                            { 
+                                key: 'google_review_stats', 
+                                value: { rating: googleStats.rating, totalReviews: googleStats.totalReviews },
+                                group: 'stats'
+                            },
+                            { upsert: true }
+                        );
+                    } catch (err) {
+                        console.error('Failed to save Google stats to DB:', err);
+                    }
 
                     // Sync to MongoDB (Upsert)
                     for (const review of latestGoogleReviews) {
@@ -68,6 +84,16 @@ export async function GET(req) {
             }
         } else {
             console.log('Google Reviews: Serving from Cache (DB)');
+            // Try to load last saved stats from DB
+            try {
+                const Settings = (await import('@/models/Settings')).default;
+                const savedStats = await Settings.findOne({ key: 'google_review_stats' });
+                if (savedStats && savedStats.value) {
+                    googleStats = savedStats.value;
+                }
+            } catch (err) {
+                console.error('Failed to load saved Google stats:', err);
+            }
         }
 
         // 3. Fetch ALL reviews from DB (Google + Website + Manual)

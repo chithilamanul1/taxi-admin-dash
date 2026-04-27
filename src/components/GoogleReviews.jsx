@@ -26,7 +26,7 @@ const GoogleReviews = () => {
     const [tripReviews, setTripReviews] = useState([]);
     const [activeSource, setActiveSource] = useState('google'); // 'google' or 'tripadvisor'
     const [stats, setStats] = useState({
-        google: { rating: 5.0, total: 296 },
+        google: { rating: 5.0, total: 300 },
         tripadvisor: { rating: 5.0, total: 100 }
     });
     const scrollContainerRef = useRef(null);
@@ -49,7 +49,7 @@ const GoogleReviews = () => {
                             ...prev,
                             google: {
                                 rating: googleData.data.rating || 5.0,
-                                total: googleData.data.totalReviews || 296
+                                total: googleData.data.totalReviews || 316
                             }
                         }));
                     } else {
