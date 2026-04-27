@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import {
     Wand2, MapPin, Calendar, Users, ArrowRight, Loader2,
     CheckCircle, MessageCircle, Navigation, Info, Clock,
