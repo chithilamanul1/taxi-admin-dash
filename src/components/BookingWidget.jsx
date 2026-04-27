@@ -849,7 +849,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 placeholder="ENTER COUPON CODE"
                                                 value={couponCode}
                                                 onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                                className="w-full h-full pl-14 pr-24 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm font-bold outline-none transition-all uppercase text-emerald-950 dark:text-white placeholder:text-slate-400 tracking-widest focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner"
+                                                className="w-full h-full pl-14 pr-24 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm font-bold outline-none transition-all uppercase text-emerald-950 dark:text-white placeholder:text-slate-500 tracking-widest focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner"
                                                 aria-label="Coupon code"
                                             />
                                             <button
@@ -954,7 +954,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                             {/* Counters Section with Label */}
                             <div className="mt-8 lg:mt-10 space-y-4">
-                                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest pl-1 leading-none block mb-4">Passenger & Luggage</label>
+                                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest pl-1 leading-none block mb-4">Passenger & Luggage</label>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                                     {[
                                     { id: 'adults', label: 'Adults' },
@@ -988,7 +988,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                             {/* Vehicle Selection - Unified for Desktop & Mobile */}
                             <div className="mt-4 sm:mt-6">
-                                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest pl-1 leading-none block mb-3">Vehicle Type</label>
+                                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest pl-1 leading-none block mb-3">Vehicle Type</label>
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
                                     className="w-full min-h-[4.5rem] sm:min-h-[5.5rem] py-3 px-4 sm:px-6 flex items-center justify-between bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all group overflow-hidden relative"
@@ -1065,11 +1065,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
-                                        <span className="text-slate-500 dark:text-slate-400">Est. Distance</span>
+                                        <span className="text-slate-600 dark:text-slate-300">Est. Distance</span>
                                         <span className="text-black dark:text-white">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
                                     </div>
                                     <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
-                                        <span className="text-slate-500 dark:text-slate-400">Vehicle Type</span>
+                                        <span className="text-slate-600 dark:text-slate-300">Vehicle Type</span>
                                         <div className="flex items-center gap-3 text-black dark:text-emerald-400">
                                             {vehiclePricing[vehicle]?.image && (
                                                 <div className="w-8 h-6 bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 p-0.5 rounded-lg overflow-hidden shrink-0">
@@ -1107,7 +1107,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <div className="flex flex-col">
                                         <div className="flex items-center gap-2 mb-1">
                                             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                                            <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">Total Payable</span>
+                                            <span className="text-[10px] font-black text-slate-700 dark:text-slate-300 uppercase tracking-[0.2em]">Total Payable</span>
                                         </div>
                                         <div className="flex items-baseline gap-2">
                                             <span className="text-3xl lg:text-4xl font-black text-black dark:text-white tracking-tighter">

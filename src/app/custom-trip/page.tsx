@@ -161,7 +161,7 @@ export default function CustomTripPage() {
                                 <h1 className="text-4xl md:text-6xl font-black text-emerald-950 leading-none tracking-tight uppercase mb-4">
                                     Plan Your <span className="text-emerald-500">Trip</span>
                                 </h1>
-                                <p className="text-slate-400 text-xs font-black uppercase tracking-[0.2em]">Build your own multi-stop adventure across Sri Lanka.</p>
+                                <p className="text-slate-700 text-xs font-black uppercase tracking-[0.2em]">Build your own multi-stop adventure across Sri Lanka.</p>
                             </div>
                             <Link 
                                 href="/trip-planner"
@@ -200,7 +200,7 @@ export default function CustomTripPage() {
 
                                         <div className="flex-1 space-y-4">
                                             <div className="flex justify-between items-center">
-                                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-2">
+                                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 ml-2">
                                                     {index === 0 ? 'Pick Up Location' : index === stops.length - 1 ? 'Final Drop Off' : `Stopover ${index}`}
                                                 </span>
                                                 {stop.type === 'waypoint' && (
@@ -262,14 +262,14 @@ export default function CustomTripPage() {
                     <div className="sticky top-24 bg-white rounded-[3rem] p-8 shadow-2xl shadow-slate-200 border border-slate-100">
                         <div className="grid grid-cols-2 gap-8 mb-8 pb-8 border-b border-slate-100">
                             <div>
-                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 mb-2 leading-none">Route Distance</p>
+                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 mb-2 leading-none">Route Distance</p>
                                 <div className="flex items-baseline gap-1 text-emerald-950">
                                     <span className="text-5xl font-black tracking-tighter">{Math.round(routeStats.distanceKm)}</span>
                                     <span className="text-sm font-black opacity-30 uppercase">km</span>
                                 </div>
                             </div>
                             <div className="text-right">
-                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 mb-2 leading-none">Approx. Time</p>
+                                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700 mb-2 leading-none">Approx. Time</p>
                                 <div className="flex items-baseline gap-1 text-emerald-950 justify-end">
                                     <span className="text-5xl font-black tracking-tighter">
                                         {Math.floor(routeStats.durationMin / 60)}<span className="text-xl text-slate-300">h</span> {routeStats.durationMin % 60}<span className="text-xl text-slate-300">m</span>
@@ -309,7 +309,7 @@ export default function CustomTripPage() {
 
                             <div className="space-y-6">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] ml-2">Your Name</label>
+                                    <label className="text-[10px] font-black uppercase text-slate-600 tracking-[0.2em] ml-2">Your Name</label>
                                     <input
                                         required
                                         className="w-full bg-slate-50 rounded-2xl px-6 py-4 font-black outline-none border border-transparent focus:border-emerald-500/20 focus:bg-white transition-all text-emerald-900 uppercase placeholder:text-slate-300"
@@ -319,7 +319,7 @@ export default function CustomTripPage() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] ml-2">Mobile / WhatsApp</label>
+                                    <label className="text-[10px] font-black uppercase text-slate-600 tracking-[0.2em] ml-2">Mobile / WhatsApp</label>
                                     <input
                                         required
                                         className="w-full bg-slate-50 rounded-2xl px-6 py-4 font-black outline-none border border-transparent focus:border-emerald-500/20 focus:bg-white transition-all text-emerald-900 uppercase placeholder:text-slate-300"
@@ -331,7 +331,7 @@ export default function CustomTripPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] ml-2">Email Address</label>
+                                <label className="text-[10px] font-black uppercase text-slate-600 tracking-[0.2em] ml-2">Email Address</label>
                                 <input
                                     required
                                     type="email"
@@ -344,7 +344,7 @@ export default function CustomTripPage() {
 
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] ml-2">Travel Date</label>
+                                    <label className="text-[10px] font-black uppercase text-slate-600 tracking-[0.2em] ml-2">Travel Date</label>
                                     <input
                                         required
                                         type="date"
@@ -354,7 +354,7 @@ export default function CustomTripPage() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] ml-2">Group Size</label>
+                                    <label className="text-[10px] font-black uppercase text-slate-600 tracking-[0.2em] ml-2">Group Size</label>
                                     <select
                                         className="w-full bg-slate-50 rounded-2xl px-6 py-4 font-black outline-none border border-transparent focus:border-emerald-500/20 focus:bg-white transition-all text-emerald-900 uppercase appearance-none"
                                         value={formData.passengers}
@@ -368,7 +368,7 @@ export default function CustomTripPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] ml-2">Preferred Vehicle</label>
+                                <label className="text-[10px] font-black uppercase text-slate-600 tracking-[0.2em] ml-2">Preferred Vehicle</label>
                                 <select
                                     className="w-full bg-slate-50 rounded-2xl px-6 py-4 font-black outline-none border border-transparent focus:border-emerald-500/20 focus:bg-white transition-all text-emerald-900 uppercase appearance-none"
                                     value={formData.vehicleType}
@@ -385,7 +385,7 @@ export default function CustomTripPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] ml-2">Requirement</label>
+                                <label className="text-[10px] font-black uppercase text-slate-600 tracking-[0.2em] ml-2">Requirement</label>
                                 <textarea
                                     className="w-full bg-slate-50 rounded-2xl px-6 py-4 font-black outline-none border border-transparent focus:border-emerald-500/20 focus:bg-white transition-all min-h-[100px] text-emerald-900 uppercase placeholder:text-slate-300"
                                     placeholder="EXTRA LUGGAGE, CHILD SEATS, ETC..."

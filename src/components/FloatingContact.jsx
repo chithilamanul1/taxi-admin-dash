@@ -26,6 +26,20 @@ export default function FloatingContact() {
                         </div>
                     </a>
 
+                    <button
+                        onClick={() => {
+                            setIsOpen(false);
+                            window.dispatchEvent(new CustomEvent('open-live-chat'));
+                        }}
+                        className="group flex items-center gap-3 justify-end"
+                        aria-label="Open Live Chat"
+                    >
+                        <span className="bg-white px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-700 whitespace-nowrap shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">Live Chat</span>
+                        <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center hover:scale-110 transition-transform shadow-md">
+                            <MessageCircle size={20} strokeWidth={3} className="text-emerald-400" />
+                        </div>
+                    </button>
+
                     <a
                         href="mailto:info@srilankantaxi.lk"
                         className="group flex items-center gap-3 justify-end"

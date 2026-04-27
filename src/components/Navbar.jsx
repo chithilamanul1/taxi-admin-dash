@@ -53,14 +53,6 @@ export default function Navbar() {
 
                 <div className="flex items-center gap-2 md:gap-3">
 
-                    {/* Live Chat Toggle */}
-                    <button 
-                        onClick={() => window.dispatchEvent(new CustomEvent('open-live-chat'))}
-                        className="w-9 h-9 md:w-14 md:h-14 bg-black rounded-2xl flex items-center justify-center text-white hover:bg-zinc-800 transition-all shadow-lg shadow-black/10 hover:-translate-y-1"
-                        aria-label="Open Live Chat"
-                    >
-                        <MessageCircle size={20} strokeWidth={3} className="text-emerald-400" />
-                    </button>
 
                     {/* Currency Selector (Always Visible) */}
                     <div className="relative group hidden sm:block">
