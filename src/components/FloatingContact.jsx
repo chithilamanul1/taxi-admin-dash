@@ -12,7 +12,7 @@ export default function FloatingContact() {
     if (isExcludedPage) return null
 
     return (
-        <div className="fixed bottom-24 md:bottom-10 right-6 z-[9999] flex flex-col items-end gap-5">
+        <div id="floating-contact" className="fixed bottom-24 md:bottom-10 right-6 z-[9999] flex flex-col items-end gap-5">
             {isOpen && (
                 <div className="flex flex-col gap-4 animate-fade-in-up items-end">
                     {/* WhatsApp */}

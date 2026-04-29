@@ -162,7 +162,10 @@ body.booking-active .live-chat-trigger,
 body.booking-active #live-chat-container,
 body.booking-active [class*='chat-widget'],
 body.booking-active iframe[title*='chat'],
-body.hide-bottom-nav .md\:hidden.fixed.bottom-0 {
+body.booking-active #mobile-bottom-nav,
+body.booking-active #floating-contact,
+body.hide-bottom-nav #mobile-bottom-nav,
+body.hide-bottom-nav #floating-contact {
     display: none !important;
 }
 

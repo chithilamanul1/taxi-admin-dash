@@ -98,13 +98,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
     // Hide bottom nav on steps 2 and 3
     useEffect(() => {
-        if (isOpen && (step === 2 || step === 3)) {
+        if (isOpen) {
             document.body.classList.add('hide-bottom-nav');
         } else {
             document.body.classList.remove('hide-bottom-nav');
         }
         return () => document.body.classList.remove('hide-bottom-nav');
-    }, [isOpen, step]);
+    }, [isOpen]);
 
     // Form State - declared early so functions below can access it
     const [formData, setFormData] = useState({
@@ -1056,7 +1056,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         />
                                     </div>
                                 ) : (
-                                <div className="flex flex-col md:flex-row items-center p-8 gap-8 md:gap-12">
+                                <div className="flex flex-col md:flex-row items-center p-5 sm:p-12 gap-5 sm:gap-12">
                                     <div className="w-full md:w-1/3 flex justify-center relative">
                                         <div className="absolute inset-0 bg-gradient-to-b from-[#FACC15]/20 to-transparent rounded-full blur-3xl opacity-30"></div>
                                         <img 
@@ -1100,6 +1100,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </div>
                                     </div>
                                 </div>
+                            )}
                             </div>
 
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 dark:border-white/10 pb-8">
@@ -1252,7 +1253,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <div className="grid lg:grid-cols-12 gap-12">
                                     {/* Left Column: Summary */}
                                     <div className="lg:col-span-7 space-y-8">
-                                        <div className="p-6 md:p-14 bg-white dark:bg-zinc-900/40 rounded-[2.5rem] md:rounded-[3rem] text-emerald-950 dark:text-white border border-emerald-100 dark:border-white/10 shadow-2xl relative overflow-hidden group">
+                                        <div className="p-5 sm:p-14 bg-white dark:bg-zinc-900/40 rounded-[2rem] sm:rounded-[3rem] text-emerald-950 dark:text-white border border-emerald-100 dark:border-white/10 shadow-2xl relative overflow-hidden group">
                                             <div className="absolute top-0 right-0 w-64 h-64 bg-[#FACC15]/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-[#FACC15]/10 transition-all duration-700"></div>
 
                                             <div className="relative z-10 space-y-10">
