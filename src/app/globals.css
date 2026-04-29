@@ -161,7 +161,8 @@ body {
 body.booking-active .live-chat-trigger,
 body.booking-active #live-chat-container,
 body.booking-active [class*='chat-widget'],
-body.booking-active iframe[title*='chat'] {
+body.booking-active iframe[title*='chat'],
+body.hide-bottom-nav .md\:hidden.fixed.bottom-0 {
     display: none !important;
 }
 
