@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSession, signIn } from 'next-auth/react';
-import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, ArrowLeft, ArrowRight, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag, Info, AlertCircle, Plus, Minus, MessageSquare, Coins } from 'lucide-react';
+import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, ArrowLeft, ArrowRight, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag, Info, AlertCircle, Plus, Minus, MessageSquare, Coins, ChevronDown, Wind } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -12,6 +12,7 @@ import LocationInput from './LocationInput';
 import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import VehicleCarousel from './VehicleCarousel';
+
 const STEPS = [
     { id: 1, title: 'Route & Vehicle', icon: MapPin },
     { id: 2, title: 'Passenger Details', icon: User },
@@ -20,7 +21,6 @@ const STEPS = [
 
 // Strip 'KDH' from vehicle display names (DB IDs/records remain untouched)
 const displayVehicleName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
-
 
 export default function BookingModal({ isOpen, onClose, initialData = {}, pricingCategory = 'airport-transfer' }) {
     const { data: session } = useSession();
@@ -39,42 +39,50 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const [isVehicleExpanded, setIsVehicleExpanded] = useState(true);
     const [isFleetExpanded, setIsFleetExpanded] = useState(false);
 
+    const { currency, rates, changeCurrency } = useCurrency();
+    const currentSymbol = rates?.[currency]?.symbol || (currency === 'LKR' ? 'Rs' : currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : currency === 'INR' ? '₹' : '$');
+
+    const SUPPORTED_CURRENCIES = [
+        { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: 'https://flagcdn.com/w40/lk.png' },
+        { code: 'USD', symbol: '$', name: 'US Dollar', flag: 'https://flagcdn.com/w40/us.png' },
+        { code: 'EUR', symbol: '€', name: 'Euro', flag: 'https://flagcdn.com/w40/eu.png' },
+        { code: 'GBP', symbol: '£', name: 'British Pound', flag: 'https://flagcdn.com/w40/gb.png' },
+        { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: 'https://flagcdn.com/w40/in.png' },
+    ];
+
+    // Fetch Settings and Destinations
     useEffect(() => {
+        if (!isOpen) return;
+        
         document.body.classList.add('booking-active');
+        
         const fetchSettings = async () => {
             try {
-                console.log("BookingModal: Fetching pricing settings...");
                 const res = await fetch('/api/admin/pricing-settings', { cache: 'no-store' });
-                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-                const data = await res.json();
-                if (data.success && data.data) {
-                    console.log("BookingModal: Pricing settings fetched successfully", data.data);
-                    setPricingSettings(data.data);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success && data.data) setPricingSettings(data.data);
                 }
-            } catch (err) {
-                console.error("BookingModal: Failed to fetch settings", err);
-            }
+            } catch (err) { console.error("Fetch Settings Error:", err); }
         };
+        
         const fetchDestinations = async () => {
             try {
-                console.log("BookingModal: Fetching destinations...");
                 const res = await fetch('/api/admin/destinations', { cache: 'no-store' });
-                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-                const data = await res.json();
-                if (data.success) {
-                    console.log("BookingModal: Destinations fetched successfully", data.data.length);
-                    setDestinations(data.data);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success) setDestinations(data.data);
                 }
-            } catch (err) {
-                console.error("BookingModal: Failed to fetch destinations", err);
-            }
+            } catch (err) { console.error("Fetch Destinations Error:", err); }
         };
+
         fetchSettings();
         fetchDestinations();
+        
         return () => document.body.classList.remove('booking-active');
-    }, []);
+    }, [isOpen]);
 
-    // Body Scroll Lock & Hide Chat
+    // Body Scroll Lock & Hide Chat & Hide Bottom Nav
     useEffect(() => {
         if (isOpen) {
             const originalOverflow = document.body.style.overflow;
@@ -82,23 +90,26 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             document.body.style.overflow = 'hidden';
             document.body.style.touchAction = 'none';
 
-            // Hide Live Chat
             const chatTrigger = document.querySelector('.live-chat-trigger');
             if (chatTrigger) chatTrigger.style.display = 'none';
+
+            if (step >= 2) {
+                document.body.classList.add('hide-bottom-nav');
+            } else {
+                document.body.classList.remove('hide-bottom-nav');
+            }
 
             return () => {
                 document.body.style.overflow = originalOverflow;
                 document.body.style.touchAction = originalTouchAction;
-                // Show Live Chat
+                document.body.classList.remove('hide-bottom-nav');
                 const chatTriggerBack = document.querySelector('.live-chat-trigger');
                 if (chatTriggerBack) chatTriggerBack.style.display = 'flex';
             };
         }
-    }, [isOpen]);
+    }, [isOpen, step]);
 
-
-
-    // Form State - declared early so functions below can access it
+    // Form State
     const [formData, setFormData] = useState({
         vehicle: initialData.vehicle || 'mini-car',
         pickup: initialData.pickup || '',
@@ -108,7 +119,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         dropoffCoords: initialData.dropoffCoords || null,
         tripType: initialData.tripType || 'one-way',
         passengerCount: initialData.passengerCount || { adults: 1, children: 0, luggage: 0, handLuggage: 0 },
-        // waitingHours removed
         hasNameBoard: (initialData.hasNameBoard === true || initialData.hasNameBoard === false) ? initialData.hasNameBoard : null,
         nameBoardText: initialData.nameBoardText || '',
         couponCode: initialData.couponCode || '',
@@ -121,37 +131,52 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         flightNumber: initialData.flightNumber || '',
         flightArrivalDate: initialData.flightArrivalDate || '',
         flightArrivalTime: initialData.flightArrivalTime || '',
-        arrivalDate: initialData.arrivalDate || '', // Added to prevent crash
+        arrivalDate: initialData.arrivalDate || '',
         notes: initialData.notes || '',
         duration: initialData.duration || '',
         paymentMethod: 'cash',
-        paymentType: 'full', // 'full' or 'partial'
+        paymentType: 'full',
         billingName: '',
         billingAddress: '',
         billingCity: '',
         billingCountry: '',
     });
 
+    // Initialize State from initialData
+    useEffect(() => {
+        if (isOpen) {
+            setFormData(prev => ({ 
+                ...prev, 
+                ...initialData,
+                pickup: initialData.pickup || prev.pickup,
+                dropoff: initialData.drop || initialData.dropoff || prev.dropoff,
+                vehicle: initialData.vehicle || prev.vehicle,
+                passengerCount: { ...prev.passengerCount, ...(initialData.passengerCount || {}) },
+                waypoints: initialData.waypoints || prev.waypoints
+            }));
+            
+            setIsVehicleExpanded(!initialData.vehicle);
+            setStep(1);
+
+            if (initialData.distance) setDistance(Number(initialData.distance));
+            if (initialData.verifiedCoupons) setVerifiedCoupons(initialData.verifiedCoupons);
+            if (initialData.couponCode) {
+                setCouponInput(initialData.couponCode);
+                handleApplyCoupon(initialData.couponCode, initialData.pickup || formData.pickup, initialData.dropoff || formData.dropoff);
+            }
+        }
+    }, [isOpen, initialData]);
 
     const handleApplyCoupon = async (codeToApply = couponInput, contextPickup = formData.pickup, contextDropoff = formData.dropoff) => {
         const input = (codeToApply || '').trim();
-        if (!input) return;
-
-        // Initial valid check - we rely on API now for specific route validation
-        if (!contextPickup) {
-            return false;
-        }
+        if (!input || !contextPickup) return false;
 
         setCouponLoading(true);
         try {
             const res = await fetch('/api/coupons/validate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    code: input,
-                    pickup: contextPickup,
-                    dropoff: contextDropoff
-                })
+                body: JSON.stringify({ code: input, pickup: contextPickup, dropoff: contextDropoff })
             });
             const data = await res.json();
             if (data.valid) {
@@ -160,10 +185,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     return [...prev, data.coupon];
                 });
                 setFormData(prev => ({ ...prev, couponCode: data.coupon.code }));
-                if (!codeToApply) setCouponInput(''); // Only clear if it was from manual input
+                if (!codeToApply) setCouponInput('');
                 return true;
             } else {
-                if (!codeToApply) alert(data.message); // Only alert if manually applied
+                if (!codeToApply) alert(data.message);
                 setFormData(prev => ({ ...prev, couponCode: '' }));
                 return false;
             }
@@ -176,22 +201,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         }
     };
 
-    const { currency, rates, changeCurrency } = useCurrency(); // Import Currency Context
-
-    // Currency conversion helper
-    const SUPPORTED_CURRENCIES = [
-        { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: 'https://flagcdn.com/w40/lk.png' },
-        { code: 'USD', symbol: '$', name: 'US Dollar', flag: 'https://flagcdn.com/w40/us.png' },
-        { code: 'EUR', symbol: 'ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬', name: 'Euro', flag: 'https://flagcdn.com/w40/eu.png' },
-        { code: 'GBP', symbol: 'Ãƒâ€šÃ‚Â£', name: 'British Pound', flag: 'https://flagcdn.com/w40/gb.png' },
-        { code: 'INR', symbol: 'ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹', name: 'Indian Rupee', flag: 'https://flagcdn.com/w40/in.png' },
-    ];
-
     const convertToAllCurrencies = (amountLKR) => {
         return SUPPORTED_CURRENCIES.map(c => {
             const rate = rates?.[c.code] || 1;
             const convertedRaw = amountLKR * rate;
-            // Round LKR to whole, others to 2 decimal places
             const value = c.code === 'LKR' ? Math.round(amountLKR) : Number(convertedRaw.toFixed(2));
             return { ...c, value };
         });
@@ -200,10 +213,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const getPriceBreakdown = () => {
         try {
             const vehicleData = pricing.find(p => p.vehicleType === formData.vehicle);
-
-            // CRITICAL: Ensure we have a valid distance and vehicle data
             const distKm = Number(distance || initialData.distance || 0);
-
             const isAirportPickup = (formData.pickup?.toLowerCase().includes('airport') || formData.dropoff?.toLowerCase().includes('airport')) || (typeof initialData.pickup === 'string' && initialData.pickup.toLowerCase().includes('airport'));
 
             if (!vehicleData || distKm === 0) {
@@ -216,14 +226,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 nameBoardPrice: pricingSettings?.nameBoardPrice
             }, vehicleData);
 
-            // Payment Method Surcharges per User Request
-            // 1. Calculate for the current display currency (for UI)
             const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, currency, formData.vehicle);
-
-            // 2. Calculate for LKR (for backend storage/consistency)
             const paymentSurchargeLKR = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, 'LKR', formData.vehicle);
 
-            let total = baseTotal + surcharges + paymentSurcharge; // Total in current currency context (mixed if rates missing, resolved below)
+            let total = baseTotal + surcharges + paymentSurcharge;
 
             let couponDiscountAmount = 0;
             if (verifiedCoupons && verifiedCoupons.length > 0) {
@@ -237,20 +243,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 });
             }
 
-            // 2. Calculate Long Distance Discount (Dynamic from Settings) - ONLY FOR AIRPORT PICKUPS
             let longDistanceDiscountAmount = 0;
             if (pricingSettings?.isActive && distKm > (pricingSettings?.longDistanceThreshold || 175) && isAirportPickup) {
                 longDistanceDiscountAmount = total * ((pricingSettings?.longDistanceDiscountPercentage || 10) / 100);
             }
 
-            // 3. Apply MAX Rule (User gets the higher discount, no stacking) - Consistent with Widget
             const finalDiscount = Math.max(couponDiscountAmount, longDistanceDiscountAmount);
             total = Math.max(0, total - finalDiscount);
 
-            const payNow = formData.paymentType === 'partial' ? total * 0.5 : total;
-            const balance = total - payNow;
-
-            // Convert values TO the selected currency individually to ensure they SUM correctly in the UI
             const rate = rates?.[currency] || 1;
             const roundFn = formData.vehicle === 'sampath-test' ? Math.round : Math.ceil;
 
@@ -258,15 +258,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const convertedSurcharges = roundFn(surcharges * rate);
             const convertedPaymentFee = roundFn(paymentSurcharge * rate);
             const convertedDiscounts = roundFn(finalDiscount * rate);
-
-            // The Total displayed MUST be the sum of its parts to avoid "Rs 0" or mismatch errors
             const convertedTotal = convertedSubtotal + convertedSurcharges + convertedPaymentFee - convertedDiscounts;
 
             const payNowRatio = formData.paymentType === 'partial' ? 0.5 : 1;
             const convertedPayNow = roundFn(convertedTotal * payNowRatio);
             const convertedBalance = convertedTotal - convertedPayNow;
 
-            // Detailed Surcharges for UI
             const detailedExtras = [
                 { label: 'Name Board', value: roundFn(calculateSurcharges({ hasNameBoard: formData.hasNameBoard, nameBoardPrice: pricingSettings.nameBoardPrice }, vehicleData) * rate) }
             ];
@@ -298,127 +295,29 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         }
     };
 
-    // Price Calculation Helper for Vehicle List
-    const calculatePrice = (v) => {
-        const distKm = Number(distance || initialData.distance || 0);
-        const baseTotal = calculateBasePrice(distKm, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
-        const surcharges = calculateSurcharges({
-            hasNameBoard: formData.hasNameBoard,
-            nameBoardPrice: pricingSettings?.nameBoardPrice
-        }, v);
-        return baseTotal + surcharges;
-    };
-
-    // Extract calculated values for render
-
-    // Memoize the price breakdown to ensure reactivity and performance
     const { total: totalPrice, subtotal, surcharges, payNow, balance: balanceAmount, ...detailedBreakdown } = useMemo(() => {
         return getPriceBreakdown();
     }, [formData, pricing, verifiedCoupons, currency, rates, pricingSettings, distance]);
 
-    const selectedVehicle = pricing.find(p => p.vehicleType === formData.vehicle);
-    const totalPassengers = (formData.passengerCount.adults || 0) + (formData.passengerCount.children || 0);
-    const isOverCapacity = selectedVehicle && totalPassengers > (selectedVehicle.capacity || 4);
-
-    // 1. Initialize State from initialData when modal opens or initialData changes
+    // Data fetching for pricing
     useEffect(() => {
         if (isOpen) {
-            setFormData(prev => ({ 
-                ...prev, 
-                ...initialData,
-                // Ensure initial data maps correctly to form fields
-                pickup: initialData.pickup || prev.pickup,
-                dropoff: initialData.drop || initialData.dropoff || prev.dropoff,
-                vehicle: initialData.vehicle || prev.vehicle,
-                // Ensure specific nested objects are merged correctly
-                passengerCount: { ...prev.passengerCount, ...(initialData.passengerCount || {}) },
-                waypoints: initialData.waypoints || prev.waypoints
-            }));
-            
-            // If vehicle is pre-selected, collapse the list by default for a focused view
-            if (initialData.vehicle) {
-                setIsVehicleExpanded(false);
-            } else {
-                setIsVehicleExpanded(true);
-            }
-            
-            setStep(1);
-
-            if (initialData.distance) {
-                const d = Number(initialData.distance);
-                console.log("Setting distance from initialData:", d);
-                setDistance(d);
-            }
-            if (initialData.verifiedCoupons) {
-                setVerifiedCoupons(initialData.verifiedCoupons);
-            }
-            if (initialData.couponCode) {
-                setCouponInput(initialData.couponCode);
-                // Automatically validate the coupon if it's passed in
-                handleApplyCoupon(initialData.couponCode, initialData.pickup || formData.pickup, initialData.dropoff || formData.dropoff);
-            }
-        }
-    }, [isOpen, initialData]);
-
-
-    const [pricingData, setPricingData] = useState([]);
-
-    // 2. Auto-Select Optimal Vehicle when capacity changes (Inside Modal)
-    useEffect(() => {
-        if (!pricingData.length) return;
-
-        const totalPax = (formData.passengerCount?.adults || 0) + (formData.passengerCount?.children || 0);
-        const totalLuggage = formData.passengerCount?.luggage || 0;
-
-        // Find best fit (Cheapest that fits)
-        const sortedVehicles = [...pricingData].sort((a, b) => (a.basePrice || 0) - (b.basePrice || 0));
-        const bestFit = sortedVehicles.find(v =>
-            totalPax <= v.capacity && totalLuggage <= (v.luggage || 0)
-        );
-
-        if (bestFit && bestFit.vehicleType !== formData.vehicle) {
-            setFormData(prev => ({ ...prev, vehicle: bestFit.vehicleType }));
-        }
-    }, [formData.passengerCount, pricingData]);
-
-    // useEffects for data fetching
-    useEffect(() => {
-        if (isOpen) {
-            // Fetch pricing based on category
             fetch(`/api/pricing?category=${pricingCategory}`, { cache: 'no-store' })
                 .then(res => res.json())
                 .then(response => {
                     if (response.success && Array.isArray(response.data)) {
-                        setPricingData(response.data);
                         setPricing(response.data);
-                    } else {
-                        setPricingData([]);
-                        setPricing([]);
                     }
                 })
                 .catch(err => console.error("Error fetching pricing:", err));
         }
-
     }, [isOpen, pricingCategory]);
 
-    const modalContentRef = useRef(null);
-    // Scroll to top on step change
+    // OSRM Distance Fetching
     useEffect(() => {
-        console.log("BookingModal: Step changed to:", step);
-        if (modalContentRef.current) {
-            modalContentRef.current.scrollTo({ top: 0, behavior: 'instant' });
-        }
-    }, [step]);
-
-    useEffect(() => {
-        // If we already have a valid distance passed from parent (Google Maps), DO NOT overwrite it with OSRM (less accurate)
-        // Only fetch if distance is missing
         if (initialData.distance && initialData.distance > 0) return;
 
-        if (
-            formData.pickupCoords?.lat && formData.pickupCoords?.lon &&
-            formData.dropoffCoords?.lat && formData.dropoffCoords?.lon
-        ) {
+        if (formData.pickupCoords?.lat && formData.pickupCoords?.lon && formData.dropoffCoords?.lat && formData.dropoffCoords?.lon) {
             const coords = [
                 `${formData.pickupCoords.lon},${formData.pickupCoords.lat}`,
                 ...formData.waypoints.map(wp => `${wp.lon},${wp.lat}`),
@@ -429,7 +328,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 .then(data => {
                     if (data.routes?.[0]) {
                         setDistance(data.routes[0].distance / 1000);
-                        // Calculate duration
                         const seconds = data.routes[0].duration;
                         const hours = Math.floor(seconds / 3600);
                         const minutes = Math.floor((seconds % 3600) / 60);
@@ -441,14 +339,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         }
     }, [formData.pickupCoords, formData.dropoffCoords, formData.waypoints]);
 
-
-
-    // Removed duplicate declaration
-
     const validateForm = (targetStep) => {
         const newErrors = {};
-        
-        // Step 1 Validation
         if (targetStep >= 1) {
             if (!formData.pickup) newErrors.pickup = true;
             if (!formData.dropoff) newErrors.dropoff = true;
@@ -458,133 +350,62 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 if (!formData.flightArrivalTime) newErrors.time = true;
             }
         }
-
-        // Step 2 Validation (Passenger Details)
         if (targetStep >= 2) {
             if (!formData.name) newErrors.name = true;
             if (!formData.phone) newErrors.phone = true;
             if (!formData.email) newErrors.email = true;
-            // Removed flightNumber requirement to make it optional as requested
             if (formData.hasNameBoard && !formData.nameBoardText) newErrors.nameBoardText = true;
         }
-
-        console.log(`BookingModal: Validating Step ${targetStep}, Errors:`, newErrors);
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const scrollToFirstError = (newErrors = errors) => {
-        const firstErrorKey = Object.keys(newErrors)[0];
-        if (!firstErrorKey) return;
-
-        // If error is on a different step, switch first
-        const step1Keys = ['pickup', 'dropoff', 'hasNameBoard', 'date', 'time'];
-        const errorIsInStep1 = step1Keys.includes(firstErrorKey);
-
-        if (errorIsInStep1 && step !== 1) {
-            setStep(1);
-            // Wait for step change to render before scrolling
-            setTimeout(() => {
-                const el = document.getElementById(`field-${firstErrorKey}`);
-                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
-            return;
-        }
-
-        const el = document.getElementById(`field-${firstErrorKey}`);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const handleNext = () => {
+        if (step === 1 && validateForm(1)) setStep(2);
+        else if (step === 2 && validateForm(2)) setStep(3);
+        else if (step === 3) handleSubmit();
     };
 
     const handleSubmit = async () => {
-        if (!validateForm(2)) {
-            scrollToFirstError();
-            return;
-        }
-        console.log("Submitting Booking... Step 1");
+        if (!validateForm(2)) return;
         setLoading(true);
         try {
-            // Sanitize customer ID (prevent Google ID string from causing CastError)
-            const customerId = session?.user?.id;
-            const isValidObjectId = (id) => typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id);
-
-            // Verify breakdown before sending
-            console.log("Getting Price Breakdown...");
             const breakdown = getPriceBreakdown();
             const { lkr } = breakdown;
-            console.log("Price Breakdown (LKR):", lkr);
-
             if (lkr.total === 0) {
-                alert("Error: Total price is 0. Please re-select vehicle.");
+                alert("Error: Total price is 0.");
                 setLoading(false);
                 return;
             }
 
-            // Map form data to Booking model schema
             const bookingData = {
-                customer: isValidObjectId(customerId) ? customerId : null,
-                pickupLocation: {
-                    address: formData.pickup,
-                    lat: formData.pickupCoords?.lat || null,
-                    lng: formData.pickupCoords?.lng || null
-                },
-                dropoffLocation: {
-                    address: formData.dropoff,
-                    lat: formData.dropoffCoords?.lat || null,
-                    lng: formData.dropoffCoords?.lng || null
-                },
-                waypoints: formData.waypoints.map(wp => ({
-                    address: wp.name,
-                    lat: wp.lat,
-                    lng: wp.lng
-                })),
+                customer: session?.user?.id || null,
+                pickupLocation: { address: formData.pickup, lat: formData.pickupCoords?.lat || null, lng: formData.pickupCoords?.lng || null },
+                dropoffLocation: { address: formData.dropoff, lat: formData.dropoffCoords?.lat || null, lng: formData.dropoffCoords?.lng || null },
+                waypoints: formData.waypoints.map(wp => ({ address: wp.name, lat: wp.lat, lng: wp.lng })),
                 vehicleType: formData.vehicle,
                 tripType: formData.tripType,
                 passengerCount: formData.passengerCount,
                 distanceKm: distance,
                 duration: formData.duration,
-                waitingHours: formData.waitingHours,
-
-                // Detailed Payment Breakdown (Always send LKR to API, backend will convert)
                 totalPrice: lkr.total,
                 paidAmount: lkr.payNow,
                 balanceAmount: lkr.balance,
-                surchargeAmount: lkr.surcharges,
-
-                // Converted values for display/admin
                 displayPrice: breakdown.total,
                 displayPaidAmount: breakdown.payNow,
                 displayBalanceAmount: breakdown.balance,
-
-                paymentType: formData.paymentType || 'full',
                 currency: currency || 'LKR',
-
-                scheduledDate: formData.date,
-                scheduledTime: formData.time,
+                scheduledDate: formData.date || formData.flightArrivalDate,
+                scheduledTime: formData.time || formData.flightArrivalTime,
                 customerName: formData.name,
                 customerEmail: formData.email,
                 guestPhone: formData.phone,
-                // Add WhatsApp if present, or fallback to phone, or store in notes
                 whatsappNumber: formData.whatsapp,
-                nameBoard: {
-                    enabled: formData.hasNameBoard,
-                    text: formData.nameBoardText
-                },
-                couponCode: formData.couponCode,
-                appliedCoupons: verifiedCoupons.map(c => c.code),
+                nameBoard: { enabled: formData.hasNameBoard, text: formData.nameBoardText },
                 paymentMethod: formData.paymentMethod,
                 flightNumber: formData.flightNumber,
-                flightArrivalDate: formData.flightArrivalDate,
-                flightArrivalTime: formData.flightArrivalTime,
-                notes: formData.notes,
-                billingDetails: {
-                    billingName: formData.billingName,
-                    billingAddress: formData.billingAddress,
-                    city: formData.billingCity,
-                    country: formData.billingCountry
-                }
+                notes: formData.notes
             };
-
-            console.log("Sending booking data:", bookingData);
 
             const res = await fetch('/api/payment/initiate', {
                 method: 'POST',
@@ -592,391 +413,156 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 body: JSON.stringify(bookingData),
             });
 
-            console.log("Response status:", res.status);
             const data = await res.json();
-            console.log("Response data:", data);
-
             if (data.success) {
-                // Save guest booking to local storage if not logged in
-                if (!session && data.bookingId) {
-                    try {
-                        const existing = JSON.parse(localStorage.getItem('guest_bookings') || '[]');
-                        if (!existing.includes(data.bookingId)) {
-                            existing.push(data.bookingId);
-                            localStorage.setItem('guest_bookings', JSON.stringify(existing));
-                        }
-                    } catch (e) { console.error("Error saving guest booking:", e); }
-                }
-
                 window.location.href = formData.paymentMethod === 'card' ? data.paymentUrl : `/payment/success?bookingId=${data.bookingId}`;
             } else {
-                alert('Booking failed: ' + (data.message || data.error || 'Server error'));
+                alert('Booking failed: ' + (data.message || 'Server error'));
             }
         } catch (error) {
             console.error("Submit Error:", error);
-            alert('An error occurred during booking: ' + error.message);
+            alert('An error occurred.');
         } finally {
             setLoading(false);
         }
     };
 
-    const handleNext = () => {
-        if (step === 1) {
-            if (validateForm(1)) {
-                setStep(2);
-            } else {
-                scrollToFirstError();
-            }
-        } else if (step === 2) {
-            if (validateForm(2)) {
-                setStep(3);
-            } else {
-                scrollToFirstError();
-            }
-        } else {
-            handleSubmit();
-        }
-    };
-
     if (!isOpen) return null;
 
-    const currentSymbol = SUPPORTED_CURRENCIES.find(c => c.code === currency)?.symbol || 'Rs';
-
+    const selectedVehicle = pricing.find(p => p.vehicleType === formData.vehicle);
 
     return (
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 p-0 sm:p-4 overflow-hidden touch-none overscroll-none backdrop-blur-xl transition-all duration-500">
-            {/* Prevent Body Scroll Shadow Overlay */}
-            <div className="absolute inset-0" onClick={onClose}></div>
-
-            <style jsx global>{`
-                body {
-                    overflow: hidden !important;
-                    touch-action: none;
-                    -webkit-overflow-scrolling: none;
-                }
-            `}</style>
-
-            {/* Modal Container */}
-            <div id="modal-container" className="bg-white dark:bg-zinc-950 w-full h-full sm:h-auto sm:max-h-[95vh] rounded-[2rem] sm:rounded-[3rem] shadow-[0_30px_100px_rgba(0,0,0,0.4)] sm:max-w-4xl overflow-x-hidden overflow-y-hidden flex flex-col animate-slide-up relative transition-all duration-500 border border-slate-100 dark:border-white/5">
-                {/* Header - Hidden in Step 2 */}
-                {step !== 2 && (
-                    <div className="p-6 sm:p-10 pb-4 flex items-center justify-between shrink-0 pt-8 sm:pt-10 bg-white dark:bg-zinc-950 transition-colors duration-500">
-                        <div className="flex items-center gap-5 min-w-0">
-                            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#FACC15] rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-[#FACC15]/20">
-                                <Zap size={24} className="text-white sm:w-8 sm:h-8" strokeWidth={3} fill="currentColor" />
-                            </div>
-                            <div className="min-w-0">
-                                <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-emerald-950 dark:text-white leading-none truncate uppercase">
-                                    SECURE <span className="text-[#FACC15]">BOOKING</span>
-                                </h2>
-                                <p className="text-[9px] sm:text-[10px] md:text-xs font-black text-slate-700 dark:text-slate-200 uppercase tracking-[0.3em] mt-2">Elite Tier Encryption</p>
-                            </div>
-                        </div>
-                        <button onClick={onClose} className="w-12 h-12 sm:w-14 sm:h-14 bg-slate-50 dark:bg-white/5 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-white/10 hover:bg-emerald-50 dark:hover:bg-yellow-400/10 transition-all z-[101] group">
-                            <X size={20} className="sm:w-7 sm:h-7 text-slate-400 group-hover:text-[#FACC15] group-hover:rotate-90 transition-transform" />
-                        </button>
-                    </div>
-                )}
-
-                {/* Progress Indicators */}
-                <div className="px-4 sm:px-12 py-4 md:py-6 flex gap-2 md:gap-6 shrink-0">
-                    {STEPS.map((s) => (
-                        <div key={s.id} className="flex-1 flex flex-col gap-2">
-                            <div className={`h-1.5 md:h-2 rounded-full transition-all duration-1000 ${step >= s.id ? 'bg-[#FACC15] shadow-sm shadow-[#FACC15]/30' : 'bg-slate-100 dark:bg-white/5'}`}></div>
-                            <span className={`text-[7px] md:text-[10px] font-black uppercase tracking-normal md:tracking-widest text-center leading-tight ${step >= s.id ? 'text-emerald-950 dark:text-emerald-400' : 'text-slate-500'}`}>{s.title}</span>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Main Viewport */}
-                <div ref={modalContentRef} className="flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-8 md:px-12 py-8 sm:py-10 md:py-12 custom-scrollbar overscroll-contain relative z-10">
-                    {step === 1 && (
-                        <div className="space-y-8 md:space-y-10 animate-slide-up">
-                            {/* Trip Header */}
-                            <div className="flex flex-wrap bg-slate-50 dark:bg-white/5 p-1.5 rounded-2xl border border-slate-100 dark:border-white/10 w-full md:w-fit gap-1 shadow-inner">
-                                {['one-way', 'round-trip'].map(t => (
-                                    <button 
-                                        key={t} 
-                                        onClick={() => setFormData({ ...formData, tripType: t })} 
-                                        className={`flex-1 md:flex-none px-4 md:px-8 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-wider md:tracking-widest transition-all whitespace-nowrap ${formData.tripType === t ? 'bg-white dark:bg-zinc-800 text-[#FACC15] shadow-md border border-slate-100 dark:border-white/5' : 'text-slate-600 dark:text-slate-400 hover:text-[#FACC15]'}`}
-                                    >
-                                        {t.replace('-', ' ')}
-                                    </button>
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-0 sm:p-4 md:p-8 bg-emerald-950/20 backdrop-blur-xl">
+            <div className="w-full h-full max-w-7xl bg-white dark:bg-zinc-950 sm:rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.2)] dark:shadow-none overflow-hidden flex flex-col relative border border-white/20">
+                {/* Header */}
+                <div className="p-6 sm:p-10 border-b border-slate-100 dark:border-white/5 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50 shrink-0">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-6">
+                            <button onClick={onClose} className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-50 dark:bg-white/5 text-slate-400 hover:text-[#FACC15] transition-all hover:scale-110 active:scale-95 group">
+                                <X size={20} className="group-hover:rotate-90 transition-transform duration-500" />
+                            </button>
+                            <div className="h-10 w-px bg-slate-100 dark:bg-white/10 mx-2 hidden sm:block"></div>
+                            <div className="hidden sm:flex items-center gap-10">
+                                {STEPS.map((s, idx) => (
+                                    <div key={s.id} className="flex items-center gap-4">
+                                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-black transition-all duration-500 ${step >= s.id ? 'bg-[#FACC15] text-white shadow-lg shadow-yellow-400/20 scale-110' : 'bg-slate-50 dark:bg-white/5 text-slate-300'}`}>
+                                            {step > s.id ? <Check size={14} strokeWidth={4} /> : s.id}
+                                        </div>
+                                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 ${step >= s.id ? 'text-black dark:text-white' : 'text-slate-300'}`}>{s.title}</span>
+                                        {idx < STEPS.length - 1 && <ChevronRight size={14} className="text-slate-100 dark:text-white/5 mx-2" />}
+                                    </div>
                                 ))}
                             </div>
+                        </div>
+                    </div>
+                </div>
 
-                            {/* Location Inputs - Premium Luxury Card */}
-                            <div className="bg-white dark:bg-zinc-900/50 p-6 sm:p-10 space-y-8 border border-slate-100 dark:border-white/10 rounded-[2.5rem] shadow-xl relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
-                                <div className="space-y-8 relative">
-                                    {/* Flow Connection Line - Premium Curved Animated Style */}
-                                    <div className="absolute left-[20px] top-12 bottom-12 w-5 z-0 pointer-events-none overflow-visible hidden sm:block">
-                                        <svg 
-                                            className="w-full h-full"
-                                            viewBox="0 0 20 100"
-                                            preserveAspectRatio="none"
-                                        >
-                                            <motion.path
-                                                d="M 10 0 Q 0 50 10 100"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeDasharray="4 6"
-                                                strokeLinecap="round"
-                                                className="text-yellow-400/30 dark:text-[#FACC15]/20"
-                                                initial={{ pathLength: 0, opacity: 0 }}
-                                                animate={{ pathLength: 1, opacity: 1 }}
-                                                transition={{ 
-                                                    duration: 2, 
-                                                    ease: "easeInOut",
-                                                    repeat: Infinity,
-                                                    repeatType: "reverse",
-                                                    repeatDelay: 1
-                                                }}
-                                            />
-                                            <motion.path
-                                                d="M 10 0 Q 0 50 10 100"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeDasharray="4 6"
-                                                strokeLinecap="round"
-                                                className="text-yellow-400 dark:text-[#FACC15]"
-                                                initial={{ pathLength: 0, pathOffset: 1 }}
-                                                animate={{ pathOffset: 0, pathLength: 0.2 }}
-                                                transition={{ 
-                                                    duration: 3, 
-                                                    ease: "linear",
-                                                    repeat: Infinity,
-                                                }}
-                                            />
-                                        </svg>
-                                    </div>
-                                    <div id="field-pickup" className={`relative group transition-all ${errors.pickup ? 'ring-2 ring-red-500 rounded-2xl animate-shake' : ''}`}>
-                                            <LocationInput
-                                                label="Initial Pickup Point"
-                                                icon={MapPin}
-                                                placeholder="Where should we pick you up?"
-                                                value={formData.pickup}
-                                                onSelect={(loc) => {
-                                                    setFormData(prev => ({ ...prev, pickup: loc.address, pickupCoords: loc.lat ? { lat: loc.lat, lon: loc.lon } : null }));
-                                                    if (errors.pickup) setErrors(prev => ({ ...prev, pickup: false }));
-                                                }}
-                                            />
-                                        </div>
-                                    {/* Waypoints */}
-                                    {formData.waypoints.map((wp, i) => (
-                                        <div key={i} className="relative group animate-slide-in pl-10">
-                                            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-[#FACC15] z-10 p-2 bg-emerald-50 dark:bg-yellow-400/10 rounded-xl border border-emerald-100 dark:border-white/5">
-                                                <Navigation size={18} strokeWidth={3} />
-                                            </div>
-                                            <div className="w-full pl-12 pr-6 py-5 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 text-xs font-black text-emerald-950 dark:text-white flex items-center justify-between group-hover:bg-white dark:group-hover:bg-zinc-800 transition-all uppercase tracking-widest shadow-sm">
-                                                <span className="truncate">{wp.address || wp.name}</span>
-                                                <button
-                                                    onClick={() => setFormData(prev => ({ ...prev, waypoints: prev.waypoints.filter((_, idx) => idx !== i) }))}
-                                                    className="w-10 h-10 flex items-center justify-center bg-white dark:bg-zinc-900 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all border border-slate-100 dark:border-white/10"
-                                                >
-                                                    <X size={18} strokeWidth={3} />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ))}
-
-                                    <div id="field-dropoff" className={`relative group transition-all ${errors.dropoff ? 'ring-2 ring-red-500 rounded-2xl animate-shake' : ''}`}>
-                                        <LocationInput
-                                            label="Final Destination"
-                                            icon={Navigation}
-                                            placeholder="Where are we heading?"
-                                            value={formData.dropoff}
-                                            onSelect={(loc) => {
-                                                setFormData(prev => ({ ...prev, dropoff: loc.address, dropoffCoords: loc.lat ? { lat: loc.lat, lon: loc.lon } : null }));
-                                                if (errors.dropoff) setErrors(prev => ({ ...prev, dropoff: false }));
-                                            }}
-                                        />
-                                    </div>
+                <div className="flex-1 overflow-y-auto p-6 sm:p-12 space-y-12">
+                    {step === 1 && (
+                        <div className="animate-slide-up space-y-12">
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-slate-100 dark:border-white/10">
+                                <div>
+                                    <h3 className="text-4xl sm:text-6xl font-black text-black dark:text-white tracking-tighter uppercase leading-none mb-3">
+                                        Route <span className="text-[#FACC15]">& Vehicle</span>
+                                    </h3>
+                                    <p className="text-[10px] sm:text-xs font-black text-slate-400 uppercase tracking-[0.4em]">Initialize Your Elite Transfer</p>
                                 </div>
                             </div>
 
                             <div className="grid md:grid-cols-2 gap-10">
                                 <div className="space-y-8">
-                                    <div className="space-y-6">
-                                        <div className="flex items-center justify-between pl-4">
-                                            <label className="text-[10px] font-black text-slate-700 dark:text-slate-300 uppercase tracking-[0.4em] leading-none">
-                                                {isVehicleExpanded ? 'Select Fleet Tier' : 'Your Selected Fleet'}
-                                            </label>
-                                            {formData.vehicle && (
-                                                <button 
-                                                    onClick={() => setIsVehicleExpanded(!isVehicleExpanded)}
-                                                    className="text-[9px] font-black uppercase tracking-widest text-[#FACC15] bg-emerald-50 dark:bg-yellow-400/10 px-4 py-2 rounded-xl border border-emerald-100 dark:border-white/5 hover:bg-[#FACC15] hover:text-white transition-all"
-                                                >
-                                                    {isVehicleExpanded ? 'Collapse' : 'Change'}
-                                                </button>
-                                            )}
-                                        </div>
-
-                                        <AnimatePresence mode="wait">
-                                            <motion.div 
-                                                key={isVehicleExpanded ? 'expanded' : 'collapsed'}
-                                                initial={{ opacity: 0, height: 0 }}
-                                                animate={{ opacity: 1, height: 'auto' }}
-                                                exit={{ opacity: 0, height: 0 }}
-                                                transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-                                                className="overflow-hidden"
-                                            >
-                                                <VehicleCarousel 
-                                                    vehicles={pricingData.map(v => ({
-                                                        ...v,
-                                                        calculatedTotal: calculatePrice(v)
-                                                    }))}
-                                                    selectedId={formData.vehicle}
-                                                    onSelect={(vehicleType) => {
-                                                        setFormData({ ...formData, vehicle: vehicleType });
-                                                    }}
-                                                    passengerCount={formData}
-                                                    pickupLocation={formData.pickup}
-                                                    dropoffLocation={formData.dropoff}
-                                                    isCondensed={!isVehicleExpanded}
-                                                />
-                                            </motion.div>
-                                        </AnimatePresence>
+                                    <div className="group/field relative">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
+                                            <MapPin size={14} className="text-[#FACC15]" strokeWidth={3} /> Pickup Location
+                                        </label>
+                                        <LocationInput
+                                            id="field-pickup"
+                                            value={formData.pickup}
+                                            onChange={(val, coords) => setFormData(prev => ({ ...prev, pickup: val, pickupCoords: coords }))}
+                                            placeholder="Enter Airport or Hotel Name"
+                                            className={errors.pickup ? 'border-red-500 animate-shake' : ''}
+                                        />
                                     </div>
-
+                                    <div className="group/field relative">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
+                                            <Navigation size={14} className="text-[#FACC15]" strokeWidth={3} /> Dropoff Location
+                                        </label>
+                                        <LocationInput
+                                            id="field-dropoff"
+                                            value={formData.dropoff}
+                                            onChange={(val, coords) => setFormData(prev => ({ ...prev, dropoff: val, dropoffCoords: coords }))}
+                                            placeholder="Where are you heading?"
+                                            className={errors.dropoff ? 'border-red-500 animate-shake' : ''}
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="space-y-8">
-                                                                        {isOverCapacity && (
-                                        <div className="p-5 bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/20 rounded-2xl flex items-center gap-4 animate-pulse">
-                                            <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-xl text-red-600">
-                                                <AlertCircle size={20} />
-                                            </div>
-                                            <p className="text-[10px] md:text-xs font-black text-red-900 dark:text-red-400 leading-tight uppercase tracking-widest">
-                                                Capacity Exceeded: {totalPassengers} Pax (Limit {selectedVehicle.capacity})
-                                            </p>
-                                        </div>
-                                    )}
-
-                                    <div className="pt-4 space-y-6">
-                                         <label className={`text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-4 leading-none ${errors.hasNameBoard ? 'text-red-500' : 'text-slate-700 dark:text-slate-200'}`}>Greeting Service / Name Board</label>
-                                         <div id="field-hasNameBoard" className={`relative overflow-hidden group rounded-[2.5rem] border transition-all ${errors.hasNameBoard ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'} ${formData.hasNameBoard ? 'bg-emerald-50/30 dark:bg-yellow-400/5' : 'bg-white dark:bg-zinc-900/30'} shadow-lg`}>
-                                            <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
-                                            
-                                            <div className="relative z-10 p-4 sm:p-10 flex flex-col items-start gap-6 sm:gap-8">
-                                                <div className="flex items-center gap-3 sm:gap-6 w-full overflow-hidden">
-                                                     <div className={`w-12 h-12 sm:w-20 sm:h-20 rounded-xl sm:rounded-3xl flex items-center justify-center border transition-all shrink-0 ${formData.hasNameBoard ? 'bg-[#FACC15] border-transparent text-white shadow-xl shadow-[#FACC15]/30' : 'bg-slate-50 dark:bg-white/5 border-slate-100 text-slate-300'}`}>
-                                                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="sm:w-10 sm:h-10">
-                                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                                                            <circle cx="9" cy="7" r="4"></circle>
-                                                            <path d="M19 8v6"></path>
-                                                            <path d="M22 11h-6"></path>
-                                                        </svg>
-                                                     </div>
-                                                     <div className="flex flex-col min-w-0">
-                                                         <h4 className={`text-lg sm:text-3xl font-black uppercase tracking-tight truncate ${formData.hasNameBoard ? 'text-emerald-950 dark:text-white' : 'text-slate-900 dark:text-slate-100'}`}>Airport Greeting</h4>
-                                                         <p className={`text-[7px] sm:text-[10px] font-black uppercase tracking-widest ${formData.hasNameBoard ? 'text-[#FACC15]' : 'text-slate-700'}`}>Arrival Hall Meeting Service</p>
-                                                     </div>
+                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
+                                        <Signpost size={14} className="text-[#FACC15]" strokeWidth={3} /> Airport Greeting Service
+                                    </label>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {[
+                                            { val: true, label: 'Name Board', sub: 'Standard Service', icon: Check },
+                                            { val: false, label: 'No Board', sub: 'Direct Pickup', icon: X }
+                                        ].map(opt => (
+                                            <button
+                                                key={opt.label}
+                                                onClick={() => setFormData({ ...formData, hasNameBoard: opt.val })}
+                                                className={`p-6 rounded-3xl border text-left transition-all relative overflow-hidden group ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-transparent text-white shadow-xl shadow-yellow-400/20' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-yellow-400/50'}`}
+                                            >
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${formData.hasNameBoard === opt.val ? 'bg-white/20' : 'bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10'}`}>
+                                                        <opt.icon size={16} strokeWidth={4} className={formData.hasNameBoard === opt.val ? 'text-white' : (opt.val ? 'text-emerald-500' : 'text-rose-500')} />
+                                                    </div>
                                                 </div>
- 
-                                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full bg-slate-50 dark:bg-white/5 p-3 sm:p-5 rounded-2xl border border-slate-100 dark:border-white/10 overflow-hidden">
-                                                     <span className="px-3 py-1 sm:px-5 sm:py-2 bg-[#FACC15] text-white rounded-full text-[8px] sm:text-[10px] font-black uppercase tracking-widest shadow-md shrink-0">
-                                                         + Rs {(pricingSettings?.nameBoardPrice || 2000).toLocaleString()}
-                                                     </span>
-                                                     <p className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-tight leading-tight ${formData.hasNameBoard ? 'text-slate-800 dark:text-slate-200' : 'text-slate-700 dark:text-slate-300'}`}>
-                                                         Our driver will wait with a name sign at the arrival hall.
-                                                     </p>
-                                                </div>
-                                                
-                                                <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full">
-                                                    <button
-                                                        onClick={() => setFormData({ ...formData, hasNameBoard: true })}
-                                                        className={`p-3 sm:p-5 rounded-xl sm:rounded-2xl border transition-all flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 ${formData.hasNameBoard === true ? 'border-[#FACC15] bg-[#FACC15] text-white shadow-lg shadow-[#FACC15]/20' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-500 hover:border-[#FACC15] hover:text-[#FACC15]'}`}
-                                                    >
-                                                        <Check size={18} strokeWidth={4} className="shrink-0" />
-                                                        <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest">Add Service</span>
-                                                    </button>
-                                                    <button
-                                                        onClick={() => setFormData({ ...formData, hasNameBoard: false, nameBoardText: '' })}
-                                                        className={`p-3 sm:p-5 rounded-xl sm:rounded-2xl border transition-all flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 ${formData.hasNameBoard === false ? 'border-red-500 bg-red-500 text-white shadow-lg shadow-red-500/20' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:border-red-500 hover:text-red-500'}`}
-                                                    >
-                                                        <X size={18} strokeWidth={4} className="shrink-0" />
-                                                        <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest">Skip Service</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                <span className="block text-[11px] font-black uppercase tracking-widest mb-1">{opt.label}</span>
+                                                <span className={`text-[8px] font-bold uppercase tracking-widest ${formData.hasNameBoard === opt.val ? 'text-white/60' : 'text-slate-400'}`}>{opt.sub}</span>
+                                            </button>
+                                        ))}
                                     </div>
-
                                     {formData.hasNameBoard && (
-                                         <div className="space-y-3 mt-8 animate-slide-up">
-                                             <label className="text-[10px] font-black text-slate-600 dark:text-slate-500 uppercase tracking-widest pl-4 leading-none">Name Board Content</label>
-                                             <input
-                                                 type="text"
-                                                 value={formData.nameBoardText}
-                                                 onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
-                                                 className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-2xl outline-none focus:ring-2 focus:ring-yellow-400/20 transition-all font-black text-xs text-emerald-950 dark:text-white uppercase tracking-widest placeholder:text-slate-300 shadow-inner"
-                                                 placeholder="Enter pickup name or greeting..."
-                                             />
-                                         </div>
+                                        <input
+                                            value={formData.nameBoardText}
+                                            onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
+                                            className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
+                                            placeholder="NAME ON BOARD (e.g. MR. JOHN SMITH)"
+                                        />
                                     )}
                                 </div>
                             </div>
 
-                                <div className="p-8 sm:p-12 bg-white dark:bg-zinc-900/50 rounded-[3rem] text-emerald-950 dark:text-white flex flex-col gap-8 relative overflow-hidden group border border-slate-100 dark:border-white/10 shadow-2xl">
-                                    {/* Decorative Background Block */}
-                                    <div className="absolute top-0 right-0 w-72 h-72 bg-yellow-400/5 rounded-full -mr-36 -mt-36 blur-3xl"></div>
-
-                                    <div className="relative z-10 space-y-6">
-                                        <div className="flex items-center gap-3 text-[#FACC15] mb-2">
-                                            <Zap size={18} fill="currentColor" className="animate-pulse" />
-                                            <span className="text-[12px] font-black uppercase tracking-[0.4em]">{formData.paymentType === 'partial' ? 'Deposit Payment' : 'Immediate Payment'}</span>
-                                        </div>
-                                        <div className="text-5xl xs:text-6xl md:text-8xl font-black leading-none tracking-tighter flex flex-wrap items-end gap-x-4 gap-y-2 uppercase">
-                                             <div className="flex items-center gap-4">
-                                                <span className="text-2xl sm:text-3xl font-black text-slate-500 dark:text-white/30">
-                                                    {(rates?.[currency]) ? currentSymbol : 'Rs'}
-                                                </span>
-                                                <span className="text-emerald-950 dark:text-white">
-                                                    {payNow.toLocaleString()}
-                                                </span>
-                                             </div>
-                                             
-                                             <div className="flex flex-wrap gap-3 mb-2 sm:mb-4">
-                                                 {convertToAllCurrencies(detailedBreakdown.lkr?.payNow || detailedBreakdown.originalLKR)
-                                                     .filter(c => {
-                                                         if (currency === 'LKR') return ['USD', 'GBP', 'EUR'].includes(c.code);
-                                                         if (currency === 'USD') return ['LKR', 'GBP', 'EUR'].includes(c.code);
-                                                         if (currency === 'INR') return ['USD'].includes(c.code);
-                                                         if (currency === 'GBP') return ['USD', 'EUR'].includes(c.code);
-                                                         if (currency === 'EUR') return ['USD', 'GBP'].includes(c.code);
-                                                         return c.code !== currency;
-                                                     })
-                                                     .map(c => (
-                                                         <span key={c.code} className="text-[10px] sm:text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-lg border border-slate-200 dark:border-white/5">
-                                                             ÃƒÂ¢Ã¢â‚¬Â°Ã‹â€  {c.symbol}{c.value.toLocaleString()}
-                                                         </span>
-                                                     ))
-                                                 }
-                                             </div>
-                                         </div>
-                                    </div>
-
-                                {/* Multi-Currency Grid */}
+                            <div className="space-y-10 pt-10 border-t border-slate-100 dark:border-white/10">
+                                <div className="flex items-center justify-between">
+                                    <h4 className="text-2xl font-black text-black dark:text-white uppercase tracking-tight">Select <span className="text-[#FACC15]">Fleet</span></h4>
+                                </div>
+                                <VehicleCarousel
+                                    vehicles={pricing}
+                                    selectedId={formData.vehicle}
+                                    onSelect={(v) => {
+                                        setFormData(prev => ({ ...prev, vehicle: v.vehicleType }));
+                                        setIsFleetExpanded(false);
+                                    }}
+                                    passengerCount={formData.passengerCount}
+                                    currency={currency}
+                                    rates={rates}
+                                    isCondensed={!isFleetExpanded && !!formData.vehicle}
+                                    onToggleExpand={() => setIsFleetExpanded(true)}
+                                />
+                                
                                 <div className="space-y-6">
                                     <div className="flex items-center gap-4">
                                         <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
                                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Global Pricing</span>
                                         <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
                                     </div>
-
                                     <div className="flex flex-wrap gap-2 justify-center">
                                         {convertToAllCurrencies(totalPrice / (rates?.[currency] || 1)).map((c) => (
                                             <button
                                                 key={c.code}
                                                 type="button"
                                                 onClick={() => changeCurrency(c.code)}
-                                                className={`px-4 py-2.5 rounded-xl border transition-all flex items-center gap-3 text-left cursor-pointer group/curr ${currency === c.code
-                                                    ? 'bg-[#FACC15] border-transparent text-white shadow-lg shadow-[#FACC15]/20'
-                                                    : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-[#FACC15] text-slate-400 hover:text-[#FACC15]'
-                                                    }`}
+                                                className={`px-4 py-2.5 rounded-xl border transition-all flex items-center gap-3 text-left cursor-pointer group/curr ${currency === c.code ? 'bg-[#FACC15] border-transparent text-white shadow-lg shadow-[#FACC15]/20' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-[#FACC15] text-slate-400 hover:text-[#FACC15]'}`}
                                             >
                                                 <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-white dark:border-zinc-800 shadow-sm">
                                                     <img src={c.flag} alt={c.code} className="w-full h-full object-cover" />
@@ -986,114 +572,34 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         ))}
                                     </div>
                                 </div>
-
-                                {/* Detailed Breakdown & Coupons */}
-                                <div className="space-y-4 bg-slate-50 dark:bg-white/5 p-8 rounded-[2rem] border border-slate-100 dark:border-white/10 shadow-inner">
-
-                                <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-widest text-slate-400">
-                                    <span>Fare Subtotal</span>
-                                    <span className="text-emerald-950 dark:text-white">{currentSymbol} {subtotal.toLocaleString()}</span>
-                                </div>
- 
-                                {detailedBreakdown.detailedExtras?.map((s, idx) => (
-                                    <div key={idx} className="flex justify-between items-center text-[11px] font-black uppercase tracking-widest text-slate-400">
-                                        <span>{s.label}</span>
-                                        <span className="text-[#FACC15]">+{currentSymbol} {s.value.toLocaleString()}</span>
-                                    </div>
-                                ))}
- 
-                                {detailedBreakdown.discounts > 0 && (
-                                    <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-widest text-[#FACC15] bg-white dark:bg-yellow-400/5 p-5 rounded-2xl border border-emerald-100 dark:border-yellow-400/10 shadow-sm">
-                                        <div className="flex items-center gap-3">
-                                            <Tag size={16} className="animate-pulse" />
-                                            <span>
-                                                {detailedBreakdown.appliedCoupons?.length > 0 ? `Code applied` : 'Special Discount'}
-                                            </span>
-                                        </div>
-                                        <span className="font-black">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
-                                    </div>
-                                )}
-
-                                {detailedBreakdown.appliedCoupons?.length > 0 && (
-                                    <div className="pt-4 border-t border-slate-200 dark:border-white/10">
-                                        <div className="flex flex-wrap gap-2">
-                                            {detailedBreakdown.appliedCoupons.map((c, idx) => (
-                                                <span key={idx} className="px-4 py-2 bg-[#FACC15] text-white text-[10px] font-black uppercase tracking-widest rounded-xl flex items-center gap-2 shadow-sm">
-                                                    <Check size={12} strokeWidth={4} /> {c.code || c}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                            </div>
-
-                            <div className="flex flex-col items-center justify-center gap-3 mt-6">
-                                <div className="flex items-center gap-2 text-[#FACC15]/60">
-                                    <ShieldCheck size={18} />
-                                    <span className="text-[10px] font-black uppercase tracking-widest">Taxes Included â€¢ Tolls Excluded</span>
-                                </div>
                             </div>
                         </div>
                     )}
+
                     {step === 2 && (
                         <div className="animate-slide-up space-y-10">
-                            <div className="bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200/50 dark:shadow-none relative group/summary transition-all duration-500">
+                            <div className="bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl relative">
                                 <div className="absolute top-6 left-10 z-20 flex items-center gap-3">
-                                    <div className="bg-[#FACC15] text-black text-[10px] font-black px-4 py-1.5 rounded-full border border-slate-100 dark:border-white/10 shadow-lg uppercase tracking-widest">
-                                        Selected Fleet
-                                    </div>
-                                    <button 
-                                        onClick={() => setIsFleetExpanded(!isFleetExpanded)}
-                                        className="bg-white dark:bg-zinc-800 text-black dark:text-white text-[10px] font-black px-4 py-1.5 rounded-full border border-slate-100 dark:border-white/10 shadow-lg uppercase tracking-widest hover:bg-slate-50 transition-all flex items-center gap-2"
-                                    >
-                                        {isFleetExpanded ? 'Close Selection' : 'Change Vehicle'}
-                                        {isFleetExpanded ? <X size={12} /> : <ChevronDown size={12} />}
-                                    </button>
+                                    <div className="bg-[#FACC15] text-black text-[10px] font-black px-4 py-1.5 rounded-full shadow-lg uppercase tracking-widest">Selected Fleet</div>
+                                    <button onClick={() => setStep(1)} className="bg-white dark:bg-zinc-800 text-black dark:text-white text-[10px] font-black px-4 py-1.5 rounded-full border border-slate-100 dark:border-white/10 shadow-lg uppercase tracking-widest hover:bg-slate-50 transition-all">Change Vehicle</button>
                                 </div>
-
-                                {isFleetExpanded ? (
-                                    <div className="p-8 pt-20 animate-slide-in">
-                                        <VehicleCarousel 
-                                            vehicles={pricing}
-                                            selectedVehicle={selectedVehicle}
-                                            onSelect={(v) => {
-                                                setSelectedVehicle(v);
-                                                setIsFleetExpanded(false);
-                                            }}
-                                            currency={currency}
-                                            rates={rates}
-                                        />
-                                    </div>
-                                ) : (
-                                <div className="flex flex-col md:flex-row items-center p-5 sm:p-12 gap-5 sm:gap-12">
+                                <div className="flex flex-col md:flex-row items-center p-12 gap-12">
                                     <div className="w-full md:w-1/3 flex justify-center relative">
-                                        <div className="absolute inset-0 bg-gradient-to-b from-[#FACC15]/20 to-transparent rounded-full blur-3xl opacity-30"></div>
-                                        <img 
-                                            src={selectedVehicle?.image} 
-                                            alt={selectedVehicle?.name} 
-                                            className="w-full max-w-[240px] object-contain relative z-10 scale-125 md:scale-150 drop-shadow-2xl"
-                                        />
+                                        <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full max-w-[240px] object-contain scale-150 drop-shadow-2xl" />
                                     </div>
-
                                     <div className="flex-1 space-y-6">
                                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                                             <div>
-                                                <h4 className="text-4xl font-black text-black dark:text-white uppercase tracking-tighter leading-none mb-2">
-                                                    {displayVehicleName(selectedVehicle?.name)}
-                                                </h4>
+                                                <h4 className="text-4xl font-black text-black dark:text-white uppercase tracking-tighter mb-2">{displayVehicleName(selectedVehicle?.name)}</h4>
                                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Premium Elite Tier</p>
                                             </div>
                                             <div className="text-right">
                                                 <div className="flex items-baseline justify-end gap-2">
                                                     <span className="text-2xl font-black text-[#FACC15]">{currentSymbol}</span>
-                                                    <span className="text-5xl font-black text-black dark:text-white tracking-tighter leading-none">
-                                                        {totalPrice.toLocaleString()}
-                                                    </span>
+                                                    <span className="text-5xl font-black text-black dark:text-white tracking-tighter leading-none">{totalPrice.toLocaleString()}</span>
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div className="grid grid-cols-4 gap-3">
                                             {[
                                                 { icon: Users, label: 'PAX', value: selectedVehicle?.capacity || 4 },
@@ -1101,7 +607,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 { icon: ShoppingBag, label: 'HAND', value: selectedVehicle?.handLuggage || 2 },
                                                 { icon: Wind, label: 'AC', value: 'ON' }
                                             ].map((item, i) => (
-                                                <div key={i} className="bg-slate-50 dark:bg-white/5 rounded-2xl p-4 border border-slate-100 dark:border-white/10 flex flex-col items-center justify-center shadow-lg">
+                                                <div key={i} className="bg-slate-50 dark:bg-white/5 rounded-2xl p-4 border border-slate-100 dark:border-white/10 flex flex-col items-center justify-center">
                                                     <item.icon size={16} className="text-[#FACC15] mb-2" strokeWidth={3} />
                                                     <span className="text-sm font-black text-black dark:text-white leading-none">{item.value}</span>
                                                     <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-1">{item.label}</span>
@@ -1110,402 +616,240 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </div>
                                     </div>
                                 </div>
-                            )}
-                            </div>
-
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 dark:border-white/10 pb-8">
-                                <div>
-                                    <h3 className="text-5xl md:text-6xl font-black text-black dark:text-white tracking-tighter uppercase leading-none mb-3">
-                                        Passenger <span className="text-[#FACC15]">Details</span>
-                                    </h3>
-                                    <p className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.4em]">Personalize Your Elite Experience</p>
-                                </div>
                             </div>
 
                             <div className="grid md:grid-cols-2 gap-10">
-                                        {[
-                                            { label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name', icon: User },
-                                            { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation', icon: Mail },
-                                            { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX', icon: Phone },
-                                            { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver chat', icon: MessageSquare },
-                                        ].map(f => (
-                                                <div key={f.key} className="group/field">
-                                                    <label className={`text-[10px] font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-3 transition-colors ${errors[f.key] ? 'text-red-500' : 'text-slate-500 dark:text-slate-400 group-focus-within/field:text-[#FACC15]'}`}>
-                                                        <f.icon size={14} className={errors[f.key] ? 'text-red-500' : 'text-[#FACC15]'} strokeWidth={3} /> {f.label}
-                                                    </label>
-                                                    {f.type === 'tel' ? (
-                                                        <PhoneInput
-                                                            id={`field-${f.key}`}
-                                                            defaultCountry="lk"
-                                                            value={formData[f.key] || ''}
-                                                            onChange={(phone) => {
-                                                                setFormData({ ...formData, [f.key]: phone });
-                                                                if (errors[f.key]) setErrors(prev => ({ ...prev, [f.key]: false }));
-                                                            }}
-                                                            inputClassName="!w-full !h-20 !bg-transparent !border-none !px-8 !outline-none focus:!ring-0 !font-black !text-black dark:!text-white placeholder:!text-slate-300 !text-sm !uppercase !tracking-widest"
-                                                            countrySelectorStyleProps={{
-                                                                buttonClassName: '!h-20 !bg-white dark:!bg-white/5 !border-r-2 !border-slate-200 dark:border-white/10 !px-6 !flex !items-center !justify-center !min-w-[100px]',
-                                                                flagClassName: '!w-10 !h-auto',
-                                                                dropdownStyleProps: {
-                                                                    className: '!z-[20000] !min-w-[240px] !max-h-[400px] !rounded-2xl !border !border-slate-200 dark:border-white/10 !bg-white dark:!bg-zinc-900 shadow-2xl shadow-slate-200/50 dark:shadow-none'
-                                                                }
-                                                            }}
-                                                            className={`w-full bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-3xl flex focus-within:shadow-lg shadow-yellow-400/20 transition-all ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-slate-200 dark:border-white/10 focus-within:border-[#FACC15]'}`}
-                                                        />
-                                                    ) : (
-                                                        <input
-                                                            id={`field-${f.key}`}
-                                                            type={f.type}
-                                                            value={formData[f.key] || ''}
-                                                            onChange={e => {
-                                                                setFormData({ ...formData, [f.key]: e.target.value });
-                                                                if (errors[f.key]) setErrors(prev => ({ ...prev, [f.key]: false }));
-                                                            }}
-                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-10 rounded-3xl outline-none focus:shadow-lg shadow-yellow-400/20 transition-all font-black text-black dark:text-white placeholder:text-slate-300 text-sm uppercase tracking-widest ${errors[f.key] ? 'border-red-500 animate-shake' : 'focus:border-[#FACC15]'}`}
-                                                            placeholder={f.placeholder}
-                                                        />
-                                                    )}
-                                                </div>
-                                        ))}
+                                {[
+                                    { label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name', icon: User },
+                                    { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation', icon: Mail },
+                                    { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX', icon: Phone },
+                                    { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver chat', icon: MessageSquare },
+                                ].map(f => (
+                                    <div key={f.key}>
+                                        <label className={`text-[10px] font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-3 transition-colors ${errors[f.key] ? 'text-red-500' : 'text-slate-500 dark:text-slate-400'}`}>
+                                            <f.icon size={14} className={errors[f.key] ? 'text-red-500' : 'text-[#FACC15]'} strokeWidth={3} /> {f.label}
+                                        </label>
+                                        {f.type === 'tel' ? (
+                                            <PhoneInput
+                                                defaultCountry="lk"
+                                                value={formData[f.key] || ''}
+                                                onChange={(phone) => setFormData({ ...formData, [f.key]: phone })}
+                                                inputClassName="!w-full !h-16 !bg-transparent !border-none !px-8 !outline-none !font-black !text-black dark:!text-white !text-sm !uppercase !tracking-widest"
+                                                className={`w-full bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-3xl flex transition-all ${errors[f.key] ? 'border-red-500' : ''}`}
+                                            />
+                                        ) : (
+                                            <input
+                                                type={f.type}
+                                                value={formData[f.key] || ''}
+                                                onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
+                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-10 rounded-3xl outline-none font-black text-black dark:text-white placeholder:text-slate-300 text-sm uppercase tracking-widest ${errors[f.key] ? 'border-red-500' : ''}`}
+                                                placeholder={f.placeholder}
+                                            />
+                                        )}
+                                    </div>
+                                ))}
                             </div>
 
-                            {/* Schedule Details in Step 2 */}
-                            <div className="space-y-8 pt-12 mt-12 border-t border-slate-200 dark:border-white/10">
-                                <h4 className="text-2xl font-black text-black dark:text-white uppercase tracking-tight flex items-center gap-6">
-                                    <div className="w-16 h-16 rounded-2xl bg-[#FACC15] flex items-center justify-center text-black border border-slate-100 dark:border-white/10 shadow-lg"><Clock size={24} strokeWidth={3} /></div> Schedule Details
-                                </h4>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                                    <div className="space-y-4">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest pl-4">Flight Number</label>
-                                        <input
-                                            type="text"
-                                            value={formData.flightNumber || ''}
-                                            onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                            className="w-full h-16 bg-slate-50 dark:bg-white/5 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:shadow-lg shadow-yellow-400/20 transition-all"
-                                            placeholder="e.g. UL 101"
-                                        />
-                                    </div>
-                                    <div className="space-y-4">
-                                        <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>Pickup Date</label>
-                                        <input
-                                            id="field-date"
-                                            type="date"
-                                            value={formData.flightArrivalDate || ''}
-                                            onChange={e => {
-                                                const d = e.target.value;
-                                                setFormData(prev => ({ ...prev, flightArrivalDate: d, arrivalDate: d, date: isAirportService ? d : prev.date }));
-                                                if (errors.date) setErrors(prev => ({ ...prev, date: false }));
-                                            }}
-                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:shadow-lg shadow-yellow-400/20 transition-all ${errors.date ? 'border-red-500' : ''}`}
-                                        />
-                                    </div>
-                                    <div className="space-y-4">
-                                        <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>Pickup Time</label>
-                                        <input
-                                            id="field-time"
-                                            type="time"
-                                            value={formData.flightArrivalTime || ''}
-                                            onChange={e => {
-                                                const t = e.target.value;
-                                                setFormData(prev => ({ ...prev, flightArrivalTime: t, arrivalTime: t, time: isAirportService ? t : prev.time }));
-                                                if (errors.time) setErrors(prev => ({ ...prev, time: false }));
-                                            }}
-                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:shadow-lg shadow-yellow-400/20 transition-all ${errors.time ? 'border-red-500' : ''}`}
-                                        />
-                                    </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-12 border-t border-slate-200 dark:border-white/10">
+                                <div className="space-y-4">
+                                    <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>Pickup Date</label>
+                                    <input
+                                        type="date"
+                                        value={formData.flightArrivalDate || formData.date || ''}
+                                        onChange={e => setFormData(prev => ({ ...prev, flightArrivalDate: e.target.value, date: e.target.value }))}
+                                        className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.date ? 'border-red-500' : ''}`}
+                                    />
                                 </div>
-                            </div>
-
-                            <div className="space-y-12 pt-12 mt-12 border-t border-slate-200 dark:border-white/10">
-                                <h4 className="text-2xl font-black text-black dark:text-white uppercase tracking-tight flex items-center gap-6">
-                                    <div className="w-16 h-16 rounded-2xl bg-[#FACC15] flex items-center justify-center text-black border border-slate-100 dark:border-white/10 shadow-lg"><CreditCard size={24} strokeWidth={3} /></div> Billing Details <span className="text-slate-400 text-xs tracking-widest">(Optional)</span>
-                                </h4>
-                                <div className="grid md:grid-cols-2 gap-10">
+                                <div className="space-y-4">
+                                    <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>Pickup Time</label>
                                     <input
-                                        type="text"
-                                        value={formData.billingName || ''}
-                                        onChange={e => setFormData({ ...formData, billingName: e.target.value })}
-                                        className="w-full h-16 bg-slate-50 dark:bg-white/5 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-10 rounded-3xl text-sm font-black text-black dark:text-white placeholder:text-slate-300 uppercase tracking-widest outline-none focus:shadow-lg shadow-yellow-400/20 transition-all"
-                                        placeholder="Full Billing Name"
+                                        type="time"
+                                        value={formData.flightArrivalTime || formData.time || ''}
+                                        onChange={e => setFormData(prev => ({ ...prev, flightArrivalTime: e.target.value, time: e.target.value }))}
+                                        className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.time ? 'border-red-500' : ''}`}
                                     />
-                                    <input
-                                        type="text"
-                                        value={formData.billingCountry || ''}
-                                        onChange={e => setFormData({ ...formData, billingCountry: e.target.value })}
-                                        className="w-full h-16 bg-slate-50 dark:bg-white/5 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-10 rounded-3xl text-sm font-black text-black dark:text-white placeholder:text-slate-300 uppercase tracking-widest outline-none focus:shadow-lg shadow-yellow-400/20 transition-all"
-                                        placeholder="Country of Residence"
-                                    />
-                                    <textarea
-                                        rows="4"
-                                        value={formData.billingAddress}
-                                        onChange={e => setFormData({ ...formData, billingAddress: e.target.value })}
-                                        className="md:col-span-2 w-full p-10 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-[2.5rem] text-sm font-black text-black dark:text-white placeholder:text-slate-300 resize-none uppercase tracking-widest outline-none focus:shadow-lg shadow-yellow-400/20 transition-all"
-                                        placeholder="Full Billing Address"
-                                    ></textarea>
                                 </div>
                             </div>
                         </div>
                     )}
 
-                {step === 3 && (
+                    {step === 3 && (
                         <div className="animate-slide-up">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
-                                <div>
-                                    <h3 className="text-4xl md:text-6xl font-black text-emerald-950 dark:text-white tracking-tight uppercase leading-none mb-3">Final <span className="text-[#FACC15]">Checkout</span></h3>
-                                    <p className="text-[10px] md:text-xs font-black text-slate-700 dark:text-slate-200 uppercase tracking-[0.4em]">Premium Booking Experience</p>
-                                </div>
-                                <div className="flex items-center gap-5 bg-emerald-50 dark:bg-yellow-400/10 px-6 py-3 rounded-2xl border border-emerald-100 dark:border-yellow-400/20 shadow-sm">
-                                    <ShieldCheck size={18} className="text-[#FACC15]" />
-                                    <span className="text-[10px] font-black text-emerald-950 dark:text-white uppercase tracking-widest">Secured by SSL</span>
-                                </div>
-                            </div>
-
                             <div className="grid lg:grid-cols-12 gap-12">
-                                    {/* Left Column: Summary */}
-                                    <div className="lg:col-span-7 space-y-8">
-                                        <div className="p-5 sm:p-14 bg-white dark:bg-zinc-900/40 rounded-[2rem] sm:rounded-[3rem] text-emerald-950 dark:text-white border border-emerald-100 dark:border-white/10 shadow-2xl relative overflow-hidden group">
-                                            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FACC15]/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-[#FACC15]/10 transition-all duration-700"></div>
+                                <div className="lg:col-span-7 space-y-8">
+                                    <div className="p-10 bg-white dark:bg-zinc-900/40 rounded-[3rem] text-emerald-950 dark:text-white border border-slate-100 dark:border-white/10 shadow-2xl relative overflow-hidden">
+                                        <div className="relative z-10 space-y-10">
+                                            <div className="flex items-center justify-between pb-8 border-b border-slate-100 dark:border-white/5">
+                                                <div className="px-6 py-2.5 bg-[#FACC15] text-white rounded-full text-[10px] font-black uppercase tracking-widest">Booking Summary</div>
+                                                <div className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-[0.3em]">{formData.tripType.replace('-', ' ')}</div>
+                                            </div>
 
-                                            <div className="relative z-10 space-y-10">
-                                                <div className="flex items-center justify-between pb-8 border-b border-slate-100 dark:border-white/5">
-                                                     <div className="px-6 py-2.5 bg-[#FACC15] text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-[#FACC15]/20">
-                                                         Booking Summary
-                                                     </div>
-                                                    <div className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-[0.3em]">
-                                                        {formData.tripType.replace('-', ' ')}
+                                            <div className="space-y-6">
+                                                <div className="flex items-center gap-6 bg-slate-50 dark:bg-white/5 p-6 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-inner">
+                                                    <div className="w-24 h-16 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-0.5 overflow-hidden shrink-0 shadow-sm">
+                                                        <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full h-full object-contain scale-[1.5]" />
+                                                    </div>
+                                                    <div className="min-w-0 flex-1">
+                                                        <p className="text-sm font-black text-emerald-950 dark:text-white uppercase truncate tracking-tight">{displayVehicleName(selectedVehicle?.name)}</p>
+                                                        <div className="flex items-center gap-4 mt-2">
+                                                            <div className="flex items-center gap-2">
+                                                                <Users size={12} className="text-[#FACC15]" />
+                                                                <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">{selectedVehicle?.capacity || 4} Pax</span>
+                                                            </div>
+                                                            <div className="flex items-center gap-2">
+                                                                <Briefcase size={12} className="text-[#FACC15]" />
+                                                                <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">{selectedVehicle?.luggage || 2} Bags</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
 
-                                                 <div className="space-y-6">
-                                                    {/* Compact Vehicle Summary */}
-                                                    <div className="flex items-center gap-4 sm:gap-6 bg-slate-50 dark:bg-white/5 p-4 sm:p-6 rounded-2xl sm:rounded-[2.5rem] border border-slate-100 dark:border-white/10 group/v-summary animate-slide-in shadow-inner">
-                                                        <div className="w-24 h-16 bg-white dark:bg-zinc-800 rounded-2xl border border-slate-100 dark:border-white/10 flex items-center justify-center p-0.5 overflow-hidden shrink-0 shadow-sm">
-                                                            <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full h-full object-contain scale-[1.5] group-hover/v-summary:scale-175 transition-transform duration-500" />
-                                                        </div>
-                                                        <div className="min-w-0 flex-1">
-                                                            <p className="text-sm font-black text-emerald-950 dark:text-white uppercase truncate tracking-tight">{displayVehicleName(selectedVehicle?.name)}</p>
-                                                            <div className="flex items-center gap-4 mt-2">
-                                                                <div className="flex items-center gap-2">
-                                                                    <Users size={12} className="text-[#FACC15]" />
-                                                                    <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">{selectedVehicle?.capacity || 4} Pax</span>
-                                                                </div>
-                                                                <span className="w-1 h-1 bg-slate-300 dark:bg-white/20 rounded-full"></span>
-                                                                <div className="flex items-center gap-2">
-                                                                    <Briefcase size={12} className="text-[#FACC15]" />
-                                                                    <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">{selectedVehicle?.luggage || 2} Bags</span>
-                                                                </div>
-                                                            </div>
+                                                <div className="grid sm:grid-cols-2 gap-8 px-2">
+                                                    <div className="flex gap-5">
+                                                        <div className="w-12 h-12 rounded-2xl bg-emerald-950 text-white flex items-center justify-center shrink-0 shadow-xl"><MapPin size={22} /></div>
+                                                        <div className="min-w-0">
+                                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Origin</p>
+                                                            <p className="text-[11px] font-black text-emerald-950 dark:text-white uppercase line-clamp-2">{formData.pickup}</p>
                                                         </div>
                                                     </div>
-
-                                                    <div className="grid sm:grid-cols-2 gap-8 px-2">
-                                                        <div className="flex gap-5">
-                                                             <div className="w-12 h-12 rounded-2xl bg-emerald-950 text-white flex items-center justify-center shrink-0 shadow-xl"><MapPin size={22} /></div>
-                                                             <div className="min-w-0">
-                                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Origin</p>
-                                                                <p className="text-[11px] font-black text-emerald-950 dark:text-white leading-tight uppercase line-clamp-2">{formData.pickup}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex gap-5">
-                                                             <div className="w-12 h-12 rounded-2xl bg-[#FACC15] text-white flex items-center justify-center shrink-0 shadow-xl shadow-[#FACC15]/20"><Navigation size={22} /></div>
-                                                             <div className="min-w-0">
-                                                                <p className="text-[9px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest mb-2">Destination</p>
-                                                                <p className="text-[11px] font-black text-emerald-950 dark:text-white leading-tight uppercase line-clamp-2">{formData.dropoff}</p>
-                                                            </div>
+                                                    <div className="flex gap-5">
+                                                        <div className="w-12 h-12 rounded-2xl bg-[#FACC15] text-white flex items-center justify-center shrink-0 shadow-xl"><Navigation size={22} /></div>
+                                                        <div className="min-w-0">
+                                                            <p className="text-[9px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest mb-2">Destination</p>
+                                                            <p className="text-[11px] font-black text-emerald-950 dark:text-white uppercase line-clamp-2">{formData.dropoff}</p>
                                                         </div>
                                                     </div>
-
-                                                    {formData.hasNameBoard && (
-                                                      <div className="flex gap-6 bg-emerald-50 dark:bg-yellow-400/5 p-6 rounded-[2.5rem] border border-emerald-100 dark:border-yellow-400/10 shadow-sm group/board">
-                                                             <div className="w-14 h-14 rounded-2xl bg-white dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-white/5 overflow-hidden shadow-sm group-hover/board:border-yellow-400 transition-colors">
-                                                                 <Signpost size={28} className="text-[#FACC15]" strokeWidth={3} />
-                                                             </div>
-                                                            <div className="min-w-0">
-                                                                <p className="text-[9px] font-black text-[#FACC15] uppercase tracking-widest mb-2">Airport Greeting</p>
-                                                                <p className="text-[11px] font-black text-emerald-950 dark:text-white uppercase truncate">"{formData.nameBoardText || 'Elite Greeting'}"</p>
-                                                            </div>
-                                                        </div>
-                                                    )}
                                                 </div>
 
-                                                <div className="space-y-4 pt-8 mt-4 border-t border-slate-100 dark:border-white/10">
-                                                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-slate-100">
-                                                        <span>Trip Base Fare</span>
-                                                        <span className="text-emerald-950 dark:text-white font-black">{currentSymbol} {subtotal.toLocaleString()}</span>
-                                                    </div>
-
-                                                    {detailedBreakdown.detailedExtras?.filter(s => s.value > 0).map((s, idx) => (
-                                                        <div key={idx} className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-slate-100">
-                                                            <span>{s.label}</span>
-                                                            <span className="text-[#FACC15] font-black">+{currentSymbol} {s.value.toLocaleString()}</span>
+                                                {formData.hasNameBoard && (
+                                                    <div className="flex gap-6 bg-emerald-50 dark:bg-yellow-400/5 p-6 rounded-[2.5rem] border border-emerald-100 dark:border-yellow-400/10 shadow-sm group/board mt-4">
+                                                        <div className="w-14 h-14 rounded-2xl bg-white dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-white/5 overflow-hidden shadow-sm group-hover/board:border-yellow-400 transition-colors">
+                                                            <Signpost size={28} className="text-[#FACC15]" strokeWidth={3} />
                                                         </div>
-                                                    ))}
-
-                                                    {detailedBreakdown.discounts > 0 && (
-                                                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-[#FACC15] bg-emerald-50 dark:bg-yellow-400/5 px-4 py-2 rounded-xl">
-                                                            <span>Special promotion applied</span>
-                                                            <span className="font-black">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
-                                                        </div>
-                                                    )}
-
-                                                    <div className="pt-8 mt-6 border-t border-slate-100 dark:border-white/10 flex justify-between items-end">
-                                                        <div>
-                                                            <p className="text-[10px] font-black text-[#FACC15] bg-emerald-50 dark:bg-yellow-400/10 px-5 py-2 mb-5 rounded-full w-fit tracking-[0.2em] shadow-sm">
-                                                                {formData.paymentType === 'partial' ? 'Secure Deposit (50%)' : 'Total Amount (Fixed)'}
-                                                            </p>
-                                                            <p className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter text-emerald-950 dark:text-white leading-none">
-                                                                <span className="text-lg md:text-2xl font-black mr-2 text-slate-500 dark:text-white/20">{currentSymbol}</span>
-                                                                {payNow.toLocaleString()}
-                                                            </p>
-                                                            <div className="flex flex-wrap gap-3 mt-6">
-                                                                 {convertToAllCurrencies(detailedBreakdown.lkr?.payNow || originalLKR)
-                                                                     .filter(c => {
-                                                                         if (currency === 'LKR') return ['USD', 'GBP', 'EUR'].includes(c.code);
-                                                                         if (currency === 'USD') return ['LKR', 'GBP', 'EUR'].includes(c.code);
-                                                                         if (currency === 'INR') return ['USD'].includes(c.code);
-                                                                         if (currency === 'GBP') return ['USD', 'EUR'].includes(c.code);
-                                                                         if (currency === 'EUR') return ['USD', 'GBP'].includes(c.code);
-                                                                         return c.code !== currency;
-                                                                     })
-                                                                     .map(c => (
-                                                                         <span key={c.code} className="text-[10px] sm:text-xs font-black text-[#FACC15] dark:text-emerald-400 uppercase tracking-widest bg-emerald-50 dark:bg-yellow-400/5 px-3 py-1.5 rounded-xl border border-emerald-100 dark:border-yellow-400/10">
-                                                                             ≈ {c.symbol}{c.value.toLocaleString()} {c.code}
-                                                                         </span>
-                                                                     ))
-                                                                 }
-                                                             </div>
+                                                        <div className="min-w-0">
+                                                            <p className="text-[9px] font-black text-[#FACC15] uppercase tracking-widest mb-2">Airport Greeting</p>
+                                                            <p className="text-[11px] font-black text-emerald-950 dark:text-white uppercase truncate">"{formData.nameBoardText || 'Elite Greeting'}"</p>
                                                         </div>
                                                     </div>
-                                                    
-                                                    {/* Disclaimer Section */}
-                                                    <div className="pt-8 mt-6 text-[9px] text-slate-800 dark:text-slate-300 font-bold uppercase tracking-wider leading-relaxed flex items-center gap-4">
-                                                        <div className="w-2 h-2 rounded-full bg-yellow-400/30 shrink-0"></div>
-                                                        Fixed price includes taxes & fuel. Highway tolls excluded.
+                                                )}
+                                            </div>
+
+                                            <div className="space-y-4 pt-8 mt-4 border-t border-slate-100 dark:border-white/10">
+                                                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-slate-100">
+                                                    <span>Trip Base Fare</span>
+                                                    <span className="font-black">{currentSymbol} {subtotal.toLocaleString()}</span>
+                                                </div>
+                                                {detailedBreakdown.detailedExtras?.filter(s => s.value > 0).map((s, idx) => (
+                                                    <div key={idx} className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+                                                        <span>{s.label}</span>
+                                                        <span className="text-[#FACC15] font-black">+{currentSymbol} {s.value.toLocaleString()}</span>
+                                                    </div>
+                                                ))}
+                                                <div className="pt-8 mt-6 border-t border-slate-100 dark:border-white/10">
+                                                    <p className="text-[10px] font-black text-[#FACC15] tracking-[0.2em] mb-4">
+                                                        {formData.paymentType === 'partial' ? 'Secure Deposit (50%)' : 'Total Amount (Fixed)'}
+                                                    </p>
+                                                    <p className="text-6xl md:text-8xl font-black tracking-tighter text-emerald-950 dark:text-white leading-none">
+                                                        <span className="text-2xl font-black mr-2 text-slate-500/30">{currentSymbol}</span>
+                                                        {payNow.toLocaleString()}
+                                                    </p>
+                                                    <div className="flex flex-wrap gap-3 mt-6">
+                                                        {convertToAllCurrencies(detailedBreakdown.lkr?.payNow || 0)
+                                                            .filter(c => ['USD', 'EUR', 'GBP'].includes(c.code) && c.code !== currency)
+                                                            .map(c => (
+                                                                <span key={c.code} className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-lg border border-slate-200 dark:border-white/5">
+                                                                    ≈ {c.symbol}{c.value.toLocaleString()}
+                                                                </span>
+                                                            ))
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
-                                    {/* Right Column: Payment */}
-                                    <div className="lg:col-span-5 space-y-12">
-                                        {/* Payment Selection */}
-                                        <div className="space-y-6">
-                                            <div className="flex items-center gap-4">
-                                                 <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
-                                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Payment Method</span>
-                                                 <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
-                                             </div>
-                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                 {['cash', 'card'].map(m => (
-                                                     <button
-                                                         key={m}
-                                                         onClick={() => setFormData({ ...formData, paymentMethod: m })}
-                                                         className={`relative flex items-center gap-4 p-4 md:p-8 rounded-2xl md:rounded-[2.5rem] border transition-all group/pm ${formData.paymentMethod === m
-                                                             ? 'bg-[#FACC15] border-transparent text-white shadow-xl shadow-[#FACC15]/30'
-                                                             : 'bg-white dark:bg-zinc-900 border-slate-100 dark:border-white/10 text-slate-600 hover:border-[#FACC15]'
-                                                             }`}
-                                                     >
-                                                         <div className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center text-3xl transition-all duration-500 group-hover/pm:scale-110 ${formData.paymentMethod === m ? 'bg-white/20' : 'bg-slate-50 dark:bg-zinc-800 shadow-sm'}`}>
-                                                             {m === 'cash' ? <Coins size={22} className={formData.paymentMethod === m ? 'text-white' : 'text-[#FACC15]'} /> : <CreditCard size={22} className={formData.paymentMethod === m ? 'text-white' : 'text-[#FACC15]'} />}
-                                                         </div>
-                                                        <div className="text-left">
-                                                            <span className="block text-[11px] font-black uppercase tracking-widest">{m === 'cash' ? 'Pay to Driver' : 'Pay via Card'}</span>
-                                                            <span className={`text-[8px] font-bold uppercase tracking-widest mt-1 block ${formData.paymentMethod === m ? 'text-white/60' : 'text-slate-500'}`}>{m === 'cash' ? 'Pay after arrival' : 'Stripe / PayHere'}</span>
-                                                        </div>
-                                                        {formData.paymentMethod === m && <Check size={24} className="absolute right-10 opacity-20" />}
+                                <div className="lg:col-span-5 space-y-12">
+                                    <div className="space-y-6">
+                                        <div className="flex items-center gap-4">
+                                            <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Payment Method</span>
+                                            <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {['cash', 'card'].map(m => (
+                                                <button
+                                                    key={m}
+                                                    onClick={() => setFormData({ ...formData, paymentMethod: m })}
+                                                    className={`p-6 rounded-[2rem] border transition-all flex flex-col items-center gap-3 ${formData.paymentMethod === m ? 'bg-[#FACC15] border-transparent text-white shadow-xl' : 'bg-white dark:bg-zinc-900 border-slate-100 dark:border-white/10 text-slate-600 hover:border-[#FACC15]'}`}
+                                                >
+                                                    {m === 'cash' ? <Coins size={22} /> : <CreditCard size={22} />}
+                                                    <span className="text-[10px] font-black uppercase tracking-widest">{m === 'cash' ? 'Cash' : 'Card'}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {formData.paymentMethod === 'card' && (
+                                        <div className="space-y-6 animate-slide-in">
+                                            <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 dark:bg-white/5 rounded-[1.8rem] border border-slate-100 dark:border-white/10 shadow-inner">
+                                                {['full', 'partial'].map(t => (
+                                                    <button
+                                                        key={t}
+                                                        onClick={() => setFormData(prev => ({ ...prev, paymentType: t }))}
+                                                        className={`py-4 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t ? 'bg-[#FACC15] text-white shadow-xl' : 'text-slate-400 hover:text-[#FACC15]'}`}
+                                                    >
+                                                        {t === 'full' ? 'Complete (100%)' : 'Deposit (50%)'}
                                                     </button>
                                                 ))}
-                                             </div>
+                                            </div>
                                         </div>
+                                    )}
 
-                                        {formData.paymentMethod === 'card' && (
-                                            <div className="space-y-6 animate-slide-in">
-                                                <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em] pl-6">Installment Option</h4>
-                                                <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 dark:bg-white/5 rounded-[1.8rem] border border-slate-100 dark:border-white/10 shadow-inner">
-                                                    {['full', 'partial'].map(t => (
-                                                        <button
-                                                            key={t}
-                                                            onClick={() => setFormData(prev => ({ ...prev, paymentType: t }))}
-                                                            className={`py-5 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t
-                                                                ? 'bg-[#FACC15] text-white shadow-xl'
-                                                                : 'text-slate-400 hover:text-[#FACC15]'}`}
-                                                        >
-                                                            {t === 'full' ? 'Complete (100%)' : 'Deposit (50%)'}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        <div className="space-y-6 pt-6">
-                                             <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em] pl-6">Promo Codes</h4>
-                                             <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 p-3 rounded-[2rem] flex gap-4 shadow-inner">
-                                                <input
-                                                    value={couponInput}
-                                                    onChange={e => setCouponInput(e.target.value.toUpperCase())}
-                                                    placeholder="HAVE A CODE?"
-                                                    className="flex-1 h-14 bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-yellow-400/10 text-emerald-950 dark:text-white shadow-sm transition-all"
-                                                />
-                                                <button
-                                                    onClick={() => handleApplyCoupon()}
-                                                    disabled={couponLoading || !couponInput}
-                                                    className="px-10 bg-emerald-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest disabled:opacity-30 active:scale-95 transition-all shadow-xl hover:bg-black"
-                                                >
-                                                    {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'Apply'}
-                                                </button>
-                                            </div>
-                                            {verifiedCoupons.length > 0 && (
-                                                <div className="flex flex-wrap gap-3 px-3">
-                                                    {verifiedCoupons.map((c, i) => (
-                                                        <span key={i} className="px-6 py-3 bg-emerald-50 dark:bg-yellow-400/10 text-[#FACC15] rounded-2xl border border-emerald-100 dark:border-yellow-400/20 text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-4 animate-slide-in shadow-sm group">
-                                                            <Tag size={12} fill="currentColor" className="group-hover:rotate-12 transition-transform" /> {c.code}
-                                                            <X size={16} className="cursor-pointer hover:rotate-90 transition-all ml-2 opacity-40 hover:opacity-100" onClick={() => setVerifiedCoupons(prev => prev.filter(vc => vc.code !== c.code))} />
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            )}
+                                    <div className="space-y-6 pt-6">
+                                        <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em] pl-6">Promo Code</h4>
+                                        <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 p-3 rounded-[2rem] flex gap-4 shadow-inner">
+                                            <input
+                                                value={couponInput}
+                                                onChange={e => setCouponInput(e.target.value.toUpperCase())}
+                                                placeholder="CODE?"
+                                                className="flex-1 h-14 bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest outline-none text-emerald-950 dark:text-white shadow-sm"
+                                            />
+                                            <button
+                                                onClick={() => handleApplyCoupon()}
+                                                disabled={couponLoading || !couponInput}
+                                                className="px-8 bg-emerald-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-xl"
+                                            >
+                                                {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'Apply'}
+                                            </button>
                                         </div>
                                     </div>
+                                </div>
                             </div>
                         </div>
                     )}
                 </div>
 
-                <div className="p-4 sm:p-10 pt-4 pb-28 sm:pb-10 border-t border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-950 shrink-0 transition-colors">
-                    <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-4">
+                <div className="p-6 sm:p-10 border-t border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-950 shrink-0">
+                    <div className="flex flex-row items-center justify-between gap-3 sm:gap-4">
                         <button
                             onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                            className="flex items-center justify-center gap-2 px-8 py-4 text-xs font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-all bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20"
+                            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 sm:px-8 py-4 text-[10px] sm:text-xs font-black uppercase tracking-widest text-slate-500 hover:text-black transition-all bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5"
                         >
-                            <ArrowLeft size={14} strokeWidth={3} />
                             {step === 1 ? 'Cancel' : 'Back'}
                         </button>
 
-                        <div className="flex items-center gap-4">
-                            <button
-                                onClick={handleNext}
-                                disabled={loading}
-                                className="flex-1 sm:flex-none flex items-center justify-center gap-3 px-10 py-4 bg-[#FACC15] hover:bg-yellow-400 disabled:bg-slate-200 dark:disabled:bg-white/10 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg shadow-[#FACC15]/20 hover:shadow-[#FACC15]/40 transition-all transform active:scale-95 group"
-                            >
-                                {step === 1 ? (
-                                    <>
-                                        Select Details
-                                        <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
-                                    </>
-                                ) : step === 2 ? (
-                                    <>
-                                        Review & Checkout
-                                        <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
-                                    </>
-                                ) : (
-                                    loading ? 'Securing...' : 'Confirm Order'
-                                )}
-                            </button>
-                        </div>
+                        <button
+                            onClick={handleNext}
+                            disabled={loading}
+                            className="flex-[2] sm:flex-none flex items-center justify-center gap-3 px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-br from-yellow-400 via-orange-500 to-orange-600 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 text-white rounded-[2rem] text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-orange-500/40 transition-all group"
+                        >
+                            {step === 1 ? 'Select Details' : step === 2 ? 'Review & Checkout' : loading ? 'Securing...' : 'Confirm Order'}
+                            <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-);
+    );
 }

@@ -4,7 +4,7 @@ import { useCurrency } from '../context/CurrencyContext';
 
 const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
 
-const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, pickupLocation, dropoffLocation, isCondensed = false }) => {
+const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, pickupLocation, dropoffLocation, isCondensed = false, onToggleExpand }) => {
     const scrollRef = useRef(null);
     const { convertPrice, rates, currency } = useCurrency();
 
@@ -36,8 +36,9 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
 
     // Smart Capacity Logic
     const isSuitable = (vehicle) => {
-        const totalPax = (passengerCount.adults || 0) + (passengerCount.children || 0);
-        const totalBags = passengerCount.bags || 0;
+        const pax = passengerCount || { adults: 1, children: 0, luggage: 0 };
+        const totalPax = (pax.adults || 0) + (pax.children || 0);
+        const totalBags = pax.bags || pax.luggage || 0;
 
         const vehiclePax = vehicle.capacity || 4;
         const vehicleLargeBags = vehicle.luggage || 0;
@@ -60,38 +61,39 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
 
         return (
             <div 
-                className="relative bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-4 flex items-center gap-4 sm:gap-6 animate-slide-up group/condensed shadow-sm cursor-pointer hover:shadow-md transition-all"
-                onClick={() => onSelect(null)}
+                className="relative bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-3 sm:p-4 flex items-center gap-3 sm:gap-6 animate-slide-up group/condensed shadow-sm cursor-pointer hover:shadow-md transition-all overflow-hidden"
+                onClick={onToggleExpand}
             >
-                <div className="w-20 sm:w-28 h-16 sm:h-20 bg-slate-50 dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-2 shrink-0 overflow-hidden border border-slate-100 dark:border-white/5">
+                <div className="w-16 sm:w-28 h-12 sm:h-20 bg-slate-50 dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-1.5 sm:p-2 shrink-0 overflow-hidden border border-slate-100 dark:border-white/5">
                     <img 
                         src={vehicle.image} 
                         alt={vehicle.name} 
                         className="w-full h-full object-contain scale-110 group-hover/condensed:scale-125 transition-transform duration-500"
                     />
                 </div>
-                <div className="flex-1 min-w-0">
-                    <h4 className="text-[10px] sm:text-xs md:text-sm font-bold text-emerald-950 dark:text-white uppercase tracking-widest truncate">{displayName(vehicle.name)}</h4>
-                    <div className="flex items-center gap-3 mt-1.5">
+                <div className="flex-1 min-w-0 pr-2">
+                    <h4 className="text-[10px] sm:text-xs md:text-sm font-black text-emerald-950 dark:text-white uppercase tracking-widest truncate">{displayName(vehicle.name)}</h4>
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-1 sm:mt-1.5">
                         {[
                             { icon: Users, val: vehicle.capacity || 4 },
                             { icon: Briefcase, val: vehicle.suitcases || 2 },
                         ].map((item, i) => (
-                            <div key={i} className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
-                                <item.icon size={12} className="text-emerald-600" />
-                                <span className="text-[10px] font-bold">{item.val}</span>
+                            <div key={i} className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
+                                <item.icon size={10} className="text-emerald-600 shrink-0" />
+                                <span className="text-[9px] sm:text-[10px] font-bold">{item.val}</span>
                             </div>
                         ))}
-                        <div className="h-3 w-[1px] bg-slate-200 dark:bg-white dark:bg-zinc-900 rounded-2xl mx-1"></div>
-                        <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest truncate">
+                        <div className="h-3 w-[1px] bg-slate-200 dark:bg-white/10 mx-0.5 hidden sm:block"></div>
+                        <span className="text-[9px] font-black text-[#FACC15] uppercase tracking-widest truncate">
                             Selected
                         </span>
                     </div>
                 </div>
-                <div className="text-right shrink-0 pr-2">
-                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Total Fare</p>
-                    <p className="text-lg font-black text-emerald-950 dark:text-white leading-none">
-                        {convertPrice(vehicle.calculatedTotal).symbol}{convertPrice(vehicle.calculatedTotal).value.toLocaleString()}
+                <div className="text-right shrink-0">
+                    <p className="text-[7px] sm:text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Total Fare</p>
+                    <p className="text-base sm:text-lg font-black text-emerald-950 dark:text-white leading-none">
+                        {convertPrice(vehicle.calculatedTotal).symbol}
+                        <span className="ml-0.5">{convertPrice(vehicle.calculatedTotal).value.toLocaleString()}</span>
                     </p>
                 </div>
             </div>

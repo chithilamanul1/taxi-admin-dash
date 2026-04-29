@@ -234,7 +234,7 @@ export default function DriverRegister() {
                                 <p className="text-sm text-slate-400 mb-2 font-bold uppercase">Bank Transfer Details</p>
                                 <div className="space-y-1 text-slate-200 font-mono text-sm uppercase">
                                     <p>Bank: <span className="text-emerald-400">Sampath Bank</span></p>
-                                    <p>Account Name: <span className="text-emerald-400">AIRPORT TAXIS PVT LTD</span></p>
+                                    <p>Account Name: <span className="text-emerald-400">AIRPORT TAXIS (PVT) LTD</span></p>
                                     <p>Account No: <span className="text-emerald-400 text-lg font-black tracking-widest">1127 1403 9751</span></p>
                                     <p>Branch: <span className="text-emerald-400">Grandpass</span></p>
                                 </div>

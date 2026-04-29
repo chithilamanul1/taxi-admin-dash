@@ -86,6 +86,10 @@ body {
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
+
+    .hide-bottom-nav #mobile-bottom-nav {
+        display: none !important;
+    }
 }
 
 @keyframes fadeIn {

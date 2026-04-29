@@ -44,8 +44,8 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <Link href="/" className="flex items-center gap-2 group">
                     <div className="flex flex-col">
-                        <span className="font-black text-2xl sm:text-3xl md:text-4xl tracking-tighter leading-none text-emerald-950 uppercase group-hover:text-emerald-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-emerald-600 after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:origin-left">
-                            AIRPORT TAXIS PVT LTD
+                        <span className="font-black text-xl sm:text-3xl md:text-4xl tracking-tighter leading-tight text-emerald-950 uppercase group-hover:text-emerald-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-emerald-600 after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:origin-left">
+                            AIRPORT TAXIS (PVT) LTD
                         </span>
                         <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Private Limited Company</span>
                     </div>
