@@ -21,7 +21,7 @@ const MobileBottomNav = () => {
     const visibleItems = navItems;
 
     return (
-        <div id="mobile-bottom-nav" className="md:hidden fixed bottom-6 left-4 right-4 z-[1000] bg-white/90 dark:bg-black/90 backdrop-blur-xl border border-slate-100 dark:border-white/10 shadow-2xl shadow-black/10 rounded-[2.5rem] px-6 pb-2">
+        <div id="mobile-bottom-nav" className="md:hidden fixed bottom-0 left-0 right-0 z-[1000] bg-white/90 dark:bg-black/90 backdrop-blur-xl border-t border-slate-100 dark:border-white/10 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] px-6 pb-safe">
             <div className="flex justify-between items-center h-16 max-w-lg mx-auto">
                 {visibleItems.map((item, i) => (
                     item.isSpecial ? (

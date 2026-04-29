@@ -167,14 +167,17 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                                 {convertPrice(vehicle.calculatedTotal).value.toLocaleString()}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-3 mt-3 text-[11px] font-black text-black dark:text-white uppercase tracking-widest">
-                                            {['USD', 'EUR', 'GBP', 'LKR'].filter(c => c !== currency).slice(0, 2).map(c => {
+                                        <div className="flex items-center gap-3 mt-3 text-[11px] font-black !text-black dark:!text-white uppercase tracking-widest">
+                                            {['USD', 'EUR', 'GBP', 'LKR'].filter(c => c !== currency).slice(0, 2).map((c, i) => {
                                                 const rate = rates[c] || 1;
                                                 const symbol = c === 'USD' ? '$' : c === 'EUR' ? '€' : c === 'GBP' ? '£' : 'Rs';
                                                 return (
-                                                    <span key={c} className="text-black dark:text-white">
-                                                        {symbol} {(vehicle.calculatedTotal * rate).toLocaleString(undefined, { minimumFractionDigits: (c === 'LKR' ? 0 : 2), maximumFractionDigits: (c === 'LKR' ? 0 : 2) })}
-                                                    </span>
+                                                    <React.Fragment key={c}>
+                                                        {i > 0 && <span className="opacity-20">•</span>}
+                                                        <span className="!text-black dark:!text-white">
+                                                            {symbol} {(vehicle.calculatedTotal * rate).toLocaleString(undefined, { minimumFractionDigits: (c === 'LKR' ? 0 : 2), maximumFractionDigits: (c === 'LKR' ? 0 : 2) })}
+                                                        </span>
+                                                    </React.Fragment>
                                                 );
                                             })}
                                         </div>

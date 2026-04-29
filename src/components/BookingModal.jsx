@@ -96,15 +96,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         }
     }, [isOpen]);
 
-    // Hide bottom nav on steps 2 and 3
-    useEffect(() => {
-        if (isOpen && step >= 2) {
-            document.body.classList.add('hide-bottom-nav');
-        } else {
-            document.body.classList.remove('hide-bottom-nav');
-        }
-        return () => document.body.classList.remove('hide-bottom-nav');
-    }, [isOpen, step]);
+
 
     // Form State - declared early so functions below can access it
     const [formData, setFormData] = useState({
