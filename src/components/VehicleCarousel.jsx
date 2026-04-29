@@ -92,8 +92,8 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                 <div className="text-right shrink-0">
                     <p className="text-[7px] sm:text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Total Fare</p>
                     <p className="text-base sm:text-lg font-black text-emerald-950 dark:text-white leading-none">
-                        {convertPrice(vehicle.calculatedTotal).symbol}
-                        <span className="ml-0.5">{convertPrice(vehicle.calculatedTotal).value.toLocaleString()}</span>
+                        {convertPrice(Number(vehicle.calculatedTotal) || 0).symbol}
+                        <span className="ml-0.5">{convertPrice(Number(vehicle.calculatedTotal) || 0).value.toLocaleString()}</span>
                     </p>
                 </div>
             </div>
@@ -164,9 +164,9 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 {vehicle.calculatedTotal >= 0 && (
                                     <div className="text-center relative z-10 flex flex-col items-center mb-8">
                                         <div className="flex items-baseline justify-center gap-2">
-                                            <span className="text-xl font-black text-[#FACC15]">{convertPrice(vehicle.calculatedTotal).symbol}</span>
+                                            <span className="text-xl font-black text-[#FACC15]">{convertPrice(Number(vehicle.calculatedTotal) || 0).symbol}</span>
                                             <span className="text-5xl font-black text-black dark:text-white tracking-tighter leading-none">
-                                                {convertPrice(vehicle.calculatedTotal).value.toLocaleString()}
+                                                {(Number(convertPrice(Number(vehicle.calculatedTotal) || 0).value) || 0).toLocaleString()}
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-3 mt-3 text-[11px] font-black !text-black dark:!text-white uppercase tracking-widest">
@@ -191,10 +191,9 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                         src={vehicle.image}
                                         alt={vehicle.name}
                                         className={`
-                                            w-full h-[200px] object-contain
+                                            w-full h-[120px] sm:h-[160px] object-contain
                                             transition-transform duration-700
-                                            ${isSelected ? 'scale-[1.4]' : 'group-hover/card:scale-110'}
-                                            ${vehicle.vehicleType?.toLowerCase().includes('sedan') || vehicle.vehicleType?.toLowerCase().includes('car') ? 'scale-[1.6]' : 'scale-[1.4]'}
+                                            ${isSelected ? 'scale-[1.1]' : 'group-hover/card:scale-110'}
                                         `}
                                     />
                                 </div>

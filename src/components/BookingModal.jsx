@@ -251,11 +251,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const rate = rates?.[currency] || 1;
             const roundFn = formData.vehicle === 'sampath-test' ? Math.round : Math.ceil;
 
-            const convertedSubtotal = roundFn(baseTotal * rate);
-            const convertedSurcharges = roundFn(surcharges * rate);
-            const convertedPaymentFee = roundFn(paymentSurcharge * rate);
-            const convertedDiscounts = roundFn(finalDiscount * rate);
-            const convertedTotal = convertedSubtotal + convertedSurcharges + convertedPaymentFee - convertedDiscounts;
+            const convertedSubtotal = roundFn((Number(baseTotal) || 0) * rate);
+            const convertedSurcharges = roundFn((Number(surcharges) || 0) * rate);
+            const convertedPaymentFee = roundFn((Number(paymentSurcharge) || 0) * rate);
+            const convertedDiscounts = roundFn((Number(finalDiscount) || 0) * rate);
+            const convertedTotal = Math.max(0, convertedSubtotal + convertedSurcharges + convertedPaymentFee - convertedDiscounts);
 
             const payNowRatio = formData.paymentType === 'partial' ? 0.5 : 1;
             const convertedPayNow = roundFn(convertedTotal * payNowRatio);
@@ -603,7 +603,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <div className="text-right">
                                                 <div className="flex items-baseline justify-end gap-2">
                                                     <span className="text-2xl font-black text-[#FACC15]">{currentSymbol}</span>
-                                                    <span className="text-5xl font-black text-black dark:text-white tracking-tighter leading-none">{totalPrice.toLocaleString()}</span>
+                                                    <span className="text-5xl font-black text-black dark:text-white tracking-tighter leading-none">{(Number(totalPrice) || 0).toLocaleString()}</span>
                                                 </div>
                                             </div>
                                         </div>
