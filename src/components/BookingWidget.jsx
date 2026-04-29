@@ -995,7 +995,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     aria-label="Select Vehicle"
                                 >
                                     <div className="flex items-center gap-4 sm:gap-6">
-                                        <div className="w-22 h-16 sm:w-28 sm:h-20 rounded-2xl flex items-center justify-center p-0 shrink-0 bg-slate-50 dark:bg-zinc-900 border border-slate-100 dark:border-white/5">
+                                        <div className="w-20 h-16 sm:w-28 sm:h-20 rounded-2xl flex items-center justify-center p-0 shrink-0 bg-slate-50 dark:bg-zinc-900 border border-slate-100 dark:border-white/5">
                                             {vehiclePricing[vehicle]?.image ? (
                                                 <div className="relative w-full h-full">
                                                     <Image
