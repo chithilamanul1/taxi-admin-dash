@@ -628,6 +628,24 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         }
     };
 
+    const handleNext = () => {
+        if (step === 1) {
+            if (validateForm(1)) {
+                setStep(2);
+            } else {
+                scrollToFirstError();
+            }
+        } else if (step === 2) {
+            if (validateForm(2)) {
+                setStep(3);
+            } else {
+                scrollToFirstError();
+            }
+        } else {
+            handleSubmit();
+        }
+    };
+
     if (!isOpen) return null;
 
     const currentSymbol = SUPPORTED_CURRENCIES.find(c => c.code === currency)?.symbol || 'Rs';
