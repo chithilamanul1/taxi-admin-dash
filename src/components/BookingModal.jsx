@@ -93,11 +93,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const chatTrigger = document.querySelector('.live-chat-trigger');
             if (chatTrigger) chatTrigger.style.display = 'none';
 
-            if (step >= 2) {
-                document.body.classList.add('hide-bottom-nav');
-            } else {
-                document.body.classList.remove('hide-bottom-nav');
-            }
+            // Always hide bottom nav when modal is open to prevent overlapping buttons
+            document.body.classList.add('hide-bottom-nav');
 
             return () => {
                 document.body.style.overflow = originalOverflow;
@@ -107,7 +104,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 if (chatTriggerBack) chatTriggerBack.style.display = 'flex';
             };
         }
-    }, [isOpen, step]);
+    }, [isOpen]);
 
     // Form State
     const [formData, setFormData] = useState({
@@ -294,6 +291,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0, lkr: { total: 0, payNow: 0, balance: 0, surcharges: 0, subtotal: 0 }, originalLKR: 0 };
         }
     };
+
+    const pricingWithTotals = useMemo(() => {
+        return pricing.map(v => {
+            const baseTotal = calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
+            return {
+                ...v,
+                calculatedTotal: baseTotal
+            };
+        });
+    }, [pricing, distance, formData.tripType, formData.pickup, formData.dropoff, destinations]);
 
     const { total: totalPrice, subtotal, surcharges, payNow, balance: balanceAmount, ...detailedBreakdown } = useMemo(() => {
         return getPriceBreakdown();
@@ -537,7 +544,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <h4 className="text-2xl font-black text-black dark:text-white uppercase tracking-tight">Select <span className="text-[#FACC15]">Fleet</span></h4>
                                 </div>
                                 <VehicleCarousel
-                                    vehicles={pricing}
+                                    vehicles={pricingWithTotals}
                                     selectedId={formData.vehicle}
                                     onSelect={(v) => {
                                         setFormData(prev => ({ ...prev, vehicle: v.vehicleType }));
