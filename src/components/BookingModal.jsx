@@ -179,9 +179,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const SUPPORTED_CURRENCIES = [
         { code: 'LKR', symbol: 'Rs', name: 'Sri Lankan Rupee', flag: 'https://flagcdn.com/w40/lk.png' },
         { code: 'USD', symbol: '$', name: 'US Dollar', flag: 'https://flagcdn.com/w40/us.png' },
-        { code: 'EUR', symbol: '€', name: 'Euro', flag: 'https://flagcdn.com/w40/eu.png' },
-        { code: 'GBP', symbol: '£', name: 'British Pound', flag: 'https://flagcdn.com/w40/gb.png' },
-        { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: 'https://flagcdn.com/w40/in.png' },
+        { code: 'EUR', symbol: 'ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬', name: 'Euro', flag: 'https://flagcdn.com/w40/eu.png' },
+        { code: 'GBP', symbol: 'Ãƒâ€šÃ‚Â£', name: 'British Pound', flag: 'https://flagcdn.com/w40/gb.png' },
+        { code: 'INR', symbol: 'ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹', name: 'Indian Rupee', flag: 'https://flagcdn.com/w40/in.png' },
     ];
 
     const convertToAllCurrencies = (amountLKR) => {
@@ -641,18 +641,18 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 {step !== 2 && (
                     <div className="p-6 sm:p-10 pb-4 flex items-center justify-between shrink-0 pt-8 sm:pt-10 bg-white dark:bg-zinc-950 transition-colors duration-500">
                         <div className="flex items-center gap-5 min-w-0">
-                            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-emerald-600 rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-emerald-600/20">
+                            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#FACC15] rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-[#FACC15]/20">
                                 <Zap size={24} className="text-white sm:w-8 sm:h-8" strokeWidth={3} fill="currentColor" />
                             </div>
                             <div className="min-w-0">
                                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-emerald-950 dark:text-white leading-none truncate uppercase">
-                                    SECURE <span className="text-emerald-600">BOOKING</span>
+                                    SECURE <span className="text-[#FACC15]">BOOKING</span>
                                 </h2>
-                                <p className="text-[9px] sm:text-[10px] md:text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.3em] mt-2">Elite Tier Encryption</p>
+                                <p className="text-[9px] sm:text-[10px] md:text-xs font-black text-slate-700 dark:text-slate-200 uppercase tracking-[0.3em] mt-2">Elite Tier Encryption</p>
                             </div>
                         </div>
-                        <button onClick={onClose} className="w-12 h-12 sm:w-14 sm:h-14 bg-slate-50 dark:bg-white/5 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-white/10 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all z-[101] group">
-                            <X size={20} className="sm:w-7 sm:h-7 text-slate-400 group-hover:text-emerald-600 group-hover:rotate-90 transition-transform" />
+                        <button onClick={onClose} className="w-12 h-12 sm:w-14 sm:h-14 bg-slate-50 dark:bg-white/5 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-white/10 hover:bg-emerald-50 dark:hover:bg-yellow-400/10 transition-all z-[101] group">
+                            <X size={20} className="sm:w-7 sm:h-7 text-slate-400 group-hover:text-[#FACC15] group-hover:rotate-90 transition-transform" />
                         </button>
                     </div>
                 )}
@@ -661,7 +661,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 <div className="px-4 sm:px-12 py-4 md:py-6 flex gap-2 md:gap-6 shrink-0">
                     {STEPS.map((s) => (
                         <div key={s.id} className="flex-1 flex flex-col gap-2">
-                            <div className={`h-1.5 md:h-2 rounded-full transition-all duration-1000 ${step >= s.id ? 'bg-emerald-600 shadow-sm shadow-emerald-600/30' : 'bg-slate-100 dark:bg-white/5'}`}></div>
+                            <div className={`h-1.5 md:h-2 rounded-full transition-all duration-1000 ${step >= s.id ? 'bg-[#FACC15] shadow-sm shadow-[#FACC15]/30' : 'bg-slate-100 dark:bg-white/5'}`}></div>
                             <span className={`text-[7px] md:text-[10px] font-black uppercase tracking-normal md:tracking-widest text-center leading-tight ${step >= s.id ? 'text-emerald-950 dark:text-emerald-400' : 'text-slate-500'}`}>{s.title}</span>
                         </div>
                     ))}
@@ -677,7 +677,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <button 
                                         key={t} 
                                         onClick={() => setFormData({ ...formData, tripType: t })} 
-                                        className={`flex-1 md:flex-none px-4 md:px-8 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-wider md:tracking-widest transition-all whitespace-nowrap ${formData.tripType === t ? 'bg-white dark:bg-zinc-800 text-emerald-600 shadow-md border border-slate-100 dark:border-white/5' : 'text-slate-600 dark:text-slate-400 hover:text-emerald-600'}`}
+                                        className={`flex-1 md:flex-none px-4 md:px-8 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-wider md:tracking-widest transition-all whitespace-nowrap ${formData.tripType === t ? 'bg-white dark:bg-zinc-800 text-[#FACC15] shadow-md border border-slate-100 dark:border-white/5' : 'text-slate-600 dark:text-slate-400 hover:text-[#FACC15]'}`}
                                     >
                                         {t.replace('-', ' ')}
                                     </button>
@@ -686,7 +686,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                             {/* Location Inputs - Premium Luxury Card */}
                             <div className="bg-white dark:bg-zinc-900/50 p-6 sm:p-10 space-y-8 border border-slate-100 dark:border-white/10 rounded-[2.5rem] shadow-xl relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
                                 <div className="space-y-8 relative">
                                     {/* Flow Connection Line - Premium Curved Animated Style */}
                                     <div className="absolute left-[20px] top-12 bottom-12 w-5 z-0 pointer-events-none overflow-visible hidden sm:block">
@@ -702,7 +702,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 strokeWidth="2"
                                                 strokeDasharray="4 6"
                                                 strokeLinecap="round"
-                                                className="text-emerald-500/30 dark:text-[#FACC15]/20"
+                                                className="text-yellow-400/30 dark:text-[#FACC15]/20"
                                                 initial={{ pathLength: 0, opacity: 0 }}
                                                 animate={{ pathLength: 1, opacity: 1 }}
                                                 transition={{ 
@@ -720,7 +720,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 strokeWidth="2"
                                                 strokeDasharray="4 6"
                                                 strokeLinecap="round"
-                                                className="text-emerald-500 dark:text-[#FACC15]"
+                                                className="text-yellow-400 dark:text-[#FACC15]"
                                                 initial={{ pathLength: 0, pathOffset: 1 }}
                                                 animate={{ pathOffset: 0, pathLength: 0.2 }}
                                                 transition={{ 
@@ -746,7 +746,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     {/* Waypoints */}
                                     {formData.waypoints.map((wp, i) => (
                                         <div key={i} className="relative group animate-slide-in pl-10">
-                                            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-emerald-600 z-10 p-2 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl border border-emerald-100 dark:border-white/5">
+                                            <div className="absolute left-2 top-1/2 -translate-y-1/2 text-[#FACC15] z-10 p-2 bg-emerald-50 dark:bg-yellow-400/10 rounded-xl border border-emerald-100 dark:border-white/5">
                                                 <Navigation size={18} strokeWidth={3} />
                                             </div>
                                             <div className="w-full pl-12 pr-6 py-5 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 text-xs font-black text-emerald-950 dark:text-white flex items-center justify-between group-hover:bg-white dark:group-hover:bg-zinc-800 transition-all uppercase tracking-widest shadow-sm">
@@ -780,13 +780,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 <div className="space-y-8">
                                     <div className="space-y-6">
                                         <div className="flex items-center justify-between pl-4">
-                                            <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] leading-none">
+                                            <label className="text-[10px] font-black text-slate-700 dark:text-slate-300 uppercase tracking-[0.4em] leading-none">
                                                 {isVehicleExpanded ? 'Select Fleet Tier' : 'Your Selected Fleet'}
                                             </label>
                                             {formData.vehicle && (
                                                 <button 
                                                     onClick={() => setIsVehicleExpanded(!isVehicleExpanded)}
-                                                    className="text-[9px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 px-4 py-2 rounded-xl border border-emerald-100 dark:border-white/5 hover:bg-emerald-600 hover:text-white transition-all"
+                                                    className="text-[9px] font-black uppercase tracking-widest text-[#FACC15] bg-emerald-50 dark:bg-yellow-400/10 px-4 py-2 rounded-xl border border-emerald-100 dark:border-white/5 hover:bg-[#FACC15] hover:text-white transition-all"
                                                 >
                                                     {isVehicleExpanded ? 'Collapse' : 'Change'}
                                                 </button>
@@ -825,33 +825,33 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 <div className="space-y-8">
                                     {pricingCategory !== 'ride-now' && (
                                         <div className="bg-white dark:bg-zinc-900/50 p-6 sm:p-10 space-y-8 overflow-hidden relative border border-slate-100 dark:border-white/10 rounded-[2.5rem] shadow-xl">
-                                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
                                             <div className="flex items-center gap-4 sm:gap-6 relative z-10">
-                                                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-600/20 shrink-0">
+                                                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#FACC15] rounded-2xl flex items-center justify-center text-white shadow-lg shadow-[#FACC15]/20 shrink-0">
                                                     <Clock size={20} className="sm:w-8 sm:h-8" strokeWidth={3} />
                                                 </div>
                                                 <div>
-                                                    <p className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.4em] leading-none mb-2">Schedule Details</p>
-                                                    <p className="text-[10px] sm:text-xs font-black text-emerald-600 uppercase tracking-widest">Time-Critical Dispatch</p>
+                                                    <p className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-[0.4em] leading-none mb-2">Schedule Details</p>
+                                                    <p className="text-[10px] sm:text-xs font-black text-[#FACC15] uppercase tracking-widest">Time-Critical Dispatch</p>
                                                 </div>
                                             </div>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
                                                     <div className="space-y-3">
-                                                        <label className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest pl-4 leading-none">Flight Number (Optional)</label>
+                                                        <label className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest pl-4 leading-none">Flight Number (Optional)</label>
                                                         <div className="relative group">
-                                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-emerald-600 transition-colors"><Zap size={16} strokeWidth={3} fill="currentColor" /></div>
+                                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15] transition-colors"><Zap size={16} strokeWidth={3} fill="currentColor" /></div>
                                                             <input
                                                                 type="text"
                                                                 value={formData.flightNumber || ''}
                                                                 onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                                className="w-full h-14 sm:h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 pl-16 pr-8 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all font-black text-xs text-emerald-950 dark:text-white uppercase tracking-widest placeholder:text-slate-300 shadow-inner"
+                                                                className="w-full h-14 sm:h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 pl-16 pr-8 rounded-2xl outline-none focus:ring-2 focus:ring-yellow-400/20 transition-all font-black text-xs text-emerald-950 dark:text-white uppercase tracking-widest placeholder:text-slate-300 shadow-inner"
                                                                 placeholder="e.g. UL 101"
                                                             />
                                                         </div>
                                                     </div>
                                                     <div className="grid grid-cols-2 gap-4">
                                                     <div className="space-y-3">
-                                                         <label className={`text-[10px] font-black uppercase tracking-widest pl-4 leading-none ${errors.date ? 'text-red-500' : 'text-slate-600 dark:text-slate-400'}`}>Target Date</label>
+                                                         <label className={`text-[10px] font-black uppercase tracking-widest pl-4 leading-none ${errors.date ? 'text-red-500' : 'text-slate-700 dark:text-slate-200'}`}>Target Date</label>
                                                          <input
                                                              id="field-date"
                                                              type="date"
@@ -861,11 +861,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                  setFormData(prev => ({ ...prev, flightArrivalDate: d, arrivalDate: d, date: isAirportService ? d : prev.date }));
                                                                  if (errors.date) setErrors(prev => ({ ...prev, date: false }));
                                                              }}
-                                                             className={`w-full h-14 md:h-16 bg-slate-50 dark:bg-white/5 border px-6 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all font-black text-xs text-emerald-950 dark:text-white uppercase tracking-widest shadow-inner ${errors.date ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                             className={`w-full h-14 md:h-16 bg-slate-50 dark:bg-white/5 border px-6 rounded-2xl outline-none focus:ring-2 focus:ring-yellow-400/20 transition-all font-black text-xs text-emerald-950 dark:text-white uppercase tracking-widest shadow-inner ${errors.date ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
                                                          />
                                                      </div>
                                                      <div className="space-y-3">
-                                                         <label className={`text-[10px] font-black uppercase tracking-widest pl-4 leading-none ${errors.time ? 'text-red-500' : 'text-slate-600 dark:text-slate-400'}`}>Target Time</label>
+                                                         <label className={`text-[10px] font-black uppercase tracking-widest pl-4 leading-none ${errors.time ? 'text-red-500' : 'text-slate-700 dark:text-slate-200'}`}>Target Time</label>
                                                          <input
                                                              id="field-time"
                                                              type="time"
@@ -875,7 +875,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                  setFormData(prev => ({ ...prev, flightArrivalTime: t, arrivalTime: t, time: isAirportService ? t : prev.time }));
                                                                  if (errors.time) setErrors(prev => ({ ...prev, time: false }));
                                                              }}
-                                                             className={`w-full h-14 md:h-16 bg-slate-50 dark:bg-white/5 border px-6 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all font-black text-xs text-emerald-950 dark:text-white uppercase tracking-widest shadow-inner ${errors.time ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                             className={`w-full h-14 md:h-16 bg-slate-50 dark:bg-white/5 border px-6 rounded-2xl outline-none focus:ring-2 focus:ring-yellow-400/20 transition-all font-black text-xs text-emerald-950 dark:text-white uppercase tracking-widest shadow-inner ${errors.time ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
                                                          />
                                                      </div>
                                                 </div>
@@ -895,14 +895,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     )}
 
                                     <div className="pt-4 space-y-6">
-                                         <label className={`text-[10px] font-black uppercase tracking-[0.4em] pl-4 leading-none ${errors.hasNameBoard ? 'text-red-500' : 'text-slate-600 dark:text-slate-400'}`}>Greeting Service / Name Board</label>
-                                         <div id="field-hasNameBoard" className={`relative overflow-hidden group rounded-[2.5rem] border transition-all ${errors.hasNameBoard ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'} ${formData.hasNameBoard ? 'bg-emerald-50/30 dark:bg-emerald-500/5' : 'bg-white dark:bg-zinc-900/30'} shadow-lg`}>
-                                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+                                         <label className={`text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.4em] pl-4 leading-none ${errors.hasNameBoard ? 'text-red-500' : 'text-slate-700 dark:text-slate-200'}`}>Greeting Service / Name Board</label>
+                                         <div id="field-hasNameBoard" className={`relative overflow-hidden group rounded-[2.5rem] border transition-all ${errors.hasNameBoard ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'} ${formData.hasNameBoard ? 'bg-emerald-50/30 dark:bg-yellow-400/5' : 'bg-white dark:bg-zinc-900/30'} shadow-lg`}>
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
                                             
-                                            <div className="relative z-10 p-6 sm:p-10 flex flex-col items-start gap-8">
-                                                <div className="flex items-center gap-4 sm:gap-6 w-full overflow-hidden">
-                                                     <div className={`w-14 h-14 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl flex items-center justify-center border transition-all shrink-0 ${formData.hasNameBoard ? 'bg-emerald-600 border-transparent text-white shadow-xl shadow-emerald-600/30' : 'bg-slate-50 dark:bg-white/5 border-slate-100 text-slate-300'}`}>
-                                                        <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="sm:w-10 sm:h-10">
+                                            <div className="relative z-10 p-4 sm:p-10 flex flex-col items-start gap-6 sm:gap-8">
+                                                <div className="flex items-center gap-3 sm:gap-6 w-full overflow-hidden">
+                                                     <div className={`w-12 h-12 sm:w-20 sm:h-20 rounded-xl sm:rounded-3xl flex items-center justify-center border transition-all shrink-0 ${formData.hasNameBoard ? 'bg-[#FACC15] border-transparent text-white shadow-xl shadow-[#FACC15]/30' : 'bg-slate-50 dark:bg-white/5 border-slate-100 text-slate-300'}`}>
+                                                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="sm:w-10 sm:h-10">
                                                             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                                                             <circle cx="9" cy="7" r="4"></circle>
                                                             <path d="M19 8v6"></path>
@@ -910,16 +910,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         </svg>
                                                      </div>
                                                      <div className="flex flex-col min-w-0">
-                                                         <h4 className={`text-xl sm:text-3xl font-black uppercase tracking-tight truncate ${formData.hasNameBoard ? 'text-emerald-950 dark:text-white' : 'text-slate-700 dark:text-slate-200'}`}>Airport Greeting</h4>
-                                                         <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-widest ${formData.hasNameBoard ? 'text-emerald-600' : 'text-slate-500'}`}>Arrival Hall Meeting Service</p>
+                                                         <h4 className={`text-lg sm:text-3xl font-black uppercase tracking-tight truncate ${formData.hasNameBoard ? 'text-emerald-950 dark:text-white' : 'text-slate-900 dark:text-slate-100'}`}>Airport Greeting</h4>
+                                                         <p className={`text-[7px] sm:text-[10px] font-black uppercase tracking-widest ${formData.hasNameBoard ? 'text-[#FACC15]' : 'text-slate-700'}`}>Arrival Hall Meeting Service</p>
                                                      </div>
                                                 </div>
  
-                                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full bg-slate-50 dark:bg-white/5 p-4 sm:p-5 rounded-2xl border border-slate-100 dark:border-white/10 overflow-hidden">
-                                                     <span className="px-4 py-1.5 sm:px-5 sm:py-2 bg-emerald-600 text-white rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest shadow-md shrink-0">
+                                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full bg-slate-50 dark:bg-white/5 p-3 sm:p-5 rounded-2xl border border-slate-100 dark:border-white/10 overflow-hidden">
+                                                     <span className="px-3 py-1 sm:px-5 sm:py-2 bg-[#FACC15] text-white rounded-full text-[8px] sm:text-[10px] font-black uppercase tracking-widest shadow-md shrink-0">
                                                          + Rs {(pricingSettings?.nameBoardPrice || 2000).toLocaleString()}
                                                      </span>
-                                                     <p className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-tight leading-tight ${formData.hasNameBoard ? 'text-slate-600 dark:text-slate-400' : 'text-slate-600 dark:text-slate-300'}`}>
+                                                     <p className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-tight leading-tight ${formData.hasNameBoard ? 'text-slate-800 dark:text-slate-200' : 'text-slate-700 dark:text-slate-300'}`}>
                                                          Our driver will wait with a name sign at the arrival hall.
                                                      </p>
                                                 </div>
@@ -927,14 +927,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full">
                                                     <button
                                                         onClick={() => setFormData({ ...formData, hasNameBoard: true })}
-                                                        className={`p-4 sm:p-5 rounded-xl sm:rounded-2xl border transition-all flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 ${formData.hasNameBoard === true ? 'border-emerald-600 bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-500 hover:border-emerald-600 hover:text-emerald-600'}`}
+                                                        className={`p-3 sm:p-5 rounded-xl sm:rounded-2xl border transition-all flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 ${formData.hasNameBoard === true ? 'border-[#FACC15] bg-[#FACC15] text-white shadow-lg shadow-[#FACC15]/20' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-500 hover:border-[#FACC15] hover:text-[#FACC15]'}`}
                                                     >
                                                         <Check size={18} strokeWidth={4} className="shrink-0" />
                                                         <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest">Add Service</span>
                                                     </button>
                                                     <button
                                                         onClick={() => setFormData({ ...formData, hasNameBoard: false, nameBoardText: '' })}
-                                                        className={`p-4 sm:p-5 rounded-xl sm:rounded-2xl border transition-all flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 ${formData.hasNameBoard === false ? 'border-red-500 bg-red-500 text-white shadow-lg shadow-red-500/20' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:border-red-500 hover:text-red-500'}`}
+                                                        className={`p-3 sm:p-5 rounded-xl sm:rounded-2xl border transition-all flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 ${formData.hasNameBoard === false ? 'border-red-500 bg-red-500 text-white shadow-lg shadow-red-500/20' : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/10 text-slate-500 dark:text-slate-300 hover:border-red-500 hover:text-red-500'}`}
                                                     >
                                                         <X size={18} strokeWidth={4} className="shrink-0" />
                                                         <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest">Skip Service</span>
@@ -951,7 +951,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                  type="text"
                                                  value={formData.nameBoardText}
                                                  onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
-                                                 className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all font-black text-xs text-emerald-950 dark:text-white uppercase tracking-widest placeholder:text-slate-300 shadow-inner"
+                                                 className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-2xl outline-none focus:ring-2 focus:ring-yellow-400/20 transition-all font-black text-xs text-emerald-950 dark:text-white uppercase tracking-widest placeholder:text-slate-300 shadow-inner"
                                                  placeholder="Enter pickup name or greeting..."
                                              />
                                          </div>
@@ -961,21 +961,41 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                 <div className="p-8 sm:p-12 bg-white dark:bg-zinc-900/50 rounded-[3rem] text-emerald-950 dark:text-white flex flex-col gap-8 relative overflow-hidden group border border-slate-100 dark:border-white/10 shadow-2xl">
                                     {/* Decorative Background Block */}
-                                    <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/5 rounded-full -mr-36 -mt-36 blur-3xl"></div>
+                                    <div className="absolute top-0 right-0 w-72 h-72 bg-yellow-400/5 rounded-full -mr-36 -mt-36 blur-3xl"></div>
 
                                     <div className="relative z-10 space-y-6">
-                                        <div className="flex items-center gap-3 text-emerald-600 mb-2">
+                                        <div className="flex items-center gap-3 text-[#FACC15] mb-2">
                                             <Zap size={18} fill="currentColor" className="animate-pulse" />
                                             <span className="text-[12px] font-black uppercase tracking-[0.4em]">{formData.paymentType === 'partial' ? 'Deposit Payment' : 'Immediate Payment'}</span>
                                         </div>
-                                        <div className="text-5xl xs:text-6xl md:text-8xl font-black leading-none tracking-tighter flex items-center gap-4 uppercase">
-                                            <span className="text-2xl sm:text-3xl font-black text-slate-300 dark:text-white/20">
-                                                {(rates?.[currency]) ? currentSymbol : 'Rs'}
-                                            </span>
-                                            <span className="text-emerald-950 dark:text-white">
-                                                {payNow.toLocaleString()}
-                                            </span>
-                                        </div>
+                                        <div className="text-5xl xs:text-6xl md:text-8xl font-black leading-none tracking-tighter flex flex-wrap items-end gap-x-4 gap-y-2 uppercase">
+                                             <div className="flex items-center gap-4">
+                                                <span className="text-2xl sm:text-3xl font-black text-slate-500 dark:text-white/30">
+                                                    {(rates?.[currency]) ? currentSymbol : 'Rs'}
+                                                </span>
+                                                <span className="text-emerald-950 dark:text-white">
+                                                    {payNow.toLocaleString()}
+                                                </span>
+                                             </div>
+                                             
+                                             <div className="flex flex-wrap gap-3 mb-2 sm:mb-4">
+                                                 {convertToAllCurrencies(detailedBreakdown.lkr?.payNow || originalLKR)
+                                                     .filter(c => {
+                                                         if (currency === 'LKR') return ['USD', 'GBP', 'EUR'].includes(c.code);
+                                                         if (currency === 'USD') return ['LKR', 'GBP', 'EUR'].includes(c.code);
+                                                         if (currency === 'INR') return ['USD'].includes(c.code);
+                                                         if (currency === 'GBP') return ['USD', 'EUR'].includes(c.code);
+                                                         if (currency === 'EUR') return ['USD', 'GBP'].includes(c.code);
+                                                         return c.code !== currency;
+                                                     })
+                                                     .map(c => (
+                                                         <span key={c.code} className="text-[10px] sm:text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-lg border border-slate-200 dark:border-white/5">
+                                                             ÃƒÂ¢Ã¢â‚¬Â°Ã‹â€  {c.symbol}{c.value.toLocaleString()}
+                                                         </span>
+                                                     ))
+                                                 }
+                                             </div>
+                                         </div>
                                     </div>
 
                                 {/* Multi-Currency Grid */}
@@ -993,8 +1013,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 type="button"
                                                 onClick={() => changeCurrency(c.code)}
                                                 className={`px-4 py-2.5 rounded-xl border transition-all flex items-center gap-3 text-left cursor-pointer group/curr ${currency === c.code
-                                                    ? 'bg-emerald-600 border-transparent text-white shadow-lg shadow-emerald-600/20'
-                                                    : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-emerald-600 text-slate-400 hover:text-emerald-600'
+                                                    ? 'bg-[#FACC15] border-transparent text-white shadow-lg shadow-[#FACC15]/20'
+                                                    : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-[#FACC15] text-slate-400 hover:text-[#FACC15]'
                                                     }`}
                                             >
                                                 <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-white dark:border-zinc-800 shadow-sm">
@@ -1017,12 +1037,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 {detailedBreakdown.detailedExtras?.map((s, idx) => (
                                     <div key={idx} className="flex justify-between items-center text-[11px] font-black uppercase tracking-widest text-slate-400">
                                         <span>{s.label}</span>
-                                        <span className="text-emerald-600">+{currentSymbol} {s.value.toLocaleString()}</span>
+                                        <span className="text-[#FACC15]">+{currentSymbol} {s.value.toLocaleString()}</span>
                                     </div>
                                 ))}
  
                                 {detailedBreakdown.discounts > 0 && (
-                                    <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-widest text-emerald-600 bg-white dark:bg-emerald-500/5 p-5 rounded-2xl border border-emerald-100 dark:border-emerald-500/10 shadow-sm">
+                                    <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-widest text-[#FACC15] bg-white dark:bg-yellow-400/5 p-5 rounded-2xl border border-emerald-100 dark:border-yellow-400/10 shadow-sm">
                                         <div className="flex items-center gap-3">
                                             <Tag size={16} className="animate-pulse" />
                                             <span>
@@ -1037,7 +1057,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <div className="pt-4 border-t border-slate-200 dark:border-white/10">
                                         <div className="flex flex-wrap gap-2">
                                             {detailedBreakdown.appliedCoupons.map((c, idx) => (
-                                                <span key={idx} className="px-4 py-2 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl flex items-center gap-2 shadow-sm">
+                                                <span key={idx} className="px-4 py-2 bg-[#FACC15] text-white text-[10px] font-black uppercase tracking-widest rounded-xl flex items-center gap-2 shadow-sm">
                                                     <Check size={12} strokeWidth={4} /> {c.code || c}
                                                 </span>
                                             ))}
@@ -1048,174 +1068,59 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             </div>
 
                             <div className="flex flex-col items-center justify-center gap-3 mt-6">
-                                <div className="flex items-center gap-2 text-emerald-600/60">
+                                <div className="flex items-center gap-2 text-[#FACC15]/60">
                                     <ShieldCheck size={18} />
-                                    <span className="text-[10px] font-black uppercase tracking-widest">Taxes Included • Tolls Excluded</span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest">Taxes Included â€¢ Tolls Excluded</span>
                                 </div>
                             </div>
                         </div>
                     )}
-
-                {step === 2 && (
-                        <div className="animate-slide-up">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
-                                <div>
-                                    <h3 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#FACC15] to-[#FF5C00] tracking-tight uppercase leading-none mb-3">
-                                        Passenger <span className="text-emerald-950 dark:text-white">Details</span>
-                                    </h3>
-                                    <p className="text-[10px] md:text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.4em]">Seamless Journey Planning</p>
-                                </div>
-                                <div className="flex items-center gap-4 bg-emerald-50 dark:bg-emerald-500/10 px-6 py-3 rounded-2xl border border-emerald-100 dark:border-emerald-500/20 shadow-sm">
-                                    <Zap size={18} className="text-emerald-600" />
-                                    <span className="text-[10px] font-black text-emerald-950 dark:text-white uppercase tracking-widest">Instant Confirmation</span>
-                                </div>
-                            </div>
-
-                            <div className="space-y-10 max-w-3xl mx-auto">
-                                {!session && (
-                                    <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 p-8 rounded-[2rem] flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden group shadow-2xl">
-                                        <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-10 mix-blend-overlay"></div>
-                                        <div className="flex items-center gap-6 relative z-10 text-white">
-                                            <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-lg"><User size={28} /></div>
-                                            <div>
-                                                <p className="text-sm font-black uppercase tracking-widest leading-none">Exclusive Benefits?</p>
-                                                <p className="text-[10px] font-bold text-white/70 uppercase tracking-widest mt-2">Sign in for member rates & trip history.</p>
-                                            </div>
-                                        </div>
-                                        <button onClick={() => signIn()} className="relative z-10 px-10 py-4 bg-white text-emerald-950 rounded-2xl text-[10px] font-black hover:bg-emerald-50 transition-all uppercase tracking-widest shadow-xl active:scale-95">Member Login</button>
-                                    </div>
-                                )}
-
-                                <div className="space-y-8">
-                                    <div className="grid md:grid-cols-2 gap-x-10 gap-y-8 bg-white dark:bg-zinc-900/40 p-1 md:p-4 rounded-[2.5rem]">
-                                        {[
-                                            { label: 'Full Legal Name', key: 'name', type: 'text', placeholder: 'Passenger Name', icon: User },
-                                            { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation', icon: Mail },
-                                            { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX', icon: Phone },
-                                            { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver chat', icon: MessageSquare },
-                                        ].map(f => (
-                                                <div key={f.key} className="group/field">
-                                                    <label className={`text-[9px] font-black uppercase tracking-[0.2em] mb-3 ml-6 flex items-center gap-2 transition-colors ${errors[f.key] ? 'text-red-500' : 'text-slate-600 dark:text-slate-400 group-focus-within/field:text-emerald-600'}`}>
-                                                        <f.icon size={11} className={errors[f.key] ? 'text-red-500' : 'text-emerald-600'} /> {f.label}
-                                                    </label>
-                                                    {f.type === 'tel' ? (
-                                                        <PhoneInput
-                                                            id={`field-${f.key}`}
-                                                            defaultCountry="lk"
-                                                            value={formData[f.key] || ''}
-                                                            onChange={(phone) => {
-                                                                setFormData({ ...formData, [f.key]: phone });
-                                                                if (errors[f.key]) setErrors(prev => ({ ...prev, [f.key]: false }));
-                                                            }}
-                                                            inputClassName="!w-full !h-16 !bg-transparent !border-none !px-6 !outline-none focus:!ring-0 !font-black !text-emerald-950 dark:!text-white placeholder:!text-slate-400 !text-sm !uppercase !tracking-widest"
-                                                            countrySelectorStyleProps={{
-                                                                buttonClassName: '!h-16 !bg-slate-50 dark:!bg-white/5 !border-r !border-slate-100 dark:!border-white/10 !px-4 !flex !items-center !justify-center !min-w-[80px] !rounded-l-3xl',
-                                                                flagClassName: '!w-8 !h-auto',
-                                                                dropdownStyleProps: {
-                                                                    className: '!z-[20000] !min-w-[200px] !max-h-[300px] !rounded-2xl !border !border-slate-100 !bg-white dark:!bg-zinc-900 dark:!text-white shadow-2xl'
-                                                                }
-                                                            }}
-                                                            className={`w-full bg-slate-50 dark:bg-white/5 border rounded-3xl flex focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all shadow-sm group-hover/field:border-emerald-200 dark:group-hover/field:border-emerald-500/20 ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
-                                                        />
-                                                    ) : (
-                                                        <input
-                                                            id={`field-${f.key}`}
-                                                            type={f.type}
-                                                            value={formData[f.key] || ''}
-                                                            onChange={e => {
-                                                                setFormData({ ...formData, [f.key]: e.target.value });
-                                                                if (errors[f.key]) setErrors(prev => ({ ...prev, [f.key]: false }));
-                                                            }}
-                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-8 rounded-3xl outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-black text-emerald-950 dark:text-white placeholder:text-slate-500 text-sm uppercase tracking-widest shadow-sm group-hover/field:border-emerald-200 dark:group-hover/field:border-emerald-500/20 ${errors[f.key] ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
-                                                            placeholder={f.placeholder}
-                                                        />
-                                                    )}
-                                                </div>
-                                        ))}
-                                    </div>
-
-                                        <div className="space-y-8 pt-12 mt-12 border-t border-slate-100 dark:border-white/5">
-                                            <h4 className="text-[11px] font-black text-emerald-950 dark:text-white uppercase tracking-[0.4em] pl-6 flex items-center gap-4">
-                                                <div className="w-10 h-10 rounded-xl bg-emerald-600/10 flex items-center justify-center text-emerald-600 shadow-sm"><CreditCard size={18} /></div> Billing Details <span className="text-slate-600 dark:text-slate-400">(Optional)</span>
-                                            </h4>
-                                            <div className="grid md:grid-cols-2 gap-8 px-2">
-                                                <input
-                                                    type="text"
-                                                    value={formData.billingName || ''}
-                                                    onChange={e => setFormData({ ...formData, billingName: e.target.value })}
-                                                    className="w-full h-16 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl text-sm font-black text-emerald-950 dark:text-white placeholder:text-slate-600 uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
-                                                    placeholder="Full Billing Name"
-                                                    aria-label="Full Billing Name"
-                                                />
-                                                <input
-                                                    type="text"
-                                                    value={formData.billingCountry || ''}
-                                                    onChange={e => setFormData({ ...formData, billingCountry: e.target.value })}
-                                                    className="w-full h-16 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl text-sm font-black text-emerald-950 dark:text-white placeholder:text-slate-600 uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
-                                                    placeholder="Country of Residence"
-                                                    aria-label="Country of Residence"
-                                                />
-                                                <textarea
-                                                    rows="3"
-                                                    value={formData.billingAddress}
-                                                    onChange={e => setFormData({ ...formData, billingAddress: e.target.value })}
-                                                    className="md:col-span-2 w-full p-8 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-[2.5rem] text-sm font-black text-emerald-950 dark:text-white placeholder:text-slate-600 resize-none uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-sm"
-                                                    placeholder="Full Billing Address"
-                                                    aria-label="Full Billing Address"
-                                                ></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
-                        </div>
-                    )}
-
                 {step === 3 && (
                         <div className="animate-slide-up">
                             <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
                                 <div>
-                                    <h3 className="text-4xl md:text-6xl font-black text-emerald-950 dark:text-white tracking-tight uppercase leading-none mb-3">Final <span className="text-emerald-600">Checkout</span></h3>
-                                    <p className="text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em]">Premium Booking Experience</p>
+                                    <h3 className="text-4xl md:text-6xl font-black text-emerald-950 dark:text-white tracking-tight uppercase leading-none mb-3">Final <span className="text-[#FACC15]">Checkout</span></h3>
+                                    <p className="text-[10px] md:text-xs font-black text-slate-700 dark:text-slate-200 uppercase tracking-[0.4em]">Premium Booking Experience</p>
                                 </div>
-                                <div className="flex items-center gap-5 bg-emerald-50 dark:bg-emerald-500/10 px-6 py-3 rounded-2xl border border-emerald-100 dark:border-emerald-500/20 shadow-sm">
-                                    <ShieldCheck size={18} className="text-emerald-600" />
+                                <div className="flex items-center gap-5 bg-emerald-50 dark:bg-yellow-400/10 px-6 py-3 rounded-2xl border border-emerald-100 dark:border-yellow-400/20 shadow-sm">
+                                    <ShieldCheck size={18} className="text-[#FACC15]" />
                                     <span className="text-[10px] font-black text-emerald-950 dark:text-white uppercase tracking-widest">Secured by SSL</span>
                                 </div>
                             </div>
 
                             <div className="grid lg:grid-cols-12 gap-12">
                                     {/* Left Column: Summary */}
-                                    <div className="lg:col-span-7 space-y-12">
-                                        <div className="p-8 md:p-14 bg-white dark:bg-zinc-900/40 rounded-[3rem] text-emerald-950 dark:text-white border border-emerald-100 dark:border-white/10 shadow-2xl relative overflow-hidden group">
-                                            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-emerald-600/10 transition-all duration-700"></div>
+                                    <div className="lg:col-span-7 space-y-8">
+                                        <div className="p-6 md:p-14 bg-white dark:bg-zinc-900/40 rounded-[2.5rem] md:rounded-[3rem] text-emerald-950 dark:text-white border border-emerald-100 dark:border-white/10 shadow-2xl relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FACC15]/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-[#FACC15]/10 transition-all duration-700"></div>
 
                                             <div className="relative z-10 space-y-10">
                                                 <div className="flex items-center justify-between pb-8 border-b border-slate-100 dark:border-white/5">
-                                                     <div className="px-6 py-2.5 bg-emerald-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-600/20">
+                                                     <div className="px-6 py-2.5 bg-[#FACC15] text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-[#FACC15]/20">
                                                          Booking Summary
                                                      </div>
-                                                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">
+                                                    <div className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-[0.3em]">
                                                         {formData.tripType.replace('-', ' ')}
                                                     </div>
                                                 </div>
 
-                                                 <div className="space-y-8">
+                                                 <div className="space-y-6">
                                                     {/* Compact Vehicle Summary */}
-                                                    <div className="flex items-center gap-6 bg-slate-50 dark:bg-white/5 p-6 rounded-[2.5rem] border border-slate-100 dark:border-white/10 group/v-summary animate-slide-in shadow-inner">
-                                                        <div className="w-24 h-16 bg-white dark:bg-zinc-800 rounded-2xl border border-slate-100 dark:border-white/10 flex items-center justify-center p-2 overflow-hidden shrink-0 shadow-sm">
-                                                            <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full h-full object-contain scale-110 group-hover/v-summary:scale-125 transition-transform duration-500" />
+                                                    <div className="flex items-center gap-4 sm:gap-6 bg-slate-50 dark:bg-white/5 p-4 sm:p-6 rounded-2xl sm:rounded-[2.5rem] border border-slate-100 dark:border-white/10 group/v-summary animate-slide-in shadow-inner">
+                                                        <div className="w-24 h-16 bg-white dark:bg-zinc-800 rounded-2xl border border-slate-100 dark:border-white/10 flex items-center justify-center p-0.5 overflow-hidden shrink-0 shadow-sm">
+                                                            <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full h-full object-contain scale-[1.5] group-hover/v-summary:scale-175 transition-transform duration-500" />
                                                         </div>
                                                         <div className="min-w-0 flex-1">
                                                             <p className="text-sm font-black text-emerald-950 dark:text-white uppercase truncate tracking-tight">{displayVehicleName(selectedVehicle?.name)}</p>
                                                             <div className="flex items-center gap-4 mt-2">
                                                                 <div className="flex items-center gap-2">
-                                                                    <Users size={12} className="text-emerald-600" />
-                                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{selectedVehicle?.capacity || 4} Pax</span>
+                                                                    <Users size={12} className="text-[#FACC15]" />
+                                                                    <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">{selectedVehicle?.capacity || 4} Pax</span>
                                                                 </div>
-                                                                <span className="w-1 h-1 bg-slate-200 dark:bg-white/10 rounded-full"></span>
+                                                                <span className="w-1 h-1 bg-slate-300 dark:bg-white/20 rounded-full"></span>
                                                                 <div className="flex items-center gap-2">
-                                                                    <Briefcase size={12} className="text-emerald-600" />
-                                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{selectedVehicle?.luggage || 2} Bags</span>
+                                                                    <Briefcase size={12} className="text-[#FACC15]" />
+                                                                    <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">{selectedVehicle?.luggage || 2} Bags</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1230,62 +1135,79 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             </div>
                                                         </div>
                                                         <div className="flex gap-5">
-                                                             <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xl shadow-emerald-600/20"><Navigation size={22} /></div>
+                                                             <div className="w-12 h-12 rounded-2xl bg-[#FACC15] text-white flex items-center justify-center shrink-0 shadow-xl shadow-[#FACC15]/20"><Navigation size={22} /></div>
                                                              <div className="min-w-0">
-                                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Destination</p>
+                                                                <p className="text-[9px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest mb-2">Destination</p>
                                                                 <p className="text-[11px] font-black text-emerald-950 dark:text-white leading-tight uppercase line-clamp-2">{formData.dropoff}</p>
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                     {formData.hasNameBoard && (
-                                                      <div className="flex gap-6 bg-emerald-50 dark:bg-emerald-500/5 p-6 rounded-[2.5rem] border border-emerald-100 dark:border-emerald-500/10 shadow-sm group/board">
-                                                             <div className="w-14 h-14 rounded-2xl bg-white dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-white/5 overflow-hidden shadow-sm group-hover/board:border-emerald-500 transition-colors">
-                                                                 <Signpost size={28} className="text-emerald-600" strokeWidth={3} />
+                                                      <div className="flex gap-6 bg-emerald-50 dark:bg-yellow-400/5 p-6 rounded-[2.5rem] border border-emerald-100 dark:border-yellow-400/10 shadow-sm group/board">
+                                                             <div className="w-14 h-14 rounded-2xl bg-white dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-white/5 overflow-hidden shadow-sm group-hover/board:border-yellow-400 transition-colors">
+                                                                 <Signpost size={28} className="text-[#FACC15]" strokeWidth={3} />
                                                              </div>
                                                             <div className="min-w-0">
-                                                                <p className="text-[9px] font-black text-emerald-600 uppercase tracking-widest mb-2">Airport Greeting</p>
+                                                                <p className="text-[9px] font-black text-[#FACC15] uppercase tracking-widest mb-2">Airport Greeting</p>
                                                                 <p className="text-[11px] font-black text-emerald-950 dark:text-white uppercase truncate">"{formData.nameBoardText || 'Elite Greeting'}"</p>
                                                             </div>
                                                         </div>
                                                     )}
                                                 </div>
 
-                                                <div className="space-y-5 pt-10 mt-6 border-t border-slate-100 dark:border-white/10">
-                                                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
+                                                <div className="space-y-4 pt-8 mt-4 border-t border-slate-100 dark:border-white/10">
+                                                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-slate-100">
                                                         <span>Trip Base Fare</span>
                                                         <span className="text-emerald-950 dark:text-white font-black">{currentSymbol} {subtotal.toLocaleString()}</span>
                                                     </div>
 
                                                     {detailedBreakdown.detailedExtras?.filter(s => s.value > 0).map((s, idx) => (
-                                                        <div key={idx} className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
+                                                        <div key={idx} className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-slate-100">
                                                             <span>{s.label}</span>
-                                                            <span className="text-emerald-600 font-black">+{currentSymbol} {s.value.toLocaleString()}</span>
+                                                            <span className="text-[#FACC15] font-black">+{currentSymbol} {s.value.toLocaleString()}</span>
                                                         </div>
                                                     ))}
 
                                                     {detailedBreakdown.discounts > 0 && (
-                                                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 dark:bg-emerald-500/5 px-4 py-2 rounded-xl">
+                                                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-[#FACC15] bg-emerald-50 dark:bg-yellow-400/5 px-4 py-2 rounded-xl">
                                                             <span>Special promotion applied</span>
                                                             <span className="font-black">-{currentSymbol} {detailedBreakdown.discounts.toLocaleString()}</span>
                                                         </div>
                                                     )}
 
-                                                    <div className="pt-10 mt-8 border-t border-slate-100 dark:border-white/10 flex justify-between items-end">
+                                                    <div className="pt-8 mt-6 border-t border-slate-100 dark:border-white/10 flex justify-between items-end">
                                                         <div>
-                                                            <p className="text-[10px] font-black text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 px-5 py-2 mb-5 rounded-full w-fit tracking-[0.2em] shadow-sm">
+                                                            <p className="text-[10px] font-black text-[#FACC15] bg-emerald-50 dark:bg-yellow-400/10 px-5 py-2 mb-5 rounded-full w-fit tracking-[0.2em] shadow-sm">
                                                                 {formData.paymentType === 'partial' ? 'Secure Deposit (50%)' : 'Total Amount (Fixed)'}
                                                             </p>
-                                                            <p className="text-6xl md:text-8xl font-black tracking-tighter text-emerald-950 dark:text-white leading-none">
-                                                                <span className="text-xl md:text-2xl font-black mr-2 text-slate-300 dark:text-white/20">{currentSymbol}</span>
+                                                            <p className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter text-emerald-950 dark:text-white leading-none">
+                                                                <span className="text-lg md:text-2xl font-black mr-2 text-slate-500 dark:text-white/20">{currentSymbol}</span>
                                                                 {payNow.toLocaleString()}
                                                             </p>
+                                                            <div className="flex flex-wrap gap-3 mt-6">
+                                                                 {convertToAllCurrencies(detailedBreakdown.lkr?.payNow || originalLKR)
+                                                                     .filter(c => {
+                                                                         if (currency === 'LKR') return ['USD', 'GBP', 'EUR'].includes(c.code);
+                                                                         if (currency === 'USD') return ['LKR', 'GBP', 'EUR'].includes(c.code);
+                                                                         if (currency === 'INR') return ['USD'].includes(c.code);
+                                                                         if (currency === 'GBP') return ['USD', 'EUR'].includes(c.code);
+                                                                         if (currency === 'EUR') return ['USD', 'GBP'].includes(c.code);
+                                                                         return c.code !== currency;
+                                                                     })
+                                                                     .map(c => (
+                                                                         <span key={c.code} className="text-[10px] sm:text-xs font-black text-[#FACC15] dark:text-emerald-400 uppercase tracking-widest bg-emerald-50 dark:bg-yellow-400/5 px-3 py-1.5 rounded-xl border border-emerald-100 dark:border-yellow-400/10">
+                                                                             ≈ {c.symbol}{c.value.toLocaleString()} {c.code}
+                                                                         </span>
+                                                                     ))
+                                                                 }
+                                                             </div>
                                                         </div>
                                                     </div>
                                                     
                                                     {/* Disclaimer Section */}
-                                                    <div className="pt-8 mt-6 text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-relaxed flex items-center gap-4">
-                                                        <div className="w-2 h-2 rounded-full bg-emerald-500/30 shrink-0"></div>
+                                                    <div className="pt-8 mt-6 text-[9px] text-slate-800 dark:text-slate-300 font-bold uppercase tracking-wider leading-relaxed flex items-center gap-4">
+                                                        <div className="w-2 h-2 rounded-full bg-yellow-400/30 shrink-0"></div>
                                                         Fixed price includes taxes & fuel. Highway tolls excluded.
                                                     </div>
                                                 </div>
@@ -1296,32 +1218,33 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     {/* Right Column: Payment */}
                                     <div className="lg:col-span-5 space-y-12">
                                         {/* Payment Selection */}
-                                        <div className="space-y-8">
-                                            <h4 className="text-[11px] font-black text-emerald-950 dark:text-white uppercase tracking-[0.4em] pl-6">Secure Payment</h4>
-                                            <div className="grid sm:grid-cols-2 lg:grid-cols-1 gap-6">
-                                                {['cash', 'card'].map(m => (
-                                                    <button
-                                                        key={m}
-                                                        onClick={() => setFormData(prev => ({
-                                                            ...prev,
-                                                            paymentMethod: m,
-                                                            paymentType: m === 'cash' ? 'full' : prev.paymentType
-                                                        }))}
-                                                        className={`p-10 rounded-[2.5rem] border-2 transition-all flex items-center gap-8 group/pm relative overflow-hidden ${formData.paymentMethod === m
-                                                            ? 'border-emerald-600 bg-emerald-600 text-white shadow-2xl shadow-emerald-600/20'
-                                                            : 'border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/5 opacity-60 hover:opacity-100 hover:border-emerald-600'}`}
-                                                    >
-                                                        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl transition-all duration-500 group-hover/pm:scale-110 ${formData.paymentMethod === m ? 'bg-white/20' : 'bg-white dark:bg-zinc-800 shadow-md'}`}>
-                                                            {m === 'cash' ? <Coins size={28} className={formData.paymentMethod === m ? 'text-white' : 'text-emerald-600'} /> : <CreditCard size={28} className={formData.paymentMethod === m ? 'text-white' : 'text-emerald-600'} />}
-                                                        </div>
+                                        <div className="space-y-6">
+                                            <div className="flex items-center gap-4">
+                                                 <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
+                                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Payment Method</span>
+                                                 <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
+                                             </div>
+                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                 {['cash', 'card'].map(m => (
+                                                     <button
+                                                         key={m}
+                                                         onClick={() => setFormData({ ...formData, paymentMethod: m })}
+                                                         className={`relative flex items-center gap-4 p-4 md:p-8 rounded-2xl md:rounded-[2.5rem] border transition-all group/pm ${formData.paymentMethod === m
+                                                             ? 'bg-[#FACC15] border-transparent text-white shadow-xl shadow-[#FACC15]/30'
+                                                             : 'bg-white dark:bg-zinc-900 border-slate-100 dark:border-white/10 text-slate-600 hover:border-[#FACC15]'
+                                                             }`}
+                                                     >
+                                                         <div className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center text-3xl transition-all duration-500 group-hover/pm:scale-110 ${formData.paymentMethod === m ? 'bg-white/20' : 'bg-slate-50 dark:bg-zinc-800 shadow-sm'}`}>
+                                                             {m === 'cash' ? <Coins size={22} className={formData.paymentMethod === m ? 'text-white' : 'text-[#FACC15]'} /> : <CreditCard size={22} className={formData.paymentMethod === m ? 'text-white' : 'text-[#FACC15]'} />}
+                                                         </div>
                                                         <div className="text-left">
                                                             <span className="block text-[11px] font-black uppercase tracking-widest">{m === 'cash' ? 'Pay to Driver' : 'Pay via Card'}</span>
-                                                            <span className={`text-[8px] font-bold uppercase tracking-widest mt-1 block ${formData.paymentMethod === m ? 'text-white/60' : 'text-slate-400'}`}>{m === 'cash' ? 'Pay after arrival' : 'Stripe / PayHere'}</span>
+                                                            <span className={`text-[8px] font-bold uppercase tracking-widest mt-1 block ${formData.paymentMethod === m ? 'text-white/60' : 'text-slate-500'}`}>{m === 'cash' ? 'Pay after arrival' : 'Stripe / PayHere'}</span>
                                                         </div>
                                                         {formData.paymentMethod === m && <Check size={24} className="absolute right-10 opacity-20" />}
                                                     </button>
                                                 ))}
-                                            </div>
+                                             </div>
                                         </div>
 
                                         {formData.paymentMethod === 'card' && (
@@ -1333,8 +1256,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             key={t}
                                                             onClick={() => setFormData(prev => ({ ...prev, paymentType: t }))}
                                                             className={`py-5 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all ${formData.paymentType === t
-                                                                ? 'bg-emerald-600 text-white shadow-xl'
-                                                                : 'text-slate-400 hover:text-emerald-600'}`}
+                                                                ? 'bg-[#FACC15] text-white shadow-xl'
+                                                                : 'text-slate-400 hover:text-[#FACC15]'}`}
                                                         >
                                                             {t === 'full' ? 'Complete (100%)' : 'Deposit (50%)'}
                                                         </button>
@@ -1350,7 +1273,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     value={couponInput}
                                                     onChange={e => setCouponInput(e.target.value.toUpperCase())}
                                                     placeholder="HAVE A CODE?"
-                                                    className="flex-1 h-14 bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/10 text-emerald-950 dark:text-white shadow-sm transition-all"
+                                                    className="flex-1 h-14 bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 px-8 rounded-2xl text-[10px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-yellow-400/10 text-emerald-950 dark:text-white shadow-sm transition-all"
                                                 />
                                                 <button
                                                     onClick={() => handleApplyCoupon()}
@@ -1363,7 +1286,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             {verifiedCoupons.length > 0 && (
                                                 <div className="flex flex-wrap gap-3 px-3">
                                                     {verifiedCoupons.map((c, i) => (
-                                                        <span key={i} className="px-6 py-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 rounded-2xl border border-emerald-100 dark:border-emerald-500/20 text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-4 animate-slide-in shadow-sm group">
+                                                        <span key={i} className="px-6 py-3 bg-emerald-50 dark:bg-yellow-400/10 text-[#FACC15] rounded-2xl border border-emerald-100 dark:border-yellow-400/20 text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-4 animate-slide-in shadow-sm group">
                                                             <Tag size={12} fill="currentColor" className="group-hover:rotate-12 transition-transform" /> {c.code}
                                                             <X size={16} className="cursor-pointer hover:rotate-90 transition-all ml-2 opacity-40 hover:opacity-100" onClick={() => setVerifiedCoupons(prev => prev.filter(vc => vc.code !== c.code))} />
                                                         </span>
@@ -1377,46 +1300,40 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     )}
                 </div>
 
-                {/* Modal Footer */}
-                 <div className="p-6 sm:p-10 pt-4 pb-28 sm:pb-10 border-t border-slate-100 dark:border-white/10 bg-white dark:bg-zinc-950 shrink-0 transition-colors">
+                <div className="p-4 sm:p-10 pt-4 pb-28 sm:pb-10 border-t border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-950 shrink-0 transition-colors">
                     <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-4">
                         <button
                             onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                            className="flex items-center justify-center gap-2 px-8 py-4.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-white/5 transition-all text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-white/10 w-full sm:w-auto sm:min-w-[180px] active:scale-95 shadow-sm"
+                            className="flex items-center justify-center gap-2 px-8 py-4 text-xs font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-all bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20"
                         >
-                            <ChevronLeft size={16} /> {step === 1 ? 'Cancel Trip' : 'Return'}
+                            <ArrowLeft size={14} strokeWidth={3} />
+                            {step === 1 ? 'Cancel' : 'Back'}
                         </button>
- 
-                        {step < 3 ? (
+
+                        <div className="flex items-center gap-4">
                             <button
-                                onClick={() => {
-                                     if (validateForm(step)) {
-                                         setStep(step + 1);
-                                         if (modalContentRef.current) modalContentRef.current.scrollTop = 0;
-                                     } else {
-                                         scrollToFirstError();
-                                     }
-                                 }}
-                                 disabled={isOverCapacity}
-                                 className="group flex items-center justify-center gap-3 px-8 py-5 bg-gradient-to-r from-[#FACC15] to-[#FF5C00] text-white rounded-2xl text-[11px] sm:text-[12px] font-black uppercase tracking-widest hover:brightness-110 transition-all shadow-xl shadow-orange-500/20 disabled:opacity-30 w-full sm:w-auto sm:min-w-[220px] active:scale-95"
+                                onClick={handleNext}
+                                disabled={loading}
+                                className="flex-1 sm:flex-none flex items-center justify-center gap-3 px-10 py-4 bg-[#FACC15] hover:bg-yellow-400 disabled:bg-slate-200 dark:disabled:bg-white/10 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg shadow-[#FACC15]/20 hover:shadow-[#FACC15]/40 transition-all transform active:scale-95 group"
                             >
-                                {step === 1 ? 'Review & Checkout' : 'Final Step: Review & Pay'} <ChevronRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
+                                {step === 1 ? (
+                                    <>
+                                        Select Details
+                                        <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+                                    </>
+                                ) : step === 2 ? (
+                                    <>
+                                        Review & Checkout
+                                        <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+                                    </>
+                                ) : (
+                                    loading ? 'Securing...' : 'Confirm Order'
+                                )}
                             </button>
-                        ) : (
-                            <button
-                                onClick={handleSubmit}
-                                 disabled={loading || isOverCapacity}
-                                 className="group flex items-center justify-center gap-3 px-8 py-5 bg-gradient-to-r from-[#FACC15] to-[#FF5C00] text-white rounded-2xl text-[11px] sm:text-[12px] font-black uppercase tracking-widest hover:brightness-110 transition-all shadow-xl shadow-orange-500/20 disabled:opacity-30 w-full sm:w-auto sm:min-w-[240px] active:scale-95"
-                            >
-                                {loading ? <Loader2 className="animate-spin" size={16} /> : <Zap size={16} fill="currentColor" />}
-                                {loading ? 'Securing Spot...' : 'Confirm My Order'}
-                            </button>
-                        )}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    );
+);
 }
-
-

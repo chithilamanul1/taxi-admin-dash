@@ -337,7 +337,7 @@ const Prices = ({ initialDestination }) => {
 
                     {/* Pickup Search */}
                     <div className="relative">
-                        <label className="flex items-center gap-2 text-xs font-bold text-gray-400  uppercase tracking-widest mb-3">
+                        <label className="flex items-center gap-2 text-xs font-black text-slate-900 uppercase tracking-widest mb-3">
                             <MapPin size={16} className="text-emerald-600 " /> Pickup Point
                         </label>
                         <input
@@ -372,7 +372,7 @@ const Prices = ({ initialDestination }) => {
 
                     {/* Dropoff Search */}
                     <div className="relative">
-                        <label className="flex items-center gap-2 text-xs font-bold text-gray-400  uppercase tracking-widest mb-3">
+                        <label className="flex items-center gap-2 text-xs font-black text-slate-900 uppercase tracking-widest mb-3">
                             <MapPin size={16} className="text-emerald-900 " /> Destination
                         </label>
                         <input
@@ -408,9 +408,9 @@ const Prices = ({ initialDestination }) => {
                     {/* Passengers & Trip Type Row */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="flex items-center gap-2 text-xs font-bold text-gray-400  uppercase tracking-widest mb-3">
-                                <Users size={16} className="text-emerald-600 " /> Passengers
-                            </label>
+                            <label className="flex items-center gap-2 text-xs font-black text-slate-900 uppercase tracking-widest mb-3">
+                            <Users size={16} className="text-emerald-600 " /> Passengers
+                        </label>
                             <div className="flex items-center justify-between bg-slate-50/50 px-4 py-3 rounded-2xl border border-gray-100 shadow-inner">
                                 <span className="text-xs font-black text-emerald-950 uppercase tracking-wider mr-2">Count:</span>
                                 <div className="flex items-center gap-3">
@@ -433,9 +433,9 @@ const Prices = ({ initialDestination }) => {
                             </div>
                         </div>
                         <div>
-                            <label className="flex items-center gap-2 text-xs font-bold text-gray-400  uppercase tracking-widest mb-3">
-                                <ArrowRightLeft size={16} className="text-emerald-900 " /> Trip Type
-                            </label>
+                            <label className="flex items-center gap-2 text-xs font-black text-slate-900 uppercase tracking-widest mb-3">
+                            <ArrowRightLeft size={16} className="text-emerald-900 " /> Trip Type
+                        </label>
                             <div className="flex bg-slate-50/50 p-1.5 rounded-2xl border border-gray-100 shadow-inner">
                                 {['one-way', 'round-trip'].map(t => (
                                     <button
@@ -797,23 +797,28 @@ const Prices = ({ initialDestination }) => {
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-3">
-                                            {convertToAllCurrencies(totalLKR).map((c) => (
+                                            {convertToAllCurrencies(totalLKR)
+                                                .filter(c => {
+                                                    if (currency === 'LKR') return ['USD', 'GBP', 'EUR'].includes(c.code);
+                                                    if (currency === 'USD') return ['LKR', 'GBP', 'EUR'].includes(c.code);
+                                                    if (currency === 'INR') return ['USD'].includes(c.code);
+                                                    if (currency === 'GBP') return ['USD', 'EUR'].includes(c.code);
+                                                    if (currency === 'EUR') return ['USD', 'GBP'].includes(c.code);
+                                                    return c.code !== currency;
+                                                })
+                                                .map((c) => (
                                                 <button
                                                     key={c.code}
                                                     type="button"
                                                     onClick={() => changeCurrency(c.code)}
-                                                    className={`p-3 rounded-3xl border transition-all flex flex-col gap-1 text-left cursor-pointer group/card ${currency === c.code
-                                                        ? 'bg-[#FACC15]/20 border-[#FACC15]'
-                                                        : 'bg-white/5 border-emerald-800/30 hover:border-[#FACC15]/50 hover:bg-white/5'
-                                                        }`}
+                                                    className="p-3 rounded-2xl border bg-white/5 border-emerald-800/30 hover:border-[#FACC15]/50 hover:bg-white/10 transition-all flex flex-col gap-1 text-left cursor-pointer group/card"
                                                 >
                                                     <div className="flex items-center justify-between">
                                                         <span className="text-[10px] font-black text-white/40 uppercase tracking-widest flex items-center gap-1.5">
                                                             <span className="text-xs">{c.flag}</span> {c.code}
                                                         </span>
-                                                        {currency === c.code && <div className="w-1.5 h-1.5 rounded-2xl bg-[#FACC15] border border-black"></div>}
                                                     </div>
-                                                    <div className={`text-sm md:text-base font-black ${currency === c.code ? 'text-[#FACC15]' : 'text-white'}`}>
+                                                    <div className="text-sm md:text-base font-black text-white">
                                                         <span className="text-[10px] font-bold mr-1 opacity-60">{c.symbol}</span>
                                                         {c.value.toLocaleString()}
                                                     </div>

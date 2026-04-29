@@ -45,14 +45,54 @@ export default function Navbar() {
                 <Link href="/" className="flex items-center gap-2 group">
                     <div className="flex flex-col">
                         <span className="font-black text-2xl sm:text-3xl md:text-4xl tracking-tighter leading-none text-emerald-950 uppercase group-hover:text-emerald-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-emerald-600 after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:origin-left">
-                            AIRPORT TAXIS
+                            AIRPORT TAXIS PVT LTD
                         </span>
-                        <span className="text-[8px] md:text-xs font-black uppercase tracking-[0.4em] text-slate-400">Sri Lanka</span>
+                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Private Limited Company</span>
                     </div>
                 </Link>
 
                 <div className="flex items-center gap-2 md:gap-3">
-
+                    {/* Desktop Sign In */}
+                    <div className="hidden md:flex items-center gap-3 mr-2">
+                        {status === 'loading' ? (
+                            <div className="w-10 h-10 bg-slate-50 rounded-2xl animate-pulse"></div>
+                        ) : session ? (
+                            <div className="relative group/user">
+                                <button 
+                                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                                    className="flex items-center gap-3 px-4 py-2 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-white hover:shadow-xl transition-all"
+                                >
+                                    <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-emerald-600">
+                                        <img src={session.user?.image || "https://ui-avatars.com/api/?name=" + session.user?.name} alt="" className="w-full h-full object-cover" />
+                                    </div>
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-emerald-950 truncate max-w-[80px]">
+                                        {session.user?.name?.split(' ')[0]}
+                                    </span>
+                                    <ChevronDown size={14} className={`transition-transform duration-300 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
+                                </button>
+                                
+                                <div className={`absolute top-full right-0 mt-4 w-56 bg-white border border-slate-100 rounded-3xl shadow-2xl z-[160] overflow-hidden p-2 transition-all duration-300 ${isUserMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                                    <Link href="/profile" className="flex items-center gap-3 px-5 py-4 hover:bg-emerald-50 text-emerald-950 font-black uppercase tracking-widest text-[10px] rounded-2xl transition-all">
+                                        <User size={16} /> My Bookings
+                                    </Link>
+                                    <button 
+                                        onClick={() => signOut()}
+                                        className="w-full flex items-center gap-3 px-5 py-4 hover:bg-red-50 text-red-600 font-black uppercase tracking-widest text-[10px] rounded-2xl transition-all"
+                                    >
+                                        <LogOut size={16} /> Sign Out
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <button 
+                                onClick={() => signIn('google')}
+                                className="flex items-center gap-3 px-6 py-3 bg-white border border-slate-200 text-emerald-950 font-black uppercase tracking-widest text-[10px] rounded-2xl hover:bg-slate-50 hover:shadow-xl transition-all"
+                            >
+                                <img src="https://www.google.com/favicon.ico" alt="" className="w-4 h-4" />
+                                Sign In
+                            </button>
+                        )}
+                    </div>
 
                     {/* Currency Selector (Always Visible) */}
                     <div className="relative group hidden sm:block">
@@ -77,11 +117,11 @@ export default function Navbar() {
 
                     {/* Menu Toggle */}
                     <button
-                        className="w-10 h-10 md:w-16 md:h-16 flex items-center justify-center bg-emerald-950 text-white rounded-2xl hover:bg-black hover:shadow-2xl hover:-translate-y-1 transition-all"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+                        className="p-3.5 bg-black text-white rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl md:hidden"
+                        aria-label="Toggle Menu"
                     >
-                        {isMobileMenuOpen ? <X size={24} strokeWidth={2} /> : <Menu size={24} strokeWidth={2} />}
+                        {isMobileMenuOpen ? <X size={24} strokeWidth={3} /> : <Menu size={24} strokeWidth={3} />}
                     </button>
                 </div>
             </div>

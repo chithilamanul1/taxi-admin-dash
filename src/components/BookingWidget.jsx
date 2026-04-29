@@ -750,13 +750,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <>
                                         {/* "Add Stop" Button - Aligned with icons */}
                                         {waypointSearches.length === 0 && (
-                                            <div className="flex justify-start pl-14 py-2">
+                                            <div className="flex justify-start pl-10 md:pl-14 py-2">
                                                 <button
                                                     onClick={() => setWaypointSearches([{ active: true }])}
                                                     aria-label="Add Stop"
-                                                    className="text-slate-600 dark:text-slate-300 bg-white dark:bg-zinc-800 text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 py-2.5 px-4 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+                                                    className="text-slate-800 dark:text-slate-100 bg-white dark:bg-zinc-800 text-[10px] font-black uppercase tracking-wider flex items-center gap-2 py-3 px-5 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
                                                 >
-                                                    <Plus size={14} strokeWidth={2.5} className="text-emerald-500" /> ADD STOP ({waypoints.length}/4)
+                                                    <Plus size={14} strokeWidth={4} className="text-emerald-500" /> ADD STOP ({waypoints.length}/4)
                                                 </button>
                                             </div>
                                         )}
@@ -954,7 +954,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                             {/* Counters Section with Label */}
                             <div className="mt-8 lg:mt-10 space-y-4">
-                                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest pl-1 leading-none block mb-4">Passenger & Luggage</label>
+                                <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-4">Passenger & Luggage</label>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                                     {[
                                     { id: 'adults', label: 'Adults' },
@@ -963,7 +963,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     { id: 'handLuggage', label: 'Hand Luggage' }
                                 ].map(c => (
                                     <div key={c.id} className="bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm p-4 rounded-2xl flex items-center justify-between transition-all group/counter h-16 sm:h-18">
-                                        <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest w-24 flex-shrink-0 leading-tight pr-2">{c.label}</span>
+                                        <span className="text-[11px] font-black text-slate-800 dark:text-slate-100 uppercase tracking-widest w-24 flex-shrink-0 leading-tight pr-2">{c.label}</span>
                                         <div className="flex items-center gap-3 shrink-0 bg-slate-50 dark:bg-zinc-900 rounded-xl p-1 border border-slate-100 dark:border-white/5">
                                             <button
                                                 onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, (Number(p[c.id]) || 0) - 1) }))}
@@ -988,22 +988,22 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                             {/* Vehicle Selection - Unified for Desktop & Mobile */}
                             <div className="mt-4 sm:mt-6">
-                                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest pl-1 leading-none block mb-3">Vehicle Type</label>
+                                <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-3">Vehicle Type</label>
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
                                     className="w-full min-h-[4.5rem] sm:min-h-[5.5rem] py-3 px-4 sm:px-6 flex items-center justify-between bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all group overflow-hidden relative"
                                     aria-label="Select Vehicle"
                                 >
                                     <div className="flex items-center gap-4 sm:gap-6">
-                                        <div className="w-20 h-14 sm:w-24 sm:h-16 rounded-xl flex items-center justify-center p-0 shrink-0 bg-slate-50 dark:bg-zinc-900 border border-slate-100 dark:border-white/5">
+                                        <div className="w-22 h-16 sm:w-28 sm:h-20 rounded-2xl flex items-center justify-center p-0 shrink-0 bg-slate-50 dark:bg-zinc-900 border border-slate-100 dark:border-white/5">
                                             {vehiclePricing[vehicle]?.image ? (
                                                 <div className="relative w-full h-full">
                                                     <Image
                                                         src={vehiclePricing[vehicle].image}
                                                         alt={vehiclePricing[vehicle]?.name || "Vehicle"}
                                                         fill
-                                                        className="object-contain scale-[1.25] sm:scale-125 drop-shadow-md group-hover:scale-125 sm:group-hover:scale-150 transition-transform duration-500"
-                                                        sizes="(max-width: 640px) 80px, 96px"
+                                                        className="object-contain scale-[1.5] sm:scale-160 drop-shadow-md group-hover:scale-175 transition-transform duration-500"
+                                                        sizes="(max-width: 640px) 88px, 112px"
                                                     />
                                                 </div>
                                             ) : (
@@ -1030,7 +1030,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         <div className="bg-slate-50/50 dark:bg-[#0a0a0a] border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm p-5 lg:p-6 flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-6 lg:gap-0 transition-colors">
                             <div className="space-y-6 flex-1 flex flex-col">
                                 <div className="flex justify-between items-center mb-2">
-                                    <h2 className="text-lg font-bold text-slate-800 dark:text-white tracking-wide">Trip Summary</h2>
+                                    <h2 className="text-lg font-black text-emerald-950 dark:text-white tracking-wide uppercase">Trip Summary</h2>
 
                                     {/* Quick Currency Selector */}
                                     <div className="relative group">
@@ -1065,15 +1065,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
-                                        <span className="text-slate-600 dark:text-slate-300">Est. Distance</span>
+                                        <span className="text-slate-900 dark:text-slate-100">Est. Distance</span>
                                         <span className="text-black dark:text-white">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
                                     </div>
                                     <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
-                                        <span className="text-slate-600 dark:text-slate-300">Vehicle Type</span>
+                                        <span className="text-slate-900 dark:text-slate-100">Vehicle Type</span>
                                         <div className="flex items-center gap-3 text-black dark:text-emerald-400">
                                             {vehiclePricing[vehicle]?.image && (
-                                                <div className="w-8 h-6 bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 p-0.5 rounded-lg overflow-hidden shrink-0">
-                                                    <img src={vehiclePricing[vehicle].image} alt="" className="w-full h-full object-contain" />
+                                                <div className="w-12 h-9 bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 p-0.5 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                                                    <img src={vehiclePricing[vehicle].image} alt="" className="w-full h-full object-contain scale-[1.5]" />
                                                 </div>
                                             )}
                                             <span>{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</span>
@@ -1083,7 +1083,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     {/* Detailed Price Breakdown */}
                                     <div className="pt-6 border-t border-slate-200 dark:border-white/10 space-y-4">
                                         <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.15em]">
-                                            <span className="text-slate-500 dark:text-slate-400">Trip Subtotal</span>
+                                            <span className="text-slate-900 dark:text-slate-100">Trip Subtotal</span>
                                             <span className="text-black dark:text-white font-black">{convertPrice(total).symbol} {convertPrice(total).value.toLocaleString()}</span>
                                         </div>
 

@@ -135,11 +135,11 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                             className={`
                                 relative flex-shrink-0 w-full snap-start transition-all duration-500 group/card flex flex-col
                                 ${isSelected 
-                                    ? 'ring-4 ring-emerald-600/20 border-emerald-600 bg-emerald-50/30 dark:bg-emerald-500/5 -translate-y-2' 
-                                    : 'border-slate-200 dark:border-white/10 hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-200'}
+                                    ? 'border-[3px] border-black bg-[#FACC15]/5 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] -translate-y-2' 
+                                    : 'border-2 border-slate-100 dark:border-white/10 hover:-translate-y-2 hover:shadow-2xl hover:border-black/20'}
                                 ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
-                                bg-white dark:bg-zinc-800 rounded-[2.5rem] border
-                                overflow-hidden h-full shadow-sm
+                                bg-white dark:bg-zinc-800 rounded-[2.5rem]
+                                overflow-hidden h-full
                             `}
                             onClick={() => suitable && onSelect(vehicle.vehicleType)}
                         >
@@ -161,58 +161,73 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
 
                                 {vehicle.calculatedTotal >= 0 && (
                                     <div className="text-center relative z-10 flex flex-col items-center mb-8">
-                                        <div className="flex items-baseline justify-center gap-1">
-                                            <span className="text-sm font-bold text-emerald-600 mb-1">{convertPrice(vehicle.calculatedTotal).symbol}</span>
-                                            <span className="text-4xl font-black text-emerald-950 dark:text-white tracking-tight leading-none">
+                                        <div className="flex items-baseline justify-center gap-2">
+                                            <span className="text-xl font-black text-[#FACC15]">{convertPrice(vehicle.calculatedTotal).symbol}</span>
+                                            <span className="text-5xl font-black text-black dark:text-white tracking-tighter leading-none">
                                                 {convertPrice(vehicle.calculatedTotal).value.toLocaleString()}
                                             </span>
                                         </div>
-                                        {!(passengerCount.distance > 0) && (
-                                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-2">Starting Estimate</p>
-                                        )}
+                                        <div className="flex items-center gap-3 mt-3 text-[11px] font-black text-black dark:text-white/70 uppercase tracking-widest">
+                                            {['USD', 'EUR', 'GBP', 'LKR'].filter(c => c !== currency).slice(0, 2).map(c => {
+                                                const rate = rates[c] || 1;
+                                                const symbol = c === 'USD' ? '$' : c === 'EUR' ? '€' : c === 'GBP' ? '£' : 'Rs';
+                                                return (
+                                                    <span key={c}>
+                                                        {symbol} {(vehicle.calculatedTotal * rate).toLocaleString(undefined, { minimumFractionDigits: (c === 'LKR' ? 0 : 2), maximumFractionDigits: (c === 'LKR' ? 0 : 2) })}
+                                                    </span>
+                                                );
+                                            })}
+                                        </div>
                                     </div>
                                 )}
 
-                                <div className="w-full flex justify-center items-center py-4 relative z-10 mt-auto min-h-[160px]">
+                                <div className="w-full flex justify-center items-center py-6 relative z-10 mt-auto min-h-[180px]">
                                     <img
                                         src={vehicle.image}
                                         alt={vehicle.name}
                                         className={`
-                                            w-full h-[180px] object-contain
+                                            w-full h-[200px] object-contain
                                             transition-transform duration-700
-                                            ${isSelected ? 'scale-110' : 'group-hover/card:scale-105'}
-                                            ${vehicle.vehicleType?.toLowerCase().includes('sedan') || vehicle.vehicleType?.toLowerCase().includes('car') ? 'scale-[1.2]' : ''}
+                                            ${isSelected ? 'scale-[1.4]' : 'group-hover/card:scale-110'}
+                                            ${vehicle.vehicleType?.toLowerCase().includes('sedan') || vehicle.vehicleType?.toLowerCase().includes('car') ? 'scale-[1.6]' : 'scale-[1.4]'}
                                         `}
                                     />
                                 </div>
                             </div>
 
                             <div className="px-8 pb-10 mt-4 relative z-40 shrink-0">
-                                <div className="grid grid-cols-3 gap-3">
+                                <div className="grid grid-cols-4 gap-2">
                                     {[
                                         { icon: Users, label: 'PAX', value: vehicle.capacity || 4 },
-                                        { icon: Briefcase, label: 'BAGS', value: vehicle.suitcases || 2 },
-                                        { icon: ShoppingBag, label: 'HAND', value: vehicle.handLuggage || 2 }
+                                        { icon: Briefcase, label: 'LUG', value: vehicle.suitcases || 2 },
+                                        { icon: ShoppingBag, label: 'HAND', value: vehicle.handLuggage || 2 },
+                                        { icon: Wind, label: 'AC', value: 'ON' }
                                     ].map((item, i) => (
                                         <div key={i} className={`
-                                            bg-slate-50 dark:bg-white/5 rounded-2xl p-4 
+                                            bg-slate-50 dark:bg-white/5 rounded-2xl p-3 
                                             flex flex-col items-center justify-center 
-                                            transition-all duration-300 border border-slate-100 dark:border-white/5
-                                            ${isSelected ? 'bg-emerald-600 text-white border-transparent shadow-lg shadow-emerald-200' : 'group-hover/card:border-emerald-100'}
+                                            transition-all duration-300 border-2 border-slate-100 dark:border-white/5
+                                            ${isSelected ? 'bg-[#FACC15] text-black border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'group-hover/card:border-black/10'}
                                         `}>
-                                            <item.icon size={16} className={`${isSelected ? 'text-white' : 'text-emerald-600'} mb-1.5`} strokeWidth={2.5} />
-                                            <span className={`text-[9px] font-bold uppercase tracking-widest leading-none ${isSelected ? 'text-white/70' : 'text-slate-400'}`}>{item.label}</span>
-                                            <span className={`text-lg font-black leading-none mt-1.5 ${isSelected ? 'text-white' : 'text-emerald-950 dark:text-white'}`}>{item.value}</span>
+                                            <item.icon size={14} className={`${isSelected ? 'text-black' : 'text-slate-400'} mb-1`} strokeWidth={3} />
+                                            <span className={`text-[10px] font-black leading-none mt-1 ${isSelected ? 'text-black' : 'text-black dark:text-white'}`}>{item.value}</span>
+                                            <span className={`text-[7px] font-bold uppercase tracking-widest leading-none mt-1 ${isSelected ? 'text-black/60' : 'text-slate-400'}`}>{item.label}</span>
                                         </div>
                                     ))}
                                 </div>
                                 
-                                <div className={`mt-6 w-full py-4 text-center rounded-2xl font-bold text-sm uppercase tracking-widest transition-all
-                                    ${isSelected 
-                                        ? 'bg-emerald-600 text-white shadow-xl shadow-emerald-200' 
-                                        : 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white group-hover:shadow-lg'}`}
-                                >
-                                    {isSelected ? 'Selected ✓' : 'Select Ride'}
+                                <div className="relative group/help">
+                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#FACC15] text-black text-[9px] font-black px-4 py-2 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] whitespace-nowrap opacity-0 group-hover/card:opacity-100 transition-all transform translate-y-2 group-hover/card:translate-y-0 z-50">
+                                        NEED HELP?
+                                        <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#FACC15] border-r-2 border-b-2 border-black rotate-45"></div>
+                                    </div>
+                                    <div className={`w-full py-5 text-center rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all border-[3px]
+                                        ${isSelected 
+                                            ? 'bg-[#FACC15] text-black border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]' 
+                                            : 'bg-white dark:bg-zinc-800 text-black dark:text-white border-black hover:bg-[#FACC15] hover:text-black hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]'}`}
+                                    >
+                                        {isSelected ? 'SELECTED ✓' : 'SELECT RIDE'}
+                                    </div>
                                 </div>
                             </div>
                         </div>

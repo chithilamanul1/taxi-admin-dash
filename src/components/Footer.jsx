@@ -18,9 +18,9 @@ const Footer = () => {
                         <div className="flex items-center gap-3">
                             <div className="flex flex-col">
                                 <span className="text-4xl font-black tracking-tighter uppercase leading-none text-black dark:text-white">
-                                    AIRPORT <span className="text-emerald-600">TAXIS</span>
+                                    AIRPORT TAXIS <span className="text-emerald-600">PVT LTD</span>
                                 </span>
-                                <span className="text-[10px] font-black text-emerald-600/60 uppercase tracking-[0.4em] mt-2">Premier Transfer Service</span>
+                                <span className="text-[10px] font-black text-emerald-600/60 uppercase tracking-[0.4em] mt-2">Private Limited Company</span>
                             </div>
                         </div>
                         <p className="text-black/60 dark:text-white/60 max-w-md leading-relaxed font-medium text-sm border-l-4 border-emerald-600 pl-6 uppercase tracking-tight">
@@ -123,7 +123,7 @@ const Footer = () => {
                 {/* Bottom Bar */}
                 <div className="pt-12 border-t-2 border-black/10 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
                     <p className="text-[10px] text-black/60 dark:text-white/60 font-black uppercase tracking-[0.3em]">
-                        © 2026 Airport Taxis Pvt (Ltd). Sri Lankan Excellence.
+                        © 2026 Airport Taxis Pvt Ltd. Sri Lankan Excellence.
                     </p>
                     <a href="https://seranex.org" target="_blank" className="group flex items-center gap-1.5 text-[10px] text-black/60 dark:text-white/60 font-black hover:text-emerald-600 transition-all uppercase tracking-[0.2em]">
                         Developed by <span className="text-black dark:text-white group-hover:text-emerald-600">Chithila Manul</span>

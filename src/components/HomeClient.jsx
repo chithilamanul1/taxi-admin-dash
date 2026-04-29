@@ -105,7 +105,7 @@ export default function HomeClient() {
                     <p className="text-slate-500 dark:text-slate-400 mb-14 text-sm md:text-base font-bold uppercase tracking-[0.4em] max-w-2xl mx-auto opacity-80">Predictable pricing • Premium vehicles • Professional chauffeurs</p>
                     <button
                         onClick={() => setIsBookingOpen(true)}
-                        className="bg-emerald-600 text-white px-16 py-7 rounded-3xl font-black text-sm uppercase tracking-[0.2em] transition-all inline-flex items-center gap-4 group shadow-2xl shadow-emerald-200 dark:shadow-none hover:bg-emerald-700 hover:-translate-y-1"
+                        className="bg-[#FACC15] text-black px-16 py-7 border-[3px] border-black font-black text-sm uppercase tracking-[0.2em] transition-all inline-flex items-center gap-4 group hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
                         aria-label="Book Your Trip Now"
                     >
                         BOOK YOUR TRIP NOW
@@ -117,9 +117,9 @@ export default function HomeClient() {
             {/* Floating Check Availability Sidebar - Luxury Style */}
             <button
                 onClick={() => setIsBookingOpen(true)}
-                className="fixed right-0 top-1/2 -translate-y-1/2 z-[100] bg-emerald-600 text-white px-5 py-10 rounded-l-[2.5rem] hover:bg-emerald-700 transition-all group flex flex-col items-center gap-5 hidden md:flex shadow-[0_20px_50px_rgba(5,150,105,0.3)]"
+                className="fixed right-0 top-1/2 -translate-y-1/2 z-[100] bg-[#FACC15] text-black px-5 py-10 border-l-[3px] border-y-[3px] border-black hover:bg-yellow-400 transition-all group flex flex-col items-center gap-5 hidden md:flex shadow-[-8px_8px_0px_0px_rgba(0,0,0,1)]"
             >
-                <div className="w-1.5 h-1.5 bg-emerald-300 rounded-full animate-pulse"></div>
+                <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse"></div>
                 <span className="[writing-mode:vertical-lr] rotate-180 uppercase font-black tracking-[0.4em] text-[10px]">
                     CHECK AVAILABILITY
                 </span>
@@ -165,7 +165,7 @@ export default function HomeClient() {
                         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-emerald-600/10 rounded-full blur-[100px] group-hover:bg-emerald-600/20 transition-all duration-1000"></div>
                         
                         <div className="relative z-10 max-w-xl text-center md:text-left">
-                            <h2 className="text-6xl md:text-8xl font-black mb-10 uppercase tracking-tighter leading-none text-white">ARE YOU <br /><span className="text-emerald-600">A DRIVER?</span></h2>
+                            <h2 className="text-6xl md:text-8xl font-black mb-10 uppercase tracking-tighter leading-none text-white">ARE YOU <br /><span className="text-[#FACC15]">A DRIVER?</span></h2>
                             <p className="text-slate-400 text-base font-medium mb-14 leading-relaxed max-w-lg">
                                 Join our exclusive fleet of professional chauffeurs. Get consistent bookings, fair rates, and become part of Sri Lanka's premium network.
                             </p>
@@ -179,7 +179,7 @@ export default function HomeClient() {
                             </div>
                         </div>
 
-                        <div className="relative z-10 w-full md:w-80 aspect-square bg-emerald-600 p-12 flex flex-col items-center justify-center text-center transform md:rotate-6 rounded-[3rem] shadow-2xl transition-transform group-hover:rotate-0 duration-700">
+                        <div className="relative z-10 w-full md:w-80 aspect-square bg-[#FACC15] p-12 flex flex-col items-center justify-center text-center transform md:rotate-6 border-[3px] border-black shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] transition-transform group-hover:rotate-0 duration-700">
                             <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-8 backdrop-blur-md">
                                 <Star size={40} className="text-white" fill="currentColor" />
                             </div>

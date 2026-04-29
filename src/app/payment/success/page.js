@@ -47,8 +47,9 @@ function PaymentSuccessContent() {
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/5 -ml-32 -mb-32 blur-2xl rounded-none"></div>
 
             <div className="bg-white rounded-none border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] max-w-lg w-full p-8 md:p-12 text-center animate-slide-up relative z-10">
-                <div className="w-24 h-24 bg-[#FACC15] rounded-none border-4 border-black flex items-center justify-center mx-auto mb-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] -rotate-3 hover:rotate-0 transition-transform">
-                    <CheckCircle className="text-black" size={56} strokeWidth={3} />
+                <div className="w-28 h-28 bg-[#FACC15] rounded-none border-4 border-black flex items-center justify-center mx-auto mb-10 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] -rotate-6 hover:rotate-0 transition-all duration-500 relative group">
+                    <div className="absolute -top-3 -left-3 w-8 h-8 bg-black"></div>
+                    <CheckCircle className="text-black group-hover:scale-110 transition-transform" size={64} strokeWidth={4} />
                 </div>
 
                 <h1 className="text-3xl font-black text-black mb-3 uppercase italic tracking-tighter leading-none">
