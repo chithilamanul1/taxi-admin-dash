@@ -24,7 +24,7 @@ export default function FloatingContact() {
                         <div className="w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center hover:scale-110 transition-transform shadow-2xl">
                             <MessageCircle size={32} strokeWidth={2.5} />
                         </div>
-                        <span className="text-[9px] font-black text-slate-900 bg-white px-2 py-0.5 rounded-md border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] uppercase tracking-tighter transition-all">whatsapp</span>
+                        <span className="text-[9px] font-black text-slate-900 bg-white px-2 py-0.5 rounded-md border border-slate-100 dark:border-white/10 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] uppercase tracking-tighter transition-all">whatsapp</span>
                     </a>
 
                     {/* Live Chat */}
@@ -39,7 +39,7 @@ export default function FloatingContact() {
                         <div className="w-14 h-14 rounded-full bg-black text-[#FACC15] flex items-center justify-center hover:scale-110 transition-transform shadow-2xl border-2 border-[#FACC15]">
                             <MessageCircle size={32} strokeWidth={3} fill="currentColor" />
                         </div>
-                        <span className="text-[9px] font-black text-slate-900 bg-white px-2 py-0.5 rounded-md border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] uppercase tracking-tighter transition-all">live chat</span>
+                        <span className="text-[9px] font-black text-slate-900 bg-white px-2 py-0.5 rounded-md border border-slate-100 dark:border-white/10 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] uppercase tracking-tighter transition-all">live chat</span>
                     </button>
 
                     {/* Email */}
@@ -51,16 +51,16 @@ export default function FloatingContact() {
                         <div className="w-14 h-14 rounded-full bg-[#1e293b] text-white flex items-center justify-center hover:scale-110 transition-transform shadow-2xl">
                             <Mail size={32} strokeWidth={2} />
                         </div>
-                        <span className="text-[9px] font-black text-slate-900 bg-white px-2 py-0.5 rounded-md border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] uppercase tracking-tighter transition-all">email</span>
+                        <span className="text-[9px] font-black text-slate-900 bg-white px-2 py-0.5 rounded-md border border-slate-100 dark:border-white/10 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] uppercase tracking-tighter transition-all">email</span>
                     </a>
                 </div>
             )}
 
             {/* Animated Prompt */}
             {!isOpen && (
-                <div className="absolute bottom-4 right-16 bg-[#FACC15] text-black text-[9px] font-black tracking-widest px-4 py-2 rounded-xl whitespace-nowrap animate-bounce z-[9999] flex items-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] border-2 border-black">
+                <div className="absolute bottom-4 right-16 bg-[#FACC15] text-black text-[9px] font-black tracking-widest px-4 py-2 rounded-xl whitespace-nowrap animate-bounce z-[9999] flex items-center shadow-xl border border-slate-100 dark:border-white/10">
                     NEED HELP?
-                    <div className="absolute top-1/2 -translate-y-1/2 -right-1.5 w-3 h-3 bg-[#FACC15] rotate-45 border-r-2 border-t-2 border-black"></div>
+                    <div className="absolute top-1/2 -translate-y-1/2 -right-1.5 w-3 h-3 bg-[#FACC15] rotate-45 border-r-2 border-t-2 border-slate-200 dark:border-white/10"></div>
                 </div>
             )}
 

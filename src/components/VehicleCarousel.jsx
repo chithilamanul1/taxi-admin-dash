@@ -135,8 +135,8 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                             className={`
                                 relative flex-shrink-0 w-full snap-start transition-all duration-500 group/card flex flex-col
                                 ${isSelected 
-                                    ? 'border-[3px] border-black bg-[#FACC15]/5 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] -translate-y-2' 
-                                    : 'border-2 border-slate-100 dark:border-white/10 hover:-translate-y-2 hover:shadow-2xl hover:border-black/20'}
+                                    ? 'border border-slate-100 dark:border-white/10 bg-[#FACC15]/5 shadow-2xl shadow-slate-200/50 dark:shadow-none -translate-y-2' 
+                                    : 'border border-slate-100 dark:border-white/10 hover:-translate-y-2 hover:shadow-2xl hover:border-slate-200 dark:border-white/10/20'}
                                 ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
                                 bg-white dark:bg-zinc-800 rounded-[2.5rem]
                                 overflow-hidden h-full
@@ -206,8 +206,8 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                         <div key={i} className={`
                                             bg-slate-50 dark:bg-white/5 rounded-2xl p-3 
                                             flex flex-col items-center justify-center 
-                                            transition-all duration-300 border-2 border-slate-100 dark:border-white/5
-                                            ${isSelected ? 'bg-[#FACC15] text-black border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]' : 'group-hover/card:border-black/10'}
+                                            transition-all duration-300 border border-slate-100 dark:border-white/5
+                                            ${isSelected ? 'bg-[#FACC15] text-black border-slate-200 dark:border-white/10 shadow-lg' : 'group-hover/card:border-slate-200 dark:border-white/10/10'}
                                         `}>
                                             <item.icon size={14} className={`${isSelected ? 'text-black' : 'text-slate-400'} mb-1`} strokeWidth={3} />
                                             <span className={`text-[10px] font-black leading-none mt-1 ${isSelected ? 'text-black' : 'text-black dark:text-white'}`}>{item.value}</span>
@@ -217,14 +217,14 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 </div>
                                 
                                 <div className="relative group/help">
-                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#FACC15] text-black text-[9px] font-black px-4 py-2 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] whitespace-nowrap opacity-0 group-hover/card:opacity-100 transition-all transform translate-y-2 group-hover/card:translate-y-0 z-50">
+                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#FACC15] text-black text-[9px] font-black px-4 py-2 rounded-xl border border-slate-100 dark:border-white/10 shadow-lg whitespace-nowrap opacity-0 group-hover/card:opacity-100 transition-all transform translate-y-2 group-hover/card:translate-y-0 z-50">
                                         NEED HELP?
-                                        <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#FACC15] border-r-2 border-b-2 border-black rotate-45"></div>
+                                        <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#FACC15] border-r-2 border-b-2 border-slate-200 dark:border-white/10 rotate-45"></div>
                                     </div>
-                                    <div className={`w-full py-5 text-center rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all border-[3px]
+                                    <div className={`w-full py-5 text-center rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all border border-slate-100 dark:border-white/10
                                         ${isSelected 
-                                            ? 'bg-[#FACC15] text-black border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]' 
-                                            : 'bg-white dark:bg-zinc-800 text-black dark:text-white border-black hover:bg-[#FACC15] hover:text-black hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]'}`}
+                                            ? 'bg-[#FACC15] text-black border-slate-200 dark:border-white/10 shadow-xl' 
+                                            : 'bg-white dark:bg-zinc-800 text-black dark:text-white border-slate-200 dark:border-white/10 hover:bg-[#FACC15] hover:text-black hover:shadow-xl'}`}
                                     >
                                         {isSelected ? 'SELECTED ✓' : 'SELECT RIDE'}
                                     </div>
