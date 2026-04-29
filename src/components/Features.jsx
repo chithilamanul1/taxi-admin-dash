@@ -47,7 +47,7 @@ const Features = () => {
                             className="stat-card group animate-slide-up"
                             style={{ animationDelay: `${idx * 0.1}s` }}
                         >
-                            <div className="w-16 h-16 bg-[#FACC15] text-black flex items-center justify-center mb-10 group-hover:bg-black group-hover:text-[#FACC15] transition-all rounded-none">
+                            <div className="w-16 h-16 bg-[#FACC15] text-black flex items-center justify-center mb-10 group-hover:bg-black group-hover:text-[#FACC15] transition-all rounded-2xl">
                                 {feature.icon}
                             </div>
                             <h3 className="text-3xl font-black mb-6 text-black dark:text-white group-hover:text-black transition-colors uppercase tracking-tighter leading-none">{feature.title}</h3>

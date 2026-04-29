@@ -61,10 +61,10 @@ const FleetSection = () => {
     }
 
     return (
-        <section className="py-24 bg-white dark:bg-[#0a0a0a] border-t-2 border-black overflow-hidden relative">
+        <section className="py-24 bg-white dark:bg-[#0a0a0a]  overflow-hidden relative">
             <div className="container mx-auto px-6">
                 <div className="mb-16">
-                    <div className="bg-[#FACC15] text-black w-fit px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] mb-4">OUR PREMIUM FLEET</div>
+                    <div className="text-[#FACC15] text-[12px] font-black uppercase tracking-[0.4em] mb-6 flex items-center gap-3">OUR PREMIUM FLEET</div>
                     <h2 className="text-6xl md:text-8xl font-black text-black dark:text-white uppercase tracking-tighter leading-[0.9]">
                         SELECT YOUR <span className="text-[#FACC15]">COMFORT</span>
                     </h2>
@@ -77,15 +77,15 @@ const FleetSection = () => {
                     {vehicles.map((vehicle, idx) => (
                         <div 
                             key={vehicle._id} 
-                            className="flex-shrink-0 w-[85vw] md:w-[400px] snap-center flex flex-col border-[3px] border-black bg-white dark:bg-zinc-900 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all duration-200"
+                            className="flex-shrink-0 w-[85vw] md:w-[420px] snap-center flex flex-col bg-white dark:bg-zinc-900/50 rounded-[3rem] shadow-2xl shadow-slate-200/30 dark:shadow-none border border-slate-100 dark:border-white/5 overflow-hidden group/f-card transition-all duration-500 hover:scale-[1.02]"
                         >
                             {/* Category Header */}
-                            <div className="bg-white dark:bg-zinc-800 text-black dark:text-white p-3 text-center border-b-2 border-black font-black uppercase tracking-[0.3em] text-[10px]">
+                            <div className="bg-slate-50 dark:bg-white/5 text-black dark:text-white p-5 text-center font-black uppercase tracking-[0.4em] text-[10px]">
                                 {vehicle.category.replace('-', ' ')}
                             </div>
 
                             {/* Image Box */}
-                            <div className="h-64 md:h-72 flex items-center justify-center bg-[#F1F3F4] dark:bg-zinc-800 border-b-2 border-black relative overflow-hidden group">
+                            <div className="h-64 md:h-72 flex items-center justify-center bg-transparent relative overflow-hidden group">
                                 <div className="absolute inset-0 flex items-center justify-center text-[100px] font-black text-black/[0.03] dark:text-white/[0.03] tracking-tighter select-none pointer-events-none uppercase">
                                     {vehicle.vehicleType.split('-')[0]}
                                 </div>
@@ -106,25 +106,25 @@ const FleetSection = () => {
                                 <h3 className="text-2xl font-black text-black dark:text-white mb-6 uppercase tracking-tight">{vehicle.name}</h3>
                                 <div className="grid grid-cols-2 gap-y-4 gap-x-2">
                                     <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-black dark:text-white">
-                                        <div className="w-8 h-8 border-2 border-black flex items-center justify-center shrink-0">
+                                        <div className="w-8 h-8 border border-slate-100 dark:border-white/10 flex items-center justify-center shrink-0">
                                             <Users size={16} />
                                         </div>
                                         {vehicle.capacity} PAX
                                     </div>
                                     <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-black dark:text-white">
-                                        <div className="w-8 h-8 border-2 border-black flex items-center justify-center shrink-0">
+                                        <div className="w-8 h-8 border border-slate-100 dark:border-white/10 flex items-center justify-center shrink-0">
                                             <Briefcase size={16} />
                                         </div>
                                         {vehicle.luggage} LUG
                                     </div>
                                     <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-black dark:text-white">
-                                        <div className="w-8 h-8 border-2 border-black flex items-center justify-center shrink-0">
+                                        <div className="w-8 h-8 border border-slate-100 dark:border-white/10 flex items-center justify-center shrink-0">
                                             <ShoppingBag size={16} />
                                         </div>
                                         {vehicle.handLuggage} HAND
                                     </div>
                                     <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-[#00A99D]">
-                                        <div className="w-8 h-8 border-2 border-black flex items-center justify-center shrink-0">
+                                        <div className="w-8 h-8 border border-slate-100 dark:border-white/10 flex items-center justify-center shrink-0">
                                             <Wind size={16} className="animate-pulse" />
                                         </div>
                                         AC ON
@@ -133,7 +133,7 @@ const FleetSection = () => {
                             </div>
 
                             {/* Pricing Grid */}
-                            <div className="grid grid-cols-4 border-t-2 border-black">
+                            <div className="grid grid-cols-4 ">
                                 {popularPoints.slice(0, 4).map((point, i) => {
                                     const dist = getDistance(point);
                                     const priceLKR = calculateBasePrice(dist, vehicle, 'one-way', 'Airport', point, dynamicDestinations);
@@ -141,7 +141,7 @@ const FleetSection = () => {
                                     const displayUSD = (priceLKR * usdRate).toFixed(0);
                                     
                                     return (
-                                        <div key={point} className={`flex flex-col items-center justify-center py-3 border-r-2 last:border-r-0 border-black bg-[#FACC15] text-black`}>
+                                        <div key={point} className={`flex flex-col items-center justify-center py-3 border-r-2 last:border-r-0 border-slate-200 dark:border-white/10 bg-[#FACC15] text-black`}>
                                             <span className="text-[7px] font-black uppercase tracking-tighter mb-1 opacity-50">{point}</span>
                                             <span className="text-[10px] font-bold leading-none">Rs {priceLKR.toLocaleString()}</span>
                                             <span className="text-[10px] font-black">$ {displayUSD}</span>

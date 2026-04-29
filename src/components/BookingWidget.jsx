@@ -715,7 +715,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             />
                                         </div>
 
-                                        <div className="flex items-center justify-between sm:justify-end border-t sm:border-t-0 sm:border-l-2 border-black/10 dark:border-white/10 px-2 sm:px-3 py-1 sm:py-0 min-h-[40px] sm:min-h-0">
+                                        <div className="flex items-center justify-between sm:justify-end border-t sm:border-t-0 sm:border-l-2 border-slate-200 dark:border-white/10/10 dark:border-white/10 px-2 sm:px-3 py-1 sm:py-0 min-h-[40px] sm:min-h-0">
                                             <div className="flex items-center flex-col sm:flex-row gap-0 sm:gap-2 mr-auto sm:mr-3">
                                                  <span className="text-[8px] sm:text-[9px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider mb-0.5 sm:mb-0">Wait Time</span>
                                                  <div className="flex items-center gap-2">

@@ -37,6 +37,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true });
     const [destinations, setDestinations] = useState([]);
     const [isVehicleExpanded, setIsVehicleExpanded] = useState(true);
+    const [isFleetExpanded, setIsFleetExpanded] = useState(false);
 
     useEffect(() => {
         document.body.classList.add('booking-active');
@@ -646,7 +647,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             `}</style>
 
             {/* Modal Container */}
-            <div id="modal-container" className="bg-white dark:bg-zinc-950 w-full h-full sm:h-auto sm:max-h-[95vh] rounded-none sm:rounded-[3rem] shadow-[0_30px_100px_rgba(0,0,0,0.4)] sm:max-w-4xl overflow-x-hidden overflow-y-hidden flex flex-col animate-slide-up relative transition-all duration-500 border border-slate-100 dark:border-white/5">
+            <div id="modal-container" className="bg-white dark:bg-zinc-950 w-full h-full sm:h-auto sm:max-h-[95vh] rounded-[2rem] sm:rounded-[3rem] shadow-[0_30px_100px_rgba(0,0,0,0.4)] sm:max-w-4xl overflow-x-hidden overflow-y-hidden flex flex-col animate-slide-up relative transition-all duration-500 border border-slate-100 dark:border-white/5">
                 {/* Header - Hidden in Step 2 */}
                 {step !== 2 && (
                     <div className="p-6 sm:p-10 pb-4 flex items-center justify-between shrink-0 pt-8 sm:pt-10 bg-white dark:bg-zinc-950 transition-colors duration-500">
@@ -1027,14 +1028,34 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     )}
                     {step === 2 && (
                         <div className="animate-slide-up space-y-10">
-                            {/* Selected Vehicle Summary - Brutalist Style */}
-                            <div className="bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200/50 dark:shadow-none relative group/summary">
-                                <div className="absolute top-6 left-10 z-20">
+                            <div className="bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200/50 dark:shadow-none relative group/summary transition-all duration-500">
+                                <div className="absolute top-6 left-10 z-20 flex items-center gap-3">
                                     <div className="bg-[#FACC15] text-black text-[10px] font-black px-4 py-1.5 rounded-full border border-slate-100 dark:border-white/10 shadow-lg uppercase tracking-widest">
                                         Selected Fleet
                                     </div>
+                                    <button 
+                                        onClick={() => setIsFleetExpanded(!isFleetExpanded)}
+                                        className="bg-white dark:bg-zinc-800 text-black dark:text-white text-[10px] font-black px-4 py-1.5 rounded-full border border-slate-100 dark:border-white/10 shadow-lg uppercase tracking-widest hover:bg-slate-50 transition-all flex items-center gap-2"
+                                    >
+                                        {isFleetExpanded ? 'Close Selection' : 'Change Vehicle'}
+                                        {isFleetExpanded ? <X size={12} /> : <ChevronDown size={12} />}
+                                    </button>
                                 </div>
 
+                                {isFleetExpanded ? (
+                                    <div className="p-8 pt-20 animate-slide-in">
+                                        <VehicleCarousel 
+                                            vehicles={pricing}
+                                            selectedVehicle={selectedVehicle}
+                                            onSelect={(v) => {
+                                                setSelectedVehicle(v);
+                                                setIsFleetExpanded(false);
+                                            }}
+                                            currency={currency}
+                                            rates={rates}
+                                        />
+                                    </div>
+                                ) : (
                                 <div className="flex flex-col md:flex-row items-center p-8 gap-8 md:gap-12">
                                     <div className="w-full md:w-1/3 flex justify-center relative">
                                         <div className="absolute inset-0 bg-gradient-to-b from-[#FACC15]/20 to-transparent rounded-full blur-3xl opacity-30"></div>

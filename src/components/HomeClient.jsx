@@ -12,10 +12,10 @@ const BookingWidget = dynamic(() => import('./BookingWidget'), {
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
 
 // Dynamic imports with loading placeholders to prevent CLS
-const LoadingBox = () => <div className="w-full h-40 bg-slate-100 dark:bg-white/5 animate-pulse border-2 border-black" />;
+const LoadingBox = () => <div className="w-full h-40 bg-slate-100 dark:bg-white/5 animate-pulse border border-slate-100 dark:border-white/10" />;
 
 const FleetSection = dynamic(() => import('./FleetSection'), { 
-    loading: () => <div className="min-h-[800px] bg-white dark:bg-zinc-900 border-t-8 border-black animate-pulse" />
+    loading: () => <div className="min-h-[800px] bg-white dark:bg-zinc-900 border-t border-slate-200 dark:border-white/10 animate-pulse" />
 })
 const DestinationsSection = dynamic(() => import('./DestinationsSection'), { 
     loading: () => <div className="min-h-[1200px] bg-white dark:bg-zinc-900 animate-pulse" />
@@ -105,7 +105,7 @@ export default function HomeClient() {
                     <p className="text-slate-500 dark:text-slate-400 mb-14 text-sm md:text-base font-bold uppercase tracking-[0.4em] max-w-2xl mx-auto opacity-80">Predictable pricing • Premium vehicles • Professional chauffeurs</p>
                     <button
                         onClick={() => setIsBookingOpen(true)}
-                        className="bg-[#FACC15] text-black px-16 py-7 border-[3px] border-black font-black text-sm uppercase tracking-[0.2em] transition-all inline-flex items-center gap-4 group hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+                        className="bg-gradient-to-r from-[#FACC15] to-[#FF5C00] text-white px-16 py-7 font-black text-sm uppercase tracking-[0.2em] transition-all inline-flex items-center gap-4 group hover:scale-105 active:scale-95 rounded-full shadow-2xl shadow-orange-500/40"
                         aria-label="Book Your Trip Now"
                     >
                         BOOK YOUR TRIP NOW
@@ -117,7 +117,7 @@ export default function HomeClient() {
             {/* Floating Check Availability Sidebar - Luxury Style */}
             <button
                 onClick={() => setIsBookingOpen(true)}
-                className="fixed right-0 top-1/2 -translate-y-1/2 z-[100] bg-[#FACC15] text-black px-5 py-10 border-l-[3px] border-y-[3px] border-black hover:bg-yellow-400 transition-all group flex flex-col items-center gap-5 hidden md:flex shadow-[-8px_8px_0px_0px_rgba(0,0,0,1)]"
+                className="fixed right-0 top-1/2 -translate-y-1/2 z-[100] bg-[#FACC15] text-black px-5 py-10 border-l-[3px] border-y-[3px] border-slate-200 dark:border-white/10 hover:bg-yellow-400 transition-all group flex flex-col items-center gap-5 hidden md:flex shadow-xl shadow-slate-200/50"
             >
                 <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse"></div>
                 <span className="[writing-mode:vertical-lr] rotate-180 uppercase font-black tracking-[0.4em] text-[10px]">
@@ -179,7 +179,7 @@ export default function HomeClient() {
                             </div>
                         </div>
 
-                        <div className="relative z-10 w-full md:w-80 aspect-square bg-[#FACC15] p-12 flex flex-col items-center justify-center text-center transform md:rotate-6 border-[3px] border-black shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] transition-transform group-hover:rotate-0 duration-700">
+                        <div className="relative z-10 w-full md:w-80 aspect-square bg-[#FACC15] p-12 flex flex-col items-center justify-center text-center transform md:rotate-6 border border-slate-100 dark:border-white/10 shadow-2xl transition-transform group-hover:rotate-0 duration-700">
                             <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-8 backdrop-blur-md">
                                 <Star size={40} className="text-white" fill="currentColor" />
                             </div>

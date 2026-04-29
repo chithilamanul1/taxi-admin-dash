@@ -60,10 +60,10 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
 
         return (
             <div 
-                className="relative bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 p-4 rounded-2xl flex items-center gap-4 sm:gap-6 animate-slide-up group/condensed shadow-sm cursor-pointer hover:shadow-md transition-all"
+                className="relative bg-white dark:bg-zinc-900 rounded-[2.5rem] dark:bg-zinc-800 border border-slate-200 dark:border-white/10 p-4 rounded-2xl flex items-center gap-4 sm:gap-6 animate-slide-up group/condensed shadow-sm cursor-pointer hover:shadow-md transition-all"
                 onClick={() => onSelect(null)}
             >
-                <div className="w-20 sm:w-28 h-16 sm:h-20 bg-slate-50 dark:bg-white/5 rounded-xl flex items-center justify-center p-2 shrink-0 overflow-hidden border border-slate-100 dark:border-white/5">
+                <div className="w-20 sm:w-28 h-16 sm:h-20 bg-slate-50 dark:bg-white dark:bg-zinc-900 rounded-[2.5rem]/5 rounded-xl flex items-center justify-center p-2 shrink-0 overflow-hidden border border-slate-100 dark:border-white/5">
                     <img 
                         src={vehicle.image} 
                         alt={vehicle.name} 
@@ -82,7 +82,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 <span className="text-[10px] font-bold">{item.val}</span>
                             </div>
                         ))}
-                        <div className="h-3 w-[1px] bg-slate-200 dark:bg-white/10 mx-1"></div>
+                        <div className="h-3 w-[1px] bg-slate-200 dark:bg-white dark:bg-zinc-900 rounded-[2.5rem]/10 mx-1"></div>
                         <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest truncate">
                             Selected
                         </span>
@@ -103,7 +103,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
             <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-8 md:mb-12 px-2 lg:px-0">
                 <div className="flex flex-col gap-4">
                     {pickupLocation && dropoffLocation && (
-                        <div className="flex items-center gap-3 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-white/5 p-4 rounded-2xl border border-slate-100 dark:border-white/5 w-fit shadow-sm">
+                        <div className="flex items-center gap-3 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-white dark:bg-zinc-900 rounded-[2.5rem]/5 p-4 rounded-2xl border border-slate-100 dark:border-white/5 w-fit shadow-sm">
                             <span className="truncate max-w-[120px] sm:max-w-xs">{pickupLocation.split(',')[0]}</span>
                             <div className="flex items-center justify-center w-6 h-6 bg-emerald-600 rounded-full">
                                 <ArrowRight size={12} className="text-white" strokeWidth={3} />
@@ -138,13 +138,13 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                     ? 'border border-slate-100 dark:border-white/10 bg-[#FACC15]/5 shadow-2xl shadow-slate-200/50 dark:shadow-none -translate-y-2' 
                                     : 'border border-slate-100 dark:border-white/10 hover:-translate-y-2 hover:shadow-2xl hover:border-slate-200 dark:border-white/10/20'}
                                 ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
-                                bg-white dark:bg-zinc-800 rounded-[2.5rem]
+                                bg-white dark:bg-zinc-900 rounded-[2.5rem] dark:bg-zinc-800 rounded-[2.5rem]
                                 overflow-hidden h-full
                             `}
                             onClick={() => suitable && onSelect(vehicle.vehicleType)}
                         >
                             {!suitable && (
-                                <div className="absolute inset-0 z-30 bg-white/60 dark:bg-black/60 backdrop-blur-[2px] flex flex-col items-center justify-center p-8 text-center">
+                                <div className="absolute inset-0 z-30 bg-white dark:bg-zinc-900 rounded-[2.5rem]/60 dark:bg-black/60 backdrop-blur-[2px] flex flex-col items-center justify-center p-8 text-center">
                                     <div className="w-16 h-16 bg-red-50 dark:bg-red-950/30 rounded-2xl mb-6 flex items-center justify-center border border-red-100 dark:border-red-900/20">
                                         <Lock size={28} className="text-red-500" strokeWidth={2.5} />
                                     </div>
@@ -157,7 +157,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 <h4 className="text-xl font-bold text-emerald-950 dark:text-white uppercase tracking-tight mb-2 text-center relative z-10">
                                     {displayName(vehicle.name)}
                                 </h4>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">Premium Class</p>
+                                <p className="text-[10px] font-bold text-black dark:text-white uppercase tracking-[0.2em] mb-6">Premium Class</p>
 
                                 {vehicle.calculatedTotal >= 0 && (
                                     <div className="text-center relative z-10 flex flex-col items-center mb-8">
@@ -204,7 +204,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                         { icon: Wind, label: 'AC', value: 'ON' }
                                     ].map((item, i) => (
                                         <div key={i} className={`
-                                            bg-slate-50 dark:bg-white/5 rounded-2xl p-3 
+                                            bg-slate-50 dark:bg-white dark:bg-zinc-900 rounded-[2.5rem]/5 rounded-2xl p-3 
                                             flex flex-col items-center justify-center 
                                             transition-all duration-300 border border-slate-100 dark:border-white/5
                                             ${isSelected ? 'bg-[#FACC15] text-black border-slate-200 dark:border-white/10 shadow-lg' : 'group-hover/card:border-slate-200 dark:border-white/10/10'}
@@ -224,7 +224,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                     <div className={`w-full py-5 text-center rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all border border-slate-100 dark:border-white/10
                                         ${isSelected 
                                             ? 'bg-[#FACC15] text-black border-slate-200 dark:border-white/10 shadow-xl' 
-                                            : 'bg-white dark:bg-zinc-800 text-black dark:text-white border-slate-200 dark:border-white/10 hover:bg-[#FACC15] hover:text-black hover:shadow-xl'}`}
+                                            : 'bg-white dark:bg-zinc-900 rounded-[2.5rem] dark:bg-zinc-800 text-black dark:text-white border-slate-200 dark:border-white/10 hover:bg-[#FACC15] hover:text-black hover:shadow-xl'}`}
                                     >
                                         {isSelected ? 'SELECTED ✓' : 'SELECT RIDE'}
                                     </div>
