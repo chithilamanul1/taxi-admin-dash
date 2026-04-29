@@ -452,7 +452,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <div className="hidden sm:flex items-center gap-10">
                                 {STEPS.map((s, idx) => (
                                     <div key={s.id} className="flex items-center gap-4">
-                                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-black transition-all duration-500 ${step >= s.id ? 'bg-[#FACC15] text-white shadow-lg shadow-yellow-400/20 scale-110' : 'bg-slate-50 dark:bg-white/5 text-slate-300'}`}>
+                                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-black transition-all duration-500 ${step >= s.id ? 'bg-[#FACC15] text-white shadow-lg scale-110' : 'bg-slate-50 dark:bg-white/5 text-slate-300'}`}>
                                             {step > s.id ? <Check size={14} strokeWidth={4} /> : s.id}
                                         </div>
                                         <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 ${step >= s.id ? 'text-black dark:text-white' : 'text-slate-300'}`}>{s.title}</span>
@@ -516,7 +516,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <button
                                                 key={opt.label}
                                                 onClick={() => setFormData({ ...formData, hasNameBoard: opt.val })}
-                                                className={`p-6 rounded-3xl border text-left transition-all relative overflow-hidden group ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-transparent text-white shadow-xl shadow-yellow-400/20' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-yellow-400/50'}`}
+                                                className={`p-6 rounded-3xl border text-left transition-all relative overflow-hidden group ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-transparent text-white shadow-xl' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-yellow-400/50'}`}
                                             >
                                                 <div className="flex items-center justify-between mb-2">
                                                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${formData.hasNameBoard === opt.val ? 'bg-white/20' : 'bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10'}`}>
@@ -569,7 +569,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 key={c.code}
                                                 type="button"
                                                 onClick={() => changeCurrency(c.code)}
-                                                className={`px-4 py-2.5 rounded-xl border transition-all flex items-center gap-3 text-left cursor-pointer group/curr ${currency === c.code ? 'bg-[#FACC15] border-transparent text-white shadow-lg shadow-[#FACC15]/20' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-[#FACC15] text-slate-400 hover:text-[#FACC15]'}`}
+                                                className={`px-4 py-2.5 rounded-xl border transition-all flex items-center gap-3 text-left cursor-pointer group/curr ${currency === c.code ? 'bg-[#FACC15] border-transparent text-white shadow-lg' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-[#FACC15] text-slate-400 hover:text-[#FACC15]'}`}
                                             >
                                                 <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-white dark:border-zinc-800 shadow-sm">
                                                     <img src={c.flag} alt={c.code} className="w-full h-full object-cover" />

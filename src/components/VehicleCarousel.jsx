@@ -116,7 +116,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
 
                     <h3 className="text-2xl md:text-3xl font-black text-emerald-950 dark:text-white flex flex-wrap items-center gap-4 uppercase tracking-tight">
                         Vehicle Options
-                        <span className="text-[10px] bg-emerald-600 text-white px-5 py-1.5 rounded-full tracking-[0.2em] font-bold shadow-lg shadow-emerald-200 dark:shadow-none">
+                        <span className="text-[10px] bg-emerald-600 text-white px-5 py-1.5 rounded-full tracking-[0.2em] font-bold shadow-lg">
                             {displayVehicles.length} Units Available
                         </span>
                     </h3>

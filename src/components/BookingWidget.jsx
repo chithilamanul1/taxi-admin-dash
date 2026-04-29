@@ -1162,7 +1162,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <button
                                         onClick={handleBook}
                                         disabled={!distance}
-                                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white min-h-16 sm:h-[72px] py-2 sm:py-0 rounded-2xl shadow-md hover:shadow-lg hover:shadow-emerald-600/20 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center border border-emerald-500/20"
+                                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white min-h-16 sm:h-[72px] py-2 sm:py-0 rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center border border-emerald-500/20"
                                     >
                                         {isLoadingPricing ? (
                                             <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
