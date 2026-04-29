@@ -930,7 +930,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                              </div>
                                              
                                              <div className="flex flex-wrap gap-3 mb-2 sm:mb-4">
-                                                 {convertToAllCurrencies(detailedBreakdown.lkr?.payNow || originalLKR)
+                                                 {convertToAllCurrencies(detailedBreakdown.lkr?.payNow || detailedBreakdown.originalLKR)
                                                      .filter(c => {
                                                          if (currency === 'LKR') return ['USD', 'GBP', 'EUR'].includes(c.code);
                                                          if (currency === 'USD') return ['LKR', 'GBP', 'EUR'].includes(c.code);
