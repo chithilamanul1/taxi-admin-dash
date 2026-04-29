@@ -25,36 +25,36 @@ export default function RecentPosts() {
     if (!loading && posts.length === 0) return null;
 
     return (
-        <section className="py-32 bg-slate-50 relative transition-colors duration-300 border-t border-slate-200 overflow-hidden">
+        <section className="py-24 md:py-32 bg-white dark:bg-[#0a0a0a] relative transition-colors duration-300 border-t border-slate-100 dark:border-white/5 overflow-hidden">
             {/* Background Accent */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-[#FACC15]/5 -mr-48 -mt-48 blur-3xl rounded-none"></div>
 
             <div className="container mx-auto px-6 max-w-7xl relative z-10">
-                <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8 animate-slide-up">
-                    <div className="max-w-2xl bg-white p-8 md:p-12 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rounded-none">
-                        <h2 className="text-6xl md:text-7xl font-black mb-6 text-slate-900 uppercase tracking-tighter leading-none">
+                <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 md:mb-20 gap-8 animate-slide-up">
+                    <div className="max-w-2xl bg-white dark:bg-zinc-900 p-8 md:p-14 rounded-[3rem] border border-slate-100 dark:border-white/5 shadow-2xl">
+                        <h2 className="text-5xl md:text-7xl font-black mb-6 text-slate-900 dark:text-white uppercase tracking-tighter leading-none">
                             TRAVEL <span className="text-[#FACC15]">INSIGHTS</span>
                         </h2>
-                        <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] md:text-xs leading-relaxed">Discover Sri Lanka through the eyes of our expert travel guides and professional chauffeurs.</p>
+                        <p className="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] md:text-xs leading-relaxed max-w-lg">Discover Sri Lanka through the eyes of our expert travel guides and professional chauffeurs.</p>
                     </div>
-                    <Link href="/blog" className="px-12 py-6 bg-[#FACC15] text-black rounded-none text-xs font-black uppercase tracking-[0.2em] hover:translate-y-[2px] active:translate-y-[4px] transition-all flex items-center gap-4 border-4 border-black group">
+                    <Link href="/blog" className="px-12 py-7 bg-[#FACC15] text-black rounded-full text-[10px] font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-4 group shadow-xl hover:scale-105 active:scale-95">
                         JOURNAL INDEX <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
                     </Link>
                 </div>
 
                 {loading ? (
-                    <div className="grid md:grid-cols-3 gap-12">
+                    <div className="grid md:grid-cols-3 gap-10">
                         {[1, 2, 3].map(i => (
-                            <div key={i} className="h-[600px] rounded-none bg-white animate-pulse border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"></div>
+                            <div key={i} className="h-[500px] rounded-[3rem] bg-slate-50 dark:bg-white/5 animate-pulse border border-slate-100 dark:border-white/10"></div>
                         ))}
                     </div>
                 ) : (
-                    <div className="grid md:grid-cols-3 gap-12">
+                    <div className="grid md:grid-cols-3 gap-10">
                         {posts.map((post, idx) => (
                             <Link
                                 href={`/blog/${post.slug}`}
                                 key={post._id}
-                                className="group relative bg-white rounded-none overflow-hidden border-4 border-black flex flex-col h-[600px] animate-slide-up hover:-translate-y-2 transition-all duration-500"
+                                className="group relative bg-white dark:bg-zinc-900 rounded-[3rem] overflow-hidden border border-slate-100 dark:border-white/5 flex flex-col h-auto animate-slide-up hover:-translate-y-2 transition-all duration-500 shadow-xl"
                                 style={{ animationDelay: `${idx * 0.1}s` }}
                             >
                                 <div className="aspect-video overflow-hidden relative">
@@ -65,9 +65,9 @@ export default function RecentPosts() {
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60"></div>
-                                    <div className="absolute top-4 left-4">
-                                        <div className="flex items-center gap-2 text-[9px] font-black text-black uppercase tracking-[0.1em] bg-[#FACC15] px-4 py-2 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                            <Calendar size={12} strokeWidth={2} />
+                                    <div className="absolute top-6 left-6">
+                                        <div className="flex items-center gap-2 text-[9px] font-black text-black uppercase tracking-[0.2em] bg-[#FACC15] px-4 py-2 rounded-full shadow-lg">
+                                            <Calendar size={12} strokeWidth={3} />
                                             {new Date(post.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                                         </div>
                                     </div>
@@ -82,13 +82,13 @@ export default function RecentPosts() {
                                     </p>
                                 </div>
 
-                                <div className="flex items-center justify-between border-t border-slate-100 px-8 py-8 mt-auto bg-slate-50/50 group-hover:bg-[#FACC15]/5 transition-colors">
-                                    <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 group-hover:text-emerald-900 uppercase tracking-[0.2em] transition-colors">
-                                        <Clock size={16} strokeWidth={2} />
+                                <div className="flex items-center justify-between border-t border-slate-50 dark:border-white/5 px-8 py-8 mt-auto bg-slate-50/30 dark:bg-white/5 group-hover:bg-[#FACC15]/5 transition-colors">
+                                    <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 group-hover:text-[#FACC15] uppercase tracking-[0.2em] transition-colors">
+                                        <Clock size={16} strokeWidth={3} />
                                         <span>READ JOURNAL</span>
                                     </div>
-                                    <div className="w-12 h-12 rounded-none bg-black text-[#FACC15] border-2 border-black flex items-center justify-center group-hover:bg-[#FACC15] group-hover:text-black transition-all group-hover:translate-x-1">
-                                        <ArrowRight size={22} strokeWidth={2} />
+                                    <div className="w-12 h-12 rounded-2xl bg-black dark:bg-zinc-800 text-[#FACC15] border border-white/10 flex items-center justify-center group-hover:bg-[#FACC15] group-hover:text-black transition-all group-hover:translate-x-1 shadow-lg">
+                                        <ArrowRight size={22} strokeWidth={3} />
                                     </div>
                                 </div>
                             </Link>
