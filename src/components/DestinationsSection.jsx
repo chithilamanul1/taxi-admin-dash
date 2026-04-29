@@ -77,7 +77,7 @@ const DestinationsSection = () => {
 
                                     <div className="flex items-center justify-between">
                                         <div className="bg-[#FACC15] text-black px-3 md:px-5 py-1.5 md:py-2 rounded-full text-[9px] md:text-xs font-black uppercase tracking-widest border border-slate-100 dark:border-white/10 shadow-lg group-hover:shadow-none transition-all">
-                                            {Math.floor(Math.random() * 15) + 5}+ Deals
+                                            {(idx * 3) + 12}+ Deals
                                         </div>
                                         
                                         <div className="hidden md:flex w-8 h-8 md:w-10 md:h-10 bg-white border border-slate-100 dark:border-white/10 items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0">
