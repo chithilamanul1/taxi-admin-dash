@@ -352,16 +352,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             if (!formData.pickup) newErrors.pickup = true;
             if (!formData.dropoff) newErrors.dropoff = true;
             if (formData.hasNameBoard === null) newErrors.hasNameBoard = true;
-            if (isAirportService) {
-                if (!formData.flightArrivalDate) newErrors.date = true;
-                if (!formData.flightArrivalTime) newErrors.time = true;
-            }
+            if (formData.hasNameBoard && !formData.nameBoardText) newErrors.nameBoardText = true;
         }
         if (targetStep >= 2) {
             if (!formData.name) newErrors.name = true;
             if (!formData.phone) newErrors.phone = true;
             if (!formData.email) newErrors.email = true;
-            if (formData.hasNameBoard && !formData.nameBoardText) newErrors.nameBoardText = true;
+            if (isAirportService) {
+                if (!formData.flightArrivalDate) newErrors.date = true;
+                if (!formData.flightArrivalTime) newErrors.time = true;
+            }
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
