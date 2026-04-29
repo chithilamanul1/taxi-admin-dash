@@ -77,7 +77,7 @@ const FleetSection = () => {
                     {vehicles.map((vehicle, idx) => (
                         <div 
                             key={vehicle._id} 
-                            className="flex-shrink-0 w-[85vw] md:w-[420px] snap-center flex flex-col bg-white dark:bg-zinc-900/50 rounded-[3rem] shadow-2xl shadow-slate-200/30 dark:shadow-none border border-slate-100 dark:border-white/5 overflow-hidden group/f-card transition-all duration-500 hover:scale-[1.02]"
+                            className="flex-shrink-0 w-[85vw] md:w-[420px] snap-center flex flex-col bg-white dark:bg-zinc-900/50 rounded-t-[3rem] rounded-b-none shadow-2xl shadow-slate-200/30 dark:shadow-none border border-slate-100 dark:border-white/5 overflow-hidden group/f-card transition-all duration-500 hover:scale-[1.02]"
                         >
                             {/* Category Header */}
                             <div className="bg-slate-50 dark:bg-white/5 text-black dark:text-white p-5 text-center font-black uppercase tracking-[0.4em] text-[10px]">
@@ -132,22 +132,32 @@ const FleetSection = () => {
                                 </div>
                             </div>
 
-                            {/* Pricing Grid */}
-                            <div className="grid grid-cols-4 ">
-                                {popularPoints.slice(0, 4).map((point, i) => {
-                                    const dist = getDistance(point);
-                                    const priceLKR = calculateBasePrice(dist, vehicle, 'one-way', 'Airport', point, dynamicDestinations);
-                                    const usdRate = rates['USD'] || 0.0031;
-                                    const displayUSD = (priceLKR * usdRate).toFixed(0);
-                                    
-                                    return (
-                                        <div key={point} className={`flex flex-col items-center justify-center py-3 border-r-2 last:border-r-0 border-slate-200 dark:border-white/10 bg-[#FACC15] text-black`}>
-                                            <span className="text-[7px] font-black uppercase tracking-tighter mb-1 opacity-50">{point}</span>
-                                            <span className="text-[10px] font-bold leading-none">Rs {priceLKR.toLocaleString()}</span>
-                                            <span className="text-[10px] font-black">$ {displayUSD}</span>
-                                        </div>
-                                    );
-                                })}
+                            {/* Pricing Marquee */}
+                            <div className="overflow-hidden bg-[#FACC15] relative">
+                                <motion.div 
+                                    className="flex"
+                                    animate={{ x: ["0%", "-50%"] }}
+                                    transition={{ 
+                                        duration: 15, 
+                                        repeat: Infinity, 
+                                        ease: "linear" 
+                                    }}
+                                >
+                                    {[...popularPoints, ...popularPoints].map((point, i) => {
+                                        const dist = getDistance(point);
+                                        const priceLKR = calculateBasePrice(dist, vehicle, 'one-way', 'Airport', point, dynamicDestinations);
+                                        const usdRate = rates['USD'] || 0.0031;
+                                        const displayUSD = (priceLKR * usdRate).toFixed(0);
+                                        
+                                        return (
+                                            <div key={`${point}-${i}`} className="flex flex-col items-center justify-center py-4 px-8 border-r border-black/10 min-w-[120px]">
+                                                <span className="text-[8px] font-black uppercase tracking-widest mb-1 text-black/50">{point}</span>
+                                                <span className="text-[10px] font-bold text-black leading-none">Rs {priceLKR.toLocaleString()}</span>
+                                                <span className="text-[10px] font-black text-black">$ {displayUSD}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </motion.div>
                             </div>
                         </div>
                     ))}
