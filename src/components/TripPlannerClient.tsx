@@ -169,16 +169,18 @@ export default function TripPlannerClient() {
                                 </div>
                                 <div className="mt-12 pt-12 border-t border-emerald-200">
                                     <div className="flex items-center gap-4 mb-6">
-                                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
-                                            <Info className="text-emerald-500" />
+                                        <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center shadow-sm">
+                                            <span className="font-black text-emerald-600 text-lg">$</span>
                                         </div>
                                         <div>
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Need Adjustments?</span>
-                                            <span className="text-sm font-black text-emerald-900">Custom pricing required</span>
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Est. Transport Cost</span>
+                                            <span className="text-lg font-black text-emerald-950">
+                                                ${(formData.duration || itinerary.days?.length || 1) * 55} - ${(formData.duration || itinerary.days?.length || 1) * 75}
+                                            </span>
                                         </div>
                                     </div>
                                     <p className="text-slate-500 text-xs font-medium leading-relaxed mb-8">
-                                        This itinerary is generated based on your session interests. Final pricing depends on chosen vehicle and hotel standards.
+                                        Estimate based on standard daily rates ($55/day for cars, $75/day for vans). Final pricing depends on exact mileage and your selected vehicle tier.
                                     </p>
                                     <button
                                         onClick={() => window.open('https://wa.me/+94716885880', '_blank')}
