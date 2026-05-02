@@ -219,71 +219,70 @@ export default function TripPlannerClient() {
                     </div>
                 </div>
 
-                <div className="bg-white rounded-[3rem] p-10 md:p-16 shadow-2xl shadow-slate-200 border border-slate-100 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                <div className="bg-white rounded-3xl md:rounded-[3rem] p-6 md:p-12 shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden">
 
                     <div className="space-y-12">
                         {/* Prompt Input */}
-                        <div className="space-y-4">
-                            <label className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] ml-2">What kind of trip are you looking for?</label>
+                        <div className="space-y-3">
+                            <label className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.2em] ml-2">What kind of trip are you looking for?</label>
                             <textarea
                                 value={formData.prompt}
                                 onChange={(e) => setFormData({ ...formData, prompt: e.target.value })}
                                 placeholder="E.g. I want a 10-day luxury honeymoon starting from Colombo, involving nature, tea estates, and a beach stay at the end."
-                                className="w-full h-40 bg-slate-50 rounded-[2.5rem] p-10 text-xl font-medium text-emerald-900 outline-none border-2 border-transparent focus:border-emerald-500/20 focus:bg-white transition-all resize-none shadow-inner uppercase-placeholder"
+                                className="w-full h-32 md:h-40 bg-slate-50 rounded-2xl md:rounded-[2.5rem] p-6 md:p-8 text-sm md:text-lg font-medium text-emerald-950 outline-none border-2 border-transparent focus:border-emerald-500/20 focus:bg-white transition-all resize-none shadow-inner"
                             />
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                             {/* Duration */}
-                            <div className="space-y-4">
-                                <label className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] ml-2">How many days?</label>
-                                <div className="flex items-center bg-slate-50 rounded-3xl p-4 gap-4 border border-slate-100">
+                            <div className="space-y-3">
+                                <label className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.2em] ml-2">How many days?</label>
+                                <div className="flex items-center bg-slate-50 rounded-2xl md:rounded-3xl p-3 gap-3 border border-slate-100">
                                     <button
                                         onClick={() => setFormData(prev => ({ ...prev, duration: Math.max(1, prev.duration - 1) }))}
-                                        className="w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm hover:text-emerald-500 transition-colors font-black text-2xl"
+                                        className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white rounded-xl md:rounded-2xl shadow-sm hover:text-emerald-500 transition-colors font-black text-xl md:text-2xl"
                                     > - </button>
                                     <div className="flex-1 text-center">
-                                        <span className="text-3xl font-black text-emerald-900">{formData.duration}</span>
-                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Days</span>
+                                        <span className="text-2xl md:text-3xl font-black text-emerald-950">{formData.duration}</span>
+                                        <span className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest block">Days</span>
                                     </div>
                                     <button
                                         onClick={() => setFormData(prev => ({ ...prev, duration: prev.duration + 1 }))}
-                                        className="w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-sm hover:text-emerald-500 transition-colors font-black text-2xl"
+                                        className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white rounded-xl md:rounded-2xl shadow-sm hover:text-emerald-500 transition-colors font-black text-xl md:text-2xl"
                                     > + </button>
                                 </div>
                             </div>
 
                             {/* Travelers */}
-                            <div className="space-y-4">
-                                <label className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Number of Travelers?</label>
-                                <div className="flex items-center bg-slate-50 rounded-3xl p-4 gap-4 border border-slate-100">
-                                    <Calendar className="text-emerald-500 ml-2" size={24} />
+                            <div className="space-y-3">
+                                <label className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Number of Travelers?</label>
+                                <div className="flex items-center bg-slate-50 rounded-2xl md:rounded-3xl p-3 md:p-4 gap-3 border border-slate-100">
+                                    <Calendar className="text-emerald-500 ml-2" size={20} />
                                     <select
                                         value={formData.travelers}
                                         onChange={(e) => setFormData({ ...formData, travelers: parseInt(e.target.value) })}
-                                        className="flex-1 bg-transparent text-2xl font-black text-emerald-900 outline-none appearance-none cursor-pointer"
+                                        className="flex-1 bg-transparent text-xl md:text-2xl font-black text-emerald-950 outline-none appearance-none cursor-pointer"
                                     >
                                         {[1, 2, 3, 4, 5, 6, 8, 10, 15].map(n => (
                                             <option key={n} value={n}>{n} Persons</option>
                                         ))}
                                     </select>
-                                    <ChevronRight className="text-slate-300 mr-2" />
+                                    <ChevronRight className="text-slate-300 mr-2" size={20} />
                                 </div>
                             </div>
                         </div>
 
                         {/* Interests */}
-                        <div className="space-y-6">
-                            <label className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Primary Interests</label>
-                            <div className="flex flex-wrap gap-3">
+                        <div className="space-y-4">
+                            <label className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Primary Interests</label>
+                            <div className="flex flex-wrap gap-2 md:gap-3">
                                 {interestOptions.map(opt => (
                                     <button
                                         key={opt.id}
                                         onClick={() => handleInterestToggle(opt.id)}
-                                        className={`flex items-center gap-3 px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border ${formData.interests.includes(opt.id)
-                                            ? 'bg-emerald-500 border-emerald-500 text-white shadow-xl shadow-emerald-200 scale-105'
-                                            : 'bg-white border-slate-100 text-slate-400 hover:border-emerald-200'
+                                        className={`flex items-center gap-2 md:gap-3 px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all border ${formData.interests.includes(opt.id)
+                                            ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-200/50 scale-[1.02]'
+                                            : 'bg-white border-slate-100 text-slate-500 hover:border-emerald-200'
                                             }`}
                                     >
                                         {opt.icon} {opt.label}
@@ -293,25 +292,25 @@ export default function TripPlannerClient() {
                         </div>
 
                         {/* Submit */}
-                        <div className="pt-8">
+                        <div className="pt-6">
                             <button
                                 onClick={generateTrip}
                                 disabled={isGenerating || !formData.prompt}
-                                className="w-full py-8 bg-emerald-900 text-white rounded-[2.5rem] font-black text-2xl shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-4 relative overflow-hidden group"
+                                className="w-full py-5 md:py-6 bg-emerald-950 text-white rounded-2xl md:rounded-[2rem] font-black text-base md:text-xl shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-3 relative overflow-hidden group"
                             >
                                 {isGenerating ? (
                                     <>
-                                        <Loader2 className="animate-spin" size={32} />
+                                        <Loader2 className="animate-spin" size={20} />
                                         Crafting your itinerary...
                                     </>
                                 ) : (
                                     <>
-                                        Generate My Trip <Wand2 className="fill-white" />
-                                        <div className="absolute inset-0 bg-emerald-500 translate-y-full group-hover:translate-y-0 transition-transform -z-10 bg-opacity-10"></div>
+                                        Generate My Trip <Wand2 className="fill-white" size={18} />
+                                        <div className="absolute inset-0 bg-emerald-500 translate-y-full group-hover:translate-y-0 transition-transform -z-10 bg-opacity-20"></div>
                                     </>
                                 )}
                             </button>
-                            <p className="text-center text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mt-8">Powered by Airport Taxis Intelligence</p>
+                            <p className="text-center text-[9px] font-black text-slate-300 uppercase tracking-[0.2em] mt-6">Powered by Airport Taxis Intelligence</p>
                         </div>
                     </div>
                 </div>
