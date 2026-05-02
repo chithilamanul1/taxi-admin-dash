@@ -125,53 +125,52 @@ export default async function SinglePostPage({ params }) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
-            <article className="min-h-screen bg-white pb-20 transition-colors relative overflow-hidden">
+        <article className="min-h-screen bg-slate-50 pb-20 transition-colors relative overflow-hidden">
             {/* Background elements */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#FACC15]/5 -mr-48 -mt-48 blur-3xl rounded-none"></div>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 -mr-48 -mt-48 blur-3xl rounded-full pointer-events-none"></div>
 
             {/* Header with Image */}
-            <div className="relative h-[60vh] md:h-[70vh] w-full border-b-8 border-black">
-                <div className="absolute inset-0 bg-black/40 z-10" />
+            <div className="relative h-[50vh] md:h-[60vh] w-full">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10" />
                 <BlogCoverImage
                     src={post.imageUrl}
                     alt={post.title}
-                    className="w-full h-full object-cover grayscale"
+                    className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 z-20 flex flex-col justify-end container mx-auto px-6 pb-24 max-w-7xl">
-                    <Link href="/blog" className="text-black hover:text-emerald-900 mb-8 flex items-center gap-3 w-fit transition-all font-black uppercase tracking-[0.2em] italic text-xs bg-[#FACC15] px-4 py-2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                        <ArrowLeft size={18} strokeWidth={4} /> Back to Journal
+                <div className="absolute inset-0 z-20 flex flex-col justify-end container mx-auto px-6 pb-20 max-w-4xl">
+                    <Link href="/blog" className="text-white hover:text-emerald-300 mb-8 flex items-center gap-2 w-fit transition-all font-medium text-sm">
+                        <ArrowLeft size={16} /> Back to Journal
                     </Link>
-                    <h1 className="text-4xl md:text-7xl font-black text-white mb-8 leading-none max-w-5xl uppercase italic tracking-tighter">
+                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight max-w-4xl">
                         {post.title}
                     </h1>
-                    <div className="flex flex-wrap gap-10 text-white font-black uppercase tracking-[0.3em] italic text-[10px]">
-                        <div className="flex items-center gap-3">
-                            <Calendar size={20} className="text-[#FACC15]" strokeWidth={3} />
+                    <div className="flex flex-wrap gap-6 text-slate-200 text-sm font-medium">
+                        <div className="flex items-center gap-2">
+                            <Calendar size={16} className="text-emerald-400" />
                             {new Date(post.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                         </div>
-                        <div className="flex items-center gap-3">
-                            <User size={20} className="text-[#FACC15]" strokeWidth={3} />
-                            CHAUFFEUR INSIGHTS: {post.author || 'ADMIN'}
+                        <div className="flex items-center gap-2">
+                            <User size={16} className="text-emerald-400" />
+                            By {post.author || 'Admin'}
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Content */}
-            <div className="container mx-auto px-6 -mt-16 relative z-30 max-w-5xl">
-                <div className="bg-white rounded-none border-4 border-black p-8 md:p-16 shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#FACC15]/5 -mr-16 -mt-16 rounded-full blur-2xl"></div>
+            <div className="container mx-auto px-6 -mt-10 relative z-30 max-w-4xl">
+                <div className="bg-white rounded-2xl p-6 md:p-12 shadow-xl shadow-slate-200/50 relative overflow-hidden ring-1 ring-slate-100">
                     
-                    <div className="prose prose-lg max-w-none prose-headings:text-black prose-headings:italic prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tighter prose-p:text-slate-800 prose-p:leading-relaxed prose-strong:text-black prose-a:text-emerald-700 prose-a:no-underline prose-a:font-black hover:prose-a:underline prose-img:rounded-none prose-img:border-4 prose-img:border-black prose-img:shadow-[8px_8px_0px_0px_#FACC15]">
+                    <div className="prose prose-lg max-w-none prose-headings:text-slate-900 prose-headings:font-bold prose-p:text-slate-600 prose-p:leading-relaxed prose-strong:text-slate-900 prose-a:text-emerald-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-img:shadow-lg">
                         <ReactMarkdown>{post.content}</ReactMarkdown>
                     </div>
 
                     {/* Tags */}
                     {post.tags && post.tags.length > 0 && (
-                        <div className="mt-16 pt-10 border-t-4 border-black flex flex-wrap gap-4">
+                        <div className="mt-12 pt-8 border-t border-slate-100 flex flex-wrap gap-3">
                             {post.tags.map(tag => (
-                                <span key={tag} className="bg-slate-50 text-black px-4 py-2 rounded-none text-[10px] font-black uppercase tracking-[0.2em] italic border-2 border-black shadow-[4px_4px_0px_0px_#FACC15] flex items-center gap-2">
-                                    <Tag size={14} strokeWidth={3} /> {tag}
+                                <span key={tag} className="bg-slate-50 text-slate-600 px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 border border-slate-100 hover:bg-slate-100 hover:text-slate-900 transition-colors cursor-default">
+                                    <Tag size={12} className="text-emerald-500" /> {tag}
                                 </span>
                             ))}
                         </div>
