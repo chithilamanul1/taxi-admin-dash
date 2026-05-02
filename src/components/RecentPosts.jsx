@@ -8,7 +8,7 @@ export default function RecentPosts() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`/api/blog?limit=3&t=${Date.now()}`)
+        fetch(`/api/blog?limit=15&t=${Date.now()}`)
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
@@ -50,7 +50,7 @@ export default function RecentPosts() {
                     </div>
                 ) : (
                     <div className="grid md:grid-cols-3 gap-10">
-                        {posts.map((post, idx) => (
+                        {posts.slice(0, 3).map((post, idx) => (
                             <Link
                                 href={`/blog/${post.slug}`}
                                 key={post._id}
@@ -93,6 +93,42 @@ export default function RecentPosts() {
                                 </div>
                             </Link>
                         ))}
+                    </div>
+                )}
+
+                {/* Additional Posts Slider */}
+                {!loading && posts.length > 3 && (
+                    <div className="mt-16 border-t border-slate-100 dark:border-white/5 pt-12">
+                        <div className="flex items-center justify-between mb-8">
+                            <h3 className="text-sm font-black text-slate-500 uppercase tracking-widest">More Travel Insights</h3>
+                        </div>
+                        <div className="flex overflow-x-auto gap-6 pb-8 snap-x touch-pan-x hide-scrollbar">
+                            {posts.slice(3).map((post) => (
+                                <Link
+                                    href={`/blog/${post.slug}`}
+                                    key={post._id}
+                                    className="group shrink-0 w-[280px] sm:w-[320px] bg-white dark:bg-zinc-900 rounded-[2rem] overflow-hidden border border-slate-100 dark:border-white/5 flex flex-col snap-start hover:-translate-y-2 transition-all duration-500 shadow-lg"
+                                >
+                                    <div className="h-40 overflow-hidden relative">
+                                        <img
+                                            src={post.imageUrl || '/hero.jpg'}
+                                            alt={post.title}
+                                            onError={(e) => { e.currentTarget.src = '/hero.jpg'; e.currentTarget.onerror = null; }}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                    </div>
+                                    <div className="p-6 flex flex-col flex-1">
+                                        <h4 className="text-lg font-black mb-3 leading-tight text-slate-900 group-hover:text-emerald-600 transition-colors line-clamp-2 uppercase tracking-tighter">
+                                            {post.title}
+                                        </h4>
+                                        <p className="text-slate-500 text-[10px] font-bold leading-relaxed line-clamp-2 uppercase tracking-wider">
+                                            {post.seo?.metaDescription || post.excerpt}
+                                        </p>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
                     </div>
                 )}
             </div>

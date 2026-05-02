@@ -158,5 +158,80 @@ At **Airport Taxis Tours**, we exclusively offer **Fixed Price Quotes**.
             metaDescription: "How much is a taxi in Sri Lanka? Detailed 2025 pricing guide for Mini Cars, Sedans, and KDH Vans. Avoid being overcharged with our expert tips.",
             keywords: ["sri lanka taxi rates", "taxi fare colombo airport", "how much is a taxi in sri lanka", "kdh van rates sri lanka", "colombo taxi prices"]
         }
+    },
+    {
+        title: "Revolutionizing Sri Lanka Travel with AI: Meet Our Smart Trip Planner",
+        slug: "ai-smart-trip-planner-sri-lanka",
+        excerpt: "Discover the ultimate way to build your perfect Sri Lankan holiday. Our new AI Trip Planner generates tailored, day-by-day itineraries with instant transport pricing in seconds.",
+        content: `
+# Say Goodbye to Planning Stress: Introducing the AI Trip Planner
+
+Planning a holiday in Sri Lanka used to mean hours of researching routes, guessing travel times between distant cities, and dealing with hidden transport costs. Not anymore. 
+
+We are thrilled to announce the launch of our brand-new **AI Smart Trip Planner**, a revolutionary tool designed to build your dream itinerary in under a minute.
+
+## How Does It Work?
+
+Powered by cutting-edge artificial intelligence, our Trip Planner acts as your personal travel concierge.
+
+1. **Tell Us What You Want**: Just enter your travel dates, group size, and interests. Whether you're chasing the best surfing spots in Ahangama, want a cultural deep-dive in the Cultural Triangle, or just want a relaxing beach holiday—our AI understands.
+2. **Instant Itinerary Generation**: Within seconds, the AI crafts a logical, geographically optimized, day-by-day schedule. It ensures you aren't spending your entire holiday stuck in a car driving back and forth across the island.
+3. **Transparent Transport Pricing**: One of the biggest challenges in Sri Lanka is knowing how much a private driver will cost for a custom tour. Our AI automatically calculates an **estimated transport cost** based on standard daily rates ($55/day for cars, $75/day for vans) so you know exactly what to budget.
+
+## Why Use the AI Trip Planner?
+
+- **Geographical Optimization**: Sri Lanka may look small on a map, but the winding roads mean a 100km drive can take 4 hours. Our AI knows the best routes.
+- **Hidden Gems**: The AI doesn't just recommend the main tourist traps; it sprinkles in lesser-known sights and local favorites.
+- **Free to Use**: You don't need an account or a credit card to generate your trip. Just play around until you find the perfect route.
+
+## Ready to build your dream trip?
+Try the [AI Trip Planner](/trip-planner) today and take the first step towards an unforgettable Sri Lankan adventure.
+        `,
+        imageUrl: "/images/blogs/ai-trip-planner.png",
+        isPublished: true,
+        tags: ["Tech", "Trip Planner", "AI", "Itinerary"],
+        seo: {
+            metaTitle: "AI Trip Planner for Sri Lanka | Custom Itineraries in Seconds",
+            metaDescription: "Generate the perfect Sri Lanka itinerary with our AI Smart Trip Planner. Get day-by-day schedules, route optimization, and instant transport pricing.",
+            keywords: ["sri lanka ai trip planner", "custom itinerary sri lanka", "sri lanka tour generator", "plan a trip to sri lanka", "ai travel planner"]
+        }
+    },
+    {
+        title: "Top 5 Hidden Gems in Southern Sri Lanka You Must Visit",
+        slug: "top-5-hidden-gems-southern-sri-lanka",
+        excerpt: "Beyond the crowded beaches of Unawatuna and Mirissa lie secret coves, quiet villages, and untouched nature. Discover the South's best-kept secrets.",
+        content: `
+# Discovering the Unseen: Southern Sri Lanka's Hidden Gems
+
+While destinations like Mirissa and Unawatuna are famous for a reason, Southern Sri Lanka still holds many secrets for those willing to venture slightly off the beaten path. If you prefer tranquil beaches, authentic local experiences, and untouched nature, this list is for you.
+
+## 1. Silent Beach, Tangalle
+Often described as the most beautiful beach in Sri Lanka, Silent Beach (Amanwella Beach) offers pristine white sands and towering palm trees with barely a tourist in sight. The water here is crystal clear, though the waves can be strong, so swim with caution.
+
+## 2. Hiriketiya Bay (Before the Crowds)
+While Hiriketiya is rapidly gaining popularity, visiting early in the morning still feels like a secret. This horseshoe-shaped bay is surrounded by lush jungle and offers some of the best beginner and intermediate surfing waves on the coast. 
+
+## 3. Mulkirigala Rock Temple
+Skip the massive crowds at Dambulla and visit Mulkirigala instead. Rising dramatically from the surrounding forest, this ancient rock temple features stunning frescoes, reclining Buddha statues, and breathtaking views from the top—all without the steep entrance fees of more famous sites.
+
+## 4. Kalametiya Bird Sanctuary
+A paradise for nature lovers, this coastal wetland area is best explored by a quiet paddle boat at dawn. You'll glide through mangrove swamps spotting exotic bird species, monkeys, and maybe even a crocodile, in complete serenity.
+
+## 5. Talalla Beach
+A sweeping, two-kilometer crescent of golden sand that remains largely undeveloped. Talalla is the perfect antidote to the bustling party beaches. The water is usually calm enough for swimming, and the sunsets are spectacular.
+
+## Getting There
+The best way to explore these hidden gems is with a private driver who knows the local roads. Many of these spots aren't easily accessible via public bus. 
+
+[Book a private driver](/booking) with Airport Taxis Tours and let us show you the real South.
+        `,
+        imageUrl: "/images/blogs/hidden-gems.png",
+        isPublished: true,
+        tags: ["Hidden Gems", "Southern Coast", "Beaches", "Travel Guide"],
+        seo: {
+            metaTitle: "Top 5 Hidden Gems in Southern Sri Lanka | Secret Beaches",
+            metaDescription: "Escape the crowds and discover the best hidden gems in Southern Sri Lanka, including Silent Beach, Talalla, and Mulkirigala Temple. Start exploring today.",
+            keywords: ["hidden gems sri lanka", "secret beaches sri lanka", "south coast sri lanka off the beaten path", "silent beach tangalle", "sri lanka travel guide"]
+        }
     }
 ];
