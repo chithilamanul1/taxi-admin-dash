@@ -811,14 +811,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         <span className="text-[#FACC15] font-black">+{currentSymbol} {s.value.toLocaleString()}</span>
                                                     </div>
                                                 ))}
-                                                <div className="pt-8 mt-6 border-t border-slate-100 dark:border-white/10">
-                                                    <p className="text-[10px] font-black text-[#FACC15] tracking-[0.2em] mb-4">
-                                                        {formData.paymentType === 'partial' ? 'Secure Deposit (50%)' : 'Total Amount (Fixed)'}
-                                                    </p>
-                                                    <p className="text-6xl md:text-8xl font-black tracking-tighter text-emerald-950 dark:text-white leading-none">
-                                                        <span className="text-2xl font-black mr-2 text-slate-500/30">{currentSymbol}</span>
-                                                        {payNow.toLocaleString()}
-                                                    </p>
+                                                <div className="pt-6 sm:pt-8 mt-6 border-t border-slate-100 dark:border-white/10">
+                                                    <div className="flex flex-col gap-2">
+                                                        <p className="text-[10px] font-black text-[#FACC15] tracking-[0.2em] uppercase">
+                                                            {formData.paymentType === 'partial' ? 'Secure Deposit (50%)' : 'Total Amount (Fixed)'}
+                                                        </p>
+                                                        <p className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter text-emerald-950 dark:text-white leading-none break-words">
+                                                            <span className="text-xl sm:text-2xl font-black mr-2 text-slate-500/50">{currentSymbol}</span>
+                                                            {payNow.toLocaleString()}
+                                                        </p>
+                                                    </div>
                                                     <div className="flex flex-wrap gap-3 mt-6">
                                                         {convertToAllCurrencies(detailedBreakdown.lkr?.payNow || 0)
                                                             .filter(c => ['USD', 'EUR', 'GBP'].includes(c.code) && c.code !== currency)

@@ -41,69 +41,74 @@ function PaymentSuccessContent() {
     const isCash = booking?.paymentMethod === 'cash';
 
     return (
-        <div className="min-h-screen bg-white flex items-center justify-center pt-32 pb-12 px-4 relative overflow-hidden">
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center pt-32 pb-12 px-4 relative overflow-hidden">
             {/* Background elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#FACC15]/20 -mr-32 -mt-32 blur-3xl rounded-none"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/5 -ml-32 -mb-32 blur-2xl rounded-none"></div>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 -mr-48 -mt-48 blur-3xl rounded-full pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/5 -ml-48 -mb-48 blur-3xl rounded-full pointer-events-none"></div>
 
-            <div className="bg-white rounded-none border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] max-w-lg w-full p-8 md:p-12 text-center animate-slide-up relative z-10">
-                <div className="w-28 h-28 bg-[#FACC15] rounded-none border-4 border-black flex items-center justify-center mx-auto mb-10 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] -rotate-6 hover:rotate-0 transition-all duration-500 relative group">
-                    <div className="absolute -top-3 -left-3 w-8 h-8 bg-black"></div>
-                    <CheckCircle className="text-black group-hover:scale-110 transition-transform" size={64} strokeWidth={4} />
+            <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 max-w-lg w-full p-8 md:p-12 text-center animate-slide-up relative z-10 border border-slate-100">
+                <div className="w-24 h-24 bg-emerald-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-emerald-500/20 transform -rotate-3 hover:rotate-0 transition-all duration-500 relative group">
+                    <CheckCircle className="text-white group-hover:scale-110 transition-transform" size={48} strokeWidth={3} />
                 </div>
 
-                <h1 className="text-3xl font-black text-black mb-3 uppercase italic tracking-tighter leading-none">
+                <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 tracking-tight">
                     {isCash ? 'Booking Secured!' : 'Payment Complete!'}
                 </h1>
 
-                <p className="text-black/60 mb-8 font-black uppercase tracking-widest text-[10px] italic leading-relaxed">
+                <p className="text-slate-500 mb-8 font-medium text-sm leading-relaxed max-w-sm mx-auto">
                     {isCash
                         ? 'Your taxi is scheduled. Pay directly to the driver at the end of your trip.'
                         : 'Transaction processed! Your confirmation will arrive via WhatsApp shortly.'}
                 </p>
                 
-                {/* Details Section directly queried from booking object to show something to User */}
+                {/* Details Section */}
                 {booking && (
-                    <div className="mb-8 p-5 bg-slate-50 border-4 border-black rounded-none shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-left flex flex-col gap-4">
-                        <div>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Route</p>
-                            <p className="text-sm font-bold text-black uppercase">
-                                {typeof booking.pickup === 'object' ? booking.pickup?.name : booking.pickup} ➔ {typeof booking.dropoff === 'object' ? booking.dropoff?.name : booking.dropoff}
+                    <div className="mb-8 p-6 bg-slate-50 rounded-3xl border border-slate-100 text-left flex flex-col gap-4">
+                        <div className="flex flex-col gap-1">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Route</p>
+                            <p className="text-sm font-semibold text-slate-900 leading-tight">
+                                {typeof booking.pickup === 'object' ? booking.pickup?.name : booking.pickup} 
+                                <span className="mx-2 text-slate-300">➔</span>
+                                {typeof booking.dropoff === 'object' ? booking.dropoff?.name : booking.dropoff}
                             </p>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-6 pt-4 border-t border-slate-200/50">
                             <div>
-                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Date</p>
-                                <p className="text-sm font-bold text-black uppercase">
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Date</p>
+                                <p className="text-sm font-semibold text-slate-900">
                                     {booking.scheduledDate ? new Date(booking.scheduledDate).toLocaleDateString() : 'TBD'} 
                                     {booking.scheduledTime ? ` at ${booking.scheduledTime}` : ''}
                                 </p>
                             </div>
                             <div>
-                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Total Fare</p>
-                                <p className="text-sm font-bold text-black uppercase">{booking.currency || 'Rs'} {booking.totalPrice?.toLocaleString() || booking.displayBalanceAmount?.toLocaleString() || '--'}</p>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Fare</p>
+                                <p className="text-sm font-semibold text-emerald-600">{booking.currency || 'Rs'} {booking.totalPrice?.toLocaleString() || booking.displayBalanceAmount?.toLocaleString() || '--'}</p>
                             </div>
                         </div>
                     </div>
                 )}
 
                 {isCash && (
-                    <div className="mb-8 p-5 bg-[#FACC15] rounded-none border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-start gap-4 text-left relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 bg-black text-[#FACC15] text-[7px] font-black px-2 py-1 uppercase tracking-widest italic border-l-2 border-b-2 border-black">REQUIRED</div>
-                        <Info className="text-black shrink-0 mt-1" size={24} strokeWidth={3} />
+                    <div className="mb-8 p-6 bg-emerald-50 rounded-3xl border border-emerald-100 flex items-start gap-4 text-left relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 bg-emerald-600 text-white text-[8px] font-bold px-3 py-1 rounded-bl-xl tracking-widest">REQUIRED</div>
+                        <div className="bg-white p-2 rounded-xl shadow-sm text-emerald-600 shrink-0">
+                            <Info size={20} strokeWidth={3} />
+                        </div>
                         <div>
-                            <p className="text-[11px] font-black text-black uppercase tracking-widest mb-1 italic">Cash Payment Only</p>
-                            <p className="text-[12px] text-black font-bold leading-tight uppercase">Please have cash ready for the driver. We accept LKR, USD, or EUR.</p>
+                            <p className="text-[11px] font-bold text-emerald-900 uppercase tracking-widest mb-0.5">Cash Payment Only</p>
+                            <p className="text-[12px] text-emerald-800/80 font-medium leading-tight">Please have cash ready for the driver. We accept LKR, USD, or EUR.</p>
                         </div>
                     </div>
                 )}
 
                 {!isCash && (
-                    <div className="mb-8 p-5 bg-black border-4 border-black rounded-none shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-start gap-4 text-left">
-                        <Info className="text-[#FACC15] shrink-0 mt-1" size={24} strokeWidth={3} />
+                    <div className="mb-8 p-6 bg-slate-900 rounded-3xl flex items-start gap-4 text-left">
+                        <div className="bg-white/10 p-2 rounded-xl text-emerald-400 shrink-0">
+                            <Info size={20} strokeWidth={3} />
+                        </div>
                         <div>
-                            <p className="text-[11px] font-black text-[#FACC15] uppercase tracking-widest mb-1 italic">Important Notice</p>
-                            <p className="text-[12px] text-white font-bold leading-tight uppercase tracking-tighter">
+                            <p className="text-[11px] font-bold text-emerald-400 uppercase tracking-widest mb-0.5">Important Notice</p>
+                            <p className="text-[12px] text-slate-300 font-medium leading-tight">
                                 Highway ticket is NOT included. Customer must pay at the counter.
                             </p>
                         </div>
@@ -111,13 +116,13 @@ function PaymentSuccessContent() {
                 )}
 
                 {!isCash && booking?.displayBalanceAmount > 0 && (
-                    <div className="mb-8 p-5 bg-red-600 border-4 border-black rounded-none shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-start gap-4 text-left animate-pulse">
-                        <div className="w-12 h-12 bg-white rounded-none border-2 border-black flex items-center justify-center shrink-0 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                            <span className="text-red-600 font-black text-2xl italic">!</span>
+                    <div className="mb-8 p-6 bg-amber-50 rounded-3xl border border-amber-100 flex items-start gap-4 text-left">
+                        <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-amber-500/20">
+                            <span className="text-white font-bold text-xl">!</span>
                         </div>
                         <div>
-                            <p className="text-[10px] font-black text-white uppercase tracking-widest mb-1 italic">Balance Due Today</p>
-                            <p className="text-2xl font-black text-white italic tracking-tighter leading-none">
+                            <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest mb-0.5">Balance Due Today</p>
+                            <p className="text-xl font-bold text-amber-900 leading-none">
                                 {booking.currency === 'GBP' ? '£' :
                                     booking.currency === 'USD' ? '$' :
                                         booking.currency === 'EUR' ? '€' :
@@ -127,40 +132,40 @@ function PaymentSuccessContent() {
                     </div>
                 )}
 
-                <div className="bg-slate-50 border-4 border-black rounded-none p-5 mb-8 grid grid-cols-2 gap-4 divide-x-4 divide-black text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <div className="px-2">
-                        <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Booking Ref</div>
-                        <div className="text-xl font-black text-black italic tracking-tighter truncate">#{bookingId ? bookingId.slice(-8).toUpperCase() : 'PENDING'}</div>
+                <div className="bg-slate-50 rounded-3xl p-5 mb-8 grid grid-cols-2 gap-4 border border-slate-100">
+                    <div className="px-2 border-r border-slate-200">
+                        <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Booking Ref</div>
+                        <div className="text-lg font-bold text-slate-900 truncate">#{bookingId ? bookingId.slice(-8).toUpperCase() : 'PENDING'}</div>
                     </div>
                     {searchParams.get('txnId') && (
                         <div className="px-2">
-                            <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 italic">Txn Ref</div>
-                            <div className="text-sm font-black text-black tracking-tighter leading-tight truncate">#{searchParams.get('txnId')}</div>
+                            <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Txn Ref</div>
+                            <div className="text-xs font-bold text-slate-900 truncate">#{searchParams.get('txnId')}</div>
                         </div>
                     )}
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                     <Link
                         href="/"
-                        className="flex items-center justify-center gap-3 w-full bg-black text-[#FACC15] py-5 rounded-none border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] font-black uppercase italic tracking-[0.2em] transform transition-all hover:translate-y-[-4px] active:translate-y-0 text-xs"
+                        className="flex items-center justify-center gap-2 w-full bg-slate-900 text-white py-4 rounded-2xl font-bold transition-all hover:bg-slate-800 shadow-xl shadow-slate-900/10"
                     >
-                        <Home size={20} strokeWidth={3} />
+                        <Home size={18} />
                         Back to Home
                     </Link>
 
                     {bookingId && (
                         <Link
                             href={`/booking/${bookingId}`}
-                            className="flex items-center justify-center gap-3 w-full bg-white text-black py-4 rounded-none border-4 border-black font-black uppercase italic tracking-[0.15em] hover:bg-slate-50 transition-all text-[10px]"
+                            className="flex items-center justify-center gap-2 w-full bg-white text-slate-900 py-4 rounded-2xl border border-slate-200 font-bold hover:bg-slate-50 transition-all shadow-sm"
                         >
-                            <FileText size={18} strokeWidth={3} />
+                            <FileText size={18} />
                             Track My Ride
                         </Link>
                     )}
                 </div>
 
-                <p className="text-[9px] font-black text-slate-400 mt-10 uppercase tracking-widest italic">
+                <p className="text-[10px] font-medium text-slate-400 mt-10 uppercase tracking-[0.2em]">
                     Need Help? Call +94 71 688 5880
                 </p>
             </div>
