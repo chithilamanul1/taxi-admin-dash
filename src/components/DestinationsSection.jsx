@@ -9,32 +9,37 @@ import { destinations } from '@/lib/destinations';
 const DestinationsSection = () => {
     // Select a subset of popular destinations for the grid
     const featuredDestinations = [
+        'mirissa',
         'sigiriya', 
-        'trincomalee', 
         'ella', 
         'kandy', 
-        'mirissa', 
-        'nuwaraeliya'
+        'nuwaraeliya',
+        'trincomalee',
+        'galle',
+        'bentota'
     ];
     
     const displayDestinations = destinations.filter(d => featuredDestinations.includes(d.id));
 
+    // Ensure they are displayed in the exact order specified
+    const orderedDestinations = featuredDestinations.map(id => displayDestinations.find(d => d.id === id)).filter(Boolean);
+
     return (
-        <section className="py-24 bg-white dark:bg-[#0a0a0a]">
+        <section className="py-24 bg-slate-50 dark:bg-[#0a0a0a] transition-colors">
             <div className="container mx-auto px-6">
                 {/* Header Section */}
-                <div className="mb-16">
-                    <h2 className="text-4xl md:text-6xl font-black text-black dark:text-white uppercase tracking-tighter mb-4">
-                        Explore Sri Lankan <span className="text-[#FACC15]">Destinations</span>
+                <div className="mb-16 text-center">
+                    <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight mb-4">
+                        Explore Sri Lankan <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Destinations</span>
                     </h2>
-                    <p className="text-xl text-gray-500 dark:text-gray-400 font-medium tracking-tight">
+                    <p className="text-slate-500 dark:text-slate-400 mt-3 text-sm md:text-base max-w-2xl mx-auto">
                         Discover amazing deals and seamless transfers across the paradise island.
                     </p>
                 </div>
 
                 {/* Destinations Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
-                    {displayDestinations.map((dest, idx) => (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                    {orderedDestinations.map((dest, idx) => (
                         <motion.div
                             key={dest.id}
                             initial={{ opacity: 0, y: 20 }}
@@ -47,7 +52,7 @@ const DestinationsSection = () => {
                             className="group relative cursor-pointer"
                         >
                             {/* Card Wrapper */}
-                            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] md:rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl md:rounded-3xl border border-slate-200 dark:border-white/10 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                                 {/* Destination Image */}
                                 <Image
                                     src={dest.img || '/placeholder-destination.jpg'}
@@ -58,30 +63,30 @@ const DestinationsSection = () => {
                                 />
 
                                 {/* Gradient Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/30 to-transparent" />
 
                                 {/* Content Overlay */}
                                 <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end">
-                                    <div className="flex items-center gap-1.5 text-white/80 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-1 md:mb-2">
-                                        <MapPin size={10} className="text-[#FACC15] md:w-3 md:h-3" />
+                                    <div className="flex items-center gap-1.5 text-white/90 text-[10px] md:text-xs font-semibold tracking-wider mb-1 md:mb-2">
+                                        <MapPin size={12} className="text-emerald-400 md:w-3.5 md:h-3.5" />
                                         SRI LANKA
                                     </div>
                                     
-                                    <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter mb-1 md:mb-2">
+                                    <h3 className="text-xl md:text-3xl font-bold text-white tracking-tight mb-1 md:mb-2">
                                         {dest.name}
                                     </h3>
                                     
-                                    <p className="hidden md:block text-white/60 text-xs font-medium line-clamp-2 mb-4">
+                                    <p className="hidden md:block text-white/80 text-xs md:text-sm font-medium line-clamp-2 mb-4">
                                         {dest.meta || dest.description}
                                     </p>
 
-                                    <div className="flex items-center justify-between">
-                                        <div className="bg-[#FACC15] text-black px-3 md:px-5 py-1.5 md:py-2 rounded-full text-[9px] md:text-xs font-black uppercase tracking-widest border border-slate-100 dark:border-white/10 shadow-lg group-hover:shadow-none transition-all">
+                                    <div className="flex items-center justify-between mt-auto">
+                                        <div className="bg-emerald-500 text-white px-3 md:px-5 py-1.5 md:py-2 rounded-full text-[10px] md:text-xs font-semibold tracking-wide shadow-sm transition-all group-hover:bg-emerald-600">
                                             {(idx * 3) + 12}+ Deals
                                         </div>
                                         
-                                        <div className="hidden md:flex w-8 h-8 md:w-10 md:h-10 bg-white border border-slate-100 dark:border-white/10 items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0">
-                                            <ArrowRight size={16} className="text-black md:w-5 md:h-5" />
+                                        <div className="hidden md:flex w-8 h-8 md:w-10 md:h-10 bg-white/20 backdrop-blur-md text-white items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0 hover:bg-emerald-500 hover:text-white">
+                                            <ArrowRight size={16} className="md:w-5 md:h-5" />
                                         </div>
                                     </div>
                                 </div>

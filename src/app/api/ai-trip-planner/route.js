@@ -1,21 +1,16 @@
 // Final build fix attempt: explicit dependency and relative paths
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export async function POST(req) {
     try {
         const { prompt, duration, interests, travelers } = await req.json();
 
-        if (!process.env.GEMINI_API_KEY) {
+        if (!process.env.OPENROUTER_API_KEY) {
             return NextResponse.json({
                 success: false,
-                message: "Gemini API Key is not configured."
+                message: "OpenRouter API Key is not configured."
             }, { status: 500 });
         }
-
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
         const fullPrompt = `
             Plan a detailed Sri Lankan tour itinerary based on the following:
@@ -37,22 +32,47 @@ export async function POST(req) {
                         "description": "Detailed description for the day"
                     }
                 ],
-                "destinations": ["Location 1", "Location 2", ...]
+                "destinations": ["Location 1", "Location 2"]
             }
 
             Only return the JSON object. Do not include any markdown formatting like \`\`\`json.
         `;
 
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout for AI
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
 
-        const result = await model.generateContent(fullPrompt, { signal: controller.signal });
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                "HTTP-Referer": process.env.NEXTAUTH_URL || "http://localhost:3000",
+                "X-Title": "Airport Taxi Tours AI Planner",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                model: "google/gemini-1.5-flash", // Using gemini-1.5-flash via OpenRouter for speed & cost, can be changed
+                messages: [
+                    { role: "user", content: fullPrompt }
+                ]
+            }),
+            signal: controller.signal
+        });
+
         clearTimeout(timeoutId);
 
-        const response = await result.response;
-        const text = response.text();
+        if (!response.ok) {
+            const errorData = await response.text();
+            console.error("OpenRouter Error:", errorData);
+            return NextResponse.json({
+                success: false,
+                message: "Failed to generate itinerary via OpenRouter."
+            }, { status: response.status });
+        }
 
-        // Clean up the response text in case Gemini adds markdown
+        const result = await response.json();
+        const text = result.choices?.[0]?.message?.content || "";
+
+        // Clean up the response text in case AI adds markdown
         const cleanedText = text.replace(/```json/g, "").replace(/```/g, "").trim();
 
         try {

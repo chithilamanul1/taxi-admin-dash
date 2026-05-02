@@ -293,14 +293,73 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     };
 
     const pricingWithTotals = useMemo(() => {
+        const isAirportPickup = (formData.pickup?.toLowerCase().includes('airport') || formData.dropoff?.toLowerCase().includes('airport')) || (typeof initialData.pickup === 'string' && initialData.pickup.toLowerCase().includes('airport'));
+        const distKm = Number(distance || initialData.distance || 0);
+
         return pricing.map(v => {
-            const baseTotal = calculateBasePrice(distance, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
+            const baseTotal = calculateBasePrice(distKm, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
+            const surcharges = calculateSurcharges({
+                hasNameBoard: formData.hasNameBoard,
+                nameBoardPrice: pricingSettings?.nameBoardPrice
+            }, v);
+            const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, currency, v.vehicleType);
+            
+            let total = baseTotal + surcharges + paymentSurcharge;
+
+            let couponDiscountAmount = 0;
+            if (verifiedCoupons && verifiedCoupons.length > 0) {
+                verifiedCoupons.forEach(coupon => {
+                    const couponVal = Number(coupon.value) || 0;
+                    if (coupon.discountType === 'percentage') {
+                        couponDiscountAmount += total * (couponVal / 100);
+                    } else {
+                        couponDiscountAmount += couponVal;
+                    }
+                });
+            }
+
+            let longDistanceDiscountAmount = 0;
+            if (pricingSettings?.isActive && distKm > (pricingSettings?.longDistanceThreshold || 175) && isAirportPickup) {
+                longDistanceDiscountAmount = total * ((pricingSettings?.longDistanceDiscountPercentage || 10) / 100);
+            }
+
+            const finalDiscount = Math.max(couponDiscountAmount, longDistanceDiscountAmount);
+            total = Math.max(0, total - finalDiscount);
+
+            // To avoid double currency conversion in VehicleCarousel, since VehicleCarousel uses convertPrice, we need to pass LKR base total.
+            // Wait, VehicleCarousel converts it?
+            // VehicleCarousel says: {convertPrice(Number(vehicle.calculatedTotal) || 0).symbol}
+            // convertPrice expects LKR! So we should compute total in LKR.
+            // Wait, paymentSurcharge in getPriceBreakdown uses `currency`. Wait. If VehicleCarousel expects LKR, it should be calculated with 'LKR'.
+            const paymentSurchargeLKR = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, 'LKR', v.vehicleType);
+            let totalLKR = baseTotal + surcharges + paymentSurchargeLKR;
+            
+            let couponDiscountAmountLKR = 0;
+            if (verifiedCoupons && verifiedCoupons.length > 0) {
+                verifiedCoupons.forEach(coupon => {
+                    const couponVal = Number(coupon.value) || 0;
+                    if (coupon.discountType === 'percentage') {
+                        couponDiscountAmountLKR += totalLKR * (couponVal / 100);
+                    } else {
+                        couponDiscountAmountLKR += couponVal;
+                    }
+                });
+            }
+
+            let longDistanceDiscountAmountLKR = 0;
+            if (pricingSettings?.isActive && distKm > (pricingSettings?.longDistanceThreshold || 175) && isAirportPickup) {
+                longDistanceDiscountAmountLKR = totalLKR * ((pricingSettings?.longDistanceDiscountPercentage || 10) / 100);
+            }
+
+            const finalDiscountLKR = Math.max(couponDiscountAmountLKR, longDistanceDiscountAmountLKR);
+            totalLKR = Math.max(0, totalLKR - finalDiscountLKR);
+
             return {
                 ...v,
-                calculatedTotal: baseTotal
+                calculatedTotal: totalLKR
             };
         });
-    }, [pricing, distance, formData.tripType, formData.pickup, formData.dropoff, destinations]);
+    }, [pricing, distance, formData.tripType, formData.pickup, formData.dropoff, destinations, formData.hasNameBoard, pricingSettings, formData.paymentMethod, currency, verifiedCoupons, initialData]);
 
     const { total: totalPrice, subtotal, surcharges, payNow, balance: balanceAmount, ...detailedBreakdown } = useMemo(() => {
         return getPriceBreakdown();

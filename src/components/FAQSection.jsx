@@ -54,7 +54,7 @@ const FAQSection = () => {
     };
 
     return (
-        <section className="py-20 md:py-32 bg-slate-50 dark:bg-[#0a0a0a] border-t border-black/10 dark:border-white/10 transition-colors">
+        <section className="py-20 md:py-32 bg-slate-50 dark:bg-[#0a0a0a] transition-colors">
             {/* Inject Structured Data for Google */}
             <script
                 type="application/ld+json"
@@ -62,15 +62,17 @@ const FAQSection = () => {
             />
 
             <div className="max-w-4xl mx-auto px-6">
-                <div className="flex items-center gap-4 mb-12 md:mb-16">
-                    <div className="w-16 h-16 bg-[#FACC15] border-4 border-black flex items-center justify-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                        <HelpCircle size={32} className="text-black" strokeWidth={2.5} />
+                <div className="flex flex-col items-center text-center gap-4 mb-12 md:mb-16">
+                    <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center shadow-sm mb-2">
+                        <HelpCircle size={32} className="text-emerald-600 dark:text-emerald-400" strokeWidth={2} />
                     </div>
                     <div>
-                        <h2 className="text-4xl md:text-6xl font-black text-black dark:text-white uppercase tracking-tighter leading-none">
-                            COMMON <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FACC15] to-amber-500">QUESTIONS</span>
+                        <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight">
+                            Common <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Questions</span>
                         </h2>
-                        <p className="text-black/40 dark:text-white/40 font-black uppercase tracking-widest text-xs mt-2">Everything you need to know</p>
+                        <p className="text-slate-500 dark:text-slate-400 mt-3 text-sm md:text-base max-w-2xl mx-auto">
+                            Everything you need to know about our airport transfer and tour services in Sri Lanka.
+                        </p>
                     </div>
                 </div>
 
@@ -80,25 +82,37 @@ const FAQSection = () => {
                         return (
                             <div 
                                 key={index} 
-                                className={`group border-4 transition-all duration-300 ${isOpen ? 'border-[#FACC15] bg-white dark:bg-[#111] shadow-[12px_12px_0px_0px_rgba(250,204,21,1)] dark:shadow-[12px_12px_0px_0px_rgba(250,204,21,0.2)]' : 'border-black dark:border-white/20 bg-white dark:bg-black hover:border-black/60 dark:hover:border-white/40'}`}
+                                className={`group border rounded-2xl transition-all duration-300 ${
+                                    isOpen 
+                                        ? 'border-emerald-500/30 bg-white dark:bg-slate-800/50 shadow-lg shadow-emerald-500/5' 
+                                        : 'border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/50 hover:border-emerald-500/30 hover:shadow-md'
+                                }`}
                             >
                                 <button
                                     onClick={() => setOpenIndex(isOpen ? -1 : index)}
-                                    className="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none"
+                                    className="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none rounded-2xl"
                                 >
-                                    <h3 className={`text-lg md:text-xl font-black uppercase tracking-wide pr-8 transition-colors ${isOpen ? 'text-black dark:text-[#FACC15]' : 'text-black dark:text-white group-hover:text-black/70 dark:group-hover:text-white/70'}`}>
+                                    <h3 className={`text-base md:text-lg font-semibold pr-8 transition-colors ${
+                                        isOpen 
+                                            ? 'text-emerald-700 dark:text-emerald-400' 
+                                            : 'text-slate-800 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
+                                    }`}>
                                         {faq.question}
                                     </h3>
-                                    <div className={`shrink-0 w-10 h-10 border-2 flex items-center justify-center transition-all ${isOpen ? 'bg-[#FACC15] border-[#FACC15] text-black rotate-180' : 'bg-black/5 dark:bg-white/5 border-black dark:border-white/20 text-black dark:text-white'}`}>
-                                        <ChevronDown size={20} strokeWidth={3} />
+                                    <div className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                                        isOpen 
+                                            ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rotate-180' 
+                                            : 'bg-slate-50 dark:bg-white/5 text-slate-500 dark:text-slate-400 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-900/20 group-hover:text-emerald-600'
+                                    }`}>
+                                        <ChevronDown size={20} strokeWidth={2} />
                                     </div>
                                 </button>
                                 
                                 <div 
                                     className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
                                 >
-                                    <div className="p-6 md:p-8 pt-0 border-t-2 border-slate-100 dark:border-white/5 mt-2">
-                                        <p className="text-black/70 dark:text-white/70 font-medium leading-relaxed text-sm md:text-base">
+                                    <div className="p-6 md:p-8 pt-0 border-t border-slate-100 dark:border-white/5 mt-2">
+                                        <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm md:text-base">
                                             {faq.answer}
                                         </p>
                                     </div>

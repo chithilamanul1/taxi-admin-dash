@@ -355,10 +355,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             const existingManual = prev.filter(o => o.type === 'coupon');
             const dynamicOffers = [];
 
-            // ONLY ALLOW AUTOMATED OFFERS FOR AIRPORT PICKUPS
-            const isAirportPickup = start.includes('airport');
+            // ALLOW AUTOMATED OFFERS FOR AIRPORT RIDES
+            const isAirportRide = start.includes('airport') || dest.includes('airport');
 
-            if (isAirportPickup) {
+            if (isAirportRide) {
                 // PRIORITY 1: Precise Database Coupons
                 availableCoupons.forEach(coupon => {
                     if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
@@ -529,7 +529,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const pricingCategory = isAirportService ? 'airport-transfer' : 'ride-now';
 
     return (
-        <div className="w-full max-w-6xl mx-auto pt-28 md:pt-36 pb-24 md:pb-0 relative z-40 px-3 sm:px-4">
+        <div id="booking" className="w-full max-w-6xl mx-auto pt-28 md:pt-36 pb-24 md:pb-0 relative z-40 px-3 sm:px-4">
             <h1 className="sr-only">Book Airport Taxis & Transfers in Sri Lanka - Fixed Rates</h1>
             {/* Tab Navigation - Luxury Pill Style */}
             <div className="flex bg-slate-100 dark:bg-zinc-900 rounded-2xl w-full sm:w-fit mx-auto lg:mx-0 mb-6 p-1.5 shadow-inner" role="tablist">
