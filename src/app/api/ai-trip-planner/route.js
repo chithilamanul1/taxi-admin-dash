@@ -50,7 +50,7 @@ export async function POST(req) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "google/gemini-2.5-flash:free", // Using gemini 2.5 flash free tier via OpenRouter
+                model: "google/gemini-2.5-flash", // Using gemini 2.5 flash via OpenRouter
                 messages: [
                     { role: "user", content: fullPrompt }
                 ],
