@@ -155,15 +155,15 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 </div>
                             )}
 
-                            <div className="p-8 pb-4 relative flex flex-col items-center flex-1 h-full">
-                                <h4 className="text-xl font-bold text-emerald-950 dark:text-white uppercase tracking-tight mb-2 text-center relative z-10">
+                            <div className="p-4 sm:p-6 pb-2 relative flex flex-col items-center flex-1 h-full">
+                                <h4 className="text-lg sm:text-xl font-bold text-emerald-950 dark:text-white uppercase tracking-tight mb-1 text-center relative z-10">
                                     {displayName(vehicle.name)}
                                 </h4>
-                                <p className="text-[10px] font-bold text-black dark:text-white uppercase tracking-[0.2em] mb-6">Premium Class</p>
+                                <p className="text-[9px] sm:text-[10px] font-bold text-black dark:text-white uppercase tracking-[0.2em] mb-2 sm:mb-4">Premium Class</p>
 
                                 {vehicle.calculatedTotal >= 0 && (
-                                    <div className="text-center relative z-10 flex flex-col items-center mb-8">
-                                        <div className="flex items-baseline justify-center gap-2">
+                                    <div className="text-center relative z-10 flex flex-col items-center mb-4">
+                                        <div className="flex items-baseline justify-center gap-1 sm:gap-2">
                                             <span className="text-xl font-black text-[#FACC15]">{convertPrice(Number(vehicle.calculatedTotal) || 0).symbol}</span>
                                             <span className="text-5xl font-black text-black dark:text-white tracking-tighter leading-none">
                                                 {(Number(convertPrice(Number(vehicle.calculatedTotal) || 0).value) || 0).toLocaleString()}
@@ -186,7 +186,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                     </div>
                                 )}
 
-                                <div className="w-full flex justify-center items-center py-4 relative z-10 mt-auto min-h-[160px]">
+                                <div className="w-full flex justify-center items-center py-2 relative z-10 mt-auto min-h-[100px] sm:min-h-[140px]">
                                     <img
                                         src={vehicle.image}
                                         alt={vehicle.name}
@@ -199,8 +199,8 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 </div>
                             </div>
 
-                            <div className="px-8 pb-10 mt-4 relative z-40 shrink-0">
-                                <div className="grid grid-cols-4 gap-2">
+                            <div className="px-4 sm:px-6 pb-6 mt-2 relative z-40 shrink-0">
+                                <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
                                     {[
                                         { icon: Users, label: 'PAX', value: vehicle.capacity || 4 },
                                         { icon: Briefcase, label: 'LUG', value: vehicle.suitcases || 2 },
