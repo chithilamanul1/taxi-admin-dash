@@ -50,10 +50,11 @@ export async function POST(req) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "google/gemini-1.5-flash", // Using gemini-1.5-flash via OpenRouter for speed & cost, can be changed
+                model: "google/gemini-2.5-flash", // Using gemini 2.5 flash via OpenRouter
                 messages: [
                     { role: "user", content: fullPrompt }
-                ]
+                ],
+                max_tokens: 2500
             }),
             signal: controller.signal
         });
