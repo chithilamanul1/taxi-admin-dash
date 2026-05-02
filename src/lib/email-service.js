@@ -27,14 +27,14 @@ const COLORS = {
     primary: '#064e3b',      // Dark Emerald
     primaryLight: '#059669', // Emerald
     gold: '#d4af37',         // Premium Gold
-    goldLight: '#f4d47c',    // Light Gold
-    dark: '#0f172a',         // Slate 900
-    darkCard: '#1e293b',     // Slate 800
-    text: '#f8fafc',         // Slate 50
-    textMuted: '#94a3b8',    // Slate 400
+    goldLight: '#b48c26',    // Darker Gold for light background
+    dark: '#f8fafc',         // Slate 50 (Outer Background)
+    darkCard: '#ffffff',     // White (Inner Card)
+    text: '#0f172a',         // Slate 900 (Main Text)
+    textMuted: '#64748b',    // Slate 500 (Muted Text)
     success: '#22c55e',      // Green 500
     warning: '#f59e0b',      // Amber 500
-    border: '#334155'        // Slate 700
+    border: '#e2e8f0'        // Slate 200 (Borders)
 };
 
 // Premium Base Template with Dark Theme
@@ -52,6 +52,16 @@ const getPremiumTemplate = (content, title = 'Airport Taxis Pvt (Ltd)') => `
         .button { padding: 14px 30px !important; }
     </style>
     <![endif]-->
+    <style>
+        @media print {
+            body { background-color: #ffffff !important; -webkit-print-color-adjust: exact; }
+            table, td, tr, div { background-color: #ffffff !important; background: none !important; color: #000000 !important; }
+            h1, h2, h3, p, span, a { color: #000000 !important; }
+            table { border-color: #cccccc !important; }
+            td { border-color: #cccccc !important; }
+            .no-print { display: none !important; }
+        }
+    </style>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: ${COLORS.dark}; color: ${COLORS.text};">
     <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; padding: 40px 20px;">
@@ -207,10 +217,10 @@ const components = {
     // Status Badge
     badge: (text, type = 'success') => {
         const colors = {
-            success: { bg: '#052e16', border: '#166534', text: '#4ade80' },
-            warning: { bg: '#451a03', border: '#92400e', text: '#fbbf24' },
-            info: { bg: '#172554', border: '#1e40af', text: '#60a5fa' },
-            gold: { bg: '#3f2c06', border: COLORS.gold, text: COLORS.goldLight }
+            success: { bg: '#dcfce7', border: '#86efac', text: '#166534' },
+            warning: { bg: '#fef3c7', border: '#fde68a', text: '#92400e' },
+            info: { bg: '#dbeafe', border: '#bfdbfe', text: '#1e40af' },
+            gold: { bg: '#fef9c3', border: '#fef08a', text: '#854d0e' }
         };
         const c = colors[type] || colors.success;
         return `<span style="display: inline-block; background-color: ${c.bg}; border: 1px solid ${c.border}; color: ${c.text}; padding: 6px 14px; border-radius: 50px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">${text}</span>`;
@@ -296,7 +306,7 @@ export async function sendBookingConfirmation(booking) {
             <tr>
                 <td style="padding: 24px; text-align: center;">
                     <p style="margin: 0 0 8px; color: rgba(255,255,255,0.7); font-size: 11px; text-transform: uppercase; letter-spacing: 2px;">Booking Reference</p>
-                    <p style="margin: 0; color: ${COLORS.goldLight}; font-size: 32px; font-weight: 800; letter-spacing: 4px; font-family: monospace;">#${bookingId}</p>
+                    <p style="margin: 0; color: #f4d47c; font-size: 32px; font-weight: 800; letter-spacing: 4px; font-family: monospace;">#${bookingId}</p>
                 </td>
             </tr>
         </table>
