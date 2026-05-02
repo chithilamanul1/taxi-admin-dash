@@ -700,15 +700,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 defaultCountry="lk"
                                                 value={formData[f.key] || ''}
                                                 onChange={(phone) => setFormData({ ...formData, [f.key]: phone })}
-                                                inputClassName="!w-full !h-16 !bg-transparent !border-none !px-8 !outline-none !font-black !text-black dark:!text-white !text-sm !uppercase !tracking-widest"
-                                                className={`w-full bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-3xl flex transition-all ${errors[f.key] ? 'border-red-500' : ''}`}
+                                                inputClassName="!w-full !h-16 !bg-transparent !border-none !px-8 !outline-none !font-black !text-black dark:!text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 !text-sm !uppercase !tracking-widest"
+                                                className={`w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl flex transition-all ${errors[f.key] ? 'border-red-500' : ''}`}
                                             />
                                         ) : (
                                             <input
                                                 type={f.type}
                                                 value={formData[f.key] || ''}
                                                 onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
-                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-10 rounded-3xl outline-none font-black text-black dark:text-white placeholder:text-slate-300 text-sm uppercase tracking-widest ${errors[f.key] ? 'border-red-500' : ''}`}
+                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl outline-none font-black text-black dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm uppercase tracking-widest ${errors[f.key] ? 'border-red-500' : ''}`}
                                                 placeholder={f.placeholder}
                                             />
                                         )}
@@ -723,7 +723,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         type="date"
                                         value={formData.flightArrivalDate || formData.date || ''}
                                         onChange={e => setFormData(prev => ({ ...prev, flightArrivalDate: e.target.value, date: e.target.value }))}
-                                        className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.date ? 'border-red-500' : ''}`}
+                                        className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.date ? 'border-red-500' : ''}`}
                                     />
                                 </div>
                                 <div className="space-y-4">
@@ -732,7 +732,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         type="time"
                                         value={formData.flightArrivalTime || formData.time || ''}
                                         onChange={e => setFormData(prev => ({ ...prev, flightArrivalTime: e.target.value, time: e.target.value }))}
-                                        className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.time ? 'border-red-500' : ''}`}
+                                        className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.time ? 'border-red-500' : ''}`}
                                     />
                                 </div>
                             </div>
