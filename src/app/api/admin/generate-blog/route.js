@@ -44,7 +44,7 @@ Your response MUST be a raw, valid JSON object (do not wrap it in markdown code 
                 'X-Title': 'Airport Taxi Tours AI Writer'
             },
             body: JSON.stringify({
-                model: 'google/gemini-2.5-flash',
+                model: 'google/gemini-2.5-flash:free',
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: `Topic: ${topic}` }
