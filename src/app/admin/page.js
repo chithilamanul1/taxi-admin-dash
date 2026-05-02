@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { Users, Car, MapPin, Map as MapIcon, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink, Plus, XCircle, Image as ImageIcon, Settings as SettingsIcon, Tag } from 'lucide-react'
+import { Users, Car, MapPin, Map as MapIcon, DollarSign, Activity, Bell, X, Phone, Mail, Calendar, Clock, CreditCard, FileText, Loader2, Percent, CheckSquare, Square, Check, LifeBuoy, Compass, MessageCircle, Copy, Link as LinkIcon, ExternalLink, Plus, XCircle, Image as ImageIcon, Settings as SettingsIcon, Tag, Sparkles } from 'lucide-react'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -50,6 +50,9 @@ export default function AdminDashboard() {
     const [editingPost, setEditingPost] = useState(null)
     const [postForm, setPostForm] = useState({})
     const [blogPosts, setBlogPosts] = useState([])
+    const [showAIGenerator, setShowAIGenerator] = useState(false)
+    const [aiTopic, setAiTopic] = useState('')
+    const [isGeneratingAI, setIsGeneratingAI] = useState(false)
     const [editingTeam, setEditingTeam] = useState(null)
     const [teamForm, setTeamForm] = useState({})
     const [teamMembers, setTeamMembers] = useState([])
@@ -2130,6 +2133,12 @@ export default function AdminDashboard() {
                                             <Activity size={14} /> Fix Slugs
                                         </button>
                                         <button
+                                            onClick={() => setShowAIGenerator(true)}
+                                            className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-indigo-700 text-sm flex items-center gap-2 shadow-lg transition-all"
+                                        >
+                                            <Sparkles size={16} /> AI Generate
+                                        </button>
+                                        <button
                                             onClick={() => {
                                                 setPostForm({ isPublished: true })
                                                 setEditingPost('NEW')
@@ -2330,6 +2339,75 @@ export default function AdminDashboard() {
                                                     className="px-6 py-2 bg-emerald-900 text-white rounded-lg font-bold hover:bg-emerald-900/90 shadow-lg shadow-emerald-900/20 transition-all hover:scale-105"
                                                 >
                                                     {editingPost === 'NEW' ? 'Create Post' : 'Update Post'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* AI Blog Generator Modal */}
+                            {showAIGenerator && (
+                                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fade-in-up">
+                                        <div className="flex justify-between items-center mb-6 border-b pb-4">
+                                            <h3 className="text-xl font-bold text-indigo-900 flex items-center gap-2">
+                                                <Sparkles size={20} /> AI Blog Generator
+                                            </h3>
+                                            <button onClick={() => setShowAIGenerator(false)} className="text-gray-400 hover:text-gray-600"><X size={24} /></button>
+                                        </div>
+                                        
+                                        <div className="space-y-4">
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">Topic or Keyword</label>
+                                                <input
+                                                    type="text"
+                                                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-600/20 outline-none"
+                                                    value={aiTopic}
+                                                    onChange={(e) => setAiTopic(e.target.value)}
+                                                    placeholder="e.g. Best beaches in Southern Sri Lanka"
+                                                />
+                                            </div>
+                                            <p className="text-xs text-slate-500">
+                                                The AI will write a 600+ word SEO-optimized blog, find a royalty-free cover image from Unsplash, and publish it instantly.
+                                            </p>
+                                            <div className="flex justify-end gap-3 pt-6 border-t mt-6">
+                                                <button
+                                                    onClick={() => setShowAIGenerator(false)}
+                                                    className="px-6 py-2 text-gray-600 hover:bg-slate-100 rounded-lg font-medium transition-colors"
+                                                    disabled={isGeneratingAI}
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    onClick={async () => {
+                                                        if(!aiTopic) return alert("Enter a topic!");
+                                                        setIsGeneratingAI(true);
+                                                        try {
+                                                            const res = await fetch('/api/admin/generate-blog', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({ topic: aiTopic })
+                                                            });
+                                                            const data = await res.json();
+                                                            if(data.success) {
+                                                                alert("Blog generated and published successfully!");
+                                                                setShowAIGenerator(false);
+                                                                setAiTopic("");
+                                                                fetch('/api/blog?isAdmin=true&limit=100').then(r => r.json()).then(d => d.success && setBlogPosts(d.data));
+                                                            } else {
+                                                                alert("Error: " + data.error);
+                                                            }
+                                                        } catch (e) {
+                                                            alert("Failed to generate blog.");
+                                                        }
+                                                        setIsGeneratingAI(false);
+                                                    }}
+                                                    className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700 shadow-lg flex items-center gap-2"
+                                                    disabled={isGeneratingAI}
+                                                >
+                                                    {isGeneratingAI ? <span className="animate-spin text-white">⌛</span> : <Sparkles size={16} />}
+                                                    {isGeneratingAI ? 'Generating...' : 'Generate Post'}
                                                 </button>
                                             </div>
                                         </div>
