@@ -136,13 +136,16 @@ export default function BookingStatusClient({ booking }) {
                                CONCIERGE
                            </h4>
                            <div className="space-y-4">
-                               <a href="tel:+94716885880" className="flex items-center justify-between bg-white text-slate-800 p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                                <button 
+                                   onClick={() => window.dispatchEvent(new CustomEvent('open-live-chat'))}
+                                   className="flex items-center justify-between w-full bg-white text-slate-800 p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all text-left"
+                                >
                                    <div className="flex items-center gap-3">
-                                       <Phone size={18} className="text-yellow-500" strokeWidth={2.5} />
-                                       <span className="text-[11px] font-bold uppercase tracking-widest">Voice Call</span>
+                                       <MessageSquare size={18} className="text-[#FACC15]" strokeWidth={2.5} />
+                                       <span className="text-[11px] font-bold uppercase tracking-widest">Live Chat</span>
                                    </div>
                                    <ArrowRight size={18} className="text-slate-400" />
-                               </a>
+                                </button>
                                <a href="https://wa.me/94716885880" target="_blank" className="flex items-center justify-between bg-emerald-500 text-white p-4 rounded-xl border border-emerald-400 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                                    <div className="flex items-center gap-3">
                                        <MessageSquare size={18} className="text-white" strokeWidth={2.5} />

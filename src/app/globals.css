@@ -7,7 +7,7 @@
     --color-gold: #FACC15;
     --background: #FFFFFF;
     --foreground: #0F172A;
-    --radius-premium: 0rem;
+    --radius-premium: 2rem;
 }
 
 [class~="dark"] {
@@ -37,21 +37,21 @@ body {
 
 @layer components {
     .premium-box {
-        @apply bg-white dark:bg-[#111] rounded-none border-2 border-black;
+        @apply bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-slate-100 dark:border-white/5 shadow-xl;
     }
 
     .yellow-badge {
-        @apply inline-flex items-center gap-2 px-6 py-2 bg-[#FACC15] text-black text-[10px] font-black uppercase tracking-[0.4em] italic border-2 border-black;
+        @apply inline-flex items-center gap-2 px-6 py-2.5 bg-[#FACC15] text-slate-900 text-[10px] font-black uppercase tracking-[0.4em] italic rounded-full shadow-lg;
     }
 
     .stat-card {
-        @apply p-12 bg-black/5 dark:bg-white/5 border-l-[12px] border-[#FACC15] hover:bg-[#FACC15] transition-all duration-500 border-y-2 border-r-2 border-black/5;
+        @apply p-12 bg-slate-50 dark:bg-white/5 border-l-8 border-emerald-600 rounded-[2.5rem] hover:bg-emerald-600 hover:text-white transition-all duration-500 shadow-xl;
     }
 }
 
 @layer utilities {
     .border-black {
-        border: 1px solid #000000 !important;
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
     }
 
     .border-black-10 {

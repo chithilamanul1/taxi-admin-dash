@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSession, signIn } from 'next-auth/react';
-import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, ArrowLeft, ArrowRight, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag, Info, AlertCircle, Plus, Minus, MessageSquare, Coins, ChevronDown, Wind } from 'lucide-react';
+import { X, MapPin, User, Users, CreditCard, Calendar, Clock, Phone, Mail, ChevronRight, ChevronLeft, ArrowLeft, ArrowRight, Check, Loader2, Car, Navigation, ShieldCheck, Zap, Signpost, Tag, Briefcase, ShoppingBag, Info, AlertCircle, Plus, Minus, MessageSquare, Coins, ChevronDown, Wind, PlaneTakeoff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -149,7 +149,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 dropoff: initialData.drop || initialData.dropoff || prev.dropoff,
                 vehicle: initialData.vehicle || prev.vehicle,
                 passengerCount: { ...prev.passengerCount, ...(initialData.passengerCount || {}) },
-                waypoints: initialData.waypoints || prev.waypoints
+                waypoints: initialData.waypoints || prev.waypoints,
+                hasNameBoard: !isAirportService ? false : ((initialData.hasNameBoard === true || initialData.hasNameBoard === false) ? initialData.hasNameBoard : null)
             }));
             
             setIsVehicleExpanded(!initialData.vehicle);
@@ -162,7 +163,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 handleApplyCoupon(initialData.couponCode, initialData.pickup || formData.pickup, initialData.dropoff || formData.dropoff);
             }
         }
-    }, [isOpen, initialData]);
+    }, [isOpen, initialData, isAirportService]);
 
     const handleApplyCoupon = async (codeToApply = couponInput, contextPickup = formData.pickup, contextDropoff = formData.dropoff) => {
         const input = (codeToApply || '').trim();
@@ -410,16 +411,17 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         if (targetStep >= 1) {
             if (!formData.pickup) newErrors.pickup = true;
             if (!formData.dropoff) newErrors.dropoff = true;
-            if (formData.hasNameBoard === null) newErrors.hasNameBoard = true;
+            if (isAirportService && formData.hasNameBoard === null) newErrors.hasNameBoard = true;
             if (formData.hasNameBoard && !formData.nameBoardText) newErrors.nameBoardText = true;
         }
         if (targetStep >= 2) {
             if (!formData.name) newErrors.name = true;
             if (!formData.phone) newErrors.phone = true;
             if (!formData.email) newErrors.email = true;
-            if (isAirportService) {
-                if (!formData.flightArrivalDate) newErrors.date = true;
-                if (!formData.flightArrivalTime) newErrors.time = true;
+            if (isAirportService || formData.hasNameBoard) {
+                if (!formData.flightArrivalDate && !formData.date) newErrors.date = true;
+                if (!formData.flightArrivalTime && !formData.time) newErrors.time = true;
+                if (formData.hasNameBoard && !formData.flightNumber) newErrors.flightNumber = true;
             }
         }
         setErrors(newErrors);
@@ -563,39 +565,41 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     </div>
                                 </div>
 
-                                <div className="space-y-8">
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
-                                        <Signpost size={14} className="text-[#FACC15]" strokeWidth={3} /> Airport Greeting Service
-                                    </label>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        {[
-                                            { val: true, label: 'Name Board', sub: 'Standard Service', icon: Check },
-                                            { val: false, label: 'No Board', sub: 'Direct Pickup', icon: X }
-                                        ].map(opt => (
-                                            <button
-                                                key={opt.label}
-                                                onClick={() => setFormData({ ...formData, hasNameBoard: opt.val })}
-                                                className={`p-6 rounded-3xl border text-left transition-all relative overflow-hidden group ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-transparent text-white shadow-xl' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-yellow-400/50'}`}
-                                            >
-                                                <div className="flex items-center justify-between mb-2">
-                                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${formData.hasNameBoard === opt.val ? 'bg-white/20' : 'bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10'}`}>
-                                                        <opt.icon size={16} strokeWidth={4} className={formData.hasNameBoard === opt.val ? 'text-white' : (opt.val ? 'text-emerald-500' : 'text-rose-500')} />
+                                {isAirportService && (
+                                    <div className="space-y-8">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
+                                            <Signpost size={14} className="text-[#FACC15]" strokeWidth={3} /> Airport Greeting Service
+                                        </label>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {[
+                                                { val: true, label: 'Name Board', sub: 'Standard Service', icon: Check },
+                                                { val: false, label: 'No Board', sub: 'Direct Pickup', icon: X }
+                                            ].map(opt => (
+                                                <button
+                                                    key={opt.label}
+                                                    onClick={() => setFormData({ ...formData, hasNameBoard: opt.val })}
+                                                    className={`p-6 rounded-3xl border text-left transition-all relative overflow-hidden group ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-transparent text-white shadow-xl' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-yellow-400/50'}`}
+                                                >
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${formData.hasNameBoard === opt.val ? 'bg-white/20' : 'bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10'}`}>
+                                                            <opt.icon size={16} strokeWidth={4} className={formData.hasNameBoard === opt.val ? 'text-white' : (opt.val ? 'text-emerald-500' : 'text-rose-500')} />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <span className="block text-[11px] font-black uppercase tracking-widest mb-1">{opt.label}</span>
-                                                <span className={`text-[8px] font-bold uppercase tracking-widest ${formData.hasNameBoard === opt.val ? 'text-white/60' : 'text-slate-400'}`}>{opt.sub}</span>
-                                            </button>
-                                        ))}
+                                                    <span className="block text-[11px] font-black uppercase tracking-widest mb-1">{opt.label}</span>
+                                                    <span className={`text-[8px] font-bold uppercase tracking-widest ${formData.hasNameBoard === opt.val ? 'text-white/60' : 'text-slate-400'}`}>{opt.sub}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                        {formData.hasNameBoard && (
+                                            <input
+                                                value={formData.nameBoardText}
+                                                onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
+                                                className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
+                                                placeholder="NAME ON BOARD (e.g. MR. JOHN SMITH)"
+                                            />
+                                        )}
                                     </div>
-                                    {formData.hasNameBoard && (
-                                        <input
-                                            value={formData.nameBoardText}
-                                            onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
-                                            className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
-                                            placeholder="NAME ON BOARD (e.g. MR. JOHN SMITH)"
-                                        />
-                                    )}
-                                </div>
+                                )}
                             </div>
 
                             <div className="space-y-10 pt-10 border-t border-slate-100 dark:border-white/10">
@@ -690,6 +694,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation', icon: Mail },
                                     { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX', icon: Phone },
                                     { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver chat', icon: MessageSquare },
+                                    ...(formData.hasNameBoard ? [{ label: 'Flight Number', key: 'flightNumber', type: 'text', placeholder: 'e.g. UL 101', icon: PlaneTakeoff }] : [])
                                 ].map(f => (
                                     <div key={f.key}>
                                         <label className={`text-[10px] font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-3 transition-colors ${errors[f.key] ? 'text-red-500' : 'text-slate-500 dark:text-slate-400'}`}>
@@ -718,7 +723,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-12 border-t border-slate-200 dark:border-white/10">
                                 <div className="space-y-4">
-                                    <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>Pickup Date</label>
+                                    <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>
+                                        {isAirportService ? 'Arrival Date' : 'Pickup Date'}
+                                    </label>
                                     <input
                                         type="date"
                                         value={formData.flightArrivalDate || formData.date || ''}
@@ -727,7 +734,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     />
                                 </div>
                                 <div className="space-y-4">
-                                    <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>Pickup Time</label>
+                                    <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>
+                                        {isAirportService ? 'Arrival Time' : 'Pickup Time'}
+                                    </label>
                                     <input
                                         type="time"
                                         value={formData.flightArrivalTime || formData.time || ''}
