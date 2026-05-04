@@ -29,10 +29,10 @@ const DestinationsSection = () => {
             <div className="container mx-auto px-6">
                 {/* Header Section */}
                 <div className="mb-16 text-center">
-                    <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight mb-4">
+                    <h2 className="text-4xl md:text-7xl font-bold text-slate-900 dark:text-white tracking-tight mb-4">
                         Explore Sri Lankan <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Destinations</span>
                     </h2>
-                    <p className="text-slate-500 dark:text-slate-400 mt-3 text-sm md:text-base max-w-2xl mx-auto">
+                    <p className="text-slate-500 dark:text-slate-400 mt-4 text-base md:text-xl max-w-3xl mx-auto font-medium">
                         Discover amazing deals and seamless transfers across the paradise island.
                     </p>
                 </div>
