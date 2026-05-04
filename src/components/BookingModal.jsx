@@ -649,37 +649,37 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     {step === 2 && (
                         <div className="animate-slide-up space-y-10">
                             <div className="bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl relative">
-                                <div className="absolute top-6 left-10 z-20 flex items-center gap-3">
-                                    <div className="bg-[#FACC15] text-black text-[10px] font-black px-4 py-1.5 rounded-full shadow-lg uppercase tracking-widest">Selected Fleet</div>
-                                    <button onClick={() => setStep(1)} className="bg-white dark:bg-zinc-800 text-black dark:text-white text-[10px] font-black px-4 py-1.5 rounded-full border border-slate-100 dark:border-white/10 shadow-lg uppercase tracking-widest hover:bg-slate-50 transition-all">Change Vehicle</button>
+                                <div className="absolute top-4 left-6 z-20 flex items-center gap-2">
+                                    <div className="bg-[#FACC15] text-black text-[9px] font-black px-3 py-1 rounded-full shadow-lg uppercase tracking-widest">Selected Fleet</div>
+                                    <button onClick={() => setStep(1)} className="bg-white dark:bg-zinc-800 text-black dark:text-white text-[9px] font-black px-3 py-1 rounded-full border border-slate-100 dark:border-white/10 shadow-lg uppercase tracking-widest hover:bg-slate-50 transition-all">Change</button>
                                 </div>
-                                <div className="flex flex-col md:flex-row items-center p-12 gap-12">
-                                    <div className="w-full md:w-1/3 flex justify-center relative">
-                                        <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full max-w-[240px] object-contain scale-150 drop-shadow-2xl" />
+                                <div className="flex flex-col md:flex-row items-center p-6 md:p-10 gap-8 md:gap-12">
+                                    <div className="w-full md:w-1/4 flex justify-center relative mt-6 md:mt-0">
+                                        <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full max-w-[180px] object-contain scale-110 md:scale-125 drop-shadow-2xl" />
                                     </div>
-                                    <div className="flex-1 space-y-6">
-                                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                                    <div className="flex-1 space-y-5">
+                                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                                             <div>
-                                                <h4 className="text-4xl font-black text-black dark:text-white uppercase tracking-tighter mb-2">{displayVehicleName(selectedVehicle?.name)}</h4>
-                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Premium Elite Tier</p>
+                                                <h4 className="text-3xl font-black text-black dark:text-white uppercase tracking-tighter mb-1">{displayVehicleName(selectedVehicle?.name)}</h4>
+                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em]">Premium Elite Tier</p>
                                             </div>
                                             <div className="text-right">
-                                                <div className="flex items-baseline justify-end gap-2">
-                                                    <span className="text-2xl font-black text-[#FACC15]">{currentSymbol}</span>
-                                                    <span className="text-5xl font-black text-black dark:text-white tracking-tighter leading-none">{(Number(totalPrice) || 0).toLocaleString()}</span>
+                                                <div className="flex items-baseline justify-end gap-1.5">
+                                                    <span className="text-xl font-black text-[#FACC15]">{currentSymbol}</span>
+                                                    <span className="text-4xl font-black text-black dark:text-white tracking-tighter leading-none">{(Number(totalPrice) || 0).toLocaleString()}</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="grid grid-cols-4 gap-3">
+                                        <div className="grid grid-cols-4 gap-2.5">
                                             {[
                                                 { icon: Users, label: 'PAX', value: selectedVehicle?.capacity || 4 },
                                                 { icon: Briefcase, label: 'LUG', value: selectedVehicle?.suitcases || 2 },
                                                 { icon: ShoppingBag, label: 'HAND', value: selectedVehicle?.handLuggage || 2 },
                                                 { icon: Wind, label: 'AC', value: 'ON' }
                                             ].map((item, i) => (
-                                                <div key={i} className="bg-slate-50 dark:bg-white/5 rounded-2xl p-4 border border-slate-100 dark:border-white/10 flex flex-col items-center justify-center">
-                                                    <item.icon size={16} className="text-[#FACC15] mb-2" strokeWidth={3} />
-                                                    <span className="text-sm font-black text-black dark:text-white leading-none">{item.value}</span>
+                                                <div key={i} className="bg-slate-50 dark:bg-white/5 rounded-xl p-3 border border-slate-100 dark:border-white/10 flex flex-col items-center justify-center">
+                                                    <item.icon size={14} className="text-[#FACC15] mb-1.5" strokeWidth={3} />
+                                                    <span className="text-xs font-black text-black dark:text-white leading-none">{item.value}</span>
                                                     <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-1">{item.label}</span>
                                                 </div>
                                             ))}
