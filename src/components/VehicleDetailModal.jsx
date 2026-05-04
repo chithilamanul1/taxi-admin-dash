@@ -17,13 +17,13 @@ const VehicleDetailModal = ({ isOpen, onClose, vehicle, onSelect }) => {
                 <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/5 rounded-full -mr-24 -mt-24 blur-3xl"></div>
                 
                 <div className="overflow-y-auto custom-scrollbar relative z-10">
-                    <div className="relative h-64 md:h-80 bg-slate-50 dark:bg-white/5 border-b border-slate-100 dark:border-white/5 p-8 shrink-0 flex items-center justify-center overflow-hidden">
+                    <div className="relative h-56 md:h-64 bg-slate-50 dark:bg-white/5 border-b border-slate-100 dark:border-white/5 p-6 shrink-0 flex items-center justify-center overflow-hidden">
                         <img
                             src={vehicle.image}
                             alt={vehicle.name}
                             className={`w-full h-full object-contain transition-transform duration-700
-                                ${vehicle.vehicleType?.toLowerCase().includes('sedan') || vehicle.vehicleType?.toLowerCase().includes('car') ? 'scale-[1.1] md:scale-[1.2]' : ''}
-                                ${vehicle.vehicleType?.toLowerCase().includes('wagon') ? 'scale-[1.05]' : ''}
+                                ${vehicle.vehicleType?.toLowerCase().includes('sedan') || vehicle.vehicleType?.toLowerCase().includes('car') ? 'scale-[1.05] md:scale-[1.1]' : ''}
+                                ${vehicle.vehicleType?.toLowerCase().includes('wagon') ? 'scale-[1.02]' : ''}
                             `}
                         />
                         <button
