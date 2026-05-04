@@ -165,6 +165,45 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         }
     }, [isOpen, initialData, isAirportService]);
 
+    // Auto-detect coupons for the route
+    useEffect(() => {
+        if (formData.pickup && formData.dropoff) {
+            const detectBestCoupon = async () => {
+                try {
+                    const res = await fetch('/api/coupons?public=true');
+                    const coupons = await res.json();
+                    if (!Array.isArray(coupons)) return;
+
+                    const p = formData.pickup.toLowerCase();
+                    const d = formData.dropoff.toLowerCase();
+
+                    // Find best applicable coupon
+                    const applicable = coupons.filter(c => {
+                        if (!c.applicableLocations || c.applicableLocations.length === 0) return true;
+                        return c.applicableLocations.some(loc => {
+                            const l = loc.toLowerCase().trim();
+                            if (l.includes('->')) {
+                                const [from, to] = l.split('->').map(s => s.trim());
+                                return p.includes(from) && d.includes(to);
+                            }
+                            return p.includes(l) || d.includes(l);
+                        });
+                    });
+
+                    if (applicable.length > 0 && verifiedCoupons.length === 0) {
+                        // Apply the first one automatically if none applied
+                        handleApplyCoupon(applicable[0].code, formData.pickup, formData.dropoff);
+                    }
+                } catch (err) {
+                    console.error("Auto-coupon detection failed", err);
+                }
+            };
+            
+            const timer = setTimeout(detectBestCoupon, 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [formData.pickup, formData.dropoff]);
+
     const handleApplyCoupon = async (codeToApply = couponInput, contextPickup = formData.pickup, contextDropoff = formData.dropoff) => {
         const input = (codeToApply || '').trim();
         if (!input || !contextPickup) return false;
@@ -591,12 +630,27 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             ))}
                                         </div>
                                         {formData.hasNameBoard && (
-                                            <input
-                                                value={formData.nameBoardText}
-                                                onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
-                                                className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
-                                                placeholder="NAME ON BOARD (e.g. MR. JOHN SMITH)"
-                                            />
+                                            <div className="space-y-6 animate-slide-up">
+                                                <div className="relative">
+                                                    <input
+                                                        value={formData.nameBoardText}
+                                                        onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
+                                                        className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
+                                                        placeholder="NAME ON BOARD (e.g. MR. JOHN SMITH)"
+                                                    />
+                                                </div>
+                                                <div className="relative">
+                                                    <input
+                                                        value={formData.flightNumber}
+                                                        onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
+                                                        className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-14 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
+                                                        placeholder="FLIGHT NUMBER (e.g. UL 101)"
+                                                    />
+                                                    <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                        <PlaneTakeoff size={20} strokeWidth={3} />
+                                                    </div>
+                                                </div>
+                                            </div>
                                         )}
                                     </div>
                                 )}
@@ -642,6 +696,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         ))}
                                     </div>
                                 </div>
+                                {verifiedCoupons.length > 0 && (
+                                    <div className="flex items-center gap-3 bg-emerald-50 dark:bg-emerald-400/10 text-emerald-600 dark:text-emerald-400 px-6 py-3 rounded-2xl border border-emerald-100 dark:border-emerald-400/20 w-fit mx-auto animate-bounce mt-6 shadow-sm">
+                                        <Tag size={14} className="shrink-0" />
+                                        <span className="text-[10px] font-black uppercase tracking-widest">
+                                            Special Offer "{verifiedCoupons[0].code}" Automatically Applied!
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}
@@ -694,7 +756,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     { label: 'Email Address', key: 'email', type: 'email', placeholder: 'for confirmation', icon: Mail },
                                     { label: 'Primary Contact No', key: 'phone', type: 'tel', placeholder: '+94 XXX XXX XXX', icon: Phone },
                                     { label: 'WhatsApp Number', key: 'whatsapp', type: 'tel', placeholder: 'For driver chat', icon: MessageSquare },
-                                    ...(formData.hasNameBoard ? [{ label: 'Flight Number', key: 'flightNumber', type: 'text', placeholder: 'e.g. UL 101', icon: PlaneTakeoff }] : [])
+                                    ...(formData.hasNameBoard ? [] : [])
                                 ].map(f => (
                                     <div key={f.key}>
                                         <label className={`text-[10px] font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-3 transition-colors ${errors[f.key] ? 'text-red-500' : 'text-slate-500 dark:text-slate-400'}`}>
