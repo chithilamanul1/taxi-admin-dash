@@ -7,7 +7,7 @@ import { sendOwnerNotification } from '@/lib/email-service';
 export async function POST(req) {
     try {
         const body = await req.json();
-        const { name, email, phone, date, adults, children, specialRequests, tourTitle, tourId, duration, totalPrice, currency } = body;
+        const { name, email, phone, date, arrivalDate, arrivalTime, adults, children, specialRequests, tourTitle, tourId, duration, totalPrice, currency } = body;
 
         await dbConnect();
 
@@ -18,6 +18,8 @@ export async function POST(req) {
             customerEmail: email,
             guestPhone: phone,
             scheduledDate: date,
+            arrivalDate,
+            arrivalTime,
             passengerCount: {
                 adults: adults || 0,
                 children: children || 0
@@ -49,10 +51,25 @@ export async function POST(req) {
             Phone: phone,
             Email: email,
             Date: date,
+            ArrivalDate: arrivalDate || 'N/A',
+            ArrivalTime: arrivalTime || 'N/A',
             Passengers: `${adults} Adults, ${children} Children`,
             SpecialRequests: specialRequests || 'None',
             EstimatedTotal: `${currency} ${totalPrice.toLocaleString()}`
         });
+
+        // Internal Notification for Admin Dashboard
+        try {
+            const Notification = (await import('@/models/Notification')).default;
+            await Notification.create({
+                type: 'booking',
+                title: 'New Tour Inquiry',
+                message: `Tour Inquiry from ${name} for ${tourTitle}`,
+                link: '/admin?view=bookings'
+            });
+        } catch (notificationError) {
+            console.error('[Notification Error]', notificationError);
+        }
 
         return NextResponse.json({ message: 'Tour inquiry submitted successfully', bookingId: newBooking._id }, { status: 201 });
 

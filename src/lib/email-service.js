@@ -493,7 +493,7 @@ export async function sendBookingConfirmation(booking) {
             </tr>
              <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Flight Details</td>
-                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${(booking.flightNumber && booking.flightNumber !== 'N/A') ? `${booking.flightNumber} - Arr: ${booking.flightArrivalDate || booking.scheduledDate} ${booking.flightArrivalTime || booking.scheduledTime}` : '-'}</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${(booking.flightNumber && booking.flightNumber !== 'N/A') ? `${booking.flightNumber} - Arr: ${booking.flightArrivalDate || booking.arrivalDate || booking.scheduledDate} ${booking.flightArrivalTime || booking.arrivalTime || booking.scheduledTime}` : (booking.arrivalDate ? `Arrival: ${booking.arrivalDate} ${booking.arrivalTime || ''}` : '-')}</td>
             </tr>
             <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Return Date</td>

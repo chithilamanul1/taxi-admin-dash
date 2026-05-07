@@ -13,7 +13,9 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
         email: '',
         phone: '',
         date: '',
-        adults: 2,
+        arrivalDate: '',
+        arrivalTime: '',
+        travelers: 1,
         children: 0,
         specialRequests: ''
     });
@@ -27,7 +29,7 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
 
         try {
             const isPerPerson = tourTitle.toLowerCase().includes('per person') || !!price && price < 500; // Heuristic if type not passed
-            const totalPrice = price ? (isPerPerson ? (formData.adults + formData.children) * price : price) : 0;
+            const totalPrice = price ? (isPerPerson ? (formData.travelers + formData.children) * price : price) : 0;
 
             const res = await fetch('/api/bookings/tour', {
                 method: 'POST',
@@ -39,7 +41,11 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                     duration,
                     totalPrice,
                     currency,
-                    isPerPerson
+                    isPerPerson,
+                    scheduledDate: formData.date,
+                    arrivalDate: formData.arrivalDate,
+                    arrivalTime: formData.arrivalTime,
+                    passengerCount: { adults: parseInt(formData.travelers), children: parseInt(formData.children) }
                 })
             });
 
@@ -149,42 +155,69 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                             </div>
                         </div>
 
+                        {/* Arrival Details */}
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Travel Date</label>
-                                <div className="relative">
-                                    <Calendar size={18} className="absolute left-3 top-3 text-slate-400" />
-                                    <input
-                                        type="date"
-                                        required
-                                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium"
-                                        value={formData.date}
-                                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                    />
-                                </div>
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                                    <Calendar size={14} className="text-emerald-600" /> Arrival Date
+                                </label>
+                                <input
+                                    type="date"
+                                    required
+                                    value={formData.arrivalDate}
+                                    onChange={(e) => setFormData({ ...formData, arrivalDate: e.target.value })}
+                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all font-medium"
+                                />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Passengers</label>
-                                <div className="relative">
-                                    <Users size={18} className="absolute left-3 top-3 text-slate-400" />
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <input
-                                            type="number"
-                                            min="1"
-                                            className="w-full pl-10 pr-2 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium text-sm"
-                                            placeholder="Adults"
-                                            value={formData.adults}
-                                            onChange={(e) => setFormData({ ...formData, adults: parseInt(e.target.value) || 0 })}
-                                        />
-                                        <input
-                                            type="number"
-                                            min="0"
-                                            className="w-full pl-2 pr-2 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium text-sm"
-                                            placeholder="Kids"
-                                            value={formData.children}
-                                            onChange={(e) => setFormData({ ...formData, children: parseInt(e.target.value) || 0 })}
-                                        />
-                                    </div>
+                                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                                    <Clock size={14} className="text-emerald-600" /> Arrival Time
+                                </label>
+                                <input
+                                    type="time"
+                                    required
+                                    value={formData.arrivalTime}
+                                    onChange={(e) => setFormData({ ...formData, arrivalTime: e.target.value })}
+                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all font-medium"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Travel Date */}
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                                <Calendar size={14} className="text-emerald-600" /> Planned Start Date
+                            </label>
+                            <input
+                                type="date"
+                                required
+                                value={formData.date}
+                                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all font-medium"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Passengers</label>
+                            <div className="relative">
+                                <Users size={18} className="absolute left-3 top-3 text-slate-400" />
+                                <div className="grid grid-cols-2 gap-2">
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        className="w-full pl-10 pr-2 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium text-sm"
+                                        placeholder="Adults"
+                                        value={formData.travelers}
+                                        onChange={(e) => setFormData({ ...formData, travelers: parseInt(e.target.value) || 0 })}
+                                    />
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        className="w-full pl-2 pr-2 py-2.5 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 transition-all font-medium text-sm"
+                                        placeholder="Kids"
+                                        value={formData.children}
+                                        onChange={(e) => setFormData({ ...formData, children: parseInt(e.target.value) || 0 })}
+                                    />
                                 </div>
                             </div>
                         </div>

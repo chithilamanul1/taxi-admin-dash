@@ -193,7 +193,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                         className={`
                                             w-[98%] sm:w-[95%] h-[160px] sm:h-[200px] object-contain
                                             transition-transform duration-700
-                                            ${isSelected ? 'scale-[1.4] sm:scale-[1.5]' : 'scale-125 group-hover/card:scale-[1.35]'}
+                                            ${(vehicle.vehicleType === 'sedan' || vehicle.name?.toLowerCase().includes('sedan')) ? 'scale-[1.65] sm:scale-[1.75]' : (isSelected ? 'scale-[1.4] sm:scale-[1.5]' : 'scale-125 group-hover/card:scale-[1.35]')}
                                         `}
                                     />
                                 </div>

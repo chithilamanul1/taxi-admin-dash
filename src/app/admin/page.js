@@ -100,6 +100,8 @@ export default function AdminDashboard() {
         dropoffLocation: { address: '' },
         scheduledDate: '',
         scheduledTime: '',
+        arrivalDate: '',
+        arrivalTime: '',
         vehicleType: 'sedan',
         distanceKm: 0,
         totalPrice: '',
@@ -2710,6 +2712,24 @@ export default function AdminDashboard() {
                                                     className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
                                                     value={manualBookingForm.scheduledTime}
                                                     onChange={e => setManualBookingForm({ ...manualBookingForm, scheduledTime: e.target.value })}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Arrival Date (Opt)</label>
+                                                <input
+                                                    type="date"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.arrivalDate}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, arrivalDate: e.target.value })}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Arrival Time (Opt)</label>
+                                                <input
+                                                    type="time"
+                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                    value={manualBookingForm.arrivalTime}
+                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, arrivalTime: e.target.value })}
                                                 />
                                             </div>
                                             <div>

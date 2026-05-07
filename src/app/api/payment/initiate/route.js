@@ -78,11 +78,24 @@ export async function POST(req) {
         // Log to Discord
         await logBookingCreated(booking).catch(console.error);
 
+        // Internal Notification for Admin Dashboard
+        try {
+            const Notification = (await import('@/models/Notification')).default;
+            await Notification.create({
+                type: 'booking',
+                title: data.paymentMethod === 'cash' ? 'New Cash Booking' : 'New Card Payment Request',
+                message: `Booking from ${booking.customerName || 'Guest'}: ${booking.pickupLocation?.address?.split(',')[0]} to ${booking.dropoffLocation?.address?.split(',')[0]}`,
+                link: '/admin?view=bookings'
+            });
+        } catch (notificationError) {
+            console.error('[Notification Error]', notificationError);
+        }
+
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://taxi-admin-dash.vercel.app/';
 
         // 2. Handle CASH payments (No gateway init needed)
         if (data.paymentMethod === 'cash') {
-            // Send Email Confirmation immediately for Cash
+            // Send Email Confirmation immediately for Cash (Already handled below, but keeping logic consistent)
             try {
                 const { sendBookingConfirmation } = require('@/lib/email-service');
                 await sendBookingConfirmation(booking);
@@ -96,6 +109,16 @@ export async function POST(req) {
                 paymentUrl: `${baseUrl}/payment/success?bookingId=${booking._id}`,
                 gateway: 'cash'
             });
+        }
+
+        // 3. Handle CARD payments - Notify owner of the request even before payment
+        try {
+            const { sendBookingConfirmation } = require('@/lib/email-service');
+            // We call this to notify the OWNER immediately. 
+            // The customer also gets a "Booking Received" feel.
+            await sendBookingConfirmation(booking);
+        } catch (emailError) {
+            console.error('[Card Booking Init] Owner notification email failed:', emailError);
         }
 
         // 3. Generate payment URL based on gateway (For CARD payments)

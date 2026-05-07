@@ -58,6 +58,8 @@ const bookingSchema = new mongoose.Schema({
     paymentTimestamp: { type: Date },
     scheduledDate: { type: String },
     scheduledTime: { type: String },
+    arrivalDate: { type: String },
+    arrivalTime: { type: String },
     customerName: { type: String },
     customerEmail: { type: String },
     nameBoard: {
