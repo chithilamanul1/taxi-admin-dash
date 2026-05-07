@@ -151,7 +151,6 @@ export default function Navbar() {
                                         { label: 'Reviews', href: '/reviews' },
                                         { label: 'Gallery', href: '/gallery' },
                                         { label: 'Blog', href: '/blog' },
-                                        { label: 'AI Trip Planner', href: '/trip-planner' },
                                         { label: 'Contact', href: '/contact' }
                                     ]
                                 }

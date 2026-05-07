@@ -20,7 +20,7 @@ interface FormData {
     interests: string[];
 }
 
-export default function TripPlannerClient() {
+export default function TripPlannerClient({ isEmbedded = false }: { isEmbedded?: boolean }) {
     const router = useRouter();
     const [step, setStep] = useState(1);
     const [isGenerating, setIsGenerating] = useState(false);
@@ -143,7 +143,7 @@ export default function TripPlannerClient() {
 
     if (itinerary && step === 2) {
         return (
-            <div className="min-h-screen bg-white pt-24 pb-20 px-6">
+            <div className={`${isEmbedded ? 'bg-transparent pb-10 px-0' : 'min-h-screen bg-white pt-24 pb-20 px-6'}`}>
                 <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                         <div>
@@ -159,9 +159,9 @@ export default function TripPlannerClient() {
                         <div className="flex flex-wrap gap-4">
                             <button 
                                 onClick={handleDownloadPDF}
-                                className="px-6 py-4 rounded-2xl border border-slate-100 font-bold hover:bg-slate-50 transition-colors flex items-center gap-2"
+                                className="px-6 py-4 bg-emerald-900 text-white rounded-2xl font-bold hover:bg-emerald-800 transition-colors flex items-center gap-2 shadow-lg"
                             >
-                                <Navigation size={18} className="rotate-45" /> Download PDF
+                                <Navigation size={18} className="rotate-45" /> Download My Travel Plan
                             </button>
                             <button onClick={() => setStep(1)} className="px-6 py-4 rounded-2xl border border-slate-100 font-bold hover:bg-slate-50 transition-colors">
                                 Edit Prompt
@@ -263,6 +263,12 @@ export default function TripPlannerClient() {
                                             <Calendar size={20} /> Confirm Booking
                                         </button>
                                         <button
+                                            onClick={handleDownloadPDF}
+                                            className="w-full py-5 bg-white text-emerald-900 border border-emerald-200 rounded-2xl font-black transition-transform hover:scale-[1.02] shadow-sm flex items-center justify-center gap-2"
+                                        >
+                                            <Navigation size={18} className="rotate-45" /> Download Travel Plan
+                                        </button>
+                                        <button
                                             onClick={() => window.open('https://wa.me/+94716885880', '_blank')}
                                             className="w-full py-5 bg-emerald-900 text-white rounded-2xl font-black transition-transform hover:scale-[1.02] shadow-xl"
                                         >
@@ -289,7 +295,7 @@ export default function TripPlannerClient() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 pt-24 pb-20 px-6">
+        <div className={`${isEmbedded ? 'bg-transparent pb-10 px-0' : 'min-h-screen bg-slate-50 pt-24 pb-20 px-6'}`}>
             <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-600 rounded-full mb-6">
