@@ -767,8 +767,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 defaultCountry="lk"
                                                 value={formData[f.key] || ''}
                                                 onChange={(phone) => setFormData({ ...formData, [f.key]: phone })}
-                                                inputClassName="!w-full !h-16 !bg-transparent !border-none !px-8 !outline-none !font-black !text-black dark:!text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 !text-sm !uppercase !tracking-widest"
-                                                className={`w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl flex transition-all ${errors[f.key] ? 'border-red-500' : ''}`}
+                                                inputClassName="!w-full !h-16 !bg-transparent !border-none !pl-2 !pr-8 !outline-none !font-black !text-black dark:!text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 !text-sm !uppercase !tracking-widest"
+                                                countrySelectorStyleProps={{
+                                                    buttonClassName: "!bg-transparent !border-none !h-16 !pl-6 !pr-2 hover:!bg-slate-100/50 dark:hover:!bg-white/5 !transition-colors !rounded-l-3xl",
+                                                }}
+                                                className={`w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl flex items-center transition-all overflow-hidden ${errors[f.key] ? 'border-red-500' : ''}`}
                                             />
                                         ) : (
                                             <input

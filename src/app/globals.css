@@ -202,3 +202,53 @@ body.booking-active nextjs-portal {
 .animate-shake {
     animation: shake 0.2s ease-in-out 0s 2;
 }
+
+/* Phone Input Luxury Styles */
+.react-international-phone-country-selector-button {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.react-international-phone-country-selector-button__button-content {
+    background: transparent !important;
+    padding-left: 1.5rem !important;
+}
+
+.react-international-phone-input {
+    background: transparent !important;
+    border: none !important;
+}
+
+.react-international-phone-country-selector-dropdown {
+    background: white !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 2rem !important;
+    padding: 1rem !important;
+    margin-top: 0.75rem !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
+    z-index: 1000 !important;
+}
+
+.dark .react-international-phone-country-selector-dropdown {
+    background: #18181b !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+.react-international-phone-country-selector-dropdown__list-item {
+    padding: 0.75rem 1rem !important;
+    border-radius: 1rem !important;
+    transition: all 0.2s !important;
+}
+
+.react-international-phone-country-selector-dropdown__list-item:hover {
+    background: #f8fafc !important;
+}
+
+.dark .react-international-phone-country-selector-dropdown__list-item:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
