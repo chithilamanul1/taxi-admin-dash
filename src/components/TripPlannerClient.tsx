@@ -124,7 +124,7 @@ export default function TripPlannerClient() {
             startY: destY + 10,
             head: [['Day', 'Location', 'Title', 'Activities']],
             body: tableData,
-            headStyles: { fillStyle: 'solid', fillColor: [5, 46, 22], textColor: [255, 255, 255], fontStyle: 'bold' },
+            headStyles: { fillColor: [5, 46, 22], textColor: [255, 255, 255], fontStyle: 'bold' },
             bodyStyles: { textColor: [60, 60, 60] },
             alternateRowStyles: { fillColor: [245, 245, 245] },
             margin: { left: 15, right: 15 },
