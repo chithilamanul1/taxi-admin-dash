@@ -31,14 +31,14 @@ const VehicleList = ({ vehicles, selectedId, onSelect, onInspect, passengerCount
                         className={`group relative bg-white dark:bg-zinc-800 rounded-xl border-2 transition-all duration-300 overflow-hidden flex flex-col md:flex-row items-stretch shadow-sm hover:shadow-md ${isSelected ? 'border-emerald-600 dark:border-emerald-500 shadow-emerald-100 dark:shadow-emerald-900/20' : 'border-slate-100 dark:border-white/5 hover:border-slate-200 dark:hover:border-white/10'}`}
                     >
                         {/* Vehicle Image Section */}
-                        <div className="w-full md:w-64 h-44 md:h-auto bg-slate-50 dark:bg-zinc-900/50 flex items-center justify-center p-4 relative shrink-0">
-                            <div className="relative w-full h-full transform group-hover:scale-105 transition-transform duration-500">
+                        <div className="w-full md:w-80 h-56 md:h-auto bg-slate-50 dark:bg-zinc-900/50 flex items-center justify-center p-6 relative shrink-0">
+                            <div className="relative w-full h-full transform group-hover:scale-110 transition-transform duration-500">
                                 <Image
                                     src={vehicle.image || "/vehicles/minicar.png"}
                                     alt={vehicle.name}
                                     fill
-                                    className="object-contain drop-shadow-xl"
-                                    sizes="(max-width: 768px) 100vw, 256px"
+                                    className="object-contain drop-shadow-2xl scale-125"
+                                    sizes="(max-width: 768px) 100vw, 320px"
                                 />
                             </div>
                             {isExceeded && (

@@ -186,14 +186,14 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                     </div>
                                 )}
 
-                                <div className="w-full flex justify-center items-center py-2 relative z-10 mt-auto min-h-[100px] sm:min-h-[140px]">
+                                <div className="w-full flex justify-center items-center py-2 relative z-10 mt-auto min-h-[140px] sm:min-h-[180px]">
                                     <img
                                         src={vehicle.image}
                                         alt={vehicle.name}
                                         className={`
-                                            w-[95%] sm:w-[90%] h-[120px] sm:h-[160px] object-contain
+                                            w-[98%] sm:w-[95%] h-[160px] sm:h-[200px] object-contain
                                             transition-transform duration-700
-                                            ${isSelected ? 'scale-[1.25] sm:scale-[1.3]' : 'scale-110 group-hover/card:scale-[1.2]'}
+                                            ${isSelected ? 'scale-[1.4] sm:scale-[1.5]' : 'scale-125 group-hover/card:scale-[1.35]'}
                                         `}
                                     />
                                 </div>

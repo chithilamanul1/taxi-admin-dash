@@ -672,11 +672,11 @@ const Prices = ({ initialDestination }) => {
                                                     </div>
                                                 </div>
 
-                                                <div className="aspect-[16/9] w-full relative mb-8 flex items-center justify-center">
+                                                <div className="aspect-[16/9] w-full relative mb-10 flex items-center justify-center">
                                                     <img
                                                         src={v.image}
                                                         alt={v.name}
-                                                        className={`w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 ${v.imageScale ? 'scale-125' : ''}`}
+                                                        className={`w-full h-full object-contain transition-transform duration-700 group-hover:scale-125 ${v.imageScale ? 'scale-[1.5]' : 'scale-125'}`}
                                                     />
                                                 </div>
 

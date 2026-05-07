@@ -716,8 +716,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <button onClick={() => setStep(1)} className="bg-white dark:bg-zinc-800 text-black dark:text-white text-[9px] font-black px-3 py-1 rounded-full border border-slate-100 dark:border-white/10 shadow-lg uppercase tracking-widest hover:bg-slate-50 transition-all">Change</button>
                                 </div>
                                 <div className="flex flex-col md:flex-row items-center p-6 md:p-10 gap-8 md:gap-12">
-                                    <div className="w-full md:w-1/4 flex justify-center relative mt-6 md:mt-0">
-                                        <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full max-w-[180px] object-contain scale-110 md:scale-125 drop-shadow-2xl" />
+                                    <div className="w-full md:w-1/3 flex justify-center relative mt-6 md:mt-0">
+                                        <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full max-w-[280px] object-contain scale-125 md:scale-150 drop-shadow-2xl" />
                                     </div>
                                     <div className="flex-1 space-y-5">
                                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -822,9 +822,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             </div>
 
                                             <div className="space-y-6">
-                                                <div className="flex items-center gap-6 bg-slate-50 dark:bg-white/5 p-6 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-inner">
-                                                    <div className="w-24 h-16 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-0.5 overflow-hidden shrink-0 shadow-sm">
-                                                        <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full h-full object-contain scale-[1.5]" />
+                                                <div className="flex items-center gap-6 bg-slate-50 dark:bg-white/5 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-inner">
+                                                    <div className="w-32 h-24 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-0.5 overflow-hidden shrink-0 shadow-sm">
+                                                        <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full h-full object-contain scale-[1.8]" />
                                                     </div>
                                                     <div className="min-w-0 flex-1">
                                                         <p className="text-sm font-black text-emerald-950 dark:text-white uppercase truncate tracking-tight">{displayVehicleName(selectedVehicle?.name)}</p>

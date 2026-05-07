@@ -85,17 +85,17 @@ const FleetSection = () => {
                             </div>
 
                             {/* Image Box */}
-                            <div className="h-64 md:h-72 flex items-center justify-center bg-transparent relative overflow-hidden group">
-                                <div className="absolute inset-0 flex items-center justify-center text-[100px] font-black text-black/[0.03] dark:text-white/[0.03] tracking-tighter select-none pointer-events-none uppercase">
+                            <div className="h-72 md:h-80 flex items-center justify-center bg-transparent relative overflow-hidden group">
+                                <div className="absolute inset-0 flex items-center justify-center text-[120px] font-black text-black/[0.03] dark:text-white/[0.03] tracking-tighter select-none pointer-events-none uppercase">
                                     {vehicle.vehicleType.split('-')[0]}
                                 </div>
-                                <div className="relative w-4/5 h-4/5 transition-transform duration-500 group-hover:scale-110">
+                                <div className="relative w-[90%] h-[90%] transition-transform duration-500 group-hover:scale-110">
                                     <Image 
                                         src={vehicle.image || "/vehicles/minicar.png"} 
                                         alt={vehicle.name} 
                                         fill
                                         priority={idx < 2}
-                                        className="object-contain" 
+                                        className="object-contain scale-125 group-hover:scale-150 transition-transform duration-700" 
                                         sizes="(max-width: 768px) 85vw, 400px"
                                     />
                                 </div>
