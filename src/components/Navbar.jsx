@@ -72,7 +72,7 @@ export default function Navbar() {
                                 </button>
                                 
                                 <div className={`absolute top-full right-0 mt-4 w-56 bg-white border border-slate-100 rounded-3xl shadow-2xl z-[160] overflow-hidden p-2 transition-all duration-300 ${isUserMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
-                                    <Link href="/profile" className="flex items-center gap-3 px-5 py-4 hover:bg-emerald-50 text-emerald-950 font-black uppercase tracking-widest text-[10px] rounded-2xl transition-all">
+                                    <Link href="/my-bookings" className="flex items-center gap-3 px-5 py-4 hover:bg-emerald-50 text-emerald-950 font-black uppercase tracking-widest text-[10px] rounded-2xl transition-all">
                                         <User size={16} /> My Bookings
                                     </Link>
                                     <button 

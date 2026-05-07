@@ -3,6 +3,8 @@ import Booking from '@/models/Booking';
 import { NextResponse } from 'next/server';
 import { getGatewayForCurrency, GATEWAY_CONFIG } from '@/lib/payment';
 import { logBookingCreated } from '@/lib/discord';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 export async function POST(req) {
     try {
@@ -69,6 +71,13 @@ export async function POST(req) {
         // Explicitly handle billingDetails if provided in the express checkout flow
         if (data.billingDetails) {
             bookingData.billingDetails = data.billingDetails;
+        }
+
+        // Enrich with session data (so logged-in users can view bookings later)
+        const session = await getServerSession(authOptions);
+        if (session?.user?.email) {
+            bookingData.customerEmail = bookingData.customerEmail || session.user.email;
+            bookingData.customerName = bookingData.customerName || session.user.name;
         }
 
         const booking = await Booking.create(bookingData);
