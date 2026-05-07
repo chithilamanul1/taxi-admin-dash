@@ -15,6 +15,8 @@ import RevenueStats from '@/components/RevenueStats'
 import InvoiceManager from '@/components/admin/InvoiceManager'
 import DestinationManager from '@/components/admin/DestinationManager'
 import GalleryManager from '@/components/admin/GalleryManager'
+import DriverManager from '@/components/admin/DriverManager'
+import TrafficSurgeManager from '@/components/admin/TrafficSurgeManager'
 
 export default function AdminDashboard() {
     const { data: session, status } = useSession()
@@ -542,7 +544,15 @@ export default function AdminDashboard() {
                     </button>
                     <button onClick={() => { setCurrentView('drivers'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'drivers' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Car size={20} />
-                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Drivers</span>
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Fleet (Active)</span>
+                    </button>
+                    <button onClick={() => { setCurrentView('driver-profiles'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'driver-profiles' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <ShieldCheck size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Driver Profiles</span>
+                    </button>
+                    <button onClick={() => { setCurrentView('traffic-surge'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'traffic-surge' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <Clock size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Traffic Surge</span>
                     </button>
                     <button onClick={() => { setCurrentView('live-map'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'live-map' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <MapPin size={20} />
@@ -3623,6 +3633,12 @@ export default function AdminDashboard() {
 
                     {/* Drivers Fleet View */}
                     {currentView === 'drivers' && <DriversFleetView />}
+
+                    {/* Driver Profiles (Public) */}
+                    {currentView === 'driver-profiles' && <DriverManager />}
+
+                    {/* Traffic Surge Management */}
+                    {currentView === 'traffic-surge' && <TrafficSurgeManager />}
 
                     {/* Live Driver Map */}
                     {currentView === 'live-map' && <LiveDriverMap />}

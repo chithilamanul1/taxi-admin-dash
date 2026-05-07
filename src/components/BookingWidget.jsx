@@ -16,17 +16,20 @@ const SmartOfferNudge = dynamic(() => import('./SmartOfferNudge'), { ssr: false 
 const TripMap = dynamic(() => import('./TripMap'), { ssr: false })
 
 import { useCurrency } from '../context/CurrencyContext'
-import { calculateBasePrice, calculateSurcharges } from '@/lib/pricing-util';
+import { calculateBasePrice, calculateSurcharges, calculateTrafficSurge } from '@/lib/pricing-util';
 
 // (Helper to calculate price)
-const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, pickupName = '', dropoffName = '', destinations = []) => {
-    if (!pricingMap[vehicleId]) return { total: 0 };
+const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, pickupName = '', dropoffName = '', destinations = [], scheduledTime = null, scheduledDate = null, surgeRules = []) => {
+    if (!pricingMap[vehicleId]) return { total: 0, surgeAmount: 0 };
     const vehicleData = pricingMap[vehicleId];
 
     const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupName, dropoffName, destinations);
     const surcharges = calculateSurcharges({ waitingHours, hasNameBoard, nameBoardPrice }, vehicleData);
 
-    return { total: basePrice + surcharges };
+    const surgePercent = calculateTrafficSurge(scheduledTime, scheduledDate, surgeRules);
+    const surgeAmount = surgePercent > 0 ? basePrice * (surgePercent / 100) : 0;
+
+    return { total: basePrice + surcharges + surgeAmount, surgeAmount };
 };
 
 // Internal Loader Component to avoid hook conflicts
@@ -75,6 +78,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [nameBoardPrice, setNameBoardPrice] = useState(2000); // Default, updated via API
     const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true });
     const [destinations, setDestinations] = useState([]);
+    const [surgeRules, setSurgeRules] = useState([]);
 
 
     // Manage body class for hiding chat
@@ -129,6 +133,17 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                     }
                 } catch (err) {
                     console.error("Failed to fetch pricing settings", err);
+                }
+
+                // Fetch Surge Rules
+                try {
+                    const surgeRes = await fetch('/api/traffic-surge', { cache: 'no-store' });
+                    const surgeData = await surgeRes.json();
+                    if (surgeData.success) {
+                        setSurgeRules(surgeData.data);
+                    }
+                } catch (err) {
+                    console.error("Failed to fetch surge rules", err);
                 }
 
             } catch (error) { console.error(error); } finally { setIsLoadingPricing(false); }
@@ -450,8 +465,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
     // Calculate total waiting hours including waypoints
     const totalWaitingHours = waitingHours + waypoints.reduce((sum, wp) => sum + (wp.waitingTime || 0), 0);
+    // Current time for "Ride Now" estimation
+    const now = new Date();
+    const currentTime = activeTab === 'ride' ? `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}` : null;
+    const currentDate = activeTab === 'ride' ? now.toISOString().split('T')[0] : null;
+
     // Updated calculatePrice call with nameBoardPrice and locations
-    const { total } = calculatePrice(
+    const { total, surgeAmount } = calculatePrice(
         distance,
         vehicle,
         tripType,
@@ -461,7 +481,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         nameBoardPrice,
         pickup?.name || pickupSearch,
         dropoff?.name || dropoffSearch,
-        destinations
+        destinations,
+        currentTime,
+        currentDate,
+        surgeRules
     );
 
     // Calculate total discount from all applied offers (MAX RULE: No Stacking)
@@ -1020,8 +1043,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-zinc-900 text-slate-900 dark:text-white flex items-center justify-center group-hover:bg-amber-400 group-hover:text-white transition-all shrink-0 shadow-sm border border-slate-200 dark:border-white/5">
-                                        <ChevronDown size={22} strokeWidth={3} />
+                                    <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-zinc-900 text-slate-900 dark:text-white flex items-center justify-center group-hover:bg-amber-400 group-hover:text-white transition-all shrink-0 shadow-sm border border-slate-200 dark:border-white/5">
+                                        <ChevronDown size={24} strokeWidth={4} />
                                     </div>
                                 </button>
                             </div>
@@ -1085,8 +1108,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                     <div className="pt-6 border-t border-slate-200 dark:border-white/10 space-y-4">
                                         <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.15em]">
                                             <span className="text-slate-900 dark:text-slate-100">Trip Subtotal</span>
-                                            <span className="text-black dark:text-white font-black">{convertPrice(total).symbol} {convertPrice(total).value.toLocaleString()}</span>
+                                            <span className="text-black dark:text-white font-black">{convertPrice(total - surgeAmount).symbol} {convertPrice(total - surgeAmount).value.toLocaleString()}</span>
                                         </div>
+
+                                        {surgeAmount > 0 && (
+                                            <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.15em] text-indigo-600 dark:text-indigo-400">
+                                                <span>Peak Traffic Surge</span>
+                                                <span className="font-black">+{convertPrice(surgeAmount).symbol} {convertPrice(surgeAmount).value.toLocaleString()}</span>
+                                            </div>
+                                        )}
 
                                         {discountAmount > 0 && (
                                             <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-400/10 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-600/20">
@@ -1216,12 +1246,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         v.vehicleType,
                         tripType,
                         vehiclePricing,
-                        waitingHours,
+                        totalWaitingHours,
                         false, // hasNameBoard removed from landing page
                         nameBoardPrice,
                         pickup.name,
                         dropoff.name,
-                        destinations
+                        destinations,
+                        currentTime,
+                        currentDate,
+                        surgeRules
                     );
                     return {
                         ...v,

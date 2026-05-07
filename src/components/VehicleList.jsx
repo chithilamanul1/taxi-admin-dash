@@ -37,7 +37,7 @@ const VehicleList = ({ vehicles, selectedId, onSelect, onInspect, passengerCount
                                     src={vehicle.image || "/vehicles/minicar.png"}
                                     alt={vehicle.name}
                                     fill
-                                    className="object-contain drop-shadow-2xl scale-125"
+                                    className={`object-contain drop-shadow-2xl transition-transform duration-500 ${vehicle.vehicleType === 'sedan' || vehicle.name?.toLowerCase().includes('sedan') ? 'scale-[1.55] sm:scale-[1.65]' : 'scale-125'}`}
                                     sizes="(max-width: 768px) 100vw, 320px"
                                 />
                             </div>

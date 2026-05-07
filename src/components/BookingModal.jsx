@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
 import { useCurrency } from '../context/CurrencyContext';
-import { calculateBasePrice, calculateSurcharges, calculatePaymentFees } from '../lib/pricing-util';
+import { calculateBasePrice, calculateSurcharges, calculatePaymentFees, calculateTrafficSurge } from '../lib/pricing-util';
 import LocationInput from './LocationInput';
 import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
@@ -38,6 +38,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const [destinations, setDestinations] = useState([]);
     const [isVehicleExpanded, setIsVehicleExpanded] = useState(true);
     const [isFleetExpanded, setIsFleetExpanded] = useState(false);
+    const [surgeRules, setSurgeRules] = useState([]);
 
     const { currency, rates, changeCurrency } = useCurrency();
     const currentSymbol = rates?.[currency]?.symbol || (currency === 'LKR' ? 'Rs' : currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : currency === 'INR' ? '₹' : '$');
@@ -257,16 +258,21 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0, lkr: { total: 0, payNow: 0, balance: 0, surcharges: 0, subtotal: 0 }, originalLKR: 0 };
             }
 
-            const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType, formData.pickup, formData.dropoff, destinations);
             const surcharges = calculateSurcharges({
                 hasNameBoard: formData.hasNameBoard,
                 nameBoardPrice: pricingSettings?.nameBoardPrice
             }, vehicleData);
 
-            const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, currency, formData.vehicle);
-            const paymentSurchargeLKR = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, 'LKR', formData.vehicle);
+            // Traffic Surge Calculation
+            const tripTime = formData.time || formData.flightArrivalTime;
+            const tripDate = formData.date || formData.flightArrivalDate;
+            const surgePercent = calculateTrafficSurge(tripTime, tripDate, surgeRules);
+            const surgeAmount = surgePercent > 0 ? baseTotal * (surgePercent / 100) : 0;
 
-            let total = baseTotal + surcharges + paymentSurcharge;
+            const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges + surgeAmount, formData.paymentMethod, currency, formData.vehicle);
+            const paymentSurchargeLKR = calculatePaymentFees(baseTotal + surcharges + surgeAmount, formData.paymentMethod, 'LKR', formData.vehicle);
+
+            let total = baseTotal + surcharges + surgeAmount + paymentSurcharge;
 
             let couponDiscountAmount = 0;
             if (verifiedCoupons && verifiedCoupons.length > 0) {
@@ -293,9 +299,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
             const convertedSubtotal = roundFn((Number(baseTotal) || 0) * rate);
             const convertedSurcharges = roundFn((Number(surcharges) || 0) * rate);
+            const convertedSurge = roundFn((Number(surgeAmount) || 0) * rate);
             const convertedPaymentFee = roundFn((Number(paymentSurcharge) || 0) * rate);
             const convertedDiscounts = roundFn((Number(finalDiscount) || 0) * rate);
-            const convertedTotal = Math.max(0, convertedSubtotal + convertedSurcharges + convertedPaymentFee - convertedDiscounts);
+            const convertedTotal = Math.max(0, convertedSubtotal + convertedSurcharges + convertedSurge + convertedPaymentFee - convertedDiscounts);
 
             const payNowRatio = formData.paymentType === 'partial' ? 0.5 : 1;
             const convertedPayNow = roundFn(convertedTotal * payNowRatio);
@@ -304,6 +311,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const detailedExtras = [
                 { label: 'Name Board', value: roundFn(calculateSurcharges({ hasNameBoard: formData.hasNameBoard, nameBoardPrice: pricingSettings.nameBoardPrice }, vehicleData) * rate) }
             ];
+
+            if (surgeAmount > 0) {
+                detailedExtras.push({ label: 'Peak Traffic Surge', value: convertedSurge });
+            }
 
             return {
                 total: convertedTotal,
@@ -316,15 +327,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 payNow: convertedPayNow,
                 balance: convertedBalance,
                 lkr: {
-                    total: Math.round(baseTotal + surcharges + paymentSurchargeLKR - finalDiscount),
-                    payNow: Math.round((formData.paymentType === 'partial' ? (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) * 0.5 : (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount))),
-                    balance: Math.round((baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) - (formData.paymentType === 'partial' ? (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount) * 0.5 : (baseTotal + surcharges + paymentSurchargeLKR - finalDiscount))),
+                    total: Math.round(baseTotal + surcharges + surgeAmount + paymentSurchargeLKR - finalDiscount),
+                    payNow: Math.round((formData.paymentType === 'partial' ? (baseTotal + surcharges + surgeAmount + paymentSurchargeLKR - finalDiscount) * 0.5 : (baseTotal + surcharges + surgeAmount + paymentSurchargeLKR - finalDiscount))),
+                    balance: Math.round((baseTotal + surcharges + surgeAmount + paymentSurchargeLKR - finalDiscount) - (formData.paymentType === 'partial' ? (baseTotal + surcharges + surgeAmount + paymentSurchargeLKR - finalDiscount) * 0.5 : (baseTotal + surcharges + surgeAmount + paymentSurchargeLKR - finalDiscount))),
                     surcharges: Math.round(surcharges),
+                    surge: Math.round(surgeAmount),
                     paymentFee: Math.round(paymentSurchargeLKR),
                     subtotal: Math.round(baseTotal),
                     discounts: Math.round(finalDiscount)
                 },
-                originalLKR: Math.round(baseTotal + surcharges + paymentSurchargeLKR - finalDiscount)
+                originalLKR: Math.round(baseTotal + surcharges + surgeAmount + paymentSurchargeLKR - finalDiscount)
             };
         } catch (err) {
             console.error("Price logic error:", err);
@@ -342,9 +354,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 hasNameBoard: formData.hasNameBoard,
                 nameBoardPrice: pricingSettings?.nameBoardPrice
             }, v);
-            const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, currency, v.vehicleType);
             
-            let total = baseTotal + surcharges + paymentSurcharge;
+            const tripTime = formData.time || formData.flightArrivalTime;
+            const tripDate = formData.date || formData.flightArrivalDate;
+            const surgePercent = calculateTrafficSurge(tripTime, tripDate, surgeRules);
+            const surgeAmount = surgePercent > 0 ? baseTotal * (surgePercent / 100) : 0;
+
+            const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges + surgeAmount, formData.paymentMethod, currency, v.vehicleType);
+            
+            let total = baseTotal + surcharges + surgeAmount + paymentSurcharge;
 
             let couponDiscountAmount = 0;
             if (verifiedCoupons && verifiedCoupons.length > 0) {
@@ -371,8 +389,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             // VehicleCarousel says: {convertPrice(Number(vehicle.calculatedTotal) || 0).symbol}
             // convertPrice expects LKR! So we should compute total in LKR.
             // Wait, paymentSurcharge in getPriceBreakdown uses `currency`. Wait. If VehicleCarousel expects LKR, it should be calculated with 'LKR'.
-            const paymentSurchargeLKR = calculatePaymentFees(baseTotal + surcharges, formData.paymentMethod, 'LKR', v.vehicleType);
-            let totalLKR = baseTotal + surcharges + paymentSurchargeLKR;
+            const paymentSurchargeLKR = calculatePaymentFees(baseTotal + surcharges + surgeAmount, formData.paymentMethod, 'LKR', v.vehicleType);
+            let totalLKR = baseTotal + surcharges + surgeAmount + paymentSurchargeLKR;
             
             let couponDiscountAmountLKR = 0;
             if (verifiedCoupons && verifiedCoupons.length > 0) {
@@ -416,6 +434,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     }
                 })
                 .catch(err => console.error("Error fetching pricing:", err));
+
+            fetch('/api/traffic-surge')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) setSurgeRules(data.data);
+                })
+                .catch(err => console.error("Error fetching surge rules:", err));
         }
     }, [isOpen, pricingCategory]);
 

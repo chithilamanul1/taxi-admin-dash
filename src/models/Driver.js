@@ -1,64 +1,14 @@
 import mongoose from 'mongoose';
 
 const driverSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Optional - for linked user accounts
     name: { type: String, required: true },
-    phone: { type: String, required: true },
-    email: { type: String, unique: true, sparse: true },
-    address: { type: String },
-    nic: { type: String, unique: true, sparse: true }, // Changed required: true to optional for legacy support
+    image: { type: String, required: true },
+    experience: { type: String, required: true }, // e.g., "15 Years"
+    trips: { type: String, required: true },      // e.g., "1200+ Safe Trips"
+    languages: [{ type: String }],                // Optional: English, Sinhala, etc.
+    description: { type: String },                 // Optional bio
+    isActive: { type: Boolean, default: true },
+    sortOrder: { type: Number, default: 0 },
+}, { timestamps: true });
 
-    vehicleType: { type: String, required: true }, // e.g., 'Car', 'Van', 'Bus'
-    vehicleModel: { type: String },
-    vehicleNumber: { type: String, required: true },
-    vehicleYear: { type: String },
-
-    documents: {
-        licenseFront: { type: String },
-        licenseBack: { type: String },
-        nicFront: { type: String },
-        nicBack: { type: String },
-        policeReport: { type: String },
-    },
-
-    initialDeposit: {
-        amount: { type: Number },
-        receipt: { type: String },
-        status: { type: String, enum: ['pending', 'verified', 'rejected'], default: 'pending' }
-    },
-
-    verificationStatus: {
-        type: String,
-        enum: ['unverified', 'pending', 'verified', 'rejected'],
-        default: 'unverified'
-    },
-
-    bankDetails: {
-        bankName: { type: String },
-        branch: { type: String },
-        accountNumber: { type: String },
-        accountName: { type: String }
-    },
-
-    // Operational Status
-    isOnline: { type: Boolean, default: false },
-    currentLocation: {
-        lat: Number,
-        lng: Number,
-    },
-
-    // Wallet & Commission
-    walletBalance: { type: Number, default: 0 },
-    minBalanceThreshold: { type: Number, default: 5000 },
-
-    status: { type: String, enum: ['free', 'busy'], default: 'free' },
-    ratings: { type: Number, default: 5.0 },
-    totalRides: { type: Number, default: 0 }
-}, {
-    timestamps: true
-});
-
-const Driver = mongoose.models.Driver || mongoose.model('Driver', driverSchema);
-
-export default Driver;
-
+export default mongoose.models.Driver || mongoose.model('Driver', driverSchema);

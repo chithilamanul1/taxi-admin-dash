@@ -126,7 +126,7 @@ const Footer = () => {
                         © 2026 Airport Taxis Pvt Ltd. Sri Lankan Excellence.
                     </p>
                     <a href="https://seranex.org" target="_blank" className="group flex items-center gap-1.5 text-[10px] text-black/60 dark:text-white/60 font-black hover:text-emerald-600 transition-all uppercase tracking-[0.2em]">
-                        Made with love by <span className="text-black dark:text-white group-hover:text-emerald-600">seranex</span>
+                        Developed by <span className="text-black dark:text-white group-hover:text-emerald-600">Chithila Manul</span>
                         <ArrowUpRight size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </a>
                 </div>

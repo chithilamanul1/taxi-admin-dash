@@ -99,7 +99,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
             }
         }
 
-        const fixedPrice = vPricing[vehicleSlug] || vPricing[vehicleType] || matchedOverride.price || 0;
+        const fixedPrice = vPricing[vehicleSlug] || vPricing[vehicleType] || 0;
         if (fixedPrice > 0) {
             distancePrice = Number(fixedPrice);
             overrideApplied = true;
@@ -240,4 +240,52 @@ export const calculatePaymentFees = (subtotal, paymentMethod, currency = 'LKR', 
         }
     }
     return 0;
+};
+
+/**
+ * Calculates the traffic surge percentage based on the scheduled time and date.
+ */
+export const calculateTrafficSurge = (scheduledTime, scheduledDate, surgeRules = []) => {
+    if (!scheduledTime || !surgeRules || surgeRules.length === 0) return 0;
+
+    try {
+        const [hours, minutes] = scheduledTime.split(':').map(Number);
+        const tripMinutes = hours * 60 + minutes;
+        
+        // Get day of week (0-6)
+        const dateObj = scheduledDate ? new Date(scheduledDate) : new Date();
+        const dayOfWeek = dateObj.getDay();
+
+        let maxSurge = 0;
+
+        for (const rule of surgeRules) {
+            if (!rule.isActive) continue;
+            
+            // Check day of week
+            if (rule.daysOfWeek && !rule.daysOfWeek.includes(dayOfWeek)) continue;
+
+            const [startH, startM] = rule.startTime.split(':').map(Number);
+            const [endH, endM] = rule.endTime.split(':').map(Number);
+            
+            const startMinutes = startH * 60 + startM;
+            const endMinutes = endH * 60 + endM;
+
+            // Handle overnight windows (e.g. 23:00 to 02:00)
+            if (startMinutes <= endMinutes) {
+                if (tripMinutes >= startMinutes && tripMinutes <= endMinutes) {
+                    maxSurge = Math.max(maxSurge, rule.percentage);
+                }
+            } else {
+                // Overnight
+                if (tripMinutes >= startMinutes || tripMinutes <= endMinutes) {
+                    maxSurge = Math.max(maxSurge, rule.percentage);
+                }
+            }
+        }
+
+        return maxSurge;
+    } catch (err) {
+        console.error('Surge calculation error:', err);
+        return 0;
+    }
 };
