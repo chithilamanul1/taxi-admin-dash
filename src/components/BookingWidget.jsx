@@ -511,7 +511,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             couponCode: verifiedCoupons.length > 0 ? verifiedCoupons[0].code : '',
             verifiedCoupons,
             nameBoardPrice,
-            isAirportPickup: (pickup?.name || '').toLowerCase().includes('airport') || (dropoff?.name || '').toLowerCase().includes('airport')
+            isAirportPickup: activeTab === 'pickup',
+            activeTab
         });
         setShowModal(true);
     };
@@ -988,7 +989,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                             {/* Vehicle Selection - Unified for Desktop & Mobile */}
                             <div className="mt-4 sm:mt-6">
-                                <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-3">Vehicle Type</label>
+                                <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-3">Select Vehicle</label>
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
                                     className="w-full min-h-[4.5rem] sm:min-h-[5.5rem] py-3 px-4 sm:px-6 flex items-center justify-between bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all group overflow-hidden relative"
@@ -1019,8 +1020,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="w-10 h-10 rounded-full bg-slate-50 dark:bg-zinc-900 text-slate-400 flex items-center justify-center group-hover:bg-slate-100 dark:group-hover:bg-zinc-700 transition-colors shrink-0">
-                                        <ChevronDown size={20} />
+                                    <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-zinc-900 text-slate-900 dark:text-white flex items-center justify-center group-hover:bg-amber-400 group-hover:text-white transition-all shrink-0 shadow-sm border border-slate-200 dark:border-white/5">
+                                        <ChevronDown size={22} strokeWidth={3} />
                                     </div>
                                 </button>
                             </div>
@@ -1069,7 +1070,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         <span className="text-black dark:text-white">{distance ? `${distance.toFixed(1)} KM` : '--'}</span>
                                     </div>
                                     <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest">
-                                        <span className="text-slate-900 dark:text-slate-100">Vehicle Type</span>
+                                        <span className="text-slate-900 dark:text-slate-100">Select Vehicle</span>
                                         <div className="flex items-center gap-3 text-black dark:text-emerald-400">
                                             {vehiclePricing[vehicle]?.image && (
                                                 <div className="w-12 h-9 bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 p-0.5 rounded-xl overflow-hidden shrink-0 shadow-sm">

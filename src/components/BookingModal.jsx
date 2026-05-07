@@ -450,8 +450,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         if (targetStep >= 1) {
             if (!formData.pickup) newErrors.pickup = true;
             if (!formData.dropoff) newErrors.dropoff = true;
-            if (isAirportService && formData.hasNameBoard === null) newErrors.hasNameBoard = true;
-            if (formData.hasNameBoard && !formData.nameBoardText) newErrors.nameBoardText = true;
+            if (isAirportService && initialData.isAirportPickup && formData.hasNameBoard === null) newErrors.hasNameBoard = true;
+            if (initialData.isAirportPickup && formData.hasNameBoard && !formData.nameBoardText) newErrors.nameBoardText = true;
         }
         if (targetStep >= 2) {
             if (!formData.name) newErrors.name = true;
@@ -604,7 +604,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     </div>
                                 </div>
 
-                                {isAirportService && (
+                                {isAirportService && initialData.isAirportPickup && (
                                     <div className="space-y-8">
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
                                             <Signpost size={14} className="text-[#FACC15]" strokeWidth={3} /> Airport Greeting Service
@@ -789,7 +789,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-12 border-t border-slate-200 dark:border-white/10">
                                 <div className="space-y-4">
                                     <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>
-                                        {isAirportService ? 'Arrival Date' : 'Pickup Date'}
+                                        {initialData.activeTab === 'pickup' ? 'Arrival Date' : (initialData.activeTab === 'drop' ? 'Departure Date' : 'Pickup Date')}
                                     </label>
                                     <input
                                         type="date"
@@ -800,7 +800,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 </div>
                                 <div className="space-y-4">
                                     <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>
-                                        {isAirportService ? 'Arrival Time' : 'Pickup Time'}
+                                        {initialData.activeTab === 'pickup' ? 'Arrival Time' : (initialData.activeTab === 'drop' ? 'Departure Time' : 'Pickup Time')}
                                     </label>
                                     <input
                                         type="time"
