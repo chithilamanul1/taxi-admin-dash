@@ -13,8 +13,8 @@ const VEHICLE_METADATA = {
     'vezel': { name: 'Honda Vezel', image: '/vehicles/Hondavezel.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 6 },
     'normal-kdh': { name: 'Van (KDH Flat Roof)', image: '/vehicles/van.png', capacity: 6, luggage: 7, handLuggage: 7, sortOrder: 7 },
     'kdh-van': { name: 'Mini Bus (KDH High Roof)', image: '/vehicles/toyota-highroof.png', capacity: 8, luggage: 8, handLuggage: 6, sortOrder: 8 },
-    'mini-bus': { name: 'Coaster Bus', image: '/vehicles/costerbus.png', capacity: 8, luggage: 8, handLuggage: 6, sortOrder: 9 },
-    'coach-bus': { name: 'Coach Bus', image: '/vehicles/coach-bus.png', capacity: 40, luggage: 30, handLuggage: 20, sortOrder: 10 },
+    'mini-bus': { name: 'Coaster Bus', image: '/vehicles/costerbus.png', capacity: 25, luggage: 20, handLuggage: 15, sortOrder: 9 },
+    'coach-bus': { name: 'Coach Bus', image: '/vehicles/coach-bus.png', capacity: 40, luggage: 40, handLuggage: 20, sortOrder: 10 },
 };
 
 export async function POST(req) {

@@ -140,35 +140,33 @@ const VEHICLE_DEFAULTS = {
     'mini-bus': {
         name: 'Coaster Bus',
         image: '/vehicles/costerbus.png',
-        capacity: 8,
-        luggage: 8,
-        handLuggage: 6,
+        capacity: 25,
+        luggage: 20,
+        handLuggage: 15,
         features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
         sortOrder: 9,
         tiers: [
-            { min: 0, max: 20, type: 'flat', price: 7500 },
-            { min: 20, max: 40, type: 'flat', price: 12000 },
-            { min: 40, max: 100, type: 'per_km', rate: 220 },
-            { min: 100, max: 140, type: 'per_km', rate: 220 },
-            { min: 140, max: 200, type: 'per_km', rate: 175 },
-            { min: 200, max: 9999, type: 'per_km', rate: 155 }
+            { min: 0, max: 20, type: 'flat', price: 15000 },
+            { min: 20, max: 40, type: 'flat', price: 25000 },
+            { min: 40, max: 100, type: 'per_km', rate: 550 },
+            { min: 100, max: 200, type: 'per_km', rate: 450 },
+            { min: 200, max: 9999, type: 'per_km', rate: 400 }
         ]
     },
     'coach-bus': {
         name: 'Coach Bus',
         image: '/vehicles/coach-bus.png',
         capacity: 40,
-        luggage: 30,
+        luggage: 40,
         handLuggage: 20,
         features: ['Air Conditioning', 'Bluetooth', 'USB Charging'],
         sortOrder: 10,
         tiers: [
-            { min: 0, max: 20, type: 'flat', price: 15000 },
-            { min: 20, max: 40, type: 'flat', price: 20000 },
-            { min: 40, max: 100, type: 'per_km', rate: 300 },
-            { min: 100, max: 140, type: 'per_km', rate: 300 },
-            { min: 140, max: 200, type: 'per_km', rate: 250 },
-            { min: 200, max: 9999, type: 'per_km', rate: 220 }
+            { min: 0, max: 20, type: 'flat', price: 30000 },
+            { min: 20, max: 40, type: 'flat', price: 45000 },
+            { min: 40, max: 100, type: 'per_km', rate: 850 },
+            { min: 100, max: 200, type: 'per_km', rate: 750 },
+            { min: 200, max: 9999, type: 'per_km', rate: 650 }
         ]
     }
 };
