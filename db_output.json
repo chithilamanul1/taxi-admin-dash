@@ -46,8 +46,8 @@
       "Bluetooth",
       "USB Charging"
     ],
-    "__v": 1,
-    "updatedAt": "2026-03-04T05:49:36.864Z",
+    "__v": 2,
+    "updatedAt": "2026-05-08T07:01:59.845Z",
     "handLuggage": 2,
     "hourlyRate": 0,
     "isActive": true,
@@ -63,7 +63,7 @@
     "perKmRate": 110,
     "capacity": 3,
     "luggage": 3,
-    "image": "/vehicles/sedancar.png",
+    "image": "/vehicles/sedan2.png",
     "tiers": [
       {
         "min": 0,
@@ -121,12 +121,12 @@
       "Bluetooth",
       "USB Charging"
     ],
-    "__v": 1,
+    "__v": 2,
     "handLuggage": 3,
     "hourlyRate": 0,
     "isActive": true,
     "sortOrder": 2,
-    "updatedAt": "2026-03-04T05:49:37.107Z"
+    "updatedAt": "2026-05-08T07:02:00.327Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd6fe",
@@ -189,12 +189,12 @@
       "Bluetooth",
       "USB Charging"
     ],
-    "__v": 1,
+    "__v": 2,
     "handLuggage": 3,
     "hourlyRate": 0,
     "isActive": true,
-    "sortOrder": 99,
-    "updatedAt": "2026-03-04T10:31:16.469Z"
+    "sortOrder": 6,
+    "updatedAt": "2026-05-08T07:02:02.241Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd703",
@@ -264,12 +264,12 @@
       "Bluetooth",
       "USB Charging"
     ],
-    "__v": 1,
+    "__v": 2,
     "handLuggage": 3,
     "hourlyRate": 0,
     "isActive": true,
     "sortOrder": 3,
-    "updatedAt": "2026-03-04T05:49:37.346Z"
+    "updatedAt": "2026-05-08T07:02:00.806Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd708",
@@ -278,7 +278,7 @@
     "category": "airport-transfer",
     "basePrice": 6000,
     "baseKm": 20,
-    "perKmRate": 132,
+    "perKmRate": 120,
     "capacity": 4,
     "luggage": 4,
     "image": "/vehicles/minivan5seat.png",
@@ -309,21 +309,21 @@
         "max": 140,
         "type": "per_km",
         "price": 0,
-        "rate": 176
+        "rate": 160
       },
       {
         "min": 140,
         "max": 200,
         "type": "per_km",
         "price": 0,
-        "rate": 143
+        "rate": 130
       },
       {
         "min": 200,
         "max": 9999,
         "type": "per_km",
         "price": 0,
-        "rate": 132
+        "rate": 120
       }
     ],
     "waitingCharges": [],
@@ -332,12 +332,12 @@
       "Bluetooth",
       "USB Charging"
     ],
-    "__v": 1,
+    "__v": 2,
     "handLuggage": 4,
     "hourlyRate": 0,
     "isActive": true,
     "sortOrder": 4,
-    "updatedAt": "2026-03-04T05:49:37.585Z"
+    "updatedAt": "2026-05-08T07:02:01.284Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd70d",
@@ -400,12 +400,12 @@
       "Bluetooth",
       "USB Charging"
     ],
-    "__v": 1,
+    "__v": 2,
     "handLuggage": 3,
     "hourlyRate": 0,
     "isActive": true,
     "sortOrder": 5,
-    "updatedAt": "2026-03-04T10:31:15.985Z"
+    "updatedAt": "2026-05-08T07:02:01.762Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd712",
@@ -468,37 +468,37 @@
       "Bluetooth",
       "USB Charging"
     ],
-    "__v": 1,
+    "__v": 2,
     "handLuggage": 6,
     "hourlyRate": 0,
     "isActive": true,
-    "sortOrder": 7,
-    "updatedAt": "2026-03-04T10:31:17.430Z"
+    "sortOrder": 8,
+    "updatedAt": "2026-05-08T07:02:03.199Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd717",
     "vehicleType": "mini-bus",
     "name": "Coaster Bus",
     "category": "airport-transfer",
-    "basePrice": 7500,
+    "basePrice": 15000,
     "baseKm": 20,
-    "perKmRate": 155,
-    "capacity": 8,
-    "luggage": 8,
+    "perKmRate": 400,
+    "capacity": 25,
+    "luggage": 20,
     "image": "/vehicles/costerbus.png",
     "tiers": [
       {
         "min": 0,
         "max": 20,
         "type": "flat",
-        "price": 7500,
+        "price": 15000,
         "rate": 0
       },
       {
         "min": 20,
         "max": 40,
         "type": "flat",
-        "price": 12000,
+        "price": 25000,
         "rate": 0
       },
       {
@@ -506,28 +506,21 @@
         "max": 100,
         "type": "per_km",
         "price": 0,
-        "rate": 220
+        "rate": 550
       },
       {
         "min": 100,
-        "max": 140,
-        "type": "per_km",
-        "price": 0,
-        "rate": 220
-      },
-      {
-        "min": 140,
         "max": 200,
         "type": "per_km",
         "price": 0,
-        "rate": 175
+        "rate": 450
       },
       {
         "min": 200,
         "max": 9999,
         "type": "per_km",
         "price": 0,
-        "rate": 155
+        "rate": 400
       }
     ],
     "waitingCharges": [],
@@ -536,30 +529,30 @@
       "Bluetooth",
       "USB Charging"
     ],
-    "__v": 1,
-    "handLuggage": 6,
+    "__v": 2,
+    "handLuggage": 15,
     "hourlyRate": 0,
     "isActive": true,
-    "sortOrder": 8,
-    "updatedAt": "2026-03-04T10:31:17.909Z"
+    "sortOrder": 9,
+    "updatedAt": "2026-05-08T07:02:03.678Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd71b",
     "vehicleType": "coach-bus",
     "name": "Coach Bus",
     "category": "airport-transfer",
-    "basePrice": 25000,
+    "basePrice": 30000,
     "baseKm": 20,
-    "perKmRate": 450,
+    "perKmRate": 650,
     "capacity": 40,
-    "luggage": 30,
+    "luggage": 40,
     "image": "/vehicles/coach-bus.png",
     "tiers": [
       {
         "min": 0,
         "max": 20,
         "type": "flat",
-        "price": 25000,
+        "price": 30000,
         "rate": 0
       },
       {
@@ -572,37 +565,23 @@
       {
         "min": 40,
         "max": 100,
-        "type": "flat",
-        "price": 60000,
-        "rate": 0
+        "type": "per_km",
+        "price": 0,
+        "rate": 850
       },
       {
         "min": 100,
-        "max": 140,
-        "type": "flat",
-        "price": 85000,
-        "rate": 0
-      },
-      {
-        "min": 140,
         "max": 200,
-        "type": "flat",
-        "price": 95000,
-        "rate": 0
+        "type": "per_km",
+        "price": 0,
+        "rate": 750
       },
       {
         "min": 200,
-        "max": 300,
-        "type": "flat",
-        "price": 135000,
-        "rate": 0
-      },
-      {
-        "min": 300,
         "max": 9999,
         "type": "per_km",
         "price": 0,
-        "rate": 450
+        "rate": 650
       }
     ],
     "waitingCharges": [],
@@ -611,12 +590,12 @@
       "Bluetooth",
       "USB Charging"
     ],
-    "__v": 2,
+    "__v": 3,
     "handLuggage": 20,
     "hourlyRate": 0,
     "isActive": true,
-    "sortOrder": 99,
-    "updatedAt": "2026-03-04T10:31:23.416Z"
+    "sortOrder": 10,
+    "updatedAt": "2026-05-08T07:02:09.179Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd71f",
@@ -665,12 +644,12 @@
       "Bluetooth",
       "USB Charging"
     ],
-    "__v": 1,
+    "__v": 2,
     "handLuggage": 2,
     "hourlyRate": 0,
     "isActive": true,
     "sortOrder": 1,
-    "updatedAt": "2026-03-04T05:49:38.543Z"
+    "updatedAt": "2026-05-08T07:02:04.635Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd724",
@@ -682,7 +661,7 @@
     "perKmRate": 110,
     "capacity": 3,
     "luggage": 3,
-    "image": "/vehicles/sedancar.png",
+    "image": "/vehicles/sedan2.png",
     "tiers": [
       {
         "min": 0,
@@ -745,7 +724,7 @@
     "hourlyRate": 0,
     "isActive": true,
     "sortOrder": 2,
-    "updatedAt": "2026-03-04T05:49:38.782Z"
+    "updatedAt": "2026-04-29T06:38:12.104Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd729",
@@ -812,8 +791,8 @@
     "handLuggage": 3,
     "hourlyRate": 0,
     "isActive": true,
-    "sortOrder": 99,
-    "updatedAt": "2026-03-04T10:31:21.262Z"
+    "sortOrder": 6,
+    "updatedAt": "2026-04-29T06:38:12.342Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd72e",
@@ -1091,88 +1070,20 @@
     "handLuggage": 6,
     "hourlyRate": 0,
     "isActive": true,
-    "sortOrder": 7,
-    "updatedAt": "2026-03-04T10:31:22.220Z"
+    "sortOrder": 8,
+    "updatedAt": "2026-04-29T06:38:13.294Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd742",
     "vehicleType": "mini-bus",
     "name": "Coaster Bus",
     "category": "ride-now",
-    "basePrice": 7500,
-    "baseKm": 20,
-    "perKmRate": 155,
-    "capacity": 8,
-    "luggage": 8,
-    "image": "/vehicles/costerbus.png",
-    "tiers": [
-      {
-        "min": 0,
-        "max": 20,
-        "type": "flat",
-        "price": 7500,
-        "rate": 0
-      },
-      {
-        "min": 20,
-        "max": 40,
-        "type": "flat",
-        "price": 12000,
-        "rate": 0
-      },
-      {
-        "min": 40,
-        "max": 100,
-        "type": "per_km",
-        "price": 0,
-        "rate": 220
-      },
-      {
-        "min": 100,
-        "max": 140,
-        "type": "per_km",
-        "price": 0,
-        "rate": 220
-      },
-      {
-        "min": 140,
-        "max": 200,
-        "type": "per_km",
-        "price": 0,
-        "rate": 175
-      },
-      {
-        "min": 200,
-        "max": 9999,
-        "type": "per_km",
-        "price": 0,
-        "rate": 155
-      }
-    ],
-    "waitingCharges": [],
-    "features": [
-      "Air Conditioning",
-      "Bluetooth",
-      "USB Charging"
-    ],
-    "__v": 1,
-    "handLuggage": 6,
-    "hourlyRate": 0,
-    "isActive": true,
-    "sortOrder": 8,
-    "updatedAt": "2026-03-04T10:31:22.698Z"
-  },
-  {
-    "_id": "69a2eb45763ebaa3526cd746",
-    "vehicleType": "coach-bus",
-    "name": "Coach Bus",
-    "category": "ride-now",
     "basePrice": 15000,
     "baseKm": 20,
-    "perKmRate": 220,
-    "capacity": 40,
-    "luggage": 30,
-    "image": "/vehicles/coach-bus.png",
+    "perKmRate": 400,
+    "capacity": 25,
+    "luggage": 20,
+    "image": "/vehicles/costerbus.png",
     "tiers": [
       {
         "min": 0,
@@ -1185,7 +1096,7 @@
         "min": 20,
         "max": 40,
         "type": "flat",
-        "price": 20000,
+        "price": 25000,
         "rate": 0
       },
       {
@@ -1193,28 +1104,21 @@
         "max": 100,
         "type": "per_km",
         "price": 0,
-        "rate": 300
+        "rate": 550
       },
       {
         "min": 100,
-        "max": 140,
-        "type": "per_km",
-        "price": 0,
-        "rate": 300
-      },
-      {
-        "min": 140,
         "max": 200,
         "type": "per_km",
         "price": 0,
-        "rate": 250
+        "rate": 450
       },
       {
         "min": 200,
         "max": 9999,
         "type": "per_km",
         "price": 0,
-        "rate": 220
+        "rate": 400
       }
     ],
     "waitingCharges": [],
@@ -1224,11 +1128,72 @@
       "USB Charging"
     ],
     "__v": 2,
+    "handLuggage": 15,
+    "hourlyRate": 0,
+    "isActive": true,
+    "sortOrder": 9,
+    "updatedAt": "2026-05-08T07:02:08.464Z"
+  },
+  {
+    "_id": "69a2eb45763ebaa3526cd746",
+    "vehicleType": "coach-bus",
+    "name": "Coach Bus",
+    "category": "ride-now",
+    "basePrice": 30000,
+    "baseKm": 20,
+    "perKmRate": 650,
+    "capacity": 40,
+    "luggage": 40,
+    "image": "/vehicles/coach-bus.png",
+    "tiers": [
+      {
+        "min": 0,
+        "max": 20,
+        "type": "flat",
+        "price": 30000,
+        "rate": 0
+      },
+      {
+        "min": 20,
+        "max": 40,
+        "type": "flat",
+        "price": 45000,
+        "rate": 0
+      },
+      {
+        "min": 40,
+        "max": 100,
+        "type": "per_km",
+        "price": 0,
+        "rate": 850
+      },
+      {
+        "min": 100,
+        "max": 200,
+        "type": "per_km",
+        "price": 0,
+        "rate": 750
+      },
+      {
+        "min": 200,
+        "max": 9999,
+        "type": "per_km",
+        "price": 0,
+        "rate": 650
+      }
+    ],
+    "waitingCharges": [],
+    "features": [
+      "Air Conditioning",
+      "Bluetooth",
+      "USB Charging"
+    ],
+    "__v": 3,
     "handLuggage": 20,
     "hourlyRate": 0,
     "isActive": true,
-    "sortOrder": 99,
-    "updatedAt": "2026-03-04T10:31:23.416Z"
+    "sortOrder": 10,
+    "updatedAt": "2026-05-08T07:02:09.179Z"
   },
   {
     "_id": "69a70a2f7cc554d643f717f8",
@@ -1246,7 +1211,7 @@
     ],
     "basePrice": 6000,
     "baseKm": 20,
-    "perKmRate": 135,
+    "perKmRate": 120,
     "hourlyRate": 0,
     "waitingCharges": [],
     "tiers": [
@@ -1276,28 +1241,28 @@
         "max": 140,
         "type": "per_km",
         "price": 0,
-        "rate": 180
+        "rate": 160
       },
       {
         "min": 140,
         "max": 200,
         "type": "per_km",
         "price": 0,
-        "rate": 145
+        "rate": 130
       },
       {
         "min": 200,
         "max": 9999,
         "type": "per_km",
         "price": 0,
-        "rate": 135
+        "rate": 120
       }
     ],
     "isActive": true,
-    "sortOrder": 6,
+    "sortOrder": 7,
     "createdAt": "2026-03-03T16:19:59.364Z",
-    "updatedAt": "2026-03-04T05:49:40.218Z",
-    "__v": 0
+    "updatedAt": "2026-05-08T07:02:02.721Z",
+    "__v": 1
   },
   {
     "_id": "69a70a307cc554d643f717fd",
@@ -1370,7 +1335,7 @@
     "isActive": false,
     "sortOrder": 99,
     "createdAt": "2026-03-03T16:20:00.324Z",
-    "updatedAt": "2026-03-04T10:31:23.657Z",
+    "updatedAt": "2026-05-08T07:02:09.418Z",
     "__v": 0
   },
   {
@@ -1437,9 +1402,9 @@
       }
     ],
     "isActive": true,
-    "sortOrder": 6,
+    "sortOrder": 7,
     "createdAt": "2026-03-03T16:20:04.152Z",
-    "updatedAt": "2026-03-04T05:49:40.456Z",
+    "updatedAt": "2026-04-29T06:38:14.245Z",
     "__v": 0
   },
   {
@@ -1513,7 +1478,7 @@
     "isActive": false,
     "sortOrder": 99,
     "createdAt": "2026-03-03T16:20:05.107Z",
-    "updatedAt": "2026-03-04T10:31:23.657Z",
+    "updatedAt": "2026-05-08T07:02:09.418Z",
     "__v": 0
   }
 ]

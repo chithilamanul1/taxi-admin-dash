@@ -2,29 +2,32 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Clock, Navigation, ChevronRight, Plane, Car, Minus, Plus, Send, CheckCircle2 } from 'lucide-react';
+import { MapPin, Clock, Navigation, ChevronRight, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle } from 'lucide-react';
 
 const vehicles = [
   { 
-    id: 'mini', 
+    id: 'mini-car', 
     name: 'Mini', 
     baseRate: 4000, 
     image: '/vehicles/minicar.png',
-    description: 'Compact & efficient for city rides.'
+    description: 'Compact & efficient for city rides.',
+    perKm: 180
   },
   { 
     id: 'sedan', 
     name: 'Sedan', 
     baseRate: 8000, 
     image: '/vehicles/sedancar.png',
-    description: 'Comfortable & spacious for small groups.'
+    description: 'Comfortable & spacious for small groups.',
+    perKm: 220
   },
   { 
-    id: 'vezel', 
+    id: 'suv', 
     name: 'Vezel', 
     baseRate: 15000, 
     image: '/vehicles/Hondavezel.png',
-    description: 'Premium SUV experience for maximum comfort.'
+    description: 'Premium SUV experience for maximum comfort.',
+    perKm: 350
   }
 ];
 
@@ -32,10 +35,23 @@ const RoundTripBooking = () => {
   const [tab, setTab] = useState('airport');
   const [selectedVehicle, setSelectedVehicle] = useState(vehicles[0]);
   const [hours, setHours] = useState(2);
-  const [selectedKm, setSelectedKm] = useState(10);
   const [locations, setLocations] = useState(['', '']);
+  const [distance, setDistance] = useState(0);
+  const [duration, setDuration] = useState('');
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [isBooking, setIsBooking] = useState(false);
   const [isBooked, setIsBooked] = useState(false);
   const [googleLoaded, setGoogleLoaded] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    date: '',
+    time: '',
+    passengers: 1,
+    name: '',
+    email: '',
+    phone: '',
+    notes: ''
+  });
 
   // Load Google Maps Script
   useEffect(() => {
@@ -75,23 +91,41 @@ const RoundTripBooking = () => {
     });
   };
 
-  // Dynamic KM options based on hours
-  const getKmOptions = (h) => {
-    if (h <= 1) return [10];
-    if (h <= 2) return [10, 20, 30];
-    if (h <= 4) return [30, 40, 50, 60];
-    if (h <= 8) return [60, 80, 100];
-    return [100, 150, 200];
-  };
-
-  const kmOptions = getKmOptions(hours);
-
-  // Reset selected KM if it's not in the new options
+  // Calculate Distance when locations change
   useEffect(() => {
-    if (!kmOptions.includes(selectedKm)) {
-      setSelectedKm(kmOptions[0]);
+    const validLocations = locations.filter(l => l.trim().length > 3);
+    if (validLocations.length >= 2 && googleLoaded) {
+      const calculateRoute = async () => {
+        setIsCalculating(true);
+        const directionsService = new window.google.maps.DirectionsService();
+        
+        try {
+          const result = await new Promise((resolve, reject) => {
+            directionsService.route({
+              origin: locations[0],
+              destination: locations[locations.length - 1],
+              waypoints: locations.slice(1, -1).map(l => ({ location: l, stopover: true })),
+              travelMode: window.google.maps.TravelMode.DRIVING,
+            }, (res, status) => {
+              if (status === 'OK') resolve(res);
+              else reject(status);
+            });
+          });
+
+          const dist = result.routes[0].legs.reduce((acc, leg) => acc + leg.distance.value, 0) / 1000;
+          setDistance(Math.ceil(dist));
+          setDuration(result.routes[0].legs[0].duration.text);
+        } catch (error) {
+          console.error("Routing error:", error);
+        } finally {
+          setIsCalculating(false);
+        }
+      };
+
+      const timer = setTimeout(calculateRoute, 1000);
+      return () => clearTimeout(timer);
     }
-  }, [hours, kmOptions, selectedKm]);
+  }, [locations, googleLoaded]);
 
   const handleAddLocation = () => {
     if (locations.length < 3) {
@@ -106,21 +140,75 @@ const RoundTripBooking = () => {
   };
 
   const calculateTotal = () => {
-    return selectedVehicle.baseRate;
+    const base = selectedVehicle.baseRate;
+    const baseKm = 20; // First 20km included in base rate
+    if (distance > baseKm) {
+      const extraKm = distance - baseKm;
+      return Math.round(base + (extraKm * selectedVehicle.perKm));
+    }
+    return base;
   };
 
-  const handleBooking = () => {
-    const locationStr = locations.filter(l => l).join(' to ');
-    const message = `*Round Trip Booking Request*%0A%0A` +
-      `Type: ${tab.toUpperCase()}%0A` +
-      `Vehicle: ${selectedVehicle.name}%0A` +
-      `Duration: ${hours} Hours%0A` +
-      `Max Distance: ${selectedKm} KM%0A` +
-      `Route: ${locationStr}%0A` +
-      `Total Estimate: Rs. ${calculateTotal().toLocaleString()}`;
-    
-    window.open(`https://wa.me/94768743357?text=${message}`, '_blank');
-    setIsBooked(true);
+  const totalPrice = calculateTotal();
+
+  const handleBooking = async () => {
+    if (!formData.name || !formData.email || !formData.phone || !formData.date || !formData.time) {
+      alert("Please fill in all required contact and trip details.");
+      return;
+    }
+
+    setIsBooking(true);
+    try {
+      const bookingData = {
+        pickupLocation: { address: locations[0] },
+        dropoffLocation: { address: locations[locations.length - 1] },
+        waypoints: locations.slice(1, -1).map(l => ({ address: l })),
+        vehicleType: selectedVehicle.id,
+        tripType: 'one-way', // User specified it's a ride/airport transfer
+        passengerCount: { adults: formData.passengers, children: 0, luggage: 0, handLuggage: 0 },
+        distanceKm: distance,
+        duration: duration,
+        totalPrice: totalPrice,
+        paidAmount: 0,
+        balanceAmount: totalPrice,
+        currency: 'LKR',
+        scheduledDate: formData.date,
+        scheduledTime: formData.time,
+        customerName: formData.name,
+        customerEmail: formData.email,
+        guestPhone: formData.phone,
+        whatsappNumber: formData.phone,
+        paymentMethod: 'cash',
+        notes: formData.notes
+      };
+
+      const res = await fetch('/api/payment/initiate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bookingData)
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setIsBooked(true);
+        // Also open WhatsApp as a secondary confirmation if user wants
+        const message = `*Booking Confirmed (Cash)*%0A%0A` +
+          `Booking ID: ${data.bookingId}%0A` +
+          `Name: ${formData.name}%0A` +
+          `Route: ${locations[0].split(',')[0]} to ${locations[locations.length - 1].split(',')[0]}%0A` +
+          `Vehicle: ${selectedVehicle.name}%0A` +
+          `Price: Rs. ${totalPrice.toLocaleString()}`;
+        
+        window.open(`https://wa.me/94768743357?text=${message}`, '_blank');
+      } else {
+        alert("Booking failed: " + (data.message || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Booking submission error:", error);
+      alert("An error occurred while processing your booking.");
+    } finally {
+      setIsBooking(false);
+    }
   };
 
   if (isBooked) {
@@ -129,11 +217,11 @@ const RoundTripBooking = () => {
         <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
           <CheckCircle2 size={40} />
         </div>
-        <h3 className="text-3xl font-serif font-black text-emerald-950 mb-4 uppercase tracking-tighter">Request Sent!</h3>
-        <p className="text-slate-500 mb-8 font-medium">We've received your round trip request. Redirecting to WhatsApp for confirmation...</p>
+        <h3 className="text-3xl font-serif font-black text-emerald-950 mb-4 uppercase tracking-tighter">Booking Confirmed!</h3>
+        <p className="text-slate-500 mb-8 font-medium">Your request has been received. A confirmation email has been sent to <strong>{formData.email}</strong>. Our team will contact you shortly.</p>
         <button 
           onClick={() => setIsBooked(false)}
-          className="text-emerald-600 font-black text-xs uppercase tracking-widest hover:underline"
+          className="px-10 py-4 bg-emerald-600 text-white rounded-full font-black text-xs uppercase tracking-widest shadow-lg hover:bg-emerald-700 transition-all"
         >
           Make Another Booking
         </button>
@@ -189,52 +277,6 @@ const RoundTripBooking = () => {
           </div>
         </section>
 
-        {/* Time & Distance Selection */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <Clock className="text-emerald-600" size={20} />
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Hour Count</h4>
-            </div>
-            <div className="flex items-center gap-6 bg-slate-50 p-4 rounded-[2rem] border border-slate-100">
-              <button 
-                onClick={() => setHours(Math.max(1, hours - 1))}
-                className="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-emerald-600 shadow-sm border border-slate-100 hover:bg-emerald-600 hover:text-white transition-all"
-              >
-                <Minus size={20} />
-              </button>
-              <div className="flex-1 text-center">
-                <span className="text-4xl font-black text-emerald-950 tracking-tighter">{hours}</span>
-                <span className="ml-2 text-xs font-black text-slate-400 uppercase tracking-widest">Hours</span>
-              </div>
-              <button 
-                onClick={() => setHours(Math.min(12, hours + 1))}
-                className="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-emerald-600 shadow-sm border border-slate-100 hover:bg-emerald-600 hover:text-white transition-all"
-              >
-                <Plus size={20} />
-              </button>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <Navigation className="text-emerald-600" size={20} />
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Select KM</h4>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              {kmOptions.map((km) => (
-                <button 
-                  key={km}
-                  onClick={() => setSelectedKm(km)}
-                  className={`px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all border-2 ${selectedKm === km ? 'bg-emerald-600 text-white border-emerald-600 shadow-lg' : 'bg-white text-slate-400 border-slate-100 hover:border-emerald-200'}`}
-                >
-                  {km}KM
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Location Details */}
         <section className="space-y-6">
           <div className="flex items-center justify-between">
@@ -268,18 +310,72 @@ const RoundTripBooking = () => {
               </div>
             ))}
           </div>
+
+          <div className="flex flex-wrap gap-4 items-center justify-between bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100">
+             <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
+                   {isCalculating ? <Loader2 className="animate-spin" size={24} /> : <Navigation size={24} />}
+                </div>
+                <div>
+                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Distance</p>
+                   <p className="text-xl font-black text-emerald-950 uppercase tracking-tight">{distance > 0 ? `${distance} KM` : 'Calculating...'}</p>
+                </div>
+             </div>
+             <div className="text-right">
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Estimated Price</p>
+                <p className="text-3xl font-black text-emerald-600 tracking-tighter">Rs. {totalPrice.toLocaleString()}.00</p>
+             </div>
+          </div>
+        </section>
+
+        {/* Contact Details */}
+        <section className="space-y-8">
+          <div className="flex items-center gap-3">
+            <User className="text-emerald-600" size={20} />
+            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Passenger & Contact Info</h4>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Pickup Date</label>
+               <input type="date" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-4 px-6 outline-none font-bold text-slate-900 focus:bg-white transition-all" />
+            </div>
+            <div className="space-y-2">
+               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Pickup Time</label>
+               <input type="time" value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-4 px-6 outline-none font-bold text-slate-900 focus:bg-white transition-all" />
+            </div>
+            <div className="space-y-2">
+               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Full Name</label>
+               <input type="text" placeholder="John Doe" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-4 px-6 outline-none font-bold text-slate-900 focus:bg-white transition-all" />
+            </div>
+            <div className="space-y-2">
+               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Email Address</label>
+               <input type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-4 px-6 outline-none font-bold text-slate-900 focus:bg-white transition-all" />
+            </div>
+            <div className="space-y-2">
+               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">WhatsApp Number</label>
+               <input type="tel" placeholder="+94 7X XXX XXXX" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-4 px-6 outline-none font-bold text-slate-900 focus:bg-white transition-all" />
+            </div>
+            <div className="space-y-2">
+               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Passengers</label>
+               <select value={formData.passengers} onChange={e => setFormData({...formData, passengers: parseInt(e.target.value)})} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-4 px-6 outline-none font-bold text-slate-900 focus:bg-white transition-all">
+                  {[1,2,3,4,5,6,7,8].map(n => <option key={n} value={n}>{n} Passengers</option>)}
+               </select>
+            </div>
+          </div>
         </section>
 
         {/* Final Step */}
         <div className="pt-6">
           <button 
             onClick={handleBooking}
-            className="w-full py-6 bg-emerald-950 text-white rounded-full font-black text-xs uppercase tracking-[0.4em] shadow-2xl shadow-emerald-950/20 flex items-center justify-center gap-4 hover:bg-emerald-900 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+            disabled={isBooking || distance === 0}
+            className="w-full py-6 bg-emerald-950 text-white rounded-full font-black text-xs uppercase tracking-[0.4em] shadow-2xl shadow-emerald-950/20 flex items-center justify-center gap-4 hover:bg-emerald-900 transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:scale-100"
           >
-            Confirm Booking <ChevronRight size={20} />
+            {isBooking ? <Loader2 className="animate-spin" /> : 'Confirm & Book Now'} <ChevronRight size={20} />
           </button>
-          <p className="text-center mt-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-            Fixed rates inclusive of all taxes. Fuel surcharge may apply for extra KM.
+          <p className="text-center mt-6 text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2">
+            <AlertCircle size={12} /> Cash Payment to Driver. Official Confirmation will be emailed.
           </p>
         </div>
       </div>
