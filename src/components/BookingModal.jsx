@@ -125,11 +125,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         name: initialData.name || '',
         phone: initialData.phone || '',
         whatsapp: initialData.whatsapp || '',
+        passport: initialData.passport || '',
         email: initialData.email || '',
         flightNumber: initialData.flightNumber || '',
         flightArrivalDate: initialData.flightArrivalDate || '',
         flightArrivalTime: initialData.flightArrivalTime || '',
         arrivalDate: initialData.arrivalDate || '',
+        returnDate: initialData.returnDate || '',
+        returnTime: initialData.returnTime || '',
         notes: initialData.notes || '',
         duration: initialData.duration || '',
         paymentMethod: 'cash',
@@ -487,6 +490,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 if (!formData.flightArrivalTime && !formData.time) newErrors.time = true;
                 if (formData.hasNameBoard && !formData.flightNumber) newErrors.flightNumber = true;
             }
+            if (formData.tripType === 'round-trip') {
+                if (!formData.returnDate) newErrors.returnDate = true;
+                if (!formData.returnTime) newErrors.returnTime = true;
+            }
+            // Enforce luggage selection (at least check if it was explicitly interacted with, or just require > 0 if passengers > 0? No, 0 luggage is possible but user wants it mandatory. Let's ensure it's not undefined)
+            if (formData.passengerCount.luggage === undefined || formData.passengerCount.luggage === null) newErrors.luggage = true;
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -532,10 +541,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 customerName: formData.name,
                 customerEmail: formData.email,
                 guestPhone: formData.phone,
-                whatsappNumber: formData.whatsapp,
+                whatsappNumber: formData.whatsapp || formData.phone,
+                passport: formData.passport,
                 nameBoard: { enabled: formData.hasNameBoard, text: formData.nameBoardText },
                 paymentMethod: formData.paymentMethod,
                 flightNumber: formData.flightNumber,
+                returnDate: formData.returnDate,
+                returnTime: formData.returnTime,
                 notes: formData.notes
             };
 
@@ -832,9 +844,41 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         value={formData.flightArrivalTime || formData.time || ''}
                                         onChange={e => setFormData(prev => ({ ...prev, flightArrivalTime: e.target.value, time: e.target.value }))}
                                         className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.time ? 'border-red-500' : ''}`}
-                                    />
                                 </div>
                             </div>
+
+                            {formData.tripType === 'round-trip' && (
+                                <div className="animate-slide-up space-y-8 pt-10 border-t border-slate-100 dark:border-white/10">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className="w-2 h-2 bg-[#FACC15] rounded-full animate-pulse"></div>
+                                        <h4 className="text-xl font-black text-black dark:text-white uppercase tracking-tight">Return Journey <span className="text-[#FACC15]">Details</span></h4>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                        <div className="space-y-4">
+                                            <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.returnDate ? 'text-red-500' : 'text-slate-500'}`}>
+                                                Return Date
+                                            </label>
+                                            <input
+                                                type="date"
+                                                value={formData.returnDate || ''}
+                                                onChange={e => setFormData(prev => ({ ...prev, returnDate: e.target.value }))}
+                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.returnDate ? 'border-red-500' : ''}`}
+                                            />
+                                        </div>
+                                        <div className="space-y-4">
+                                            <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.returnTime ? 'text-red-500' : 'text-slate-500'}`}>
+                                                Return Time
+                                            </label>
+                                            <input
+                                                type="time"
+                                                value={formData.returnTime || ''}
+                                                onChange={e => setFormData(prev => ({ ...prev, returnTime: e.target.value }))}
+                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.returnTime ? 'border-red-500' : ''}`}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
 

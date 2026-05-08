@@ -73,6 +73,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [availableCoupons, setAvailableCoupons] = useState([])
     const [isLoadingCoupons, setIsLoadingCoupons] = useState(false)
     const [isCouponOpen, setIsCouponOpen] = useState(false)
+    const [isCurrencyOpen, setIsCurrencyOpen] = useState(false)
 
     const [dismissedOfferIds, setDismissedOfferIds] = useState([]);
     const [nameBoardPrice, setNameBoardPrice] = useState(2000); // Default, updated via API
@@ -600,25 +601,23 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         One Way
                                     </button>
                                     <button
-                                        onClick={() => (activeTab !== 'pickup' && activeTab !== 'drop') && setTripType('round-trip')}
-                                        disabled={activeTab === 'pickup' || activeTab === 'drop'}
+                                        onClick={() => (activeTab === 'ride' || activeTab === 'pickup' || activeTab === 'drop') && setTripType('round-trip')}
+                                        disabled={activeTab === 'tours'}
                                         aria-label="Round Trip"
                                         className={`flex-1 sm:flex-none px-4 sm:px-8 py-2.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all duration-300 relative flex items-center justify-center gap-1.5
-                                            ${tripType === 'round-trip' && activeTab !== 'pickup' && activeTab !== 'drop' ? 'bg-white dark:bg-zinc-700 text-black dark:text-white shadow-sm' : 'text-slate-500 hover:text-black dark:hover:text-white'}
-                                            ${(activeTab === 'pickup' || activeTab === 'drop') ? 'opacity-50 cursor-not-allowed' : ''}
+                                            ${tripType === 'round-trip' ? 'bg-white dark:bg-zinc-700 text-black dark:text-white shadow-sm' : 'text-slate-500 hover:text-black dark:hover:text-white'}
+                                            ${activeTab === 'tours' ? 'opacity-50 cursor-not-allowed' : ''}
                                         `}
                                     >
                                         Round Trip
-                                        {(activeTab === 'pickup' || activeTab === 'drop') && (
-                                            <span className="flex items-center justify-center text-[10px] text-emerald-500 opacity-70">🔒</span>
-                                        )}
                                     </button>
                                 </div>
 
                                  <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto sm:overflow-visible pb-1 sm:pb-0 hide-scrollbar">
                                     {/* Currency Selector */}
-                                    <div className="relative group z-[110] shrink-0">
+                                    <div className="relative shrink-0">
                                         <button 
+                                            onClick={() => setIsCurrencyOpen(!isCurrencyOpen)}
                                             className="flex items-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-[10px] sm:text-xs font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
                                             aria-label="Select Currency"
                                         >
@@ -630,24 +629,36 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 />
                                             </div>
                                             <span className="uppercase text-slate-700 dark:text-white">{currency}</span>
-                                            <ChevronDown size={14} className="opacity-70 text-slate-700 dark:text-white" aria-hidden="true" />
+                                            <ChevronDown size={14} className={`opacity-70 text-slate-700 dark:text-white transition-transform ${isCurrencyOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                                         </button>
-                                        <div className="absolute top-[calc(100%+8px)] left-0 mt-2 w-36 sm:w-40 bg-white dark:bg-zinc-800 rounded-xl border border-slate-200 dark:border-white/10 shadow-xl overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 duration-200 z-[200]">
-                                            <div className="py-0">
-                                                {SUPPORTED_CURRENCIES.map(c => (
-                                                    <button
-                                                        key={c.code}
-                                                        onClick={() => changeCurrency(c.code)}
-                                                        className={`w-full text-left px-4 sm:px-5 py-2.5 sm:py-3 text-[10px] sm:text-xs font-black flex items-center gap-3 hover:bg-emerald-50 hover:text-emerald-600 transition-colors ${currency === c.code ? 'text-white bg-emerald-600 border-l-[4px] border-emerald-800' : 'text-slate-700 dark:text-white border-b border-slate-100 last:border-0'}`}
-                                                    >
-                                                        <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full overflow-hidden border border-slate-200">
-                                                            <img src={c.flag} alt={`${c.code} flag`} className="w-full h-full object-cover scale-150" />
-                                                        </div>
-                                                        <span>{c.code}</span>
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
+                                        <AnimatePresence>
+                                            {isCurrencyOpen && (
+                                                <motion.div 
+                                                    initial={{ opacity: 0, y: 10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, y: 10 }}
+                                                    className="absolute top-[calc(100%+8px)] left-0 mt-2 w-36 sm:w-40 bg-white dark:bg-zinc-800 rounded-xl border border-slate-200 dark:border-white/10 shadow-xl overflow-hidden z-[200]"
+                                                >
+                                                    <div className="py-0">
+                                                        {SUPPORTED_CURRENCIES.map(c => (
+                                                            <button
+                                                                key={c.code}
+                                                                onClick={() => {
+                                                                    changeCurrency(c.code);
+                                                                    setIsCurrencyOpen(false);
+                                                                }}
+                                                                className={`w-full text-left px-4 sm:px-5 py-2.5 sm:py-3 text-[10px] sm:text-xs font-black flex items-center gap-3 hover:bg-emerald-50 hover:text-emerald-600 transition-colors ${currency === c.code ? 'text-white bg-emerald-600 border-l-[4px] border-emerald-800' : 'text-slate-700 dark:text-white border-b border-slate-100 last:border-0'}`}
+                                                            >
+                                                                <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full overflow-hidden border border-slate-200">
+                                                                    <img src={c.flag} alt={`${c.code} flag`} className="w-full h-full object-cover scale-150" />
+                                                                </div>
+                                                                <span>{c.code}</span>
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
                                     </div>
 
                                     <button onClick={handleGetCurrentLocation} aria-label="Auto Detect My Location" className="flex-1 sm:flex-none text-black text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 bg-white hover:bg-slate-50 dark:bg-zinc-800 px-4 sm:px-6 py-2 sm:py-2.5 md:py-3 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 justify-center whitespace-nowrap min-w-fit">

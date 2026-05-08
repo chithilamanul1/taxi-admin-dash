@@ -60,8 +60,11 @@ const bookingSchema = new mongoose.Schema({
     scheduledTime: { type: String },
     arrivalDate: { type: String },
     arrivalTime: { type: String },
+    returnDate: { type: String },
+    returnTime: { type: String },
     customerName: { type: String },
     customerEmail: { type: String },
+    passport: { type: String },
     nameBoard: {
         enabled: { type: Boolean, default: false },
         text: { type: String }
