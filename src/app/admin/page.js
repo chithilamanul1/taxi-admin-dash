@@ -607,7 +607,7 @@ export default function AdminDashboard() {
             {/* Main Content */}
             <div className="flex-1 overflow-auto">
                 {/* Premium Header */}
-                <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200/50 px-6 py-4 flex justify-between items-center sticky top-0 z-40">
+                <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200/50 px-4 md:px-6 py-4 flex justify-between items-center sticky top-0 z-40">
                     <div className="flex items-center gap-4">
                         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-600">
                             <Activity size={20} />
@@ -617,7 +617,7 @@ export default function AdminDashboard() {
                             <p className="text-[10px] text-slate-400 truncate">Manage your business</p>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 md:gap-3">
                         <PushNotificationManager />
                         <button
                             onClick={() => {
@@ -640,7 +640,7 @@ export default function AdminDashboard() {
                         <button 
                             onClick={handlePurgeData}
                             disabled={isPurging}
-                            className="flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 border border-red-200 rounded-lg text-[10px] font-black uppercase tracking-wider hover:bg-red-100 transition-all disabled:opacity-50"
+                            className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 border border-red-200 rounded-lg text-[10px] font-black uppercase tracking-wider hover:bg-red-100 transition-all disabled:opacity-50"
                         >
                             {isPurging ? <Loader2 size={12} className="animate-spin" /> : <XCircle size={12} />}
                             Purge Data
@@ -701,7 +701,7 @@ export default function AdminDashboard() {
                     </div>
                 </header>
 
-                <div className="p-6">
+                <div className="p-4 md:p-6">
                     {currentView === 'revenue' && (
                         <div className="space-y-8">
                             <div className="flex items-center justify-between">
@@ -715,12 +715,12 @@ export default function AdminDashboard() {
                     )}
                     {currentView === 'dashboard' && (
                         <div className="space-y-8">
-                            <div className="flex items-center justify-between">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                 <div>
-                                    <h2 className="text-3xl font-bold text-slate-800">Dashboard Overview</h2>
-                                    <p className="text-slate-500 mt-1">Welcome back! Here's what's happening today.</p>
+                                    <h2 className="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">Dashboard Overview</h2>
+                                    <p className="text-slate-500 text-sm mt-1">Welcome back! Here's what's happening today.</p>
                                 </div>
-                                <button className="px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-500/30 flex items-center gap-2">
+                                <button className="w-full sm:w-auto px-4 py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2">
                                     <Activity size={16} />
                                     Refresh
                                 </button>
@@ -732,8 +732,8 @@ export default function AdminDashboard() {
                             {/* Stats are now exclusively handled by RevenueStats to ensure verified data */}
 
                             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                                <div className="px-8 py-5 border-b border-slate-100 flex items-center justify-between">
-                                    <h3 className="text-xl font-bold text-slate-800">Recent Bookings</h3>
+                                <div className="px-6 md:px-8 py-5 border-b border-slate-100 flex items-center justify-between">
+                                    <h3 className="text-lg md:text-xl font-bold text-slate-800">Recent Bookings</h3>
                                     <button onClick={() => setCurrentView('bookings')} className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
                                         View All →
                                     </button>

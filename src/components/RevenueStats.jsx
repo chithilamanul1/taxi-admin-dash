@@ -82,11 +82,11 @@ const RevenueStats = ({ bookings = [] }) => {
 
     return (
         <div className="space-y-6">
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Total Revenue */}
-                <div className="bg-white p-6 rounded-none shadow-sm border border-slate-100 hover:shadow-md transition-all">
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all">
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-none flex items-center justify-center">
+                        <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center">
                             <DollarSign size={24} />
                         </div>
                         <div>
@@ -103,9 +103,9 @@ const RevenueStats = ({ bookings = [] }) => {
                 </div>
 
                 {/* Estimate Fuel Cost */}
-                <div className="bg-white p-6 rounded-none shadow-sm border border-slate-100 hover:shadow-md transition-all">
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all">
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-none flex items-center justify-center">
+                        <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center">
                             <Fuel size={24} />
                         </div>
                         <div>
@@ -121,9 +121,9 @@ const RevenueStats = ({ bookings = [] }) => {
                 </div>
 
                 {/* Net Profit */}
-                <div className="bg-white p-6 rounded-none shadow-sm border border-slate-100 hover:shadow-md transition-all">
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all">
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-none flex items-center justify-center">
+                        <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
                             <TrendingUp size={24} />
                         </div>
                         <div>
@@ -145,9 +145,9 @@ const RevenueStats = ({ bookings = [] }) => {
                 </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Chart Section */}
-                <div className="bg-white p-6 rounded-none shadow-sm border border-slate-100">
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                     <h4 className="text-sm font-bold text-slate-800 mb-6 font-mono tracking-tighter uppercase">Revenue Trend <span className="text-emerald-500">(Last 7 Days)</span></h4>
                     <div className="h-48 flex items-end justify-between gap-2 px-2 border-b border-slate-100 pb-2">
                         {dailyData.map((val, i) => {
@@ -179,7 +179,7 @@ const RevenueStats = ({ bookings = [] }) => {
                 </div>
 
                 {/* Parameters Section */}
-                <div className="bg-emerald-900 text-white p-6 rounded-none shadow-2xl flex flex-col justify-center">
+                <div className="bg-emerald-900 text-white p-6 rounded-2xl shadow-2xl flex flex-col justify-center">
                     <div className="flex items-center gap-3 mb-6">
                         <Calculator className="text-emerald-400" size={20} />
                         <h4 className="font-bold">Calculation Strategy</h4>
@@ -211,7 +211,7 @@ const RevenueStats = ({ bookings = [] }) => {
             </div>
 
             {/* Detailed Profit Breakdown Table */}
-            <div className="bg-white rounded-none shadow-sm border border-slate-100 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                 <div className="px-6 py-4 border-b border-slate-100">
                     <h3 className="font-bold text-slate-800">Verified Trip-by-Trip Profit Breakdown</h3>
                 </div>
