@@ -515,6 +515,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             return;
         }
 
+        if (!passengerCount.adults || passengerCount.adults < 1) {
+            alert("Please select at least one adult passenger.");
+            return;
+        }
+
         const verifiedCoupons = appliedOffers.map(offer => ({
             code: offer.name,
             discountType: offer.discountPercentage > 0 ? 'percentage' : 'flat',
@@ -1088,7 +1093,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                             {/* Counters Section with Label */}
                             <div className="mt-8 lg:mt-10 space-y-4">
-                                <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-4">Passenger & Luggage</label>
+                                <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-4 flex items-center gap-2">
+                                    Passenger & Luggage
+                                    <span className="text-[9px] bg-red-500 text-white px-2 py-0.5 rounded-full lowercase tracking-tight">Compulsory</span>
+                                </label>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                                     {[
                                     { id: 'adults', label: 'Adults' },
@@ -1100,7 +1108,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         <span className="text-[11px] font-black text-slate-800 dark:text-slate-100 uppercase tracking-widest w-24 flex-shrink-0 leading-tight pr-2">{c.label}</span>
                                         <div className="flex items-center gap-3 shrink-0 bg-slate-50 dark:bg-zinc-900 rounded-xl p-1 border border-slate-100 dark:border-white/5">
                                             <button
-                                                onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, (Number(p[c.id]) || 0) - 1) }))}
+                                                onClick={() => setPassengerCount(p => ({ 
+                                                    ...p, 
+                                                    [c.id]: Math.max(c.id === 'adults' ? 1 : 0, (Number(p[c.id]) || 0) - 1) 
+                                                }))}
                                                 className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center hover:bg-slate-50 transition-all text-slate-600 dark:text-white active:scale-95"
                                                 aria-label={`Decrease ${c.label}`}
                                             >

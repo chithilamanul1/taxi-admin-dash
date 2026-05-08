@@ -501,6 +501,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             }
             // Enforce luggage selection (at least check if it was explicitly interacted with, or just require > 0 if passengers > 0? No, 0 luggage is possible but user wants it mandatory. Let's ensure it's not undefined)
             if (formData.passengerCount.luggage === undefined || formData.passengerCount.luggage === null) newErrors.luggage = true;
+            if (!formData.passengerCount.adults || formData.passengerCount.adults < 1) newErrors.adults = true;
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
