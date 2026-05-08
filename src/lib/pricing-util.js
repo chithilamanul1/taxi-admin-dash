@@ -5,8 +5,32 @@
 
 import { destinations } from './destinations.js';
 
-export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '', dynamicDestinations = []) => {
+export const ROUND_TRIP_PACKAGES = [
+    { id: 'base-5h-50km', name: '5 Hour / 50 KM', hours: 5, distance: 50, price: 7000, description: 'Perfect for quick city tours or airport returns.' },
+    { id: 'standard-12h-300km', name: '12 Hour / 300 KM', hours: 12, distance: 300, price: 25000, description: 'Full day hire for outstation trips.' }
+];
+
+export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '', dynamicDestinations = [], options = {}) => {
     const distKm = Math.ceil(Number(distanceKm) || 0);
+    const { roundTripPackageId, roundTripPackages: customPackages } = options;
+    const activePackages = customPackages || ROUND_TRIP_PACKAGES;
+
+    // 1. Handle Package-based Round Trip Pricing
+    if (tripType === 'round-trip' && roundTripPackageId) {
+        const pkg = activePackages.find(p => p.id === roundTripPackageId);
+        if (pkg) {
+            let total = pkg.price;
+            
+            // Handle excess distance if applicable
+            if (distKm > pkg.distance) {
+                const excessKm = distKm - pkg.distance;
+                const perKmRate = vehicleData.perKmRate || 100;
+                total += (excessKm * perKmRate);
+            }
+            
+            return Math.round(total);
+        }
+    }
 
     // If no distance/location, return vehicle base price to show "Starting From" rates
     if (distKm <= 0) {
@@ -202,8 +226,8 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
 
     baseTotal = distancePrice;
 
-    // 3. Round Trip Multiplier
-    if (tripType === 'round-trip') {
+    // 2. Default Round Trip Multiplier (if no package selected)
+    if (tripType === 'round-trip' && !roundTripPackageId) {
         baseTotal *= 2;
     }
 

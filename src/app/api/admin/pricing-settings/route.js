@@ -16,7 +16,11 @@ export async function GET(req) {
                 longDistanceDiscountPercentage: 10,
                 isActive: true,
                 nameBoardPrice: 2000,
-                waitingHourRate: 1000
+                waitingHourRate: 1000,
+                roundTripPackages: [
+                    { id: 'base-5h-50km', name: '5 Hour / 50 KM', hours: 5, distance: 50, price: 7000, description: 'Perfect for quick city tours or airport returns.' },
+                    { id: 'standard-12h-300km', name: '12 Hour / 300 KM', hours: 12, distance: 300, price: 25000, description: 'Full day hire for outstation trips.' }
+                ]
             });
         }
 
@@ -39,6 +43,7 @@ export async function PUT(req) {
                 isActive: body.isActive,
                 nameBoardPrice: Number(body.nameBoardPrice || 2000),
                 waitingHourRate: Number(body.waitingHourRate || 1000),
+                roundTripPackages: body.roundTripPackages || [],
                 updatedBy: body.updatedBy || 'admin'
             },
             { new: true, upsert: true }

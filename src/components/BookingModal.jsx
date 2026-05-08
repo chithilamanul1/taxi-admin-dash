@@ -116,6 +116,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         dropoff: initialData.dropoff || '',
         dropoffCoords: initialData.dropoffCoords || null,
         tripType: initialData.tripType || 'one-way',
+        roundTripPackageId: initialData.roundTripPackageId || null,
         passengerCount: initialData.passengerCount || { adults: 1, children: 0, luggage: 0, handLuggage: 0 },
         hasNameBoard: (initialData.hasNameBoard === true || initialData.hasNameBoard === false) ? initialData.hasNameBoard : null,
         nameBoardText: initialData.nameBoardText || '',
@@ -154,6 +155,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 vehicle: initialData.vehicle || prev.vehicle,
                 passengerCount: { ...prev.passengerCount, ...(initialData.passengerCount || {}) },
                 waypoints: initialData.waypoints || prev.waypoints,
+                roundTripPackageId: initialData.roundTripPackageId || prev.roundTripPackageId,
                 hasNameBoard: !isAirportService ? false : ((initialData.hasNameBoard === true || initialData.hasNameBoard === false) ? initialData.hasNameBoard : null)
             }));
             
@@ -352,7 +354,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         const distKm = Number(distance || initialData.distance || 0);
 
         return pricing.map(v => {
-            const baseTotal = calculateBasePrice(distKm, v, formData.tripType, formData.pickup, formData.dropoff, destinations);
+            const baseTotal = calculateBasePrice(distKm, v, formData.tripType, formData.pickup, formData.dropoff, destinations, { 
+                roundTripPackageId: formData.roundTripPackageId,
+                roundTripPackages: pricingSettings?.roundTripPackages 
+            });
             const surcharges = calculateSurcharges({
                 hasNameBoard: formData.hasNameBoard,
                 nameBoardPrice: pricingSettings?.nameBoardPrice

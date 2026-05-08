@@ -17,14 +17,14 @@ const TripMap = dynamic(() => import('./TripMap'), { ssr: false })
 const CustomDateTimePicker = dynamic(() => import('./CustomDateTimePicker'), { ssr: false })
 
 import { useCurrency } from '../context/CurrencyContext'
-import { calculateBasePrice, calculateSurcharges, calculateTrafficSurge } from '@/lib/pricing-util';
+import { calculateBasePrice, calculateSurcharges, calculateTrafficSurge, ROUND_TRIP_PACKAGES } from '@/lib/pricing-util';
 
 // (Helper to calculate price)
-const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, pickupName = '', dropoffName = '', destinations = [], scheduledTime = null, scheduledDate = null, surgeRules = []) => {
+const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, pickupName = '', dropoffName = '', destinations = [], scheduledTime = null, scheduledDate = null, surgeRules = [], roundTripPackageId = null, roundTripPackages = []) => {
     if (!pricingMap[vehicleId]) return { total: 0, surgeAmount: 0 };
     const vehicleData = pricingMap[vehicleId];
 
-    const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupName, dropoffName, destinations);
+    const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupName, dropoffName, destinations, { roundTripPackageId, roundTripPackages });
     const surcharges = calculateSurcharges({ waitingHours, hasNameBoard, nameBoardPrice }, vehicleData);
 
     const surgePercent = calculateTrafficSurge(scheduledTime, scheduledDate, surgeRules);
@@ -48,6 +48,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [pickupSearch, setPickupSearch] = useState('Bandaranaike International Airport (CMB)')
     const [dropoffSearch, setDropoffSearch] = useState('')
     const [waypointSearches, setWaypointSearches] = useState([])
+    const [roundTripPackageId, setRoundTripPackageId] = useState(null)
     const [pickupResults, setPickupResults] = useState([])
     const [dropoffResults, setDropoffResults] = useState([])
     const [waypointResults, setWaypointResults] = useState([])
@@ -490,7 +491,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         destinations,
         scheduledTime || currentTime,
         scheduledDate || currentDate,
-        surgeRules
+        surgeRules,
+        roundTripPackageId,
+        pricingSettings.roundTripPackages
     );
 
     // Calculate total discount from all applied offers (MAX RULE: No Stacking)
@@ -543,7 +546,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             isAirportPickup: activeTab === 'pickup',
             activeTab,
             scheduledDate: scheduledDate || currentDate,
-            scheduledTime: scheduledTime || currentTime
+            scheduledTime: scheduledTime || currentTime,
+            roundTripPackageId
         });
         setShowModal(true);
     };
@@ -619,6 +623,30 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         Round Trip
                                     </button>
                                 </div>
+
+                                {tripType === 'round-trip' && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        className="flex bg-slate-100 dark:bg-zinc-800 rounded-xl p-1 w-full sm:w-auto shadow-inner border border-slate-200/50 dark:border-white/5"
+                                    >
+                                        {(pricingSettings.roundTripPackages || ROUND_TRIP_PACKAGES).map(pkg => (
+                                            <button
+                                                key={pkg.id}
+                                                onClick={() => setRoundTripPackageId(pkg.id)}
+                                                className={`px-3 sm:px-5 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all duration-300 ${roundTripPackageId === pkg.id ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/30' : 'text-slate-500 hover:text-emerald-600'}`}
+                                            >
+                                                {pkg.name}
+                                            </button>
+                                        ))}
+                                        <button
+                                            onClick={() => setRoundTripPackageId(null)}
+                                            className={`px-3 sm:px-5 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all duration-300 ${roundTripPackageId === null ? 'bg-white dark:bg-zinc-700 text-black dark:text-white shadow-sm' : 'text-slate-500 hover:text-black'}`}
+                                        >
+                                            Custom
+                                        </button>
+                                    </motion.div>
+                                )}
 
                                  <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto sm:overflow-visible pb-1 sm:pb-0 hide-scrollbar">
                                     {/* Currency Selector */}
@@ -1336,7 +1364,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         destinations,
                         scheduledTime || currentTime,
                         scheduledDate || currentDate,
-                        surgeRules
+                        surgeRules,
+                        roundTripPackageId,
+                        pricingSettings.roundTripPackages
                     );
                     return {
                         ...v,
