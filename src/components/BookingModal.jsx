@@ -648,26 +648,30 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </label>
                                         <div className="grid grid-cols-2 gap-4">
                                             {[
-                                                { val: true, label: 'Name Board', sub: 'Standard Service', icon: Check },
-                                                { val: false, label: 'No Board', sub: 'Direct Pickup', icon: X }
+                                                { val: true, label: 'Name Board', sub: 'Standard Service', icon: Check, color: 'emerald' },
+                                                { val: false, label: 'No Board', sub: 'Direct Pickup', icon: X, color: 'rose' }
                                             ].map(opt => (
                                                 <button
                                                     key={opt.label}
                                                     onClick={() => setFormData({ ...formData, hasNameBoard: opt.val })}
-                                                    className={`p-6 rounded-3xl border text-left transition-all relative overflow-hidden group ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-transparent text-white shadow-xl' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-yellow-400/50'}`}
+                                                    className={`p-6 rounded-3xl border text-left transition-all relative overflow-hidden group ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-transparent text-white shadow-xl' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-[#FACC15]/50'}`}
                                                 >
-                                                    <div className="flex items-center justify-between mb-2">
-                                                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${formData.hasNameBoard === opt.val ? 'bg-white/20' : 'bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10'}`}>
-                                                            <opt.icon size={16} strokeWidth={4} className={formData.hasNameBoard === opt.val ? 'text-white' : (opt.val ? 'text-emerald-500' : 'text-rose-500')} />
+                                                    <div className="flex items-center justify-between mb-4">
+                                                        <div className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all ${formData.hasNameBoard === opt.val ? 'bg-white/20' : 'bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 shadow-sm'}`}>
+                                                            <opt.icon size={18} strokeWidth={4} className={formData.hasNameBoard === opt.val ? 'text-white' : (opt.val ? 'text-emerald-500' : 'text-rose-500')} />
                                                         </div>
+                                                        {formData.hasNameBoard === opt.val && (
+                                                            <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+                                                        )}
                                                     </div>
-                                                    <span className="block text-[11px] font-black uppercase tracking-widest mb-1">{opt.label}</span>
-                                                    <span className={`text-[8px] font-bold uppercase tracking-widest ${formData.hasNameBoard === opt.val ? 'text-white/60' : 'text-slate-400'}`}>{opt.sub}</span>
+                                                    <span className="block text-xs font-black uppercase tracking-widest mb-1">{opt.label}</span>
+                                                    <span className={`text-[9px] font-bold uppercase tracking-widest ${formData.hasNameBoard === opt.val ? 'text-white/70' : 'text-slate-400'}`}>{opt.sub}</span>
                                                 </button>
                                             ))}
                                         </div>
+
                                         {formData.hasNameBoard && (
-                                            <div className="space-y-6 animate-slide-up">
+                                            <div className="space-y-6 animate-slide-up pt-4">
                                                 <div className="relative">
                                                     <input
                                                         value={formData.nameBoardText}
