@@ -888,7 +888,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             <span className="uppercase tracking-widest text-[11px]">
                                                 {scheduledDate && scheduledTime 
                                                     ? `${new Date(scheduledDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${scheduledTime}` 
-                                                    : 'Select Date & Time (for traffic rates)'}
+                                                    : 'Select Date & Time'}
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-2">
@@ -926,10 +926,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                             // Keep open to allow time selection after date
                                                         }} 
                                                     />
-                                                    <div className="bg-black border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-end max-w-[320px] mx-auto">
+                                                    <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
                                                         <button 
                                                             onClick={() => setIsDateTimePickerOpen(false)}
-                                                            className="px-6 py-2 bg-[#FACC15] text-black font-black text-xs uppercase tracking-widest hover:bg-white transition-colors"
+                                                            className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95"
                                                         >
                                                             Done
                                                         </button>
