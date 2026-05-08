@@ -1209,6 +1209,25 @@ export default function AdminDashboard() {
                                             </label>
                                         </div>
                                     </div>
+
+                                    {/* Traffic Surge Shortcut */}
+                                    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 shadow-sm">
+                                                <Clock size={24} strokeWidth={2.5} />
+                                            </div>
+                                            <div>
+                                                <h4 className="font-black text-amber-900 uppercase tracking-tight text-lg">Traffic Surge Pricing</h4>
+                                                <p className="text-xs text-amber-700 font-bold uppercase tracking-widest mt-0.5 opacity-70">Manage Peak-Hour Rates & Time Windows</p>
+                                            </div>
+                                        </div>
+                                        <button 
+                                            onClick={() => setCurrentView('traffic-surge')}
+                                            className="w-full sm:w-auto px-6 py-3 bg-amber-600 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-amber-700 transition-all shadow-lg shadow-amber-600/20 active:scale-95"
+                                        >
+                                            Configure Surge Rules
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* Category Tabs */}
