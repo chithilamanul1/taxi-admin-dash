@@ -11,7 +11,7 @@ const vehicles = [
     baseRate: 4000, 
     image: '/vehicles/minicar.png',
     description: 'Compact & efficient for city rides.',
-    perKm: 180
+    perKm: 110
   },
   { 
     id: 'sedan', 
@@ -19,15 +19,15 @@ const vehicles = [
     baseRate: 8000, 
     image: '/vehicles/sedancar.png',
     description: 'Comfortable & spacious for small groups.',
-    perKm: 220
+    perKm: 130
   },
   { 
-    id: 'suv', 
+    id: 'vezel', 
     name: 'Vezel', 
     baseRate: 15000, 
     image: '/vehicles/Hondavezel.png',
     description: 'Premium SUV experience for maximum comfort.',
-    perKm: 350
+    perKm: 180
   }
 ];
 
