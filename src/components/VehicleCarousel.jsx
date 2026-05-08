@@ -125,7 +125,8 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
 
             <div
                 ref={scrollRef}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-8 px-2 w-full"
+                className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 px-2 w-full no-scrollbar scroll-smooth"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {displayVehicles.map((vehicle, index) => {
                     const { suitable, reason } = isSuitable(vehicle);
@@ -135,7 +136,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                         <div
                             key={vehicle._id || vehicle.vehicleType}
                             className={`
-                                relative flex-shrink-0 w-full snap-start transition-all duration-500 group/card flex flex-col
+                                relative flex-shrink-0 w-[85vw] sm:w-[400px] md:w-[350px] snap-start transition-all duration-500 group/card flex flex-col
                                 ${isSelected 
                                     ? 'border border-slate-100 dark:border-white/10 bg-[#FACC15]/5 shadow-2xl shadow-slate-200/50 dark:shadow-none -translate-y-2' 
                                     : 'border border-slate-100 dark:border-white/10 hover:-translate-y-2 hover:shadow-2xl hover:border-slate-200 dark:border-white/10/20'}
@@ -237,6 +238,22 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                         </div>
                     );
                 })}
+            </div>
+
+            {/* Carousel Navigation Buttons */}
+            <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between pointer-events-none px-4">
+                <button 
+                    onClick={() => scroll('left')}
+                    className="w-12 h-12 rounded-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md border border-slate-200 dark:border-white/10 flex items-center justify-center text-emerald-950 dark:text-white shadow-lg pointer-events-auto hover:bg-emerald-600 hover:text-white transition-all active:scale-95"
+                >
+                    <ChevronLeft size={24} />
+                </button>
+                <button 
+                    onClick={() => scroll('right')}
+                    className="w-12 h-12 rounded-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md border border-slate-200 dark:border-white/10 flex items-center justify-center text-emerald-950 dark:text-white shadow-lg pointer-events-auto hover:bg-emerald-600 hover:text-white transition-all active:scale-95"
+                >
+                    <ChevronRight size={24} />
+                </button>
             </div>
         </div>
     );

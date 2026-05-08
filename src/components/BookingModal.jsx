@@ -676,15 +676,26 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         placeholder="NAME ON BOARD (e.g. MR. JOHN SMITH)"
                                                     />
                                                 </div>
-                                                <div className="relative">
-                                                    <input
-                                                        value={formData.flightNumber}
-                                                        onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                        className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-14 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
-                                                        placeholder="FLIGHT NUMBER (e.g. UL 101)"
-                                                    />
-                                                    <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                        <PlaneTakeoff size={20} strokeWidth={3} />
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                    <div className="relative">
+                                                        <input
+                                                            value={formData.flightNumber}
+                                                            onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
+                                                            className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-14 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
+                                                            placeholder="FLIGHT NO"
+                                                        />
+                                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                            <PlaneTakeoff size={20} strokeWidth={3} />
+                                                        </div>
+                                                    </div>
+                                                    <div className="relative">
+                                                        <input
+                                                            type="time"
+                                                            value={formData.flightArrivalTime || ''}
+                                                            onChange={e => setFormData({ ...formData, flightArrivalTime: e.target.value, time: e.target.value })}
+                                                            className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
+                                                        />
+                                                        <div className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 text-[8px] font-black uppercase tracking-widest pointer-events-none">ARR TIME</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -826,24 +837,25 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-12 border-t border-slate-200 dark:border-white/10">
                                 <div className="space-y-4">
                                     <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>
-                                        {initialData.activeTab === 'pickup' ? 'Arrival Date' : (initialData.activeTab === 'drop' ? 'Departure Date' : 'Pickup Date')}
+                                        {formData.hasNameBoard ? 'Arrival Date' : 'Pickup Date'}
                                     </label>
                                     <input
                                         type="date"
-                                        value={formData.flightArrivalDate || formData.date || ''}
-                                        onChange={e => setFormData(prev => ({ ...prev, flightArrivalDate: e.target.value, date: e.target.value }))}
+                                        value={formData.date || formData.flightArrivalDate || ''}
+                                        onChange={e => setFormData(prev => ({ ...prev, date: e.target.value, flightArrivalDate: e.target.value }))}
                                         className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.date ? 'border-red-500' : ''}`}
                                     />
                                 </div>
                                 <div className="space-y-4">
                                     <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>
-                                        {initialData.activeTab === 'pickup' ? 'Arrival Time' : (initialData.activeTab === 'drop' ? 'Departure Time' : 'Pickup Time')}
+                                        {formData.hasNameBoard ? 'Arrival Time' : 'Pickup Time'}
                                     </label>
                                     <input
                                         type="time"
-                                        value={formData.flightArrivalTime || formData.time || ''}
-                                        onChange={e => setFormData(prev => ({ ...prev, flightArrivalTime: e.target.value, time: e.target.value }))}
+                                        value={formData.time || formData.flightArrivalTime || ''}
+                                        onChange={e => setFormData(prev => ({ ...prev, time: e.target.value, flightArrivalTime: e.target.value }))}
                                         className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.time ? 'border-red-500' : ''}`}
+                                    />
                                 </div>
                             </div>
 

@@ -163,14 +163,18 @@ const getPrintFriendlyTemplate = (content, title = 'Booking Details') => `
     <title>${title}</title>
     <style>
         @media print {
-            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; padding: 0; }
+            body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; margin: 0; padding: 0; }
             .no-print { display: none !important; }
-            table { page-break-inside: avoid; }
+            .print-container { width: 100% !important; max-width: 800px !important; margin: 0 !important; padding: 0 !important; }
+            table { page-break-inside: auto; }
+            tr, td { page-break-inside: avoid; }
+            .keep-together { page-break-inside: avoid !important; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
     </style>
 </head>
-<body style="margin: 0; padding: 10px; font-family: 'Arial', 'Helvetica', sans-serif; background-color: #ffffff; color: #1f2937; font-size: 11px; line-height: 1.2;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 595px; margin: 0 auto; background-color: #ffffff;">
+<body style="margin: 0; padding: 10px; font-family: 'Arial', 'Helvetica', sans-serif; background-color: #ffffff; color: #1f2937; font-size: 12px; line-height: 1.4;">
+    <table width="100%" cellpadding="0" cellspacing="0" class="print-container" style="max-width: 650px; margin: 0 auto; background-color: #ffffff;">
         <!-- Header -->
         <tr>
             <td style="padding: 10px 0; border-bottom: 2px solid #064e3b;">
@@ -433,9 +437,9 @@ export async function sendBookingConfirmation(booking) {
 
     const ownerContent = `
         <!-- Booking ID Header -->
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 10px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 10px; border: 1px solid #064e3b; border-left: 10px solid #064e3b;">
             <tr>
-                <td style="background-color: #064e3b; color: #ffffff; padding: 10px 16px; font-size: 16px; font-weight: bold;">
+                <td style="background-color: #f0fdf4; color: #064e3b; padding: 12px 16px; font-size: 18px; font-weight: 800;">
                     NEW BOOKING #${bookingId}
                 </td>
             </tr>
@@ -538,9 +542,9 @@ export async function sendBookingConfirmation(booking) {
         </table>
 
         <!-- Payment Summary -->
-        <table width="100%" cellpadding="4" cellspacing="0" style="border: 2px solid #064e3b; margin-bottom: 15px;">
-            <tr style="background-color: #064e3b;">
-                <td colspan="2" style="font-weight: bold; font-size: 11px; color: #ffffff; padding: 6px 10px;">
+        <table width="100%" cellpadding="4" cellspacing="0" style="border: 2px solid #064e3b; margin-bottom: 15px; page-break-inside: avoid;">
+            <tr style="background-color: #064e3b; -webkit-print-color-adjust: exact;">
+                <td colspan="2" style="font-weight: 800; font-size: 12px; color: #ffffff; padding: 8px 10px; -webkit-print-color-adjust: exact;">
                     PAYMENT SUMMARY
                 </td>
             </tr>
@@ -1145,7 +1149,7 @@ export async function sendCustomTripInquiry(data) {
     const inquiryId = Math.random().toString(36).substring(7).toUpperCase();
 
     const ownerContent = `
-    < !--Inquiry Header-- >
+        <!-- Inquiry Header -->
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
             <tr>
                 <td style="background-color: #064e3b; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
@@ -1154,7 +1158,7 @@ export async function sendCustomTripInquiry(data) {
             </tr>
         </table>
 
-        <!--Customer Details-- >
+        <!-- Customer Details -->
         <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
             <tr style="background-color: #f9fafb;">
                 <td colspan="2" style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
@@ -1175,7 +1179,7 @@ export async function sendCustomTripInquiry(data) {
             </tr>
         </table>
 
-        <!--Trip Requirements-- >
+        <!-- Trip Requirements -->
         <table width="100%" cellpadding="4" cellspacing="0" style="border: 1px solid #e5e7eb; margin-bottom: 20px;">
             <tr style="background-color: #f9fafb;">
                 <td colspan="2" style="font-weight: bold; font-size: 12px; color: #374151; border-bottom: 1px solid #e5e7eb; padding: 10px;">
@@ -1279,7 +1283,7 @@ export async function sendOwnerNotification(subject, details) {
 
     try {
         const content = `
-    < table width = "100%" cellpadding = "0" cellspacing = "0" style = "margin-bottom: 20px;" >
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
         <tr>
             <td style="background-color: ${COLORS.primary}; color: #ffffff; padding: 12px 16px; font-size: 18px; font-weight: bold;">
                 SYSTEM ALERT: ${subject.toUpperCase()}
@@ -1317,7 +1321,7 @@ export async function sendManualInvoice(booking) {
     const bookingId = booking._id?.toString().slice(-8).toUpperCase();
 
     const content = `
-    < !--Hero Section-- >
+        <!-- Hero Section -->
         <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
             <tr>
                 <td>
@@ -1332,7 +1336,7 @@ export async function sendManualInvoice(booking) {
             </tr>
         </table>
 
-        <!--Amount Card-- >
+        <!-- Amount Card -->
         <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, ${COLORS.primary}, #047857); border-radius: 16px; margin-bottom: 30px;">
             <tr>
                 <td style="padding: 30px; text-align: center;">
@@ -1347,8 +1351,8 @@ export async function sendManualInvoice(booking) {
             </tr>
         </table>
 
-        <!--Details Card-- >
-    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
+        <!-- Details Card -->
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
         ${components.infoCard('📍', 'Trip Route', `${booking.pickupLocation?.address?.split(',')[0] || 'Pickup'} to ${booking.dropoffLocation?.address?.split(',')[0] || 'Dropoff'}`)}
         ${components.infoCard('📅', 'Date & Time', `${booking.scheduledDate || 'TBD'} ${booking.scheduledTime || ''}`)}
         ${booking.notes ? components.infoCard('📝', 'Notes', booking.notes) : ''}
