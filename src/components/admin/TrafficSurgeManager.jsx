@@ -221,7 +221,7 @@ export default function TrafficSurgeManager() {
                             initial={{ scale: 0.9, y: 20 }}
                             animate={{ scale: 1, y: 0 }}
                             exit={{ scale: 0.9, y: 20 }}
-                            className="bg-white rounded-[3rem] shadow-2xl w-full max-w-xl overflow-hidden"
+                            className="bg-white rounded-[3rem] shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden"
                         >
                             <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-indigo-50/50">
                                 <div>
@@ -235,7 +235,7 @@ export default function TrafficSurgeManager() {
                                 </button>
                             </div>
 
-                            <form onSubmit={handleSubmit} className="p-8 space-y-6">
+                            <form onSubmit={handleSubmit} className="p-8 space-y-6 overflow-y-auto flex-1">
                                 <div className="grid grid-cols-2 gap-6">
                                     <div className="col-span-2">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Rule Label</label>
