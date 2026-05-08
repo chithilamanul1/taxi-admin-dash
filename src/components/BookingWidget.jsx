@@ -14,6 +14,7 @@ const VehicleCarousel = dynamic(() => import('./VehicleCarousel'), { ssr: false 
 const LocationInput = dynamic(() => import('./LocationInput'), { ssr: false })
 const SmartOfferNudge = dynamic(() => import('./SmartOfferNudge'), { ssr: false })
 const TripMap = dynamic(() => import('./TripMap'), { ssr: false })
+const CustomDateTimePicker = dynamic(() => import('./CustomDateTimePicker'), { ssr: false })
 
 import { useCurrency } from '../context/CurrencyContext'
 import { calculateBasePrice, calculateSurcharges, calculateTrafficSurge } from '@/lib/pricing-util';
@@ -80,6 +81,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true });
     const [destinations, setDestinations] = useState([]);
     const [surgeRules, setSurgeRules] = useState([]);
+
+    const [scheduledDate, setScheduledDate] = useState(null);
+    const [scheduledTime, setScheduledTime] = useState(null);
+    const [isDateTimePickerOpen, setIsDateTimePickerOpen] = useState(false);
 
 
     // Manage body class for hiding chat
@@ -483,8 +488,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         pickup?.name || pickupSearch,
         dropoff?.name || dropoffSearch,
         destinations,
-        currentTime,
-        currentDate,
+        scheduledTime || currentTime,
+        scheduledDate || currentDate,
         surgeRules
     );
 
@@ -536,7 +541,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             verifiedCoupons,
             nameBoardPrice,
             isAirportPickup: activeTab === 'pickup',
-            activeTab
+            activeTab,
+            scheduledDate: scheduledDate || currentDate,
+            scheduledTime: scheduledTime || currentTime
         });
         setShowModal(true);
     };
@@ -839,6 +846,70 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             setDropoffSearch(loc.address);
                                         }}
                                     />
+                                </div>
+
+                                {/* Date & Time Selector */}
+                                <div className="relative mt-2">
+                                    <button 
+                                        onClick={() => setIsDateTimePickerOpen(!isDateTimePickerOpen)}
+                                        className="w-full h-14 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-2xl px-6 flex items-center justify-between text-sm font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md transition-all group"
+                                        aria-label="Select Date and Time"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <Calendar size={18} className={scheduledDate ? 'text-emerald-500' : 'text-slate-400'} />
+                                            <span className="uppercase tracking-widest text-[11px]">
+                                                {scheduledDate && scheduledTime 
+                                                    ? `${new Date(scheduledDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${scheduledTime}` 
+                                                    : 'Select Date & Time (for traffic rates)'}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            {scheduledDate && (
+                                                <button 
+                                                    onClick={(e) => { e.stopPropagation(); setScheduledDate(null); setScheduledTime(null); }}
+                                                    className="p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-slate-400 hover:text-red-500"
+                                                >
+                                                    <X size={14} />
+                                                </button>
+                                            )}
+                                            <ChevronDown size={16} className={`opacity-50 transition-transform ${isDateTimePickerOpen ? 'rotate-180' : ''}`} />
+                                        </div>
+                                    </button>
+                                    
+                                    <AnimatePresence>
+                                        {isDateTimePickerOpen && (
+                                            <>
+                                                <div 
+                                                    className="fixed inset-0 z-[190]" 
+                                                    onClick={() => setIsDateTimePickerOpen(false)}
+                                                />
+                                                <motion.div 
+                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                    className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top"
+                                                >
+                                                    <CustomDateTimePicker 
+                                                        date={scheduledDate} 
+                                                        time={scheduledTime} 
+                                                        onChange={(d, t) => {
+                                                            setScheduledDate(d);
+                                                            setScheduledTime(t);
+                                                            // Keep open to allow time selection after date
+                                                        }} 
+                                                    />
+                                                    <div className="bg-black border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-end max-w-[320px] mx-auto">
+                                                        <button 
+                                                            onClick={() => setIsDateTimePickerOpen(false)}
+                                                            className="px-6 py-2 bg-[#FACC15] text-black font-black text-xs uppercase tracking-widest hover:bg-white transition-colors"
+                                                        >
+                                                            Done
+                                                        </button>
+                                                    </div>
+                                                </motion.div>
+                                            </>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                             </div>
                         </div>
@@ -1263,8 +1334,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         pickup.name,
                         dropoff.name,
                         destinations,
-                        currentTime,
-                        currentDate,
+                        scheduledTime || currentTime,
+                        scheduledDate || currentDate,
                         surgeRules
                     );
                     return {
