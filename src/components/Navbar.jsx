@@ -138,6 +138,7 @@ export default function Navbar() {
                                 { label: 'Day Tours', href: '/day-trips', icon: '🌴', id: 'm-day' },
                                 { label: 'City Tours', href: '/tours', icon: '🏙️', id: 'm-city' },
                                 { label: 'Tour Packages', href: '/tour-packages', icon: '🗺️', id: 'm-pkg' },
+                                { label: 'Round Trips', href: '/round-trips', icon: '🔄', id: 'm-round' },
                                 { label: 'Gallery', href: '/gallery', icon: '📸', id: 'm-gallery' },
                                 { label: 'Rates', href: '/prices', icon: '💰', id: 'm-rates' },
                                 {
