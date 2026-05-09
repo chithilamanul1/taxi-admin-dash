@@ -38,9 +38,7 @@ const GoogleReviews = dynamic(() => import('./GoogleReviews'), {
 const RecentPosts = dynamic(() => import('./RecentPosts'), { 
     loading: () => <div className="min-h-[400px] bg-white dark:bg-[#0a0a0a] animate-pulse" />
 })
-// const AITripPlannerBanner = dynamic(() => import('./AITripPlannerBanner'), { 
-//     loading: () => <div className="min-h-[400px] bg-white animate-pulse" />
-// })
+
 const SpecialOffersSection = dynamic(() => import('./SpecialOffersSection'), { 
     loading: () => <div className="min-h-[500px] bg-white dark:bg-[#0a0a0a] animate-pulse" />
 })
@@ -160,7 +158,7 @@ export default function HomeClient() {
             <ReviewStatsBar />
             <MobileAppSection />
             <GoogleReviews />
-            {/* <AITripPlannerBanner /> */}
+
             <RecentPosts />
 
             <section className="py-24 md:py-40 bg-white dark:bg-black border-t border-slate-100 dark:border-white/5 transition-colors">
