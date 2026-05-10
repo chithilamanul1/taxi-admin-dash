@@ -552,7 +552,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             activeTab,
             scheduledDate: scheduledDate || currentDate,
             scheduledTime: scheduledTime || currentTime,
-            roundTripPackageId
+            roundTripPackageId,
+            pricing: Object.values(vehiclePricing)
         });
         setShowModal(true);
     };
@@ -1133,7 +1134,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                             {/* Vehicle Selection - Unified for Desktop & Mobile */}
                             <div className="mt-4 sm:mt-6">
-                                <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-3">Select Vehicle</label>
+                                <div className="flex items-center justify-between mb-3 px-1">
+                                    <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Select Vehicle</label>
+                                    <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest animate-pulse flex items-center gap-2">
+                                        <Info size={10} strokeWidth={4} />
+                                        SEE ALL OPTIONS
+                                    </div>
+                                </div>
                                 <button
                                     onClick={() => setIsVehicleDrawerOpen(true)}
                                     className="w-full min-h-[4.5rem] sm:min-h-[5.5rem] py-3 px-4 sm:px-6 flex items-center justify-between bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all group overflow-hidden relative"

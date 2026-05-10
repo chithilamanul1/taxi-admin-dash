@@ -1072,6 +1072,18 @@ export default function AdminDashboard() {
                         </div>
                     )}
 
+                    {currentView === 'driver-profiles' && (
+                        <div className="animate-fade-in-up">
+                            <DriverManager />
+                        </div>
+                    )}
+
+                    {currentView === 'drivers' && (
+                        <div className="animate-fade-in-up">
+                            <DriversFleetView />
+                        </div>
+                    )}
+
                     {currentView === 'pricing' && (
                         <div className="space-y-6">
                             <div className="bg-white rounded-xl shadow-sm p-6">
@@ -3045,6 +3057,13 @@ export default function AdminDashboard() {
                                                                 <div className="text-xs">
                                                                     <span className="text-red-500">●</span> {booking.dropoffLocation?.address?.split(',')[0] || 'N/A'}
                                                                 </div>
+                                                                {booking.tripType === 'round-trip' && (
+                                                                    <div className="mt-1">
+                                                                        <span className="bg-amber-100 text-amber-700 text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter border border-amber-200">
+                                                                            Round Trip
+                                                                        </span>
+                                                                    </div>
+                                                                )}
                                                             </>
                                                         )}
                                                     </td>
@@ -3167,6 +3186,12 @@ export default function AdminDashboard() {
                                                         <div>
                                                             <span className="text-xs text-gray-500 uppercase tracking-wider block">Vehicle</span>
                                                             <span className="font-medium capitalize">{selectedBooking.vehicleType?.replace(/-/g, ' ')}</span>
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-xs text-gray-500 uppercase tracking-wider block">Trip Type</span>
+                                                            <span className={`text-xs font-black uppercase tracking-widest ${selectedBooking.tripType === 'round-trip' ? 'text-amber-600' : 'text-slate-400'}`}>
+                                                                {selectedBooking.tripType || 'one-way'}
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>

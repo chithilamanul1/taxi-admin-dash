@@ -29,7 +29,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const isAirportService = pricingCategory === 'airport-transfer';
     const [loading, setLoading] = useState(false);
     const [hasAgreed, setHasAgreed] = useState(false);
-    const [pricing, setPricing] = useState([]);
+    const [pricing, setPricing] = useState(initialData.pricing || []);
     const [distance, setDistance] = useState(0);
     const [verifiedCoupons, setVerifiedCoupons] = useState(initialData.verifiedCoupons || (initialData.verifiedCoupon ? [initialData.verifiedCoupon] : []));
     const [couponInput, setCouponInput] = useState('');
@@ -259,9 +259,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const distKm = Number(distance || initialData.distance || 0);
             const isAirportPickup = (formData.pickup?.toLowerCase().includes('airport') || formData.dropoff?.toLowerCase().includes('airport')) || (typeof initialData.pickup === 'string' && initialData.pickup.toLowerCase().includes('airport'));
 
-            if (!vehicleData || distKm === 0) {
+            if (!vehicleData) {
                 return { total: 0, subtotal: 0, surcharges: 0, payNow: 0, balance: 0, lkr: { total: 0, payNow: 0, balance: 0, surcharges: 0, subtotal: 0 }, originalLKR: 0 };
             }
+
+            const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType, formData.pickup, formData.dropoff, destinations, { 
+                roundTripPackageId: formData.roundTripPackageId,
+                roundTripPackages: pricingSettings?.roundTripPackages,
+                taxiTourHours: formData.taxiTourHours,
+                taxiTourKm: formData.taxiTourKm
+            });
 
             const surcharges = calculateSurcharges({
                 hasNameBoard: formData.hasNameBoard,
@@ -499,12 +506,20 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 if (!formData.returnDate) newErrors.returnDate = true;
                 if (!formData.returnTime) newErrors.returnTime = true;
             }
-            // Enforce luggage selection (at least check if it was explicitly interacted with, or just require > 0 if passengers > 0? No, 0 luggage is possible but user wants it mandatory. Let's ensure it's not undefined)
+            // Enforce luggage selection and adult count (Hard Stop)
             if (formData.passengerCount.luggage === undefined || formData.passengerCount.luggage === null) newErrors.luggage = true;
             if (!formData.passengerCount.adults || formData.passengerCount.adults < 1) newErrors.adults = true;
         }
+        
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        
+        if (Object.keys(newErrors).length > 0) {
+            // Trigger a visual alert for hard stop
+            const firstError = Object.keys(newErrors)[0];
+            alert(`MANDATORY FIELD: Please complete the ${firstError.replace(/([A-Z])/g, ' $1').toLowerCase()} before proceeding.`);
+            return false;
+        }
+        return true;
     };
 
     const handleNext = () => {
@@ -520,7 +535,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const breakdown = getPriceBreakdown();
             const { lkr } = breakdown;
             if (lkr.total === 0) {
-                alert("Error: Total price is 0.");
+                alert("Pricing is not available for this selection. Please try selecting a different vehicle or route.");
                 setLoading(false);
                 return;
             }
@@ -717,6 +732,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <div className="space-y-10 pt-10 border-t border-slate-100 dark:border-white/10">
                                 <div className="flex items-center justify-between">
                                     <h4 className="text-2xl font-black text-black dark:text-white uppercase tracking-tight">Select <span className="text-[#FACC15]">Fleet</span></h4>
+                                    <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest animate-pulse flex items-center gap-2">
+                                        <Info size={10} strokeWidth={4} />
+                                        SEE ALL OPTIONS
+                                    </div>
                                 </div>
                                 <VehicleCarousel
                                     vehicles={pricingWithTotals}
@@ -986,6 +1005,33 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             {payNow.toLocaleString()}
                                                         </p>
                                                     </div>
+                                                    
+                                                    {/* Cost Disclosures */}
+                                                    <div className="mt-8 p-6 bg-slate-50 dark:bg-white/5 rounded-[2rem] border border-slate-100 dark:border-white/10 space-y-4">
+                                                        <div className="flex items-start gap-4">
+                                                            <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-400/20 text-amber-600 flex items-center justify-center shrink-0">
+                                                                <Info size={16} strokeWidth={3} />
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest mb-1">Hire Charge Only</p>
+                                                                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tight">
+                                                                    The quoted price covers the vehicle hire charge and fuel only.
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-start gap-4 border-t border-slate-200/50 dark:border-white/5 pt-4">
+                                                            <div className="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-400/20 text-rose-600 flex items-center justify-center shrink-0">
+                                                                <AlertCircle size={16} strokeWidth={3} />
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-1">Customer Responsibility</p>
+                                                                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tight">
+                                                                    Parking tickets and highway tolls are the responsibility of the customer.
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div className="flex flex-wrap gap-3 mt-6">
                                                         {convertToAllCurrencies(detailedBreakdown.lkr?.payNow || 0)
                                                             .filter(c => ['USD', 'EUR', 'GBP'].includes(c.code) && c.code !== currency)

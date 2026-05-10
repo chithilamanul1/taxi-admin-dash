@@ -19,7 +19,8 @@ export default function DriverManager() {
         trips: '',
         sortOrder: 0,
         isActive: true,
-        preview: null
+        preview: null,
+        rating: '5.0'
     });
 
     useEffect(() => {
@@ -129,7 +130,8 @@ export default function DriverManager() {
             trips: '',
             sortOrder: 0,
             isActive: true,
-            preview: null
+            preview: null,
+            rating: '5.0'
         });
         setEditingDriver(null);
     };
@@ -143,7 +145,8 @@ export default function DriverManager() {
             trips: driver.trips,
             sortOrder: driver.sortOrder || 0,
             isActive: driver.isActive !== undefined ? driver.isActive : true,
-            preview: driver.image
+            preview: driver.image,
+            rating: driver.rating || '5.0'
         });
         setShowModal(true);
     };
@@ -209,6 +212,10 @@ export default function DriverManager() {
                                         <div className="flex items-center gap-2 text-amber-400">
                                             <ShieldCheck size={14} strokeWidth={3} />
                                             <span className="text-[10px] font-black uppercase tracking-widest">{driver.trips} Safe Trips</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 text-yellow-400">
+                                            <Star size={14} strokeWidth={3} className="fill-yellow-400" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest">{driver.rating || '5.0'} Rating</span>
                                         </div>
                                     </div>
                                 </div>
@@ -316,6 +323,18 @@ export default function DriverManager() {
                                             value={form.trips}
                                             onChange={e => setForm({ ...form, trips: e.target.value })}
                                             placeholder="e.g. 1200+"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Star Rating</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all"
+                                            value={form.rating}
+                                            onChange={e => setForm({ ...form, rating: e.target.value })}
+                                            placeholder="e.g. 5.0"
                                         />
                                     </div>
 

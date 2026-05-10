@@ -10,6 +10,18 @@ export const ROUND_TRIP_PACKAGES = [
     { id: 'standard-12h-300km', name: '12 Hour / 300 KM', hours: 12, distance: 300, price: 25000, description: 'Full day hire for outstation trips.' }
 ];
 
+export const TAXI_TOUR_PACKAGES = [
+    { hours: 2, kms: [10, 20, 30, 40], rates: { 'mini-car': 2800, 'sedan': 3500 } },
+    { hours: 3, kms: [40, 50, 60], rates: { 'mini-car': 4500, 'sedan': 5500 } },
+    { hours: 4, kms: [60, 70, 80], rates: { 'mini-car': 6000, 'sedan': 7000 } },
+    { hours: 5, kms: [80, 90, 100], rates: { 'mini-car': 7500, 'sedan': 8500 } },
+    { hours: 6, kms: [100, 110, 120], rates: { 'mini-car': 9000, 'sedan': 10500 } },
+    { hours: 8, kms: [150, 160, 180], rates: { 'mini-car': 12000, 'sedan': 14000 } },
+    { hours: 10, kms: [200, 220, 240], rates: { 'mini-car': 15000, 'sedan': 17500 } },
+    { hours: 12, kms: [250, 280, 300], rates: { 'mini-car': 18000, 'sedan': 21000 } },
+    { hours: 14, kms: [300], rates: { 'mini-car': 22000, 'sedan': 25000 } }
+];
+
 export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '', dynamicDestinations = [], options = {}) => {
     const distKm = Math.ceil(Number(distanceKm) || 0);
     const { roundTripPackageId, roundTripPackages: customPackages } = options;
@@ -17,6 +29,23 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
 
     // 1. Handle Package-based Round Trip Pricing
     if (tripType === 'round-trip' && roundTripPackageId) {
+        // First check in taxi tour packages (new logic)
+        if (options.taxiTourHours) {
+            const tourPkg = TAXI_TOUR_PACKAGES.find(p => p.hours === Number(options.taxiTourHours));
+            if (tourPkg) {
+                const baseRate = tourPkg.rates[vehicleData.vehicleType] || tourPkg.rates['mini-car'] || 5000;
+                let total = baseRate;
+                
+                // Add excess KM if the selected KM is exceeded
+                const allowedKm = Number(options.taxiTourKm) || 0;
+                if (distKm > allowedKm) {
+                    const perKmRate = vehicleData.perKmRate || 100;
+                    total += (distKm - allowedKm) * perKmRate;
+                }
+                return Math.round(total);
+            }
+        }
+
         const pkg = activePackages.find(p => p.id === roundTripPackageId);
         if (pkg) {
             let total = pkg.price;

@@ -2,55 +2,71 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Clock, Navigation, ChevronRight, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle } from 'lucide-react';
+import { MapPin, Clock, Navigation, ChevronRight, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles } from 'lucide-react';
+import { TAXI_TOUR_PACKAGES } from '../lib/pricing-util';
 
-const vehicles = [
-  { 
-    id: 'mini-car', 
-    name: 'Mini', 
-    baseRate: 4000, 
-    image: '/vehicles/minicar.png',
-    description: 'Compact & efficient for city rides.',
-    perKm: 110
-  },
-  { 
-    id: 'sedan', 
-    name: 'Sedan', 
-    baseRate: 8000, 
-    image: '/vehicles/sedancar.png',
-    description: 'Comfortable & spacious for small groups.',
-    perKm: 130
-  },
-  { 
-    id: 'vezel', 
-    name: 'Vezel', 
-    baseRate: 15000, 
-    image: '/vehicles/Hondavezel.png',
-    description: 'Premium SUV experience for maximum comfort.',
-    perKm: 180
-  }
-];
+
 
 const RoundTripBooking = () => {
   const [tab, setTab] = useState('airport');
-  const [selectedVehicle, setSelectedVehicle] = useState(vehicles[0]);
-  const [hours, setHours] = useState(2);
-  const [locations, setLocations] = useState(['', '']);
-  const [distance, setDistance] = useState(0);
-  const [duration, setDuration] = useState('');
+  const [vehicles, setVehicles] = useState([]);
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
   const [isBooked, setIsBooked] = useState(false);
   const [googleLoaded, setGoogleLoaded] = useState(false);
+  const [pricingSettings, setPricingSettings] = useState(null);
+  
+  // Fetch vehicles and pricing settings
+  useEffect(() => {
+    // Fetch vehicles for 'tours' category
+    fetch('/api/pricing?category=tours')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.data.length > 0) {
+          const mapped = data.data.map(v => ({
+            id: v.vehicleType,
+            name: v.name,
+            baseRate: v.basePrice,
+            perKm: v.perKmRate,
+            image: v.image,
+            capacity: v.capacity,
+            suitcases: v.luggage
+          }));
+          setVehicles(mapped);
+          setSelectedVehicle(mapped[0]);
+        } else {
+          // Fallback if none in DB
+          const defaults = [
+            { id: 'mini-car', name: 'Mini Car (Alto/Axia)', baseRate: 5000, perKm: 110, image: '/vehicles/mini-car.png' },
+            { id: 'sedan', name: 'Sedan (Premio/Allion)', baseRate: 6500, perKm: 130, image: '/vehicles/sedan.png' },
+            { id: 'van', name: 'Luxury Van (KDH/Commuter)', baseRate: 9500, perKm: 180, image: '/vehicles/van.png' },
+          ];
+          setVehicles(defaults);
+          setSelectedVehicle(defaults[0]);
+        }
+      })
+      .catch(err => console.error("Error fetching vehicles:", err));
+
+    fetch('/api/admin/pricing-settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setPricingSettings(data.data);
+      })
+      .catch(err => console.error("Error fetching pricing settings:", err));
+  }, []);
   
   const [formData, setFormData] = useState({
     date: '',
     time: '',
     passengers: 1,
+    luggage: 0,
     name: '',
     email: '',
     phone: '',
-    notes: ''
+    notes: '',
+    taxiTourHours: 2,
+    taxiTourKm: 10
   });
 
   // Load Google Maps Script
@@ -140,6 +156,36 @@ const RoundTripBooking = () => {
   };
 
   const calculateTotal = () => {
+    if (tab === 'tour') {
+      // Use dynamic packages if available
+      const activePackages = pricingSettings?.roundTripPackages || [];
+      const pkg = activePackages.find(p => p.hours === Number(formData.taxiTourHours));
+      
+      if (pkg) {
+        let total = pkg.price;
+        if (distance > (pkg.distance || 0)) {
+           const perKmRate = selectedVehicle.perKm || 110;
+           total += (distance - pkg.distance) * perKmRate;
+        }
+        return Math.round(total);
+      }
+
+      // Fallback to static packages
+      const tourPkg = TAXI_TOUR_PACKAGES.find(p => p.hours === Number(formData.taxiTourHours));
+      if (tourPkg) {
+        const vType = selectedVehicle.id === 'mini-car' ? 'mini-car' : (selectedVehicle.id === 'van' ? 'van' : 'sedan');
+        const baseRate = tourPkg.rates[vType] || tourPkg.rates['mini-car'] || 5000;
+        let total = baseRate;
+        
+        // Add excess KM if distance > selected package KM
+        if (distance > formData.taxiTourKm) {
+          const perKmRate = selectedVehicle.perKm || 110;
+          total += (distance - formData.taxiTourKm) * perKmRate;
+        }
+        return Math.round(total);
+      }
+    }
+
     const base = selectedVehicle.baseRate;
     const baseKm = 20; // First 20km included in base rate
     if (distance > baseKm) {
@@ -150,6 +196,14 @@ const RoundTripBooking = () => {
   };
 
   const totalPrice = calculateTotal();
+
+  if (vehicles.length === 0 || !selectedVehicle) {
+      return (
+          <div className="min-h-[400px] flex items-center justify-center">
+              <Loader2 className="animate-spin text-emerald-600" size={32} />
+          </div>
+      );
+  }
 
   const handleBooking = async () => {
     if (!formData.name || !formData.email || !formData.phone || !formData.date || !formData.time) {
@@ -164,7 +218,8 @@ const RoundTripBooking = () => {
         dropoffLocation: { address: locations[locations.length - 1] },
         waypoints: locations.slice(1, -1).map(l => ({ address: l })),
         vehicleType: selectedVehicle.id,
-        tripType: 'one-way', // User specified it's a ride/airport transfer
+        tripType: 'round-trip', 
+        roundTripPackageId: tab === 'tour' ? `tour-${formData.taxiTourHours}h` : null,
         passengerCount: { adults: formData.passengers, children: 0, luggage: 0, handLuggage: 0 },
         distanceKm: distance,
         duration: duration,
@@ -245,14 +300,26 @@ const RoundTripBooking = () => {
         >
           <Car size={18} /> Ride
         </button>
+        <button 
+          onClick={() => setTab('tour')}
+          className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'tour' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400 hover:bg-white/50'}`}
+        >
+          <Sparkles size={18} /> Taxi Tour
+        </button>
       </div>
 
       <div className="p-8 md:p-12 space-y-12">
         {/* Vehicle Category */}
         <section>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="h-4 w-1 bg-emerald-600 rounded-full" />
-            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Select Vehicle Class</h4>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="h-4 w-1 bg-emerald-600 rounded-full" />
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Select Vehicle Class</h4>
+            </div>
+            <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest animate-pulse flex items-center gap-2">
+                <Info size={10} strokeWidth={4} />
+                SEE ALL OPTIONS
+            </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {vehicles.map((v) => (
@@ -276,6 +343,66 @@ const RoundTripBooking = () => {
             ))}
           </div>
         </section>
+
+        {tab === 'tour' && (
+           <section className="animate-slide-up space-y-8 bg-emerald-50/30 p-8 rounded-[2.5rem] border border-emerald-100">
+              <div className="flex items-center gap-3">
+                <Clock className="text-emerald-600" size={20} />
+                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Taxi Tour Duration & Distance</h4>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                 <div className="space-y-4">
+                    <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Available Packages</label>
+                    <div className="flex flex-wrap gap-2">
+                       {pricingSettings?.roundTripPackages?.length > 0 ? (
+                          pricingSettings.roundTripPackages.map(p => (
+                            <button
+                              key={p.id}
+                              onClick={() => setFormData({...formData, taxiTourHours: p.hours, taxiTourKm: p.distance})}
+                              className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all border ${formData.taxiTourHours === p.hours ? 'bg-emerald-600 border-emerald-600 text-white shadow-lg' : 'bg-white border-slate-100 text-slate-400 hover:border-emerald-200'}`}
+                            >
+                               {p.name || `${p.hours}H / ${p.distance}KM`}
+                            </button>
+                          ))
+                       ) : (
+                          TAXI_TOUR_PACKAGES.map(p => (
+                             <button
+                               key={p.hours}
+                               onClick={() => setFormData({...formData, taxiTourHours: p.hours, taxiTourKm: p.kms[0]})}
+                               className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all border ${formData.taxiTourHours === p.hours ? 'bg-emerald-600 border-emerald-600 text-white shadow-lg' : 'bg-white border-slate-100 text-slate-400 hover:border-emerald-200'}`}
+                             >
+                                {p.hours}H
+                             </button>
+                          ))
+                       )}
+                    </div>
+                 </div>
+
+                 {(!pricingSettings?.roundTripPackages || pricingSettings.roundTripPackages.length === 0) && (
+                    <div className="space-y-4">
+                        <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Included Distance (KM)</label>
+                        <div className="flex flex-wrap gap-2">
+                          {TAXI_TOUR_PACKAGES.find(p => p.hours === formData.taxiTourHours)?.kms.map(km => (
+                              <button
+                                key={km}
+                                onClick={() => setFormData({...formData, taxiTourKm: km})}
+                                className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all border ${formData.taxiTourKm === km ? 'bg-emerald-600 border-emerald-600 text-white shadow-lg' : 'bg-white border-slate-100 text-slate-400 hover:border-emerald-200'}`}
+                              >
+                                {km} KM
+                              </button>
+                          ))}
+                        </div>
+                    </div>
+                 )}
+              </div>
+
+              <div className="flex items-center gap-4 p-4 bg-emerald-100/50 rounded-2xl border border-emerald-100">
+                 <AlertCircle size={16} className="text-emerald-600 shrink-0" />
+                 <p className="text-[9px] font-bold text-emerald-900 uppercase tracking-tight">Maximum 300KM limit per day applies for all round-tours.</p>
+              </div>
+           </section>
+        )}
 
         {/* Location Details */}
         <section className="space-y-6">
@@ -358,9 +485,43 @@ const RoundTripBooking = () => {
             </div>
             <div className="space-y-2">
                <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Passengers</label>
-               <select value={formData.passengers} onChange={e => setFormData({...formData, passengers: parseInt(e.target.value)})} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-4 px-6 outline-none font-bold text-slate-900 focus:bg-white transition-all">
-                  {[1,2,3,4,5,6,7,8].map(n => <option key={n} value={n}>{n} Passengers</option>)}
-               </select>
+               <div className="flex items-center bg-slate-50 border border-slate-100 rounded-3xl p-1">
+                  <button 
+                    onClick={() => setFormData({...formData, passengers: Math.max(1, formData.passengers - 1)})}
+                    className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-colors"
+                  >
+                    <Minus size={20} strokeWidth={3} />
+                  </button>
+                  <div className="flex-1 text-center font-black text-emerald-950 uppercase tracking-widest text-sm">
+                    {formData.passengers} Adults
+                  </div>
+                  <button 
+                    onClick={() => setFormData({...formData, passengers: Math.min(8, formData.passengers + 1)})}
+                    className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-colors"
+                  >
+                    <Plus size={20} strokeWidth={3} />
+                  </button>
+               </div>
+            </div>
+            <div className="space-y-2">
+               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Luggage</label>
+               <div className="flex items-center bg-slate-50 border border-slate-100 rounded-3xl p-1">
+                  <button 
+                    onClick={() => setFormData({...formData, luggage: Math.max(0, formData.luggage - 1)})}
+                    className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-colors"
+                  >
+                    <Minus size={20} strokeWidth={3} />
+                  </button>
+                  <div className="flex-1 text-center font-black text-emerald-950 uppercase tracking-widest text-sm">
+                    {formData.luggage} Bags
+                  </div>
+                  <button 
+                    onClick={() => setFormData({...formData, luggage: Math.min(10, formData.luggage + 1)})}
+                    className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-colors"
+                  >
+                    <Plus size={20} strokeWidth={3} />
+                  </button>
+               </div>
             </div>
           </div>
         </section>
@@ -374,8 +535,32 @@ const RoundTripBooking = () => {
           >
             {isBooking ? <Loader2 className="animate-spin" /> : 'Confirm & Book Now'} <ChevronRight size={20} />
           </button>
+          <div className="mt-8 p-6 bg-amber-50 rounded-3xl border border-amber-100 space-y-4">
+              <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0 shadow-sm">
+                      <Info size={16} strokeWidth={3} />
+                  </div>
+                  <div>
+                      <p className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-1">Hire Charge Only</p>
+                      <p className="text-[9px] font-bold text-slate-500 leading-relaxed uppercase tracking-tight">
+                          The quoted price covers the vehicle hire charge and fuel only.
+                      </p>
+                  </div>
+              </div>
+              <div className="flex items-start gap-4 border-t border-amber-200/50 pt-4">
+                  <div className="w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 shadow-sm">
+                      <AlertCircle size={16} strokeWidth={3} />
+                  </div>
+                  <div>
+                      <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-1">Customer Responsibility</p>
+                      <p className="text-[9px] font-bold text-slate-500 leading-relaxed uppercase tracking-tight">
+                          Parking tickets and highway tolls are the responsibility of the customer.
+                      </p>
+                  </div>
+              </div>
+          </div>
           <p className="text-center mt-6 text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2">
-            <AlertCircle size={12} /> Cash Payment to Driver. Official Confirmation will be emailed.
+            <CheckCircle2 size={12} className="text-emerald-600" /> Professional Service Guaranteed.
           </p>
         </div>
       </div>
