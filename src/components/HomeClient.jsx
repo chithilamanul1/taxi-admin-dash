@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, MapPin, Star, Compass } from 'lucide-react'
+import { ArrowRight, MapPin, Star, Compass, Clock, Users, ShieldCheck } from 'lucide-react'
 const BookingWidget = dynamic(() => import('./BookingWidget'), { 
     ssr: false,
     loading: () => <div className="min-h-[650px] md:min-h-[750px] bg-slate-50 dark:bg-zinc-900 animate-pulse rounded-[2rem]" />
@@ -130,6 +130,47 @@ export default function HomeClient() {
             <div className="h-4 md:h-10" /> {/* Spacing */}
 
             <FleetSection />
+
+            {/* Legacy & Stats Section */}
+            <section className="py-24 md:py-40 relative overflow-hidden bg-slate-50/30 dark:bg-zinc-950/30">
+                <div className="max-w-7xl mx-auto px-6 relative z-10">
+                    <div className="flex flex-col items-center text-center mb-24">
+                        <div className="inline-flex items-center gap-3 bg-[#FACC15] text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] mb-10 shadow-xl shadow-yellow-500/20">
+                            <Clock size={14} strokeWidth={4} /> OUR LEGACY SINCE 2010
+                        </div>
+                        <h2 className="text-5xl md:text-8xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter leading-[0.85] mb-12">
+                            ELEVATING <span className="text-[#FACC15]">SRI LANKA'S</span> <br />
+                            TRAVEL EXPERIENCE
+                        </h2>
+                        <p className="max-w-2xl mx-auto text-slate-500 dark:text-slate-400 text-sm md:text-lg font-bold uppercase tracking-widest leading-relaxed opacity-80">
+                            From humble beginnings to being the island's most trusted transfer partner. <br />
+                            We don't just move people; we create journeys that last a lifetime.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
+                        {[
+                            { label: 'Happy Clients', value: '10k+', icon: Users },
+                            { label: 'Tours Completed', value: '1.2k+', icon: MapPin },
+                            { label: 'Years Excellence', value: '14+', icon: Star },
+                            { label: 'Elite Drivers', value: '80+', icon: ShieldCheck }
+                        ].map((stat, idx) => (
+                            <div key={idx} className="bg-white dark:bg-zinc-900 p-10 rounded-[3rem] border border-slate-100 dark:border-white/5 shadow-2xl shadow-slate-200/50 dark:shadow-none flex flex-col items-center group hover:-translate-y-4 transition-all duration-500">
+                                <div className="w-20 h-20 bg-emerald-950 dark:bg-white/5 rounded-3xl flex items-center justify-center mb-8 shadow-xl group-hover:bg-[#FACC15] group-hover:text-black transition-colors duration-500">
+                                    <stat.icon size={32} className="text-[#FACC15] group-hover:text-black" strokeWidth={2.5} />
+                                </div>
+                                <span className="text-5xl md:text-6xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter mb-2">{stat.value}</span>
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] text-center">{stat.label}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                
+                {/* Decorative Elements */}
+                <div className="absolute top-0 right-0 -mr-64 -mt-64 w-[600px] h-[600px] bg-[#FACC15]/5 rounded-full blur-[120px]"></div>
+                <div className="absolute bottom-0 left-0 -ml-64 -mb-64 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-[120px]"></div>
+            </section>
+
 
             <BookingModal
                 isOpen={isBookingOpen}

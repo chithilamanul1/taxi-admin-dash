@@ -162,6 +162,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             setIsVehicleExpanded(!initialData.vehicle);
             setStep(1);
 
+            if (initialData.pricing) setPricing(initialData.pricing);
             if (initialData.distance) setDistance(Number(initialData.distance));
             if (initialData.verifiedCoupons) setVerifiedCoupons(initialData.verifiedCoupons);
             if (initialData.couponCode) {
@@ -500,7 +501,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             if (isAirportService || formData.hasNameBoard) {
                 if (!formData.flightArrivalDate && !formData.date) newErrors.date = true;
                 if (!formData.flightArrivalTime && !formData.time) newErrors.time = true;
-                if (formData.hasNameBoard && !formData.flightNumber) newErrors.flightNumber = true;
+                // Flight number is now optional as per user request
+                // if (formData.hasNameBoard && !formData.flightNumber) newErrors.flightNumber = true;
             }
             if (formData.tripType === 'round-trip') {
                 if (!formData.returnDate) newErrors.returnDate = true;
@@ -707,7 +709,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             value={formData.flightNumber}
                                                             onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
                                                             className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-14 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
-                                                            placeholder="FLIGHT NO"
+                                                            placeholder="FLIGHT NO (OPTIONAL)"
                                                         />
                                                         <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
                                                             <PlaneTakeoff size={20} strokeWidth={3} />
@@ -944,11 +946,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         <div className="flex items-center gap-4 mt-2">
                                                             <div className="flex items-center gap-2">
                                                                 <Users size={12} className="text-[#FACC15]" />
-                                                                <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">{selectedVehicle?.capacity || 4} Pax</span>
+                                                                <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">
+                                                                    {(formData.passengerCount?.adults || 0) + (formData.passengerCount?.children || 0)} Pax
+                                                                </span>
                                                             </div>
                                                             <div className="flex items-center gap-2">
                                                                 <Briefcase size={12} className="text-[#FACC15]" />
-                                                                <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">{selectedVehicle?.luggage || 2} Bags</span>
+                                                                <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">
+                                                                    {formData.passengerCount?.luggage || 0} Bags
+                                                                </span>
                                                             </div>
                                                         </div>
                                                     </div>
