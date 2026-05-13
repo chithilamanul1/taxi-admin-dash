@@ -1275,6 +1275,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         <span className="text-lg align-top mr-1">{convertPrice(finalTotal).symbol}</span>
                                                         {convertPrice(finalTotal).value.toLocaleString()}
                                                     </>
+                                                ) : (pickup?.lat && dropoff?.lat && !distance) ? (
+                                                    <div className="flex items-center gap-2">
+                                                        <Loader2 size={24} className="animate-spin text-emerald-500" />
+                                                        <span className="text-slate-300 dark:text-slate-700 text-xl font-bold animate-pulse">Calculating...</span>
+                                                    </div>
                                                 ) : (
                                                     <span className="text-slate-300 dark:text-slate-700">Rates</span>
                                                 )}
@@ -1288,7 +1293,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">USD Estimate</span>
                                                         <span className="text-sm font-black text-black dark:text-white">
                                                             $ {(() => {
-                                                                const rate = rates['USD'] || 0.0032;
+                                                                const rate = (rates && rates['USD']) || 0.0032;
                                                                 return (finalTotal * rate).toFixed(2);
                                                             })()}
                                                         </span>
@@ -1297,7 +1302,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">EUR Estimate</span>
                                                         <span className="text-sm font-black text-black dark:text-white">
                                                             € {(() => {
-                                                                const rate = rates['EUR'] || 0.003;
+                                                                const rate = (rates && rates['EUR']) || 0.003;
                                                                 return (finalTotal * rate).toFixed(2);
                                                             })()}
                                                         </span>
