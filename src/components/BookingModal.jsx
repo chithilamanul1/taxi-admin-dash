@@ -279,7 +279,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             // Traffic Surge Calculation
             const tripTime = formData.time || formData.flightArrivalTime;
             const tripDate = formData.date || formData.flightArrivalDate;
-            const surgePercent = calculateTrafficSurge(tripTime, tripDate, surgeRules);
+            const surgePercent = calculateTrafficSurge(tripTime, tripDate, surgeRules, distKm);
             const surgeAmount = surgePercent > 0 ? baseTotal * (surgePercent / 100) : 0;
 
             const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges + surgeAmount, formData.paymentMethod, currency, formData.vehicle);
@@ -373,7 +373,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             
             const tripTime = formData.time || formData.flightArrivalTime;
             const tripDate = formData.date || formData.flightArrivalDate;
-            const surgePercent = calculateTrafficSurge(tripTime, tripDate, surgeRules);
+            const surgePercent = calculateTrafficSurge(tripTime, tripDate, surgeRules, distKm);
             const surgeAmount = surgePercent > 0 ? baseTotal * (surgePercent / 100) : 0;
 
             const paymentSurcharge = calculatePaymentFees(baseTotal + surcharges + surgeAmount, formData.paymentMethod, currency, v.vehicleType);

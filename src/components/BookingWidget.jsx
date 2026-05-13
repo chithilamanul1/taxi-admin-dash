@@ -27,7 +27,7 @@ const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours,
     const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupName, dropoffName, destinations, { roundTripPackageId, roundTripPackages });
     const surcharges = calculateSurcharges({ waitingHours, hasNameBoard, nameBoardPrice }, vehicleData);
 
-    const surgePercent = calculateTrafficSurge(scheduledTime, scheduledDate, surgeRules);
+    const surgePercent = calculateTrafficSurge(scheduledTime, scheduledDate, surgeRules, distance);
     const surgeAmount = surgePercent > 0 ? basePrice * (surgePercent / 100) : 0;
 
     return { total: basePrice + surcharges + surgeAmount, surgeAmount };

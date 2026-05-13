@@ -292,8 +292,12 @@ export const calculatePaymentFees = (subtotal, paymentMethod, currency = 'LKR', 
 /**
  * Calculates the traffic surge percentage based on the scheduled time and date.
  */
-export const calculateTrafficSurge = (scheduledTime, scheduledDate, surgeRules = []) => {
+export const calculateTrafficSurge = (scheduledTime, scheduledDate, surgeRules = [], distanceKm = 0) => {
     if (!scheduledTime || !surgeRules || surgeRules.length === 0) return 0;
+
+    // Surge only applies to distances between 1 and 50 KM
+    const dist = Number(distanceKm) || 0;
+    if (dist < 1 || dist > 50) return 0;
 
     try {
         const [hours, minutes] = scheduledTime.split(':').map(Number);
