@@ -51,6 +51,52 @@ export default function Navbar() {
                     </div>
                 </Link>
 
+                {/* Desktop Navigation Menu */}
+                <div className="hidden lg:flex items-center gap-1 xl:gap-2">
+                    {[
+                        { label: 'Airport', href: '/' },
+                        { label: 'Ride', href: '/ride' },
+                        { label: 'Day Tours', href: '/day-trips' },
+                        { label: 'Tour Packages', href: '/tour-packages' },
+                        { label: 'Round Trips', href: '/round-trips' },
+                        { label: 'Rates', href: '/prices' },
+                        { label: 'Gallery', href: '/gallery' },
+                    ].map(item => (
+                        <Link 
+                            key={item.label}
+                            href={item.href}
+                            className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all hover:bg-slate-50 relative group ${pathname === item.href ? 'text-emerald-600 bg-emerald-50' : 'text-emerald-950'}`}
+                        >
+                            {item.label}
+                            <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-emerald-600 rounded-full transition-all ${pathname === item.href ? 'opacity-100' : 'opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100'}`}></span>
+                        </Link>
+                    ))}
+                    
+                    {/* More Dropdown */}
+                    <div className="relative group/more">
+                        <button className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-emerald-950 hover:bg-slate-50 transition-all flex items-center gap-1">
+                            More <ChevronDown size={12} strokeWidth={3} className="group-hover/more:rotate-180 transition-transform" />
+                        </button>
+                        <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-slate-100 rounded-2xl shadow-2xl opacity-0 invisible group-hover/more:opacity-100 group-hover/more:visible transition-all p-2 z-[160]">
+                            {[
+                                { label: 'Custom Trip', href: '/custom-trip' },
+                                { label: 'Special Offers', href: '/offers' },
+                                { label: 'Blog', href: '/blog' },
+                                { label: 'Reviews', href: '/reviews' },
+                                { label: 'Contact Us', href: '/contact' }
+                            ].map(sub => (
+                                <Link 
+                                    key={sub.label}
+                                    href={sub.href}
+                                    className="block px-4 py-3 hover:bg-emerald-50 text-emerald-950 hover:text-emerald-600 font-bold uppercase tracking-widest text-[9px] rounded-xl transition-all"
+                                >
+                                    {sub.label}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
                 <div className="flex items-center gap-2 md:gap-3">
                     {/* Desktop Sign In */}
                     <div className="hidden md:flex items-center gap-3 mr-2">

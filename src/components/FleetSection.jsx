@@ -65,9 +65,27 @@ const FleetSection = () => {
             <div className="container mx-auto px-6">
                 <div className="mb-16">
                     <div className="text-[#FACC15] text-[12px] font-black uppercase tracking-[0.4em] mb-6 flex items-center gap-3">OUR PREMIUM FLEET</div>
-                    <h2 className="text-6xl md:text-8xl font-black text-black dark:text-white uppercase tracking-tighter leading-[0.9]">
-                        SELECT YOUR <span className="text-[#FACC15]">COMFORT</span>
-                    </h2>
+                    <div className="flex items-end justify-between gap-4">
+                        <h2 className="text-6xl md:text-8xl font-black text-black dark:text-white uppercase tracking-tighter leading-[0.9]">
+                            SELECT YOUR <span className="text-[#FACC15]">COMFORT</span>
+                        </h2>
+                        <div className="flex gap-4 mb-4">
+                            <button 
+                                onClick={() => scrollRef.current?.scrollBy({ left: -400, behavior: 'smooth' })}
+                                className="w-14 h-14 rounded-2xl border border-slate-200 dark:border-white/10 flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all group"
+                                aria-label="Previous Vehicle"
+                            >
+                                <ChevronLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
+                            </button>
+                            <button 
+                                onClick={() => scrollRef.current?.scrollBy({ left: 400, behavior: 'smooth' })}
+                                className="w-14 h-14 rounded-2xl border border-slate-200 dark:border-white/10 flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all group"
+                                aria-label="Next Vehicle"
+                            >
+                                <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div 

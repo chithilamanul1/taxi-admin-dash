@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, MapPin, Star, Compass, Clock, Users, ShieldCheck } from 'lucide-react'
+import { ArrowRight, MapPin, Star, Compass, Clock, Users, ShieldCheck, Sparkles } from 'lucide-react'
 const BookingWidget = dynamic(() => import('./BookingWidget'), { 
     ssr: false,
     loading: () => <div className="min-h-[650px] md:min-h-[750px] bg-slate-50 dark:bg-zinc-900 animate-pulse rounded-[2rem]" />
@@ -190,6 +190,55 @@ export default function HomeClient() {
                 onClose={() => setIsExpressOpen(false)}
                 product={selectedExpressProduct}
             />
+
+            {/* AI Trip Planner Section */}
+            <section className="py-24 md:py-32 bg-emerald-950 dark:bg-[#0a0a0a] relative overflow-hidden">
+                <div className="max-w-7xl mx-auto px-6 relative z-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                        <div className="order-2 lg:order-1">
+                            <div className="inline-flex items-center gap-3 bg-[#FACC15] text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] mb-10 shadow-xl shadow-yellow-500/20">
+                                <Sparkles size={14} strokeWidth={4} className="animate-pulse" /> NEW: SMART TRAVEL
+                            </div>
+                            <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-[0.85] mb-10">
+                                PLAN YOUR <span className="text-[#FACC15]">TRIP WITH AI</span>
+                            </h2>
+                            <p className="text-slate-400 text-lg md:text-xl font-bold uppercase tracking-widest leading-relaxed opacity-90 mb-12">
+                                Describe your dream vacation, and our AI will craft a personalized itinerary instantly. 
+                                From hidden gems to popular landmarks, let technology guide your next adventure.
+                            </p>
+                            <Link 
+                                href="/custom-trip"
+                                className="inline-flex items-center gap-4 bg-white text-emerald-950 px-12 py-6 rounded-full font-black text-sm uppercase tracking-widest hover:bg-[#FACC15] hover:text-black transition-all shadow-2xl group"
+                            >
+                                START PLANNING NOW
+                                <ArrowRight size={22} className="group-hover:translate-x-3 transition-transform" />
+                            </Link>
+                        </div>
+                        <div className="order-1 lg:order-2 relative group">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-[#FACC15]/20 to-transparent rounded-[3rem] blur-3xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                            <div className="relative bg-zinc-900 border border-white/10 rounded-[4rem] p-4 shadow-2xl overflow-hidden aspect-[4/3] flex items-center justify-center">
+                                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center opacity-40"></div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/40 to-transparent"></div>
+                                <div className="relative z-10 text-center p-10">
+                                    <div className="w-24 h-24 bg-[#FACC15] rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-yellow-500/40 -rotate-12 group-hover:rotate-0 transition-transform duration-700">
+                                        <Sparkles size={48} className="text-black" />
+                                    </div>
+                                    <div className="space-y-3">
+                                        <div className="h-2 w-48 bg-white/20 rounded-full mx-auto"></div>
+                                        <div className="h-2 w-32 bg-white/10 rounded-full mx-auto"></div>
+                                        <div className="h-2 w-40 bg-white/20 rounded-full mx-auto"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {/* Decorative BG pattern */}
+                <div className="absolute top-0 right-0 p-20 opacity-5 pointer-events-none">
+                    <Compass size={400} strokeWidth={1} className="text-white animate-spin-slow" />
+                </div>
+            </section>
 
             <SpecialOffersSection />
 

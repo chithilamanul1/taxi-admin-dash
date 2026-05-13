@@ -15,6 +15,9 @@ const RoundTripBooking = () => {
   const [isBooking, setIsBooking] = useState(false);
   const [isBooked, setIsBooked] = useState(false);
   const [googleLoaded, setGoogleLoaded] = useState(false);
+  const [locations, setLocations] = useState(['', '']);
+  const [distance, setDistance] = useState(0);
+  const [duration, setDuration] = useState('');
   const [pricingSettings, setPricingSettings] = useState(null);
   
   // Fetch vehicles and pricing settings
@@ -206,6 +209,11 @@ const RoundTripBooking = () => {
   }
 
   const handleBooking = async () => {
+    if (tab === 'tour' && locations[0].trim() !== locations[locations.length - 1].trim()) {
+      alert("Round Tour must have the same Pickup and Drop-off location (e.g. Seeduwa to Seeduwa).");
+      return;
+    }
+
     if (!formData.name || !formData.email || !formData.phone || !formData.date || !formData.time) {
       alert("Please fill in all required contact and trip details.");
       return;

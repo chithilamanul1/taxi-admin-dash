@@ -590,6 +590,10 @@ export default function AdminDashboard() {
                         <ImageIcon size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Gallery</span>
                     </button>
+                    <button onClick={() => { setCurrentView('round-trips'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'round-trips' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <Route size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Round Trips</span>
+                    </button>
                     <button onClick={() => { setCurrentView('global-settings'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'global-settings' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <SettingsIcon size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Site Settings</span>
@@ -1066,6 +1070,154 @@ export default function AdminDashboard() {
                         </div>
                     )}
 
+                    {currentView === 'round-trips' && (
+                        <div className="space-y-6">
+                            <div className="bg-white rounded-xl shadow-sm p-8">
+                                <div className="flex items-center gap-4 mb-8">
+                                    <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
+                                        <Route size={24} strokeWidth={2.5} />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-emerald-950 uppercase tracking-tight">Round Trip & Taxi Tour Packages</h2>
+                                        <p className="text-sm text-slate-500 font-medium mt-1">Configure time and distance based hire packages with custom pricing.</p>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white border border-slate-200 rounded-[2rem] p-6 sm:p-8 shadow-sm">
+                                    <div className="flex items-center justify-between mb-8">
+                                        <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Package List</h4>
+                                        <button 
+                                            onClick={() => {
+                                                const newPackage = { id: `pkg-${Date.now()}`, name: 'New Package', hours: 5, distance: 50, price: 7000, description: 'Package description here' };
+                                                setPricingSettings({ ...pricingSettings, roundTripPackages: [...(pricingSettings.roundTripPackages || []), newPackage] });
+                                            }}
+                                            className="px-6 py-3 bg-emerald-900 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-800 transition-all shadow-lg shadow-emerald-900/10 flex items-center gap-2"
+                                        >
+                                            <Plus size={16} strokeWidth={3} /> Add New Package
+                                        </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                                        {(pricingSettings.roundTripPackages || []).map((pkg, idx) => (
+                                            <div key={pkg.id} className="bg-slate-50/50 border border-slate-200 rounded-2xl p-5 hover:border-emerald-500/30 transition-all group">
+                                                <div className="flex justify-between items-start mb-4">
+                                                    <input 
+                                                        type="text"
+                                                        value={pkg.name}
+                                                        onChange={(e) => {
+                                                            const updated = [...pricingSettings.roundTripPackages];
+                                                            updated[idx].name = e.target.value;
+                                                            setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                        }}
+                                                        className="bg-transparent border-none font-black text-emerald-950 uppercase tracking-tight text-sm outline-none w-full focus:text-emerald-600"
+                                                        placeholder="Package Name"
+                                                    />
+                                                    <button 
+                                                        onClick={() => {
+                                                            const updated = pricingSettings.roundTripPackages.filter((_, i) => i !== idx);
+                                                            setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                        }}
+                                                        className="text-slate-400 hover:text-red-500 transition-colors"
+                                                    >
+                                                        <X size={18} />
+                                                    </button>
+                                                </div>
+                                                
+                                                <div className="space-y-4">
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        <div>
+                                                            <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Hours</label>
+                                                            <input 
+                                                                type="number"
+                                                                value={pkg.hours}
+                                                                onChange={(e) => {
+                                                                    const updated = [...pricingSettings.roundTripPackages];
+                                                                    updated[idx].hours = Number(e.target.value);
+                                                                    setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                                }}
+                                                                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Distance (KM)</label>
+                                                            <input 
+                                                                type="number"
+                                                                value={pkg.distance}
+                                                                onChange={(e) => {
+                                                                    const updated = [...pricingSettings.roundTripPackages];
+                                                                    updated[idx].distance = Number(e.target.value);
+                                                                    setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                                }}
+                                                                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Price (LKR)</label>
+                                                        <input 
+                                                            type="number"
+                                                            value={pkg.price}
+                                                            onChange={(e) => {
+                                                                const updated = [...pricingSettings.roundTripPackages];
+                                                                updated[idx].price = Number(e.target.value);
+                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                            }}
+                                                            className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-emerald-600 outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                                        />
+                                                    </div>
+
+                                                    <div>
+                                                        <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Description</label>
+                                                        <textarea 
+                                                            value={pkg.description}
+                                                            onChange={(e) => {
+                                                                const updated = [...pricingSettings.roundTripPackages];
+                                                                updated[idx].description = e.target.value;
+                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                            }}
+                                                            rows={2}
+                                                            className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-[11px] font-medium outline-none focus:ring-2 focus:ring-emerald-500/20 resize-none"
+                                                            placeholder="Short description..."
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                        {(pricingSettings.roundTripPackages || []).length === 0 && (
+                                            <div className="col-span-full py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl">
+                                                <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 mb-4">
+                                                    <Route size={32} />
+                                                </div>
+                                                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">No Packages Configured</p>
+                                                <p className="text-[10px] text-slate-400 mt-1 uppercase">Click 'Add Package' to create your first round trip hire package.</p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
+                                         <button
+                                            onClick={async () => {
+                                                const res = await fetch('/api/admin/pricing-settings', {
+                                                    method: 'PUT',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify(pricingSettings)
+                                                });
+                                                const data = await res.json();
+                                                if (data.success) alert('Packages saved successfully!');
+                                                else alert('Failed to save packages.');
+                                            }}
+                                            className="px-8 py-3.5 bg-emerald-950 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl shadow-emerald-950/20 flex items-center gap-3 active:scale-95"
+                                        >
+                                            <ShieldCheck size={18} /> Update All Packages
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {currentView === 'gallery' && (
                         <div className="animate-fade-in-up">
                             <GalleryManager />
@@ -1241,146 +1393,6 @@ export default function AdminDashboard() {
                                         </button>
                                     </div>
 
-                                    {/* Round Trip Packages Manager */}
-                                    <div className="bg-white border border-slate-200 rounded-[2rem] p-6 sm:p-8 mt-8 shadow-sm">
-                                        <div className="flex items-center justify-between mb-8">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
-                                                    <Route size={24} strokeWidth={2.5} />
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Round Trip Packages</h4>
-                                                    <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mt-0.5 opacity-70">Manage Time & Distance based hire packages</p>
-                                                </div>
-                                            </div>
-                                            <button 
-                                                onClick={() => {
-                                                    const newPackage = { id: `pkg-${Date.now()}`, name: 'New Package', hours: 5, distance: 50, price: 7000, description: 'Package description here' };
-                                                    setPricingSettings({ ...pricingSettings, roundTripPackages: [...(pricingSettings.roundTripPackages || []), newPackage] });
-                                                }}
-                                                className="px-6 py-3 bg-emerald-900 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-800 transition-all shadow-lg shadow-emerald-900/10 flex items-center gap-2"
-                                            >
-                                                <Plus size={16} strokeWidth={3} /> Add Package
-                                            </button>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                                            {(pricingSettings.roundTripPackages || []).map((pkg, idx) => (
-                                                <div key={pkg.id} className="bg-slate-50/50 border border-slate-200 rounded-2xl p-5 hover:border-emerald-500/30 transition-all group">
-                                                    <div className="flex justify-between items-start mb-4">
-                                                        <input 
-                                                            type="text"
-                                                            value={pkg.name}
-                                                            onChange={(e) => {
-                                                                const updated = [...pricingSettings.roundTripPackages];
-                                                                updated[idx].name = e.target.value;
-                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                            }}
-                                                            className="bg-transparent border-none font-black text-emerald-950 uppercase tracking-tight text-sm outline-none w-full focus:text-emerald-600"
-                                                            placeholder="Package Name"
-                                                        />
-                                                        <button 
-                                                            onClick={() => {
-                                                                const updated = pricingSettings.roundTripPackages.filter((_, i) => i !== idx);
-                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                            }}
-                                                            className="text-slate-400 hover:text-red-500 transition-colors"
-                                                        >
-                                                            <X size={18} />
-                                                        </button>
-                                                    </div>
-                                                    
-                                                    <div className="space-y-4">
-                                                        <div className="grid grid-cols-2 gap-4">
-                                                            <div>
-                                                                <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Hours</label>
-                                                                <input 
-                                                                    type="number"
-                                                                    value={pkg.hours}
-                                                                    onChange={(e) => {
-                                                                        const updated = [...pricingSettings.roundTripPackages];
-                                                                        updated[idx].hours = Number(e.target.value);
-                                                                        setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                                    }}
-                                                                    className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                                />
-                                                            </div>
-                                                            <div>
-                                                                <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Distance (KM)</label>
-                                                                <input 
-                                                                    type="number"
-                                                                    value={pkg.distance}
-                                                                    onChange={(e) => {
-                                                                        const updated = [...pricingSettings.roundTripPackages];
-                                                                        updated[idx].distance = Number(e.target.value);
-                                                                        setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                                    }}
-                                                                    className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                                />
-                                                            </div>
-                                                        </div>
-
-                                                        <div>
-                                                            <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Price (LKR)</label>
-                                                            <input 
-                                                                type="number"
-                                                                value={pkg.price}
-                                                                onChange={(e) => {
-                                                                    const updated = [...pricingSettings.roundTripPackages];
-                                                                    updated[idx].price = Number(e.target.value);
-                                                                    setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                                }}
-                                                                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-emerald-600 outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                            />
-                                                        </div>
-
-                                                        <div>
-                                                            <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Description</label>
-                                                            <textarea 
-                                                                value={pkg.description}
-                                                                onChange={(e) => {
-                                                                    const updated = [...pricingSettings.roundTripPackages];
-                                                                    updated[idx].description = e.target.value;
-                                                                    setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                                }}
-                                                                rows={2}
-                                                                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-[11px] font-medium outline-none focus:ring-2 focus:ring-emerald-500/20 resize-none"
-                                                                placeholder="Short description..."
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-
-                                            {(pricingSettings.roundTripPackages || []).length === 0 && (
-                                                <div className="col-span-full py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl">
-                                                    <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 mb-4">
-                                                        <Route size={32} />
-                                                    </div>
-                                                    <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">No Packages Configured</p>
-                                                    <p className="text-[10px] text-slate-400 mt-1 uppercase">Click 'Add Package' to create your first round trip hire package.</p>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
-                                             <button
-                                                onClick={async () => {
-                                                    const res = await fetch('/api/admin/pricing-settings', {
-                                                        method: 'PUT',
-                                                        headers: { 'Content-Type': 'application/json' },
-                                                        body: JSON.stringify(pricingSettings)
-                                                    });
-                                                    const data = await res.json();
-                                                    if (data.success) alert('Packages saved successfully!');
-                                                    else alert('Failed to save packages.');
-                                                }}
-                                                className="px-8 py-3.5 bg-emerald-950 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl shadow-emerald-950/20 flex items-center gap-3 active:scale-95"
-                                            >
-                                                <ShieldCheck size={18} /> Update All Packages
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 {/* Category Tabs */}

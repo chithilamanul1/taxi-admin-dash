@@ -11,15 +11,10 @@ export const ROUND_TRIP_PACKAGES = [
 ];
 
 export const TAXI_TOUR_PACKAGES = [
-    { hours: 2, kms: [10, 20, 30, 40], rates: { 'mini-car': 2800, 'sedan': 3500 } },
-    { hours: 3, kms: [40, 50, 60], rates: { 'mini-car': 4500, 'sedan': 5500 } },
-    { hours: 4, kms: [60, 70, 80], rates: { 'mini-car': 6000, 'sedan': 7000 } },
-    { hours: 5, kms: [80, 90, 100], rates: { 'mini-car': 7500, 'sedan': 8500 } },
-    { hours: 6, kms: [100, 110, 120], rates: { 'mini-car': 9000, 'sedan': 10500 } },
-    { hours: 8, kms: [150, 160, 180], rates: { 'mini-car': 12000, 'sedan': 14000 } },
-    { hours: 10, kms: [200, 220, 240], rates: { 'mini-car': 15000, 'sedan': 17500 } },
-    { hours: 12, kms: [250, 280, 300], rates: { 'mini-car': 18000, 'sedan': 21000 } },
-    { hours: 14, kms: [300], rates: { 'mini-car': 22000, 'sedan': 25000 } }
+    { id: '2h-10km', name: '2 Hour / 10 KM', hours: 2, distance: 10, price: 3000, description: 'Quick local tour.' },
+    { id: '2h-20km', name: '2 Hour / 20 KM', hours: 2, distance: 20, price: 5000, description: 'Short city tour.' },
+    { id: '2h-50km', name: '2 Hour / 50 KM', hours: 2, distance: 50, price: 8000, description: 'Extended city tour.' },
+    { id: 'standard-12h-300km', name: '12 Hour / 300 KM', hours: 12, distance: 300, price: 25000, description: 'Full day hire.' }
 ];
 
 export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '', dynamicDestinations = [], options = {}) => {
@@ -31,13 +26,12 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     if (tripType === 'round-trip' && roundTripPackageId) {
         // First check in taxi tour packages (new logic)
         if (options.taxiTourHours) {
-            const tourPkg = TAXI_TOUR_PACKAGES.find(p => p.hours === Number(options.taxiTourHours));
+            const tourPkg = TAXI_TOUR_PACKAGES.find(p => p.hours === Number(options.taxiTourHours) && (p.distance === Number(options.taxiTourKm) || p.id === options.roundTripPackageId));
             if (tourPkg) {
-                const baseRate = tourPkg.rates[vehicleData.vehicleType] || tourPkg.rates['mini-car'] || 5000;
-                let total = baseRate;
+                let total = tourPkg.price;
                 
                 // Add excess KM if the selected KM is exceeded
-                const allowedKm = Number(options.taxiTourKm) || 0;
+                const allowedKm = tourPkg.distance || Number(options.taxiTourKm) || 0;
                 if (distKm > allowedKm) {
                     const perKmRate = vehicleData.perKmRate || 100;
                     total += (distKm - allowedKm) * perKmRate;
