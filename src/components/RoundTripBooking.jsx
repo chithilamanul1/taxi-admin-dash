@@ -51,9 +51,9 @@ const RoundTripBooking = () => {
         } else {
           // Fallback if none in DB
           const defaults = [
-            { id: 'mini-car', name: 'Mini Car (Alto/Axia)', baseRate: 5000, perKm: 110, image: '/vehicles/minicar.png' },
-            { id: 'sedan', name: 'Sedan (Premio/Allion)', baseRate: 6500, perKm: 130, image: '/vehicles/sedancar.png' },
-            { id: 'van', name: 'Luxury Van (KDH/Commuter)', baseRate: 9500, perKm: 180, image: '/vehicles/van.png' },
+            { id: 'mini-car', name: 'Mini', baseRate: 4000, perKm: 110, image: '/vehicles/minicar.png' },
+            { id: 'sedan', name: 'Sedan', baseRate: 8000, perKm: 130, image: '/vehicles/sedancar.png' },
+            { id: 'van', name: 'Vezel', baseRate: 15000, perKm: 180, image: '/vehicles/van.png' },
           ];
           setVehicles(defaults);
           setSelectedVehicle(defaults[0]);
@@ -173,15 +173,15 @@ const RoundTripBooking = () => {
     if (tab === 'tour') {
       // Use dynamic packages if available
       const activePackages = pricingSettings?.roundTripPackages || [];
-      const pkg = activePackages.find(p => p.hours === Number(formData.taxiTourHours));
+      // Find package that matches vehicle, hours, AND selected KM
+      const pkg = activePackages.find(p => 
+        p.hours === Number(formData.taxiTourHours) && 
+        p.distance === Number(formData.taxiTourKm) && 
+        (p.vehicleType === selectedVehicle.id || (!p.vehicleType && selectedVehicle.id === 'mini-car'))
+      );
       
       if (pkg) {
-        let total = pkg.price;
-        if (distance > (pkg.distance || 0)) {
-           const perKmRate = selectedVehicle.perKm || 110;
-           total += (distance - pkg.distance) * perKmRate;
-        }
-        return Math.round(total);
+        return Math.round(pkg.price);
       }
 
       // Fallback to static packages
@@ -340,25 +340,20 @@ const RoundTripBooking = () => {
                 SEE ALL OPTIONS
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex bg-slate-100 dark:bg-white/5 p-1 rounded-2xl w-full mb-8">
             {vehicles.map((v) => (
-              <motion.div 
+              <button
                 key={v.id}
-                whileHover={{ y: -5 }}
                 onClick={() => setSelectedVehicle(v)}
-                className={`cursor-pointer p-6 rounded-3xl border-2 transition-all relative overflow-hidden group ${selectedVehicle.id === v.id ? 'border-emerald-600 bg-emerald-50/30' : 'border-slate-100 hover:border-emerald-200 bg-white'}`}
+                className={`flex-1 py-4 rounded-xl text-center transition-all ${selectedVehicle.id === v.id ? 'bg-white dark:bg-zinc-800 shadow-xl scale-[1.02] border border-slate-100 dark:border-white/10' : 'text-slate-400 hover:text-emerald-600'}`}
               >
-                <div className="aspect-video mb-4 relative flex items-center justify-center">
-                  <img src={v.image} alt={v.name} className="max-h-full object-contain transition-transform duration-500 group-hover:scale-110" />
-                </div>
-                <h5 className="font-black text-emerald-950 uppercase tracking-tight mb-1">{displayVehicleName(v.name)}</h5>
-                <p className="text-xl font-black text-emerald-600 tracking-tighter">Rs. {v.baseRate.toLocaleString()}.00</p>
-                {selectedVehicle.id === v.id && (
-                  <div className="absolute top-4 right-4 text-emerald-600">
-                    <CheckCircle2 size={20} />
-                  </div>
-                )}
-              </motion.div>
+                <p className={`text-[10px] font-black uppercase tracking-widest ${selectedVehicle.id === v.id ? 'text-emerald-950 dark:text-white' : 'text-slate-400'}`}>
+                    {displayVehicleName(v.name)}
+                </p>
+                <p className={`text-xs font-black mt-1 ${selectedVehicle.id === v.id ? 'text-emerald-600' : 'text-slate-300'}`}>
+                    Rs. {v.baseRate.toLocaleString()}
+                </p>
+              </button>
             ))}
           </div>
         </section>
@@ -380,41 +375,57 @@ const RoundTripBooking = () => {
                               key={p.id}
                               onClick={() => setFormData({...formData, taxiTourHours: p.hours, taxiTourKm: p.distance})}
                               className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all border ${formData.taxiTourHours === p.hours ? 'bg-emerald-600 border-emerald-600 text-white shadow-lg' : 'bg-white border-slate-100 text-slate-400 hover:border-emerald-200'}`}
-                            >
-                               {p.name || `${p.hours}H / ${p.distance}KM`}
-                            </button>
-                          ))
-                       ) : (
-                          TAXI_TOUR_PACKAGES.map(p => (
-                             <button
-                               key={p.hours}
-                               onClick={() => setFormData({...formData, taxiTourHours: p.hours, taxiTourKm: p.kms[0]})}
-                               className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all border ${formData.taxiTourHours === p.hours ? 'bg-emerald-600 border-emerald-600 text-white shadow-lg' : 'bg-white border-slate-100 text-slate-400 hover:border-emerald-200'}`}
-                             >
-                                {p.hours}H
-                             </button>
-                          ))
-                       )}
-                    </div>
-                 </div>
-
-                 {(!pricingSettings?.roundTripPackages || pricingSettings.roundTripPackages.length === 0) && (
-                    <div className="space-y-4">
-                        <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Included Distance (KM)</label>
-                        <div className="flex flex-wrap gap-2">
-                          {TAXI_TOUR_PACKAGES.find(p => p.hours === formData.taxiTourHours)?.kms.map(km => (
-                              <button
-                                key={km}
-                                onClick={() => setFormData({...formData, taxiTourKm: km})}
-                                className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all border ${formData.taxiTourKm === km ? 'bg-emerald-600 border-emerald-600 text-white shadow-lg' : 'bg-white border-slate-100 text-slate-400 hover:border-emerald-200'}`}
-                              >
-                                {km} KM
-                              </button>
-                          ))}
+               <div className="grid md:grid-cols-2 gap-12">
+                  <div className="space-y-6">
+                     <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-[0.3em]">Hour count</label>
+                     <div className="flex items-center bg-white dark:bg-zinc-900 border border-emerald-100 dark:border-white/5 p-2 rounded-[2rem] shadow-inner">
+                        <button 
+                            onClick={() => {
+                                const newHours = Math.max(1, formData.taxiTourHours - 1);
+                                setFormData({...formData, taxiTourHours: newHours});
+                            }}
+                            className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-white/5 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-all active:scale-90"
+                        >
+                            <Minus size={20} strokeWidth={3} />
+                        </button>
+                        <div className="flex-1 text-center">
+                            <span className="text-2xl font-black text-emerald-950 dark:text-white">{formData.taxiTourHours}</span>
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Hours</span>
                         </div>
-                    </div>
-                 )}
-              </div>
+                        <button 
+                            onClick={() => {
+                                const newHours = Math.min(24, formData.taxiTourHours + 1);
+                                setFormData({...formData, taxiTourHours: newHours});
+                            }}
+                            className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-white/5 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-all active:scale-90"
+                        >
+                            <Plus size={20} strokeWidth={3} />
+                        </button>
+                     </div>
+                  </div>
+
+                  <div className="space-y-6">
+                     <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-[0.3em]">Select KM</label>
+                     <div className="flex flex-wrap gap-3">
+                        {pricingSettings?.roundTripPackages
+                            ?.filter(p => p.hours === formData.taxiTourHours && (p.vehicleType === selectedVehicle.id || (!p.vehicleType && selectedVehicle.id === 'mini-car')))
+                            .map(pkg => (
+                                <button
+                                    key={pkg.id}
+                                    onClick={() => setFormData({...formData, taxiTourKm: pkg.distance})}
+                                    className={`px-8 py-4 rounded-2xl font-black text-xs transition-all border-2 flex flex-col items-center gap-1 ${formData.taxiTourKm === pkg.distance ? 'border-emerald-600 bg-emerald-600 text-white shadow-xl scale-105' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-800 text-slate-400 hover:border-emerald-200'}`}
+                                >
+                                    <span>{pkg.distance} KM</span>
+                                    <span className={`text-[9px] ${formData.taxiTourKm === pkg.distance ? 'text-emerald-100' : 'text-emerald-600/50'}`}>Rs.{pkg.price.toLocaleString()}</span>
+                                </button>
+                            ))
+                        }
+                        {(!pricingSettings?.roundTripPackages?.filter(p => p.hours === formData.taxiTourHours && (p.vehicleType === selectedVehicle.id || (!p.vehicleType && selectedVehicle.id === 'mini-car'))).length) && (
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest p-4 bg-slate-100/50 rounded-2xl w-full text-center">No KM packages for {formData.taxiTourHours}H</p>
+                        )}
+                     </div>
+                  </div>
+               </div>
 
               <div className="flex items-center gap-4 p-4 bg-emerald-100/50 rounded-2xl border border-emerald-100">
                  <AlertCircle size={16} className="text-emerald-600 shrink-0" />

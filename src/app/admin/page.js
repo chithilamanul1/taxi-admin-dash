@@ -1125,6 +1125,22 @@ export default function AdminDashboard() {
                                                 
                                                 <div className="space-y-4">
                                                     <div className="grid grid-cols-2 gap-4">
+                                                        <div className="col-span-2">
+                                                            <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Vehicle Category</label>
+                                                            <select 
+                                                                value={pkg.vehicleType || 'mini-car'}
+                                                                onChange={(e) => {
+                                                                    const updated = [...pricingSettings.roundTripPackages];
+                                                                    updated[idx].vehicleType = e.target.value;
+                                                                    setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                                }}
+                                                                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                                            >
+                                                                <option value="mini-car">Mini Car</option>
+                                                                <option value="sedan">Sedan</option>
+                                                                <option value="luxury-van">Luxury Van</option>
+                                                            </select>
+                                                        </div>
                                                         <div>
                                                             <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Hours</label>
                                                             <input 

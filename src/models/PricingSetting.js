@@ -35,6 +35,7 @@ const PricingSettingSchema = new mongoose.Schema({
         hours: Number,
         distance: Number,
         price: Number,
+        vehicleType: String,
         description: String
     }],
     updatedBy: {

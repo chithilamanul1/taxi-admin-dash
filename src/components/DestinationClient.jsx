@@ -162,6 +162,28 @@ export default function DestinationClient({ destination }) {
                                     </div>
                                     <h2 className="text-3xl font-black text-emerald-900 dark:text-white">Route FAQs</h2>
                                 </div>
+
+                                {destination.id === 'kandy' && (
+                                    <div className="mb-10 bg-gradient-to-br from-emerald-900 to-emerald-950 text-white rounded-[2rem] p-8 border border-emerald-500/20 relative overflow-hidden group">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700"></div>
+                                        <div className="relative z-10">
+                                            <div className="flex items-center gap-2 text-emerald-400 font-bold uppercase tracking-widest text-[10px] mb-4">
+                                                <Star fill="currentColor" size={12} /> Recommended for Tourists
+                                            </div>
+                                            <h3 className="text-2xl font-black mb-3">Exploring Kandy?</h3>
+                                            <p className="text-emerald-100/70 mb-6 text-sm leading-relaxed">
+                                                Don't just travel to Kandy, experience it! Book a <strong>Round Trip Package</strong> to visit the Temple of the Tooth, Botanical Gardens, and more at your own pace.
+                                            </p>
+                                            <a 
+                                                href="/round-trips" 
+                                                className="inline-flex items-center gap-3 bg-emerald-500 text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20"
+                                            >
+                                                View Kandy Tour Packages <ArrowRight size={16} />
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div className="space-y-4">
                                     {destination.faqs.map((faq, i) => (
                                         <div key={i} className="border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden">
