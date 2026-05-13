@@ -1136,7 +1136,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             <div className="mt-4 sm:mt-6">
                                 <div className="flex items-center justify-between mb-3 px-1">
                                     <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Select Vehicle</label>
-                                    <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest animate-pulse flex items-center gap-2">
+                                    <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest flex items-center gap-2">
                                         <Info size={10} strokeWidth={4} />
                                         SEE ALL OPTIONS
                                     </div>

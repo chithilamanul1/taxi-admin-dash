@@ -336,7 +336,7 @@ const RoundTripBooking = () => {
               <div className="h-4 w-1 bg-emerald-600 rounded-full" />
               <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Select Vehicle Class</h4>
             </div>
-            <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest animate-pulse flex items-center gap-2">
+            <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest flex items-center gap-2">
                 <Info size={10} strokeWidth={4} />
                 SEE ALL OPTIONS
             </div>

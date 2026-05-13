@@ -143,7 +143,7 @@ const FleetSection = () => {
                                     </div>
                                     <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-[#00A99D]">
                                         <div className="w-8 h-8 border border-slate-100 dark:border-white/10 flex items-center justify-center shrink-0">
-                                            <Wind size={16} className="animate-pulse" />
+                                            <Wind size={16} />
                                         </div>
                                         AC ON
                                     </div>

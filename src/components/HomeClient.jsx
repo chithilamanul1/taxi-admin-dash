@@ -197,7 +197,7 @@ export default function HomeClient() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div className="order-2 lg:order-1">
                             <div className="inline-flex items-center gap-3 bg-[#FACC15] text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] mb-10 shadow-xl shadow-yellow-500/20">
-                                <Sparkles size={14} strokeWidth={4} className="animate-pulse" /> NEW: SMART TRAVEL
+                                <Sparkles size={14} strokeWidth={4} /> NEW: SMART TRAVEL
                             </div>
                             <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-[0.85] mb-10">
                                 PLAN YOUR <span className="text-[#FACC15]">TRIP WITH AI</span>

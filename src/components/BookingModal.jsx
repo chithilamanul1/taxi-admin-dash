@@ -743,7 +743,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <div className="space-y-10 pt-10 border-t border-slate-100 dark:border-white/10">
                                 <div className="flex items-center justify-between">
                                     <h4 className="text-2xl font-black text-black dark:text-white uppercase tracking-tight">Select <span className="text-[#FACC15]">Fleet</span></h4>
-                                    <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest animate-pulse flex items-center gap-2">
+                                    <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest flex items-center gap-2">
                                         <Info size={10} strokeWidth={4} />
                                         SEE ALL OPTIONS
                                     </div>
