@@ -208,10 +208,10 @@ export default function HomeClient() {
                             </p>
                             <Link 
                                 href="/custom-trip"
-                                className="inline-flex items-center gap-4 bg-white text-emerald-950 px-12 py-6 rounded-full font-black text-sm uppercase tracking-widest hover:bg-[#FACC15] hover:text-black transition-all shadow-2xl group"
+                                className="inline-flex items-center gap-3 bg-white text-emerald-950 px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest hover:bg-[#FACC15] hover:text-black transition-all shadow-2xl group"
                             >
                                 START PLANNING NOW
-                                <ArrowRight size={22} className="group-hover:translate-x-3 transition-transform" />
+                                <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
                             </Link>
                         </div>
                         <div className="order-1 lg:order-2 relative group">
