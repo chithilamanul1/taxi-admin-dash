@@ -83,7 +83,6 @@ const RoundTripBooking = () => {
     email: '',
     phone: '',
     notes: '',
-    notes: '',
     taxiTourHours: 2,
     taxiTourKm: 40
   });
@@ -578,6 +577,7 @@ const RoundTripBooking = () => {
                   </div>
               </div>
           </div>
+        </div>
         <div className="flex items-center justify-center gap-2 mt-8 opacity-40 hover:opacity-100 transition-opacity">
            <Sparkles size={10} className="text-emerald-600" />
            <span className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-400">Powered by Gemini 1.5 Pro</span>
