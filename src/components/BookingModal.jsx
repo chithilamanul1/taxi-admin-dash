@@ -1116,33 +1116,32 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             </button>
                                         </div>
                                     </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     )}
-                </div>
+                    </div>
 
-                <div className="p-6 sm:p-10 border-t border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-950 shrink-0">
-                    <div className="flex flex-row items-center justify-between gap-3 sm:gap-4">
-                        <button
-                            onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
-                            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-8 py-3 sm:py-4 text-[9px] sm:text-xs font-black uppercase tracking-widest text-slate-500 hover:text-black transition-all bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5"
-                        >
-                            {step === 1 ? 'Cancel' : 'Back'}
-                        </button>
+                    <div className="p-6 sm:p-10 border-t border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-950 shrink-0">
+                        <div className="flex flex-row items-center justify-between gap-3 sm:gap-4">
+                            <button
+                                onClick={() => (step > 1 ? setStep(step - 1) : onClose())}
+                                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-8 py-3 sm:py-4 text-[9px] sm:text-xs font-black uppercase tracking-widest text-slate-500 hover:text-black transition-all bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5"
+                            >
+                                {step === 1 ? 'Cancel' : 'Back'}
+                            </button>
 
-                        <button
-                            onClick={handleNext}
-                            disabled={loading}
-                            className="flex-[2] sm:flex-none flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-12 py-3 sm:py-5 bg-gradient-to-br from-yellow-400 via-orange-500 to-orange-600 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 text-white rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-orange-500/40 transition-all group"
-                        >
-                            {step === 1 ? 'Select Details' : step === 2 ? 'Review & Checkout' : loading ? 'Securing...' : 'Confirm Order'}
-                            <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
-                        </button>
+                            <button
+                                onClick={handleNext}
+                                disabled={loading}
+                                className="flex-[2] sm:flex-none flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-12 py-3 sm:py-5 bg-gradient-to-br from-yellow-400 via-orange-500 to-orange-600 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 text-white rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-orange-500/40 transition-all group"
+                            >
+                                {step === 1 ? 'Select Details' : step === 2 ? 'Review & Checkout' : loading ? 'Securing...' : 'Confirm Order'}
+                                <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     );
 }
