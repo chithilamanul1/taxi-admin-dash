@@ -19,8 +19,8 @@ const STEPS = [
     { id: 3, title: 'Confirm & Pay', icon: CreditCard },
 ];
 
-// Strip 'KDH' from vehicle display names (DB IDs/records remain untouched)
-const displayVehicleName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
+// Strip 'KDH' and any model details in parentheses from vehicle display names
+const displayVehicleName = (name) => (name || '').replace(/\bKDH\s*/gi, '').split('(')[0].trim();
 
 export default function BookingModal({ isOpen, onClose, initialData = {}, pricingCategory = 'airport-transfer' }) {
     const { data: session } = useSession();

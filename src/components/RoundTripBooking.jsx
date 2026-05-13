@@ -7,6 +7,9 @@ import { TAXI_TOUR_PACKAGES } from '../lib/pricing-util';
 
 
 
+// Strip specific models in parentheses (e.g. "Mini Car (Alto/Axia)" -> "Mini Car")
+const displayVehicleName = (name) => (name || '').split('(')[0].trim();
+
 const RoundTripBooking = () => {
   const [tab, setTab] = useState('airport');
   const [vehicles, setVehicles] = useState([]);
@@ -27,22 +30,29 @@ const RoundTripBooking = () => {
       .then(res => res.json())
       .then(data => {
         if (data.success && data.data.length > 0) {
-          const mapped = data.data.map(v => ({
-            id: v.vehicleType,
-            name: v.name,
-            baseRate: v.basePrice,
-            perKm: v.perKmRate,
-            image: v.image,
-            capacity: v.capacity,
-            suitcases: v.luggage
-          }));
+          const mapped = data.data.map(v => {
+            // Sanitize image paths from DB if they are missing or incorrect
+            let img = v.image || '/vehicles/placeholder.png';
+            if (v.vehicleType === 'mini-car' && (!v.image || v.image.includes('mini-car'))) img = '/vehicles/minicar.png';
+            if (v.vehicleType === 'sedan' && (!v.image || v.image.includes('sedan.png'))) img = '/vehicles/sedancar.png';
+
+            return {
+              id: v.vehicleType,
+              name: v.name,
+              baseRate: v.basePrice,
+              perKm: v.perKmRate,
+              image: img,
+              capacity: v.capacity,
+              suitcases: v.luggage
+            };
+          });
           setVehicles(mapped);
           setSelectedVehicle(mapped[0]);
         } else {
           // Fallback if none in DB
           const defaults = [
-            { id: 'mini-car', name: 'Mini Car (Alto/Axia)', baseRate: 5000, perKm: 110, image: '/vehicles/mini-car.png' },
-            { id: 'sedan', name: 'Sedan (Premio/Allion)', baseRate: 6500, perKm: 130, image: '/vehicles/sedan.png' },
+            { id: 'mini-car', name: 'Mini Car (Alto/Axia)', baseRate: 5000, perKm: 110, image: '/vehicles/minicar.png' },
+            { id: 'sedan', name: 'Sedan (Premio/Allion)', baseRate: 6500, perKm: 130, image: '/vehicles/sedancar.png' },
             { id: 'van', name: 'Luxury Van (KDH/Commuter)', baseRate: 9500, perKm: 180, image: '/vehicles/van.png' },
           ];
           setVehicles(defaults);
@@ -260,7 +270,7 @@ const RoundTripBooking = () => {
           `Booking ID: ${data.bookingId}%0A` +
           `Name: ${formData.name}%0A` +
           `Route: ${locations[0].split(',')[0]} to ${locations[locations.length - 1].split(',')[0]}%0A` +
-          `Vehicle: ${selectedVehicle.name}%0A` +
+          `Vehicle: ${displayVehicleName(selectedVehicle.name)}%0A` +
           `Price: Rs. ${totalPrice.toLocaleString()}`;
         
         window.open(`https://wa.me/94768743357?text=${message}`, '_blank');
@@ -341,7 +351,7 @@ const RoundTripBooking = () => {
                 <div className="aspect-video mb-4 relative flex items-center justify-center">
                   <img src={v.image} alt={v.name} className="max-h-full object-contain transition-transform duration-500 group-hover:scale-110" />
                 </div>
-                <h5 className="font-black text-emerald-950 uppercase tracking-tight mb-1">{v.name}</h5>
+                <h5 className="font-black text-emerald-950 uppercase tracking-tight mb-1">{displayVehicleName(v.name)}</h5>
                 <p className="text-xl font-black text-emerald-600 tracking-tighter">Rs. {v.baseRate.toLocaleString()}.00</p>
                 {selectedVehicle.id === v.id && (
                   <div className="absolute top-4 right-4 text-emerald-600">
