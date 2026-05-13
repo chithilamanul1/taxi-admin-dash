@@ -620,6 +620,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     </div>
                                 ))}
                             </div>
+                            <div className="flex sm:hidden items-center gap-3">
+                                <div className="w-10 h-10 rounded-2xl bg-[#FACC15] text-white flex items-center justify-center shadow-lg">
+                                    <span className="text-xs font-black">{step}</span>
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-[8px] font-black text-[#FACC15] uppercase tracking-widest leading-none mb-1">Step {step} of 3</span>
+                                    <span className="text-[10px] font-black text-black dark:text-white uppercase tracking-tight leading-none">{STEPS[step-1].title}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -934,16 +943,14 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <div className="flex items-center justify-between pb-8 border-b border-slate-100 dark:border-white/5">
                                                 <div className="px-6 py-2.5 bg-[#FACC15] text-white rounded-full text-[10px] font-black uppercase tracking-widest">Booking Summary</div>
                                                 <div className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-[0.3em]">{formData.tripType.replace('-', ' ')}</div>
-                                            </div>
-
                                             <div className="space-y-6">
-                                                <div className="flex items-center gap-6 bg-slate-50 dark:bg-white/5 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-inner">
-                                                    <div className="w-32 h-24 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-0.5 overflow-hidden shrink-0 shadow-sm">
+                                                <div className="flex flex-col sm:flex-row items-center gap-6 bg-slate-50 dark:bg-white/5 p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-inner">
+                                                    <div className="w-40 sm:w-32 h-28 sm:h-24 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-0.5 overflow-hidden shrink-0 shadow-sm">
                                                         <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full h-full object-contain scale-[1.8]" />
                                                     </div>
-                                                    <div className="min-w-0 flex-1">
-                                                        <p className="text-sm font-black text-emerald-950 dark:text-white uppercase truncate tracking-tight">{displayVehicleName(selectedVehicle?.name)}</p>
-                                                        <div className="flex items-center gap-4 mt-2">
+                                                    <div className="min-w-0 flex-1 text-center sm:text-left">
+                                                        <p className="text-base sm:text-sm font-black text-emerald-950 dark:text-white uppercase truncate tracking-tight">{displayVehicleName(selectedVehicle?.name)}</p>
+                                                        <div className="flex items-center justify-center sm:justify-start gap-4 mt-2">
                                                             <div className="flex items-center gap-2">
                                                                 <Users size={12} className="text-[#FACC15]" />
                                                                 <span className="text-[9px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">
@@ -959,6 +966,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         </div>
                                                     </div>
                                                 </div>
+
 
                                                 <div className="grid sm:grid-cols-2 gap-8 px-2">
                                                     <div className="flex gap-5">
@@ -1000,17 +1008,18 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         <span>{s.label}</span>
                                                         <span className="text-[#FACC15] font-black">+{currentSymbol} {s.value.toLocaleString()}</span>
                                                     </div>
-                                                ))}
                                                 <div className="pt-6 sm:pt-8 mt-6 border-t border-slate-100 dark:border-white/10">
                                                     <div className="flex flex-col gap-2">
                                                         <p className="text-[10px] font-black text-[#FACC15] tracking-[0.2em] uppercase">
                                                             {formData.paymentType === 'partial' ? 'Secure Deposit (50%)' : 'Total Amount (Fixed)'}
                                                         </p>
-                                                        <p className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter text-emerald-950 dark:text-white leading-none break-words">
-                                                            <span className="text-xl sm:text-2xl font-black mr-2 text-slate-500/50">{currentSymbol}</span>
+                                                        <p className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter text-emerald-950 dark:text-white leading-none break-words">
+                                                            <span className="text-lg sm:text-2xl font-black mr-2 text-slate-500/50">{currentSymbol}</span>
                                                             {payNow.toLocaleString()}
                                                         </p>
                                                     </div>
+                                                </div>
+
                                                     
                                                     {/* Cost Disclosures */}
                                                     <div className="mt-8 p-6 bg-slate-50 dark:bg-white/5 rounded-[2rem] border border-slate-100 dark:border-white/10 space-y-4">
