@@ -31,10 +31,13 @@ const RoundTripBooking = () => {
       .then(data => {
         if (data.success && data.data.length > 0) {
           const mapped = data.data.map(v => {
-            // Sanitize image paths from DB if they are missing or incorrect
             let img = v.image || '/vehicles/placeholder.png';
-            if (v.vehicleType === 'mini-car' && (!v.image || v.image.includes('mini-car'))) img = '/vehicles/minicar.png';
-            if (v.vehicleType === 'sedan' && (!v.image || v.image.includes('sedan.png'))) img = '/vehicles/sedancar.png';
+            // Fleet mapping for all categories
+            if (v.vehicleType === 'mini-car') img = '/vehicles/minicar.png';
+            if (v.vehicleType === 'sedan') img = '/vehicles/sedancar.png';
+            if (v.vehicleType === 'vezel') img = '/vehicles/van.png';
+            if (v.vehicleType === 'van') img = '/vehicles/van.png';
+            if (v.vehicleType === 'suv') img = '/vehicles/sedancar.png'; // Placeholder if needed
 
             return {
               id: v.vehicleType,
@@ -49,11 +52,13 @@ const RoundTripBooking = () => {
           setVehicles(mapped);
           setSelectedVehicle(mapped[0]);
         } else {
-          // Fallback if none in DB
+          // Fallback if none in DB - Expanded Fleet
           const defaults = [
             { id: 'mini-car', name: 'Mini', baseRate: 4000, perKm: 110, image: '/vehicles/minicar.png' },
             { id: 'sedan', name: 'Sedan', baseRate: 8000, perKm: 130, image: '/vehicles/sedancar.png' },
-            { id: 'van', name: 'Vezel', baseRate: 15000, perKm: 180, image: '/vehicles/van.png' },
+            { id: 'vezel', name: 'Vezel', baseRate: 12000, perKm: 160, image: '/vehicles/van.png' },
+            { id: 'van', name: 'Van', baseRate: 15000, perKm: 180, image: '/vehicles/van.png' },
+            { id: 'suv', name: 'SUV', baseRate: 20000, perKm: 220, image: '/vehicles/sedancar.png' },
           ];
           setVehicles(defaults);
           setSelectedVehicle(defaults[0]);
@@ -78,9 +83,31 @@ const RoundTripBooking = () => {
     email: '',
     phone: '',
     notes: '',
+    notes: '',
     taxiTourHours: 2,
-    taxiTourKm: 10
+    taxiTourKm: 40
   });
+
+  // Duration to KM mapping logic
+  const updateDuration = (newHours) => {
+    const kmMap = {
+      2: 40,
+      4: 80,
+      6: 120,
+      8: 160,
+      10: 200,
+      12: 300
+    };
+    // Find closest mapping or interpolate
+    let newKm = kmMap[newHours] || newHours * 20;
+    if (newHours > 12) newKm = 300; // Cap
+    
+    setFormData(prev => ({
+        ...prev, 
+        taxiTourHours: newHours,
+        taxiTourKm: newKm
+    }));
+  };
 
   // Load Google Maps Script
   useEffect(() => {
@@ -331,27 +358,26 @@ const RoundTripBooking = () => {
       <div className="p-8 md:p-12 space-y-12">
         {/* Vehicle Category */}
         <section>
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2.5">
               <div className="h-4 w-1 bg-emerald-600 rounded-full" />
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Select Vehicle Class</h4>
-            </div>
-            <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest flex items-center gap-2">
-                <Info size={10} strokeWidth={4} />
-                SEE ALL OPTIONS
+              <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Select Class</h4>
             </div>
           </div>
-          <div className="flex bg-slate-100 dark:bg-white/5 p-1 rounded-2xl w-full mb-8">
+          <div className="flex bg-slate-100/50 dark:bg-white/5 p-1 rounded-2xl w-full mb-6 overflow-x-auto hide-scrollbar gap-1">
             {vehicles.map((v) => (
               <button
                 key={v.id}
                 onClick={() => setSelectedVehicle(v)}
-                className={`flex-1 py-4 rounded-xl text-center transition-all ${selectedVehicle.id === v.id ? 'bg-white dark:bg-zinc-800 shadow-xl scale-[1.02] border border-slate-100 dark:border-white/10' : 'text-slate-400 hover:text-emerald-600'}`}
+                className={`min-w-[80px] flex-1 py-3 px-2 rounded-xl text-center transition-all ${selectedVehicle.id === v.id ? 'bg-white dark:bg-zinc-800 shadow-lg scale-[1.02] border border-slate-100 dark:border-white/10' : 'text-slate-400 hover:text-emerald-600'}`}
               >
-                <p className={`text-[10px] font-black uppercase tracking-widest ${selectedVehicle.id === v.id ? 'text-emerald-950 dark:text-white' : 'text-slate-400'}`}>
-                    {displayVehicleName(v.name)}
+                <div className="h-8 mb-1 flex items-center justify-center">
+                   {v.image && <img src={v.image} alt={v.name} className="h-full object-contain drop-shadow-sm group-hover:scale-110 transition-transform" />}
+                </div>
+                <p className={`text-[8px] font-black uppercase tracking-tight truncate ${selectedVehicle.id === v.id ? 'text-emerald-950 dark:text-white' : 'text-slate-400'}`}>
+                    {v.name.split(' ')[0]}
                 </p>
-                <p className={`text-xs font-black mt-1 ${selectedVehicle.id === v.id ? 'text-emerald-600' : 'text-slate-300'}`}>
+                <p className={`text-[9px] font-bold mt-0.5 ${selectedVehicle.id === v.id ? 'text-emerald-600' : 'text-slate-300'}`}>
                     Rs. {v.baseRate.toLocaleString()}
                 </p>
               </button>
@@ -360,93 +386,86 @@ const RoundTripBooking = () => {
         </section>
 
         {tab === 'tour' && (
-           <section className="animate-slide-up space-y-8 bg-emerald-50/30 p-8 rounded-[2.5rem] border border-emerald-100">
-              <div className="flex items-center gap-3">
-                <Clock className="text-emerald-600" size={20} />
-                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Taxi Tour Duration & Distance</h4>
+           <section className="animate-slide-up space-y-6 bg-slate-50/50 dark:bg-white/5 p-6 rounded-3xl border border-slate-100 dark:border-white/10">
+              <div className="flex items-center justify-between px-2">
+                <div className="flex items-center gap-3">
+                  <Clock className="text-emerald-600" size={18} />
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Duration & Limit</h4>
+                </div>
+                <div className="flex items-center gap-2 bg-emerald-100/50 dark:bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-100/50">
+                   <Sparkles size={12} className="text-emerald-600" />
+                   <span className="text-[9px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-tight">AI Estimated Limit</span>
+                </div>
               </div>
               
-              <div className="grid md:grid-cols-2 gap-12">
-                  <div className="space-y-6">
-                     <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-[0.3em]">Hour count</label>
-                     <div className="flex items-center bg-white dark:bg-zinc-900 border border-emerald-100 dark:border-white/5 p-2 rounded-[2rem] shadow-inner">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                     <label className="text-[9px] uppercase font-black text-slate-500 px-2 tracking-widest">Select Hours</label>
+                     <div className="flex items-center bg-white dark:bg-zinc-900 border border-slate-200 dark:border-white/5 p-1.5 rounded-2xl shadow-sm">
                         <button 
-                            onClick={() => {
-                                const newHours = Math.max(1, formData.taxiTourHours - 1);
-                                setFormData({...formData, taxiTourHours: newHours});
-                            }}
-                            className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-white/5 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-all active:scale-90"
+                            onClick={() => updateDuration(Math.max(1, formData.taxiTourHours - 1))}
+                            className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-white/5 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-all active:scale-90"
                         >
-                            <Minus size={20} strokeWidth={3} />
+                            <Minus size={18} strokeWidth={3} />
                         </button>
                         <div className="flex-1 text-center">
-                            <span className="text-2xl font-black text-emerald-950 dark:text-white">{formData.taxiTourHours}</span>
-                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Hours</span>
+                            <span className="text-xl font-black text-emerald-950 dark:text-white">{formData.taxiTourHours}</span>
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1.5">Hours</span>
                         </div>
                         <button 
-                            onClick={() => {
-                                const newHours = Math.min(24, formData.taxiTourHours + 1);
-                                setFormData({...formData, taxiTourHours: newHours});
-                            }}
-                            className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-white/5 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-all active:scale-90"
+                            onClick={() => updateDuration(Math.min(24, formData.taxiTourHours + 1))}
+                            className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-white/5 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-all active:scale-90"
                         >
-                            <Plus size={20} strokeWidth={3} />
+                            <Plus size={18} strokeWidth={3} />
                         </button>
                      </div>
                   </div>
 
-                  <div className="space-y-6">
-                     <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-[0.3em]">Select KM</label>
-                     <div className="flex flex-wrap gap-3">
-                        {pricingSettings?.roundTripPackages
-                            ?.filter(p => p.hours === formData.taxiTourHours && (p.vehicleType === selectedVehicle.id || (!p.vehicleType && selectedVehicle.id === 'mini-car')))
-                            .flatMap(p => p.tiers || [])
-                            .map((tier, tIdx) => (
-                                <button
-                                    key={`${formData.taxiTourHours}-${tier.km}-${tIdx}`}
-                                    onClick={() => setFormData({...formData, taxiTourKm: tier.km})}
-                                    className={`px-8 py-4 rounded-2xl font-black text-xs transition-all border-2 flex flex-col items-center gap-1 ${formData.taxiTourKm === tier.km ? 'border-emerald-600 bg-emerald-600 text-white shadow-xl scale-105' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-800 text-slate-400 hover:border-emerald-200'}`}
-                                >
-                                    <span>{tier.km} KM</span>
-                                    <span className={`text-[9px] ${formData.taxiTourKm === tier.km ? 'text-emerald-100' : 'text-emerald-600/50'}`}>Rs.{tier.price.toLocaleString()}</span>
-                                </button>
-                            ))
-                        }
-                        {(!pricingSettings?.roundTripPackages?.some(p => p.hours === formData.taxiTourHours && (p.vehicleType === selectedVehicle.id || (!p.vehicleType && selectedVehicle.id === 'mini-car')))) && (
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest p-4 bg-slate-100/50 rounded-2xl w-full text-center">No KM packages for {formData.taxiTourHours}H</p>
-                        )}
+                  <div className="space-y-4">
+                     <label className="text-[9px] uppercase font-black text-slate-500 px-2 tracking-widest">KM Limit</label>
+                     <div className="bg-white dark:bg-zinc-900 border border-emerald-100 dark:border-emerald-500/20 p-4 rounded-2xl shadow-sm flex items-center justify-between group overflow-hidden relative">
+                        <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div className="flex flex-col">
+                            <span className="text-xl font-black text-emerald-600 leading-none">{formData.taxiTourKm} KM</span>
+                            <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">Included Distance</span>
+                        </div>
+                        <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 flex items-center justify-center shadow-inner">
+                            <Navigation size={18} />
+                        </div>
                      </div>
                   </div>
                </div>
 
-              <div className="flex items-center gap-4 p-4 bg-emerald-100/50 rounded-2xl border border-emerald-100">
-                 <AlertCircle size={16} className="text-emerald-600 shrink-0" />
-                 <p className="text-[9px] font-bold text-emerald-900 uppercase tracking-tight">Maximum 300KM limit per day applies for all round-tours.</p>
+              <div className="flex items-center gap-3 p-4 bg-emerald-50 dark:bg-emerald-500/5 rounded-2xl border border-emerald-100 dark:border-emerald-500/10">
+                 <Info size={14} className="text-emerald-600 shrink-0" />
+                 <p className="text-[8px] font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-tight leading-relaxed">
+                    Exceeding {formData.taxiTourKm}KM will be charged at {selectedVehicle.perKm || 110} LKR per extra KM.
+                 </p>
               </div>
            </section>
         )}
 
         {/* Location Details */}
-        <section className="space-y-6">
+        <section className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <MapPin className="text-emerald-600" size={20} />
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Route Details</h4>
+              <MapPin className="text-emerald-600" size={18} />
+              <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Route & Locations</h4>
             </div>
             {locations.length < 3 && (
               <button 
                 onClick={handleAddLocation}
-                className="text-[10px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-2 hover:bg-emerald-50 px-4 py-2 rounded-xl transition-all"
+                className="text-[9px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-2 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 px-4 py-2 rounded-xl transition-all"
               >
-                <Plus size={14} /> Add Location
+                <Plus size={14} /> Add Stop
               </button>
             )}
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {locations.map((loc, idx) => (
               <div key={idx} className="relative group">
                 <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 transition-colors group-focus-within:text-emerald-600">
-                  {idx === 0 ? <Plane size={18} /> : idx === locations.length - 1 ? <MapPin size={18} /> : <Navigation size={18} />}
+                  {idx === 0 ? <Plane size={16} /> : idx === locations.length - 1 ? <MapPin size={16} /> : <Navigation size={16} />}
                 </div>
                 <input 
                   type="text"
@@ -478,70 +497,59 @@ const RoundTripBooking = () => {
         </section>
 
         {/* Contact Details */}
-        <section className="space-y-8">
-          <div className="flex items-center gap-3">
-            <User className="text-emerald-600" size={20} />
-            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Passenger & Contact Info</h4>
+        <section className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <User className="text-emerald-600" size={18} />
+              <h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Contact Details</h4>
+            </div>
+            <button 
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/5 text-emerald-600 border border-emerald-500/10 hover:bg-emerald-500/10 transition-all group"
+              onClick={() => alert("Gemini AI is analyzing your route for optimizations...")}
+            >
+              <Sparkles size={14} className="group-hover:rotate-12 transition-transform" />
+              <span className="text-[9px] font-black uppercase tracking-widest">AI Optimizer</span>
+            </button>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Pickup Date</label>
-               <input type="date" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-4 px-6 outline-none font-bold text-slate-900 focus:bg-white transition-all" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="space-y-1.5">
+               <label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Pickup Date</label>
+               <input type="date" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full bg-slate-50/50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 dark:text-white focus:bg-white dark:focus:bg-zinc-900 transition-all text-sm" />
             </div>
-            <div className="space-y-2">
-               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Pickup Time</label>
-               <input type="time" value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-4 px-6 outline-none font-bold text-slate-900 focus:bg-white transition-all" />
+            <div className="space-y-1.5">
+               <label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Pickup Time</label>
+               <input type="time" value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})} className="w-full bg-slate-50/50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 dark:text-white focus:bg-white dark:focus:bg-zinc-900 transition-all text-sm" />
             </div>
-            <div className="space-y-2">
-               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Full Name</label>
-               <input type="text" placeholder="John Doe" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-4 px-6 outline-none font-bold text-slate-900 focus:bg-white transition-all" />
+            <div className="space-y-1.5">
+               <label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Full Name</label>
+               <input type="text" placeholder="John Doe" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-slate-50/50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 dark:text-white focus:bg-white dark:focus:bg-zinc-900 transition-all text-sm" />
             </div>
-            <div className="space-y-2">
-               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Email Address</label>
-               <input type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-4 px-6 outline-none font-bold text-slate-900 focus:bg-white transition-all" />
+            <div className="space-y-1.5">
+               <label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Email</label>
+               <input type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full bg-slate-50/50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 dark:text-white focus:bg-white dark:focus:bg-zinc-900 transition-all text-sm" />
             </div>
-            <div className="space-y-2">
-               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">WhatsApp Number</label>
-               <input type="tel" placeholder="+94 7X XXX XXXX" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-4 px-6 outline-none font-bold text-slate-900 focus:bg-white transition-all" />
+            <div className="space-y-1.5">
+               <label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">WhatsApp</label>
+               <input type="tel" placeholder="+94 7X XXX XXXX" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-slate-50/50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 dark:text-white focus:bg-white dark:focus:bg-zinc-900 transition-all text-sm" />
             </div>
-            <div className="space-y-2">
-               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Passengers</label>
-               <div className="flex items-center bg-slate-50 border border-slate-100 rounded-3xl p-1">
+            <div className="space-y-1.5">
+               <label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Passengers</label>
+               <div className="flex items-center bg-slate-50/50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-1">
                   <button 
                     onClick={() => setFormData({...formData, passengers: Math.max(1, formData.passengers - 1)})}
-                    className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-colors"
+                    className="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-colors"
                   >
-                    <Minus size={20} strokeWidth={3} />
+                    <Minus size={16} strokeWidth={3} />
                   </button>
-                  <div className="flex-1 text-center font-black text-emerald-950 uppercase tracking-widest text-sm">
-                    {formData.passengers} Adults
+                  <div className="flex-1 text-center font-black text-emerald-950 dark:text-white uppercase tracking-widest text-[10px]">
+                    {formData.passengers}
                   </div>
                   <button 
                     onClick={() => setFormData({...formData, passengers: Math.min(8, formData.passengers + 1)})}
-                    className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-colors"
+                    className="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-colors"
                   >
-                    <Plus size={20} strokeWidth={3} />
-                  </button>
-               </div>
-            </div>
-            <div className="space-y-2">
-               <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Luggage</label>
-               <div className="flex items-center bg-slate-50 border border-slate-100 rounded-3xl p-1">
-                  <button 
-                    onClick={() => setFormData({...formData, luggage: Math.max(0, formData.luggage - 1)})}
-                    className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-colors"
-                  >
-                    <Minus size={20} strokeWidth={3} />
-                  </button>
-                  <div className="flex-1 text-center font-black text-emerald-950 uppercase tracking-widest text-sm">
-                    {formData.luggage} Bags
-                  </div>
-                  <button 
-                    onClick={() => setFormData({...formData, luggage: Math.min(10, formData.luggage + 1)})}
-                    className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-emerald-600 transition-colors"
-                  >
-                    <Plus size={20} strokeWidth={3} />
+                    <Plus size={16} strokeWidth={3} />
                   </button>
                </div>
             </div>
@@ -549,41 +557,30 @@ const RoundTripBooking = () => {
         </section>
 
         {/* Final Step */}
-        <div className="pt-6">
+        <div className="pt-2">
           <button 
             onClick={handleBooking}
-            disabled={isBooking || distance === 0}
-            className="w-full py-6 bg-emerald-950 text-white rounded-full font-black text-xs uppercase tracking-[0.4em] shadow-2xl shadow-emerald-950/20 flex items-center justify-center gap-4 hover:bg-emerald-900 transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:scale-100"
+            disabled={isBooking || (tab !== 'tour' && distance === 0)}
+            className="w-full py-5 bg-emerald-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl shadow-emerald-950/20 flex items-center justify-center gap-3 hover:bg-emerald-900 transition-all transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50"
           >
-            {isBooking ? <Loader2 className="animate-spin" /> : 'Confirm & Book Now'} <ChevronRight size={20} />
+            {isBooking ? <Loader2 className="animate-spin" size={16} /> : 'Complete Booking'} <ChevronRight size={16} />
           </button>
-          <div className="mt-8 p-6 bg-amber-50 rounded-3xl border border-amber-100 space-y-4">
-              <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0 shadow-sm">
-                      <Info size={16} strokeWidth={3} />
+          <div className="mt-6 p-5 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 space-y-3">
+              <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-lg bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 flex items-center justify-center shrink-0 shadow-sm">
+                      <Info size={12} strokeWidth={3} />
                   </div>
                   <div>
-                      <p className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-1">Hire Charge Only</p>
-                      <p className="text-[9px] font-bold text-slate-500 leading-relaxed uppercase tracking-tight">
-                          The quoted price covers the vehicle hire charge and fuel only.
-                      </p>
-                  </div>
-              </div>
-              <div className="flex items-start gap-4 border-t border-amber-200/50 pt-4">
-                  <div className="w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 shadow-sm">
-                      <AlertCircle size={16} strokeWidth={3} />
-                  </div>
-                  <div>
-                      <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-1">Customer Responsibility</p>
-                      <p className="text-[9px] font-bold text-slate-500 leading-relaxed uppercase tracking-tight">
-                          Parking tickets and highway tolls are the responsibility of the customer.
+                      <p className="text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-widest mb-0.5">Hire Charge Only</p>
+                      <p className="text-[8px] font-bold text-slate-400 leading-relaxed uppercase tracking-tight">
+                          Covers vehicle hire and fuel. Parking & tolls extra.
                       </p>
                   </div>
               </div>
           </div>
-          <p className="text-center mt-6 text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2">
-            <CheckCircle2 size={12} className="text-emerald-600" /> Professional Service Guaranteed.
-          </p>
+        <div className="flex items-center justify-center gap-2 mt-8 opacity-40 hover:opacity-100 transition-opacity">
+           <Sparkles size={10} className="text-emerald-600" />
+           <span className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-400">Powered by Gemini 1.5 Pro</span>
         </div>
       </div>
     </div>

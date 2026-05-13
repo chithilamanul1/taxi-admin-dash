@@ -11,10 +11,12 @@ export const ROUND_TRIP_PACKAGES = [
 ];
 
 export const TAXI_TOUR_PACKAGES = [
-    { id: '2h-10km', name: '2 Hour / 10 KM', hours: 2, distance: 10, price: 3000, description: 'Quick local tour.' },
-    { id: '2h-20km', name: '2 Hour / 20 KM', hours: 2, distance: 20, price: 5000, description: 'Short city tour.' },
-    { id: '2h-50km', name: '2 Hour / 50 KM', hours: 2, distance: 50, price: 8000, description: 'Extended city tour.' },
-    { id: 'standard-12h-300km', name: '12 Hour / 300 KM', hours: 12, distance: 300, price: 25000, description: 'Full day hire.' }
+    { id: '2h-40km', name: '2 Hour / 40 KM', hours: 2, distance: 40, price: 5000, description: 'Quick local tour.' },
+    { id: '4h-80km', name: '4 Hour / 80 KM', hours: 4, distance: 80, price: 9000, description: 'Short city tour.' },
+    { id: '6h-120km', name: '6 Hour / 120 KM', hours: 6, distance: 120, price: 13000, description: 'Extended city tour.' },
+    { id: '8h-160km', name: '8 Hour / 160 KM', hours: 8, distance: 160, price: 17000, description: 'Half day hire.' },
+    { id: '10h-200km', name: '10 Hour / 200 KM', hours: 10, distance: 200, price: 21000, description: 'Full day city tour.' },
+    { id: '12h-300km', name: '12 Hour / 300 KM', hours: 12, distance: 300, price: 25000, description: 'Full day hire outstation.' }
 ];
 
 export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '', dynamicDestinations = [], options = {}) => {
