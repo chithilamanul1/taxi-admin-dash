@@ -1088,45 +1088,57 @@ export default function AdminDashboard() {
                                         <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Package List</h4>
                                         <button 
                                             onClick={() => {
-                                                const newPackage = { id: `pkg-${Date.now()}`, name: 'New Package', hours: 5, distance: 50, price: 7000, description: 'Package description here' };
+                                                const newPackage = { 
+                                                    id: `pkg-${Date.now()}`, 
+                                                    hours: 2, 
+                                                    vehicleType: 'mini-car',
+                                                    tiers: [
+                                                        { km: 10, price: 0 },
+                                                        { km: 20, price: 0 },
+                                                        { km: 30, price: 0 },
+                                                        { km: 40, price: 0 }
+                                                    ]
+                                                };
                                                 setPricingSettings({ ...pricingSettings, roundTripPackages: [...(pricingSettings.roundTripPackages || []), newPackage] });
                                             }}
                                             className="px-6 py-3 bg-emerald-900 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-800 transition-all shadow-lg shadow-emerald-900/10 flex items-center gap-2"
                                         >
-                                            <Plus size={16} strokeWidth={3} /> Add New Package
+                                            <Plus size={16} strokeWidth={3} /> Add Hour Package
                                         </button>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                                        {(pricingSettings.roundTripPackages || []).map((pkg, idx) => (
-                                            <div key={pkg.id} className="bg-slate-50/50 border border-slate-200 rounded-2xl p-5 hover:border-emerald-500/30 transition-all group">
-                                                <div className="flex justify-between items-start mb-4">
-                                                    <input 
-                                                        type="text"
-                                                        value={pkg.name}
-                                                        onChange={(e) => {
-                                                            const updated = [...pricingSettings.roundTripPackages];
-                                                            updated[idx].name = e.target.value;
-                                                            setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                        }}
-                                                        className="bg-transparent border-none font-black text-emerald-950 uppercase tracking-tight text-sm outline-none w-full focus:text-emerald-600"
-                                                        placeholder="Package Name"
-                                                    />
-                                                    <button 
-                                                        onClick={() => {
-                                                            const updated = pricingSettings.roundTripPackages.filter((_, i) => i !== idx);
-                                                            setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                        }}
-                                                        className="text-slate-400 hover:text-red-500 transition-colors"
-                                                    >
-                                                        <X size={18} />
-                                                    </button>
-                                                </div>
-                                                
-                                                <div className="space-y-4">
-                                                    <div className="grid grid-cols-2 gap-4">
-                                                        <div className="col-span-2">
-                                                            <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Vehicle Category</label>
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left">
+                                            <thead>
+                                                <tr className="border-b border-slate-100">
+                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Hour Count</th>
+                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Vehicle</th>
+                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">KM Tier 1</th>
+                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">KM Tier 2</th>
+                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">KM Tier 3</th>
+                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">KM Tier 4</th>
+                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-slate-50">
+                                                {(pricingSettings.roundTripPackages || []).map((pkg, idx) => (
+                                                    <tr key={pkg.id} className="group hover:bg-slate-50/50 transition-colors">
+                                                        <td className="py-4">
+                                                            <div className="flex items-center gap-2">
+                                                                <input 
+                                                                    type="number"
+                                                                    value={pkg.hours}
+                                                                    onChange={(e) => {
+                                                                        const updated = [...pricingSettings.roundTripPackages];
+                                                                        updated[idx].hours = Number(e.target.value);
+                                                                        setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                                    }}
+                                                                    className="w-16 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-black outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                                                />
+                                                                <span className="text-[10px] font-bold text-slate-400 uppercase">Hrs</span>
+                                                            </div>
+                                                        </td>
+                                                        <td className="py-4">
                                                             <select 
                                                                 value={pkg.vehicleType || 'mini-car'}
                                                                 onChange={(e) => {
@@ -1134,72 +1146,65 @@ export default function AdminDashboard() {
                                                                     updated[idx].vehicleType = e.target.value;
                                                                     setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
                                                                 }}
-                                                                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                                                className="bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
                                                             >
-                                                                <option value="mini-car">Mini Car</option>
+                                                                <option value="mini-car">Mini</option>
                                                                 <option value="sedan">Sedan</option>
-                                                                <option value="luxury-van">Luxury Van</option>
+                                                                <option value="luxury-van">Vezel/Van</option>
                                                             </select>
-                                                        </div>
-                                                        <div>
-                                                            <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Hours</label>
-                                                            <input 
-                                                                type="number"
-                                                                value={pkg.hours}
-                                                                onChange={(e) => {
-                                                                    const updated = [...pricingSettings.roundTripPackages];
-                                                                    updated[idx].hours = Number(e.target.value);
+                                                        </td>
+                                                        {[0, 1, 2, 3].map(tIdx => (
+                                                            <td key={tIdx} className="py-4 px-2">
+                                                                <div className="space-y-1">
+                                                                    <div className="flex items-center gap-1">
+                                                                        <input 
+                                                                            type="number"
+                                                                            placeholder="KM"
+                                                                            value={pkg.tiers?.[tIdx]?.km || 0}
+                                                                            onChange={(e) => {
+                                                                                const updated = [...pricingSettings.roundTripPackages];
+                                                                                if (!updated[idx].tiers) updated[idx].tiers = [{},{},{},{}];
+                                                                                updated[idx].tiers[tIdx].km = Number(e.target.value);
+                                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                                            }}
+                                                                            className="w-12 bg-slate-50 border-none rounded px-1.5 py-1 text-[10px] font-black outline-none"
+                                                                        />
+                                                                        <span className="text-[8px] font-bold text-slate-300 uppercase">KM</span>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-1">
+                                                                        <span className="text-[8px] font-black text-emerald-600">Rs.</span>
+                                                                        <input 
+                                                                            type="number"
+                                                                            placeholder="Price"
+                                                                            value={pkg.tiers?.[tIdx]?.price || 0}
+                                                                            onChange={(e) => {
+                                                                                const updated = [...pricingSettings.roundTripPackages];
+                                                                                if (!updated[idx].tiers) updated[idx].tiers = [{},{},{},{}];
+                                                                                updated[idx].tiers[tIdx].price = Number(e.target.value);
+                                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                                            }}
+                                                                            className="w-20 bg-white border border-slate-200 rounded px-1.5 py-1 text-xs font-black text-emerald-600 outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        ))}
+                                                        <td className="py-4 text-right">
+                                                            <button 
+                                                                onClick={() => {
+                                                                    const updated = pricingSettings.roundTripPackages.filter((_, i) => i !== idx);
                                                                     setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
                                                                 }}
-                                                                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                            />
-                                                        </div>
-                                                        <div>
-                                                            <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Distance (KM)</label>
-                                                            <input 
-                                                                type="number"
-                                                                value={pkg.distance}
-                                                                onChange={(e) => {
-                                                                    const updated = [...pricingSettings.roundTripPackages];
-                                                                    updated[idx].distance = Number(e.target.value);
-                                                                    setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                                }}
-                                                                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                            />
-                                                        </div>
-                                                    </div>
-
-                                                    <div>
-                                                        <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Price (LKR)</label>
-                                                        <input 
-                                                            type="number"
-                                                            value={pkg.price}
-                                                            onChange={(e) => {
-                                                                const updated = [...pricingSettings.roundTripPackages];
-                                                                updated[idx].price = Number(e.target.value);
-                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                            }}
-                                                            className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-emerald-600 outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                        />
-                                                    </div>
-
-                                                    <div>
-                                                        <label className="block text-[10px] font-black text-slate-400 uppercase mb-1">Description</label>
-                                                        <textarea 
-                                                            value={pkg.description}
-                                                            onChange={(e) => {
-                                                                const updated = [...pricingSettings.roundTripPackages];
-                                                                updated[idx].description = e.target.value;
-                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                            }}
-                                                            rows={2}
-                                                            className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-[11px] font-medium outline-none focus:ring-2 focus:ring-emerald-500/20 resize-none"
-                                                            placeholder="Short description..."
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
+                                                                className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all"
+                                                            >
+                                                                <X size={16} />
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
 
                                         {(pricingSettings.roundTripPackages || []).length === 0 && (
                                             <div className="col-span-full py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl">

@@ -18,8 +18,28 @@ export async function GET(req) {
                 nameBoardPrice: 2000,
                 waitingHourRate: 1000,
                 roundTripPackages: [
-                    { id: 'base-5h-50km', name: '5 Hour / 50 KM', hours: 5, distance: 50, price: 7000, description: 'Perfect for quick city tours or airport returns.' },
-                    { id: 'standard-12h-300km', name: '12 Hour / 300 KM', hours: 12, distance: 300, price: 25000, description: 'Full day hire for outstation trips.' }
+                    { 
+                        id: 'mini-2h', 
+                        hours: 2, 
+                        vehicleType: 'mini-car',
+                        tiers: [
+                            { km: 10, price: 4000 },
+                            { km: 20, price: 4500 },
+                            { km: 30, price: 5000 },
+                            { km: 40, price: 5500 }
+                        ]
+                    },
+                    { 
+                        id: 'mini-3h', 
+                        hours: 3, 
+                        vehicleType: 'mini-car',
+                        tiers: [
+                            { km: 30, price: 6000 },
+                            { km: 40, price: 6500 },
+                            { km: 50, price: 7000 },
+                            { km: 60, price: 7500 }
+                        ]
+                    }
                 ]
             });
         }

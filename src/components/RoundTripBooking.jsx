@@ -173,15 +173,16 @@ const RoundTripBooking = () => {
     if (tab === 'tour') {
       // Use dynamic packages if available
       const activePackages = pricingSettings?.roundTripPackages || [];
-      // Find package that matches vehicle, hours, AND selected KM
-      const pkg = activePackages.find(p => 
+      // Find package group that matches vehicle and hours
+      const pkgGroup = activePackages.find(p => 
         p.hours === Number(formData.taxiTourHours) && 
-        p.distance === Number(formData.taxiTourKm) && 
         (p.vehicleType === selectedVehicle.id || (!p.vehicleType && selectedVehicle.id === 'mini-car'))
       );
       
-      if (pkg) {
-        return Math.round(pkg.price);
+      const tier = pkgGroup?.tiers?.find(t => t.km === Number(formData.taxiTourKm));
+      
+      if (tier) {
+        return Math.round(tier.price);
       }
 
       // Fallback to static packages
@@ -365,17 +366,7 @@ const RoundTripBooking = () => {
                 <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Taxi Tour Duration & Distance</h4>
               </div>
               
-              <div className="grid md:grid-cols-2 gap-8">
-                 <div className="space-y-4">
-                    <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-widest">Available Packages</label>
-                    <div className="flex flex-wrap gap-2">
-                       {pricingSettings?.roundTripPackages?.length > 0 ? (
-                          pricingSettings.roundTripPackages.map(p => (
-                            <button
-                              key={p.id}
-                              onClick={() => setFormData({...formData, taxiTourHours: p.hours, taxiTourKm: p.distance})}
-                              className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all border ${formData.taxiTourHours === p.hours ? 'bg-emerald-600 border-emerald-600 text-white shadow-lg' : 'bg-white border-slate-100 text-slate-400 hover:border-emerald-200'}`}
-               <div className="grid md:grid-cols-2 gap-12">
+              <div className="grid md:grid-cols-2 gap-12">
                   <div className="space-y-6">
                      <label className="text-[10px] uppercase font-black text-slate-400 px-4 tracking-[0.3em]">Hour count</label>
                      <div className="flex items-center bg-white dark:bg-zinc-900 border border-emerald-100 dark:border-white/5 p-2 rounded-[2rem] shadow-inner">
@@ -409,18 +400,19 @@ const RoundTripBooking = () => {
                      <div className="flex flex-wrap gap-3">
                         {pricingSettings?.roundTripPackages
                             ?.filter(p => p.hours === formData.taxiTourHours && (p.vehicleType === selectedVehicle.id || (!p.vehicleType && selectedVehicle.id === 'mini-car')))
-                            .map(pkg => (
+                            .flatMap(p => p.tiers || [])
+                            .map((tier, tIdx) => (
                                 <button
-                                    key={pkg.id}
-                                    onClick={() => setFormData({...formData, taxiTourKm: pkg.distance})}
-                                    className={`px-8 py-4 rounded-2xl font-black text-xs transition-all border-2 flex flex-col items-center gap-1 ${formData.taxiTourKm === pkg.distance ? 'border-emerald-600 bg-emerald-600 text-white shadow-xl scale-105' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-800 text-slate-400 hover:border-emerald-200'}`}
+                                    key={`${formData.taxiTourHours}-${tier.km}-${tIdx}`}
+                                    onClick={() => setFormData({...formData, taxiTourKm: tier.km})}
+                                    className={`px-8 py-4 rounded-2xl font-black text-xs transition-all border-2 flex flex-col items-center gap-1 ${formData.taxiTourKm === tier.km ? 'border-emerald-600 bg-emerald-600 text-white shadow-xl scale-105' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-800 text-slate-400 hover:border-emerald-200'}`}
                                 >
-                                    <span>{pkg.distance} KM</span>
-                                    <span className={`text-[9px] ${formData.taxiTourKm === pkg.distance ? 'text-emerald-100' : 'text-emerald-600/50'}`}>Rs.{pkg.price.toLocaleString()}</span>
+                                    <span>{tier.km} KM</span>
+                                    <span className={`text-[9px] ${formData.taxiTourKm === tier.km ? 'text-emerald-100' : 'text-emerald-600/50'}`}>Rs.{tier.price.toLocaleString()}</span>
                                 </button>
                             ))
                         }
-                        {(!pricingSettings?.roundTripPackages?.filter(p => p.hours === formData.taxiTourHours && (p.vehicleType === selectedVehicle.id || (!p.vehicleType && selectedVehicle.id === 'mini-car'))).length) && (
+                        {(!pricingSettings?.roundTripPackages?.some(p => p.hours === formData.taxiTourHours && (p.vehicleType === selectedVehicle.id || (!p.vehicleType && selectedVehicle.id === 'mini-car')))) && (
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest p-4 bg-slate-100/50 rounded-2xl w-full text-center">No KM packages for {formData.taxiTourHours}H</p>
                         )}
                      </div>

@@ -1008,6 +1008,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         <span>{s.label}</span>
                                                         <span className="text-[#FACC15] font-black">+{currentSymbol} {s.value.toLocaleString()}</span>
                                                     </div>
+                                                ))}
                                                 <div className="pt-6 sm:pt-8 mt-6 border-t border-slate-100 dark:border-white/10">
                                                     <div className="flex flex-col gap-2">
                                                         <p className="text-[10px] font-black text-[#FACC15] tracking-[0.2em] uppercase">
@@ -1020,43 +1021,41 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     </div>
                                                 </div>
 
-                                                    
-                                                    {/* Cost Disclosures */}
-                                                    <div className="mt-8 p-6 bg-slate-50 dark:bg-white/5 rounded-[2rem] border border-slate-100 dark:border-white/10 space-y-4">
-                                                        <div className="flex items-start gap-4">
-                                                            <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-400/20 text-amber-600 flex items-center justify-center shrink-0">
-                                                                <Info size={16} strokeWidth={3} />
-                                                            </div>
-                                                            <div>
-                                                                <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest mb-1">Hire Charge Only</p>
-                                                                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tight">
-                                                                    The quoted price covers the vehicle hire charge and fuel only.
-                                                                </p>
-                                                            </div>
+                                                {/* Cost Disclosures */}
+                                                <div className="mt-8 p-6 bg-slate-50 dark:bg-white/5 rounded-[2rem] border border-slate-100 dark:border-white/10 space-y-4">
+                                                    <div className="flex items-start gap-4">
+                                                        <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-400/20 text-amber-600 flex items-center justify-center shrink-0 shadow-sm">
+                                                            <Info size={16} strokeWidth={3} />
                                                         </div>
-                                                        <div className="flex items-start gap-4 border-t border-slate-200/50 dark:border-white/5 pt-4">
-                                                            <div className="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-400/20 text-rose-600 flex items-center justify-center shrink-0">
-                                                                <AlertCircle size={16} strokeWidth={3} />
-                                                            </div>
-                                                            <div>
-                                                                <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-1">Customer Responsibility</p>
-                                                                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tight">
-                                                                    Parking tickets and highway tolls are the responsibility of the customer.
-                                                                </p>
-                                                            </div>
+                                                        <div>
+                                                            <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest mb-1">Hire Charge Only</p>
+                                                            <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tight">
+                                                                The quoted price covers the vehicle hire charge and fuel only.
+                                                            </p>
                                                         </div>
                                                     </div>
+                                                    <div className="flex items-start gap-4 border-t border-slate-200/50 dark:border-white/5 pt-4">
+                                                        <div className="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-400/20 text-rose-600 flex items-center justify-center shrink-0 shadow-sm">
+                                                            <AlertCircle size={16} strokeWidth={3} />
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-1">Customer Responsibility</p>
+                                                            <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 leading-relaxed uppercase tracking-tight">
+                                                                Parking tickets and highway tolls are the responsibility of the customer.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                                    <div className="flex flex-wrap gap-3 mt-6">
-                                                        {convertToAllCurrencies(detailedBreakdown.lkr?.payNow || 0)
-                                                            .filter(c => ['USD', 'EUR', 'GBP'].includes(c.code) && c.code !== currency)
-                                                            .map(c => (
-                                                                <span key={c.code} className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-lg border border-slate-200 dark:border-white/5">
-                                                                    ≈ {c.symbol}{c.value.toLocaleString()}
-                                                                </span>
-                                                            ))
-                                                        }
-                                                    </div>
+                                                <div className="flex flex-wrap gap-3 mt-6">
+                                                    {convertToAllCurrencies(detailedBreakdown.lkr?.payNow || 0)
+                                                        .filter(c => ['USD', 'EUR', 'GBP'].includes(c.code) && c.code !== currency)
+                                                        .map(c => (
+                                                            <span key={c.code} className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-lg border border-slate-200 dark:border-white/5">
+                                                                ≈ {c.symbol}{c.value.toLocaleString()}
+                                                            </span>
+                                                        ))
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
