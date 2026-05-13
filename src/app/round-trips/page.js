@@ -1,5 +1,3 @@
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import RoundTripBookingWrapper from '@/components/RoundTripBookingWrapper';
 
 export const metadata = {
@@ -10,7 +8,6 @@ export const metadata = {
 export default function RoundTripsPage() {
   return (
     <main className="min-h-screen bg-slate-50">
-      <Navbar />
       
       {/* Header Section */}
       <section className="pt-32 pb-20 bg-emerald-950 text-center relative overflow-hidden">
@@ -69,8 +66,6 @@ export default function RoundTripsPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </main>
   );
 }
