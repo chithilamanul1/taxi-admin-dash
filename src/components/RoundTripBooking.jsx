@@ -159,6 +159,7 @@ const RoundTripBooking = () => {
   };
 
   const calculateTotal = () => {
+    if (!selectedVehicle) return 0;
     if (tab === 'tour') {
       // Use dynamic packages if available
       const activePackages = pricingSettings?.roundTripPackages || [];
@@ -198,8 +199,6 @@ const RoundTripBooking = () => {
     return base;
   };
 
-  const totalPrice = calculateTotal();
-
   if (vehicles.length === 0 || !selectedVehicle) {
       return (
           <div className="min-h-[400px] flex items-center justify-center">
@@ -207,6 +206,8 @@ const RoundTripBooking = () => {
           </div>
       );
   }
+
+  const totalPrice = calculateTotal();
 
   const handleBooking = async () => {
     if (tab === 'tour' && locations[0].trim() !== locations[locations.length - 1].trim()) {
