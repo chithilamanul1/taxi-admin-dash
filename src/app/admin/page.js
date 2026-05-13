@@ -1206,19 +1206,18 @@ export default function AdminDashboard() {
                                         </table>
                                     </div>
 
-                                        {(pricingSettings.roundTripPackages || []).length === 0 && (
-                                            <div className="col-span-full py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl">
-                                                <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 mb-4">
-                                                    <Route size={32} />
-                                                </div>
-                                                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">No Packages Configured</p>
-                                                <p className="text-[10px] text-slate-400 mt-1 uppercase">Click 'Add Package' to create your first round trip hire package.</p>
+                                    {(pricingSettings.roundTripPackages || []).length === 0 && (
+                                        <div className="col-span-full py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl">
+                                            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 mb-4">
+                                                <Route size={32} />
                                             </div>
-                                        )}
-                                    </div>
+                                            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">No Packages Configured</p>
+                                            <p className="text-[10px] text-slate-400 mt-1 uppercase">Click 'Add Package' to create your first round trip hire package.</p>
+                                        </div>
+                                    )}
 
                                     <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
-                                         <button
+                                        <button
                                             onClick={async () => {
                                                 const res = await fetch('/api/admin/pricing-settings', {
                                                     method: 'PUT',

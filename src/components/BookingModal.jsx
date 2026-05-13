@@ -1060,16 +1060,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div className="lg:col-span-5 space-y-12">
-                                    <div className="space-y-6">
-                                        <div className="flex items-center gap-4">
-                                            <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Payment Method</span>
-                                            <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-2 sm:gap-4">
+                                    <div className="lg:col-span-5 space-y-12">
+                                        <div className="space-y-6">
+                                            <div className="flex items-center gap-4">
+                                                <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
+                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Payment Method</span>
+                                                <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-2 sm:gap-4">
                                             {['cash', 'card'].map(m => (
                                                 <button
                                                     key={m}
@@ -1116,6 +1115,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 {couponLoading ? <Loader2 className="animate-spin" size={16} /> : 'Apply'}
                                             </button>
                                         </div>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
