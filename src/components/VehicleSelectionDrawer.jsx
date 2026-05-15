@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { X, Users, Briefcase, Lock, Loader2, Info, Wind, ShieldCheck, Backpack, Check, ArrowRight, MessageCircle } from 'lucide-react';
-import VehicleList from './VehicleList';
+import VehicleCarousel from './VehicleCarousel';
 import VehicleDetailModal from './VehicleDetailModal';
 
 // Strip the word 'KDH' from display names only (keeps DB IDs intact)
@@ -78,12 +78,13 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                                 <MessageCircle size={16} /> Need help? Chat with Support
                             </button>
 
-                            <VehicleList 
+                            <VehicleCarousel 
                                 vehicles={vehicles} 
                                 selectedId={selectedId} 
                                 onSelect={(id) => { onSelect(id); onClose(); }}
-                                onInspect={(vehicle) => setInspectingVehicle(vehicle)}
                                 passengerCount={passengerCount}
+                                pickupLocation={pickupLocation}
+                                dropoffLocation={dropoffLocation}
                             />
                             
                             {/* Modern Feature Highlight */}

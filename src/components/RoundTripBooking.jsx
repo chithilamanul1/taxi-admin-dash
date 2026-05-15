@@ -28,10 +28,10 @@ const RoundTripBooking = () => {
           const mapped = data.data.map(v => {
             let img = v.image || '/vehicles/placeholder.png';
             if (v.vehicleType === 'mini-car') img = '/vehicles/minicar.png';
-            if (v.vehicleType === 'sedan') img = '/vehicles/sedancar.png';
+            if (v.vehicleType === 'sedan') img = '/vehicles/sedan_luxury.png';
             if (v.vehicleType === 'vezel') img = '/vehicles/van.png';
             if (v.vehicleType === 'van') img = '/vehicles/van.png';
-            if (v.vehicleType === 'suv') img = '/vehicles/sedancar.png';
+            if (v.vehicleType === 'suv') img = '/vehicles/sedan_luxury.png';
 
             return {
               id: v.vehicleType,
@@ -209,7 +209,7 @@ const RoundTripBooking = () => {
       <div className="flex bg-slate-50 p-2 border-b border-slate-100">
         <button onClick={() => setTab('airport')} className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'airport' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Plane size={18} /> Airport</button>
         <button onClick={() => setTab('ride')} className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'ride' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Car size={18} /> Ride</button>
-        <button onClick={() => setTab('tour')} className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'tour' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Sparkles size={18} /> Taxi Tour</button>
+        <button onClick={() => setTab('tour')} className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'tour' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Sparkles size={18} /> Taxi Round Tour</button>
       </div>
 
       <div className="p-8 md:p-12 space-y-12">
@@ -245,9 +245,22 @@ const RoundTripBooking = () => {
               </div>
               <div className="space-y-4">
                 <label className="text-[9px] uppercase font-black text-slate-500 px-2 tracking-widest">KM Limit</label>
-                <div className="bg-white border border-emerald-100 p-4 rounded-2xl shadow-sm flex items-center justify-between">
-                  <div className="flex flex-col"><span className="text-xl font-black text-emerald-600 leading-none">{formData.taxiTourKm} KM</span><span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">Included</span></div>
-                  <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center"><Navigation size={18} /></div>
+                <div className="flex flex-col gap-3">
+                  <div className="bg-white border border-emerald-100 p-4 rounded-2xl shadow-sm flex items-center justify-between">
+                    <div className="flex flex-col"><span className="text-xl font-black text-emerald-600 leading-none">{formData.taxiTourKm} KM</span><span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">Included</span></div>
+                    <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center"><Navigation size={18} /></div>
+                  </div>
+                  <div className="grid grid-cols-4 gap-2">
+                    {[20, 30, 40, 50].map(km => (
+                      <button
+                        key={km}
+                        onClick={() => setFormData(prev => ({ ...prev, taxiTourKm: km }))}
+                        className={`py-2 rounded-xl text-[10px] font-black transition-all border ${formData.taxiTourKm === km ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-white text-slate-500 border-slate-200 hover:border-emerald-300'}`}
+                      >
+                        {km}KM
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

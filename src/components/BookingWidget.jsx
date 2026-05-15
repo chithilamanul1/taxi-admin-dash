@@ -8,6 +8,7 @@ import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, Sh
 import Image from 'next/image'
 const ToursWidget = dynamic(() => import('./ToursWidget'), { ssr: false })
 const RentalsWidget = dynamic(() => import('./RentalsWidget'), { ssr: false })
+const RoundTripBooking = dynamic(() => import('./RoundTripBooking'), { ssr: false })
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
 const VehicleSelectionDrawer = dynamic(() => import('./VehicleSelectionDrawer'), { ssr: false })
 const VehicleCarousel = dynamic(() => import('./VehicleCarousel'), { ssr: false })
@@ -577,10 +578,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             <div className="flex bg-slate-100 dark:bg-zinc-900 rounded-2xl w-full sm:w-fit mx-auto lg:mx-0 mb-6 p-1.5 shadow-inner" role="tablist">
                 <div className="grid grid-cols-4 w-full sm:w-auto gap-1">
                     {[
-                        { id: 'pickup', label: 'Airport Pickup', icon: PlaneTakeoff },
-                        { id: 'drop', label: 'Airport Drop', icon: PlaneLanding },
-                        { id: 'ride', label: 'Ride', icon: Zap },
-                        { id: 'tours', label: 'Tours', icon: Signpost }
+                        { id: 'pickup', label: 'Airport Pickup', icon: PlaneLanding },
+                        { id: 'drop', label: 'Airport Dropoff', icon: PlaneTakeoff },
+                        { id: 'ride', label: 'Intercity Ride', icon: Route },
+                        { id: 'tours', label: 'Taxi Round Tour', icon: Signpost }
                     ].map(tab => (
                         <button
                             key={tab.id}
@@ -605,7 +606,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             {/* Widget Main Content - Modern Flat Luxury Style */}
             <div className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-slate-200 dark:border-white/10 p-4 sm:p-6 md:p-8 animate-slide-up relative z-10 w-full box-border shadow-xl shadow-slate-200/50 dark:shadow-none">
 
-                {activeTab === 'tours' ? <ToursWidget /> : (
+                {activeTab === 'tours' ? <RoundTripBooking /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,380px] gap-8 lg:gap-10 min-w-0">
                         <div className="flex-1 text-center lg:text-left min-w-0">
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 mb-8">

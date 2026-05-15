@@ -504,10 +504,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 // Flight number is now optional as per user request
                 // if (formData.hasNameBoard && !formData.flightNumber) newErrors.flightNumber = true;
             }
-            if (formData.tripType === 'round-trip') {
-                if (!formData.returnDate) newErrors.returnDate = true;
-                if (!formData.returnTime) newErrors.returnTime = true;
-            }
+            // Return details are now optional as per user request
+            // if (formData.tripType === 'round-trip') {
+            //     if (!formData.returnDate) newErrors.returnDate = true;
+            //     if (!formData.returnTime) newErrors.returnTime = true;
+            // }
             // Enforce luggage selection and adult count (Hard Stop)
             if (formData.passengerCount.luggage === undefined || formData.passengerCount.luggage === null) newErrors.luggage = true;
             if (!formData.passengerCount.adults || formData.passengerCount.adults < 1) newErrors.adults = true;
@@ -702,7 +703,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             ))}
                                         </div>
 
-                                        {formData.hasNameBoard && (
+                                        {formData.hasNameBoard ? (
                                             <div className="space-y-6 animate-slide-up pt-4">
                                                 <div className="relative">
                                                     <input
@@ -712,6 +713,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         placeholder="NAME ON BOARD (e.g. MR. JOHN SMITH)"
                                                     />
                                                 </div>
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-6 animate-slide-up pt-4">
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                     <div className="relative">
                                                         <input
@@ -728,7 +732,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         <input
                                                             type="time"
                                                             value={formData.flightArrivalTime || ''}
-                                                            onChange={e => setFormData({ ...formData, flightArrivalTime: e.target.value, time: e.target.value })}
+                                                            onChange={e => setFormData(prev => ({ ...prev, flightArrivalTime: e.target.value, time: e.target.value }))}
                                                             className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
                                                         />
                                                         <div className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 text-[8px] font-black uppercase tracking-widest pointer-events-none">ARR TIME</div>
@@ -908,7 +912,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                         <div className="space-y-4">
                                             <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.returnDate ? 'text-red-500' : 'text-slate-500'}`}>
-                                                Return Date
+                                                Return Date (Optional)
                                             </label>
                                             <input
                                                 type="date"
@@ -919,7 +923,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         </div>
                                         <div className="space-y-4">
                                             <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.returnTime ? 'text-red-500' : 'text-slate-500'}`}>
-                                                Return Time
+                                                Return Time (Optional)
                                             </label>
                                             <input
                                                 type="time"
