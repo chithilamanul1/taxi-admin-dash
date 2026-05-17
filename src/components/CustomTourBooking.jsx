@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Clock, Navigation, ChevronRight, ChevronLeft, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles } from 'lucide-react';
+import { MapPin, Clock, Navigation, ChevronRight, ChevronLeft, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles, CreditCard } from 'lucide-react';
 import { TAXI_TOUR_PACKAGES } from '../lib/pricing-util';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
+import { useSession } from 'next-auth/react';
 
 const CustomTourBooking = () => {
+  const { data: session } = useSession();
   const [step, setStep] = useState(1);
   const [tab, setTab] = useState('airport'); // 'airport' | 'tour'
   const [vehicles, setVehicles] = useState([]);
@@ -30,7 +32,8 @@ const CustomTourBooking = () => {
     phone: '',
     notes: '',
     taxiTourHours: 2,
-    taxiTourKm: 40
+    taxiTourKm: 40,
+    paymentMethod: 'card'
   });
 
   // Load vehicles and settings
@@ -93,6 +96,17 @@ const CustomTourBooking = () => {
       })
       .catch(err => console.error("Error fetching pricing settings:", err));
   }, []);
+
+  // Pre-fill user details if session exists
+  useEffect(() => {
+    if (session?.user) {
+      setFormData(prev => ({
+        ...prev,
+        name: prev.name || session.user.name || '',
+        email: prev.email || session.user.email || ''
+      }));
+    }
+  }, [session]);
 
   // Update hours and dynamic KM limit defaults
   const updateDuration = (newHours) => {
@@ -195,8 +209,8 @@ const CustomTourBooking = () => {
   const totalPrice = calculateTotalForVehicle(selectedVehicle);
 
   const handleBooking = async () => {
-    if (!formData.name || !formData.phone || !formData.date || !formData.time) {
-      alert("Please fill in all required contact and timing details.");
+    if (!formData.name || !formData.phone || !formData.email || !formData.date || !formData.time) {
+      alert("Please fill in all required contact, email, and timing details.");
       return;
     }
     setIsBooking(true);
@@ -205,6 +219,7 @@ const CustomTourBooking = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          customer: session?.user?.id || null,
           pickupLocation: { address: locations[0] || 'Airport' },
           dropoffLocation: { address: locations[locations.length - 1] || 'Tour Destination' },
           waypoints: locations.slice(1, -1).map(l => ({ address: l })),
@@ -214,29 +229,46 @@ const CustomTourBooking = () => {
           passengerCount: { adults: formData.passengers, children: 0, luggage: formData.luggage, handLuggage: 0 },
           distanceKm: distance || formData.taxiTourKm,
           totalPrice: totalPrice,
+          paidAmount: formData.paymentMethod === 'cash' ? 0 : totalPrice,
+          balanceAmount: formData.paymentMethod === 'cash' ? totalPrice : 0,
+          displayPrice: totalPrice,
+          displayPaidAmount: formData.paymentMethod === 'cash' ? 0 : totalPrice,
+          displayBalanceAmount: formData.paymentMethod === 'cash' ? totalPrice : 0,
+          currency: 'LKR',
           scheduledDate: formData.date,
           scheduledTime: formData.time,
           customerName: formData.name,
-          customerEmail: formData.email || 'customer@srilankantaxi.lk',
+          customerEmail: formData.email,
           customerPhone: formData.phone,
+          guestPhone: formData.phone,
+          whatsappNumber: formData.phone,
+          paymentMethod: formData.paymentMethod,
           notes: `Custom Tour: ${formData.taxiTourHours} Hours, Limit: ${formData.taxiTourKm} KM. ${formData.notes || ''}`
         })
       });
       const data = await res.json();
       if (data.success) {
-        setIsBooked(true);
-        const tourTypeStr = tab === 'airport' ? 'Airport Round Tour' : 'Round Tour';
-        const message = `*New Tour Booking Request*%0A` + 
-                        `*Type:* ${tourTypeStr}%0A` + 
-                        `*Name:* ${formData.name}%0A` + 
-                        `*WhatsApp:* ${formData.phone}%0A` + 
-                        `*Vehicle:* ${selectedVehicle.name}%0A` + 
-                        `*Hours:* ${formData.taxiTourHours} Hours%0A` + 
-                        `*KM Limit:* ${formData.taxiTourKm} KM%0A` + 
-                        `*Route:* ${locations.filter(Boolean).join(' ➔ ')}%0A` + 
-                        `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
-                        `*Price:* Rs. ${totalPrice.toLocaleString()}`;
-        window.open(`https://wa.me/94768743357?text=${message}`, '_blank');
+        // Open WhatsApp confirmation companion window
+        try {
+          const tourTypeStr = tab === 'airport' ? 'Airport Round Tour' : 'Round Tour';
+          const message = `*New Tour Booking Request*%0A` + 
+                          `*Type:* ${tourTypeStr}%0A` + 
+                          `*Name:* ${formData.name}%0A` + 
+                          `*WhatsApp:* ${formData.phone}%0A` + 
+                          `*Vehicle:* ${selectedVehicle.name}%0A` + 
+                          `*Hours:* ${formData.taxiTourHours} Hours%0A` + 
+                          `*KM Limit:* ${formData.taxiTourKm} KM%0A` + 
+                          `*Route:* ${locations.filter(Boolean).join(' ➔ ')}%0A` + 
+                          `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
+                          `*Payment:* ${formData.paymentMethod === 'cash' ? 'Cash to Driver' : 'Pay Online (Card)'}%0A` + 
+                          `*Price:* Rs. ${totalPrice.toLocaleString()}`;
+          window.open(`https://wa.me/94768743357?text=${message}`, '_blank');
+        } catch (e) {
+          console.error("WhatsApp companion load blocked", e);
+        }
+        
+        // Redirect to gateway or success page
+        window.location.href = data.paymentUrl;
       } else { 
         alert(data.message || "Booking failed"); 
       }
@@ -540,8 +572,31 @@ const CustomTourBooking = () => {
                   <input type="text" placeholder="John Doe" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 rounded-2xl py-3 px-4 outline-none font-bold text-xs text-slate-900 dark:text-white" />
                 </div>
                 <div className="space-y-1">
+                  <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Email Address</label>
+                  <input type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 rounded-2xl py-3 px-4 outline-none font-bold text-xs text-slate-900 dark:text-white" />
+                </div>
+                <div className="space-y-1">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">WhatsApp / Phone</label>
                   <input type="tel" placeholder="+94 7X XXX XXXX" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 rounded-2xl py-3 px-4 outline-none font-bold text-xs text-slate-900 dark:text-white" />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Payment Method</label>
+                  <div className="flex bg-slate-100 dark:bg-zinc-800/60 p-1 rounded-2xl border border-slate-200/80 dark:border-white/10 gap-1 h-[46px] items-center animate-fade-in">
+                    <button 
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paymentMethod: 'card' })}
+                      className={`flex-1 h-full rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 ${formData.paymentMethod === 'card' ? 'bg-[#FACC15] text-black shadow-md font-bold' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                    >
+                      <CreditCard size={12} /> Card
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paymentMethod: 'cash' })}
+                      className={`flex-1 h-full rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 ${formData.paymentMethod === 'cash' ? 'bg-[#FACC15] text-black shadow-md font-bold' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                    >
+                      <Car size={12} /> Cash
+                    </button>
+                  </div>
                 </div>
               </div>
             </section>

@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { CheckCircle, Home, FileText, Loader2, Info } from 'lucide-react';
+import { generateBookingPDF } from '@/lib/pdfGenerator';
 
 function PaymentSuccessContent() {
     const searchParams = useSearchParams();
@@ -145,7 +146,7 @@ function PaymentSuccessContent() {
                     )}
                 </div>
 
-                <div className="space-y-3">
+                 <div className="space-y-3">
                     <Link
                         href="/"
                         className="flex items-center justify-center gap-2 w-full bg-slate-900 text-white py-4 rounded-2xl font-bold transition-all hover:bg-slate-800 shadow-xl shadow-slate-900/10"
@@ -153,6 +154,16 @@ function PaymentSuccessContent() {
                         <Home size={18} />
                         Back to Home
                     </Link>
+
+                    {booking && (
+                        <button
+                            onClick={() => generateBookingPDF(booking)}
+                            className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-bold transition-all shadow-xl shadow-emerald-600/10"
+                        >
+                            <FileText size={18} />
+                            Download PDF Receipt
+                        </button>
+                    )}
 
                     {bookingId && (
                         <Link
