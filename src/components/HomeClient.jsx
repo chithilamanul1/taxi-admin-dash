@@ -10,6 +10,10 @@ const BookingWidget = dynamic(() => import('./BookingWidget'), {
     loading: () => <div className="min-h-[650px] md:min-h-[750px] bg-slate-50 dark:bg-zinc-900 animate-pulse rounded-[2rem]" />
 })
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
+const CustomTourBooking = dynamic(() => import('./CustomTourBooking'), {
+    ssr: false,
+    loading: () => <div className="min-h-[500px] bg-slate-50 dark:bg-zinc-900 animate-pulse rounded-[2.5rem]" />
+})
 
 // Dynamic imports with loading placeholders to prevent CLS
 const LoadingBox = () => <div className="w-full h-40 bg-slate-100 dark:bg-white/5 animate-pulse border border-slate-100 dark:border-white/10" />;
@@ -95,23 +99,20 @@ export default function HomeClient() {
         <div className="bg-white dark:bg-black overflow-hidden transition-colors duration-300">
             <BookingWidget />
 
-            <div id="calculator" className="py-24 md:py-48 relative border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2">
-                <div className="max-w-6xl mx-auto px-4 text-center relative z-10">
-                    <h2 className="text-5xl xs:text-6xl md:text-9xl font-black text-emerald-950 dark:text-white mb-10 uppercase tracking-tighter leading-[0.9] px-2">
-                        SEAMLESS <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FACC15] to-[#FF5C00]">
-                            AIRPORT TRANSFERS
+            <div id="calculator" className="py-20 md:py-32 relative border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2">
+                <div className="max-w-6xl mx-auto px-4 relative z-10">
+                    <div className="text-center mb-12">
+                        <span className="text-emerald-600 dark:text-[#FACC15] text-[10px] font-black tracking-[0.4em] uppercase mb-4 block">
+                            Explore Premium Island Tours
                         </span>
-                    </h2>
-                    <p className="text-slate-500 dark:text-slate-400 mb-14 text-sm md:text-base font-bold uppercase tracking-[0.4em] max-w-2xl mx-auto opacity-80">Predictable pricing • Premium vehicles • Professional chauffeurs</p>
-                    <button
-                        onClick={() => setIsBookingOpen(true)}
-                        className="bg-gradient-to-r from-[#FACC15] to-[#FF5C00] text-white px-16 py-7 font-black text-sm uppercase tracking-[0.2em] transition-all inline-flex items-center gap-4 group hover:scale-105 active:scale-95 rounded-full shadow-xl"
-                        aria-label="Book Your Trip Now"
-                    >
-                        BOOK YOUR TRIP NOW
-                        <ArrowRight size={22} className="group-hover:translate-x-4 transition-transform" />
-                    </button>
+                        <h2 className="text-4xl md:text-7xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter leading-none mb-6">
+                            Tailored <span className="text-emerald-600 dark:text-[#FACC15] italic font-serif">Tour</span> Packages
+                        </h2>
+                        <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm font-bold uppercase tracking-[0.3em] max-w-xl mx-auto opacity-80">
+                            Fixed Rates • Custom Stopovers • Elite Vehicles
+                        </p>
+                    </div>
+                    <CustomTourBooking />
                 </div>
             </div>
 
