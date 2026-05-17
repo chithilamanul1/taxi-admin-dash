@@ -35,21 +35,15 @@ const CustomTourBooking = () => {
 
   // Load vehicles and settings
   useEffect(() => {
-    fetch('/api/pricing?category=tours')
+    fetch('/api/pricing?category=airport-transfer')
       .then(res => res.json())
       .then(data => {
         if (data.success && data.data.length > 0) {
           const mapped = data.data.map(v => {
             let img = v.image || '/vehicles/placeholder.png';
-            if (v.vehicleType === 'mini-car') img = '/vehicles/minicar.png';
-            if (v.vehicleType === 'sedan') img = '/vehicles/sedan_luxury.png';
-            if (v.vehicleType === 'vezel') img = '/vehicles/van.png';
-            if (v.vehicleType === 'van') img = '/vehicles/van.png';
-            if (v.vehicleType === 'suv') img = '/vehicles/sedan_luxury.png';
-
             return {
               id: v.vehicleType,
-              name: v.name.split('(')[0].trim(),
+              name: v.name.split('(')[0].trim().toUpperCase(),
               baseRate: v.basePrice || 5000,
               perKm: v.perKmRate || 110,
               image: img,
@@ -61,10 +55,15 @@ const CustomTourBooking = () => {
           setSelectedVehicle(mapped[0]);
         } else {
           const defaults = [
-            { id: 'mini-car', name: 'MINI', baseRate: 5000, perKm: 110, image: '/vehicles/minicar.png', capacity: 2, suitcases: 4 },
-            { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedancar.png', capacity: 3, suitcases: 4 },
-            { id: 'vezel', name: 'VEZEL', baseRate: 8000, perKm: 160, image: '/vehicles/van.png', capacity: 4, suitcases: 4 },
-            { id: 'van', name: 'VAN', baseRate: 10000, perKm: 180, image: '/vehicles/van.png', capacity: 8, suitcases: 8 },
+            { id: 'mini-car', name: 'MINI CAR', baseRate: 5000, perKm: 100, image: '/vehicles/minicar.png', capacity: 3, suitcases: 2 },
+            { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedancar.png', capacity: 4, suitcases: 3 },
+            { id: 'vezel', name: 'HONDA VEZEL', baseRate: 8000, perKm: 135, image: '/vehicles/Hondavezel.png', capacity: 4, suitcases: 3 },
+            { id: 'mini-van-every', name: 'MINI VAN (EVERY)', baseRate: 7000, perKm: 110, image: '/vehicles/susukievery.png', capacity: 4, suitcases: 4 },
+            { id: 'mini-van-05', name: 'MINI VAN (5 SEATER)', baseRate: 7500, perKm: 130, image: '/vehicles/minivan5seat.png', capacity: 5, suitcases: 5 },
+            { id: 'suv', name: 'SUV (LUXURY)', baseRate: 9000, perKm: 160, image: '/vehicles/Hondavezel.png', capacity: 4, suitcases: 4 },
+            { id: 'kdh-van', name: 'KDH HIGH ROOF', baseRate: 10000, perKm: 180, image: '/vehicles/toyota-highroof.png', capacity: 9, suitcases: 8 },
+            { id: 'mini-bus', name: 'MINI BUS (COSTER)', baseRate: 15000, perKm: 250, image: '/vehicles/costerbus.png', capacity: 20, suitcases: 15 },
+            { id: 'coach-bus', name: 'LUXURY COACH', baseRate: 25000, perKm: 450, image: '/vehicles/coach-bus.png', capacity: 45, suitcases: 50 }
           ];
           setVehicles(defaults);
           setSelectedVehicle(defaults[0]);
@@ -73,10 +72,15 @@ const CustomTourBooking = () => {
       .catch(err => {
         console.error("Error fetching vehicles:", err);
         const defaults = [
-          { id: 'mini-car', name: 'MINI', baseRate: 5000, perKm: 110, image: '/vehicles/minicar.png', capacity: 2, suitcases: 4 },
-          { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedancar.png', capacity: 3, suitcases: 4 },
-          { id: 'vezel', name: 'VEZEL', baseRate: 8000, perKm: 160, image: '/vehicles/van.png', capacity: 4, suitcases: 4 },
-          { id: 'van', name: 'VAN', baseRate: 10000, perKm: 180, image: '/vehicles/van.png', capacity: 8, suitcases: 8 },
+          { id: 'mini-car', name: 'MINI CAR', baseRate: 5000, perKm: 100, image: '/vehicles/minicar.png', capacity: 3, suitcases: 2 },
+          { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedancar.png', capacity: 4, suitcases: 3 },
+          { id: 'vezel', name: 'HONDA VEZEL', baseRate: 8000, perKm: 135, image: '/vehicles/Hondavezel.png', capacity: 4, suitcases: 3 },
+          { id: 'mini-van-every', name: 'MINI VAN (EVERY)', baseRate: 7000, perKm: 110, image: '/vehicles/susukievery.png', capacity: 4, suitcases: 4 },
+          { id: 'mini-van-05', name: 'MINI VAN (5 SEATER)', baseRate: 7500, perKm: 130, image: '/vehicles/minivan5seat.png', capacity: 5, suitcases: 5 },
+          { id: 'suv', name: 'SUV (LUXURY)', baseRate: 9000, perKm: 160, image: '/vehicles/Hondavezel.png', capacity: 4, suitcases: 4 },
+          { id: 'kdh-van', name: 'KDH HIGH ROOF', baseRate: 10000, perKm: 180, image: '/vehicles/toyota-highroof.png', capacity: 9, suitcases: 8 },
+          { id: 'mini-bus', name: 'MINI BUS (COSTER)', baseRate: 15000, perKm: 250, image: '/vehicles/costerbus.png', capacity: 20, suitcases: 15 },
+          { id: 'coach-bus', name: 'LUXURY COACH', baseRate: 25000, perKm: 450, image: '/vehicles/coach-bus.png', capacity: 45, suitcases: 50 }
         ];
         setVehicles(defaults);
         setSelectedVehicle(defaults[0]);
@@ -169,7 +173,10 @@ const CustomTourBooking = () => {
       // Scale dynamic rate slightly depending on vehicle class tier
       if (veh.id === 'sedan') basePrice *= 1.2;
       if (veh.id === 'vezel' || veh.id === 'suv') basePrice *= 1.4;
-      if (veh.id === 'van') basePrice *= 1.7;
+      if (veh.id === 'mini-van-every' || veh.id === 'mini-van-05') basePrice *= 1.3;
+      if (veh.id === 'van' || veh.id === 'kdh-van') basePrice *= 1.7;
+      if (veh.id === 'mini-bus') basePrice *= 2.5;
+      if (veh.id === 'coach-bus') basePrice *= 4.5;
 
       // Handle extra KMs if route exceeds selections
       let total = basePrice;
@@ -358,8 +365,8 @@ const CustomTourBooking = () => {
               </button>
             </div>
 
-            {/* 2. Grid of vehicle cards with SVGs */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* 2. Grid of vehicle cards with images */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {vehicles.map((v) => {
                 const isActive = selectedVehicle?.id === v.id;
                 const dynamicPrice = calculateTotalForVehicle(v);
@@ -367,23 +374,27 @@ const CustomTourBooking = () => {
                   <button 
                     key={v.id} 
                     onClick={() => setSelectedVehicle(v)} 
-                    className={`flex flex-col items-center p-5 rounded-[2rem] transition-all duration-300 border text-center relative overflow-hidden group
+                    className={`flex flex-col items-center p-4 rounded-[2rem] transition-all duration-300 border text-center relative overflow-hidden group
                       ${isActive 
                         ? 'bg-gradient-to-br from-yellow-50 to-amber-100/50 dark:from-zinc-800 dark:to-zinc-800/50 border-[#FACC15] shadow-lg scale-[1.02] ring-1 ring-yellow-400/30' 
                         : 'bg-white dark:bg-zinc-800/40 hover:bg-slate-50 dark:hover:bg-zinc-800/80 border-slate-200/80 dark:border-white/5 shadow-sm'}`}
                   >
-                    {/* SVG car outlines */}
-                    <div className="h-14 mb-3 flex items-center justify-center w-full group-hover:scale-105 transition-transform duration-300">
-                      {renderVehicleIcon(v.id, isActive)}
+                    {/* Vehicle images */}
+                    <div className="h-20 mb-2 flex items-center justify-center w-full group-hover:scale-105 transition-transform duration-300 relative">
+                      <img 
+                        src={v.image || '/vehicles/minicar.png'} 
+                        alt={v.name} 
+                        className="object-contain max-h-full max-w-full drop-shadow-sm select-none pointer-events-none"
+                      />
                     </div>
                     
-                    <p className="text-xs font-black uppercase tracking-widest text-slate-800 dark:text-white mb-1">{v.name}</p>
-                    <p className="text-sm font-black text-emerald-700 dark:text-emerald-400 mb-3">RS : {dynamicPrice.toLocaleString()}</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-800 dark:text-white mb-0.5">{v.name}</p>
+                    <p className="text-xs font-black text-emerald-700 dark:text-emerald-400 mb-2">RS : {dynamicPrice.toLocaleString()}</p>
                     
                     {/* Passenger capacity and baggage count details */}
-                    <div className="flex items-center gap-4 text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-white/5 pt-2.5 w-full justify-center">
-                      <span className="flex items-center gap-1 text-[10px] font-bold"><User size={12} /> {v.capacity}</span>
-                      <span className="flex items-center gap-1 text-[10px] font-bold">💼 {v.suitcases}</span>
+                    <div className="flex items-center gap-4 text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-white/5 pt-2 w-full justify-center">
+                      <span className="flex items-center gap-1 text-[9px] font-bold"><User size={10} /> {v.capacity}</span>
+                      <span className="flex items-center gap-1 text-[9px] font-bold">💼 {v.suitcases}</span>
                     </div>
                   </button>
                 );
