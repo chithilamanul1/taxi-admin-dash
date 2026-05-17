@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock, Navigation, ChevronRight, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles } from 'lucide-react';
 import { TAXI_TOUR_PACKAGES } from '../lib/pricing-util';
+import { loadGoogleMapsScript } from '@/lib/google-maps';
 
 const displayVehicleName = (name) => (name || '').split('(')[0].trim();
 
@@ -88,12 +89,9 @@ const RoundTripBooking = () => {
   };
 
   useEffect(() => {
-    if (window.google) { setGoogleLoaded(true); return; }
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
-    script.async = true;
-    script.onload = () => setGoogleLoaded(true);
-    document.head.appendChild(script);
+    loadGoogleMapsScript()
+      .then(() => setGoogleLoaded(true))
+      .catch(err => console.error("Error loading Google Maps script:", err));
   }, []);
 
   const initAutocomplete = (node, index) => {
