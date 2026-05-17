@@ -397,8 +397,11 @@ const CustomTourBooking = () => {
               </button>
             </div>
 
-            {/* 2. Grid of vehicle cards with images */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {/* 2. Responsive horizontal slider on mobile, standard grid on desktop */}
+            <div 
+              className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 no-scrollbar sm:grid sm:grid-cols-3 sm:gap-4 select-none"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
               {vehicles.map((v) => {
                 const isActive = selectedVehicle?.id === v.id;
                 const dynamicPrice = calculateTotalForVehicle(v);
@@ -406,7 +409,7 @@ const CustomTourBooking = () => {
                   <button 
                     key={v.id} 
                     onClick={() => setSelectedVehicle(v)} 
-                    className={`flex flex-col items-center p-4 rounded-[2rem] transition-all duration-300 border text-center relative overflow-hidden group
+                    className={`flex-shrink-0 w-[75vw] sm:w-auto snap-start flex flex-col items-center p-4 rounded-[2rem] transition-all duration-300 border text-center relative overflow-hidden group
                       ${isActive 
                         ? 'bg-gradient-to-br from-yellow-50 to-amber-100/50 dark:from-zinc-800 dark:to-zinc-800/50 border-[#FACC15] shadow-lg scale-[1.02] ring-1 ring-yellow-400/30' 
                         : 'bg-white dark:bg-zinc-800/40 hover:bg-slate-50 dark:hover:bg-zinc-800/80 border-slate-200/80 dark:border-white/5 shadow-sm'}`}
