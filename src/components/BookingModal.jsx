@@ -464,11 +464,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     useEffect(() => {
         if (initialData.distance && initialData.distance > 0) return;
 
-        if (formData.pickupCoords?.lat && formData.pickupCoords?.lon && formData.dropoffCoords?.lat && formData.dropoffCoords?.lon) {
+        const pickupLng = formData.pickupCoords?.lng || formData.pickupCoords?.lon;
+        const pickupLat = formData.pickupCoords?.lat;
+        const dropoffLng = formData.dropoffCoords?.lng || formData.dropoffCoords?.lon;
+        const dropoffLat = formData.dropoffCoords?.lat;
+
+        if (pickupLat && pickupLng && dropoffLat && dropoffLng) {
             const coords = [
-                `${formData.pickupCoords.lon},${formData.pickupCoords.lat}`,
-                ...formData.waypoints.map(wp => `${wp.lon},${wp.lat}`),
-                `${formData.dropoffCoords.lon},${formData.dropoffCoords.lat}`
+                `${pickupLng},${pickupLat}`,
+                ...formData.waypoints.map(wp => `${wp.lng || wp.lon},${wp.lat}`),
+                `${dropoffLng},${dropoffLat}`
             ].join(';');
             fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=false`)
                 .then(res => res.json())

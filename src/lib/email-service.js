@@ -558,10 +558,12 @@ export async function sendBookingConfirmation(booking) {
                     ${booking.currency || 'LKR'} ${((booking.currency && booking.currency !== 'LKR' && booking.displayPrice) ? booking.displayPrice : (booking.totalPrice || 0)).toLocaleString(undefined, (booking.currency === 'LKR' ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}
                 </td>
             </tr>
+            ${(booking.currency && booking.currency !== 'LKR') ? `
             <tr>
                 <td width="50%" style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Total Price (LKR)</td>
                 <td style="border-bottom: 1px solid #e5e7eb; font-weight: bold; font-size: 16px; color: #064e3b;">LKR ${(booking.totalPriceLkr || booking.totalPrice || 0).toLocaleString()}</td>
             </tr>
+            ` : ''}
             <tr>
                 <td style="border-bottom: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">Payment Method</td>
                 <td style="border-bottom: 1px solid #e5e7eb; font-size: 13px;">${booking.paymentMethod === 'card' ? '💳 Online Payment' : '💵 Cash on Arrival'}</td>
