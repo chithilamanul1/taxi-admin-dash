@@ -708,44 +708,64 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                         {formData.hasNameBoard !== null && (
                                             <div className="space-y-6 animate-slide-up pt-4">
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                    <div className="relative">
-                                                        <input
-                                                            value={formData.flightNumber || ''}
-                                                            onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.flightNumber ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
-                                                            placeholder="FLIGHT NUMBER (REQUIRED)"
-                                                        />
-                                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                            <PlaneTakeoff size={20} strokeWidth={3} />
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                                    <div className="space-y-3">
+                                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.flightNumber ? 'text-red-500' : 'text-slate-500'}`}>
+                                                            Flight Number (Required)
+                                                        </label>
+                                                        <div className="relative">
+                                                            <input
+                                                                value={formData.flightNumber || ''}
+                                                                onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
+                                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-xs placeholder:font-black ${errors.flightNumber ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                                placeholder="E.G. UL 504"
+                                                            />
+                                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                                <PlaneTakeoff size={20} strokeWidth={3} />
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="relative">
-                                                        <input
-                                                            type="time"
-                                                            value={formData.flightArrivalTime || ''}
-                                                            onChange={e => setFormData(prev => ({ ...prev, flightArrivalTime: e.target.value, time: e.target.value }))}
-                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.flightArrivalTime ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
-                                                        />
-                                                        <div className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 text-[8px] font-black uppercase tracking-widest pointer-events-none">ARR TIME</div>
+                                                    <div className="space-y-3">
+                                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.flightArrivalTime ? 'text-red-500' : 'text-slate-500'}`}>
+                                                            Arrival Time (Required)
+                                                        </label>
+                                                        <div className="relative">
+                                                            <input
+                                                                type="time"
+                                                                value={formData.flightArrivalTime || ''}
+                                                                onChange={e => setFormData(prev => ({ ...prev, flightArrivalTime: e.target.value, time: e.target.value }))}
+                                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.flightArrivalTime ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                            />
+                                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                                <Clock size={20} strokeWidth={3} />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
 
                                                 {formData.hasNameBoard && (
-                                                    <div className="relative animate-slide-up">
-                                                        <input
-                                                            value={formData.nameBoardText || ''}
-                                                            onChange={e => {
-                                                                const val = e.target.value;
-                                                                setFormData(prev => ({
-                                                                    ...prev,
-                                                                    nameBoardText: val,
-                                                                    name: prev.name ? prev.name : val
-                                                                }));
-                                                            }}
-                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.nameBoardText ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
-                                                            placeholder="CUSTOMER'S NAME"
-                                                        />
+                                                    <div className="space-y-3 animate-slide-up">
+                                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.nameBoardText ? 'text-red-500' : 'text-slate-500'}`}>
+                                                            Customer's Name on Board
+                                                        </label>
+                                                        <div className="relative">
+                                                            <input
+                                                                value={formData.nameBoardText || ''}
+                                                                onChange={e => {
+                                                                    const val = e.target.value;
+                                                                    setFormData(prev => ({
+                                                                        ...prev,
+                                                                        nameBoardText: val,
+                                                                        name: prev.name ? prev.name : val
+                                                                    }));
+                                                                }}
+                                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-xs placeholder:font-black ${errors.nameBoardText ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                                placeholder="ENTER NAME FOR WELCOME BOARD"
+                                                            />
+                                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                                <User size={20} strokeWidth={3} />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 )}
                                             </div>
@@ -899,26 +919,36 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-12 border-t border-slate-200 dark:border-white/10">
                                 <div className="space-y-4">
-                                    <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>
+                                    <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>
                                         {formData.hasNameBoard ? 'Arrival Date' : 'Pickup Date'}
                                     </label>
-                                    <input
-                                        type="date"
-                                        value={formData.date || formData.flightArrivalDate || ''}
-                                        onChange={e => setFormData(prev => ({ ...prev, date: e.target.value, flightArrivalDate: e.target.value }))}
-                                        className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.date ? 'border-red-500' : ''}`}
-                                    />
+                                    <div className="relative">
+                                        <input
+                                            type="date"
+                                            value={formData.date || formData.flightArrivalDate || ''}
+                                            onChange={e => setFormData(prev => ({ ...prev, date: e.target.value, flightArrivalDate: e.target.value }))}
+                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.date ? 'border-red-500' : ''}`}
+                                        />
+                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                            <Calendar size={20} strokeWidth={3} />
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="space-y-4">
-                                    <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>
+                                    <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>
                                         {formData.hasNameBoard ? 'Arrival Time' : 'Pickup Time'}
                                     </label>
-                                    <input
-                                        type="time"
-                                        value={formData.time || formData.flightArrivalTime || ''}
-                                        onChange={e => setFormData(prev => ({ ...prev, time: e.target.value, flightArrivalTime: e.target.value }))}
-                                        className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.time ? 'border-red-500' : ''}`}
-                                    />
+                                    <div className="relative">
+                                        <input
+                                            type="time"
+                                            value={formData.time || formData.flightArrivalTime || ''}
+                                            onChange={e => setFormData(prev => ({ ...prev, time: e.target.value, flightArrivalTime: e.target.value }))}
+                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.time ? 'border-red-500' : ''}`}
+                                        />
+                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                            <Clock size={20} strokeWidth={3} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -930,26 +960,36 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                         <div className="space-y-4">
-                                            <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.returnDate ? 'text-red-500' : 'text-slate-500'}`}>
+                                            <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.returnDate ? 'text-red-500' : 'text-slate-500'}`}>
                                                 Return Date (Optional)
                                             </label>
-                                            <input
-                                                type="date"
-                                                value={formData.returnDate || ''}
-                                                onChange={e => setFormData(prev => ({ ...prev, returnDate: e.target.value }))}
-                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.returnDate ? 'border-red-500' : ''}`}
-                                            />
+                                            <div className="relative">
+                                                <input
+                                                    type="date"
+                                                    value={formData.returnDate || ''}
+                                                    onChange={e => setFormData(prev => ({ ...prev, returnDate: e.target.value }))}
+                                                    className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.returnDate ? 'border-red-500' : ''}`}
+                                                />
+                                                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                    <Calendar size={20} strokeWidth={3} />
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="space-y-4">
-                                            <label className={`text-[10px] font-black uppercase tracking-widest pl-4 ${errors.returnTime ? 'text-red-500' : 'text-slate-500'}`}>
+                                            <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.returnTime ? 'text-red-500' : 'text-slate-500'}`}>
                                                 Return Time (Optional)
                                             </label>
-                                            <input
-                                                type="time"
-                                                value={formData.returnTime || ''}
-                                                onChange={e => setFormData(prev => ({ ...prev, returnTime: e.target.value }))}
-                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.returnTime ? 'border-red-500' : ''}`}
-                                            />
+                                            <div className="relative">
+                                                <input
+                                                    type="time"
+                                                    value={formData.returnTime || ''}
+                                                    onChange={e => setFormData(prev => ({ ...prev, returnTime: e.target.value }))}
+                                                    className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.returnTime ? 'border-red-500' : ''}`}
+                                                />
+                                                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                    <Clock size={20} strokeWidth={3} />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
