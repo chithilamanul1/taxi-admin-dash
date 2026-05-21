@@ -735,9 +735,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                     <div className="relative animate-slide-up">
                                                         <input
                                                             value={formData.nameBoardText || ''}
-                                                            onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
+                                                            onChange={e => {
+                                                                const val = e.target.value;
+                                                                setFormData(prev => ({
+                                                                    ...prev,
+                                                                    nameBoardText: val,
+                                                                    name: prev.name ? prev.name : val
+                                                                }));
+                                                            }}
                                                             className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.nameBoardText ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
-                                                            placeholder="NAME ON BOARD (e.g. MR. JOHN SMITH)"
+                                                            placeholder="CUSTOMER'S NAME"
                                                         />
                                                     </div>
                                                 )}
@@ -872,7 +879,16 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             <input
                                                 type={f.type}
                                                 value={formData[f.key] || ''}
-                                                onChange={e => setFormData({ ...formData, [f.key]: e.target.value })}
+                                                onChange={e => {
+                                                    const val = e.target.value;
+                                                    setFormData(prev => {
+                                                        const updated = { ...prev, [f.key]: val };
+                                                        if (f.key === 'name' && prev.hasNameBoard) {
+                                                            updated.nameBoardText = val;
+                                                        }
+                                                        return updated;
+                                                    });
+                                                }}
                                                 className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl outline-none font-black text-black dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm uppercase tracking-widest ${errors[f.key] ? 'border-red-500' : ''}`}
                                                 placeholder={f.placeholder}
                                             />

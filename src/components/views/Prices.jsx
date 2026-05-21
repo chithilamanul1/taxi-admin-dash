@@ -557,7 +557,7 @@ const Prices = ({ initialDestination }) => {
                                             type="text"
                                             value={boardName}
                                             onChange={(e) => setBoardName(e.target.value)}
-                                            placeholder="Name on Board (e.g. John Doe)"
+                                            placeholder="Customer's Name"
                                             className="w-full bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 px-5 py-3.5 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none shadow-sm transition-all text-emerald-950 dark:text-white"
                                         />
                                     </div>
