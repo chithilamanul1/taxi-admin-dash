@@ -358,9 +358,14 @@ const CustomTourBooking = () => {
       
       {/* Dynamic Header Step Indicator */}
       <div className="flex items-center justify-between mb-8 px-2 border-b border-slate-100 dark:border-white/5 pb-4">
-        <span className="text-[10px] font-black tracking-[0.3em] uppercase text-emerald-600 dark:text-[#FACC15] flex items-center gap-1.5">
-          <Sparkles size={12} /> Premium Round Tours
-        </span>
+        <div className="flex flex-col gap-1">
+          <span className="text-[10px] font-black tracking-[0.3em] uppercase text-emerald-600 dark:text-[#FACC15] flex items-center gap-1.5">
+            <Sparkles size={12} /> Premium Round Tours
+          </span>
+          <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400">
+            {step === 1 ? "Choose Your Vehicle Class" : "Configure Route & Booking Details"}
+          </span>
+        </div>
         <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
           Step {step} of 2
         </span>
@@ -373,122 +378,83 @@ const CustomTourBooking = () => {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
-            className="space-y-8"
+            className="space-y-6"
           >
-            {/* 1. Styled Tabs */}
-            <div className="grid grid-cols-2 gap-4 bg-slate-100/80 dark:bg-zinc-800/80 p-2 rounded-[2rem] border border-slate-200/40 dark:border-white/5">
-              <button 
-                onClick={() => setTab('airport')} 
-                className={`py-4 rounded-3xl transition-all duration-300 font-black text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-2
-                  ${tab === 'airport' 
-                    ? 'bg-white dark:bg-zinc-700 text-black dark:text-white shadow-md' 
-                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}
-              >
-                <Plane size={15} /> AirPort Round TOUR
-              </button>
-              <button 
-                onClick={() => setTab('tour')} 
-                className={`py-4 rounded-3xl transition-all duration-300 font-black text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-2
-                  ${tab === 'tour' 
-                    ? 'bg-white dark:bg-zinc-700 text-black dark:text-white shadow-md' 
-                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}
-              >
-                <Car size={15} /> Round TOUR
-              </button>
+            {/* 1. Consolidated Category Selection (Segmented Toggle Control) */}
+            <div className="flex justify-center">
+              <div className="inline-flex w-full bg-slate-100/70 dark:bg-zinc-800/60 p-1.5 rounded-[2rem] border border-slate-200/30 dark:border-white/5 relative">
+                <button 
+                  type="button"
+                  onClick={() => setTab('airport')} 
+                  className={`flex-1 py-3 rounded-2xl transition-all duration-300 font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-2 z-10
+                    ${tab === 'airport' 
+                      ? 'bg-white dark:bg-zinc-700 text-slate-900 dark:text-white shadow-md font-bold' 
+                      : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                >
+                  <Plane size={14} /> Airport Tour
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => setTab('tour')} 
+                  className={`flex-1 py-3 rounded-2xl transition-all duration-300 font-black text-[10px] uppercase tracking-wider flex items-center justify-center gap-2 z-10
+                    ${tab === 'tour' 
+                      ? 'bg-white dark:bg-zinc-700 text-slate-900 dark:text-white shadow-md font-bold' 
+                      : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                >
+                  <Car size={14} /> Round Tour
+                </button>
+              </div>
             </div>
 
-            {/* 2. Responsive horizontal slider on mobile, standard grid on desktop */}
-            <div 
-              className="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-4 no-scrollbar sm:grid sm:grid-cols-3 sm:gap-4 select-none"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {vehicles.map((v) => {
-                const isActive = selectedVehicle?.id === v.id;
-                const dynamicPrice = calculateTotalForVehicle(v);
-                return (
-                  <button 
-                    key={v.id} 
-                    onClick={() => setSelectedVehicle(v)} 
-                    className={`flex-shrink-0 w-[46vw] sm:w-auto snap-start flex flex-col items-center p-3 sm:p-4 rounded-[1.5rem] sm:rounded-[2rem] transition-all duration-300 border text-center relative overflow-hidden group
-                      ${isActive 
-                        ? 'bg-gradient-to-br from-yellow-50 to-amber-100/50 dark:from-zinc-800 dark:to-zinc-800/50 border-[#FACC15] shadow-lg scale-[1.02] ring-1 ring-yellow-400/30' 
-                        : 'bg-white dark:bg-zinc-800/40 hover:bg-slate-50 dark:hover:bg-zinc-800/80 border-slate-200/80 dark:border-white/5 shadow-sm'}`}
-                  >
-                    {/* Vehicle images */}
-                    <div className="h-16 sm:h-20 mb-2 flex items-center justify-center w-full group-hover:scale-105 transition-transform duration-300 relative">
-                      <img 
-                        src={v.image || '/vehicles/minicar.png'} 
-                        alt={v.name} 
-                        className="object-contain max-h-full max-w-full drop-shadow-sm select-none pointer-events-none"
-                      />
-                    </div>
-                    
-                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-800 dark:text-white mb-0.5">{v.name}</p>
-                    <p className="text-xs font-black text-emerald-700 dark:text-emerald-400 mb-2">RS : {dynamicPrice.toLocaleString()}</p>
-                    
-                    {/* Passenger capacity and baggage count details */}
-                    <div className="flex items-center gap-4 text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-white/5 pt-2 w-full justify-center">
-                      <span className="flex items-center gap-1 text-[9px] font-bold"><User size={10} /> {v.capacity}</span>
-                      <span className="flex items-center gap-1 text-[9px] font-bold">💼 {v.suitcases}</span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* 3. Stepper & Select KM panel */}
-            <div className="bg-slate-50 dark:bg-zinc-800/20 rounded-[2.5rem] border border-slate-100 dark:border-white/5 p-6 space-y-6">
-              
-              {/* Stepper Selection */}
-              <div className="space-y-3">
-                <label className="text-[10px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Select hours</label>
-                <div className="flex items-center bg-white dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 p-2 rounded-3xl shadow-sm">
-                  <button 
-                    onClick={() => updateDuration(Math.max(1, formData.taxiTourHours - 1))} 
-                    className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-slate-600 dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
-                  >
-                    <Minus size={20} strokeWidth={3} />
-                  </button>
-                  <div className="flex-1 text-center font-black text-slate-800 dark:text-white flex items-center justify-center gap-2">
-                    <span className="text-2xl font-black">{formData.taxiTourHours}</span>
-                    <span className="text-xs uppercase tracking-widest text-slate-400 font-bold">hours</span>
-                  </div>
-                  <button 
-                    onClick={() => updateDuration(Math.min(12, formData.taxiTourHours + 1))} 
-                    className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-slate-600 dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
-                  >
-                    <Plus size={20} strokeWidth={3} />
-                  </button>
-                </div>
+            {/* 2. Distinct Vehicle Selection Slider/Grid */}
+            <div className="space-y-3">
+              <label className="text-[10px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">
+                Select Vehicle
+              </label>
+              <div 
+                className="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-4 no-scrollbar sm:grid sm:grid-cols-3 sm:gap-4 select-none"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {vehicles.map((v) => {
+                  const isActive = selectedVehicle?.id === v.id;
+                  const dynamicPrice = calculateTotalForVehicle(v);
+                  return (
+                    <button 
+                      key={v.id} 
+                      type="button"
+                      onClick={() => setSelectedVehicle(v)} 
+                      className={`flex-shrink-0 w-[46vw] sm:w-auto snap-start flex flex-col items-center p-3 sm:p-4 rounded-[1.5rem] sm:rounded-[2rem] transition-all duration-300 border text-center relative overflow-hidden group
+                        ${isActive 
+                          ? 'bg-gradient-to-br from-yellow-50 to-amber-100/50 dark:from-zinc-800 dark:to-zinc-800/50 border-[#FACC15] shadow-lg scale-[1.02] ring-1 ring-yellow-400/30' 
+                          : 'bg-white dark:bg-zinc-800/40 hover:bg-slate-50 dark:hover:bg-zinc-800/80 border-slate-200/80 dark:border-white/5 shadow-sm'}`}
+                    >
+                      {/* Vehicle images */}
+                      <div className="h-16 sm:h-20 mb-2 flex items-center justify-center w-full group-hover:scale-105 transition-transform duration-300 relative">
+                        <img 
+                          src={v.image || '/vehicles/minicar.png'} 
+                          alt={v.name} 
+                          className="object-contain max-h-full max-w-full drop-shadow-sm select-none pointer-events-none"
+                        />
+                      </div>
+                      
+                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-800 dark:text-white mb-0.5">{v.name}</p>
+                      <p className="text-xs font-black text-emerald-700 dark:text-emerald-400 mb-2">RS : {dynamicPrice.toLocaleString()}</p>
+                      
+                      {/* Passenger capacity and baggage count details */}
+                      <div className="flex items-center gap-4 text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-white/5 pt-2 w-full justify-center">
+                        <span className="flex items-center gap-1 text-[9px] font-bold"><User size={10} /> {v.capacity}</span>
+                        <span className="flex items-center gap-1 text-[9px] font-bold">💼 {v.suitcases}</span>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
-
-              {/* Dynamic KM selection */}
-              <div className="space-y-3">
-                <label className="text-[10px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Select KM Limit</label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {currentKmLimits.map((km) => {
-                    const isSelected = formData.taxiTourKm === km;
-                    return (
-                      <button
-                        key={km}
-                        onClick={() => setFormData(prev => ({ ...prev, taxiTourKm: km }))}
-                        className={`py-3.5 rounded-2xl text-[11px] font-black transition-all border text-center tracking-widest
-                          ${isSelected 
-                            ? 'bg-[#FACC15] text-black border-[#FACC15] shadow-md scale-[1.03]' 
-                            : 'bg-white dark:bg-zinc-800 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-white/10 hover:border-yellow-400'}`}
-                      >
-                        {km} KM
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
             </div>
 
             {/* Next Button */}
-            <div className="pt-2 text-center">
+            <div className="pt-4 text-center">
               <button 
+                type="button"
                 onClick={() => setStep(2)} 
                 className="w-full py-5 bg-black hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-black rounded-3xl font-black text-xs uppercase tracking-[0.25em] shadow-xl hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2"
               >
@@ -503,14 +469,79 @@ const CustomTourBooking = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="space-y-8"
+            className="space-y-6"
           >
-            {/* Route Planning Inputs */}
-            <section className="space-y-4 bg-slate-50/50 dark:bg-zinc-800/10 p-5 rounded-3xl border border-slate-200/40 dark:border-white/5">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2"><MapPin className="text-emerald-600 dark:text-[#FACC15]" size={16} /><h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Route details</h4></div>
+            {/* Block 1: Tour Parameters (Only visible/relevant for Round Tour) */}
+            {tab === 'tour' && (
+              <section className="bg-slate-50 dark:bg-zinc-800/20 rounded-[2rem] border border-slate-100 dark:border-white/5 p-5 space-y-6">
+                <div className="flex items-center gap-2 border-b border-slate-100 dark:border-white/5 pb-3">
+                  <Clock className="text-emerald-600 dark:text-[#FACC15]" size={16} />
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Tour Parameters</h4>
+                </div>
+                
+                {/* Stepper Selection */}
+                <div className="space-y-3">
+                  <label className="text-[10px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Select hours</label>
+                  <div className="flex items-center bg-white dark:bg-zinc-850 border border-slate-200/80 dark:border-white/10 p-2 rounded-3xl shadow-sm">
+                    <button 
+                      type="button"
+                      onClick={() => updateDuration(Math.max(1, formData.taxiTourHours - 1))} 
+                      className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-slate-600 dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
+                    >
+                      <Minus size={20} strokeWidth={3} />
+                    </button>
+                    <div className="flex-1 text-center font-black text-slate-800 dark:text-white flex items-center justify-center gap-2">
+                      <span className="text-2xl font-black">{formData.taxiTourHours}</span>
+                      <span className="text-xs uppercase tracking-widest text-slate-400 font-bold">hours</span>
+                    </div>
+                    <button 
+                      type="button"
+                      onClick={() => updateDuration(Math.min(12, formData.taxiTourHours + 1))} 
+                      className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-slate-600 dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
+                    >
+                      <Plus size={20} strokeWidth={3} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Dynamic KM selection */}
+                <div className="space-y-3">
+                  <label className="text-[10px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Select KM Limit</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {currentKmLimits.map((km) => {
+                      const isSelected = formData.taxiTourKm === km;
+                      return (
+                        <button
+                          type="button"
+                          key={km}
+                          onClick={() => setFormData(prev => ({ ...prev, taxiTourKm: km }))}
+                          className={`py-3.5 rounded-2xl text-[11px] font-black transition-all border text-center tracking-widest
+                            ${isSelected 
+                              ? 'bg-[#FACC15] text-black border-[#FACC15] shadow-md scale-[1.03]' 
+                              : 'bg-white dark:bg-zinc-850 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-white/10 hover:border-yellow-400'}`}
+                        >
+                          {km} KM
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Block 2: Isolated Route Planning */}
+            <section className="bg-slate-50 dark:bg-zinc-800/20 rounded-[2rem] border border-slate-100 dark:border-white/5 p-5 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-3">
+                <div className="flex items-center gap-2">
+                  <MapPin className="text-emerald-600 dark:text-[#FACC15]" size={16} />
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Route details</h4>
+                </div>
                 {locations.length < 4 && (
-                  <button onClick={handleAddLocation} className="text-[10px] font-black text-emerald-600 dark:text-[#FACC15] uppercase tracking-widest flex items-center gap-1 hover:underline">
+                  <button 
+                    type="button"
+                    onClick={handleAddLocation} 
+                    className="text-[10px] font-black text-emerald-600 dark:text-[#FACC15] uppercase tracking-widest flex items-center gap-1 hover:underline"
+                  >
                     <Plus size={12} /> Add Stop
                   </button>
                 )}
@@ -532,7 +563,11 @@ const CustomTourBooking = () => {
                       />
                     </div>
                     {locations.length > 2 && (
-                      <button onClick={() => handleRemoveLocation(idx)} className="p-3 bg-red-50 hover:bg-red-100 dark:bg-red-500/10 text-red-500 rounded-xl transition-all">
+                      <button 
+                        type="button"
+                        onClick={() => handleRemoveLocation(idx)} 
+                        className="p-3 bg-red-50 hover:bg-red-100 dark:bg-red-500/10 text-red-500 rounded-xl transition-all"
+                      >
                         <Minus size={14} />
                       </button>
                     )}
@@ -541,9 +576,9 @@ const CustomTourBooking = () => {
               </div>
 
               {/* Distance Display & Details */}
-              <div className="flex flex-wrap gap-4 items-center justify-between bg-emerald-50/40 dark:bg-emerald-950/10 p-5 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/20 mt-4">
+              <div className="flex flex-wrap gap-4 items-center justify-between bg-white dark:bg-zinc-800/80 p-5 rounded-2xl border border-slate-100 dark:border-white/5 mt-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white dark:bg-zinc-800 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
+                  <div className="w-10 h-10 bg-slate-50 dark:bg-zinc-700/50 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
                     {isCalculating ? <Loader2 className="animate-spin" size={16} /> : <Navigation size={18} />}
                   </div>
                   <div>
@@ -558,9 +593,12 @@ const CustomTourBooking = () => {
               </div>
             </section>
 
-            {/* Timing & Contact Information */}
-            <section className="space-y-4">
-              <div className="flex items-center gap-2"><User className="text-emerald-600 dark:text-[#FACC15]" size={16} /><h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Contact & Schedule</h4></div>
+            {/* Block 3: Isolated Timing & Contact Information */}
+            <section className="bg-slate-50 dark:bg-zinc-800/20 rounded-[2rem] border border-slate-100 dark:border-white/5 p-5 space-y-4">
+              <div className="flex items-center gap-2 border-b border-slate-100 dark:border-white/5 pb-3">
+                <User className="text-emerald-600 dark:text-[#FACC15]" size={16} />
+                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Contact & Schedule</h4>
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Pickup Date</label>
@@ -607,12 +645,14 @@ const CustomTourBooking = () => {
             {/* Stepper buttons (Back & Complete Booking) */}
             <div className="grid grid-cols-3 gap-3 pt-2">
               <button 
+                type="button"
                 onClick={() => setStep(1)} 
                 className="py-5 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 text-slate-700 dark:text-white rounded-3xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-1.5"
               >
                 <ChevronLeft size={14} strokeWidth={3} /> BACK
               </button>
               <button 
+                type="button"
                 onClick={handleBooking} 
                 disabled={isBooking}
                 className="col-span-2 py-5 bg-emerald-900 hover:bg-emerald-950 text-white rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl flex items-center justify-center gap-2 transition-all disabled:opacity-50"
