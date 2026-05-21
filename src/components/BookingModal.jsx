@@ -496,8 +496,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         if (targetStep >= 1) {
             if (!formData.pickup) newErrors.pickup = true;
             if (!formData.dropoff) newErrors.dropoff = true;
-            if (isAirportService && initialData.isAirportPickup && formData.hasNameBoard === null) newErrors.hasNameBoard = true;
-            if (initialData.isAirportPickup && formData.hasNameBoard && !formData.nameBoardText) newErrors.nameBoardText = true;
+            if (isAirportService && initialData.isAirportPickup) {
+                if (formData.hasNameBoard === null) newErrors.hasNameBoard = true;
+                if (!formData.flightNumber) newErrors.flightNumber = true;
+                if (!formData.flightArrivalTime) newErrors.flightArrivalTime = true;
+                if (formData.hasNameBoard && !formData.nameBoardText) newErrors.nameBoardText = true;
+            }
         }
         if (targetStep >= 2) {
             if (!formData.name) newErrors.name = true;
@@ -506,14 +510,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             if (isAirportService || formData.hasNameBoard) {
                 if (!formData.flightArrivalDate && !formData.date) newErrors.date = true;
                 if (!formData.flightArrivalTime && !formData.time) newErrors.time = true;
-                // Flight number is now optional as per user request
-                // if (formData.hasNameBoard && !formData.flightNumber) newErrors.flightNumber = true;
+                if (initialData.isAirportPickup && !formData.flightNumber) newErrors.flightNumber = true;
             }
-            // Return details are now optional as per user request
-            // if (formData.tripType === 'round-trip') {
-            //     if (!formData.returnDate) newErrors.returnDate = true;
-            //     if (!formData.returnTime) newErrors.returnTime = true;
-            // }
             // Enforce luggage selection and adult count (Hard Stop)
             if (formData.passengerCount.luggage === undefined || formData.passengerCount.luggage === null) newErrors.luggage = true;
             if (!formData.passengerCount.adults || formData.passengerCount.adults < 1) newErrors.adults = true;
@@ -708,26 +706,15 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             ))}
                                         </div>
 
-                                        {formData.hasNameBoard ? (
-                                            <div className="space-y-6 animate-slide-up pt-4">
-                                                <div className="relative">
-                                                    <input
-                                                        value={formData.nameBoardText}
-                                                        onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
-                                                        className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
-                                                        placeholder="NAME ON BOARD (e.g. MR. JOHN SMITH)"
-                                                    />
-                                                </div>
-                                            </div>
-                                        ) : (
+                                        {formData.hasNameBoard !== null && (
                                             <div className="space-y-6 animate-slide-up pt-4">
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                     <div className="relative">
                                                         <input
-                                                            value={formData.flightNumber}
+                                                            value={formData.flightNumber || ''}
                                                             onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                            className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-14 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
-                                                            placeholder="FLIGHT NO (OPTIONAL)"
+                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.flightNumber ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                            placeholder="FLIGHT NUMBER (REQUIRED)"
                                                         />
                                                         <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
                                                             <PlaneTakeoff size={20} strokeWidth={3} />
@@ -738,11 +725,22 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             type="time"
                                                             value={formData.flightArrivalTime || ''}
                                                             onChange={e => setFormData(prev => ({ ...prev, flightArrivalTime: e.target.value, time: e.target.value }))}
-                                                            className="w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all"
+                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.flightArrivalTime ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
                                                         />
                                                         <div className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 text-[8px] font-black uppercase tracking-widest pointer-events-none">ARR TIME</div>
                                                     </div>
                                                 </div>
+
+                                                {formData.hasNameBoard && (
+                                                    <div className="relative animate-slide-up">
+                                                        <input
+                                                            value={formData.nameBoardText || ''}
+                                                            onChange={e => setFormData({ ...formData, nameBoardText: e.target.value })}
+                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-8 rounded-3xl font-black text-sm uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.nameBoardText ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                            placeholder="NAME ON BOARD (e.g. MR. JOHN SMITH)"
+                                                        />
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
                                     </div>
