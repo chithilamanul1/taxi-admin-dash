@@ -73,6 +73,22 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [showModal, setShowModal] = useState(false)
     const [isVehicleDrawerOpen, setIsVehicleDrawerOpen] = useState(false)
     const [bookingInitialData, setBookingInitialData] = useState({})
+
+    const handleTabChange = (tabId) => {
+        setActiveTab(tabId);
+        const syncTab = ['pickup', 'drop'].includes(tabId) ? 'airport' : 'tour';
+        const event = new CustomEvent('syncCustomTourBooking', {
+            detail: {
+                tab: syncTab,
+                vehicleId: vehicle
+            }
+        });
+        window.dispatchEvent(event);
+        const element = document.getElementById('calculator');
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
     const [availableCoupons, setAvailableCoupons] = useState([])
     const [isLoadingCoupons, setIsLoadingCoupons] = useState(false)
     const [isCouponOpen, setIsCouponOpen] = useState(false)
@@ -590,7 +606,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             aria-controls={`panel-${tab.id}`}
                             id={`tab-${tab.id}`}
                             aria-label={`Switch to ${tab.label} tab`}
-                            onClick={() => setActiveTab(tab.id)}
+                            onClick={() => handleTabChange(tab.id)}
                             className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 md:gap-2.5 px-2 sm:px-6 py-3 rounded-xl text-[9px] sm:text-xs md:text-sm font-bold transition-all duration-300 ${activeTab === tab.id
                                 ? 'bg-white dark:bg-zinc-800 text-black dark:text-white shadow-sm border border-slate-200/60 dark:border-white/5'
                                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-white/5'
@@ -1401,6 +1417,18 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 onSelect={(vType) => {
                     setVehicle(vType);
                     setIsManualVehicle(true);
+                    const syncTab = ['pickup', 'drop'].includes(activeTab) ? 'airport' : 'tour';
+                    const event = new CustomEvent('syncCustomTourBooking', {
+                        detail: {
+                            tab: syncTab,
+                            vehicleId: vType
+                        }
+                    });
+                    window.dispatchEvent(event);
+                    const element = document.getElementById('calculator');
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                    }
                 }}
                 passengerCount={passengerCount}
                 isLoading={isLoadingPricing}

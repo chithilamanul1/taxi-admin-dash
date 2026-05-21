@@ -9,7 +9,7 @@ import { loadGoogleMapsScript } from '@/lib/google-maps';
 const displayVehicleName = (name) => (name || '').split('(')[0].trim();
 
 const RoundTripBooking = () => {
-  const [tab, setTab] = useState('airport');
+  const [tab, setTab] = useState('tour');
   const [vehicles, setVehicles] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
@@ -80,6 +80,24 @@ const RoundTripBooking = () => {
     taxiTourHours: 2,
     taxiTourKm: 40
   });
+
+  const syncWithCalculator = (targetTab, targetVehicle) => {
+    const syncTab = targetTab === 'airport' ? 'airport' : 'tour';
+    const vehicleId = targetVehicle?.id || selectedVehicle?.id;
+    const event = new CustomEvent('syncCustomTourBooking', {
+      detail: {
+        tab: syncTab,
+        vehicleId: vehicleId,
+        hours: formData.taxiTourHours,
+        km: formData.taxiTourKm
+      }
+    });
+    window.dispatchEvent(event);
+    const element = document.getElementById('calculator');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const updateDuration = (newHours) => {
     const kmMap = { 2: 40, 4: 80, 6: 120, 8: 160, 10: 200, 12: 300 };
@@ -205,9 +223,9 @@ const RoundTripBooking = () => {
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
       <div className="flex bg-slate-50 p-2 border-b border-slate-100">
-        <button onClick={() => setTab('airport')} className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'airport' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Plane size={18} /> Airport</button>
-        <button onClick={() => setTab('ride')} className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'ride' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Car size={18} /> Ride</button>
-        <button onClick={() => setTab('tour')} className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'tour' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Sparkles size={18} /> Taxi Round Tour</button>
+        <button onClick={() => { setTab('airport'); syncWithCalculator('airport', selectedVehicle); }} className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'airport' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Plane size={18} /> Airport</button>
+        <button onClick={() => { setTab('ride'); syncWithCalculator('ride', selectedVehicle); }} className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'ride' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Car size={18} /> Ride</button>
+        <button onClick={() => { setTab('tour'); syncWithCalculator('tour', selectedVehicle); }} className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'tour' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Sparkles size={18} /> Taxi Round Tour</button>
       </div>
 
       <div className="p-8 md:p-12 space-y-12">
@@ -217,7 +235,7 @@ const RoundTripBooking = () => {
           </div>
           <div className="flex bg-slate-100/50 dark:bg-white/5 p-1 rounded-2xl w-full mb-6 overflow-x-auto gap-1">
             {vehicles.map((v) => (
-              <button key={v.id} onClick={() => setSelectedVehicle(v)} className={`min-w-[80px] flex-1 py-3 px-2 rounded-xl text-center transition-all ${selectedVehicle?.id === v.id ? 'bg-white shadow-lg border border-slate-100' : 'text-slate-400 hover:text-emerald-600'}`}>
+              <button key={v.id} onClick={() => { setSelectedVehicle(v); syncWithCalculator(tab, v); }} className={`min-w-[80px] flex-1 py-3 px-2 rounded-xl text-center transition-all ${selectedVehicle?.id === v.id ? 'bg-white shadow-lg border border-slate-100' : 'text-slate-400 hover:text-emerald-600'}`}>
                 <div className="h-8 mb-1 flex items-center justify-center">{v.image && <img src={v.image} alt={v.name} className="h-full object-contain" />}</div>
                 <p className="text-[8px] font-black uppercase tracking-tight truncate">{v.name.split(' ')[0]}</p>
                 <p className="text-[9px] font-bold mt-0.5">Rs. {v.baseRate.toLocaleString()}</p>
