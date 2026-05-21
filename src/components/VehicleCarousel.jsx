@@ -1,8 +1,14 @@
-import React, { useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Users, Briefcase, ShoppingBag, Info, Lock, Wind, Backpack, Check, ArrowRight, Car } from 'lucide-react';
+import React, { useRef } from 'react';
+import { ChevronLeft, ChevronRight, Users, Briefcase, ShoppingBag, Wind, Lock, Check, ArrowRight } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
 
 const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
+
+const isMiniCar = (vehicle) => {
+    const t = (vehicle.vehicleType || '').toLowerCase();
+    const n = (vehicle.name || '').toLowerCase();
+    return t.includes('mini') || n.includes('mini') || n.includes('wagon');
+};
 
 const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, pickupLocation, dropoffLocation, isCondensed = false, onToggleExpand }) => {
     const scrollRef = useRef(null);
@@ -22,15 +28,14 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
         return getPriority(a.vehicleType) - getPriority(b.vehicleType);
     });
 
-    const displayVehicles = isCondensed && selectedId 
+    const displayVehicles = isCondensed && selectedId
         ? sortedVehicles.filter(v => v.vehicleType === selectedId)
         : sortedVehicles;
 
     const scroll = (direction) => {
         if (scrollRef.current) {
             const { current } = scrollRef;
-            const scrollAmount = 300;
-            current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+            scrollRef.current.scrollBy({ left: direction === 'left' ? -320 : 320, behavior: 'smooth' });
         }
     };
 
@@ -46,12 +51,10 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
 
         const spareSeats = Math.max(0, vehiclePax - totalPax);
         const extraBagCapacity = spareSeats * 2;
-
         const maxBagUnits = vehicleLargeBags + (vehicleSmallBags * 0.5) + extraBagCapacity;
 
-        if (totalPax > vehiclePax) return { suitable: false, reason: "Too many passengers" };
-        if (totalBags > maxBagUnits) return { suitable: false, reason: "Luggage limit exceeded" };
-
+        if (totalPax > vehiclePax) return { suitable: false, reason: 'Too many passengers' };
+        if (totalBags > maxBagUnits) return { suitable: false, reason: 'Luggage limit exceeded' };
         return { suitable: true };
     };
 
@@ -60,14 +63,14 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
         if (!vehicle) return null;
 
         return (
-            <div 
+            <div
                 className="relative bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-3 sm:p-4 flex items-center gap-3 sm:gap-6 animate-slide-up group/condensed shadow-sm cursor-pointer hover:shadow-md transition-all overflow-hidden"
                 onClick={onToggleExpand}
             >
                 <div className="w-16 sm:w-28 h-12 sm:h-20 bg-slate-50 dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-1.5 sm:p-2 shrink-0 overflow-hidden border border-slate-100 dark:border-white/5">
-                    <img 
-                        src={vehicle.image} 
-                        alt={vehicle.name} 
+                    <img
+                        src={vehicle.image}
+                        alt={vehicle.name}
                         className="w-full h-full object-contain scale-110 group-hover/condensed:scale-125 transition-transform duration-500"
                     />
                 </div>
@@ -102,106 +105,95 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
 
     return (
         <div className="relative group/carousel">
-            <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-8 md:mb-12 px-2 lg:px-0">
-                <div className="flex flex-col gap-4">
-                    {pickupLocation && dropoffLocation && (
-                        <div className="flex items-center gap-3 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-white dark:bg-zinc-900 rounded-2xl p-4 rounded-2xl border border-slate-100 dark:border-white/5 w-fit shadow-sm">
-                            <span className="truncate max-w-[120px] sm:max-w-xs">{pickupLocation.split(',')[0]}</span>
-                            <div className="flex items-center justify-center w-6 h-6 bg-emerald-600 rounded-full">
-                                <ArrowRight size={12} className="text-white" strokeWidth={3} />
-                            </div>
-                            <span className="truncate max-w-[120px] sm:max-w-xs">{dropoffLocation.split(',')[0]}</span>
-                        </div>
-                    )}
-
-                    <h3 className="text-2xl md:text-3xl font-black text-emerald-950 dark:text-white flex flex-wrap items-center gap-4 uppercase tracking-tight">
-                        Vehicle Options
-                        <span className="text-[10px] bg-emerald-600 text-white px-5 py-1.5 rounded-full tracking-[0.2em] font-bold shadow-lg">
-                            {displayVehicles.length} Units Available
-                        </span>
-                    </h3>
-                </div>
-            </div>
-
+            {/* Open Uber-style list — no outer box wrappers */}
             <div
                 ref={scrollRef}
-                className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 px-2 w-full no-scrollbar scroll-smooth"
+                className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 w-full no-scrollbar scroll-smooth"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-                {displayVehicles.map((vehicle, index) => {
+                {displayVehicles.map((vehicle) => {
                     const { suitable, reason } = isSuitable(vehicle);
                     const isSelected = selectedId === vehicle.vehicleType;
+                    const mini = isMiniCar(vehicle);
 
                     return (
                         <div
                             key={vehicle._id || vehicle.vehicleType}
-                            className={`
-                                relative flex-shrink-0 w-[85vw] sm:w-[400px] md:w-[350px] snap-start transition-all duration-500 group/card flex flex-col
-                                ${isSelected 
-                                    ? 'border border-slate-100 dark:border-white/10 bg-[#FACC15]/5 shadow-2xl shadow-slate-200/50 dark:shadow-none -translate-y-2' 
-                                    : 'border border-slate-100 dark:border-white/10 hover:-translate-y-2 hover:shadow-2xl hover:border-slate-200 dark:border-white/10/20'}
-                                ${!suitable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}
-                                bg-white dark:bg-zinc-900 rounded-[2.5rem]
-                                overflow-hidden h-full
-                            `}
                             onClick={() => suitable && onSelect(vehicle.vehicleType)}
+                            className={`
+                                relative flex-shrink-0 w-[72vw] sm:w-[260px] md:w-[230px] snap-start
+                                cursor-${suitable ? 'pointer' : 'not-allowed'}
+                                transition-all duration-300 group/card flex flex-col
+                                rounded-[2rem]
+                                ${!suitable ? 'opacity-50 grayscale' : ''}
+                                ${isSelected
+                                    ? 'ring-2 ring-[#FACC15] ring-offset-2 ring-offset-white dark:ring-offset-zinc-950 bg-[#FACC15]/5 shadow-lg shadow-[#FACC15]/10'
+                                    : 'hover:bg-slate-50 dark:hover:bg-white/5 hover:shadow-md'
+                                }
+                            `}
+                            style={{ contain: 'layout' }}
                         >
                             {!suitable && (
-                                <div className="absolute inset-0 z-30 bg-white dark:bg-zinc-900 rounded-[2.5rem]/60 dark:bg-black/60 backdrop-blur-[2px] flex flex-col items-center justify-center p-8 text-center">
-                                    <div className="w-16 h-16 bg-red-50 dark:bg-red-950/30 rounded-2xl mb-6 flex items-center justify-center border border-red-100 dark:border-red-900/20">
-                                        <Lock size={28} className="text-red-500" strokeWidth={2.5} />
+                                <div className="absolute inset-0 z-30 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-[2px] flex flex-col items-center justify-center p-6 text-center rounded-[2rem]">
+                                    <div className="w-12 h-12 bg-red-50 dark:bg-red-950/30 rounded-2xl mb-4 flex items-center justify-center border border-red-100 dark:border-red-900/20">
+                                        <Lock size={22} className="text-red-500" strokeWidth={2.5} />
                                     </div>
-                                    <p className="text-xl font-bold text-emerald-950 dark:text-white uppercase tracking-tight leading-tight">{reason}</p>
-                                    <p className="text-[10px] text-red-600 font-bold mt-4 uppercase tracking-[0.2em] bg-red-50 dark:bg-red-950/30 px-6 py-2 rounded-full border border-red-100 dark:border-red-900/20">Select Larger Vehicle</p>
+                                    <p className="text-sm font-bold text-emerald-950 dark:text-white uppercase tracking-tight leading-tight">{reason}</p>
+                                    <p className="text-[9px] text-red-600 font-bold mt-3 uppercase tracking-[0.2em] bg-red-50 dark:bg-red-950/30 px-4 py-1 rounded-full border border-red-100 dark:border-red-900/20">Select Larger Vehicle</p>
                                 </div>
                             )}
 
-                            <div className="p-4 sm:p-6 pb-2 relative flex flex-col items-center flex-1 h-full">
-                                <h4 className="text-lg sm:text-xl font-bold text-emerald-950 dark:text-white uppercase tracking-tight mb-1 text-center relative z-10">
+                            <div className="p-3 sm:p-4 pb-2 relative flex flex-col items-center flex-1">
+                                {/* Vehicle Name */}
+                                <h4 className="text-sm font-black text-emerald-950 dark:text-white uppercase tracking-tight mb-0.5 text-center relative z-10">
                                     {displayName(vehicle.name)}
                                 </h4>
-                                <p className="text-[9px] sm:text-[10px] font-bold text-black dark:text-white uppercase tracking-[0.2em] mb-2 sm:mb-4">Premium Class</p>
+                                <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-2">Premium Class</p>
 
+                                {/* Pricing */}
                                 {vehicle.calculatedTotal >= 0 && (
-                                    <div className="text-center relative z-10 flex flex-col items-center mb-4">
-                                        <div className="flex items-baseline justify-center gap-1 sm:gap-2">
-                                            <span className="text-xl font-black text-[#FACC15]">{convertPrice(Number(vehicle.calculatedTotal) || 0).symbol}</span>
-                                            <span className="text-5xl font-black text-black dark:text-white tracking-tighter leading-none">
+                                    <div className="text-center relative z-10 flex flex-col items-center mb-2">
+                                        <div className="flex items-baseline justify-center gap-1">
+                                            <span className="text-sm font-black text-[#FACC15]">{convertPrice(Number(vehicle.calculatedTotal) || 0).symbol}</span>
+                                            <span className="text-3xl font-black text-black dark:text-white tracking-tighter leading-none">
                                                 {(Number(convertPrice(Number(vehicle.calculatedTotal) || 0).value) || 0).toLocaleString()}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-3 mt-3 text-[11px] font-black !text-black dark:!text-white uppercase tracking-widest">
-                                            {['USD', 'EUR', 'GBP', 'LKR'].filter(c => c !== currency).slice(0, 2).map((c, i) => {
+                                        <div className="flex items-center gap-2 mt-1.5 text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                                            {['USD', 'EUR', 'LKR'].filter(c => c !== currency).slice(0, 1).map((c) => {
                                                 const rate = rates[c] || 1;
-                                                const symbol = c === 'USD' ? '$' : c === 'EUR' ? '€' : c === 'GBP' ? '£' : 'Rs';
+                                                const symbol = c === 'USD' ? '$' : c === 'EUR' ? '€' : 'Rs';
                                                 return (
-                                                    <React.Fragment key={c}>
-                                                        {i > 0 && <span className="opacity-20">•</span>}
-                                                        <span className="!text-black dark:!text-white">
-                                                            {symbol} {(vehicle.calculatedTotal * rate).toLocaleString(undefined, { minimumFractionDigits: (c === 'LKR' ? 0 : 2), maximumFractionDigits: (c === 'LKR' ? 0 : 2) })}
-                                                        </span>
-                                                    </React.Fragment>
+                                                    <span key={c} className="text-slate-400">
+                                                        {symbol} {(vehicle.calculatedTotal * rate).toLocaleString(undefined, { minimumFractionDigits: c === 'LKR' ? 0 : 2, maximumFractionDigits: c === 'LKR' ? 0 : 2 })}
+                                                    </span>
                                                 );
                                             })}
                                         </div>
                                     </div>
                                 )}
 
-                                <div className="w-full flex justify-center items-center py-2 relative z-10 mt-auto min-h-[140px] sm:min-h-[180px]">
+                                {/* Vehicle Image — Wagon R (mini-car) stays bigger */}
+                                <div className={`w-full flex justify-center items-center relative z-10 mt-auto ${mini ? 'min-h-[120px] sm:min-h-[140px] py-1' : 'min-h-[90px] sm:min-h-[110px] py-1'}`}>
                                     <img
                                         src={vehicle.image}
                                         alt={vehicle.name}
                                         className={`
-                                            w-[98%] sm:w-[95%] h-[160px] sm:h-[200px] object-contain
-                                            transition-transform duration-700
-                                            ${(vehicle.vehicleType === 'sedan' || vehicle.name?.toLowerCase().includes('sedan')) ? 'scale-[1.65] sm:scale-[1.75]' : (isSelected ? 'scale-[1.4] sm:scale-[1.5]' : 'scale-125 group-hover/card:scale-[1.35]')}
+                                            object-contain transition-transform duration-500
+                                            ${mini
+                                                ? 'w-[95%] h-[110px] sm:h-[130px] scale-[1.2] sm:scale-[1.3] group-hover/card:scale-[1.35]'
+                                                : (vehicle.vehicleType === 'sedan' || (vehicle.name || '').toLowerCase().includes('sedan'))
+                                                    ? 'w-[90%] h-[80px] sm:h-[95px] scale-[1.35] sm:scale-[1.45]'
+                                                    : `w-[88%] h-[75px] sm:h-[90px] ${isSelected ? 'scale-[1.2] sm:scale-[1.25]' : 'scale-105 group-hover/card:scale-[1.15]'}`
+                                            }
                                         `}
                                     />
                                 </div>
                             </div>
 
-                            <div className="px-4 sm:px-6 pb-6 mt-2 relative z-40 shrink-0">
-                                <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+                            {/* Specs & CTA */}
+                            <div className="px-3 sm:px-4 pb-4 mt-1 relative z-10 shrink-0">
+                                <div className="grid grid-cols-4 gap-1">
                                     {[
                                         { icon: Users, label: 'PAX', value: vehicle.capacity || 4 },
                                         { icon: Briefcase, label: 'LUG', value: vehicle.suitcases || 2 },
@@ -209,50 +201,48 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                         { icon: Wind, label: 'AC', value: 'ON' }
                                     ].map((item, i) => (
                                         <div key={i} className={`
-                                            bg-slate-50 dark:bg-white dark:bg-zinc-900 rounded-2xl rounded-2xl p-3 
-                                            flex flex-col items-center justify-center 
-                                            transition-all duration-300 border border-slate-100 dark:border-white/5
-                                            ${isSelected ? 'bg-[#FACC15] text-black border-slate-200 dark:border-white/10 shadow-lg' : 'group-hover/card:border-slate-200 dark:border-white/10/10'}
+                                            rounded-xl p-2 flex flex-col items-center justify-center border transition-all duration-300
+                                            ${isSelected
+                                                ? 'bg-[#FACC15] text-black border-[#FACC15] shadow'
+                                                : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 group-hover/card:border-slate-200 dark:group-hover/card:border-white/20'
+                                            }
                                         `}>
-                                            <item.icon size={14} className={`${isSelected ? 'text-black' : 'text-slate-400'} mb-1`} strokeWidth={3} />
-                                            <span className={`text-[10px] font-black leading-none mt-1 ${isSelected ? 'text-black' : 'text-black dark:text-white'}`}>{item.value}</span>
-                                            <span className={`text-[7px] font-bold uppercase tracking-widest leading-none mt-1 ${isSelected ? 'text-black/60' : 'text-slate-400'}`}>{item.label}</span>
+                                            <item.icon size={11} className={`${isSelected ? 'text-black' : 'text-slate-400'} mb-0.5`} strokeWidth={3} />
+                                            <span className={`text-[9px] font-black leading-none ${isSelected ? 'text-black' : 'text-black dark:text-white'}`}>{item.value}</span>
+                                            <span className={`text-[6px] font-bold uppercase tracking-widest leading-none mt-0.5 ${isSelected ? 'text-black/60' : 'text-slate-400'}`}>{item.label}</span>
                                         </div>
                                     ))}
                                 </div>
-                                
-                                <div className="relative group/help">
-                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#FACC15] text-black text-[9px] font-black px-4 py-2 rounded-xl border border-slate-100 dark:border-white/10 shadow-lg whitespace-nowrap opacity-0 group-hover/card:opacity-100 transition-all transform translate-y-2 group-hover/card:translate-y-0 z-50">
-                                        NEED HELP?
-                                        <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#FACC15] border-r-2 border-b-2 border-slate-200 dark:border-white/10 rotate-45"></div>
-                                    </div>
-                                    <div className={`w-full py-5 text-center rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all border border-slate-100 dark:border-white/10
-                                        ${isSelected 
-                                            ? 'bg-[#FACC15] text-black border-slate-200 dark:border-white/10 shadow-xl' 
-                                            : 'bg-white dark:bg-zinc-900 rounded-[2.5rem] dark:bg-zinc-800 text-black dark:text-white border-slate-200 dark:border-white/10 hover:bg-[#FACC15] hover:text-black hover:shadow-xl'}`}
-                                    >
-                                        {isSelected ? 'SELECTED ✓' : 'SELECT RIDE'}
-                                    </div>
-                                </div>
+
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); suitable && onSelect(vehicle.vehicleType); }}
+                                    className={`w-full mt-2 py-3 text-center rounded-xl font-black text-[10px] uppercase tracking-widest transition-all border
+                                        ${isSelected
+                                            ? 'bg-[#FACC15] text-black border-[#FACC15] shadow-md'
+                                            : 'bg-white dark:bg-zinc-900 text-black dark:text-white border-slate-200 dark:border-white/10 hover:bg-[#FACC15] hover:text-black hover:border-[#FACC15] hover:shadow-md'
+                                        }`}
+                                >
+                                    {isSelected ? 'SELECTED ✓' : 'SELECT'}
+                                </button>
                             </div>
                         </div>
                     );
                 })}
             </div>
 
-            {/* Carousel Navigation Buttons */}
-            <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between pointer-events-none px-4">
-                <button 
+            {/* Carousel Nav Buttons */}
+            <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 left-0 right-0 justify-between pointer-events-none px-1">
+                <button
                     onClick={() => scroll('left')}
-                    className="w-12 h-12 rounded-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md border border-slate-200 dark:border-white/10 flex items-center justify-center text-emerald-950 dark:text-white shadow-lg pointer-events-auto hover:bg-emerald-600 hover:text-white transition-all active:scale-95"
+                    className="w-10 h-10 rounded-full bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md border border-slate-200 dark:border-white/10 flex items-center justify-center text-emerald-950 dark:text-white shadow pointer-events-auto hover:bg-[#FACC15] hover:text-black transition-all active:scale-95"
                 >
-                    <ChevronLeft size={24} />
+                    <ChevronLeft size={20} />
                 </button>
-                <button 
+                <button
                     onClick={() => scroll('right')}
-                    className="w-12 h-12 rounded-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md border border-slate-200 dark:border-white/10 flex items-center justify-center text-emerald-950 dark:text-white shadow-lg pointer-events-auto hover:bg-emerald-600 hover:text-white transition-all active:scale-95"
+                    className="w-10 h-10 rounded-full bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md border border-slate-200 dark:border-white/10 flex items-center justify-center text-emerald-950 dark:text-white shadow pointer-events-auto hover:bg-[#FACC15] hover:text-black transition-all active:scale-95"
                 >
-                    <ChevronRight size={24} />
+                    <ChevronRight size={20} />
                 </button>
             </div>
         </div>

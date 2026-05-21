@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
 import { useCurrency } from '../context/CurrencyContext';
-import { calculateBasePrice, calculateSurcharges, calculatePaymentFees, calculateTrafficSurge } from '../lib/pricing-util';
+import { calculateBasePrice, calculateSurcharges, calculatePaymentFees, calculateTrafficSurge, TAXI_TOUR_PACKAGES } from '../lib/pricing-util';
 import LocationInput from './LocationInput';
 import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
@@ -117,6 +117,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         dropoffCoords: initialData.dropoffCoords || null,
         tripType: initialData.tripType || 'one-way',
         roundTripPackageId: initialData.roundTripPackageId || null,
+        taxiTourHours: initialData.taxiTourHours || 4,
+        taxiTourKm: initialData.taxiTourKm || 80,
         passengerCount: initialData.passengerCount || { adults: 1, children: 0, luggage: 0, handLuggage: 0 },
         hasNameBoard: (initialData.hasNameBoard === true || initialData.hasNameBoard === false) ? initialData.hasNameBoard : null,
         nameBoardText: initialData.nameBoardText || '',
@@ -364,7 +366,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         return pricing.map(v => {
             const baseTotal = calculateBasePrice(distKm, v, formData.tripType, formData.pickup, formData.dropoff, destinations, { 
                 roundTripPackageId: formData.roundTripPackageId,
-                roundTripPackages: pricingSettings?.roundTripPackages 
+                roundTripPackages: pricingSettings?.roundTripPackages,
+                taxiTourHours: formData.taxiTourHours,
+                taxiTourKm: formData.taxiTourKm
             });
             const surcharges = calculateSurcharges({
                 hasNameBoard: formData.hasNameBoard,
@@ -433,7 +437,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 calculatedTotal: totalLKR
             };
         });
-    }, [pricing, distance, formData.tripType, formData.pickup, formData.dropoff, destinations, formData.hasNameBoard, pricingSettings, formData.paymentMethod, currency, verifiedCoupons, initialData]);
+    }, [pricing, distance, formData.tripType, formData.pickup, formData.dropoff, destinations, formData.hasNameBoard, pricingSettings, formData.paymentMethod, currency, verifiedCoupons, initialData, formData.roundTripPackageId, formData.taxiTourHours, formData.taxiTourKm]);
 
     const { total: totalPrice, subtotal, surcharges, payNow, balance: balanceAmount, ...detailedBreakdown } = useMemo(() => {
         return getPriceBreakdown();
@@ -493,10 +497,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
     const validateForm = (targetStep) => {
         const newErrors = {};
+        const isAirportPickup = (formData.pickup?.toLowerCase().includes('airport') || (typeof initialData.pickup === 'string' && initialData.pickup.toLowerCase().includes('airport')));
+
         if (targetStep >= 1) {
             if (!formData.pickup) newErrors.pickup = true;
             if (!formData.dropoff) newErrors.dropoff = true;
-            if (isAirportService && initialData.isAirportPickup) {
+            if (isAirportPickup) {
                 if (formData.hasNameBoard === null) newErrors.hasNameBoard = true;
                 if (!formData.flightNumber) newErrors.flightNumber = true;
                 if (!formData.flightArrivalTime) newErrors.flightArrivalTime = true;
@@ -507,10 +513,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             if (!formData.name) newErrors.name = true;
             if (!formData.phone) newErrors.phone = true;
             if (!formData.email) newErrors.email = true;
-            if (isAirportService || formData.hasNameBoard) {
+            if (isAirportPickup || formData.hasNameBoard) {
                 if (!formData.flightArrivalDate && !formData.date) newErrors.date = true;
                 if (!formData.flightArrivalTime && !formData.time) newErrors.time = true;
-                if (initialData.isAirportPickup && !formData.flightNumber) newErrors.flightNumber = true;
+                if (!formData.flightNumber) newErrors.flightNumber = true;
             }
             // Enforce luggage selection and adult count (Hard Stop)
             if (formData.passengerCount.luggage === undefined || formData.passengerCount.luggage === null) newErrors.luggage = true;
@@ -708,41 +714,61 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
                                         {formData.hasNameBoard !== null && (
                                             <div className="space-y-6 animate-slide-up pt-4">
+                                                {/* Flight Number — always required for airport pickup */}
+                                                <div className="space-y-3">
+                                                    <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.flightNumber ? 'text-red-500' : 'text-slate-500'}`}>
+                                                        ✈ Flight Number <span className="text-[#FACC15]">*Required</span>
+                                                    </label>
+                                                    <div className="relative">
+                                                        <input
+                                                            value={formData.flightNumber || ''}
+                                                            onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
+                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-xs placeholder:font-black ${errors.flightNumber ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                            placeholder="E.G. UL 504"
+                                                        />
+                                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                            <PlaneTakeoff size={20} strokeWidth={3} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Arrival Date & Time — large and prominent */}
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                                     <div className="space-y-3">
-                                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.flightNumber ? 'text-red-500' : 'text-slate-500'}`}>
-                                                            Flight Number (Required)
+                                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>
+                                                            Arrival Date
                                                         </label>
                                                         <div className="relative">
                                                             <input
-                                                                value={formData.flightNumber || ''}
-                                                                onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-xs placeholder:font-black ${errors.flightNumber ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
-                                                                placeholder="E.G. UL 504"
+                                                                type="date"
+                                                                value={formData.flightArrivalDate || formData.date || ''}
+                                                                onChange={e => setFormData(prev => ({ ...prev, flightArrivalDate: e.target.value, date: e.target.value }))}
+                                                                className={`w-full h-20 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-2xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.date ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
                                                             />
                                                             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                                <PlaneTakeoff size={20} strokeWidth={3} />
+                                                                <Calendar size={22} strokeWidth={3} />
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div className="space-y-3">
                                                         <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.flightArrivalTime ? 'text-red-500' : 'text-slate-500'}`}>
-                                                            Arrival Time (Required)
+                                                            Arrival Time <span className="text-[#FACC15]">*Required</span>
                                                         </label>
                                                         <div className="relative">
                                                             <input
                                                                 type="time"
                                                                 value={formData.flightArrivalTime || ''}
                                                                 onChange={e => setFormData(prev => ({ ...prev, flightArrivalTime: e.target.value, time: e.target.value }))}
-                                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.flightArrivalTime ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                                className={`w-full h-20 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-2xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.flightArrivalTime ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
                                                             />
                                                             <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                                <Clock size={20} strokeWidth={3} />
+                                                                <Clock size={22} strokeWidth={3} />
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
+                                                {/* Customer Name on Board — shown only when Name Board is selected */}
                                                 {formData.hasNameBoard && (
                                                     <div className="space-y-3 animate-slide-up">
                                                         <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.nameBoardText ? 'text-red-500' : 'text-slate-500'}`}>
@@ -786,7 +812,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     vehicles={pricingWithTotals}
                                     selectedId={formData.vehicle}
                                     onSelect={(v) => {
-                                        setFormData(prev => ({ ...prev, vehicle: v.vehicleType }));
+                                        // VehicleCarousel passes vehicleType string directly
+                                        const vehicleType = typeof v === 'string' ? v : v.vehicleType;
+                                        setFormData(prev => ({ ...prev, vehicle: vehicleType }));
                                         setIsFleetExpanded(false);
                                     }}
                                     passengerCount={formData.passengerCount}
@@ -795,6 +823,81 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     isCondensed={!isFleetExpanded && !!formData.vehicle}
                                     onToggleExpand={() => setIsFleetExpanded(true)}
                                 />
+
+                                {/* Live Price Breakdown on Step 1 */}
+                                {formData.vehicle && totalPrice > 0 && (
+                                    <div className="mt-8 bg-gradient-to-br from-zinc-950 to-zinc-900 text-white rounded-[2rem] p-6 sm:p-8 border border-white/5 shadow-2xl animate-slide-up">
+                                        <div className="flex items-center justify-between mb-5">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-8 h-8 rounded-xl bg-[#FACC15] flex items-center justify-center">
+                                                    <Coins size={14} className="text-black" strokeWidth={3} />
+                                                </div>
+                                                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-white/60">Estimated Total</span>
+                                            </div>
+                                            <span className="text-[9px] font-black uppercase tracking-widest text-white/30">Live Calculation</span>
+                                        </div>
+                                        <div className="flex items-baseline gap-2 mb-4">
+                                            <span className="text-2xl font-black text-[#FACC15]">{currentSymbol}</span>
+                                            <span className="text-5xl sm:text-6xl font-black tracking-tighter leading-none">{(Number(totalPrice) || 0).toLocaleString()}</span>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/10">
+                                            <div>
+                                                <p className="text-[8px] font-black uppercase tracking-widest text-white/40 mb-1">Base Fare</p>
+                                                <p className="text-sm font-black text-white">{currentSymbol} {(subtotal || 0).toLocaleString()}</p>
+                                            </div>
+                                            {(surcharges || 0) > 0 && (
+                                                <div>
+                                                    <p className="text-[8px] font-black uppercase tracking-widest text-white/40 mb-1">Add-ons</p>
+                                                    <p className="text-sm font-black text-[#FACC15]">+{currentSymbol} {(surcharges || 0).toLocaleString()}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                        {verifiedCoupons.length > 0 && (
+                                            <div className="mt-3 flex items-center gap-2 text-emerald-400">
+                                                <Tag size={12} />
+                                                <span className="text-[9px] font-black uppercase tracking-widest">Coupon "{verifiedCoupons[0].code}" Applied</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Arrival Date & Time for non-airport-pickup contexts */}
+                                {!isAirportService && (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6 pt-8 border-t border-slate-100 dark:border-white/10">
+                                        <div className="space-y-3">
+                                            <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>
+                                                Pickup Date
+                                            </label>
+                                            <div className="relative">
+                                                <input
+                                                    type="date"
+                                                    value={formData.date || ''}
+                                                    onChange={e => setFormData(prev => ({ ...prev, date: e.target.value, flightArrivalDate: e.target.value }))}
+                                                    className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-14 rounded-3xl font-black text-base sm:text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.date ? 'border-red-500' : ''}`}
+                                                />
+                                                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                    <Calendar size={20} strokeWidth={3} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="space-y-3">
+                                            <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>
+                                                Pickup Time
+                                            </label>
+                                            <div className="relative">
+                                                <input
+                                                    type="time"
+                                                    value={formData.time || ''}
+                                                    onChange={e => setFormData(prev => ({ ...prev, time: e.target.value, flightArrivalTime: e.target.value }))}
+                                                    className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-14 rounded-3xl font-black text-base sm:text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.time ? 'border-red-500' : ''}`}
+                                                />
+                                                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                    <Clock size={20} strokeWidth={3} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                                 
                                 <div className="space-y-6">
                                     <div className="flex items-center gap-4">
