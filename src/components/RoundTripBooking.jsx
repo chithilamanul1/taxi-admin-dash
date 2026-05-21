@@ -29,7 +29,7 @@ const RoundTripBooking = () => {
           const mapped = data.data.map(v => {
             let img = v.image || '/vehicles/placeholder.png';
             if (v.vehicleType === 'mini-car') img = '/vehicles/minicar.png';
-            if (v.vehicleType === 'sedan') img = '/vehicles/sedan_luxury.png';
+            if (v.vehicleType === 'sedan') img = '/vehicles/sedan2.png';
             if (v.vehicleType === 'vezel') img = '/vehicles/van.png';
             if (v.vehicleType === 'van') img = '/vehicles/van.png';
             if (v.vehicleType === 'suv') img = '/vehicles/sedan_luxury.png';

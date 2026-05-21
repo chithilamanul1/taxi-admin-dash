@@ -46,7 +46,7 @@ const CustomTourBooking = () => {
         if (data.success && data.data.length > 0) {
           const mapped = data.data.map(v => {
             let img = v.image || '/vehicles/placeholder.png';
-            if (v.vehicleType === 'sedan') img = '/vehicles/sedan_luxury.png';
+            if (v.vehicleType === 'sedan') img = '/vehicles/sedan2.png';
             if (v.vehicleType === 'mini-car') img = '/vehicles/minicar.png';
             return {
               ...v, // Preserve database-supplied tiers and other properties
@@ -64,7 +64,7 @@ const CustomTourBooking = () => {
         } else {
           const defaults = [
             { id: 'mini-car', name: 'MINI CAR', baseRate: 5000, perKm: 100, image: '/vehicles/minicar.png', capacity: 3, suitcases: 2 },
-            { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedan_luxury.png', capacity: 4, suitcases: 3 },
+            { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedan2.png', capacity: 4, suitcases: 3 },
             { id: 'vezel', name: 'HONDA VEZEL', baseRate: 8000, perKm: 135, image: '/vehicles/Hondavezel.png', capacity: 4, suitcases: 3 },
             { id: 'mini-van-every', name: 'MINI VAN (EVERY)', baseRate: 7000, perKm: 110, image: '/vehicles/susukievery.png', capacity: 4, suitcases: 4 },
             { id: 'mini-van-05', name: 'MINI VAN (5 SEATER)', baseRate: 7500, perKm: 130, image: '/vehicles/minivan5seat.png', capacity: 5, suitcases: 5 },
