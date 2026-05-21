@@ -46,6 +46,8 @@ const CustomTourBooking = () => {
         if (data.success && data.data.length > 0) {
           const mapped = data.data.map(v => {
             let img = v.image || '/vehicles/placeholder.png';
+            if (v.vehicleType === 'sedan') img = '/vehicles/sedan_luxury.png';
+            if (v.vehicleType === 'mini-car') img = '/vehicles/minicar.png';
             return {
               ...v, // Preserve database-supplied tiers and other properties
               id: v.vehicleType,
@@ -62,7 +64,7 @@ const CustomTourBooking = () => {
         } else {
           const defaults = [
             { id: 'mini-car', name: 'MINI CAR', baseRate: 5000, perKm: 100, image: '/vehicles/minicar.png', capacity: 3, suitcases: 2 },
-            { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedancar.png', capacity: 4, suitcases: 3 },
+            { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedan_luxury.png', capacity: 4, suitcases: 3 },
             { id: 'vezel', name: 'HONDA VEZEL', baseRate: 8000, perKm: 135, image: '/vehicles/Hondavezel.png', capacity: 4, suitcases: 3 },
             { id: 'mini-van-every', name: 'MINI VAN (EVERY)', baseRate: 7000, perKm: 110, image: '/vehicles/susukievery.png', capacity: 4, suitcases: 4 },
             { id: 'mini-van-05', name: 'MINI VAN (5 SEATER)', baseRate: 7500, perKm: 130, image: '/vehicles/minivan5seat.png', capacity: 5, suitcases: 5 },
@@ -79,7 +81,7 @@ const CustomTourBooking = () => {
         console.error("Error fetching vehicles:", err);
         const defaults = [
           { id: 'mini-car', name: 'MINI CAR', baseRate: 5000, perKm: 100, image: '/vehicles/minicar.png', capacity: 3, suitcases: 2 },
-          { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedancar.png', capacity: 4, suitcases: 3 },
+          { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedan_luxury.png', capacity: 4, suitcases: 3 },
           { id: 'vezel', name: 'HONDA VEZEL', baseRate: 8000, perKm: 135, image: '/vehicles/Hondavezel.png', capacity: 4, suitcases: 3 },
           { id: 'mini-van-every', name: 'MINI VAN (EVERY)', baseRate: 7000, perKm: 110, image: '/vehicles/susukievery.png', capacity: 4, suitcases: 4 },
           { id: 'mini-van-05', name: 'MINI VAN (5 SEATER)', baseRate: 7500, perKm: 130, image: '/vehicles/minivan5seat.png', capacity: 5, suitcases: 5 },
@@ -151,11 +153,28 @@ const CustomTourBooking = () => {
     };
   }, [vehicles]);
 
+    // Auto-fill/clear pickup location based on tab
+  useEffect(() => {
+    if (tab === 'airport') {
+      setLocations(prev => {
+        const newLocs = [...prev];
+        newLocs[0] = "Bandaranaike International Airport (CMB)";
+        return newLocs;
+      });
+    } else {
+      setLocations(prev => {
+        const newLocs = [...prev];
+        if (newLocs[0] === "Bandaranaike International Airport (CMB)") {
+          newLocs[0] = '';
+        }
+        return newLocs;
+      });
+    }
+  }, [tab]);
+
   // Update hours and dynamic KM limit defaults
   const updateDuration = (newHours) => {
-    const kmMap = { 1: 20, 2: 40, 3: 60, 4: 80, 6: 120, 8: 160, 10: 200, 12: 300 };
-    let newKm = kmMap[newHours] || newHours * 20;
-    if (newHours > 12) newKm = 300;
+    const newKm = newHours * 20;
     setFormData(prev => ({ ...prev, taxiTourHours: newHours, taxiTourKm: newKm }));
   };
 
@@ -223,43 +242,23 @@ const CustomTourBooking = () => {
   // Calculate pricing based on selected vehicle & hours & KM limit
   const calculateTotalForVehicle = (veh) => {
     if (!veh) return 0;
-    if (tab === 'tour') {
-      const tourPkg = TAXI_TOUR_PACKAGES.find(p => p.hours === Number(formData.taxiTourHours));
-      let basePrice = tourPkg ? tourPkg.price : (formData.taxiTourHours * 2500);
-      
-      // Scale dynamic rate slightly depending on vehicle class tier
-      if (veh.id === 'sedan') basePrice *= 1.2;
-      if (veh.id === 'vezel' || veh.id === 'suv') basePrice *= 1.4;
-      if (veh.id === 'mini-van-every' || veh.id === 'mini-van-05') basePrice *= 1.3;
-      if (veh.id === 'van' || veh.id === 'kdh-van') basePrice *= 1.7;
-      if (veh.id === 'mini-bus') basePrice *= 2.5;
-      if (veh.id === 'coach-bus') basePrice *= 4.5;
+    const tourPkg = TAXI_TOUR_PACKAGES.find(p => p.hours === Number(formData.taxiTourHours));
+    let basePrice = tourPkg ? tourPkg.price : (formData.taxiTourHours * 2500);
+    
+    // Scale dynamic rate slightly depending on vehicle class tier
+    if (veh.id === 'sedan') basePrice *= 1.2;
+    if (veh.id === 'vezel' || veh.id === 'suv') basePrice *= 1.4;
+    if (veh.id === 'mini-van-every' || veh.id === 'mini-van-05') basePrice *= 1.3;
+    if (veh.id === 'van' || veh.id === 'kdh-van') basePrice *= 1.7;
+    if (veh.id === 'mini-bus') basePrice *= 2.5;
+    if (veh.id === 'coach-bus') basePrice *= 4.5;
 
-      // Handle extra KMs if route exceeds selections
-      let total = basePrice;
-      if (distance > formData.taxiTourKm) {
-        total += (distance - formData.taxiTourKm) * (veh.perKmRate || veh.perKm || 100);
-      }
-      return Math.round(total);
-    } else {
-      // Airport Tour: matching main booking engine, using database overrides and traffic surge
-      const pickupName = locations[0] || '';
-      const dropoffName = locations[locations.length - 1] || '';
-      
-      const basePrice = calculateBasePrice(
-        distance || 0,
-        veh,
-        'round-trip',
-        pickupName,
-        dropoffName,
-        destinations
-      );
-
-      const surgePercent = calculateTrafficSurge(formData.time, formData.date, surgeRules, distance || 0);
-      const surgeAmount = surgePercent > 0 ? basePrice * (surgePercent / 100) : 0;
-
-      return Math.round(basePrice + surgeAmount);
+    // Handle extra KMs if route exceeds selections
+    let total = basePrice;
+    if (distance > formData.taxiTourKm) {
+      total += (distance - formData.taxiTourKm) * (veh.perKmRate || veh.perKm || 100);
     }
+    return Math.round(total);
   };
 
   const totalPrice = calculateTotalForVehicle(selectedVehicle);
@@ -307,7 +306,7 @@ const CustomTourBooking = () => {
       if (data.success) {
         // Open WhatsApp confirmation companion window
         try {
-          const tourTypeStr = tab === 'airport' ? 'Airport Round Tour' : 'Round Tour';
+          const tourTypeStr = tab === 'airport' ? 'AirPort Round TOUR' : 'Round TOUR';
           const message = `*New Tour Booking Request*%0A` + 
                           `*Type:* ${tourTypeStr}%0A` + 
                           `*Name:* ${formData.name}%0A` + 
@@ -404,10 +403,10 @@ const CustomTourBooking = () => {
 
   // Dynamic KM limits selection array
   const currentKmLimits = [
+    formData.taxiTourHours * 5,
     formData.taxiTourHours * 10,
     formData.taxiTourHours * 15,
-    formData.taxiTourHours * 20,
-    formData.taxiTourHours * 25
+    formData.taxiTourHours * 20
   ];
 
   return (
@@ -448,7 +447,7 @@ const CustomTourBooking = () => {
                       ? 'bg-white dark:bg-zinc-700 text-slate-900 dark:text-white shadow-md font-bold' 
                       : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                 >
-                  <Plane size={14} /> Airport Tour
+                  <Plane size={14} /> AirPort Round TOUR
                 </button>
                 <button 
                   type="button"
@@ -458,7 +457,7 @@ const CustomTourBooking = () => {
                       ? 'bg-white dark:bg-zinc-700 text-slate-900 dark:text-white shadow-md font-bold' 
                       : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                 >
-                  <Car size={14} /> Round Tour
+                  <Car size={14} /> Round TOUR
                 </button>
               </div>
             </div>
@@ -475,8 +474,20 @@ const CustomTourBooking = () => {
                 {vehicles.map((v) => {
                   const isActive = selectedVehicle?.id === v.id;
                   const dynamicPrice = calculateTotalForVehicle(v);
-                  const isWagonR = v.id === 'mini-car';
-                  const imageClass = isWagonR ? 'h-16 sm:h-20' : 'h-11 sm:h-13 my-2.5';
+                  const imageClass = 'h-16 sm:h-20';
+                  
+                  const isMini = v.id?.toLowerCase().includes('mini') || v.name?.toLowerCase().includes('mini') || v.name?.toLowerCase().includes('wagon');
+                  const isSedan = v.id?.toLowerCase().includes('sedan') || v.name?.toLowerCase().includes('sedan');
+                  
+                  let imgScale = 'scale-100';
+                  if (isSedan) {
+                    imgScale = 'scale-[1.35] sm:scale-[1.4]';
+                  } else if (isMini) {
+                    imgScale = 'scale-[1.05] sm:scale-[1.1]';
+                  } else {
+                    imgScale = 'scale-[1.1] sm:scale-[1.15]';
+                  }
+                  
                   return (
                     <button 
                       key={v.id} 
@@ -492,7 +503,7 @@ const CustomTourBooking = () => {
                         <img 
                           src={v.image || '/vehicles/minicar.png'} 
                           alt={v.name} 
-                          className="object-contain max-h-full max-w-full drop-shadow-sm select-none pointer-events-none"
+                          className={`object-contain max-h-full max-w-full drop-shadow-sm select-none pointer-events-none transition-transform duration-300 ${imgScale}`}
                         />
                       </div>
                       
@@ -511,57 +522,55 @@ const CustomTourBooking = () => {
             </div>
 
             {/* Stepper Selection & KM Limit (Step 1) */}
-            {tab === 'tour' && (
-              <div className="space-y-6 bg-slate-50/50 dark:bg-zinc-800/10 p-5 rounded-[2rem] border border-slate-100 dark:border-white/5">
-                {/* Stepper Selection */}
-                <div className="space-y-3">
-                  <label className="text-[10px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Select hours</label>
-                  <div className="flex items-center bg-white dark:bg-zinc-850 border border-slate-200/80 dark:border-white/10 p-2 rounded-3xl shadow-sm">
-                    <button 
-                      type="button"
-                      onClick={() => updateDuration(Math.max(1, formData.taxiTourHours - 1))} 
-                      className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-slate-600 dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
-                    >
-                      <Minus size={20} strokeWidth={3} />
-                    </button>
-                    <div className="flex-1 text-center font-black text-slate-800 dark:text-white flex items-center justify-center gap-2">
-                      <span className="text-2xl font-black">{formData.taxiTourHours}</span>
-                      <span className="text-xs uppercase tracking-widest text-slate-400 font-bold">hours</span>
-                    </div>
-                    <button 
-                      type="button"
-                      onClick={() => updateDuration(Math.min(12, formData.taxiTourHours + 1))} 
-                      className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-slate-600 dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
-                    >
-                      <Plus size={20} strokeWidth={3} />
-                    </button>
+            <div className="space-y-6 bg-slate-50/50 dark:bg-zinc-800/10 p-5 rounded-[2rem] border border-slate-100 dark:border-white/5">
+              {/* Stepper Selection */}
+              <div className="space-y-3">
+                <label className="text-[10px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Select hours</label>
+                <div className="flex items-center bg-white dark:bg-zinc-850 border border-slate-200/80 dark:border-white/10 p-2 rounded-3xl shadow-sm">
+                  <button 
+                    type="button"
+                    onClick={() => updateDuration(Math.max(1, formData.taxiTourHours - 1))} 
+                    className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-slate-600 dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
+                  >
+                    <Minus size={20} strokeWidth={3} />
+                  </button>
+                  <div className="flex-1 text-center font-black text-slate-800 dark:text-white flex items-center justify-center gap-2">
+                    <span className="text-2xl font-black">{formData.taxiTourHours}</span>
+                    <span className="text-xs uppercase tracking-widest text-slate-400 font-bold">hours</span>
                   </div>
-                </div>
-
-                {/* Dynamic KM selection */}
-                <div className="space-y-3">
-                  <label className="text-[10px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Select KM Limit</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {currentKmLimits.map((km) => {
-                      const isSelected = formData.taxiTourKm === km;
-                      return (
-                        <button
-                          type="button"
-                          key={km}
-                          onClick={() => setFormData(prev => ({ ...prev, taxiTourKm: km }))}
-                          className={`py-3.5 rounded-2xl text-[11px] font-black transition-all border text-center tracking-widest
-                            ${isSelected 
-                              ? 'bg-[#FACC15] text-black border-[#FACC15] shadow-md' 
-                              : 'bg-white dark:bg-zinc-850 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-white/10 hover:border-yellow-400'}`}
-                        >
-                          {km} KM
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <button 
+                    type="button"
+                    onClick={() => updateDuration(Math.min(12, formData.taxiTourHours + 1))} 
+                    className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-slate-600 dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
+                  >
+                    <Plus size={20} strokeWidth={3} />
+                  </button>
                 </div>
               </div>
-            )}
+
+              {/* Dynamic KM selection */}
+              <div className="space-y-3">
+                <label className="text-[10px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Select KM Limit</label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {currentKmLimits.map((km) => {
+                    const isSelected = formData.taxiTourKm === km;
+                    return (
+                      <button
+                        type="button"
+                        key={km}
+                        onClick={() => setFormData(prev => ({ ...prev, taxiTourKm: km }))}
+                        className={`py-3.5 rounded-2xl text-[11px] font-black transition-all border text-center tracking-widest
+                          ${isSelected 
+                            ? 'bg-[#FACC15] text-black border-[#FACC15] shadow-md' 
+                            : 'bg-white dark:bg-zinc-850 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-white/10 hover:border-yellow-400'}`}
+                      >
+                        {km} KM
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
 
             {/* Estimated Total Price Banner */}
             <div className="flex flex-wrap gap-4 items-center justify-between bg-emerald-500/5 dark:bg-emerald-500/10 p-5 rounded-[2rem] border border-emerald-500/10 mt-4">
