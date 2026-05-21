@@ -281,6 +281,12 @@ const CustomTourBooking = () => {
           waypoints: locations.slice(1, -1).map(l => ({ address: l })),
           vehicleType: selectedVehicle.id,
           tripType: 'round-trip',
+          type: 'tour',
+          tourDetails: {
+            tourId: `custom-tour-${formData.taxiTourHours}h-${formData.taxiTourKm}km`,
+            tourTitle: `${tab === 'airport' ? 'Airport' : 'Custom'} Round Tour (${formData.taxiTourHours}h / ${formData.taxiTourKm}km)`,
+            duration: `${formData.taxiTourHours} Hours`
+          },
           roundTripPackageId: tab === 'tour' ? `custom-tour-${formData.taxiTourHours}h` : 'airport-round-tour',
           passengerCount: { adults: formData.passengers, children: 0, luggage: formData.luggage, handLuggage: 0 },
           distanceKm: distance || formData.taxiTourKm,
@@ -508,7 +514,7 @@ const CustomTourBooking = () => {
                       </div>
                       
                       <p className="text-[10px] font-black uppercase tracking-widest text-slate-800 dark:text-white mb-0.5">{v.name}</p>
-                      <p className="text-xs font-black text-emerald-700 dark:text-emerald-400 mb-2">RS : {dynamicPrice.toLocaleString()}</p>
+                      <p className="text-xs font-black text-emerald-700 dark:text-emerald-400 mb-2">RS : {v.baseRate.toLocaleString()}</p>
                       
                       {/* Passenger capacity and baggage count details */}
                       <div className="flex items-center gap-4 text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-white/5 pt-2 w-full justify-center">
@@ -572,22 +578,7 @@ const CustomTourBooking = () => {
               </div>
             </div>
 
-            {/* Estimated Total Price Banner */}
-            <div className="flex flex-wrap gap-4 items-center justify-between bg-emerald-500/5 dark:bg-emerald-500/10 p-5 rounded-[2rem] border border-emerald-500/10 mt-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-emerald-500/10 dark:bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-sm">
-                  <Sparkles size={18} />
-                </div>
-                <div>
-                  <p className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Selected Vehicle</p>
-                  <p className="text-base font-black text-slate-800 dark:text-white uppercase">{selectedVehicle?.name}</p>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Estimated Total Fare</p>
-                <p className="text-2xl font-black text-emerald-700 dark:text-emerald-400">Rs. {totalPrice.toLocaleString()}.00</p>
-              </div>
-            </div>
+
 
             {/* Next Button */}
             <div className="pt-4 text-center">
