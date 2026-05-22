@@ -1148,9 +1148,20 @@ export default function AdminDashboard() {
                                                                 }}
                                                                 className="bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
                                                             >
-                                                                <option value="mini-car">Mini</option>
+                                                                <option value="mini-car">Wagon R (Mini Car)</option>
                                                                 <option value="sedan">Sedan</option>
-                                                                <option value="luxury-van">Vezel/Van</option>
+                                                                <option value="vezel">Vessel (Vezel)</option>
+                                                                <option value="suv">SUV</option>
+                                                                <option value="mini-van-05">Mini Van (5-Seater)</option>
+                                                                <option value="mini-van-every">Mini Van</option>
+                                                                <option value="kdh-van">KDH</option>
+                                                                <option value="kdh-flatroof">KDH Flatroof</option>
+                                                                <option value="kdh-highroof">High Roof</option>
+                                                                <option value="mini-bus">Mini Bus</option>
+                                                                <option value="bus">Bus</option>
+                                                                <option value="large-bus">Large Bus</option>
+                                                                <option value="coach-bus">Coach Bus</option>
+                                                                <option value="coster-coach">Coster Coach</option>
                                                             </select>
                                                         </td>
                                                         {[0, 1, 2, 3].map(tIdx => (
