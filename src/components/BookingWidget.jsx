@@ -838,24 +838,57 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             </div>
                                         </div>
                                         <div className="mb-6">
-                                            <div className="flex items-center justify-between mb-3 px-1">
+                                            <div className="flex items-center justify-between mb-4 px-1">
                                                 <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Select Vehicle</label>
-                                                <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest flex items-center gap-2"><Info size={10} strokeWidth={4} />SEE ALL OPTIONS</div>
+                                                <button
+                                                    onClick={() => setIsVehicleDrawerOpen(true)}
+                                                    className="bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20 text-[8px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1.5 shadow-sm hover:bg-emerald-100 hover:shadow transition-all"
+                                                >
+                                                    <Info size={10} strokeWidth={3} /> Fleet Specs
+                                                </button>
                                             </div>
-                                            <button onClick={() => setIsVehicleDrawerOpen(true)} className="w-full min-h-[4.5rem] sm:min-h-[5.5rem] py-3 px-4 sm:px-6 flex items-center justify-between bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all group overflow-hidden relative" aria-label="Select Vehicle">
-                                                <div className="flex items-center gap-4 sm:gap-6">
-                                                    <div className="w-20 h-16 sm:w-28 sm:h-20 rounded-2xl flex items-center justify-center p-0 shrink-0 bg-slate-50 dark:bg-zinc-900 border border-slate-100 dark:border-white/5">
-                                                        {vehiclePricing[vehicle]?.image ? (
-                                                            <div className="relative w-full h-full"><Image src={vehiclePricing[vehicle].image} alt={vehiclePricing[vehicle]?.name || "Vehicle"} fill className="object-contain scale-[1.5] sm:scale-160 drop-shadow-md group-hover:scale-175 transition-transform duration-500" sizes="(max-width: 640px) 88px, 112px" /></div>
-                                                        ) : <Car className="text-slate-300 dark:text-slate-600" size={24} />}
-                                                    </div>
-                                                    <div className="text-left">
-                                                        <p className="font-bold text-sm sm:text-base text-slate-800 dark:text-white uppercase tracking-wider leading-none mb-1.5">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
-                                                        <div className="flex items-center gap-2 text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest"><span>{vehiclePricing[vehicle]?.capacity || 4} Pax</span><span className="w-1 h-1 bg-slate-300 dark:bg-slate-600 rounded-full"></span><span>{vehiclePricing[vehicle]?.luggage || 2} Luggage</span></div>
-                                                    </div>
-                                                </div>
-                                                <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-zinc-900 text-slate-900 dark:text-white flex items-center justify-center group-hover:bg-amber-400 group-hover:text-white transition-all shrink-0 shadow-sm border border-slate-200 dark:border-white/5"><ChevronDown size={24} strokeWidth={4} /></div>
-                                            </button>
+                                            <VehicleCarousel
+                                                vehicles={Object.values(vehiclePricing).map(v => {
+                                                    const priceInfo = calculatePrice(
+                                                        distance,
+                                                        v.vehicleType,
+                                                        tripType,
+                                                        vehiclePricing,
+                                                        totalWaitingHours,
+                                                        false, // hasNameBoard removed from landing page
+                                                        nameBoardPrice,
+                                                        pickup?.name || pickupSearch,
+                                                        dropoff?.name || dropoffSearch,
+                                                        destinations,
+                                                        scheduledTime || currentTime,
+                                                        scheduledDate || currentDate,
+                                                        surgeRules,
+                                                        roundTripPackageId,
+                                                        pricingSettings.roundTripPackages
+                                                    );
+                                                    return {
+                                                        ...v,
+                                                        calculatedTotal: priceInfo.total
+                                                    };
+                                                })}
+                                                selectedId={vehicle}
+                                                onSelect={(vType) => {
+                                                    setVehicle(vType);
+                                                    setIsManualVehicle(true);
+                                                    const syncTab = ['pickup', 'drop'].includes(activeTab) ? 'airport' : 'tour';
+                                                    const event = new CustomEvent('syncCustomTourBooking', {
+                                                        detail: {
+                                                            tab: syncTab,
+                                                            vehicleId: vType
+                                                        }
+                                                    });
+                                                    window.dispatchEvent(event);
+                                                }}
+                                                passengerCount={passengerCount}
+                                                pickupLocation={pickup}
+                                                dropoffLocation={dropoff}
+                                                isCondensed={false}
+                                            />
                                         </div>
                                         <div className="flex items-center gap-3">
                                             <button onClick={() => setStep(1)} className="flex items-center justify-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white font-black text-xs uppercase tracking-widest px-5 py-4 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all" aria-label="Back to step 1">
