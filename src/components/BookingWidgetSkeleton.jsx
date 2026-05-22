@@ -33,23 +33,7 @@ export default function BookingWidgetSkeleton() {
 
                         {/* Step Progress Indicator Skeleton */}
                         <div className="flex items-center justify-between mb-6">
-                            {/* Step 1 — active */}
-                            <div className="flex items-center gap-2">
-                                <div className="w-7 h-7 rounded-full bg-emerald-600 flex items-center justify-center text-[10px] font-black text-white shadow-lg shadow-emerald-500/30">1</div>
-                                <span className="hidden sm:block text-[10px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400">Route</span>
-                            </div>
-                            <div className="flex-1 h-px mx-2 bg-slate-200 dark:bg-zinc-700" />
-                            {/* Step 2 — inactive */}
-                            <div className="flex items-center gap-2">
-                                <div className="w-7 h-7 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-[10px] font-black text-slate-400">2</div>
-                                <span className="hidden sm:block text-[10px] font-black uppercase tracking-widest text-slate-300 dark:text-slate-600">Details</span>
-                            </div>
-                            {/* Step 3 — mobile only */}
-                            <div className="flex lg:hidden items-center gap-2">
-                                <div className="flex-1 h-px mx-2 bg-slate-200 dark:bg-zinc-700" />
-                                <div className="w-7 h-7 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-[10px] font-black text-slate-400">3</div>
-                                <span className="hidden sm:block lg:hidden text-[10px] font-black uppercase tracking-widest text-slate-300 dark:text-slate-600">Review</span>
-                            </div>
+                            <div className="flex-1" />
                             {/* Currency placeholder */}
                             <div className="flex items-center gap-2 ml-4 shrink-0">
                                 <div className="flex items-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-[10px] font-bold text-slate-400 shadow-sm w-20">

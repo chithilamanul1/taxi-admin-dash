@@ -610,30 +610,34 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         <div className="flex-1 text-center lg:text-left min-w-0">
                             {/* Step indicator + currency row */}
                             <div className="flex items-center gap-2 mb-6">
-                                {[{n:1,label:'Route'},{n:2,label:'Details'},{n:3,label:'Review',mobileOnly:true}].map((s, i, arr) => (
-                                    <React.Fragment key={s.n}>
-                                        <button
-                                            onClick={() => s.n < step && setStep(s.n)}
-                                            className={`flex items-center gap-2 ${s.mobileOnly ? 'flex lg:hidden' : 'flex'} ${s.n < step ? 'cursor-pointer' : 'cursor-default'}`}
-                                            aria-label={`Step ${s.n}: ${s.label}`}
-                                        >
-                                            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-300 ${
-                                                step === s.n ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/30 scale-110' :
-                                                step > s.n ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' :
-                                                'bg-slate-100 dark:bg-zinc-800 text-slate-400'
-                                            }`}>
-                                                {step > s.n ? <Check size={12} strokeWidth={3}/> : s.n}
-                                            </div>
-                                            <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${
-                                                step === s.n ? 'text-emerald-700 dark:text-emerald-400' :
-                                                step > s.n ? 'text-slate-500' : 'text-slate-300 dark:text-slate-600'
-                                            } ${s.mobileOnly ? 'hidden sm:block lg:hidden' : 'hidden sm:block'}`}>{s.label}</span>
-                                        </button>
-                                        {i < arr.length - 1 && (
-                                            <div className={`flex-1 h-px transition-all duration-500 ${step > s.n ? 'bg-emerald-400' : 'bg-slate-200 dark:bg-zinc-700'} ${arr[i+1].mobileOnly ? 'flex lg:hidden' : ''}`} />
-                                        )}
-                                    </React.Fragment>
-                                ))}
+                                {step > 1 ? (
+                                    [{n:1,label:'Route'},{n:2,label:'Details'},{n:3,label:'Review',mobileOnly:true}].map((s, i, arr) => (
+                                        <React.Fragment key={s.n}>
+                                            <button
+                                                onClick={() => s.n < step && setStep(s.n)}
+                                                className={`flex items-center gap-2 ${s.mobileOnly ? 'flex lg:hidden' : 'flex'} ${s.n < step ? 'cursor-pointer' : 'cursor-default'}`}
+                                                aria-label={`Step ${s.n}: ${s.label}`}
+                                            >
+                                                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-300 ${
+                                                    step === s.n ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/30 scale-110' :
+                                                    step > s.n ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' :
+                                                    'bg-slate-100 dark:bg-zinc-800 text-slate-400'
+                                                }`}>
+                                                    {step > s.n ? <Check size={12} strokeWidth={3}/> : s.n}
+                                                </div>
+                                                <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${
+                                                    step === s.n ? 'text-emerald-700 dark:text-emerald-400' :
+                                                    step > s.n ? 'text-slate-500' : 'text-slate-300 dark:text-slate-600'
+                                                } ${s.mobileOnly ? 'hidden sm:block lg:hidden' : 'hidden sm:block'}`}>{s.label}</span>
+                                            </button>
+                                            {i < arr.length - 1 && (
+                                                <div className={`flex-1 h-px transition-all duration-500 ${step > s.n ? 'bg-emerald-400' : 'bg-slate-200 dark:bg-zinc-700'} ${arr[i+1].mobileOnly ? 'flex lg:hidden' : ''}`} />
+                                            )}
+                                        </React.Fragment>
+                                    ))
+                                ) : (
+                                    <div className="flex-1" />
+                                )}
                                 {/* Currency Selector */}
                                 <div className="relative ml-3 shrink-0">
                                     <button
@@ -757,6 +761,62 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         )}
                                                     </AnimatePresence>
                                                 </div>
+
+                                                {distance && distance > 0 && (
+                                                    <div className="mt-4 animate-slide-up space-y-4">
+                                                        <div className="flex items-center justify-between px-1">
+                                                            <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Select Vehicle</label>
+                                                            <button
+                                                                onClick={() => setIsVehicleDrawerOpen(true)}
+                                                                className="bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20 text-[8px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1.5 shadow-sm hover:bg-emerald-100 hover:shadow transition-all"
+                                                            >
+                                                                <Info size={10} strokeWidth={3} /> Fleet Specs
+                                                            </button>
+                                                        </div>
+                                                        <VehicleCarousel
+                                                            vehicles={Object.values(vehiclePricing).map(v => {
+                                                                const priceInfo = calculatePrice(
+                                                                    distance,
+                                                                    v.vehicleType,
+                                                                    tripType,
+                                                                    vehiclePricing,
+                                                                    totalWaitingHours,
+                                                                    false, // hasNameBoard removed from landing page
+                                                                    nameBoardPrice,
+                                                                    pickup?.name || pickupSearch,
+                                                                    dropoff?.name || dropoffSearch,
+                                                                    destinations,
+                                                                    scheduledTime || currentTime,
+                                                                    scheduledDate || currentDate,
+                                                                    surgeRules,
+                                                                    roundTripPackageId,
+                                                                    pricingSettings.roundTripPackages
+                                                                );
+                                                                return {
+                                                                    ...v,
+                                                                    calculatedTotal: priceInfo.total
+                                                                };
+                                                            })}
+                                                            selectedId={vehicle}
+                                                            onSelect={(vType) => {
+                                                                setVehicle(vType);
+                                                                setIsManualVehicle(true);
+                                                                const syncTab = ['pickup', 'drop'].includes(activeTab) ? 'airport' : 'tour';
+                                                                const event = new CustomEvent('syncCustomTourBooking', {
+                                                                    detail: {
+                                                                        tab: syncTab,
+                                                                        vehicleId: vType
+                                                                    }
+                                                                });
+                                                                window.dispatchEvent(event);
+                                                            }}
+                                                            passengerCount={passengerCount}
+                                                            pickupLocation={pickup}
+                                                            dropoffLocation={dropoff}
+                                                            isCondensed={false}
+                                                        />
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                         <div className="mt-6 flex items-center gap-3">
