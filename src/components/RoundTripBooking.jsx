@@ -9,7 +9,7 @@ import { loadGoogleMapsScript } from '@/lib/google-maps';
 const displayVehicleName = (name) => (name || '').split('(')[0].trim();
 
 const RoundTripBooking = () => {
-  const [tab, setTab] = useState('tour');
+  const [tab, setTab] = useState('airport-round-tour');
   const [vehicles, setVehicles] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
@@ -83,11 +83,10 @@ const RoundTripBooking = () => {
   });
 
   const syncWithCalculator = (targetTab, targetVehicle) => {
-    const syncTab = targetTab === 'airport' ? 'airport' : 'tour';
     const vehicleId = targetVehicle?.id || selectedVehicle?.id;
     const event = new CustomEvent('syncCustomTourBooking', {
       detail: {
-        tab: syncTab,
+        tab: targetTab,
         vehicleId: vehicleId,
         hours: formData.taxiTourHours,
         km: formData.taxiTourKm
@@ -158,17 +157,22 @@ const RoundTripBooking = () => {
 
   const calculateTotal = () => {
     if (!selectedVehicle) return 0;
-    if (tab === 'tour') {
-      const tourPkg = TAXI_TOUR_PACKAGES.find(p => p.hours === Number(formData.taxiTourHours));
-      if (tourPkg) {
-        let total = tourPkg.price;
-        if (distance > formData.taxiTourKm) { total += (distance - formData.taxiTourKm) * (selectedVehicle.perKm || 110); }
-        return Math.round(total);
+    
+    if (tab === 'airport-round-tour') {
+      const pkg = (pricingSettings?.airportRoundTripPackages || []).find(p => p.hours === Number(formData.taxiTourHours) && p.distance === Number(formData.taxiTourKm) && p.vehicleType === selectedVehicle.id);
+      if (pkg && pkg.price) return Math.round(pkg.price);
+    }
+    
+    if (tab === 'normal-round-tour') {
+      const pkg = (pricingSettings?.roundTripPackages || []).find(p => p.hours === Number(formData.taxiTourHours) && p.vehicleType === selectedVehicle.id);
+      if (pkg) {
+        const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
+        if (tier && tier.price) return Math.round(tier.price);
       }
     }
-    const base = selectedVehicle.baseRate;
-    const extraKm = Math.max(0, distance - 20);
-    return Math.round(base + (extraKm * selectedVehicle.perKm));
+    
+    // For destination-based or fallback
+    return selectedVehicle.baseRate || 0;
   };
 
   const totalPrice = calculateTotal();
@@ -185,9 +189,9 @@ const RoundTripBooking = () => {
         dropoffLocation: { address: locations[locations.length - 1] || 'Destination' },
         waypoints: locations.slice(1, -1).map(l => ({ address: l })),
         vehicleType: selectedVehicle.id,
-        tripType: 'round-trip',
-        type: tab === 'tour' ? 'tour' : 'transfer',
-        roundTripPackageId: tab === 'tour' ? `tour-${formData.taxiTourHours}h` : null,
+        tripType: tab,
+        type: 'tour',
+        roundTripPackageId: (tab === 'airport-round-tour' || tab === 'normal-round-tour') ? `tour-${formData.taxiTourHours}h` : null,
         passengerCount: { adults: formData.passengers, children: 0, luggage: 0, handLuggage: 0 },
         distanceKm: distance,
         totalPrice: totalPrice,
@@ -208,11 +212,17 @@ const RoundTripBooking = () => {
         notes: formData.notes
       };
 
-      if (tab === 'tour') {
+      if (tab === 'airport-round-tour' || tab === 'normal-round-tour') {
         payload.tourDetails = {
           tourId: `tour-${formData.taxiTourHours}h-${formData.taxiTourKm}km`,
-          tourTitle: `Taxi Round Tour (${formData.taxiTourHours}h / ${formData.taxiTourKm}km)`,
+          tourTitle: `${tab === 'airport-round-tour' ? 'Airport' : 'Normal'} Round Tour (${formData.taxiTourHours}h / ${formData.taxiTourKm}km)`,
           duration: `${formData.taxiTourHours} Hours`
+        };
+      } else if (tab === 'destination-based-tour') {
+        payload.tourDetails = {
+          tourId: `destination-tour`,
+          tourTitle: `Destination-Based Tour`,
+          duration: `Flat Rate`
         };
       }
 
@@ -269,10 +279,10 @@ const RoundTripBooking = () => {
 
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
-      <div className="flex bg-slate-50 p-2 border-b border-slate-100">
-        <button onClick={() => { setTab('airport'); syncWithCalculator('airport', selectedVehicle); }} className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'airport' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Plane size={18} /> Airport</button>
-        <button onClick={() => { setTab('ride'); syncWithCalculator('ride', selectedVehicle); }} className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'ride' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Car size={18} /> Ride</button>
-        <button onClick={() => { setTab('tour'); syncWithCalculator('tour', selectedVehicle); }} className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl transition-all font-black text-xs uppercase tracking-[0.2em] ${tab === 'tour' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Sparkles size={18} /> Taxi Round Tour</button>
+      <div className="flex bg-slate-50 p-2 border-b border-slate-100 overflow-x-auto gap-2">
+        <button onClick={() => { setTab('airport-round-tour'); syncWithCalculator('airport-round-tour', selectedVehicle); }} className={`flex-1 flex items-center justify-center gap-2 py-4 px-3 whitespace-nowrap rounded-2xl transition-all font-black text-[10px] uppercase tracking-[0.1em] ${tab === 'airport-round-tour' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Plane size={16} /> Airport Round Tour</button>
+        <button onClick={() => { setTab('normal-round-tour'); syncWithCalculator('normal-round-tour', selectedVehicle); }} className={`flex-1 flex items-center justify-center gap-2 py-4 px-3 whitespace-nowrap rounded-2xl transition-all font-black text-[10px] uppercase tracking-[0.1em] ${tab === 'normal-round-tour' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Sparkles size={16} /> Normal Round Tour</button>
+        <button onClick={() => { setTab('destination-based-tour'); syncWithCalculator('destination-based-tour', selectedVehicle); }} className={`flex-1 flex items-center justify-center gap-2 py-4 px-3 whitespace-nowrap rounded-2xl transition-all font-black text-[10px] uppercase tracking-[0.1em] ${tab === 'destination-based-tour' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><MapPin size={16} /> Destination-Based Tour</button>
       </div>
 
       <div className="p-8 md:p-12 space-y-12">
@@ -291,7 +301,7 @@ const RoundTripBooking = () => {
           </div>
         </section>
 
-        {tab === 'tour' && (
+        {(tab === 'airport-round-tour' || tab === 'normal-round-tour') && (
           <section className="animate-slide-up space-y-6 bg-slate-50/50 p-6 rounded-3xl border border-slate-100">
             <div className="flex items-center justify-between px-2">
               <div className="flex items-center gap-3"><Clock className="text-emerald-600" size={18} /><h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Duration & Limit</h4></div>

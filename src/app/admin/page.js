@@ -41,7 +41,7 @@ export default function AdminDashboard() {
     const [pricingCategory, setPricingCategory] = useState('airport-transfer')
     const [editingVehicle, setEditingVehicle] = useState(null)
     const [editForm, setEditForm] = useState({})
-    const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true, nameBoardPrice: 2000, waitingHourRate: 1000, roundTripPackages: [] })
+    const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true, nameBoardPrice: 2000, waitingHourRate: 1000, roundTripPackages: [], airportRoundTripPackages: [] })
 
     // Tours State
     const [tours, setTours] = useState([])
@@ -1083,9 +1083,140 @@ export default function AdminDashboard() {
                                     </div>
                                 </div>
 
+                                <div className="bg-emerald-50/50 border border-emerald-100 rounded-[2rem] p-6 sm:p-8 shadow-sm mb-6">
+                                    <div className="flex items-center justify-between mb-8">
+                                        <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Airport Round Tour Packages</h4>
+                                        <button 
+                                            onClick={() => {
+                                                const newPackage = { 
+                                                    id: `air-pkg-${Date.now()}`, 
+                                                    hours: 5,
+                                                    distance: 50, 
+                                                    vehicleType: 'mini-car',
+                                                    price: 0
+                                                };
+                                                setPricingSettings({ ...pricingSettings, airportRoundTripPackages: [...(pricingSettings.airportRoundTripPackages || []), newPackage] });
+                                            }}
+                                            className="px-6 py-3 bg-emerald-600 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-900/10 flex items-center gap-2"
+                                        >
+                                            <Plus size={16} strokeWidth={3} /> Add Airport Package
+                                        </button>
+                                    </div>
+
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left">
+                                            <thead>
+                                                <tr className="border-b border-emerald-100">
+                                                    <th className="pb-4 text-[10px] font-black text-emerald-800 uppercase tracking-widest">Hour Count</th>
+                                                    <th className="pb-4 text-[10px] font-black text-emerald-800 uppercase tracking-widest">KM Limit</th>
+                                                    <th className="pb-4 text-[10px] font-black text-emerald-800 uppercase tracking-widest">Vehicle</th>
+                                                    <th className="pb-4 text-[10px] font-black text-emerald-800 uppercase tracking-widest">Flat Price</th>
+                                                    <th className="pb-4 text-[10px] font-black text-emerald-800 uppercase tracking-widest text-right">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-emerald-50">
+                                                {(pricingSettings.airportRoundTripPackages || []).map((pkg, idx) => (
+                                                    <tr key={pkg.id} className="group hover:bg-emerald-50/50 transition-colors">
+                                                        <td className="py-4">
+                                                            <div className="flex items-center gap-2">
+                                                                <input 
+                                                                    type="number"
+                                                                    value={pkg.hours}
+                                                                    onChange={(e) => {
+                                                                        const updated = [...pricingSettings.airportRoundTripPackages];
+                                                                        updated[idx].hours = Number(e.target.value);
+                                                                        setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
+                                                                    }}
+                                                                    className="w-16 bg-white border border-emerald-200 rounded-lg px-2 py-1.5 text-xs font-black outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                                                />
+                                                                <span className="text-[10px] font-bold text-emerald-700 uppercase">Hrs</span>
+                                                            </div>
+                                                        </td>
+                                                        <td className="py-4">
+                                                            <div className="flex items-center gap-2">
+                                                                <input 
+                                                                    type="number"
+                                                                    value={pkg.distance}
+                                                                    onChange={(e) => {
+                                                                        const updated = [...pricingSettings.airportRoundTripPackages];
+                                                                        updated[idx].distance = Number(e.target.value);
+                                                                        setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
+                                                                    }}
+                                                                    className="w-16 bg-white border border-emerald-200 rounded-lg px-2 py-1.5 text-xs font-black outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                                                />
+                                                                <span className="text-[10px] font-bold text-emerald-700 uppercase">KM</span>
+                                                            </div>
+                                                        </td>
+                                                        <td className="py-4">
+                                                            <select 
+                                                                value={pkg.vehicleType || 'mini-car'}
+                                                                onChange={(e) => {
+                                                                    const updated = [...pricingSettings.airportRoundTripPackages];
+                                                                    updated[idx].vehicleType = e.target.value;
+                                                                    setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
+                                                                }}
+                                                                className="bg-white border border-emerald-200 rounded-lg px-2 py-1.5 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                                            >
+                                                                <option value="mini-car">Wagon R (Mini Car)</option>
+                                                                <option value="sedan">Sedan</option>
+                                                                <option value="vezel">Vessel (Vezel)</option>
+                                                                <option value="suv">SUV</option>
+                                                                <option value="mini-van-05">Mini Van (5-Seater)</option>
+                                                                <option value="mini-van-every">Mini Van</option>
+                                                                <option value="kdh-van">KDH</option>
+                                                                <option value="kdh-flatroof">KDH Flatroof</option>
+                                                                <option value="kdh-highroof">High Roof</option>
+                                                                <option value="mini-bus">Mini Bus</option>
+                                                                <option value="bus">Bus</option>
+                                                            </select>
+                                                        </td>
+                                                        <td className="py-4">
+                                                            <div className="flex items-center gap-1">
+                                                                <span className="text-[8px] font-black text-emerald-600">Rs.</span>
+                                                                <input 
+                                                                    type="number"
+                                                                    placeholder="Price"
+                                                                    value={pkg.price || 0}
+                                                                    onChange={(e) => {
+                                                                        const updated = [...pricingSettings.airportRoundTripPackages];
+                                                                        updated[idx].price = Number(e.target.value);
+                                                                        setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
+                                                                    }}
+                                                                    className="w-24 bg-white border border-emerald-200 rounded px-2 py-1.5 text-sm font-black text-emerald-600 outline-none focus:ring-2 focus:ring-emerald-500/20"
+                                                                />
+                                                            </div>
+                                                        </td>
+                                                        <td className="py-4 text-right">
+                                                            <button 
+                                                                onClick={() => {
+                                                                    const updated = pricingSettings.airportRoundTripPackages.filter((_, i) => i !== idx);
+                                                                    setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
+                                                                }}
+                                                                className="w-8 h-8 rounded-lg flex items-center justify-center text-emerald-400 hover:text-red-500 hover:bg-red-50 transition-all"
+                                                            >
+                                                                <X size={16} />
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    {(pricingSettings.airportRoundTripPackages || []).length === 0 && (
+                                        <div className="col-span-full py-12 flex flex-col items-center justify-center border-2 border-dashed border-emerald-200 rounded-3xl bg-white/50">
+                                            <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-400 mb-4">
+                                                <Route size={32} />
+                                            </div>
+                                            <p className="text-sm font-bold text-emerald-600 uppercase tracking-widest">No Airport Packages</p>
+                                            <p className="text-[10px] text-emerald-500 mt-1 uppercase">Click 'Add Airport Package' to create fixed flat-rate airport tours.</p>
+                                        </div>
+                                    )}
+                                </div>
+
                                 <div className="bg-white border border-slate-200 rounded-[2rem] p-6 sm:p-8 shadow-sm">
                                     <div className="flex items-center justify-between mb-8">
-                                        <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Package List</h4>
+                                        <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Normal Round Tour Packages</h4>
                                         <button 
                                             onClick={() => {
                                                 const newPackage = { 

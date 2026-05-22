@@ -21,25 +21,68 @@ export const TAXI_TOUR_PACKAGES = [
 
 export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '', dynamicDestinations = [], options = {}) => {
     const distKm = Math.ceil(Number(distanceKm) || 0);
-    const { roundTripPackageId, roundTripPackages: customPackages } = options;
-    const activePackages = customPackages || ROUND_TRIP_PACKAGES;
+    const { roundTripPackageId, roundTripPackages: normalPackages, airportRoundTripPackages } = options;
+    const activeNormalPackages = normalPackages || ROUND_TRIP_PACKAGES;
+    const activeAirportPackages = airportRoundTripPackages || [];
 
     // 1. Handle Package-based Round Trip Pricing
-    if (tripType === 'round-trip' && roundTripPackageId) {
-        // First check in taxi tour packages (new logic)
+    if (tripType === 'airport-round-tour' && roundTripPackageId) {
+        const pkg = activeAirportPackages.find(p => p.id === roundTripPackageId);
+        if (pkg) {
+            return Math.round(pkg.price || 0);
+        }
+    }
+
+    if (tripType === 'normal-round-tour' && roundTripPackageId) {
         if (options.taxiTourHours) {
-            const tourPkg = TAXI_TOUR_PACKAGES.find(p => p.hours === Number(options.taxiTourHours) && (p.distance === Number(options.taxiTourKm) || p.id === options.roundTripPackageId));
-            if (tourPkg) {
-                // Return exactly the static package price (no dynamic distance math)
-                return Math.round(tourPkg.price);
+            // Find specific matching package based on hours and km limit
+            const pkg = activeNormalPackages.find(p => 
+                p.hours === Number(options.taxiTourHours) && 
+                p.vehicleType === vehicleData.vehicleType
+            );
+            if (pkg) {
+                // Determine which tier matches the requested KM
+                const selectedKm = Number(options.taxiTourKm);
+                const matchingTier = (pkg.tiers || []).find(t => t.km === selectedKm);
+                if (matchingTier) {
+                    return Math.round(matchingTier.price || 0);
+                }
             }
         }
+    }
 
-        const pkg = activePackages.find(p => p.id === roundTripPackageId);
-        if (pkg) {
-            // Return exactly the static package price (no dynamic distance math)
-            return Math.round(pkg.price);
+    if (tripType === 'destination-based-tour') {
+        // Helper to check pricing data
+        const hasPricing = (d) => d && (d.price > 0 || (d.pricing && Object.keys(d.pricing).length > 0) || (typeof d.pricing?.get === 'function' && d.pricing.size > 0));
+        
+        // Use a simpler location matcher for early return
+        const normalize = (str) => (str || '').toLowerCase().replace(/sri lanka/g, '').replace(/[,.-]/g, ' ').replace(/\s+/g, ' ').trim();
+        const dropLower = normalize(dropoff);
+        const pickLower = normalize(pickup);
+        
+        const destMatch = (dynamicDestinations || []).find(d => {
+            const name = normalize(d.name);
+            const title = normalize(d.title);
+            if (!name && !title) return false;
+            return (name && (dropLower.includes(name) || pickLower.includes(name))) || 
+                   (title && (dropLower.includes(title) || pickLower.includes(title)));
+        });
+
+        if (destMatch && hasPricing(destMatch)) {
+            let vPricing = {};
+            if (destMatch.pricing) {
+                if (typeof destMatch.pricing.get === 'function') vPricing = Object.fromEntries(destMatch.pricing);
+                else vPricing = destMatch.pricing;
+            }
+            const vehicleSlug = vehicleData.vehicleSlug || vehicleData.vehicleType;
+            const fixedPrice = vPricing[vehicleSlug] || vPricing[vehicleData.vehicleType] || 0;
+            if (fixedPrice > 0) {
+                return Number(fixedPrice);
+            }
         }
+        
+        // If no fixed price mapped, return base price or 0
+        return Number(vehicleData.basePrice) || 0;
     }
 
     // If no distance/location, return vehicle base price to show "Starting From" rates
