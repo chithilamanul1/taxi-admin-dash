@@ -289,17 +289,18 @@ export async function sendBookingConfirmation(booking) {
     const dropoffShort = booking.dropoffLocation?.address?.split(',')[0] || 'Dropoff';
     const bookingId = booking._id?.toString().slice(-8).toUpperCase();
 
+    const isRoundTrip = booking.tripType === 'round-trip';
     const customerContent = `
         <!-- Hero Section -->
         <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
             <tr>
                 <td>
-                    ${components.badge('✓ Booking Confirmed', 'success')}
+                    ${components.badge(isRoundTrip ? '✓ Round Trip Confirmed' : '✓ Booking Confirmed', 'success')}
                     <h2 style="color: ${COLORS.text}; margin: 20px 0 10px; font-size: 24px; font-weight: 700;">
                         Thank You, ${booking.customerName?.split(' ')[0] || 'Traveler'}!
                     </h2>
                     <p style="color: ${COLORS.textMuted}; margin: 0; font-size: 14px;">
-                        Your airport transfer has been confirmed. Here are your trip details.
+                        Your ${isRoundTrip ? 'round trip' : 'airport transfer'} has been confirmed. Here are your ${isRoundTrip ? 'round trip details' : 'trip details'}.
                     </p>
                 </td>
             </tr>
@@ -309,7 +310,9 @@ export async function sendBookingConfirmation(booking) {
         <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, ${COLORS.primary}, #047857); border-radius: 16px; margin-bottom: 30px;">
             <tr>
                 <td style="padding: 24px; text-align: center;">
-                    <p style="margin: 0 0 8px; color: rgba(255,255,255,0.7); font-size: 11px; text-transform: uppercase; letter-spacing: 2px;">Booking Reference</p>
+                    <p style="margin: 0 0 8px; color: rgba(255,255,255,0.7); font-size: 11px; text-transform: uppercase; letter-spacing: 2px;">
+                        ${isRoundTrip ? 'Round Trip Reference' : 'Booking Reference'}
+                    </p>
                     <p style="margin: 0; color: #f4d47c; font-size: 32px; font-weight: 800; letter-spacing: 4px; font-family: monospace;">#${bookingId}</p>
                 </td>
             </tr>
@@ -415,8 +418,10 @@ export async function sendBookingConfirmation(booking) {
                 await transporter.sendMail({
                     from: FROM_EMAIL,
                     to: booking.customerEmail,
-                    subject: `✅ Booking Confirmed #${bookingId} - Airport Taxis`,
-                    html: getPremiumTemplate(customerContent, 'Booking Confirmation')
+                    subject: isRoundTrip 
+                        ? `✅ Round Trip Confirmed #${bookingId} - Airport Taxis`
+                        : `✅ Booking Confirmed #${bookingId} - Airport Taxis`,
+                    html: getPremiumTemplate(customerContent, isRoundTrip ? 'Round Trip Confirmation' : 'Booking Confirmation')
                 });
                 console.log('[Email] Booking confirmation sent to customer:', booking.customerEmail);
             } else {
@@ -440,7 +445,7 @@ export async function sendBookingConfirmation(booking) {
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 10px; border: 1px solid #064e3b; border-left: 10px solid #064e3b;">
             <tr>
                 <td style="background-color: #f0fdf4; color: #064e3b; padding: 12px 16px; font-size: 18px; font-weight: 800;">
-                    NEW BOOKING #${bookingId}
+                    ${isRoundTrip ? 'NEW ROUND TRIP' : 'NEW BOOKING'} #${bookingId}
                 </td>
             </tr>
         </table>
@@ -617,8 +622,8 @@ export async function sendBookingConfirmation(booking) {
             await transporter.sendMail({
                 from: FROM_EMAIL,
                 to: OWNER_EMAIL,
-                subject: `NEW BOOKING #${bookingId} | ${booking.customerName || 'Guest'} | ${booking.scheduledDate || 'Today'} `,
-                html: getPrintFriendlyTemplate(ownerContent, `Booking #${bookingId} `)
+                subject: `${isRoundTrip ? 'NEW ROUND TRIP' : 'NEW BOOKING'} #${bookingId} | ${booking.customerName || 'Guest'} | ${booking.scheduledDate || 'Today'} `,
+                html: getPrintFriendlyTemplate(ownerContent, isRoundTrip ? `Round Trip #${bookingId} ` : `Booking #${bookingId} `)
             });
             console.log('[Email] Print-friendly booking notification sent to owner');
         } else {

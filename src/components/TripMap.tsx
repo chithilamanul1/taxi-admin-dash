@@ -8,6 +8,7 @@ interface Point {
     address?: string;
     lat?: number | null;
     lon?: number | null;
+    lng?: number | null;
 }
 
 interface ResolvedPoint {
@@ -103,8 +104,9 @@ export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalcul
 
         const geocodePoint = async (point: Point | null): Promise<ResolvedPoint | null> => {
             if (!point) return null;
-            if (point.lat != null && point.lon != null) {
-                return { lat: parseFloat(point.lat.toString()), lng: parseFloat(point.lon.toString()), name: point.name || point.address };
+            const longitude = point.lng ?? point.lon;
+            if (point.lat != null && longitude != null) {
+                return { lat: parseFloat(point.lat.toString()), lng: parseFloat(longitude.toString()), name: point.name || point.address };
             }
             const searchValue = point.name || point.address;
             if (!searchValue) return null;

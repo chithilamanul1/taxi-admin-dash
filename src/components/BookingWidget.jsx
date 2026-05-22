@@ -148,28 +148,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                     setNameBoardPrice(response.meta.nameBoardPrice);
                 }
 
-                // Fetch Global Settings
-                try {
-                    const settingsRes = await fetch('/api/admin/pricing-settings', { cache: 'no-store' });
-                    const settingsData = await settingsRes.json();
-                    if (settingsData.success && settingsData.data) {
-                        setPricingSettings(settingsData.data);
-                    }
-                } catch (err) {
-                    console.error("Failed to fetch pricing settings", err);
-                }
-
-                // Fetch Surge Rules
-                try {
-                    const surgeRes = await fetch('/api/traffic-surge', { cache: 'no-store' });
-                    const surgeData = await surgeRes.json();
-                    if (surgeData.success) {
-                        setSurgeRules(surgeData.data);
-                    }
-                } catch (err) {
-                    console.error("Failed to fetch surge rules", err);
-                }
-
             } catch (error) { console.error(error); } finally { setIsLoadingPricing(false); }
         };
         if (activeTab !== 'tours') fetchPricing();
@@ -278,38 +256,41 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         // We could also set duration if needed
     }
 
-    // Fetch Marketing Offers & Destinations
+    // Fetch Marketing Offers, Destinations, Global Settings, Surge Rules, and Coupons on mount in parallel
     useEffect(() => {
-        fetch('/api/admin/marketing')
-            .then(res => res.json())
-            .then(data => {
-                if (data.offers) setActiveOffers(data.offers);
-            })
-            .catch(err => console.error("Error fetching offers:", err));
-
-        fetch('/api/admin/destinations')
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) setDestinations(data.data);
-            })
-            .catch(err => console.error("Error fetching destinations:", err));
-    }, []);
-
-    // Fetch Available Coupons for Widget
-    useEffect(() => {
-        const fetchCoupons = async () => {
+        const fetchGlobalData = async () => {
             setIsLoadingCoupons(true);
             try {
-                const res = await fetch('/api/coupons?public=true', { cache: 'no-store' });
-                const data = await res.json();
-                if (Array.isArray(data)) setAvailableCoupons(data);
-            } catch (e) {
-                console.error("Error fetching coupons:", e);
+                const [marketingRes, destinationsRes, settingsRes, surgeRes, couponsRes] = await Promise.all([
+                    fetch('/api/admin/marketing').then(r => r.json()).catch(err => { console.error("Error fetching offers:", err); return null; }),
+                    fetch('/api/admin/destinations').then(r => r.json()).catch(err => { console.error("Error fetching destinations:", err); return null; }),
+                    fetch('/api/admin/pricing-settings', { cache: 'no-store' }).then(r => r.json()).catch(err => { console.error("Failed to fetch pricing settings", err); return null; }),
+                    fetch('/api/traffic-surge', { cache: 'no-store' }).then(r => r.json()).catch(err => { console.error("Failed to fetch surge rules", err); return null; }),
+                    fetch('/api/coupons?public=true', { cache: 'no-store' }).then(r => r.json()).catch(err => { console.error("Error fetching coupons:", err); return null; })
+                ]);
+
+                if (marketingRes?.offers) {
+                    setActiveOffers(marketingRes.offers);
+                }
+                if (destinationsRes?.success && destinationsRes.data) {
+                    setDestinations(destinationsRes.data);
+                }
+                if (settingsRes?.success && settingsRes.data) {
+                    setPricingSettings(settingsRes.data);
+                }
+                if (surgeRes?.success && surgeRes.data) {
+                    setSurgeRules(surgeRes.data);
+                }
+                if (Array.isArray(couponsRes)) {
+                    setAvailableCoupons(couponsRes);
+                }
+            } catch (err) {
+                console.error("Error in BookingWidget mount fetch waterfall resolver:", err);
             } finally {
                 setIsLoadingCoupons(false);
             }
         };
-        fetchCoupons();
+        fetchGlobalData();
     }, []);
 
     // Dynamic Coupon Filtering based on Location

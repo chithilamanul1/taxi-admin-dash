@@ -5,9 +5,10 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, MapPin, Star, Compass, Clock, Users, ShieldCheck, Sparkles } from 'lucide-react'
+import BookingWidgetSkeleton from './BookingWidgetSkeleton'
 const BookingWidget = dynamic(() => import('./BookingWidget'), { 
     ssr: false,
-    loading: () => <div className="min-h-[650px] md:min-h-[750px] bg-slate-50 dark:bg-zinc-900 animate-pulse rounded-[2rem]" />
+    loading: () => <BookingWidgetSkeleton />
 })
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
 const CustomTourBooking = dynamic(() => import('./CustomTourBooking'), {
