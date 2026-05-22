@@ -108,7 +108,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
             {/* Open Uber-style list — no outer box wrappers */}
             <div
                 ref={scrollRef}
-                className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 w-full no-scrollbar scroll-smooth"
+                className="flex overflow-x-auto snap-x snap-mandatory gap-4 px-1 py-1 pb-4 w-full no-scrollbar scroll-smooth"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
                 {displayVehicles.map((vehicle) => {
@@ -124,11 +124,11 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 relative flex-shrink-0 w-[72vw] sm:w-[260px] md:w-[230px] snap-start
                                 cursor-${suitable ? 'pointer' : 'not-allowed'}
                                 transition-all duration-300 group/card flex flex-col
-                                rounded-[2rem]
+                                rounded-[2rem] bg-white dark:bg-zinc-900
                                 ${!suitable ? 'opacity-50 grayscale' : ''}
                                 ${isSelected
-                                    ? 'ring-2 ring-[#FACC15] ring-offset-2 ring-offset-white dark:ring-offset-zinc-950 bg-[#FACC15]/5 shadow-lg shadow-[#FACC15]/10'
-                                    : 'hover:bg-slate-50 dark:hover:bg-white/5 hover:shadow-md'
+                                    ? 'border-2 border-[#FACC15] bg-[#FACC15]/5 dark:bg-[#FACC15]/10 shadow-lg shadow-[#FACC15]/5'
+                                    : 'border-2 border-slate-100 dark:border-white/5 hover:border-slate-200 dark:hover:border-white/10 hover:shadow-md'
                                 }
                             `}
                             style={{ contain: 'layout' }}
