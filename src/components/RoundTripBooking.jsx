@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Clock, Navigation, ChevronRight, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles } from 'lucide-react';
+import { MapPin, Clock, Navigation, ChevronRight, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles, CreditCard } from 'lucide-react';
 import { TAXI_TOUR_PACKAGES } from '../lib/pricing-util';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
 
@@ -78,7 +78,8 @@ const RoundTripBooking = () => {
     phone: '',
     notes: '',
     taxiTourHours: 2,
-    taxiTourKm: 40
+    taxiTourKm: 40,
+    paymentMethod: 'card'
   });
 
   const syncWithCalculator = (targetTab, targetVehicle) => {
@@ -179,34 +180,80 @@ const RoundTripBooking = () => {
     }
     setIsBooking(true);
     try {
+      const payload = {
+        pickupLocation: { address: locations[0] || 'Pickup Location' },
+        dropoffLocation: { address: locations[locations.length - 1] || 'Destination' },
+        waypoints: locations.slice(1, -1).map(l => ({ address: l })),
+        vehicleType: selectedVehicle.id,
+        tripType: 'round-trip',
+        type: tab === 'tour' ? 'tour' : 'transfer',
+        roundTripPackageId: tab === 'tour' ? `tour-${formData.taxiTourHours}h` : null,
+        passengerCount: { adults: formData.passengers, children: 0, luggage: 0, handLuggage: 0 },
+        distanceKm: distance,
+        totalPrice: totalPrice,
+        paidAmount: formData.paymentMethod === 'cash' ? 0 : totalPrice,
+        balanceAmount: formData.paymentMethod === 'cash' ? totalPrice : 0,
+        displayPrice: totalPrice,
+        displayPaidAmount: formData.paymentMethod === 'cash' ? 0 : totalPrice,
+        displayBalanceAmount: formData.paymentMethod === 'cash' ? totalPrice : 0,
+        currency: 'LKR',
+        scheduledDate: formData.date,
+        scheduledTime: formData.time,
+        customerName: formData.name,
+        customerEmail: formData.email,
+        customerPhone: formData.phone,
+        whatsappNumber: formData.phone,
+        guestPhone: formData.phone,
+        paymentMethod: formData.paymentMethod,
+        notes: formData.notes
+      };
+
+      if (tab === 'tour') {
+        payload.tourDetails = {
+          tourId: `tour-${formData.taxiTourHours}h-${formData.taxiTourKm}km`,
+          tourTitle: `Taxi Round Tour (${formData.taxiTourHours}h / ${formData.taxiTourKm}km)`,
+          duration: `${formData.taxiTourHours} Hours`
+        };
+      }
+
       const res = await fetch('/api/payment/initiate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          pickupLocation: { address: locations[0] },
-          dropoffLocation: { address: locations[locations.length - 1] },
-          waypoints: locations.slice(1, -1).map(l => ({ address: l })),
-          vehicleType: selectedVehicle.id,
-          tripType: 'round-trip',
-          roundTripPackageId: tab === 'tour' ? `tour-${formData.taxiTourHours}h` : null,
-          passengerCount: { adults: formData.passengers, children: 0, luggage: 0, handLuggage: 0 },
-          distanceKm: distance,
-          totalPrice: totalPrice,
-          scheduledDate: formData.date,
-          scheduledTime: formData.time,
-          customerName: formData.name,
-          customerEmail: formData.email,
-          customerPhone: formData.phone,
-          notes: formData.notes
-        })
+        body: JSON.stringify(payload)
       });
       const data = await res.json();
       if (data.success) {
-        setIsBooked(true);
-        const message = `*New Booking Request*%0A` + `Type: Round Trip%0A` + `Name: ${formData.name}%0A` + `Vehicle: ${selectedVehicle.name}%0A` + `Price: Rs. ${totalPrice.toLocaleString()}`;
-        window.open(`https://wa.me/94768743357?text=${message}`, '_blank');
-      } else { alert(data.message || "Booking failed"); }
-    } catch (e) { alert("An error occurred"); } finally { setIsBooking(false); }
+        try {
+          const typeStr = tab === 'tour' ? 'Round TOUR' : tab === 'airport' ? 'Airport Round Trip' : 'Ride Round Trip';
+          const paymentStr = formData.paymentMethod === 'cash' ? 'Cash to Driver' : 'Pay Online (Card)';
+          let message = `*New Booking Request*%0A` + 
+                        `*Type:* ${typeStr}%0A` + 
+                        `*Name:* ${formData.name}%0A` + 
+                        `*WhatsApp:* ${formData.phone}%0A` + 
+                        `*Vehicle:* ${selectedVehicle.name}%0A`;
+          if (tab === 'tour') {
+            message += `*Hours:* ${formData.taxiTourHours} Hours%0A` + 
+                       `*KM Limit:* ${formData.taxiTourKm} KM%0A`;
+          }
+          message += `*Route:* ${locations.filter(Boolean).join(' ➔ ')}%0A` + 
+                     `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
+                     `*Payment:* ${paymentStr}%0A` + 
+                     `*Price:* Rs. ${totalPrice.toLocaleString()}`;
+          window.open(`https://wa.me/94768743357?text=${message}`, '_blank');
+        } catch (e) {
+          console.error("WhatsApp companion load blocked", e);
+        }
+
+        // Redirect to checkout or success URL
+        window.location.href = data.paymentUrl;
+      } else { 
+        alert(data.message || "Booking failed"); 
+      }
+    } catch (e) { 
+      alert("An error occurred"); 
+    } finally { 
+      setIsBooking(false); 
+    }
   };
 
   if (isBooked) {
@@ -317,6 +364,25 @@ const RoundTripBooking = () => {
             <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Email</label><input type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
             <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">WhatsApp</label><input type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
             <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Passengers</label><div className="flex items-center bg-slate-50 border border-slate-100 rounded-2xl p-1"><button onClick={() => setFormData({ ...formData, passengers: Math.max(1, formData.passengers - 1) })} className="w-10 h-10 flex items-center justify-center text-slate-400"><Minus size={16} /></button><div className="flex-1 text-center font-black text-emerald-950 text-[10px]">{formData.passengers}</div><button onClick={() => setFormData({ ...formData, passengers: Math.min(8, formData.passengers + 1) })} className="w-10 h-10 flex items-center justify-center text-slate-400"><Plus size={16} /></button></div></div>
+            <div className="space-y-1.5">
+              <label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Payment Method</label>
+              <div className="flex bg-slate-50 border border-slate-100 rounded-2xl p-1 h-12 items-center gap-1">
+                <button 
+                  type="button"
+                  onClick={() => setFormData({ ...formData, paymentMethod: 'card' })}
+                  className={`flex-1 h-full rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 ${formData.paymentMethod === 'card' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-400 hover:text-emerald-600'}`}
+                >
+                  <CreditCard size={14} /> Card
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => setFormData({ ...formData, paymentMethod: 'cash' })}
+                  className={`flex-1 h-full rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 ${formData.paymentMethod === 'cash' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-400 hover:text-emerald-600'}`}
+                >
+                  <Car size={14} /> Cash
+                </button>
+              </div>
+            </div>
           </div>
         </section>
 
