@@ -302,7 +302,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             }
 
             let longDistanceDiscountAmount = 0;
-            if (pricingSettings?.isActive && distKm > (pricingSettings?.longDistanceThreshold || 175) && isAirportPickup) {
+            if (pricingSettings?.isActive && Number(distKm) > Number(pricingSettings?.longDistanceThreshold || 175) && isAirportPickup) {
                 longDistanceDiscountAmount = total * ((pricingSettings?.longDistanceDiscountPercentage || 10) / 100);
             }
 
@@ -425,7 +425,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             }
 
             let longDistanceDiscountAmountLKR = 0;
-            if (pricingSettings?.isActive && distKm > (pricingSettings?.longDistanceThreshold || 175) && isAirportPickup) {
+            if (pricingSettings?.isActive && Number(distKm) > Number(pricingSettings?.longDistanceThreshold || 175) && isAirportPickup) {
                 longDistanceDiscountAmountLKR = totalLKR * ((pricingSettings?.longDistanceDiscountPercentage || 10) / 100);
             }
 

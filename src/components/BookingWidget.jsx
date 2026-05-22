@@ -432,7 +432,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 }
 
                 // PRIORITY 3: Automated Rules (e.g. 175km Discount)
-                if (pricingSettings.isActive && distance > pricingSettings.longDistanceThreshold) {
+                if (pricingSettings?.isActive && Number(distance) > Number(pricingSettings?.longDistanceThreshold || 175)) {
                     dynamicOffers.push({
                         _id: 'auto-long-distance',
                         name: 'Long Distance Discount',
@@ -856,7 +856,30 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 <div className="relative h-14 animate-slide-up">
                                                     <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                                                     <input type="text" placeholder="ENTER COUPON CODE" value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} className="w-full h-full pl-14 pr-24 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm font-bold outline-none uppercase text-emerald-950 dark:text-white placeholder:text-slate-500 tracking-widest focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner" aria-label="Coupon code" />
-                                                    <button onClick={async () => { if (!couponCode) return; const known = availableCoupons.find(c => c.code === couponCode); if (known) { const couponOffer = { _id: 'coupon-' + known.code, name: known.code, discountPercentage: known.discountType === 'percentage' ? known.value : 0, discountAmount: known.discountType === 'flat' ? known.value : 0, type: 'coupon' }; setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]); setCouponCode(''); setIsCouponOpen(false); } else { alert("Invalid or expired coupon code."); } }} aria-label="Apply Coupon" className="absolute right-2 top-2 bottom-2 bg-emerald-600 text-white px-6 rounded-xl text-[10px] font-black uppercase hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">Apply</button>
+                                                    <button onClick={async () => {
+                                                        if (!couponCode) return;
+                                                        const dest = (dropoff?.name || dropoffSearch || '').toLowerCase().trim();
+                                                        const start = (pickup?.name || pickupSearch || '').toLowerCase().trim();
+                                                        try {
+                                                            const res = await fetch('/api/coupons/validate', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({ code: couponCode, pickup: start, dropoff: dest })
+                                                            });
+                                                            const data = await res.json();
+                                                            if (data.valid) {
+                                                                const known = data.coupon;
+                                                                const couponOffer = { _id: 'coupon-' + known.code, name: known.code, discountPercentage: known.discountType === 'percentage' ? known.value : 0, discountAmount: known.discountType === 'flat' ? known.value : 0, type: 'coupon' };
+                                                                setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]);
+                                                                setCouponCode('');
+                                                                setIsCouponOpen(false);
+                                                            } else {
+                                                                alert(data.message || "Invalid or expired coupon code.");
+                                                            }
+                                                        } catch (e) {
+                                                            alert("Validation failed.");
+                                                        }
+                                                    }} aria-label="Apply Coupon" className="absolute right-2 top-2 bottom-2 bg-emerald-600 text-white px-6 rounded-xl text-[10px] font-black uppercase hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">Apply</button>
                                                 </div>
                                             )}
                                             {filteredCoupons.length > 0 && isCouponOpen && (
