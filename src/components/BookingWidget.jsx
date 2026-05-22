@@ -610,34 +610,30 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         <div className="flex-1 text-center lg:text-left min-w-0">
                             {/* Step indicator + currency row */}
                             <div className="flex items-center gap-2 mb-6">
-                                {step > 1 ? (
-                                    [{n:1,label:'Route'},{n:2,label:'Details'},{n:3,label:'Review',mobileOnly:true}].map((s, i, arr) => (
-                                        <React.Fragment key={s.n}>
-                                            <button
-                                                onClick={() => s.n < step && setStep(s.n)}
-                                                className={`flex items-center gap-2 ${s.mobileOnly ? 'flex lg:hidden' : 'flex'} ${s.n < step ? 'cursor-pointer' : 'cursor-default'}`}
-                                                aria-label={`Step ${s.n}: ${s.label}`}
-                                            >
-                                                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-300 ${
-                                                    step === s.n ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/30 scale-110' :
-                                                    step > s.n ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' :
-                                                    'bg-slate-100 dark:bg-zinc-800 text-slate-400'
-                                                }`}>
-                                                    {step > s.n ? <Check size={12} strokeWidth={3}/> : s.n}
-                                                </div>
-                                                <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${
-                                                    step === s.n ? 'text-emerald-700 dark:text-emerald-400' :
-                                                    step > s.n ? 'text-slate-500' : 'text-slate-300 dark:text-slate-600'
-                                                } ${s.mobileOnly ? 'hidden sm:block lg:hidden' : 'hidden sm:block'}`}>{s.label}</span>
-                                            </button>
-                                            {i < arr.length - 1 && (
-                                                <div className={`flex-1 h-px transition-all duration-500 ${step > s.n ? 'bg-emerald-400' : 'bg-slate-200 dark:bg-zinc-700'} ${arr[i+1].mobileOnly ? 'flex lg:hidden' : ''}`} />
-                                            )}
-                                        </React.Fragment>
-                                    ))
-                                ) : (
-                                    <div className="flex-1" />
-                                )}
+                                {[{n:1,label:'Route'},{n:2,label:'Details'},{n:3,label:'Review',mobileOnly:true}].map((s, i, arr) => (
+                                    <React.Fragment key={s.n}>
+                                        <button
+                                            onClick={() => s.n < step && setStep(s.n)}
+                                            className={`flex items-center gap-2 ${s.mobileOnly ? 'flex lg:hidden' : 'flex'} ${s.n < step ? 'cursor-pointer' : 'cursor-default'}`}
+                                            aria-label={`Step ${s.n}: ${s.label}`}
+                                        >
+                                            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-300 ${
+                                                step === s.n ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/30 scale-110' :
+                                                step > s.n ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' :
+                                                'bg-slate-100 dark:bg-zinc-800 text-slate-400'
+                                            }`}>
+                                                {step > s.n ? <Check size={12} strokeWidth={3}/> : s.n}
+                                            </div>
+                                            <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${
+                                                step === s.n ? 'text-emerald-700 dark:text-emerald-400' :
+                                                step > s.n ? 'text-slate-500' : 'text-slate-300 dark:text-slate-600'
+                                            } ${s.mobileOnly ? 'hidden sm:block lg:hidden' : 'hidden sm:block'}`}>{s.label}</span>
+                                        </button>
+                                        {i < arr.length - 1 && (
+                                            <div className={`flex-1 h-px transition-all duration-500 ${step > s.n ? 'bg-emerald-400' : 'bg-slate-200 dark:bg-zinc-700'} ${arr[i+1].mobileOnly ? 'flex lg:hidden' : ''}`} />
+                                        )}
+                                    </React.Fragment>
+                                ))}
                                 {/* Currency Selector */}
                                 <div className="relative ml-3 shrink-0">
                                     <button
