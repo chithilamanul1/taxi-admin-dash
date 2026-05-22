@@ -323,6 +323,26 @@ export default function DestinationManager() {
 
                                                 <div className="space-y-4">
                                                     <div className="space-y-1.5">
+                                                        <label className="text-[10px] font-black text-slate-400 tracking-widest uppercase pl-1">Fixed Flat Rate (LKR)</label>
+                                                        <div className="relative">
+                                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-600 font-black">LKR</span>
+                                                            <input
+                                                                type="number"
+                                                                className="w-full pl-14 pr-6 py-4 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-2xl text-lg font-black outline-none focus:ring-4 focus:ring-emerald-500/20 transition-all"
+                                                                value={form.pricing?.[selectedVehicle] || ''}
+                                                                onChange={e => setForm({
+                                                                    ...form,
+                                                                    pricing: {
+                                                                        ...(form.pricing || {}),
+                                                                        [selectedVehicle]: Number(e.target.value)
+                                                                    }
+                                                                })}
+                                                                placeholder="e.g. 15000 (Overrides KM calculation)"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="space-y-1.5">
                                                         <label className="text-[10px] font-black text-slate-400 tracking-widest uppercase pl-1">Custom Per-KM Rate (LKR)</label>
                                                         <div className="relative">
                                                             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-600 font-black">LKR</span>

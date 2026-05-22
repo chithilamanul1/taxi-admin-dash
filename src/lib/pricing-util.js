@@ -30,30 +30,15 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
         if (options.taxiTourHours) {
             const tourPkg = TAXI_TOUR_PACKAGES.find(p => p.hours === Number(options.taxiTourHours) && (p.distance === Number(options.taxiTourKm) || p.id === options.roundTripPackageId));
             if (tourPkg) {
-                let total = tourPkg.price;
-                
-                // Add excess KM if the selected KM is exceeded
-                const allowedKm = tourPkg.distance || Number(options.taxiTourKm) || 0;
-                if (distKm > allowedKm) {
-                    const perKmRate = vehicleData.perKmRate || 100;
-                    total += (distKm - allowedKm) * perKmRate;
-                }
-                return Math.round(total);
+                // Return exactly the static package price (no dynamic distance math)
+                return Math.round(tourPkg.price);
             }
         }
 
         const pkg = activePackages.find(p => p.id === roundTripPackageId);
         if (pkg) {
-            let total = pkg.price;
-            
-            // Handle excess distance if applicable
-            if (distKm > pkg.distance) {
-                const excessKm = distKm - pkg.distance;
-                const perKmRate = vehicleData.perKmRate || 100;
-                total += (excessKm * perKmRate);
-            }
-            
-            return Math.round(total);
+            // Return exactly the static package price (no dynamic distance math)
+            return Math.round(pkg.price);
         }
     }
 
