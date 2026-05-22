@@ -14,7 +14,7 @@ const getTransporter = () => {
     });
 };
 
-const OWNER_EMAIL = process.env.OWNER_EMAIL || 'srilankantaxilk@gmail.com';
+const OWNER_EMAIL = process.env.OWNER_EMAIL || 'laxmangunasekara05@gmail.com';
 const FROM_EMAIL = process.env.FROM_EMAIL || 'Airport Taxis <noreply@srilankantaxi.lk>';
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://srilankantaxi.lk';
 

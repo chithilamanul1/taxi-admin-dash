@@ -73,9 +73,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [showModal, setShowModal] = useState(false)
     const [isVehicleDrawerOpen, setIsVehicleDrawerOpen] = useState(false)
     const [bookingInitialData, setBookingInitialData] = useState({})
+    const [step, setStep] = useState(1); // 1=Route, 2=Passengers+Vehicle, 3=Summary(mobile)
 
     const handleTabChange = (tabId) => {
         setActiveTab(tabId);
+        setStep(1);
         const syncTab = ['pickup', 'drop'].includes(tabId) ? 'airport' : 'tour';
         const event = new CustomEvent('syncCustomTourBooking', {
             detail: {
@@ -606,578 +608,279 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 {activeTab === 'tours' ? <RoundTripBooking /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,380px] gap-8 lg:gap-10 min-w-0">
                         <div className="flex-1 text-center lg:text-left min-w-0">
-                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 mb-8">
-                                <div className="flex bg-slate-100 dark:bg-zinc-800 rounded-xl p-1 w-full sm:w-auto shadow-inner">
-                                    <button 
-                                        onClick={() => setTripType('one-way')} 
-                                        aria-label="One Way Trip" 
-                                        className={`flex-1 sm:flex-none px-4 sm:px-8 py-2.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${tripType === 'one-way' ? 'bg-white dark:bg-zinc-700 text-black dark:text-white shadow-sm' : 'text-slate-500 hover:text-black dark:hover:text-white'}`}
-                                    >
-                                        One Way
-                                    </button>
-                                    <button
-                                        onClick={() => (activeTab === 'ride' || activeTab === 'pickup' || activeTab === 'drop') && setTripType('round-trip')}
-                                        disabled={activeTab === 'tours'}
-                                        aria-label="Round Trip"
-                                        className={`flex-1 sm:flex-none px-4 sm:px-8 py-2.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all duration-300 relative flex items-center justify-center gap-1.5
-                                            ${tripType === 'round-trip' ? 'bg-white dark:bg-zinc-700 text-black dark:text-white shadow-sm' : 'text-slate-500 hover:text-black dark:hover:text-white'}
-                                            ${activeTab === 'tours' ? 'opacity-50 cursor-not-allowed' : ''}
-                                        `}
-                                    >
-                                        Round Trip
-                                    </button>
-                                </div>
-
-                                {tripType === 'round-trip' && (
-                                    <motion.div 
-                                        initial={{ opacity: 0, x: -10 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        className="flex bg-slate-100 dark:bg-zinc-800 rounded-xl p-1 w-full sm:w-auto shadow-inner border border-slate-200/50 dark:border-white/5"
-                                    >
-                                        {(pricingSettings.roundTripPackages || ROUND_TRIP_PACKAGES).map(pkg => (
-                                            <button
-                                                key={pkg.id}
-                                                onClick={() => setRoundTripPackageId(pkg.id)}
-                                                className={`px-3 sm:px-5 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all duration-300 ${roundTripPackageId === pkg.id ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/30' : 'text-slate-500 hover:text-emerald-600'}`}
-                                            >
-                                                {pkg.name}
-                                            </button>
-                                        ))}
+                            {/* Step indicator + currency row */}
+                            <div className="flex items-center gap-2 mb-6">
+                                {[{n:1,label:'Route'},{n:2,label:'Details'},{n:3,label:'Review',mobileOnly:true}].map((s, i, arr) => (
+                                    <React.Fragment key={s.n}>
                                         <button
-                                            onClick={() => setRoundTripPackageId(null)}
-                                            className={`px-3 sm:px-5 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all duration-300 ${roundTripPackageId === null ? 'bg-white dark:bg-zinc-700 text-black dark:text-white shadow-sm' : 'text-slate-500 hover:text-black'}`}
+                                            onClick={() => s.n < step && setStep(s.n)}
+                                            className={`flex items-center gap-2 ${s.mobileOnly ? 'flex lg:hidden' : 'flex'} ${s.n < step ? 'cursor-pointer' : 'cursor-default'}`}
+                                            aria-label={`Step ${s.n}: ${s.label}`}
                                         >
-                                            Custom
+                                            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-300 ${
+                                                step === s.n ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/30 scale-110' :
+                                                step > s.n ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' :
+                                                'bg-slate-100 dark:bg-zinc-800 text-slate-400'
+                                            }`}>
+                                                {step > s.n ? <Check size={12} strokeWidth={3}/> : s.n}
+                                            </div>
+                                            <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${
+                                                step === s.n ? 'text-emerald-700 dark:text-emerald-400' :
+                                                step > s.n ? 'text-slate-500' : 'text-slate-300 dark:text-slate-600'
+                                            } ${s.mobileOnly ? 'hidden sm:block lg:hidden' : 'hidden sm:block'}`}>{s.label}</span>
                                         </button>
-                                    </motion.div>
-                                )}
-
-                                 <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto sm:overflow-visible pb-1 sm:pb-0 hide-scrollbar">
-                                    {/* Currency Selector */}
-                                    <div className="relative shrink-0">
-                                        <button 
-                                            onClick={() => setIsCurrencyOpen(!isCurrencyOpen)}
-                                            className="flex items-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-[10px] sm:text-xs font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
-                                            aria-label="Select Currency"
-                                        >
-                                            <div className="w-4 h-4 sm:w-5 sm:h-5 overflow-hidden rounded-full border border-slate-200 dark:border-white/20">
-                                                <img 
-                                                    src={SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag} 
-                                                    alt={`${currency} flag`} 
-                                                    className="w-full h-full object-cover scale-150" 
-                                                />
-                                            </div>
-                                            <span className="uppercase text-slate-700 dark:text-white">{currency}</span>
-                                            <ChevronDown size={14} className={`opacity-70 text-slate-700 dark:text-white transition-transform ${isCurrencyOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
-                                        </button>
-                                        <AnimatePresence>
-                                            {isCurrencyOpen && (
-                                                <motion.div 
-                                                    initial={{ opacity: 0, y: 10 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0, y: 10 }}
-                                                    className="absolute top-[calc(100%+8px)] left-0 mt-2 w-36 sm:w-40 bg-white dark:bg-zinc-800 rounded-xl border border-slate-200 dark:border-white/10 shadow-xl overflow-hidden z-[200]"
-                                                >
-                                                    <div className="py-0">
-                                                        {SUPPORTED_CURRENCIES.map(c => (
-                                                            <button
-                                                                key={c.code}
-                                                                onClick={() => {
-                                                                    changeCurrency(c.code);
-                                                                    setIsCurrencyOpen(false);
-                                                                }}
-                                                                className={`w-full text-left px-4 sm:px-5 py-2.5 sm:py-3 text-[10px] sm:text-xs font-black flex items-center gap-3 hover:bg-emerald-50 hover:text-emerald-600 transition-colors ${currency === c.code ? 'text-white bg-emerald-600 border-l-[4px] border-emerald-800' : 'text-slate-700 dark:text-white border-b border-slate-100 last:border-0'}`}
-                                                            >
-                                                                <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full overflow-hidden border border-slate-200">
-                                                                    <img src={c.flag} alt={`${c.code} flag`} className="w-full h-full object-cover scale-150" />
-                                                                </div>
-                                                                <span>{c.code}</span>
-                                                            </button>
-                                                        ))}
-                                                    </div>
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </div>
-
-                                    <button onClick={handleGetCurrentLocation} aria-label="Auto Detect My Location" className="flex-1 sm:flex-none text-black text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 bg-white hover:bg-slate-50 dark:bg-zinc-800 px-4 sm:px-6 py-2 sm:py-2.5 md:py-3 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 justify-center whitespace-nowrap min-w-fit">
-
-                                        {isLocating ? <Loader2 size={12} className="animate-spin text-emerald-500" /> : <Zap size={14} className="text-emerald-500" />}
-                                        <span className="hidden xs:inline sm:inline text-slate-800 dark:text-white">Auto Detect</span>
-                                        <span className="xs:hidden uppercase text-slate-800 dark:text-white">Detect</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="relative">
-                                {/* Flow Connection Line - Premium Curved Animated Style */}
-                                <div className="absolute left-[16px] top-10 bottom-10 w-5 z-0 pointer-events-none overflow-visible">
-                                    <svg 
-                                        className="w-full h-full"
-                                        viewBox="0 0 20 100"
-                                        preserveAspectRatio="none"
-                                    >
-                                        <motion.path
-                                            d="M 10 0 Q 0 50 10 100"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                            strokeDasharray="4 6"
-                                            strokeLinecap="round"
-                                            className="text-emerald-500/30 dark:text-[#FACC15]/20"
-                                            initial={{ pathLength: 0, opacity: 0 }}
-                                            animate={{ pathLength: 1, opacity: 1 }}
-                                            transition={{ 
-                                                duration: 2, 
-                                                ease: "easeInOut",
-                                                repeat: Infinity,
-                                                repeatType: "reverse",
-                                                repeatDelay: 1
-                                            }}
-                                        />
-                                        <motion.path
-                                            d="M 10 0 Q 0 50 10 100"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                            strokeDasharray="4 6"
-                                            strokeLinecap="round"
-                                            className="text-emerald-500 dark:text-[#FACC15]"
-                                            initial={{ pathLength: 0.2, pathOffset: 0 }}
-                                            animate={{ pathOffset: 1 }}
-                                            transition={{ 
-                                                duration: 3, 
-                                                ease: "linear",
-                                                repeat: Infinity,
-                                            }}
-                                        />
-                                    </svg>
-                                </div>
-
-                                <div className="space-y-4 md:space-y-3 relative z-10">
-                                    <div className="relative">
-                                        <div className="absolute left-[18px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-emerald-500 bg-white dark:bg-zinc-800 z-20 flex items-center justify-center text-emerald-500">
-                                            <CircleDot size={10} strokeWidth={4} />
-                                        </div>
-                                        <LocationInput
-                                            placeholder="Pick-up Location"
-                                            value={pickupSearch}
-                                            icon={activeTab === 'pickup' ? PlaneTakeoff : MapPin}
-                                            disabled={activeTab === 'pickup'}
-                                            onChange={(val) => setPickupSearch(val)}
-                                            zIndex={100}
-                                            onSelect={(loc) => {
-                                                setPickup({ name: loc.address, lat: loc.lat, lng: loc.lng });
-                                                setPickupSearch(loc.address);
-                                            }}
-                                        />
-                                    </div>
-
-
-                                 {/* Waypoints List */}
-                                {waypoints.map((wp, idx) => (
-                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-zinc-800 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-1 sm:p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-1 mb-3">
-                                        <div className="flex items-center flex-1 min-w-0">
-                                            <div className="flex items-center justify-center text-slate-500 dark:text-slate-400 shrink-0 bg-slate-100 dark:bg-zinc-900 p-2 rounded-full ml-1 sm:ml-2">
-                                                <Navigation size={16} />
-                                            </div>
-                                            <input
-                                                type="text"
-                                                readOnly
-                                                value={wp.name}
-                                                className="flex-1 min-w-0 pl-3 sm:pl-4 pr-2 sm:pr-4 h-10 sm:h-12 bg-transparent border-none text-[11px] sm:text-sm font-medium text-slate-800 dark:text-white outline-none truncate"
-                                            />
-                                        </div>
-
-                                        <div className="flex items-center justify-between sm:justify-end border-t sm:border-t-0 sm:border-l-2 border-slate-200 dark:border-white/10/10 dark:border-white/10 px-2 sm:px-3 py-1 sm:py-0 min-h-[40px] sm:min-h-0">
-                                            <div className="flex items-center flex-col sm:flex-row gap-0 sm:gap-2 mr-auto sm:mr-3">
-                                                 <span className="text-[8px] sm:text-[9px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider mb-0.5 sm:mb-0">Wait Time</span>
-                                                 <div className="flex items-center gap-2">
-                                                    <button
-                                                        onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: Math.max(0, (w.waitingTime || 0) - 1) } : w)); }}
-                                                        aria-label="Decrease waiting time"
-                                                        className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-white/10 text-slate-700 dark:text-white text-[10px] sm:text-xs font-black transition-colors hover:bg-slate-200 active:scale-95"
-                                                    >−</button>
-                                                    <span className="text-[10px] sm:text-sm font-black text-slate-700 dark:text-white w-4 sm:w-6 text-center">{wp.waitingTime || 0}h</span>
-                                                    <button
-                                                        onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: (w.waitingTime || 0) + 1 } : w)); }}
-                                                        aria-label="Increase waiting time"
-                                                        className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 text-[10px] sm:text-xs font-black transition-colors hover:bg-emerald-200 active:scale-95"
-                                                    >+</button>
-                                                </div>
-                                            </div>
-                                            
-                                            <button
-                                                onClick={() => setWaypoints(prev => prev.filter((_, i) => i !== idx))}
-                                                className="p-1.5 sm:p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all flex items-center justify-center active:scale-95"
-                                                aria-label="Remove stop"
-                                            >
-                                                <X size={14} className="sm:size-18" />
-                                            </button>
-                                        </div>
-                                    </div>
+                                        {i < arr.length - 1 && (
+                                            <div className={`flex-1 h-px transition-all duration-500 ${step > s.n ? 'bg-emerald-400' : 'bg-slate-200 dark:bg-zinc-700'} ${arr[i+1].mobileOnly ? 'flex lg:hidden' : ''}`} />
+                                        )}
+                                    </React.Fragment>
                                 ))}
-
-
-                                {/* Add Waypoint Search - supports up to 4 stops */}
-                                {waypoints.length < 4 && (
-                                    <>
-                                        {/* "Add Stop" Button - Aligned with icons */}
-                                        {waypointSearches.length === 0 && (
-                                            <div className="flex justify-start pl-10 md:pl-14 py-2">
-                                                <button
-                                                    onClick={() => setWaypointSearches([{ active: true }])}
-                                                    aria-label="Add Stop"
-                                                    className="text-slate-800 dark:text-slate-100 bg-white dark:bg-zinc-800 text-[10px] font-black uppercase tracking-wider flex items-center gap-2 py-3 px-5 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
-                                                >
-                                                    <Plus size={14} strokeWidth={4} className="text-emerald-500" /> ADD STOP ({waypoints.length}/4)
-                                                </button>
-                                            </div>
-                                        )}
-
-                                        {/* Active Search Input */}
-                                        {waypointSearches.length > 0 && (
-                                            <div className="relative group animate-fade-in">
-                                                <LocationInput
-                                                    placeholder="Add Stop (Search City)"
-                                                    icon={Navigation}
-                                                    zIndex={40}
-                                                    onSelect={(loc) => {
-                                                        setWaypoints([...waypoints, { name: loc.address, lat: loc.lat, lng: loc.lng, waitingTime: 0 }]);
-                                                        setWaypointSearches([]);
-                                                    }}
-                                                />
-                                                <button
-                                                    onClick={() => setWaypointSearches([])}
-                                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-red-500 z-30"
-                                                    aria-label="Cancel add stop"
-                                                >
-                                                    <X size={16} />
-                                                </button>
-                                            </div>
-                                        )}
-                                    </>
-                                )}
-
-
-
-                                {/* Dropoff Input */}
-                                <div className="relative mt-2">
-                                    <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 transition-colors z-10 flex items-center justify-center">
-                                        <MapPin size={20} className="text-red-500" strokeWidth={2.5} />
-                                    </div>
-                                    <LocationInput
-                                        placeholder="Drop-off Location"
-                                        value={dropoffSearch}
-                                        icon={activeTab === 'drop' ? PlaneLanding : MapPin}
-                                        zIndex={100}
-                                        disabled={activeTab === 'drop'}
-                                        onChange={(val) => setDropoffSearch(val)}
-                                        onSelect={(loc) => {
-                                            setDropoff({ name: loc.address, lat: loc.lat, lng: loc.lng });
-                                            setDropoffSearch(loc.address);
-                                        }}
-                                    />
-                                </div>
-
-                                {/* Date & Time Selector */}
-                                <div className="relative mt-2">
-                                    <button 
-                                        onClick={() => setIsDateTimePickerOpen(!isDateTimePickerOpen)}
-                                        className="w-full h-14 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-2xl px-6 flex items-center justify-between text-sm font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md transition-all group"
-                                        aria-label="Select Date and Time"
+                                {/* Currency Selector */}
+                                <div className="relative ml-3 shrink-0">
+                                    <button
+                                        onClick={() => setIsCurrencyOpen(!isCurrencyOpen)}
+                                        className="flex items-center gap-1.5 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-[10px] font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+                                        aria-label="Select Currency"
                                     >
-                                        <div className="flex items-center gap-3">
-                                            <Calendar size={18} className={scheduledDate ? 'text-emerald-500' : 'text-slate-400'} />
-                                            <span className="uppercase tracking-widest text-[11px]">
-                                                {scheduledDate && scheduledTime 
-                                                    ? `${new Date(scheduledDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${scheduledTime}` 
-                                                    : 'Select Date & Time'}
-                                            </span>
+                                        <div className="w-4 h-4 overflow-hidden rounded-full border border-slate-200 dark:border-white/20">
+                                            <img src={SUPPORTED_CURRENCIES.find(c => c.code === currency)?.flag} alt={`${currency} flag`} className="w-full h-full object-cover scale-150" />
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            {scheduledDate && (
-                                                <button 
-                                                    onClick={(e) => { e.stopPropagation(); setScheduledDate(null); setScheduledTime(null); }}
-                                                    className="p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-slate-400 hover:text-red-500"
-                                                >
-                                                    <X size={14} />
-                                                </button>
-                                            )}
-                                            <ChevronDown size={16} className={`opacity-50 transition-transform ${isDateTimePickerOpen ? 'rotate-180' : ''}`} />
-                                        </div>
+                                        <span className="uppercase">{currency}</span>
+                                        <ChevronDown size={12} className={`opacity-70 transition-transform ${isCurrencyOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                                     </button>
-                                    
                                     <AnimatePresence>
-                                        {isDateTimePickerOpen && (
-                                            <>
-                                                <div 
-                                                    className="fixed inset-0 z-[190]" 
-                                                    onClick={() => setIsDateTimePickerOpen(false)}
-                                                />
-                                                <motion.div 
-                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                    className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top"
-                                                >
-                                                    <CustomDateTimePicker 
-                                                        date={scheduledDate} 
-                                                        time={scheduledTime} 
-                                                        onChange={(d, t) => {
-                                                            setScheduledDate(d);
-                                                            setScheduledTime(t);
-                                                            // Keep open to allow time selection after date
-                                                        }} 
-                                                    />
-                                                    <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
-                                                        <button 
-                                                            onClick={() => setIsDateTimePickerOpen(false)}
-                                                            className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95"
-                                                        >
-                                                            Done
-                                                        </button>
-                                                    </div>
-                                                </motion.div>
-                                            </>
+                                        {isCurrencyOpen && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: 10 }}
+                                                className="absolute top-[calc(100%+8px)] right-0 mt-2 w-36 bg-white dark:bg-zinc-800 rounded-xl border border-slate-200 dark:border-white/10 shadow-xl overflow-hidden z-[200]"
+                                            >
+                                                {SUPPORTED_CURRENCIES.map(c => (
+                                                    <button
+                                                        key={c.code}
+                                                        onClick={() => { changeCurrency(c.code); setIsCurrencyOpen(false); }}
+                                                        className={`w-full text-left px-4 py-2.5 text-[10px] font-black flex items-center gap-3 hover:bg-emerald-50 hover:text-emerald-600 transition-colors ${currency === c.code ? 'text-white bg-emerald-600 border-l-4 border-emerald-800' : 'text-slate-700 dark:text-white border-b border-slate-100 last:border-0'}`}
+                                                    >
+                                                        <div className="w-4 h-4 rounded-full overflow-hidden border border-slate-200"><img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" /></div>
+                                                        <span>{c.code}</span>
+                                                    </button>
+                                                ))}
+                                            </motion.div>
                                         )}
                                     </AnimatePresence>
                                 </div>
                             </div>
-                        </div>
 
-                                {/* Extra Options Grid - Refined Spacing & Alignment */}
-                                <div className="flex flex-col xl:flex-row gap-6 lg:gap-8 mt-12 lg:mt-8 mb-6 lg:mb-4">
+                            {/* STEPS */}
+                            <AnimatePresence>
 
-                                <div className="flex-1 space-y-4">
-                                    <button
-                                        onClick={() => setIsCouponOpen(!isCouponOpen)}
-                                        className={`flex items-center gap-3 text-xs lg:text-[11px] font-bold h-full min-h-[3.5rem] transition-all px-4 sm:px-6 py-3 rounded-2xl w-full justify-center uppercase tracking-widest border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md ${isCouponOpen ? 'bg-amber-50 dark:bg-amber-500/20 text-amber-900 dark:text-amber-400 border-amber-200 dark:border-amber-500/30' : 'bg-white dark:bg-zinc-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-zinc-700'}`}
-                                    >
-                                        <Tag size={16} className={`${isCouponOpen ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400 dark:text-slate-500'} shrink-0`} fill="currentColor" />
-                                        {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
-                                    </button>
-
-                                    {/* Applied Coupons List */}
-                                    {appliedOffers.length > 0 && (
-                                        <div className="flex flex-wrap gap-2 animate-fade-in">
-                                            {appliedOffers.map((offer, i) => (
-                                                <div key={i} className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 px-3 py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-500/20 shadow-sm">
-                                                    <Tag size={12} className="text-emerald-600 dark:text-emerald-500" />
-                                                    <span className="text-[10px] font-bold uppercase tracking-widest">{offer.name}</span>
-                                                    <span className="text-[10px] font-bold opacity-70">
-                                                        (-{offer.discountPercentage > 0 ? `${offer.discountPercentage}%` : `Rs ${offer.discountAmount}`})
-                                                    </span>
-                                                    <button
-                                                        onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))}
-                                                        className="ml-1 p-0.5 hover:bg-emerald-200 dark:hover:bg-emerald-500/30 rounded-md transition-colors"
-                                                    >
-                                                        <X size={12} />
-                                                    </button>
+                                {step === 1 && (
+                                    <motion.div key="step1" initial={{opacity:0,x:-16}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-16}} transition={{duration:0.2}}>
+                                        <div className="relative">
+                                            <div className="absolute left-[16px] top-10 bottom-10 w-5 z-0 pointer-events-none overflow-visible">
+                                                <svg className="w-full h-full" viewBox="0 0 20 100" preserveAspectRatio="none">
+                                                    <motion.path d="M 10 0 Q 0 50 10 100" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 6" strokeLinecap="round" className="text-emerald-500/30 dark:text-[#FACC15]/20" initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ duration: 2, ease: "easeInOut", repeat: Infinity, repeatType: "reverse", repeatDelay: 1 }} />
+                                                    <motion.path d="M 10 0 Q 0 50 10 100" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 6" strokeLinecap="round" className="text-emerald-500 dark:text-[#FACC15]" initial={{ pathLength: 0.2, pathOffset: 0 }} animate={{ pathOffset: 1 }} transition={{ duration: 3, ease: "linear", repeat: Infinity }} />
+                                                </svg>
+                                            </div>
+                                            <div className="space-y-4 md:space-y-3 relative z-10">
+                                                <div className="relative">
+                                                    <div className="absolute left-[18px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-emerald-500 bg-white dark:bg-zinc-800 z-20 flex items-center justify-center text-emerald-500">
+                                                        <CircleDot size={10} strokeWidth={4} />
+                                                    </div>
+                                                    <LocationInput placeholder="Pick-up Location" value={pickupSearch} icon={activeTab === 'pickup' ? PlaneTakeoff : MapPin} disabled={activeTab === 'pickup'} onChange={(val) => setPickupSearch(val)} zIndex={100} onSelect={(loc) => { setPickup({ name: loc.address, lat: loc.lat, lng: loc.lng }); setPickupSearch(loc.address); }} />
                                                 </div>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    {isCouponOpen && (
-                                        <div className="relative h-14 animate-slide-up">
-                                            <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                                            <input
-                                                type="text"
-                                                placeholder="ENTER COUPON CODE"
-                                                value={couponCode}
-                                                onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                                className="w-full h-full pl-14 pr-24 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm font-bold outline-none transition-all uppercase text-emerald-950 dark:text-white placeholder:text-slate-500 tracking-widest focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner"
-                                                aria-label="Coupon code"
-                                            />
-                                            <button
-                                                onClick={async () => {
-                                                    if (!couponCode) return;
-                                                    // Simple frontend validation for known public codes
-                                                    const known = availableCoupons.find(c => c.code === couponCode);
-                                                    if (known) {
-                                                        const couponOffer = {
-                                                            _id: 'coupon-' + known.code,
-                                                            name: known.code,
-                                                            discountPercentage: known.discountType === 'percentage' ? known.value : 0,
-                                                            discountAmount: known.discountType === 'flat' ? known.value : 0,
-                                                            type: 'coupon'
-                                                        };
-                                                        setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]);
-                                                        setCouponCode('');
-                                                        setIsCouponOpen(false);
-                                                    } else {
-                                                        alert("Invalid or expired coupon code.");
-                                                    }
-                                                }}
-                                                aria-label="Apply Coupon"
-                                                className="absolute right-2 top-2 bottom-2 bg-emerald-600 text-white px-6 rounded-xl text-[10px] font-black uppercase hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20"
-                                            >
-                                                Apply
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Visual Coupon Selector */}
-                                {filteredCoupons.length > 0 && isCouponOpen && (
-                                    <div className="lg:col-span-2 space-y-4 animate-fade-in mt-4">
-                                        <div className="flex items-center gap-3 px-1">
-                                            <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                                            <span className="text-[10px] font-black text-emerald-900/40 dark:text-white/40 uppercase tracking-[0.3em]">Exclusive Offers</span>
-                                        </div>
-                                        <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar snap-x touch-pan-x">
-                                            {filteredCoupons.map((c) => (
-                                                <button
-                                                    key={c._id}
-                                                    onClick={() => {
-                                                        const isApplied = appliedOffers.some(o => o.name === c.code);
-                                                        if (isApplied) {
-                                                            setAppliedOffers(prev => prev.filter(o => o.name !== c.code));
-                                                        } else {
-                                                            const couponOffer = {
-                                                                _id: 'coupon-' + c.code,
-                                                                name: c.code,
-                                                                discountPercentage: c.discountType === 'percentage' ? c.value : 0,
-                                                                discountAmount: c.discountType === 'flat' ? c.value : 0,
-                                                                type: 'coupon'
-                                                            };
-                                                            setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]);
-                                                        }
-                                                    }}
-                                                    className={`snap-start min-w-[280px] sm:min-w-[320px] group relative flex items-center justify-between gap-4 p-5 rounded-[2rem] border transition-all text-left flex-shrink-0 shadow-lg hover:shadow-xl hover:-translate-y-1 ${appliedOffers.some(o => o.name === c.code) ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-800'}`}
-                                                >
-                                                    <div className="flex items-center gap-5 min-w-0">
-                                                        <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-900 flex-shrink-0 flex items-center justify-center overflow-hidden border border-slate-100 dark:border-white/5">
-                                                            {c.imageUrl ? (
-                                                                <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" />
-                                                            ) : (
-                                                                <Tag size={24} className="text-emerald-600" />
-                                                            )}
+                                                {waypoints.map((wp, idx) => (
+                                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-zinc-800 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-1 sm:p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-1 mb-3">
+                                                        <div className="flex items-center flex-1 min-w-0">
+                                                            <div className="flex items-center justify-center text-slate-500 dark:text-slate-400 shrink-0 bg-slate-100 dark:bg-zinc-900 p-2 rounded-full ml-1 sm:ml-2"><Navigation size={16} /></div>
+                                                            <input type="text" readOnly value={wp.name} className="flex-1 min-w-0 pl-3 sm:pl-4 pr-2 sm:pr-4 h-10 sm:h-12 bg-transparent border-none text-[11px] sm:text-sm font-medium text-slate-800 dark:text-white outline-none truncate" />
                                                         </div>
-                                                        <div className="flex-1 min-w-0">
-                                                            <div className="flex flex-col">
-                                                                <span className="text-2xl font-black text-emerald-950 dark:text-white leading-tight tracking-tight">
-                                                                    {c.value}{c.discountType === 'percentage' ? '%' : ''}
-                                                                    <span className="text-emerald-600 ml-1">OFF</span>
-                                                                </span>
-                                                                <div className="flex items-center gap-2 mt-2">
-                                                                    <div className="px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 flex items-center gap-2 shadow-sm">
-                                                                        <span className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-widest">{c.code}</span>
-                                                                        <div className="h-3 w-px bg-slate-200 dark:bg-white/10"></div>
-                                                                        <span className="text-[9px] font-bold text-slate-400 flex items-center gap-1">
-                                                                            {appliedOffers.some(o => o.name === c.code) ? 'Applied' : 'Apply'}
-                                                                        </span>
-                                                                    </div>
+                                                        <div className="flex items-center justify-between sm:justify-end border-t sm:border-t-0 sm:border-l-2 border-slate-200 dark:border-white/10 px-2 sm:px-3 py-1 sm:py-0 min-h-[40px] sm:min-h-0">
+                                                            <div className="flex items-center flex-col sm:flex-row gap-0 sm:gap-2 mr-auto sm:mr-3">
+                                                                <span className="text-[8px] sm:text-[9px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider mb-0.5 sm:mb-0">Wait Time</span>
+                                                                <div className="flex items-center gap-2">
+                                                                    <button onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: Math.max(0, (w.waitingTime || 0) - 1) } : w)); }} aria-label="Decrease waiting time" className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-white/10 text-slate-700 dark:text-white text-[10px] sm:text-xs font-black transition-colors hover:bg-slate-200 active:scale-95">-</button>
+                                                                    <span className="text-[10px] sm:text-sm font-black text-slate-700 dark:text-white w-4 sm:w-6 text-center">{wp.waitingTime || 0}h</span>
+                                                                    <button onClick={(e) => { e.stopPropagation(); setWaypoints(prev => prev.map((w, i) => i === idx ? { ...w, waitingTime: (w.waitingTime || 0) + 1 } : w)); }} aria-label="Increase waiting time" className="w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 text-[10px] sm:text-xs font-black transition-colors hover:bg-emerald-200 active:scale-95">+</button>
                                                                 </div>
                                                             </div>
+                                                            <button onClick={() => setWaypoints(prev => prev.filter((_, i) => i !== idx))} className="p-1.5 sm:p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all flex items-center justify-center active:scale-95" aria-label="Remove stop"><X size={14} /></button>
                                                         </div>
                                                     </div>
-                                                    
-                                                    {appliedOffers.some(o => o.name === c.code) ? (
-                                                        <div className="flex-shrink-0 w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white shadow-lg animate-scale-in">
-                                                            <Check size={16} strokeWidth={4} />
-                                                        </div>
-                                                    ) : (
-                                                        <div className="flex-shrink-0 w-8 h-8 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-300 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-600 transition-all">
-                                                            <Plus size={16} strokeWidth={3} />
-                                                        </div>
-                                                    )}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Counters Section with Label */}
-                            <div className="mt-8 lg:mt-10 space-y-4">
-                                <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-4 flex items-center gap-2">
-                                    Passenger & Luggage
-                                    <span className="text-[9px] bg-red-500 text-white px-2 py-0.5 rounded-full lowercase tracking-tight">Compulsory</span>
-                                </label>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-                                    {[
-                                    { id: 'adults', label: 'Adults' },
-                                    { id: 'children', label: 'Children' },
-                                    { id: 'luggage', label: 'Luggage' },
-                                    { id: 'handLuggage', label: 'Hand Luggage' }
-                                ].map(c => (
-                                    <div key={c.id} className="bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm p-4 rounded-2xl flex items-center justify-between transition-all group/counter h-16 sm:h-18">
-                                        <span className="text-[11px] font-black text-slate-800 dark:text-slate-100 uppercase tracking-widest w-24 flex-shrink-0 leading-tight pr-2">{c.label}</span>
-                                        <div className="flex items-center gap-3 shrink-0 bg-slate-50 dark:bg-zinc-900 rounded-xl p-1 border border-slate-100 dark:border-white/5">
-                                            <button
-                                                onClick={() => setPassengerCount(p => ({ 
-                                                    ...p, 
-                                                    [c.id]: Math.max(c.id === 'adults' ? 1 : 0, (Number(p[c.id]) || 0) - 1) 
-                                                }))}
-                                                className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center hover:bg-slate-50 transition-all text-slate-600 dark:text-white active:scale-95"
-                                                aria-label={`Decrease ${c.label}`}
-                                            >
-                                                <Minus size={14} strokeWidth={2.5} />
-                                            </button>
-                                            <span className="font-bold text-base text-slate-800 dark:text-white min-w-[20px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
-                                            <button
-                                                onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))}
-                                                className="w-8 h-8 rounded-lg bg-emerald-500 dark:bg-emerald-600 border border-transparent flex items-center justify-center transition-all text-white shadow-sm active:scale-95"
-                                                aria-label={`Increase ${c.label}`}
-                                            >
-                                                <Plus size={14} strokeWidth={2.5} />
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                            {/* Vehicle Selection - Unified for Desktop & Mobile */}
-                            <div className="mt-4 sm:mt-6">
-                                <div className="flex items-center justify-between mb-3 px-1">
-                                    <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Select Vehicle</label>
-                                    <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest flex items-center gap-2">
-                                        <Info size={10} strokeWidth={4} />
-                                        SEE ALL OPTIONS
-                                    </div>
-                                </div>
-                                <button
-                                    onClick={() => setIsVehicleDrawerOpen(true)}
-                                    className="w-full min-h-[4.5rem] sm:min-h-[5.5rem] py-3 px-4 sm:px-6 flex items-center justify-between bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all group overflow-hidden relative"
-                                    aria-label="Select Vehicle"
-                                >
-                                    <div className="flex items-center gap-4 sm:gap-6">
-                                        <div className="w-20 h-16 sm:w-28 sm:h-20 rounded-2xl flex items-center justify-center p-0 shrink-0 bg-slate-50 dark:bg-zinc-900 border border-slate-100 dark:border-white/5">
-                                            {vehiclePricing[vehicle]?.image ? (
-                                                <div className="relative w-full h-full">
-                                                    <Image
-                                                        src={vehiclePricing[vehicle].image}
-                                                        alt={vehiclePricing[vehicle]?.name || "Vehicle"}
-                                                        fill
-                                                        className="object-contain scale-[1.5] sm:scale-160 drop-shadow-md group-hover:scale-175 transition-transform duration-500"
-                                                        sizes="(max-width: 640px) 88px, 112px"
-                                                    />
+                                                ))}
+                                                {waypoints.length < 4 && (
+                                                    <>
+                                                        {waypointSearches.length === 0 && (
+                                                            <div className="flex justify-start pl-10 md:pl-14 py-2">
+                                                                <button onClick={() => setWaypointSearches([{ active: true }])} aria-label="Add Stop" className="text-slate-800 dark:text-slate-100 bg-white dark:bg-zinc-800 text-[10px] font-black uppercase tracking-wider flex items-center gap-2 py-3 px-5 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                                                                    <Plus size={14} strokeWidth={4} className="text-emerald-500" /> ADD STOP ({waypoints.length}/4)
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                        {waypointSearches.length > 0 && (
+                                                            <div className="relative group animate-fade-in">
+                                                                <LocationInput placeholder="Add Stop (Search City)" icon={Navigation} zIndex={40} onSelect={(loc) => { setWaypoints([...waypoints, { name: loc.address, lat: loc.lat, lng: loc.lng, waitingTime: 0 }]); setWaypointSearches([]); }} />
+                                                                <button onClick={() => setWaypointSearches([])} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-red-500 z-30" aria-label="Cancel add stop"><X size={16} /></button>
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                )}
+                                                <div className="relative mt-2">
+                                                    <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 transition-colors z-10 flex items-center justify-center"><MapPin size={20} className="text-red-500" strokeWidth={2.5} /></div>
+                                                    <LocationInput placeholder="Drop-off Location" value={dropoffSearch} icon={activeTab === 'drop' ? PlaneLanding : MapPin} zIndex={100} disabled={activeTab === 'drop'} onChange={(val) => setDropoffSearch(val)} onSelect={(loc) => { setDropoff({ name: loc.address, lat: loc.lat, lng: loc.lng }); setDropoffSearch(loc.address); }} />
                                                 </div>
-                                            ) : (
-                                                <Car className="text-slate-300 dark:text-slate-600" size={24} />
-                                            )}
-                                        </div>
-                                        <div className="text-left">
-                                            <p className="font-bold text-sm sm:text-base text-slate-800 dark:text-white uppercase tracking-wider leading-none mb-1.5">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
-                                            <div className="flex items-center gap-2 text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest">
-                                                <span>{vehiclePricing[vehicle]?.capacity || 4} Pax</span>
-                                                <span className="w-1 h-1 bg-slate-300 dark:bg-slate-600 rounded-full"></span>
-                                                <span>{vehiclePricing[vehicle]?.luggage || 2} Luggage</span>
+                                                <div className="relative mt-2">
+                                                    <button onClick={() => setIsDateTimePickerOpen(!isDateTimePickerOpen)} className="w-full h-14 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-2xl px-6 flex items-center justify-between text-sm font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md transition-all group" aria-label="Select Date and Time">
+                                                        <div className="flex items-center gap-3">
+                                                            <Calendar size={18} className={scheduledDate ? 'text-emerald-500' : 'text-slate-400'} />
+                                                            <span className="uppercase tracking-widest text-[11px]">
+                                                                {scheduledDate && scheduledTime ? `${new Date(scheduledDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${scheduledTime}` : 'Select Date & Time'}
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            {scheduledDate && (<button onClick={(e) => { e.stopPropagation(); setScheduledDate(null); setScheduledTime(null); }} className="p-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-slate-400 hover:text-red-500"><X size={14} /></button>)}
+                                                            <ChevronDown size={16} className={`opacity-50 transition-transform ${isDateTimePickerOpen ? 'rotate-180' : ''}`} />
+                                                        </div>
+                                                    </button>
+                                                    <AnimatePresence>
+                                                        {isDateTimePickerOpen && (
+                                                            <>
+                                                                <div className="fixed inset-0 z-[190]" onClick={() => setIsDateTimePickerOpen(false)} />
+                                                                <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
+                                                                    <CustomDateTimePicker date={scheduledDate} time={scheduledTime} onChange={(d, t) => { setScheduledDate(d); setScheduledTime(t); }} />
+                                                                    <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
+                                                                        <button onClick={() => setIsDateTimePickerOpen(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
+                                                                    </div>
+                                                                </motion.div>
+                                                            </>
+                                                        )}
+                                                    </AnimatePresence>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-zinc-900 text-slate-900 dark:text-white flex items-center justify-center group-hover:bg-amber-400 group-hover:text-white transition-all shrink-0 shadow-sm border border-slate-200 dark:border-white/5">
-                                        <ChevronDown size={24} strokeWidth={4} />
-                                    </div>
-                                </button>
-                            </div>
+                                        <div className="mt-6 flex items-center gap-3">
+                                            <button
+                                                onClick={() => {
+                                                    if (!pickup?.lat || !dropoff?.lat) { alert('Please select a valid pickup and dropoff location to continue.'); return; }
+                                                    setStep(2);
+                                                }}
+                                                className="flex-1 flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
+                                                aria-label="Continue to step 2"
+                                            >
+                                                Continue - Select Passengers <ArrowRight size={16} strokeWidth={3}/>
+                                            </button>
+                                            <button onClick={handleGetCurrentLocation} aria-label="Auto Detect My Location" className="shrink-0 w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                                                {isLocating ? <Loader2 size={16} className="animate-spin text-emerald-500"/> : <Zap size={16} className="text-emerald-500"/>}
+                                            </button>
+                                        </div>
+                                    </motion.div>
+                                )}
+
+                                {step === 2 && (
+                                    <motion.div key="step2" initial={{opacity:0,x:16}} animate={{opacity:1,x:0}} exit={{opacity:0,x:16}} transition={{duration:0.2}}>
+                                        <div className="space-y-4 mb-6">
+                                            <button onClick={() => setIsCouponOpen(!isCouponOpen)} className={`flex items-center gap-3 text-xs font-bold min-h-[3.5rem] transition-all px-6 py-3 rounded-2xl w-full justify-center uppercase tracking-widest border shadow-sm hover:shadow-md ${isCouponOpen ? 'bg-amber-50 dark:bg-amber-500/20 text-amber-900 dark:text-amber-400 border-amber-200 dark:border-amber-500/30' : 'bg-white dark:bg-zinc-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:bg-slate-50'}`}>
+                                                <Tag size={16} className={`${isCouponOpen ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400'} shrink-0`} fill="currentColor" />
+                                                {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
+                                            </button>
+                                            {appliedOffers.length > 0 && (
+                                                <div className="flex flex-wrap gap-2 animate-fade-in">
+                                                    {appliedOffers.map((offer, i) => (
+                                                        <div key={i} className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 px-3 py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-500/20 shadow-sm">
+                                                            <Tag size={12} className="text-emerald-600 dark:text-emerald-500" />
+                                                            <span className="text-[10px] font-bold uppercase tracking-widest">{offer.name}</span>
+                                                            <span className="text-[10px] font-bold opacity-70">(-{offer.discountPercentage > 0 ? `${offer.discountPercentage}%` : `Rs ${offer.discountAmount}`})</span>
+                                                            <button onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))} className="ml-1 p-0.5 hover:bg-emerald-200 dark:hover:bg-emerald-500/30 rounded-md transition-colors"><X size={12} /></button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            {isCouponOpen && (
+                                                <div className="relative h-14 animate-slide-up">
+                                                    <Tag className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                                    <input type="text" placeholder="ENTER COUPON CODE" value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} className="w-full h-full pl-14 pr-24 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm font-bold outline-none uppercase text-emerald-950 dark:text-white placeholder:text-slate-500 tracking-widest focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner" aria-label="Coupon code" />
+                                                    <button onClick={async () => { if (!couponCode) return; const known = availableCoupons.find(c => c.code === couponCode); if (known) { const couponOffer = { _id: 'coupon-' + known.code, name: known.code, discountPercentage: known.discountType === 'percentage' ? known.value : 0, discountAmount: known.discountType === 'flat' ? known.value : 0, type: 'coupon' }; setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]); setCouponCode(''); setIsCouponOpen(false); } else { alert("Invalid or expired coupon code."); } }} aria-label="Apply Coupon" className="absolute right-2 top-2 bottom-2 bg-emerald-600 text-white px-6 rounded-xl text-[10px] font-black uppercase hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">Apply</button>
+                                                </div>
+                                            )}
+                                            {filteredCoupons.length > 0 && isCouponOpen && (
+                                                <div className="space-y-4 animate-fade-in mt-4">
+                                                    <div className="flex items-center gap-3 px-1"><div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div><span className="text-[10px] font-black text-emerald-900/40 dark:text-white/40 uppercase tracking-[0.3em]">Exclusive Offers</span></div>
+                                                    <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar snap-x touch-pan-x">
+                                                        {filteredCoupons.map((c) => (
+                                                            <button key={c._id} onClick={() => { const isApplied = appliedOffers.some(o => o.name === c.code); if (isApplied) { setAppliedOffers(prev => prev.filter(o => o.name !== c.code)); } else { const couponOffer = { _id: 'coupon-' + c.code, name: c.code, discountPercentage: c.discountType === 'percentage' ? c.value : 0, discountAmount: c.discountType === 'flat' ? c.value : 0, type: 'coupon' }; setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]); } }} className={`snap-start min-w-[280px] sm:min-w-[320px] group relative flex items-center justify-between gap-4 p-5 rounded-[2rem] border transition-all text-left flex-shrink-0 shadow-lg hover:shadow-xl hover:-translate-y-1 ${appliedOffers.some(o => o.name === c.code) ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-800'}`}>
+                                                                <div className="flex items-center gap-5 min-w-0">
+                                                                    <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-900 flex-shrink-0 flex items-center justify-center overflow-hidden border border-slate-100 dark:border-white/5">{c.imageUrl ? <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" /> : <Tag size={24} className="text-emerald-600" />}</div>
+                                                                    <div className="flex-1 min-w-0"><div className="flex flex-col"><span className="text-2xl font-black text-emerald-950 dark:text-white leading-tight tracking-tight">{c.value}{c.discountType === 'percentage' ? '%' : ''}<span className="text-emerald-600 ml-1">OFF</span></span><div className="flex items-center gap-2 mt-2"><div className="px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 flex items-center gap-2 shadow-sm"><span className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-widest">{c.code}</span><div className="h-3 w-px bg-slate-200 dark:bg-white/10"></div><span className="text-[9px] font-bold text-slate-400">{appliedOffers.some(o => o.name === c.code) ? 'Applied' : 'Apply'}</span></div></div></div></div>
+                                                                </div>
+                                                                {appliedOffers.some(o => o.name === c.code) ? <div className="flex-shrink-0 w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white shadow-lg animate-scale-in"><Check size={16} strokeWidth={4} /></div> : <div className="flex-shrink-0 w-8 h-8 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-300 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-600 transition-all"><Plus size={16} strokeWidth={3} /></div>}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="space-y-4 mb-6">
+                                            <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-4 flex items-center gap-2">
+                                                Passenger and Luggage <span className="text-[9px] bg-red-500 text-white px-2 py-0.5 rounded-full lowercase tracking-tight">Compulsory</span>
+                                            </label>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                                                {[{ id: 'adults', label: 'Adults' }, { id: 'children', label: 'Children' }, { id: 'luggage', label: 'Luggage' }, { id: 'handLuggage', label: 'Hand Luggage' }].map(c => (
+                                                    <div key={c.id} className="bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm p-4 rounded-2xl flex items-center justify-between transition-all h-16 sm:h-18">
+                                                        <span className="text-[11px] font-black text-slate-800 dark:text-slate-100 uppercase tracking-widest w-24 flex-shrink-0 leading-tight pr-2">{c.label}</span>
+                                                        <div className="flex items-center gap-3 shrink-0 bg-slate-50 dark:bg-zinc-900 rounded-xl p-1 border border-slate-100 dark:border-white/5">
+                                                            <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(c.id === 'adults' ? 1 : 0, (Number(p[c.id]) || 0) - 1) }))} className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center hover:bg-slate-50 transition-all text-slate-600 dark:text-white active:scale-95" aria-label={`Decrease ${c.label}`}><Minus size={14} strokeWidth={2.5} /></button>
+                                                            <span className="font-bold text-base text-slate-800 dark:text-white min-w-[20px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
+                                                            <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))} className="w-8 h-8 rounded-lg bg-emerald-500 dark:bg-emerald-600 border border-transparent flex items-center justify-center transition-all text-white shadow-sm active:scale-95" aria-label={`Increase ${c.label}`}><Plus size={14} strokeWidth={2.5} /></button>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="mb-6">
+                                            <div className="flex items-center justify-between mb-3 px-1">
+                                                <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Select Vehicle</label>
+                                                <div className="bg-rose-600 text-white text-[8px] font-black px-4 py-1.5 rounded-full shadow-lg shadow-rose-600/20 uppercase tracking-widest flex items-center gap-2"><Info size={10} strokeWidth={4} />SEE ALL OPTIONS</div>
+                                            </div>
+                                            <button onClick={() => setIsVehicleDrawerOpen(true)} className="w-full min-h-[4.5rem] sm:min-h-[5.5rem] py-3 px-4 sm:px-6 flex items-center justify-between bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 hover:-translate-y-0.5 transition-all group overflow-hidden relative" aria-label="Select Vehicle">
+                                                <div className="flex items-center gap-4 sm:gap-6">
+                                                    <div className="w-20 h-16 sm:w-28 sm:h-20 rounded-2xl flex items-center justify-center p-0 shrink-0 bg-slate-50 dark:bg-zinc-900 border border-slate-100 dark:border-white/5">
+                                                        {vehiclePricing[vehicle]?.image ? (
+                                                            <div className="relative w-full h-full"><Image src={vehiclePricing[vehicle].image} alt={vehiclePricing[vehicle]?.name || "Vehicle"} fill className="object-contain scale-[1.5] sm:scale-160 drop-shadow-md group-hover:scale-175 transition-transform duration-500" sizes="(max-width: 640px) 88px, 112px" /></div>
+                                                        ) : <Car className="text-slate-300 dark:text-slate-600" size={24} />}
+                                                    </div>
+                                                    <div className="text-left">
+                                                        <p className="font-bold text-sm sm:text-base text-slate-800 dark:text-white uppercase tracking-wider leading-none mb-1.5">{vehiclePricing[vehicle]?.name || 'Select Vehicle'}</p>
+                                                        <div className="flex items-center gap-2 text-[9px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest"><span>{vehiclePricing[vehicle]?.capacity || 4} Pax</span><span className="w-1 h-1 bg-slate-300 dark:bg-slate-600 rounded-full"></span><span>{vehiclePricing[vehicle]?.luggage || 2} Luggage</span></div>
+                                                    </div>
+                                                </div>
+                                                <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-zinc-900 text-slate-900 dark:text-white flex items-center justify-center group-hover:bg-amber-400 group-hover:text-white transition-all shrink-0 shadow-sm border border-slate-200 dark:border-white/5"><ChevronDown size={24} strokeWidth={4} /></div>
+                                            </button>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <button onClick={() => setStep(1)} className="flex items-center justify-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white font-black text-xs uppercase tracking-widest px-5 py-4 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all" aria-label="Back to step 1">
+                                                <ArrowRight size={14} strokeWidth={3} className="rotate-180"/> Back
+                                            </button>
+                                            <button onClick={() => setStep(3)} className="flex-1 flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98] lg:hidden" aria-label="Continue to review">
+                                                Review Trip <ArrowRight size={16} strokeWidth={3}/>
+                                            </button>
+                                        </div>
+                                    </motion.div>
+                                )}
+
+                                {step === 3 && (
+                                    <motion.div key="step3" initial={{opacity:0,x:16}} animate={{opacity:1,x:0}} exit={{opacity:0,x:16}} transition={{duration:0.2}} className="lg:hidden">
+                                        <button onClick={() => setStep(2)} className="mb-4 flex items-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white font-black text-xs uppercase tracking-widest px-5 py-3 rounded-2xl shadow-sm hover:shadow-md transition-all" aria-label="Back to step 2">
+                                            <ArrowRight size={14} strokeWidth={3} className="rotate-180"/> Back to Details
+                                        </button>
+                                    </motion.div>
+                                )}
+
+                            </AnimatePresence>
                         </div>
 
                         {/* Section 2: Summary & Checkout */}
-                        <div className="bg-slate-50/50 dark:bg-[#0a0a0a] border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm p-5 lg:p-6 flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-6 lg:gap-0 transition-colors">
+                        <div className={`bg-slate-50/50 dark:bg-[#0a0a0a] border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm p-5 lg:p-6 flex flex-col justify-start lg:justify-between h-auto lg:h-full lg:min-h-0 gap-6 lg:gap-0 transition-colors ${step === 3 ? 'flex' : 'hidden lg:flex'}`}>
                             <div className="space-y-6 flex-1 flex flex-col">
                                 <div className="flex justify-between items-center mb-2">
                                     <h2 className="text-lg font-black text-emerald-950 dark:text-white tracking-wide uppercase">Trip Summary</h2>
