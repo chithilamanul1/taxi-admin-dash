@@ -18,11 +18,15 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
     const sortedVehicles = [...vehicles].sort((a, b) => {
         const getPriority = (type) => {
             const t = type?.toLowerCase() || '';
-            if (t.includes('mini')) return 1;
+            if (t.includes('mini-car') || t.includes('wagon')) return 1;
             if (t.includes('sedan')) return 2;
-            if (t.includes('suv')) return 3;
-            if (t.includes('vezel')) return 4;
-            if (t.includes('van')) return 5;
+            if (t.includes('vezel') || t.includes('vessel')) return 3;
+            if (t.includes('suv')) return 4;
+            if (t.includes('mini-van-05')) return 5;
+            if (t.includes('mini-van')) return 5.5; // Catch other mini-vans
+            if (t.includes('kdh-van') || t.includes('flatroof') || t.includes('kdh')) return 6;
+            if (t.includes('highroof')) return 7;
+            if (t.includes('bus') || t.includes('coach')) return 8;
             return 10;
         };
         return getPriority(a.vehicleType) - getPriority(b.vehicleType);
@@ -127,8 +131,8 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 rounded-[2rem] bg-white dark:bg-zinc-900
                                 ${!suitable ? 'opacity-50 grayscale' : ''}
                                 ${isSelected
-                                    ? 'border-2 border-[#FACC15] bg-[#FACC15]/5 dark:bg-[#FACC15]/10 shadow-lg shadow-[#FACC15]/5'
-                                    : 'border-2 border-slate-100 dark:border-white/5 hover:border-slate-200 dark:hover:border-white/10 hover:shadow-md'
+                                    ? 'border-2 border-[#FACC15] bg-[#FACC15]/5 dark:bg-[#FACC15]/10'
+                                    : 'border-2 border-slate-100 dark:border-white/5 hover:border-slate-200 dark:hover:border-white/10'
                                 }
                             `}
                             style={{ contain: 'layout' }}
@@ -181,10 +185,10 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                         className={`
                                             object-contain transition-transform duration-500
                                             ${mini
-                                                ? 'w-[95%] h-[110px] sm:h-[130px] scale-[1.2] sm:scale-[1.3] group-hover/card:scale-[1.35]'
+                                                ? `w-[95%] h-[110px] sm:h-[130px] ${isSelected ? 'scale-[1.35] sm:scale-[1.45]' : 'scale-[1.25] sm:scale-[1.3] group-hover/card:scale-[1.35]'}`
                                                 : (vehicle.vehicleType === 'sedan' || (vehicle.name || '').toLowerCase().includes('sedan'))
-                                                    ? 'w-[90%] h-[80px] sm:h-[95px] scale-[1.35] sm:scale-[1.45]'
-                                                    : `w-[88%] h-[75px] sm:h-[90px] ${isSelected ? 'scale-[1.2] sm:scale-[1.25]' : 'scale-105 group-hover/card:scale-[1.15]'}`
+                                                    ? `w-[90%] h-[80px] sm:h-[95px] ${isSelected ? 'scale-[1.5] sm:scale-[1.6]' : 'scale-[1.4] sm:scale-[1.45] group-hover/card:scale-[1.5]'}`
+                                                    : `w-[88%] h-[75px] sm:h-[90px] ${isSelected ? 'scale-[1.35] sm:scale-[1.45]' : 'scale-[1.15] sm:scale-[1.25] group-hover/card:scale-[1.25]'}`
                                             }
                                         `}
                                     />

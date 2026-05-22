@@ -86,7 +86,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             }
         });
         window.dispatchEvent(event);
-        const element = document.getElementById('calculator');
+        const element = document.getElementById('booking');
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
         }
