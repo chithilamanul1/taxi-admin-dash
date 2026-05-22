@@ -3,6 +3,9 @@ import Booking from '@/models/Booking';
 import { initiatePayHereTransaction } from '@/lib/payment';
 import { redirect } from 'next/navigation';
 import AutoSubmitForm from './AutoSubmitForm'; // Client component
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+export const revalidate = 0;
 
 export default async function PayHerePage({ searchParams }) {
     await dbConnect();
