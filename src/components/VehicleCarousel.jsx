@@ -177,18 +177,18 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                     </div>
                                 )}
 
-                                {/* Vehicle Image — Wagon R (mini-car) stays bigger */}
-                                <div className={`w-full flex justify-center items-center relative z-10 mt-auto ${mini ? 'min-h-[120px] sm:min-h-[140px] py-1' : 'min-h-[90px] sm:min-h-[110px] py-1'}`}>
+                                {/* Vehicle Image — uniform premium dimensions */}
+                                <div className="w-full flex justify-center items-center relative z-10 mt-auto min-h-[120px] sm:min-h-[140px] py-1">
                                     <img
                                         src={vehicle.image}
                                         alt={vehicle.name}
                                         className={`
                                             object-contain transition-transform duration-500
                                             ${mini
-                                                ? `w-[95%] h-[110px] sm:h-[130px] ${isSelected ? 'scale-[1.35] sm:scale-[1.45]' : 'scale-[1.25] sm:scale-[1.3] group-hover/card:scale-[1.35]'}`
+                                                ? `w-[95%] h-[110px] sm:h-[130px] ${isSelected ? 'scale-[1.25] sm:scale-[1.3]' : 'scale-[1.1] sm:scale-[1.15] group-hover/card:scale-[1.2]'}`
                                                 : (vehicle.vehicleType === 'sedan' || (vehicle.name || '').toLowerCase().includes('sedan'))
-                                                    ? `w-[90%] h-[80px] sm:h-[95px] ${isSelected ? 'scale-[1.5] sm:scale-[1.6]' : 'scale-[1.4] sm:scale-[1.45] group-hover/card:scale-[1.5]'}`
-                                                    : `w-[88%] h-[75px] sm:h-[90px] ${isSelected ? 'scale-[1.35] sm:scale-[1.45]' : 'scale-[1.15] sm:scale-[1.25] group-hover/card:scale-[1.25]'}`
+                                                    ? `w-[95%] h-[110px] sm:h-[130px] ${isSelected ? 'scale-[1.25] sm:scale-[1.3]' : 'scale-[1.1] sm:scale-[1.15] group-hover/card:scale-[1.2]'}`
+                                                    : `w-[90%] h-[100px] sm:h-[120px] ${isSelected ? 'scale-[1.2] sm:scale-[1.25]' : 'scale-[1.05] sm:scale-[1.1] group-hover/card:scale-[1.15]'}`
                                             }
                                         `}
                                     />
