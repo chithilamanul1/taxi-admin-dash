@@ -171,7 +171,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const isSigiriyaOrEllaRoute = pickupNorm.includes('sigiriya') || dropoffNorm.includes('sigiriya') || pickupNorm.includes('ella') || dropoffNorm.includes('ella');
     const isWagonRVehicle = vehicleData && (vehicleData.vehicleType === 'mini-car' || vehicleData.vehicleSlug === 'mini-car');
 
-    if (isWagonRVehicle && isSigiriyaOrEllaRoute && distKm > 0 && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour') {
+    if (isWagonRVehicle && isSigiriyaOrEllaRoute && distKm > 0 && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour' && !isAirportRide) {
         distancePrice = distKm * 200;
         overrideApplied = true;
         console.log(`[Pricing Override] Wagon R route to/from Sigiriya/Ella: LKR ${distancePrice} (Rs. 200/km)`);
@@ -197,7 +197,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const vehicleType = vehicleData.vehicleType;
     const vehicleSlug = vehicleData.vehicleSlug || vehicleType;
 
-    if (matchedOverride && !overrideApplied) {
+    if (matchedOverride && !overrideApplied && !isAirportRide) {
         console.log(`[Pricing] Found Override for: ${matchedOverride.name || matchedOverride.title}`);
 
         // 1. Check for Fixed Pricing (Precedence)
