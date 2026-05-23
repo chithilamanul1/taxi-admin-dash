@@ -2,6 +2,8 @@ import dbConnect from '@/lib/db';
 import PricingSetting from '@/models/PricingSetting';
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req) {
     try {
         await dbConnect();
@@ -67,7 +69,7 @@ export async function PUT(req) {
                 airportRoundTripPackages: body.airportRoundTripPackages || [],
                 updatedBy: body.updatedBy || 'admin'
             },
-            { new: true, upsert: true }
+            { new: true, upsert: true, runValidators: true }
         );
 
         return NextResponse.json({ success: true, data: settings });
@@ -75,3 +77,4 @@ export async function PUT(req) {
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }
+

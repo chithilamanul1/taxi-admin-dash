@@ -140,6 +140,7 @@ export default function AdminDashboard() {
     const [editingVehicle, setEditingVehicle] = useState(null)
     const [editForm, setEditForm] = useState({})
     const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true, nameBoardPrice: 2000, waitingHourRate: 1000, roundTripPackages: [], airportRoundTripPackages: [] })
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     // Tours State
     const [tours, setTours] = useState([])
@@ -494,7 +495,7 @@ export default function AdminDashboard() {
         }, 45000)
 
         return () => clearInterval(interval)
-    }, [currentView, pricingCategory, editingVehicle, editingTour, editingPost, editingTeam, selectedTicket, selectedBooking])
+    }, [currentView, pricingCategory, editingVehicle, editingTour, editingPost, editingTeam, selectedTicket, selectedBooking, refreshTrigger])
 
     const markNotificationRead = async (id) => {
         try {
@@ -1521,8 +1522,13 @@ export default function AdminDashboard() {
                                                     body: JSON.stringify(pricingSettings)
                                                 });
                                                 const data = await res.json();
-                                                if (data.success) alert('Packages saved successfully!');
-                                                else alert('Failed to save packages.');
+                                                if (data.success) {
+                                                    alert('Packages saved successfully!');
+                                                    setRefreshTrigger(prev => prev + 1);
+                                                    router.refresh();
+                                                } else {
+                                                    alert('Failed to save packages.');
+                                                }
                                             }}
                                             className="px-8 py-3.5 bg-emerald-950 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl shadow-emerald-950/20 flex items-center gap-3 active:scale-95"
                                         >
@@ -1620,8 +1626,13 @@ export default function AdminDashboard() {
                                                     body: JSON.stringify(pricingSettings)
                                                 });
                                                 const data = await res.json();
-                                                if (data.success) alert('Settings saved successfully!');
-                                                else alert('Failed to save settings.');
+                                                if (data.success) {
+                                                    alert('Settings saved successfully!');
+                                                    setRefreshTrigger(prev => prev + 1);
+                                                    router.refresh();
+                                                } else {
+                                                    alert('Failed to save settings.');
+                                                }
                                             }}
                                             className="text-xs bg-emerald-900 text-white px-3 py-1.5 rounded-lg hover:bg-emerald-900/90 font-bold shadow-md shadow-emerald-900/10 transition-all hover:scale-105"
                                         >
