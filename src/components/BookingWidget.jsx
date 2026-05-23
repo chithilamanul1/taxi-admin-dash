@@ -74,10 +74,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [isVehicleDrawerOpen, setIsVehicleDrawerOpen] = useState(false)
     const [bookingInitialData, setBookingInitialData] = useState({})
     const [step, setStep] = useState(1); // 1=Route, 2=Passengers+Vehicle, 3=Summary(mobile)
+    const [showVehicleSelection, setShowVehicleSelection] = useState(false);
 
     const handleTabChange = (tabId) => {
         setActiveTab(tabId);
         setStep(1);
+        setShowVehicleSelection(false);
         const syncTab = ['pickup', 'drop'].includes(tabId) ? 'airport' : 'tour';
         const event = new CustomEvent('syncCustomTourBooking', {
             detail: {
@@ -373,25 +375,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         }
     }, [passengerCount, vehiclePricing, vehicle, isManualVehicle]);
 
-    // Auto-open vehicle drawer when passengers/luggage exceed current vehicle capacity
-    useEffect(() => {
-        const currentVehicleData = vehiclePricing[vehicle];
-        if (!currentVehicleData) return;
 
-        const totalPax = passengerCount.adults + passengerCount.children;
-        const totalLuggage = passengerCount.luggage;
-
-        const exceedsCapacity =
-            totalPax > (currentVehicleData.capacity || 4) ||
-            totalLuggage > (currentVehicleData.luggage || 0);
-
-        if (exceedsCapacity && !isVehicleDrawerOpen) {
-            const timer = setTimeout(() => {
-                setIsVehicleDrawerOpen(true);
-            }, 600);
-            return () => clearTimeout(timer);
-        }
-    }, [passengerCount, vehiclePricing, vehicle, isVehicleDrawerOpen]);
 
     // Check for Location Offers (Smart Offers)
     useEffect(() => {
@@ -550,6 +534,21 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         if (!passengerCount.adults || passengerCount.adults < 1) {
             alert("Please select at least one adult passenger.");
             return;
+        }
+
+        const currentVehicleData = vehiclePricing[vehicle];
+        if (currentVehicleData) {
+            const totalPax = (passengerCount.adults || 0) + (passengerCount.children || 0);
+            const totalLuggage = passengerCount.luggage || 0;
+            const exceedsCapacity =
+                totalPax > (currentVehicleData.capacity || 4) ||
+                totalLuggage > (currentVehicleData.luggage || 0);
+
+            if (exceedsCapacity) {
+                alert(`The selected vehicle (${currentVehicleData.name}) does not have enough capacity for your passenger and luggage count. Please select a suitable vehicle.`);
+                setIsVehicleDrawerOpen(true);
+                return;
+            }
         }
 
         const verifiedCoupons = appliedOffers.map(offer => ({
@@ -798,62 +797,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         )}
                                                     </AnimatePresence>
                                                 </div>
-
-                                                {distance && distance > 0 && (
-                                                    <div className="mt-4 animate-slide-up space-y-4">
-                                                        <div className="flex items-center justify-between px-1">
-                                                            <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Select Vehicle</label>
-                                                            <button
-                                                                onClick={() => setIsVehicleDrawerOpen(true)}
-                                                                className="bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20 text-[8px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1.5 shadow-sm hover:bg-emerald-100 hover:shadow transition-all"
-                                                            >
-                                                                <Info size={10} strokeWidth={3} /> Fleet Specs
-                                                            </button>
-                                                        </div>
-                                                        <VehicleCarousel
-                                                            vehicles={Object.values(vehiclePricing).map(v => {
-                                                                 const priceInfo = calculatePrice(
-                                                                     distance,
-                                                                     v.vehicleType,
-                                                                     tripType,
-                                                                     vehiclePricing,
-                                                                     totalWaitingHours,
-                                                                     false, // hasNameBoard removed from landing page
-                                                                     nameBoardPrice,
-                                                                     pickup?.name || pickupSearch,
-                                                                     dropoff?.name || dropoffSearch,
-                                                                     destinations,
-                                                                     scheduledTime || currentTime,
-                                                                     scheduledDate || currentDate,
-                                                                     surgeRules,
-                                                                     roundTripPackageId,
-                                                                     pricingSettings.roundTripPackages
-                                                                 );
-                                                                 return {
-                                                                     ...v,
-                                                                     calculatedTotal: priceInfo.total
-                                                                 };
-                                                            })}
-                                                            selectedId={vehicle}
-                                                            onSelect={(vType) => {
-                                                                setVehicle(vType);
-                                                                setIsManualVehicle(true);
-                                                                const syncTab = ['pickup', 'drop'].includes(activeTab) ? 'airport' : 'tour';
-                                                                const event = new CustomEvent('syncCustomTourBooking', {
-                                                                    detail: {
-                                                                        tab: syncTab,
-                                                                        vehicleId: vType
-                                                                    }
-                                                                });
-                                                                window.dispatchEvent(event);
-                                                            }}
-                                                            passengerCount={passengerCount}
-                                                            pickupLocation={pickup}
-                                                            dropoffLocation={dropoff}
-                                                            isCondensed={false}
-                                                        />
-                                                    </div>
-                                                )}
                                             </div>
                                         </div>
                                         <div className="mt-6 flex items-center gap-3">
@@ -962,67 +905,91 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 ))}
                                             </div>
                                         </div>
-                                        <div className="mb-6">
-                                            <div className="flex items-center justify-between mb-4 px-1">
-                                                <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Select Vehicle</label>
+                                        {!showVehicleSelection ? (
+                                            <div className="flex items-center gap-3 mt-6">
+                                                <button onClick={() => setStep(1)} className="flex items-center justify-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white font-black text-xs uppercase tracking-widest px-5 py-4 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all" aria-label="Back to step 1">
+                                                    <ArrowRight size={14} strokeWidth={3} className="rotate-180"/> Back
+                                                </button>
                                                 <button
-                                                    onClick={() => setIsVehicleDrawerOpen(true)}
-                                                    className="bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20 text-[8px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1.5 shadow-sm hover:bg-emerald-100 hover:shadow transition-all"
+                                                    onClick={() => {
+                                                        if (!passengerCount.adults || passengerCount.adults < 1) {
+                                                            alert("Please select at least 1 Adult passenger.");
+                                                            return;
+                                                        }
+                                                        setShowVehicleSelection(true);
+                                                        setIsVehicleDrawerOpen(true);
+                                                    }}
+                                                    className="flex-1 flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
+                                                    aria-label="Continue to vehicle selection"
                                                 >
-                                                    <Info size={10} strokeWidth={3} /> Fleet Specs
+                                                    Continue - Select Vehicle <ArrowRight size={16} strokeWidth={3}/>
                                                 </button>
                                             </div>
-                                            <VehicleCarousel
-                                                vehicles={Object.values(vehiclePricing).map(v => {
-                                                    const priceInfo = calculatePrice(
-                                                        distance,
-                                                        v.vehicleType,
-                                                        tripType,
-                                                        vehiclePricing,
-                                                        totalWaitingHours,
-                                                        false, // hasNameBoard removed from landing page
-                                                        nameBoardPrice,
-                                                        pickup?.name || pickupSearch,
-                                                        dropoff?.name || dropoffSearch,
-                                                        destinations,
-                                                        scheduledTime || currentTime,
-                                                        scheduledDate || currentDate,
-                                                        surgeRules,
-                                                        roundTripPackageId,
-                                                        pricingSettings.roundTripPackages
-                                                    );
-                                                    return {
-                                                        ...v,
-                                                        calculatedTotal: priceInfo.total
-                                                    };
-                                                })}
-                                                selectedId={vehicle}
-                                                onSelect={(vType) => {
-                                                    setVehicle(vType);
-                                                    setIsManualVehicle(true);
-                                                    const syncTab = ['pickup', 'drop'].includes(activeTab) ? 'airport' : 'tour';
-                                                    const event = new CustomEvent('syncCustomTourBooking', {
-                                                        detail: {
-                                                            tab: syncTab,
-                                                            vehicleId: vType
-                                                        }
-                                                    });
-                                                    window.dispatchEvent(event);
-                                                }}
-                                                passengerCount={passengerCount}
-                                                pickupLocation={pickup}
-                                                dropoffLocation={dropoff}
-                                                isCondensed={false}
-                                            />
-                                        </div>
-                                        <div className="flex items-center gap-3">
-                                            <button onClick={() => setStep(1)} className="flex items-center justify-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white font-black text-xs uppercase tracking-widest px-5 py-4 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all" aria-label="Back to step 1">
-                                                <ArrowRight size={14} strokeWidth={3} className="rotate-180"/> Back
-                                            </button>
-                                            <button onClick={() => setStep(3)} className="flex-1 flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98] lg:hidden" aria-label="Continue to review">
-                                                Review Trip <ArrowRight size={16} strokeWidth={3}/>
-                                            </button>
-                                        </div>
+                                        ) : (
+                                            <>
+                                                <div className="mb-6 animate-slide-up">
+                                                    <div className="flex items-center justify-between mb-4 px-1">
+                                                        <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Select Vehicle</label>
+                                                        <button
+                                                            onClick={() => setIsVehicleDrawerOpen(true)}
+                                                            className="bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20 text-[8px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1.5 shadow-sm hover:bg-emerald-100 hover:shadow transition-all"
+                                                        >
+                                                            <Info size={10} strokeWidth={3} /> Fleet Specs
+                                                        </button>
+                                                    </div>
+                                                    <VehicleCarousel
+                                                        vehicles={Object.values(vehiclePricing).map(v => {
+                                                            const priceInfo = calculatePrice(
+                                                                distance,
+                                                                v.vehicleType,
+                                                                tripType,
+                                                                vehiclePricing,
+                                                                totalWaitingHours,
+                                                                false, // hasNameBoard removed from landing page
+                                                                nameBoardPrice,
+                                                                pickup?.name || pickupSearch,
+                                                                dropoff?.name || dropoffSearch,
+                                                                destinations,
+                                                                scheduledTime || currentTime,
+                                                                scheduledDate || currentDate,
+                                                                surgeRules,
+                                                                roundTripPackageId,
+                                                                pricingSettings.roundTripPackages
+                                                            );
+                                                            return {
+                                                                ...v,
+                                                                calculatedTotal: priceInfo.total
+                                                            };
+                                                        })}
+                                                        selectedId={vehicle}
+                                                        onSelect={(vType) => {
+                                                            setVehicle(vType);
+                                                            setIsManualVehicle(true);
+                                                            const syncTab = ['pickup', 'drop'].includes(activeTab) ? 'airport' : 'tour';
+                                                            const event = new CustomEvent('syncCustomTourBooking', {
+                                                                detail: {
+                                                                    tab: syncTab,
+                                                                    vehicleId: vType
+                                                                }
+                                                            });
+                                                            window.dispatchEvent(event);
+                                                        }}
+                                                        passengerCount={passengerCount}
+                                                        pickupLocation={pickup}
+                                                        dropoffLocation={dropoff}
+                                                        isCondensed={false}
+                                                    />
+                                                </div>
+                                                <div className="flex items-center gap-3">
+                                                    <button onClick={() => setShowVehicleSelection(false)} className="flex items-center justify-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white font-black text-xs uppercase tracking-widest px-5 py-4 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all" aria-label="Back to passenger input selection">
+                                                        <ArrowRight size={14} strokeWidth={3} className="rotate-180"/> Back
+                                                    </button>
+                                                    <button onClick={() => setStep(3)} className="flex-1 flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98] lg:hidden" aria-label="Continue to review">
+                                                        Review Trip <ArrowRight size={16} strokeWidth={3}/>
+                                                    </button>
+                                                </div>
+                                            </>
+                                        )}
                                     </motion.div>
                                 )}
 
@@ -1184,7 +1151,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
                                     <button
                                         onClick={handleBook}
-                                        disabled={!distance}
+                                        disabled={!distance || !showVehicleSelection}
                                         className="w-full bg-emerald-600 hover:bg-emerald-700 text-white min-h-16 sm:h-[72px] py-2 sm:py-0 rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center border border-emerald-500/20"
                                     >
                                         {isLoadingPricing ? (
