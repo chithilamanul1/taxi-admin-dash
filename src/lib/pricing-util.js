@@ -19,6 +19,64 @@ export const TAXI_TOUR_PACKAGES = [
     { id: '12h-300km', name: '12 Hour / 300 KM', hours: 12, distance: 300, price: 25000, description: 'Full day hire outstation.' }
 ];
 
+export const hasPricingData = (d) => {
+    if (!d) return false;
+    if (d.price > 0) return true;
+    if (d.pricing && (Object.keys(d.pricing).length > 0 || (typeof d.pricing.get === 'function' && d.pricing.size > 0))) return true;
+    if (d.vehicleTiers && (Object.keys(d.vehicleTiers).length > 0 || (typeof d.vehicleTiers.get === 'function' && d.vehicleTiers.size > 0))) return true;
+    if (d.vehicleRateOverrides && (Object.keys(d.vehicleRateOverrides).length > 0 || (typeof d.vehicleRateOverrides.get === 'function' && d.vehicleRateOverrides.size > 0))) return true;
+    if (d.perKmRateOverride > 0) return true;
+    return false;
+};
+
+export const findMatchingDestination = (address, destinationsList) => {
+    if (!address || !destinationsList || destinationsList.length === 0) return null;
+
+    const normalize = (str) => {
+        if (!str) return '';
+        return str.toLowerCase()
+            .replace(/sri lanka/g, '')
+            .replace(/[,.-]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+    };
+
+    const addrLower = normalize(address);
+    const parts = address.split(',').map(p => normalize(p));
+
+    const matches = destinationsList.filter(d => {
+        const name = normalize(d.name);
+        const title = normalize(d.title);
+        if (!name && !title) return false;
+
+        // Check if any comma-separated component is an exact match for destination name or title
+        const isExactComponent = parts.some(p => (name && p === name) || (title && p === title));
+        if (isExactComponent) return true;
+
+        // Also support cases where the address is just the destination name (e.g. "Galle")
+        if (addrLower === name || addrLower === title) return true;
+
+        // Otherwise, we do a word boundary match, but ONLY if the address doesn't contain "road", "street", "lane" nearby to avoid matching street names (like Galle Road)
+        const isStreet = addrLower.includes('road') || addrLower.includes('street') || addrLower.includes('lane') || addrLower.includes('face');
+        if (isStreet) {
+            return false;
+        }
+
+        const nameRegex = name ? new RegExp(`\\b${name}\\b`, 'i') : null;
+        const titleRegex = title ? new RegExp(`\\b${title}\\b`, 'i') : null;
+        
+        return (nameRegex && nameRegex.test(addrLower)) || (titleRegex && titleRegex.test(addrLower));
+    });
+
+    if (matches.length === 0) return null;
+
+    return matches.sort((a, b) => {
+        const lenA = (a.name || a.title || '').length;
+        const lenB = (b.name || b.title || '').length;
+        return lenB - lenA;
+    })[0];
+};
+
 export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '', dynamicDestinations = [], options = {}) => {
     const distKm = Math.ceil(Number(distanceKm) || 0);
     const { roundTripPackageId, roundTripPackages: normalPackages, airportRoundTripPackages } = options;
@@ -87,23 +145,11 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
             }
         }
 
-        // Helper to check pricing data
-        const hasPricing = (d) => d && (d.price > 0 || (d.pricing && Object.keys(d.pricing).length > 0) || (typeof d.pricing?.get === 'function' && d.pricing.size > 0));
-        
-        // Use a simpler location matcher for early return
-        const normalize = (str) => (str || '').toLowerCase().replace(/sri lanka/g, '').replace(/[,.-]/g, ' ').replace(/\s+/g, ' ').trim();
-        const dropLower = normalize(dropoff);
-        const pickLower = normalize(pickup);
-        
-        const destMatch = (dynamicDestinations || []).find(d => {
-            const name = normalize(d.name);
-            const title = normalize(d.title);
-            if (!name && !title) return false;
-            return (name && (dropLower.includes(name) || pickLower.includes(name))) || 
-                   (title && (dropLower.includes(title) || pickLower.includes(title)));
-        });
+        const pickupOverride = findMatchingDestination(pickup, dynamicDestinations);
+        const dropoffOverride = findMatchingDestination(dropoff, dynamicDestinations);
+        const destMatch = hasPricingData(dropoffOverride) ? dropoffOverride : (hasPricingData(pickupOverride) ? pickupOverride : null);
 
-        if (destMatch && hasPricing(destMatch)) {
+        if (destMatch && hasPricingData(destMatch)) {
             let vPricing = {};
             if (destMatch.pricing) {
                 if (typeof destMatch.pricing.get === 'function') vPricing = Object.fromEntries(destMatch.pricing);
@@ -138,41 +184,11 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const isFromAirport = isAirport(pickup);
     const isToAirport = isAirport(dropoff);
     const isAirportRide = isFromAirport || isToAirport;
+    const isAirportTransfer = (tripType === 'one-way' || tripType === 'pickup' || tripType === 'drop') && isAirportRide;
 
     if (isAirportRide) console.log(`[Pricing] Identified as AIRPORT RIDE. Forcing standard airport rates.`);
 
     const tiers = (vehicleData.tiers || []).sort((a, b) => a.min - b.min);
-
-    // Helper for robust location matching
-    const findMatchingDestination = (address, destinationsList) => {
-        if (!address || !destinationsList || destinationsList.length === 0) return null;
-
-        const normalize = (str) => {
-            if (!str) return '';
-            return str.toLowerCase()
-                .replace(/sri lanka/g, '')
-                .replace(/[,.-]/g, ' ')
-                .replace(/\s+/g, ' ')
-                .trim();
-        };
-
-        const addrLower = normalize(address);
-
-        const matches = destinationsList.filter(d => {
-            const name = normalize(d.name);
-            const title = normalize(d.title);
-            if (!name && !title) return false;
-            return (name && addrLower.includes(name)) || (title && addrLower.includes(title));
-        });
-
-        if (matches.length === 0) return null;
-
-        return matches.sort((a, b) => {
-            const lenA = (a.name || a.title || '').length;
-            const lenB = (b.name || b.title || '').length;
-            return lenB - lenA;
-        })[0];
-    };
 
     // Calculate distance-based price
     let distancePrice = 0;
@@ -185,7 +201,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const isSigiriyaOrEllaRoute = pickupNorm.includes('sigiriya') || dropoffNorm.includes('sigiriya') || pickupNorm.includes('ella') || dropoffNorm.includes('ella');
     const isWagonRVehicle = vehicleData && (vehicleData.vehicleType === 'mini-car' || vehicleData.vehicleSlug === 'mini-car');
 
-    if (isWagonRVehicle && isSigiriyaOrEllaRoute && distKm > 0 && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour' && !isAirportRide) {
+    if (isWagonRVehicle && isSigiriyaOrEllaRoute && distKm > 0 && tripType !== 'airport-round-tour' && tripType !== 'normal-round-tour' && !isAirportTransfer) {
         distancePrice = distKm * 200;
         overrideApplied = true;
         console.log(`[Pricing Override] Wagon R route to/from Sigiriya/Ella: LKR ${distancePrice} (Rs. 200/km)`);
@@ -194,24 +210,13 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     const pickupOverride = findMatchingDestination(pickup, dynamicDestinations);
     const dropoffOverride = findMatchingDestination(dropoff, dynamicDestinations);
 
-    // Helper to check if a destination has any valid pricing data
-    const hasPricingData = (d) => {
-        if (!d) return false;
-        if (d.price > 0) return true;
-        if (d.pricing && (Object.keys(d.pricing).length > 0 || (typeof d.pricing.get === 'function' && d.pricing.size > 0))) return true;
-        if (d.vehicleTiers && (Object.keys(d.vehicleTiers).length > 0 || (typeof d.vehicleTiers.get === 'function' && d.vehicleTiers.size > 0))) return true;
-        if (d.vehicleRateOverrides && (Object.keys(d.vehicleRateOverrides).length > 0 || (typeof d.vehicleRateOverrides.get === 'function' && d.vehicleRateOverrides.size > 0))) return true;
-        if (d.perKmRateOverride > 0) return true;
-        return false;
-    };
-
     // Prefer the one that actually has pricing defined (usually the destination/dropoff)
     const matchedOverride = hasPricingData(dropoffOverride) ? dropoffOverride : (hasPricingData(pickupOverride) ? pickupOverride : null);
 
     const vehicleType = vehicleData.vehicleType;
     const vehicleSlug = vehicleData.vehicleSlug || vehicleType;
 
-    if (matchedOverride && !overrideApplied && !isAirportRide) {
+    if (matchedOverride && !overrideApplied && !isAirportTransfer) {
         console.log(`[Pricing] Found Override for: ${matchedOverride.name || matchedOverride.title}`);
 
         // 1. Check for Fixed Pricing (Precedence)
