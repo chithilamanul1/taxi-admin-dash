@@ -18,6 +18,104 @@ import GalleryManager from '@/components/admin/GalleryManager'
 import DriverManager from '@/components/admin/DriverManager'
 import TrafficSurgeManager from '@/components/admin/TrafficSurgeManager'
 
+const ALL_VEHICLE_TYPES = [
+    { value: 'mini-car', label: 'Wagon R (Mini Car)' },
+    { value: 'sedan', label: 'Sedan' },
+    { value: 'vezel', label: 'Vessel (Vezel)' },
+    { value: 'suv', label: 'SUV' },
+    { value: 'mini-van-05', label: 'Mini Van (5-Seater)' },
+    { value: 'mini-van-every', label: 'Mini Van' },
+    { value: 'kdh-van', label: 'KDH' },
+    { value: 'kdh-flatroof', label: 'KDH Flatroof' },
+    { value: 'kdh-highroof', label: 'High Roof' },
+    { value: 'mini-bus', label: 'Mini Bus' },
+    { value: 'bus', label: 'Bus' },
+    { value: 'large-bus', label: 'Large Bus' },
+    { value: 'coach-bus', label: 'Coach Bus' },
+    { value: 'coster-coach', label: 'Coster Coach' }
+];
+
+const ensureAllVehicles = (settingsData) => {
+    if (!settingsData) return settingsData;
+    const updatedSettings = { ...settingsData };
+    
+    // Process roundTripPackages (Normal packages)
+    const normalHours = [...new Set((updatedSettings.roundTripPackages || []).map(p => p.hours))];
+    const normalPackages = [];
+    normalHours.forEach(h => {
+        ALL_VEHICLE_TYPES.forEach(vt => {
+            const existing = (updatedSettings.roundTripPackages || []).find(p => p.hours === h && p.vehicleType === vt.value);
+            if (existing) {
+                const tiers = [...(existing.tiers || [])];
+                while (tiers.length < 4) {
+                    tiers.push({ km: (tiers.length + 1) * 10, price: 0 });
+                }
+                normalPackages.push({ ...existing, tiers });
+            } else {
+                normalPackages.push({
+                    id: `pkg-${h}h-${vt.value}-${Date.now()}`,
+                    hours: h,
+                    vehicleType: vt.value,
+                    tiers: [
+                        { km: 10, price: 0 },
+                        { km: 20, price: 0 },
+                        { km: 30, price: 0 },
+                        { km: 40, price: 0 }
+                    ]
+                });
+            }
+        });
+    });
+    updatedSettings.roundTripPackages = normalPackages;
+
+    // Process airportRoundTripPackages
+    const airportHours = [...new Set((updatedSettings.airportRoundTripPackages || []).map(p => p.hours))];
+    const airportPackages = [];
+    airportHours.forEach(h => {
+        ALL_VEHICLE_TYPES.forEach(vt => {
+            const existing = (updatedSettings.airportRoundTripPackages || []).find(p => p.hours === h && p.vehicleType === vt.value);
+            if (existing) {
+                let tiers = [];
+                if (existing.tiers && existing.tiers.length > 0) {
+                    tiers = [...existing.tiers];
+                } else {
+                    // Convert old distance & price to 4 tiers
+                    tiers = [
+                        { km: existing.distance || 50, price: existing.price || 0 },
+                        { km: (existing.distance || 50) * 2, price: 0 },
+                        { km: (existing.distance || 50) * 3, price: 0 },
+                        { km: (existing.distance || 50) * 4, price: 0 }
+                    ];
+                }
+                while (tiers.length < 4) {
+                    tiers.push({ km: (tiers.length + 1) * 50, price: 0 });
+                }
+                airportPackages.push({
+                    id: existing.id || `air-pkg-${h}h-${vt.value}-${Date.now()}`,
+                    hours: existing.hours,
+                    vehicleType: existing.vehicleType,
+                    tiers
+                });
+            } else {
+                airportPackages.push({
+                    id: `air-pkg-${h}h-${vt.value}-${Date.now()}`,
+                    hours: h,
+                    vehicleType: vt.value,
+                    tiers: [
+                        { km: 50, price: 0 },
+                        { km: 100, price: 0 },
+                        { km: 150, price: 0 },
+                        { km: 200, price: 0 }
+                    ]
+                });
+            }
+        });
+    });
+    updatedSettings.airportRoundTripPackages = airportPackages;
+    
+    return updatedSettings;
+};
+
 export default function AdminDashboard() {
     const { data: session, status } = useSession()
     const router = useRouter()
@@ -283,7 +381,7 @@ export default function AdminDashboard() {
                     .catch(err => console.error("Error fetching posts:", err));
             }
 
-            if (currentView === 'pricing') {
+            if (currentView === 'pricing' || currentView === 'round-trips') {
                 setIsLoading(true)
                 // Fetch vehicle pricing
                 fetch(`/api/pricing?category=${pricingCategory}`, { cache: 'no-store' })
@@ -302,7 +400,7 @@ export default function AdminDashboard() {
                     .then(res => res.json())
                     .then(data => {
                         if (data.success && data.data) {
-                            setPricingSettings(data.data)
+                            setPricingSettings(ensureAllVehicles(data.data))
                         }
                         setIsLoading(false)
                     })
@@ -1085,17 +1183,39 @@ export default function AdminDashboard() {
 
                                 <div className="bg-emerald-50/50 border border-emerald-100 rounded-[2rem] p-6 sm:p-8 shadow-sm mb-6">
                                     <div className="flex items-center justify-between mb-8">
-                                        <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Airport Round Tour Packages</h4>
+                                        <div>
+                                            <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Airport Round Tour Packages</h4>
+                                            <p className="text-xs text-emerald-800/60 font-medium mt-1">Pricing tiers for round tours starting from the Airport.</p>
+                                        </div>
                                         <button 
                                             onClick={() => {
-                                                const newPackage = { 
-                                                    id: `air-pkg-${Date.now()}`, 
-                                                    hours: 5,
-                                                    distance: 50, 
-                                                    vehicleType: 'mini-car',
-                                                    price: 0
-                                                };
-                                                setPricingSettings({ ...pricingSettings, airportRoundTripPackages: [...(pricingSettings.airportRoundTripPackages || []), newPackage] });
+                                                const hoursStr = prompt("Enter hour count for the new Airport Package (e.g. 5, 8, 12):");
+                                                if (!hoursStr) return;
+                                                const newHours = Number(hoursStr);
+                                                if (isNaN(newHours) || newHours <= 0) {
+                                                    alert("Please enter a valid number of hours.");
+                                                    return;
+                                                }
+                                                const exists = (pricingSettings.airportRoundTripPackages || []).some(p => p.hours === newHours);
+                                                if (exists) {
+                                                    alert(`Package for ${newHours} hours already exists.`);
+                                                    return;
+                                                }
+                                                const newPackages = ALL_VEHICLE_TYPES.map(vt => ({
+                                                    id: `air-pkg-${newHours}h-${vt.value}-${Date.now()}`,
+                                                    hours: newHours,
+                                                    vehicleType: vt.value,
+                                                    tiers: [
+                                                        { km: 50, price: 0 },
+                                                        { km: 100, price: 0 },
+                                                        { km: 150, price: 0 },
+                                                        { km: 200, price: 0 }
+                                                    ]
+                                                }));
+                                                setPricingSettings({
+                                                    ...pricingSettings,
+                                                    airportRoundTripPackages: [...(pricingSettings.airportRoundTripPackages || []), ...newPackages]
+                                                });
                                             }}
                                             className="px-6 py-3 bg-emerald-600 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-900/10 flex items-center gap-2"
                                         >
@@ -1103,134 +1223,165 @@ export default function AdminDashboard() {
                                         </button>
                                     </div>
 
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-left">
-                                            <thead>
-                                                <tr className="border-b border-emerald-100">
-                                                    <th className="pb-4 text-[10px] font-black text-emerald-800 uppercase tracking-widest">Hour Count</th>
-                                                    <th className="pb-4 text-[10px] font-black text-emerald-800 uppercase tracking-widest">KM Limit</th>
-                                                    <th className="pb-4 text-[10px] font-black text-emerald-800 uppercase tracking-widest">Vehicle</th>
-                                                    <th className="pb-4 text-[10px] font-black text-emerald-800 uppercase tracking-widest">Flat Price</th>
-                                                    <th className="pb-4 text-[10px] font-black text-emerald-800 uppercase tracking-widest text-right">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-emerald-50">
-                                                {(pricingSettings.airportRoundTripPackages || []).map((pkg, idx) => (
-                                                    <tr key={pkg.id} className="group hover:bg-emerald-50/50 transition-colors">
-                                                        <td className="py-4">
-                                                            <div className="flex items-center gap-2">
-                                                                <input 
-                                                                    type="number"
-                                                                    value={pkg.hours}
-                                                                    onChange={(e) => {
-                                                                        const updated = [...pricingSettings.airportRoundTripPackages];
-                                                                        updated[idx].hours = Number(e.target.value);
-                                                                        setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
-                                                                    }}
-                                                                    className="w-16 bg-white border border-emerald-200 rounded-lg px-2 py-1.5 text-xs font-black outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                                />
-                                                                <span className="text-[10px] font-bold text-emerald-700 uppercase">Hrs</span>
-                                                            </div>
-                                                        </td>
-                                                        <td className="py-4">
-                                                            <div className="flex items-center gap-2">
-                                                                <input 
-                                                                    type="number"
-                                                                    value={pkg.distance}
-                                                                    onChange={(e) => {
-                                                                        const updated = [...pricingSettings.airportRoundTripPackages];
-                                                                        updated[idx].distance = Number(e.target.value);
-                                                                        setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
-                                                                    }}
-                                                                    className="w-16 bg-white border border-emerald-200 rounded-lg px-2 py-1.5 text-xs font-black outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                                />
-                                                                <span className="text-[10px] font-bold text-emerald-700 uppercase">KM</span>
-                                                            </div>
-                                                        </td>
-                                                        <td className="py-4">
-                                                            <select 
-                                                                value={pkg.vehicleType || 'mini-car'}
-                                                                onChange={(e) => {
-                                                                    const updated = [...pricingSettings.airportRoundTripPackages];
-                                                                    updated[idx].vehicleType = e.target.value;
-                                                                    setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
-                                                                }}
-                                                                className="bg-white border border-emerald-200 rounded-lg px-2 py-1.5 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                            >
-                                                                <option value="mini-car">Wagon R (Mini Car)</option>
-                                                                <option value="sedan">Sedan</option>
-                                                                <option value="vezel">Vessel (Vezel)</option>
-                                                                <option value="suv">SUV</option>
-                                                                <option value="mini-van-05">Mini Van (5-Seater)</option>
-                                                                <option value="mini-van-every">Mini Van</option>
-                                                                <option value="kdh-van">KDH</option>
-                                                                <option value="kdh-flatroof">KDH Flatroof</option>
-                                                                <option value="kdh-highroof">High Roof</option>
-                                                                <option value="mini-bus">Mini Bus</option>
-                                                                <option value="bus">Bus</option>
-                                                            </select>
-                                                        </td>
-                                                        <td className="py-4">
-                                                            <div className="flex items-center gap-1">
-                                                                <span className="text-[8px] font-black text-emerald-600">Rs.</span>
-                                                                <input 
-                                                                    type="number"
-                                                                    placeholder="Price"
-                                                                    value={pkg.price || 0}
-                                                                    onChange={(e) => {
-                                                                        const updated = [...pricingSettings.airportRoundTripPackages];
-                                                                        updated[idx].price = Number(e.target.value);
-                                                                        setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
-                                                                    }}
-                                                                    className="w-24 bg-white border border-emerald-200 rounded px-2 py-1.5 text-sm font-black text-emerald-600 outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                                />
-                                                            </div>
-                                                        </td>
-                                                        <td className="py-4 text-right">
-                                                            <button 
-                                                                onClick={() => {
-                                                                    const updated = pricingSettings.airportRoundTripPackages.filter((_, i) => i !== idx);
-                                                                    setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
-                                                                }}
-                                                                className="w-8 h-8 rounded-lg flex items-center justify-center text-emerald-400 hover:text-red-500 hover:bg-red-50 transition-all"
-                                                            >
-                                                                <X size={16} />
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    {(() => {
+                                        const uniqueAirportHours = [...new Set((pricingSettings.airportRoundTripPackages || []).map(p => p.hours))].sort((a, b) => a - b);
+                                        if (uniqueAirportHours.length === 0) {
+                                            return (
+                                                <div className="py-12 flex flex-col items-center justify-center border-2 border-dashed border-emerald-200 rounded-3xl bg-white/50">
+                                                    <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-400 mb-4">
+                                                        <Route size={32} />
+                                                    </div>
+                                                    <p className="text-sm font-bold text-emerald-600 uppercase tracking-widest">No Airport Packages</p>
+                                                    <p className="text-[10px] text-emerald-500 mt-1 uppercase">Click 'Add Airport Package' to create tiered airport tours.</p>
+                                                </div>
+                                            );
+                                        }
 
-                                    {(pricingSettings.airportRoundTripPackages || []).length === 0 && (
-                                        <div className="col-span-full py-12 flex flex-col items-center justify-center border-2 border-dashed border-emerald-200 rounded-3xl bg-white/50">
-                                            <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-400 mb-4">
-                                                <Route size={32} />
+                                        return uniqueAirportHours.map(hours => (
+                                            <div key={`air-group-${hours}`} className="mb-8 bg-white border border-emerald-100 rounded-3xl p-5 shadow-sm last:mb-0">
+                                                <div className="flex items-center justify-between mb-4 pb-2 border-b border-emerald-50">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-black uppercase tracking-wider">{hours} Hours Package</span>
+                                                        <input 
+                                                            type="number"
+                                                            value={hours}
+                                                            onChange={(e) => {
+                                                                const newHours = Number(e.target.value);
+                                                                if (!newHours || newHours <= 0) return;
+                                                                const updated = (pricingSettings.airportRoundTripPackages || []).map(p => {
+                                                                    if (p.hours === hours) {
+                                                                        return { ...p, hours: newHours };
+                                                                    }
+                                                                    return p;
+                                                                });
+                                                                setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
+                                                            }}
+                                                            className="w-16 bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5 text-xs font-bold outline-none focus:ring-1 focus:ring-emerald-500/20"
+                                                            title="Change package hours"
+                                                        />
+                                                    </div>
+                                                    <button 
+                                                        onClick={() => {
+                                                            if (!confirm(`Are you sure you want to delete all airport packages for ${hours} hours?`)) return;
+                                                            const updated = (pricingSettings.airportRoundTripPackages || []).filter(p => p.hours !== hours);
+                                                            setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
+                                                        }}
+                                                        className="px-3 py-1 text-[10px] font-bold text-red-500 hover:bg-red-50 rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1"
+                                                    >
+                                                        Delete Hour Group
+                                                    </button>
+                                                </div>
+
+                                                <div className="overflow-x-auto">
+                                                    <table className="w-full text-left">
+                                                        <thead>
+                                                            <tr className="border-b border-emerald-50">
+                                                                <th className="pb-3 text-[10px] font-black text-emerald-800 uppercase tracking-widest w-1/4">Vehicle Type</th>
+                                                                <th className="pb-3 text-[10px] font-black text-emerald-800 uppercase tracking-widest text-center">KM Limit 1</th>
+                                                                <th className="pb-3 text-[10px] font-black text-emerald-800 uppercase tracking-widest text-center">KM Limit 2</th>
+                                                                <th className="pb-3 text-[10px] font-black text-emerald-800 uppercase tracking-widest text-center">KM Limit 3</th>
+                                                                <th className="pb-3 text-[10px] font-black text-emerald-800 uppercase tracking-widest text-center">KM Limit 4</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="divide-y divide-emerald-50/50">
+                                                            {ALL_VEHICLE_TYPES.map(vt => {
+                                                                const pkg = (pricingSettings.airportRoundTripPackages || []).find(p => p.hours === hours && p.vehicleType === vt.value);
+                                                                if (!pkg) return null;
+                                                                return (
+                                                                    <tr key={vt.value} className="hover:bg-emerald-50/20 transition-colors">
+                                                                        <td className="py-3 font-semibold text-xs text-slate-700">{vt.label}</td>
+                                                                        {[0, 1, 2, 3].map(tIdx => (
+                                                                            <td key={tIdx} className="py-3 px-1 text-center">
+                                                                                <div className="inline-block space-y-1 text-left">
+                                                                                    <div className="flex items-center gap-1">
+                                                                                        <input 
+                                                                                            type="number"
+                                                                                            placeholder="KM"
+                                                                                            value={pkg.tiers?.[tIdx]?.km || 0}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = (pricingSettings.airportRoundTripPackages || []).map(p => {
+                                                                                                    if (p.id === pkg.id) {
+                                                                                                        const tiers = [...p.tiers];
+                                                                                                        tiers[tIdx] = { ...tiers[tIdx], km: Number(e.target.value) };
+                                                                                                        return { ...p, tiers };
+                                                                                                    }
+                                                                                                    return p;
+                                                                                                });
+                                                                                                setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
+                                                                                            }}
+                                                                                            className="w-12 bg-slate-50 border-none rounded px-1 py-0.5 text-[9px] font-black outline-none focus:ring-1 focus:ring-emerald-500/20"
+                                                                                        />
+                                                                                        <span className="text-[7px] font-bold text-slate-300 uppercase">KM</span>
+                                                                                    </div>
+                                                                                    <div className="flex items-center gap-1">
+                                                                                        <span className="text-[8px] font-black text-emerald-600">Rs.</span>
+                                                                                        <input 
+                                                                                            type="number"
+                                                                                            placeholder="Price"
+                                                                                            value={pkg.tiers?.[tIdx]?.price || 0}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = (pricingSettings.airportRoundTripPackages || []).map(p => {
+                                                                                                    if (p.id === pkg.id) {
+                                                                                                        const tiers = [...p.tiers];
+                                                                                                        tiers[tIdx] = { ...tiers[tIdx], price: Number(e.target.value) };
+                                                                                                        return { ...p, tiers };
+                                                                                                    }
+                                                                                                    return p;
+                                                                                                });
+                                                                                                setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
+                                                                                            }}
+                                                                                            className="w-20 bg-white border border-emerald-100 rounded px-1 py-0.5 text-xs font-black text-emerald-600 outline-none focus:ring-1 focus:ring-emerald-500/20"
+                                                                                        />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                        ))}
+                                                                    </tr>
+                                                                );
+                                                            })}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
-                                            <p className="text-sm font-bold text-emerald-600 uppercase tracking-widest">No Airport Packages</p>
-                                            <p className="text-[10px] text-emerald-500 mt-1 uppercase">Click 'Add Airport Package' to create fixed flat-rate airport tours.</p>
-                                        </div>
-                                    )}
+                                        ));
+                                    })()}
                                 </div>
 
                                 <div className="bg-white border border-slate-200 rounded-[2rem] p-6 sm:p-8 shadow-sm">
                                     <div className="flex items-center justify-between mb-8">
-                                        <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Normal Round Tour Packages</h4>
+                                        <div>
+                                            <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Normal Round Tour Packages</h4>
+                                            <p className="text-xs text-slate-500 font-medium mt-1">Pricing tiers for normal round tours based on traditional hour limits.</p>
+                                        </div>
                                         <button 
                                             onClick={() => {
-                                                const newPackage = { 
-                                                    id: `pkg-${Date.now()}`, 
-                                                    hours: 2, 
-                                                    vehicleType: 'mini-car',
+                                                const hoursStr = prompt("Enter hour count for the new Normal Package (e.g. 2, 4, 8):");
+                                                if (!hoursStr) return;
+                                                const newHours = Number(hoursStr);
+                                                if (isNaN(newHours) || newHours <= 0) {
+                                                    alert("Please enter a valid number of hours.");
+                                                    return;
+                                                }
+                                                const exists = (pricingSettings.roundTripPackages || []).some(p => p.hours === newHours);
+                                                if (exists) {
+                                                    alert(`Package for ${newHours} hours already exists.`);
+                                                    return;
+                                                }
+                                                const newPackages = ALL_VEHICLE_TYPES.map(vt => ({
+                                                    id: `pkg-${newHours}h-${vt.value}-${Date.now()}`,
+                                                    hours: newHours,
+                                                    vehicleType: vt.value,
                                                     tiers: [
                                                         { km: 10, price: 0 },
                                                         { km: 20, price: 0 },
                                                         { km: 30, price: 0 },
                                                         { km: 40, price: 0 }
                                                     ]
-                                                };
-                                                setPricingSettings({ ...pricingSettings, roundTripPackages: [...(pricingSettings.roundTripPackages || []), newPackage] });
+                                                }));
+                                                setPricingSettings({
+                                                    ...pricingSettings,
+                                                    roundTripPackages: [...(pricingSettings.roundTripPackages || []), ...newPackages]
+                                                });
                                             }}
                                             className="px-6 py-3 bg-emerald-900 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-800 transition-all shadow-lg shadow-emerald-900/10 flex items-center gap-2"
                                         >
@@ -1238,125 +1389,128 @@ export default function AdminDashboard() {
                                         </button>
                                     </div>
 
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-left">
-                                            <thead>
-                                                <tr className="border-b border-slate-100">
-                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Hour Count</th>
-                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Vehicle</th>
-                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">KM Tier 1</th>
-                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">KM Tier 2</th>
-                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">KM Tier 3</th>
-                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">KM Tier 4</th>
-                                                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-slate-50">
-                                                {(pricingSettings.roundTripPackages || []).map((pkg, idx) => (
-                                                    <tr key={pkg.id} className="group hover:bg-slate-50/50 transition-colors">
-                                                        <td className="py-4">
-                                                            <div className="flex items-center gap-2">
-                                                                <input 
-                                                                    type="number"
-                                                                    value={pkg.hours}
-                                                                    onChange={(e) => {
-                                                                        const updated = [...pricingSettings.roundTripPackages];
-                                                                        updated[idx].hours = Number(e.target.value);
-                                                                        setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                                    }}
-                                                                    className="w-16 bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-black outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                                />
-                                                                <span className="text-[10px] font-bold text-slate-400 uppercase">Hrs</span>
-                                                            </div>
-                                                        </td>
-                                                        <td className="py-4">
-                                                            <select 
-                                                                value={pkg.vehicleType || 'mini-car'}
-                                                                onChange={(e) => {
-                                                                    const updated = [...pricingSettings.roundTripPackages];
-                                                                    updated[idx].vehicleType = e.target.value;
-                                                                    setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                                }}
-                                                                className="bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                            >
-                                                                <option value="mini-car">Wagon R (Mini Car)</option>
-                                                                <option value="sedan">Sedan</option>
-                                                                <option value="vezel">Vessel (Vezel)</option>
-                                                                <option value="suv">SUV</option>
-                                                                <option value="mini-van-05">Mini Van (5-Seater)</option>
-                                                                <option value="mini-van-every">Mini Van</option>
-                                                                <option value="kdh-van">KDH</option>
-                                                                <option value="kdh-flatroof">KDH Flatroof</option>
-                                                                <option value="kdh-highroof">High Roof</option>
-                                                                <option value="mini-bus">Mini Bus</option>
-                                                                <option value="bus">Bus</option>
-                                                                <option value="large-bus">Large Bus</option>
-                                                                <option value="coach-bus">Coach Bus</option>
-                                                                <option value="coster-coach">Coster Coach</option>
-                                                            </select>
-                                                        </td>
-                                                        {[0, 1, 2, 3].map(tIdx => (
-                                                            <td key={tIdx} className="py-4 px-2">
-                                                                <div className="space-y-1">
-                                                                    <div className="flex items-center gap-1">
-                                                                        <input 
-                                                                            type="number"
-                                                                            placeholder="KM"
-                                                                            value={pkg.tiers?.[tIdx]?.km || 0}
-                                                                            onChange={(e) => {
-                                                                                const updated = [...pricingSettings.roundTripPackages];
-                                                                                if (!updated[idx].tiers) updated[idx].tiers = [{},{},{},{}];
-                                                                                updated[idx].tiers[tIdx].km = Number(e.target.value);
-                                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                                            }}
-                                                                            className="w-12 bg-slate-50 border-none rounded px-1.5 py-1 text-[10px] font-black outline-none"
-                                                                        />
-                                                                        <span className="text-[8px] font-bold text-slate-300 uppercase">KM</span>
-                                                                    </div>
-                                                                    <div className="flex items-center gap-1">
-                                                                        <span className="text-[8px] font-black text-emerald-600">Rs.</span>
-                                                                        <input 
-                                                                            type="number"
-                                                                            placeholder="Price"
-                                                                            value={pkg.tiers?.[tIdx]?.price || 0}
-                                                                            onChange={(e) => {
-                                                                                const updated = [...pricingSettings.roundTripPackages];
-                                                                                if (!updated[idx].tiers) updated[idx].tiers = [{},{},{},{}];
-                                                                                updated[idx].tiers[tIdx].price = Number(e.target.value);
-                                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                                            }}
-                                                                            className="w-20 bg-white border border-slate-200 rounded px-1.5 py-1 text-xs font-black text-emerald-600 outline-none focus:ring-2 focus:ring-emerald-500/20"
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        ))}
-                                                        <td className="py-4 text-right">
-                                                            <button 
-                                                                onClick={() => {
-                                                                    const updated = pricingSettings.roundTripPackages.filter((_, i) => i !== idx);
-                                                                    setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                                }}
-                                                                className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all"
-                                                            >
-                                                                <X size={16} />
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    {(() => {
+                                        const uniqueNormalHours = [...new Set((pricingSettings.roundTripPackages || []).map(p => p.hours))].sort((a, b) => a - b);
+                                        if (uniqueNormalHours.length === 0) {
+                                            return (
+                                                <div className="py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl">
+                                                    <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 mb-4">
+                                                        <Route size={32} />
+                                                    </div>
+                                                    <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">No Packages Configured</p>
+                                                    <p className="text-[10px] text-slate-400 mt-1 uppercase">Click 'Add Hour Package' to create your first round trip hire package.</p>
+                                                </div>
+                                            );
+                                        }
 
-                                    {(pricingSettings.roundTripPackages || []).length === 0 && (
-                                        <div className="col-span-full py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl">
-                                            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 mb-4">
-                                                <Route size={32} />
+                                        return uniqueNormalHours.map(hours => (
+                                            <div key={`norm-group-${hours}`} className="mb-8 bg-white border border-slate-100 rounded-3xl p-5 shadow-sm last:mb-0">
+                                                <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-50">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="px-3 py-1 bg-slate-100 text-slate-800 rounded-lg text-xs font-black uppercase tracking-wider">{hours} Hours Package</span>
+                                                        <input 
+                                                            type="number"
+                                                            value={hours}
+                                                            onChange={(e) => {
+                                                                const newHours = Number(e.target.value);
+                                                                if (!newHours || newHours <= 0) return;
+                                                                const updated = (pricingSettings.roundTripPackages || []).map(p => {
+                                                                    if (p.hours === hours) {
+                                                                        return { ...p, hours: newHours };
+                                                                    }
+                                                                    return p;
+                                                                });
+                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                            }}
+                                                            className="w-16 bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5 text-xs font-bold outline-none focus:ring-1 focus:ring-slate-500/20"
+                                                            title="Change package hours"
+                                                        />
+                                                    </div>
+                                                    <button 
+                                                        onClick={() => {
+                                                            if (!confirm(`Are you sure you want to delete all normal packages for ${hours} hours?`)) return;
+                                                            const updated = (pricingSettings.roundTripPackages || []).filter(p => p.hours !== hours);
+                                                            setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                        }}
+                                                        className="px-3 py-1 text-[10px] font-bold text-red-500 hover:bg-red-50 rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1"
+                                                    >
+                                                        Delete Hour Group
+                                                    </button>
+                                                </div>
+
+                                                <div className="overflow-x-auto">
+                                                    <table className="w-full text-left">
+                                                        <thead>
+                                                            <tr className="border-b border-slate-50">
+                                                                <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest w-1/4">Vehicle Type</th>
+                                                                <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">KM Tier 1</th>
+                                                                <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">KM Tier 2</th>
+                                                                <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">KM Tier 3</th>
+                                                                <th className="pb-3 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">KM Tier 4</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="divide-y divide-slate-50/50">
+                                                            {ALL_VEHICLE_TYPES.map(vt => {
+                                                                const pkg = (pricingSettings.roundTripPackages || []).find(p => p.hours === hours && p.vehicleType === vt.value);
+                                                                if (!pkg) return null;
+                                                                return (
+                                                                    <tr key={vt.value} className="hover:bg-slate-50/20 transition-colors">
+                                                                        <td className="py-3 font-semibold text-xs text-slate-700">{vt.label}</td>
+                                                                        {[0, 1, 2, 3].map(tIdx => (
+                                                                            <td key={tIdx} className="py-3 px-1 text-center">
+                                                                                <div className="inline-block space-y-1 text-left">
+                                                                                    <div className="flex items-center gap-1">
+                                                                                        <input 
+                                                                                            type="number"
+                                                                                            placeholder="KM"
+                                                                                            value={pkg.tiers?.[tIdx]?.km || 0}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = (pricingSettings.roundTripPackages || []).map(p => {
+                                                                                                    if (p.id === pkg.id) {
+                                                                                                        const tiers = [...p.tiers];
+                                                                                                        tiers[tIdx] = { ...tiers[tIdx], km: Number(e.target.value) };
+                                                                                                        return { ...p, tiers };
+                                                                                                    }
+                                                                                                    return p;
+                                                                                                });
+                                                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                                                            }}
+                                                                                            className="w-12 bg-slate-50 border-none rounded px-1 py-0.5 text-[9px] font-black outline-none focus:ring-1 focus:ring-slate-500/20"
+                                                                                        />
+                                                                                        <span className="text-[7px] font-bold text-slate-300 uppercase">KM</span>
+                                                                                    </div>
+                                                                                    <div className="flex items-center gap-1">
+                                                                                        <span className="text-[8px] font-black text-emerald-600">Rs.</span>
+                                                                                        <input 
+                                                                                            type="number"
+                                                                                            placeholder="Price"
+                                                                                            value={pkg.tiers?.[tIdx]?.price || 0}
+                                                                                            onChange={(e) => {
+                                                                                                const updated = (pricingSettings.roundTripPackages || []).map(p => {
+                                                                                                    if (p.id === pkg.id) {
+                                                                                                        const tiers = [...p.tiers];
+                                                                                                        tiers[tIdx] = { ...tiers[tIdx], price: Number(e.target.value) };
+                                                                                                        return { ...p, tiers };
+                                                                                                    }
+                                                                                                    return p;
+                                                                                                });
+                                                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                                                            }}
+                                                                                            className="w-20 bg-white border border-slate-200 rounded px-1 py-0.5 text-xs font-black text-emerald-600 outline-none focus:ring-1 focus:ring-slate-500/20"
+                                                                                        />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                        ))}
+                                                                    </tr>
+                                                                );
+                                                            })}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
-                                            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">No Packages Configured</p>
-                                            <p className="text-[10px] text-slate-400 mt-1 uppercase">Click 'Add Package' to create your first round trip hire package.</p>
-                                        </div>
-                                    )}
+                                        ));
+                                    })()}
 
                                     <div className="mt-8 pt-6 border-t border-slate-100 flex justify-end">
                                         <button

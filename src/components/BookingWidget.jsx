@@ -106,6 +106,38 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [scheduledTime, setScheduledTime] = useState(null);
     const [isDateTimePickerOpen, setIsDateTimePickerOpen] = useState(false);
 
+    const pickupRef = useRef(null);
+    const dropoffRef = useRef(null);
+    const dateTimeRef = useRef(null);
+    const [step1Errors, setStep1Errors] = useState({
+        pickup: false,
+        dropoff: false,
+        dateTime: false
+    });
+
+    const validateStep1 = () => {
+        const errors = {
+            pickup: !pickup?.lat || !pickup?.name,
+            dropoff: !dropoff?.lat || !dropoff?.name,
+            dateTime: !scheduledDate || !scheduledTime
+        };
+        setStep1Errors(errors);
+
+        const hasErrors = errors.pickup || errors.dropoff || errors.dateTime;
+
+        if (hasErrors) {
+            if (errors.pickup && pickupRef.current) {
+                pickupRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (errors.dropoff && dropoffRef.current) {
+                dropoffRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (errors.dateTime && dateTimeRef.current) {
+                dateTimeRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        return !hasErrors;
+    };
+
 
     // Manage body class for hiding chat
     useEffect(() => {
@@ -684,11 +716,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                 </svg>
                                             </div>
                                             <div className="space-y-4 md:space-y-3 relative z-10">
-                                                <div className="relative">
+                                                <div ref={pickupRef} className="relative">
                                                     <div className="absolute left-[18px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-emerald-500 bg-white dark:bg-zinc-800 z-20 flex items-center justify-center text-emerald-500">
                                                         <CircleDot size={10} strokeWidth={4} />
                                                     </div>
-                                                    <LocationInput placeholder="Pick-up Location" value={pickupSearch} icon={activeTab === 'pickup' ? PlaneTakeoff : MapPin} disabled={activeTab === 'pickup'} onChange={(val) => setPickupSearch(val)} zIndex={100} onSelect={(loc) => { setPickup({ name: loc.address, lat: loc.lat, lng: loc.lng }); setPickupSearch(loc.address); }} />
+                                                    <LocationInput placeholder="Pick-up Location" value={pickupSearch} icon={activeTab === 'pickup' ? PlaneTakeoff : MapPin} disabled={activeTab === 'pickup'} onChange={(val) => setPickupSearch(val)} zIndex={100} onSelect={(loc) => { setPickup({ name: loc.address, lat: loc.lat, lng: loc.lng }); setPickupSearch(loc.address); setStep1Errors(prev => ({ ...prev, pickup: false })); }} error={step1Errors.pickup} />
+                                                    {step1Errors.pickup && (
+                                                        <span className="text-[10px] font-bold text-red-500 mt-1 block pl-1">Please select a valid pick-up location</span>
+                                                    )}
                                                 </div>
                                                 {waypoints.map((wp, idx) => (
                                                     <div key={idx} className="relative group animate-slide-up bg-white dark:bg-zinc-800 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-1 sm:p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-1 mb-3">
@@ -726,14 +761,17 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         )}
                                                     </>
                                                 )}
-                                                <div className="relative mt-2">
+                                                <div ref={dropoffRef} className="relative mt-2">
                                                     <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 transition-colors z-10 flex items-center justify-center"><MapPin size={20} className="text-red-500" strokeWidth={2.5} /></div>
-                                                    <LocationInput placeholder="Drop-off Location" value={dropoffSearch} icon={activeTab === 'drop' ? PlaneLanding : MapPin} zIndex={100} disabled={activeTab === 'drop'} onChange={(val) => setDropoffSearch(val)} onSelect={(loc) => { setDropoff({ name: loc.address, lat: loc.lat, lng: loc.lng }); setDropoffSearch(loc.address); }} />
+                                                    <LocationInput placeholder="Drop-off Location" value={dropoffSearch} icon={activeTab === 'drop' ? PlaneLanding : MapPin} zIndex={100} disabled={activeTab === 'drop'} onChange={(val) => setDropoffSearch(val)} onSelect={(loc) => { setDropoff({ name: loc.address, lat: loc.lat, lng: loc.lng }); setDropoffSearch(loc.address); setStep1Errors(prev => ({ ...prev, dropoff: false })); }} error={step1Errors.dropoff} />
+                                                    {step1Errors.dropoff && (
+                                                        <span className="text-[10px] font-bold text-red-500 mt-1 block pl-1">Please select a valid drop-off location</span>
+                                                    )}
                                                 </div>
-                                                <div className="relative mt-2">
-                                                    <button onClick={() => setIsDateTimePickerOpen(!isDateTimePickerOpen)} className="w-full h-14 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 rounded-2xl px-6 flex items-center justify-between text-sm font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md transition-all group" aria-label="Select Date and Time">
+                                                <div ref={dateTimeRef} className="relative mt-2">
+                                                    <button onClick={() => setIsDateTimePickerOpen(!isDateTimePickerOpen)} className={`w-full h-14 bg-white dark:bg-zinc-800 border rounded-2xl px-6 flex items-center justify-between text-sm font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md transition-all group ${step1Errors.dateTime ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-200 dark:border-white/10'}`} aria-label="Select Date and Time">
                                                         <div className="flex items-center gap-3">
-                                                            <Calendar size={18} className={scheduledDate ? 'text-emerald-500' : 'text-slate-400'} />
+                                                            <Calendar size={18} className={scheduledDate ? 'text-emerald-500' : step1Errors.dateTime ? 'text-red-500' : 'text-slate-400'} />
                                                             <span className="uppercase tracking-widest text-[11px]">
                                                                 {scheduledDate && scheduledTime ? `${new Date(scheduledDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${scheduledTime}` : 'Select Date & Time'}
                                                             </span>
@@ -743,12 +781,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                             <ChevronDown size={16} className={`opacity-50 transition-transform ${isDateTimePickerOpen ? 'rotate-180' : ''}`} />
                                                         </div>
                                                     </button>
+                                                    {step1Errors.dateTime && (
+                                                        <span className="text-[10px] font-bold text-red-500 mt-1 block pl-1">Please select date and time</span>
+                                                    )}
                                                     <AnimatePresence>
                                                         {isDateTimePickerOpen && (
                                                             <>
                                                                 <div className="fixed inset-0 z-[190]" onClick={() => setIsDateTimePickerOpen(false)} />
                                                                 <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
-                                                                    <CustomDateTimePicker date={scheduledDate} time={scheduledTime} onChange={(d, t) => { setScheduledDate(d); setScheduledTime(t); }} />
+                                                                    <CustomDateTimePicker date={scheduledDate} time={scheduledTime} onChange={(d, t) => { setScheduledDate(d); setScheduledTime(t); setStep1Errors(prev => ({ ...prev, dateTime: false })); }} />
                                                                     <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
                                                                         <button onClick={() => setIsDateTimePickerOpen(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
                                                                     </div>
@@ -771,27 +812,27 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         </div>
                                                         <VehicleCarousel
                                                             vehicles={Object.values(vehiclePricing).map(v => {
-                                                                const priceInfo = calculatePrice(
-                                                                    distance,
-                                                                    v.vehicleType,
-                                                                    tripType,
-                                                                    vehiclePricing,
-                                                                    totalWaitingHours,
-                                                                    false, // hasNameBoard removed from landing page
-                                                                    nameBoardPrice,
-                                                                    pickup?.name || pickupSearch,
-                                                                    dropoff?.name || dropoffSearch,
-                                                                    destinations,
-                                                                    scheduledTime || currentTime,
-                                                                    scheduledDate || currentDate,
-                                                                    surgeRules,
-                                                                    roundTripPackageId,
-                                                                    pricingSettings.roundTripPackages
-                                                                );
-                                                                return {
-                                                                    ...v,
-                                                                    calculatedTotal: priceInfo.total
-                                                                };
+                                                                 const priceInfo = calculatePrice(
+                                                                     distance,
+                                                                     v.vehicleType,
+                                                                     tripType,
+                                                                     vehiclePricing,
+                                                                     totalWaitingHours,
+                                                                     false, // hasNameBoard removed from landing page
+                                                                     nameBoardPrice,
+                                                                     pickup?.name || pickupSearch,
+                                                                     dropoff?.name || dropoffSearch,
+                                                                     destinations,
+                                                                     scheduledTime || currentTime,
+                                                                     scheduledDate || currentDate,
+                                                                     surgeRules,
+                                                                     roundTripPackageId,
+                                                                     pricingSettings.roundTripPackages
+                                                                 );
+                                                                 return {
+                                                                     ...v,
+                                                                     calculatedTotal: priceInfo.total
+                                                                 };
                                                             })}
                                                             selectedId={vehicle}
                                                             onSelect={(vType) => {
@@ -818,10 +859,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         <div className="mt-6 flex items-center gap-3">
                                             <button
                                                 onClick={() => {
-                                                    if (!pickup?.lat || !dropoff?.lat) { alert('Please select a valid pickup and dropoff location to continue.'); return; }
-                                                    setStep(2);
+                                                    if (validateStep1()) {
+                                                        setStep(2);
+                                                    }
                                                 }}
-                                                className="flex-1 flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
+                                                className={`flex-1 flex items-center justify-center gap-3 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] ${
+                                                    (pickup?.lat && dropoff?.lat && scheduledDate && scheduledTime)
+                                                        ? 'bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5'
+                                                        : 'bg-slate-400 dark:bg-zinc-700 opacity-60 cursor-not-allowed'
+                                                }`}
                                                 aria-label="Continue to step 2"
                                             >
                                                 Continue - Select Passengers <ArrowRight size={16} strokeWidth={3}/>

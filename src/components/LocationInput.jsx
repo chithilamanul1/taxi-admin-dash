@@ -11,6 +11,7 @@ const LocationInput = ({
     onSelect = (_) => { },
     onFocus = () => { },
     disabled = false,
+    error = false,
     icon: Icon = MapPin,
     isLoaded: _isLoaded = true,
     zIndex = 20
@@ -130,7 +131,7 @@ const LocationInput = ({
         <div className={`relative group ${zIndex || 'z-20'}`} ref={wrapperRef}>
             {/* Icon - Modern Styled */}
             <div className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 transition-colors z-10 flex items-center justify-center">
-                <Icon size={20} className={disabled ? "text-slate-400" : "text-emerald-600 dark:text-[#FACC15]"} strokeWidth={2.5} />
+                <Icon size={20} className={disabled ? "text-slate-400" : error ? "text-red-500" : "text-emerald-600 dark:text-[#FACC15]"} strokeWidth={2.5} />
             </div>
 
             <input
@@ -147,7 +148,9 @@ const LocationInput = ({
                 className={`w-full pl-12 sm:pl-14 pr-10 sm:pr-14 h-14 rounded-2xl text-sm sm:text-base font-medium transition-all outline-none border
                 ${disabled 
                     ? 'bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-white/5 text-slate-400 cursor-not-allowed shadow-inner' 
-                    : 'bg-white dark:bg-zinc-800 border-slate-200 dark:border-white/10 text-slate-800 dark:text-white shadow-sm hover:border-slate-300 dark:hover:border-white/20 focus:border-emerald-500 dark:focus:border-[#FACC15] focus:ring-4 focus:ring-emerald-500/10 dark:focus:ring-[#FACC15]/10'}`}
+                    : error 
+                        ? 'bg-white dark:bg-zinc-800 border-red-500 ring-2 ring-red-500/20 text-slate-800 dark:text-white shadow-sm'
+                        : 'bg-white dark:bg-zinc-800 border-slate-200 dark:border-white/10 text-slate-800 dark:text-white shadow-sm hover:border-slate-300 dark:hover:border-white/20 focus:border-emerald-500 dark:focus:border-[#FACC15] focus:ring-4 focus:ring-emerald-500/10 dark:focus:ring-[#FACC15]/10'}`}
             />
 
             {/* Clear Button */}

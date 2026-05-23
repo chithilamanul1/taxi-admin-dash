@@ -159,8 +159,18 @@ const RoundTripBooking = () => {
     if (!selectedVehicle) return 0;
     
     if (tab === 'airport-round-tour') {
-      const pkg = (pricingSettings?.airportRoundTripPackages || []).find(p => p.hours === Number(formData.taxiTourHours) && p.distance === Number(formData.taxiTourKm) && p.vehicleType === selectedVehicle.id);
-      if (pkg && pkg.price) return Math.round(pkg.price);
+      const pkg = (pricingSettings?.airportRoundTripPackages || []).find(p => p.hours === Number(formData.taxiTourHours) && p.vehicleType === selectedVehicle.id);
+      if (pkg) {
+        if (pkg.tiers && pkg.tiers.length > 0) {
+          const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
+          if (tier && tier.price) return Math.round(tier.price);
+        } else {
+          // Legacy fallback
+          if (pkg.distance === Number(formData.taxiTourKm) && pkg.price) {
+            return Math.round(pkg.price);
+          }
+        }
+      }
     }
     
     if (tab === 'normal-round-tour') {

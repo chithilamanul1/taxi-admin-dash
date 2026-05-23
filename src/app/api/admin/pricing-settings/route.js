@@ -64,6 +64,7 @@ export async function PUT(req) {
                 nameBoardPrice: Number(body.nameBoardPrice || 2000),
                 waitingHourRate: Number(body.waitingHourRate || 1000),
                 roundTripPackages: body.roundTripPackages || [],
+                airportRoundTripPackages: body.airportRoundTripPackages || [],
                 updatedBy: body.updatedBy || 'admin'
             },
             { new: true, upsert: true }

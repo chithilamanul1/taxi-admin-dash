@@ -41,9 +41,11 @@ const PricingSettingSchema = new mongoose.Schema({
     airportRoundTripPackages: [{
         id: String,
         hours: Number,
-        distance: Number, // Fixed KM limit
         vehicleType: String,
-        price: Number     // Flat price
+        tiers: [{
+            km: Number,
+            price: Number
+        }]
     }],
     updatedBy: {
         type: String // Admin email or ID
