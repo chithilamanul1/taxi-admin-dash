@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock, Navigation, ChevronRight, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles, CreditCard } from 'lucide-react';
 import { TAXI_TOUR_PACKAGES } from '../lib/pricing-util';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
+
+const VehicleCarousel = dynamic(() => import('./VehicleCarousel'), { ssr: false });
 
 const displayVehicleName = (name) => (name || '').split('(')[0].trim();
 
@@ -36,23 +39,26 @@ const RoundTripBooking = () => {
 
             return {
               id: v.vehicleType,
+              vehicleType: v.vehicleType,
               name: v.name,
               baseRate: v.basePrice,
               perKm: v.perKmRate,
               image: img,
-              capacity: v.capacity,
-              suitcases: v.luggage
+              capacity: v.capacity || 4,
+              suitcases: v.luggage || 2,
+              luggage: v.luggage || 2,
+              handLuggage: v.handLuggage || 2
             };
           });
           setVehicles(mapped);
           setSelectedVehicle(mapped[0]);
         } else {
           const defaults = [
-            { id: 'mini-car', name: 'Mini', baseRate: 4000, perKm: 110, image: '/vehicles/minicar.png' },
-            { id: 'sedan', name: 'Sedan', baseRate: 8000, perKm: 130, image: '/vehicles/sedancar.png' },
-            { id: 'vezel', name: 'Vezel', baseRate: 12000, perKm: 160, image: '/vehicles/van.png' },
-            { id: 'van', name: 'Van', baseRate: 15000, perKm: 180, image: '/vehicles/van.png' },
-            { id: 'suv', name: 'SUV', baseRate: 20000, perKm: 220, image: '/vehicles/sedancar.png' },
+            { id: 'mini-car', vehicleType: 'mini-car', name: 'Mini', baseRate: 4000, perKm: 110, image: '/vehicles/minicar.png', capacity: 4, suitcases: 2, luggage: 2, handLuggage: 2 },
+            { id: 'sedan', vehicleType: 'sedan', name: 'Sedan', baseRate: 8000, perKm: 130, image: '/vehicles/sedancar.png', capacity: 4, suitcases: 3, luggage: 3, handLuggage: 2 },
+            { id: 'vezel', vehicleType: 'vezel', name: 'Vezel', baseRate: 12000, perKm: 160, image: '/vehicles/van.png', capacity: 4, suitcases: 4, luggage: 4, handLuggage: 2 },
+            { id: 'van', vehicleType: 'van', name: 'Van', baseRate: 15000, perKm: 180, image: '/vehicles/van.png', capacity: 7, suitcases: 5, luggage: 5, handLuggage: 4 },
+            { id: 'suv', vehicleType: 'suv', name: 'SUV', baseRate: 20000, perKm: 220, image: '/vehicles/sedancar.png', capacity: 6, suitcases: 4, luggage: 4, handLuggage: 3 },
           ];
           setVehicles(defaults);
           setSelectedVehicle(defaults[0]);
@@ -99,12 +105,84 @@ const RoundTripBooking = () => {
     }
   };
 
+  const getAvailableHours = () => {
+    const pkgs = tab === 'airport-round-tour'
+      ? (pricingSettings?.airportRoundTripPackages || [])
+      : (pricingSettings?.roundTripPackages || []);
+    const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
+    return hours.length > 0 ? hours : [2, 4, 6, 8, 10, 12]; // Fallback
+  };
+
+  const getAvailableKmLimits = () => {
+    const pkgs = tab === 'airport-round-tour'
+      ? (pricingSettings?.airportRoundTripPackages || [])
+      : (pricingSettings?.roundTripPackages || []);
+    const match = pkgs.filter(p => p.hours === formData.taxiTourHours);
+    if (match.length > 0) {
+      const kms = [];
+      match.forEach(p => {
+        (p.tiers || []).forEach(t => {
+          if (t.km && !kms.includes(t.km)) {
+            kms.push(t.km);
+          }
+        });
+      });
+      return kms.sort((a, b) => a - b);
+    }
+    return [20, 30, 40, 50]; // Fallback
+  };
+
+  const calculateVehiclePrice = (v) => {
+    if (!v) return 0;
+    
+    if (tab === 'airport-round-tour') {
+      const pkg = (pricingSettings?.airportRoundTripPackages || []).find(p => p.hours === Number(formData.taxiTourHours) && p.vehicleType === v.id);
+      if (pkg) {
+        const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
+        if (tier && tier.price) return Math.round(tier.price);
+      }
+    }
+    
+    if (tab === 'normal-round-tour' || tab === 'destination-based-tour') {
+      const pkg = (pricingSettings?.roundTripPackages || []).find(p => p.hours === Number(formData.taxiTourHours) && p.vehicleType === v.id);
+      if (pkg) {
+        const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
+        if (tier && tier.price) return Math.round(tier.price);
+      }
+    }
+    
+    return v.baseRate || 0;
+  };
+
   const updateDuration = (newHours) => {
-    const kmMap = { 2: 40, 4: 80, 6: 120, 8: 160, 10: 200, 12: 300 };
-    let newKm = kmMap[newHours] || newHours * 20;
-    if (newHours > 12) newKm = 300;
+    const pkgs = tab === 'airport-round-tour'
+      ? (pricingSettings?.airportRoundTripPackages || [])
+      : (pricingSettings?.roundTripPackages || []);
+    const match = pkgs.find(p => p.hours === newHours);
+    const tiers = match?.tiers || [];
+    const newKm = tiers.length > 0 ? tiers[0].km : newHours * 20;
     setFormData(prev => ({ ...prev, taxiTourHours: newHours, taxiTourKm: newKm }));
   };
+
+  useEffect(() => {
+    if (pricingSettings) {
+      const pkgs = tab === 'airport-round-tour'
+        ? (pricingSettings.airportRoundTripPackages || [])
+        : (pricingSettings.roundTripPackages || []);
+      const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
+      if (hours.length > 0) {
+        const defaultHours = hours.includes(formData.taxiTourHours) ? formData.taxiTourHours : hours[0];
+        const pkg = pkgs.find(p => p.hours === defaultHours);
+        const tiers = pkg?.tiers || [];
+        const defaultKm = (tiers.some(t => t.km === formData.taxiTourKm)) ? formData.taxiTourKm : (tiers.length > 0 ? tiers[0].km : defaultHours * 20);
+        setFormData(prev => ({
+          ...prev,
+          taxiTourHours: defaultHours,
+          taxiTourKm: defaultKm
+        }));
+      }
+    }
+  }, [pricingSettings, tab]);
 
   useEffect(() => {
     loadGoogleMapsScript()
@@ -156,33 +234,7 @@ const RoundTripBooking = () => {
   const handleLocationChange = (index, value) => { const newLocs = [...locations]; newLocs[index] = value; setLocations(newLocs); };
 
   const calculateTotal = () => {
-    if (!selectedVehicle) return 0;
-    
-    if (tab === 'airport-round-tour') {
-      const pkg = (pricingSettings?.airportRoundTripPackages || []).find(p => p.hours === Number(formData.taxiTourHours) && p.vehicleType === selectedVehicle.id);
-      if (pkg) {
-        if (pkg.tiers && pkg.tiers.length > 0) {
-          const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
-          if (tier && tier.price) return Math.round(tier.price);
-        } else {
-          // Legacy fallback
-          if (pkg.distance === Number(formData.taxiTourKm) && pkg.price) {
-            return Math.round(pkg.price);
-          }
-        }
-      }
-    }
-    
-    if (tab === 'normal-round-tour') {
-      const pkg = (pricingSettings?.roundTripPackages || []).find(p => p.hours === Number(formData.taxiTourHours) && p.vehicleType === selectedVehicle.id);
-      if (pkg) {
-        const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
-        if (tier && tier.price) return Math.round(tier.price);
-      }
-    }
-    
-    // For destination-based or fallback
-    return selectedVehicle.baseRate || 0;
+    return calculateVehiclePrice(selectedVehicle);
   };
 
   const totalPrice = calculateTotal();
@@ -201,7 +253,7 @@ const RoundTripBooking = () => {
         vehicleType: selectedVehicle.id,
         tripType: tab,
         type: 'tour',
-        roundTripPackageId: (tab === 'airport-round-tour' || tab === 'normal-round-tour') ? `tour-${formData.taxiTourHours}h` : null,
+        roundTripPackageId: `tour-${formData.taxiTourHours}h`,
         passengerCount: { adults: formData.passengers, children: 0, luggage: 0, handLuggage: 0 },
         distanceKm: distance,
         totalPrice: totalPrice,
@@ -222,19 +274,11 @@ const RoundTripBooking = () => {
         notes: formData.notes
       };
 
-      if (tab === 'airport-round-tour' || tab === 'normal-round-tour') {
-        payload.tourDetails = {
-          tourId: `tour-${formData.taxiTourHours}h-${formData.taxiTourKm}km`,
-          tourTitle: `${tab === 'airport-round-tour' ? 'Airport' : 'Normal'} Round Tour (${formData.taxiTourHours}h / ${formData.taxiTourKm}km)`,
-          duration: `${formData.taxiTourHours} Hours`
-        };
-      } else if (tab === 'destination-based-tour') {
-        payload.tourDetails = {
-          tourId: `destination-tour`,
-          tourTitle: `Destination-Based Tour`,
-          duration: `Flat Rate`
-        };
-      }
+      payload.tourDetails = {
+        tourId: `${tab === 'destination-based-tour' ? 'dest' : tab === 'airport-round-tour' ? 'airport' : 'normal'}-tour-${formData.taxiTourHours}h-${formData.taxiTourKm}km`,
+        tourTitle: `${tab === 'destination-based-tour' ? 'Destination' : tab === 'airport-round-tour' ? 'Airport' : 'Normal'} Round Tour (${formData.taxiTourHours}h / ${formData.taxiTourKm}km)`,
+        duration: `${formData.taxiTourHours} Hours`
+      };
 
       const res = await fetch('/api/payment/initiate', {
         method: 'POST',
@@ -244,21 +288,19 @@ const RoundTripBooking = () => {
       const data = await res.json();
       if (data.success) {
         try {
-          const typeStr = tab === 'tour' ? 'Round TOUR' : tab === 'airport' ? 'Airport Round Trip' : 'Ride Round Trip';
+          const typeStr = tab === 'airport-round-tour' ? 'Airport Round Tour' : tab === 'normal-round-tour' ? 'Normal Round Tour' : 'Destination-Based Tour';
           const paymentStr = formData.paymentMethod === 'cash' ? 'Cash to Driver' : 'Pay Online (Card)';
           let message = `*New Booking Request*%0A` + 
                         `*Type:* ${typeStr}%0A` + 
                         `*Name:* ${formData.name}%0A` + 
                         `*WhatsApp:* ${formData.phone}%0A` + 
-                        `*Vehicle:* ${selectedVehicle.name}%0A`;
-          if (tab === 'tour') {
-            message += `*Hours:* ${formData.taxiTourHours} Hours%0A` + 
-                       `*KM Limit:* ${formData.taxiTourKm} KM%0A`;
-          }
-          message += `*Route:* ${locations.filter(Boolean).join(' ➔ ')}%0A` + 
-                     `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
-                     `*Payment:* ${paymentStr}%0A` + 
-                     `*Price:* Rs. ${totalPrice.toLocaleString()}`;
+                        `*Vehicle:* ${selectedVehicle.name}%0A` +
+                        `*Hours:* ${formData.taxiTourHours} Hours%0A` + 
+                        `*KM Limit:* ${formData.taxiTourKm} KM%0A` +
+                        `*Route:* ${locations.filter(Boolean).join(' ➔ ')}%0A` + 
+                        `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
+                        `*Payment:* ${paymentStr}%0A` + 
+                        `*Price:* Rs. ${totalPrice.toLocaleString()}`;
           window.open(`https://wa.me/94768743357?text=${message}`, '_blank');
         } catch (e) {
           console.error("WhatsApp companion load blocked", e);
@@ -296,22 +338,7 @@ const RoundTripBooking = () => {
       </div>
 
       <div className="p-8 md:p-12 space-y-12">
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2.5"><div className="h-4 w-1 bg-emerald-600 rounded-full" /><h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Select Class</h4></div>
-          </div>
-          <div className="flex bg-slate-100/50 dark:bg-white/5 p-1 rounded-2xl w-full mb-6 overflow-x-auto gap-1">
-            {vehicles.map((v) => (
-              <button key={v.id} onClick={() => { setSelectedVehicle(v); syncWithCalculator(tab, v); }} className={`min-w-[80px] flex-1 py-3 px-2 rounded-xl text-center transition-all ${selectedVehicle?.id === v.id ? 'bg-white shadow-lg border border-slate-100' : 'text-slate-400 hover:text-emerald-600'}`}>
-                <div className="h-8 mb-1 flex items-center justify-center">{v.image && <img src={v.image} alt={v.name} className="h-full object-contain" />}</div>
-                <p className="text-[8px] font-black uppercase tracking-tight truncate">{v.name.split(' ')[0]}</p>
-                <p className="text-[9px] font-bold mt-0.5">Rs. {v.baseRate.toLocaleString()}</p>
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {(tab === 'airport-round-tour' || tab === 'normal-round-tour') && (
+        {(tab === 'airport-round-tour' || tab === 'normal-round-tour' || tab === 'destination-based-tour') && (
           <section className="animate-slide-up space-y-6 bg-slate-50/50 p-6 rounded-3xl border border-slate-100">
             <div className="flex items-center justify-between px-2">
               <div className="flex items-center gap-3"><Clock className="text-emerald-600" size={18} /><h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Duration & Limit</h4></div>
@@ -321,9 +348,33 @@ const RoundTripBooking = () => {
               <div className="space-y-4">
                 <label className="text-[9px] uppercase font-black text-slate-500 px-2 tracking-widest">Select Hours</label>
                 <div className="flex items-center bg-white border border-slate-200 p-1.5 rounded-2xl shadow-sm">
-                  <button onClick={() => updateDuration(Math.max(1, formData.taxiTourHours - 1))} className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-emerald-600"><Minus size={18} /></button>
+                  <button 
+                    onClick={() => {
+                      const avHours = getAvailableHours();
+                      const currentIndex = avHours.indexOf(formData.taxiTourHours);
+                      if (currentIndex > 0) {
+                        updateDuration(avHours[currentIndex - 1]);
+                      }
+                    }} 
+                    className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-emerald-600"
+                  >
+                    <Minus size={18} />
+                  </button>
                   <div className="flex-1 text-center"><span className="text-xl font-black text-emerald-950">{formData.taxiTourHours}</span><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1.5">Hours</span></div>
-                  <button onClick={() => updateDuration(Math.min(24, formData.taxiTourHours + 1))} className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-emerald-600"><Plus size={18} /></button>
+                  <button 
+                    onClick={() => {
+                      const avHours = getAvailableHours();
+                      const currentIndex = avHours.indexOf(formData.taxiTourHours);
+                      if (currentIndex < avHours.length - 1) {
+                        updateDuration(avHours[currentIndex + 1]);
+                      } else if (currentIndex === -1 && avHours.length > 0) {
+                        updateDuration(avHours[0]);
+                      }
+                    }} 
+                    className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-emerald-600"
+                  >
+                    <Plus size={18} />
+                  </button>
                 </div>
               </div>
               <div className="space-y-4">
@@ -334,7 +385,7 @@ const RoundTripBooking = () => {
                     <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center"><Navigation size={18} /></div>
                   </div>
                   <div className="grid grid-cols-4 gap-2">
-                    {[20, 30, 40, 50].map(km => (
+                    {getAvailableKmLimits().map(km => (
                       <button
                         key={km}
                         onClick={() => setFormData(prev => ({ ...prev, taxiTourKm: km }))}
@@ -370,6 +421,30 @@ const RoundTripBooking = () => {
             </div>
             <div className="text-right"><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Estimated Price</p><p className="text-3xl font-black text-emerald-600 tracking-tighter">Rs. {totalPrice.toLocaleString()}.00</p></div>
           </div>
+        </section>
+
+        <section className="space-y-4 mb-8">
+          <div className="flex items-center justify-between px-2">
+            <div className="flex items-center gap-3">
+              <Car className="text-emerald-600" size={18} />
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Select Vehicle</h4>
+            </div>
+          </div>
+          <VehicleCarousel
+            vehicles={vehicles.map(v => ({
+              ...v,
+              calculatedTotal: calculateVehiclePrice(v)
+            }))}
+            selectedId={selectedVehicle?.vehicleType || selectedVehicle?.id}
+            onSelect={(vType) => {
+              const found = vehicles.find(v => v.vehicleType === vType || v.id === vType);
+              if (found) {
+                setSelectedVehicle(found);
+                syncWithCalculator(tab, found);
+              }
+            }}
+            passengerCount={{ adults: formData.passengers, children: 0, luggage: 0 }}
+          />
         </section>
 
         <section className="space-y-6">

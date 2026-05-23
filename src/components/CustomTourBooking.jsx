@@ -172,11 +172,63 @@ const CustomTourBooking = () => {
     }
   }, [tab]);
 
+  const getAvailableHours = () => {
+    const pkgs = tab === 'airport'
+      ? (pricingSettings?.airportRoundTripPackages || [])
+      : (pricingSettings?.roundTripPackages || []);
+    const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
+    return hours.length > 0 ? hours : [2, 4, 6, 8, 10, 12]; // Fallback
+  };
+
+  const getAvailableKmLimits = () => {
+    const pkgs = tab === 'airport'
+      ? (pricingSettings?.airportRoundTripPackages || [])
+      : (pricingSettings?.roundTripPackages || []);
+    const match = pkgs.filter(p => p.hours === formData.taxiTourHours);
+    if (match.length > 0) {
+      const kms = [];
+      match.forEach(p => {
+        (p.tiers || []).forEach(t => {
+          if (t.km && !kms.includes(t.km)) {
+            kms.push(t.km);
+          }
+        });
+      });
+      return kms.sort((a, b) => a - b);
+    }
+    return [20, 30, 40, 50]; // Fallback
+  };
+
   // Update hours and dynamic KM limit defaults
   const updateDuration = (newHours) => {
-    const newKm = newHours * 20;
+    const pkgs = tab === 'airport'
+      ? (pricingSettings?.airportRoundTripPackages || [])
+      : (pricingSettings?.roundTripPackages || []);
+    const match = pkgs.find(p => p.hours === newHours);
+    const tiers = match?.tiers || [];
+    const newKm = tiers.length > 0 ? tiers[0].km : newHours * 20;
     setFormData(prev => ({ ...prev, taxiTourHours: newHours, taxiTourKm: newKm }));
   };
+
+  useEffect(() => {
+    if (pricingSettings) {
+      const pkgs = tab === 'airport'
+        ? (pricingSettings.airportRoundTripPackages || [])
+        : (pricingSettings.roundTripPackages || []);
+      const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
+      if (hours.length > 0) {
+        const defaultHours = hours.includes(formData.taxiTourHours) ? formData.taxiTourHours : hours[0];
+        const pkg = pkgs.find(p => p.hours === defaultHours);
+        const tiers = pkg?.tiers || [];
+        const defaultKm = (tiers.some(t => t.km === formData.taxiTourKm)) ? formData.taxiTourKm : (tiers.length > 0 ? tiers[0].km : defaultHours * 20);
+        setFormData(prev => ({
+          ...prev,
+          taxiTourHours: defaultHours,
+          taxiTourKm: defaultKm
+        }));
+      }
+    }
+  }, [pricingSettings, tab]);
 
   // Google Maps Places Autocomplete setup
   useEffect(() => {
@@ -242,16 +294,32 @@ const CustomTourBooking = () => {
   // Calculate pricing based on selected vehicle & hours & KM limit
   const calculateTotalForVehicle = (veh) => {
     if (!veh) return 0;
-    const tourPkg = TAXI_TOUR_PACKAGES.find(p => p.hours === Number(formData.taxiTourHours));
-    let basePrice = tourPkg ? tourPkg.price : (formData.taxiTourHours * 2500);
     
-    // Scale dynamic rate slightly depending on vehicle class tier
-    if (veh.id === 'sedan') basePrice *= 1.2;
-    if (veh.id === 'vezel' || veh.id === 'suv') basePrice *= 1.4;
-    if (veh.id === 'mini-van-every' || veh.id === 'mini-van-05') basePrice *= 1.3;
-    if (veh.id === 'van' || veh.id === 'kdh-van') basePrice *= 1.7;
-    if (veh.id === 'mini-bus') basePrice *= 2.5;
-    if (veh.id === 'coach-bus') basePrice *= 4.5;
+    let basePrice = 0;
+    const pkgs = tab === 'airport'
+      ? (pricingSettings?.airportRoundTripPackages || [])
+      : (pricingSettings?.roundTripPackages || []);
+      
+    const pkg = pkgs.find(p => p.hours === Number(formData.taxiTourHours) && p.vehicleType === veh.id);
+    if (pkg) {
+      const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
+      if (tier && tier.price) {
+        basePrice = Math.round(tier.price);
+      }
+    }
+    
+    if (!basePrice) {
+      // Fallback
+      const tourPkg = TAXI_TOUR_PACKAGES.find(p => p.hours === Number(formData.taxiTourHours));
+      let fallbackBasePrice = tourPkg ? tourPkg.price : (formData.taxiTourHours * 2500);
+      if (veh.id === 'sedan') fallbackBasePrice *= 1.2;
+      if (veh.id === 'vezel' || veh.id === 'suv') fallbackBasePrice *= 1.4;
+      if (veh.id === 'mini-van-every' || veh.id === 'mini-van-05') fallbackBasePrice *= 1.3;
+      if (veh.id === 'van' || veh.id === 'kdh-van') fallbackBasePrice *= 1.7;
+      if (veh.id === 'mini-bus') fallbackBasePrice *= 2.5;
+      if (veh.id === 'coach-bus') fallbackBasePrice *= 4.5;
+      basePrice = fallbackBasePrice;
+    }
 
     // Handle extra KMs if route exceeds selections
     let total = basePrice;
@@ -408,12 +476,7 @@ const CustomTourBooking = () => {
   }
 
   // Dynamic KM limits selection array
-  const currentKmLimits = [
-    formData.taxiTourHours * 5,
-    formData.taxiTourHours * 10,
-    formData.taxiTourHours * 15,
-    formData.taxiTourHours * 20
-  ];
+  const currentKmLimits = getAvailableKmLimits();
 
   return (
     <div className="max-w-2xl mx-auto bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl rounded-[2rem] shadow-2xl overflow-hidden border border-slate-200/80 dark:border-white/10 p-4 sm:p-6">
@@ -514,7 +577,7 @@ const CustomTourBooking = () => {
                       </div>
                       
                       <p className="text-[9px] font-black uppercase tracking-widest text-slate-800 dark:text-white mb-0.5">{v.name}</p>
-                      <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 mb-1">RS : {v.baseRate.toLocaleString()}</p>
+                      <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 mb-1">RS : {dynamicPrice.toLocaleString()}</p>
                       
                       {/* Passenger capacity and baggage count details */}
                       <div className="flex items-center gap-2 text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-white/5 pt-1 w-full justify-center">
@@ -535,7 +598,13 @@ const CustomTourBooking = () => {
                 <div className="flex items-center bg-white dark:bg-zinc-850 border border-slate-200/80 dark:border-white/10 p-1 rounded-2xl shadow-sm">
                   <button 
                     type="button"
-                    onClick={() => updateDuration(Math.max(1, formData.taxiTourHours - 1))} 
+                    onClick={() => {
+                      const avHours = getAvailableHours();
+                      const currentIndex = avHours.indexOf(formData.taxiTourHours);
+                      if (currentIndex > 0) {
+                        updateDuration(avHours[currentIndex - 1]);
+                      }
+                    }} 
                     className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-slate-600 dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
                   >
                     <Minus size={16} strokeWidth={3} />
@@ -546,7 +615,15 @@ const CustomTourBooking = () => {
                   </div>
                   <button 
                     type="button"
-                    onClick={() => updateDuration(Math.min(12, formData.taxiTourHours + 1))} 
+                    onClick={() => {
+                      const avHours = getAvailableHours();
+                      const currentIndex = avHours.indexOf(formData.taxiTourHours);
+                      if (currentIndex < avHours.length - 1) {
+                        updateDuration(avHours[currentIndex + 1]);
+                      } else if (currentIndex === -1 && avHours.length > 0) {
+                        updateDuration(avHours[0]);
+                      }
+                    }} 
                     className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-slate-600 dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
                   >
                     <Plus size={16} strokeWidth={3} />

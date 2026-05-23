@@ -73,6 +73,20 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     }
 
     if (tripType === 'destination-based-tour') {
+        if (options.taxiTourHours) {
+            const pkg = activeNormalPackages.find(p => 
+                p.hours === Number(options.taxiTourHours) && 
+                p.vehicleType === vehicleData.vehicleType
+            );
+            if (pkg) {
+                const selectedKm = Number(options.taxiTourKm);
+                const matchingTier = (pkg.tiers || []).find(t => t.km === selectedKm);
+                if (matchingTier) {
+                    return Math.round(matchingTier.price || 0);
+                }
+            }
+        }
+
         // Helper to check pricing data
         const hasPricing = (d) => d && (d.price > 0 || (d.pricing && Object.keys(d.pricing).length > 0) || (typeof d.pricing?.get === 'function' && d.pricing.size > 0));
         
