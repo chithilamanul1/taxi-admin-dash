@@ -795,6 +795,62 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         )}
                                                     </AnimatePresence>
                                                 </div>
+
+                                                {distance && distance > 0 && (
+                                                    <div className="mt-4 animate-slide-up space-y-4">
+                                                        <div className="flex items-center justify-between px-1">
+                                                            <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Select Vehicle</label>
+                                                            <button
+                                                                onClick={() => setIsVehicleDrawerOpen(true)}
+                                                                className="bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20 text-[8px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1.5 shadow-sm hover:bg-emerald-100 hover:shadow transition-all"
+                                                            >
+                                                                <Info size={10} strokeWidth={3} /> Fleet Specs
+                                                            </button>
+                                                        </div>
+                                                        <VehicleCarousel
+                                                            vehicles={Object.values(vehiclePricing).map(v => {
+                                                                const priceInfo = calculatePrice(
+                                                                    distance,
+                                                                    v.vehicleType,
+                                                                    tripType,
+                                                                    vehiclePricing,
+                                                                    totalWaitingHours,
+                                                                    false, // hasNameBoard removed from landing page
+                                                                    nameBoardPrice,
+                                                                    pickup?.name || pickupSearch,
+                                                                    dropoff?.name || dropoffSearch,
+                                                                    destinations,
+                                                                    scheduledTime || currentTime,
+                                                                    scheduledDate || currentDate,
+                                                                    surgeRules,
+                                                                    roundTripPackageId,
+                                                                    pricingSettings.roundTripPackages
+                                                                );
+                                                                return {
+                                                                    ...v,
+                                                                    calculatedTotal: priceInfo.total
+                                                                };
+                                                            })}
+                                                            selectedId={vehicle}
+                                                            onSelect={(vType) => {
+                                                                setVehicle(vType);
+                                                                setIsManualVehicle(true);
+                                                                const syncTab = ['pickup', 'drop'].includes(activeTab) ? 'airport' : 'tour';
+                                                                const event = new CustomEvent('syncCustomTourBooking', {
+                                                                    detail: {
+                                                                        tab: syncTab,
+                                                                        vehicleId: vType
+                                                                    }
+                                                                });
+                                                                window.dispatchEvent(event);
+                                                            }}
+                                                            passengerCount={passengerCount}
+                                                            pickupLocation={pickup}
+                                                            dropoffLocation={dropoff}
+                                                            isCondensed={false}
+                                                        />
+                                                    </div>
+                                                )}</div>
                                             </div>
                                         </div>
                                         <div className="mt-6 flex items-center gap-3">
