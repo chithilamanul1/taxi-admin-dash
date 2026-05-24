@@ -186,16 +186,54 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     const p = formData.pickup.toLowerCase();
                     const d = formData.dropoff.toLowerCase();
 
+                    const isAirport = (name) => {
+                        if (!name) return false;
+                        const n = name.toLowerCase();
+                        return (n.includes('bandaranaike') || n.includes('cmb') || n.includes('airport'));
+                    };
+
+                    const isAirportRide = isAirport(p) || isAirport(d);
+
+                    if (!isAirportRide) return; // Coupons are only applicable for airport drop and pickup
+
                     // Find best applicable coupon
                     const applicable = coupons.filter(c => {
                         if (!c.applicableLocations || c.applicableLocations.length === 0) return true;
+
+                        const isRealMatch = (address, keyword) => {
+                            if (!address || !keyword) return false;
+                            const addr = address.toLowerCase().trim();
+                            const kw = keyword.toLowerCase().trim();
+                            
+                            const streetPattern1 = kw + ' road';
+                            const streetPattern2 = kw + ' face';
+                            const streetPattern3 = kw + ' street';
+                            const streetPattern4 = kw + ' lane';
+                            const streetPattern5 = kw + ' hotel';
+
+                            if (addr.includes(streetPattern1) || addr.includes(streetPattern2) || addr.includes(streetPattern3) || addr.includes(streetPattern4) || addr.includes(streetPattern5)) {
+                                const cleanedAddr = addr
+                                    .split(streetPattern1).join('')
+                                    .split(streetPattern2).join('')
+                                    .split(streetPattern3).join('')
+                                    .split(streetPattern4).join('')
+                                    .split(streetPattern5).join('');
+                                    
+                                const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                                return regex.test(cleanedAddr);
+                            }
+                            
+                            const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                            return regex.test(addr);
+                        };
+
                         return c.applicableLocations.some(loc => {
                             const l = loc.toLowerCase().trim();
                             if (l.includes('->')) {
                                 const [from, to] = l.split('->').map(s => s.trim());
-                                return p.includes(from) && d.includes(to);
+                                return isRealMatch(p, from) && isRealMatch(d, to);
                             }
-                            return p.includes(l) || d.includes(l);
+                            return isRealMatch(p, l) || isRealMatch(d, l);
                         });
                     });
 

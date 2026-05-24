@@ -20,9 +20,24 @@ export async function POST(req) {
             return NextResponse.json({ valid: false, message: 'Coupon expired' });
         }
 
+        // Airport Drop and Pickup check
+        const pickupText = (typeof pickup === 'object' ? pickup?.name : pickup || '').toLowerCase();
+        const dropoffText = (typeof dropoff === 'object' ? dropoff?.name : dropoff || '').toLowerCase();
+
+        const isAirport = (name) => {
+            if (!name) return false;
+            const n = name.toLowerCase();
+            return (n.includes('bandaranaike') || n.includes('cmb') || n.includes('airport'));
+        };
+
+        const isAirportRide = isAirport(pickupText) || isAirport(dropoffText);
+
+        if (!isAirportRide) {
+            return NextResponse.json({ valid: false, message: 'Coupons are only applicable for airport drop and pickup rides.' });
+        }
+
         // Location Check
         if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
-            const pickupText = (typeof pickup === 'object' ? pickup?.name : pickup || '').toLowerCase();
             const dropoffText = (typeof dropoff === 'object' ? dropoff?.name : dropoff || '').toLowerCase();
 
             if (!pickupText && !dropoffText) {
@@ -31,12 +46,40 @@ export async function POST(req) {
 
             const matches = coupon.applicableLocations.some(loc => {
                 const l = loc.toLowerCase().trim();
+
+                const isRealMatch = (address, keyword) => {
+                    if (!address || !keyword) return false;
+                    const addr = address.toLowerCase().trim();
+                    const kw = keyword.toLowerCase().trim();
+                    
+                    const streetPattern1 = kw + ' road';
+                    const streetPattern2 = kw + ' face';
+                    const streetPattern3 = kw + ' street';
+                    const streetPattern4 = kw + ' lane';
+                    const streetPattern5 = kw + ' hotel';
+
+                    if (addr.includes(streetPattern1) || addr.includes(streetPattern2) || addr.includes(streetPattern3) || addr.includes(streetPattern4) || addr.includes(streetPattern5)) {
+                        const cleanedAddr = addr
+                            .split(streetPattern1).join('')
+                            .split(streetPattern2).join('')
+                            .split(streetPattern3).join('')
+                            .split(streetPattern4).join('')
+                            .split(streetPattern5).join('');
+                            
+                        const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                        return regex.test(cleanedAddr);
+                    }
+                    
+                    const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                    return regex.test(addr);
+                };
+
                 if (l.includes('->')) {
                     const [fromPart, toPart] = l.split('->').map(s => s.trim());
-                    return pickupText.includes(fromPart) && dropoffText.includes(toPart);
+                    return isRealMatch(pickupText, fromPart) && isRealMatch(dropoffText, toPart);
                 }
                 // Fallback: simple match if no '->'
-                return pickupText.includes(l) || dropoffText.includes(l);
+                return isRealMatch(pickupText, l) || isRealMatch(dropoffText, l);
             });
 
             if (!matches) {

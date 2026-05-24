@@ -334,20 +334,59 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         const pickupText = (pickup?.name || pickupSearch || '').toLowerCase();
         const dropoffText = (dropoff?.name || dropoffSearch || '').toLowerCase();
 
+        const isAirport = (name) => {
+            if (!name) return false;
+            const n = name.toLowerCase();
+            return (n.includes('bandaranaike') || n.includes('cmb') || n.includes('airport'));
+        };
+
+        const isAirportRide = isAirport(pickupText) || isAirport(dropoffText);
+
+        if (!isAirportRide) {
+            return []; // Coupons are only applicable for airport drop and pickup
+        }
+
         return availableCoupons.filter(coupon => {
             // If coupon has no location restrictions, consider it global
             if (!coupon.applicableLocations || coupon.applicableLocations.length === 0) {
                 return true;
             }
 
+            const isRealMatch = (address, keyword) => {
+                if (!address || !keyword) return false;
+                const addr = address.toLowerCase().trim();
+                const kw = keyword.toLowerCase().trim();
+                
+                const streetPattern1 = kw + ' road';
+                const streetPattern2 = kw + ' face';
+                const streetPattern3 = kw + ' street';
+                const streetPattern4 = kw + ' lane';
+                const streetPattern5 = kw + ' hotel';
+
+                if (addr.includes(streetPattern1) || addr.includes(streetPattern2) || addr.includes(streetPattern3) || addr.includes(streetPattern4) || addr.includes(streetPattern5)) {
+                    const cleanedAddr = addr
+                        .split(streetPattern1).join('')
+                        .split(streetPattern2).join('')
+                        .split(streetPattern3).join('')
+                        .split(streetPattern4).join('')
+                        .split(streetPattern5).join('');
+                        
+                    const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                    return regex.test(cleanedAddr);
+                }
+                
+                const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                return regex.test(addr);
+            };
+
             // Check if any applicable location matches the current route
             return coupon.applicableLocations.some(loc => {
                 const l = loc.toLowerCase().trim();
                 if (l.includes('->')) {
                     const [fromPart, toPart] = l.split('->').map(s => s.trim());
-                    return pickupText.includes(fromPart) && dropoffText.includes(toPart);
+                    return isRealMatch(pickupText, fromPart) && isRealMatch(dropoffText, toPart);
                 }
-                return pickupText.includes(l) || dropoffText.includes(l);
+                return isRealMatch(pickupText, l) || isRealMatch(dropoffText, l);
             });
         });
     }, [availableCoupons, pickup, pickupSearch, dropoff, dropoffSearch]);
@@ -403,16 +442,41 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             const l = loc.toLowerCase().trim();
                             if (l.length < 3) return false;
 
+                            const isRealMatch = (address, keyword) => {
+                                if (!address || !keyword) return false;
+                                const addr = address.toLowerCase().trim();
+                                const kw = keyword.toLowerCase().trim();
+                                
+                                const streetPattern1 = kw + ' road';
+                                const streetPattern2 = kw + ' face';
+                                const streetPattern3 = kw + ' street';
+                                const streetPattern4 = kw + ' lane';
+                                const streetPattern5 = kw + ' hotel';
+
+                                if (addr.includes(streetPattern1) || addr.includes(streetPattern2) || addr.includes(streetPattern3) || addr.includes(streetPattern4) || addr.includes(streetPattern5)) {
+                                    const cleanedAddr = addr
+                                        .split(streetPattern1).join('')
+                                        .split(streetPattern2).join('')
+                                        .split(streetPattern3).join('')
+                                        .split(streetPattern4).join('')
+                                        .split(streetPattern5).join('');
+                                        
+                                    const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                                    return regex.test(cleanedAddr);
+                                }
+                                
+                                const regex = new RegExp(`\\b${kw}\\b`, 'i');
+                                return regex.test(addr);
+                            };
+
                             if (l.includes('->')) {
                                 const [fromPart, toPart] = l.split('->').map(s => s.trim());
-                                const match = start.includes(fromPart) && dest.includes(toPart);
+                                const match = isRealMatch(start, fromPart) && isRealMatch(dest, toPart);
                                 if (match) matchedLoc = loc;
                                 return match;
                             }
 
-                            // Exact word match or prominent presence in route
-                            const regex = new RegExp(`\\b${l}\\b`, 'i');
-                            const match = regex.test(dest) || regex.test(start);
+                            const match = isRealMatch(dest, l) || isRealMatch(start, l);
                             if (match) matchedLoc = loc; // Store the actual matched location name
                             return match;
                         });
