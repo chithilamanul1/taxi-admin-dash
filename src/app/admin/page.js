@@ -32,7 +32,8 @@ const ALL_VEHICLE_TYPES = [
     { value: 'bus', label: 'Bus' },
     { value: 'large-bus', label: 'Large Bus' },
     { value: 'coach-bus', label: 'Coach Bus' },
-    { value: 'coster-coach', label: 'Coster Coach' }
+    { value: 'coster-coach', label: 'Coster Coach' },
+    { value: 'luxury-car', label: 'Luxury Car' }
 ];
 
 const ensureAllVehicles = (settingsData) => {
@@ -40,7 +41,10 @@ const ensureAllVehicles = (settingsData) => {
     const updatedSettings = { ...settingsData };
     
     // Process roundTripPackages (Normal packages)
-    const normalHours = [...new Set((updatedSettings.roundTripPackages || []).map(p => p.hours))];
+    const defaultHours = [4, 8, 12, 24];
+    const existingHours = [...new Set((updatedSettings.roundTripPackages || []).map(p => p.hours))];
+    const normalHours = [...new Set([...defaultHours, ...existingHours])];
+    
     const normalPackages = [];
     normalHours.forEach(h => {
         ALL_VEHICLE_TYPES.forEach(vt => {
