@@ -850,7 +850,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                             isCondensed={false}
                                                         />
                                                     </div>
-                                                )}</div>
+                                                )}
                                             </div>
                                         </div>
                                         <div className="mt-6 flex items-center gap-3">
