@@ -464,6 +464,71 @@ const CustomTourBooking = () => {
     );
   };
 
+  const renderRoutePlanning = () => (
+    <section className="bg-slate-50 dark:bg-zinc-800/20 rounded-3xl border border-slate-100 dark:border-white/5 p-4 space-y-3">
+      <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-2">
+        <div className="flex items-center gap-1.5">
+          <MapPin className="text-emerald-600 dark:text-[#FACC15]" size={14} />
+          <h4 className="text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Route details</h4>
+        </div>
+        {locations.length < 4 && (
+          <button 
+            type="button"
+            onClick={handleAddLocation} 
+            className="text-[9px] font-black text-emerald-600 dark:text-[#FACC15] uppercase tracking-widest flex items-center gap-1 hover:underline"
+          >
+            <Plus size={10} /> Add Stop
+          </button>
+        )}
+      </div>
+      <div className="space-y-2">
+        {locations.map((loc, idx) => (
+          <div key={idx} className="relative group flex items-center gap-1.5">
+            <div className="relative flex-1">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                {idx === 0 ? <Plane size={14} /> : idx === locations.length - 1 ? <MapPin size={14} /> : <Navigation size={14} />}
+              </div>
+              <input 
+                type="text" 
+                value={loc} 
+                ref={(el) => initAutocomplete(el, idx)} 
+                onChange={(e) => handleLocationChange(idx, e.target.value)} 
+                placeholder={idx === 0 ? "Pickup Location (Sri Lanka)" : idx === locations.length - 1 ? "Final Destination" : `Stop ${idx}`} 
+                className="w-full bg-white dark:bg-zinc-800 border border-slate-200/60 dark:border-white/10 rounded-xl py-3 pl-11 pr-4 outline-none font-bold text-[11px] text-slate-900 dark:text-white focus:border-[#FACC15] transition-all shadow-sm" 
+              />
+            </div>
+            {locations.length > 2 && (
+              <button 
+                type="button"
+                onClick={() => handleRemoveLocation(idx)} 
+                className="p-2.5 bg-red-50 hover:bg-red-100 dark:bg-red-500/10 text-red-500 rounded-lg transition-all"
+              >
+                <Minus size={12} />
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Distance Display & Details */}
+      <div className="flex flex-wrap gap-3 items-center justify-between bg-white dark:bg-zinc-800/80 p-4 rounded-xl border border-slate-100 dark:border-white/5 mt-3">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 bg-slate-50 dark:bg-zinc-700/50 rounded-lg flex items-center justify-center text-emerald-600 shadow-sm">
+            {isCalculating ? <Loader2 className="animate-spin" size={14} /> : <Navigation size={16} />}
+          </div>
+          <div>
+            <p className="text-[7px] font-black text-slate-400 uppercase tracking-widest">Total Distance</p>
+            <p className="text-sm font-black text-slate-800 dark:text-white">{distance > 0 ? `${distance} KM` : 'Calculating...'}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-[7px] font-black text-slate-400 uppercase tracking-widest">Selected Tour Fare</p>
+          <p className="text-base font-black text-emerald-700 dark:text-emerald-400">Rs. {totalPrice.toLocaleString()}.00</p>
+        </div>
+      </div>
+    </section>
+  );
+
   if (isBooked) {
     return (
       <div className="bg-white rounded-[2.5rem] p-12 text-center shadow-2xl border border-slate-100 max-w-2xl mx-auto py-16">
@@ -590,6 +655,8 @@ const CustomTourBooking = () => {
               </div>
             </div>
 
+            {tab === 'tour' && renderRoutePlanning()}
+
             {/* Stepper Selection & KM Limit (Step 1) */}
             <div className="space-y-4 bg-slate-50/50 dark:bg-zinc-800/10 p-4 rounded-3xl border border-slate-100 dark:border-white/5">
               {/* Stepper Selection */}
@@ -679,68 +746,7 @@ const CustomTourBooking = () => {
           >
 
             {/* Block 2: Isolated Route Planning */}
-            <section className="bg-slate-50 dark:bg-zinc-800/20 rounded-3xl border border-slate-100 dark:border-white/5 p-4 space-y-3">
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-2">
-                <div className="flex items-center gap-1.5">
-                  <MapPin className="text-emerald-600 dark:text-[#FACC15]" size={14} />
-                  <h4 className="text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Route details</h4>
-                </div>
-                {locations.length < 4 && (
-                  <button 
-                    type="button"
-                    onClick={handleAddLocation} 
-                    className="text-[9px] font-black text-emerald-600 dark:text-[#FACC15] uppercase tracking-widest flex items-center gap-1 hover:underline"
-                  >
-                    <Plus size={10} /> Add Stop
-                  </button>
-                )}
-              </div>
-              <div className="space-y-2">
-                {locations.map((loc, idx) => (
-                  <div key={idx} className="relative group flex items-center gap-1.5">
-                    <div className="relative flex-1">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                        {idx === 0 ? <Plane size={14} /> : idx === locations.length - 1 ? <MapPin size={14} /> : <Navigation size={14} />}
-                      </div>
-                      <input 
-                        type="text" 
-                        value={loc} 
-                        ref={(el) => initAutocomplete(el, idx)} 
-                        onChange={(e) => handleLocationChange(idx, e.target.value)} 
-                        placeholder={idx === 0 ? "Pickup Location (Sri Lanka)" : idx === locations.length - 1 ? "Final Destination" : `Stop ${idx}`} 
-                        className="w-full bg-white dark:bg-zinc-800 border border-slate-200/60 dark:border-white/10 rounded-xl py-3 pl-11 pr-4 outline-none font-bold text-[11px] text-slate-900 dark:text-white focus:border-[#FACC15] transition-all shadow-sm" 
-                      />
-                    </div>
-                    {locations.length > 2 && (
-                      <button 
-                        type="button"
-                        onClick={() => handleRemoveLocation(idx)} 
-                        className="p-2.5 bg-red-50 hover:bg-red-100 dark:bg-red-500/10 text-red-500 rounded-lg transition-all"
-                      >
-                        <Minus size={12} />
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Distance Display & Details */}
-              <div className="flex flex-wrap gap-3 items-center justify-between bg-white dark:bg-zinc-800/80 p-4 rounded-xl border border-slate-100 dark:border-white/5 mt-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 bg-slate-50 dark:bg-zinc-700/50 rounded-lg flex items-center justify-center text-emerald-600 shadow-sm">
-                    {isCalculating ? <Loader2 className="animate-spin" size={14} /> : <Navigation size={16} />}
-                  </div>
-                  <div>
-                    <p className="text-[7px] font-black text-slate-400 uppercase tracking-widest">Total Distance</p>
-                    <p className="text-sm font-black text-slate-800 dark:text-white">{distance > 0 ? `${distance} KM` : 'Calculating...'}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-[7px] font-black text-slate-400 uppercase tracking-widest">Selected Tour Fare</p>
-                  <p className="text-base font-black text-emerald-700 dark:text-emerald-400">Rs. {totalPrice.toLocaleString()}.00</p>
-                </div>
-              </div>
-            </section>
+            {tab === 'airport' && renderRoutePlanning()}
 
             {/* Block 3: Isolated Timing & Contact Information */}
             <section className="bg-slate-50 dark:bg-zinc-800/20 rounded-3xl border border-slate-100 dark:border-white/5 p-4 space-y-3">
