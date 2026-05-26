@@ -419,6 +419,93 @@ const RoundTripBooking = () => {
     }
   };
 
+  const renderDurationSection = () => (
+    <section className="animate-slide-up space-y-6 bg-slate-50/50 p-6 rounded-3xl border border-slate-100">
+      <div className="flex items-center justify-between px-2">
+        <div className="flex items-center gap-3"><Clock className="text-emerald-600" size={18} /><h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Duration & Limit</h4></div>
+        <div className="flex items-center gap-2 bg-emerald-100/50 px-3 py-1 rounded-full"><Sparkles size={12} className="text-emerald-600" /><span className="text-[9px] font-black text-emerald-700 uppercase tracking-tight">AI Estimated Limit</span></div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-4">
+          <label className="text-[9px] uppercase font-black text-slate-500 px-2 tracking-widest">Select Hours</label>
+          <div className="flex items-center bg-white border border-slate-200 p-1.5 rounded-2xl shadow-sm">
+            <button 
+              onClick={() => {
+                const avHours = getAvailableHours();
+                const currentIndex = avHours.indexOf(formData.taxiTourHours);
+                if (currentIndex > 0) {
+                  updateDuration(avHours[currentIndex - 1]);
+                }
+              }} 
+              className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-emerald-600"
+            >
+              <Minus size={18} />
+            </button>
+            <div className="flex-1 text-center"><span className="text-xl font-black text-emerald-950">{formData.taxiTourHours}</span><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1.5">Hours</span></div>
+            <button 
+              onClick={() => {
+                const avHours = getAvailableHours();
+                const currentIndex = avHours.indexOf(formData.taxiTourHours);
+                if (currentIndex < avHours.length - 1) {
+                  updateDuration(avHours[currentIndex + 1]);
+                } else if (currentIndex === -1 && avHours.length > 0) {
+                  updateDuration(avHours[0]);
+                }
+              }} 
+              className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-emerald-600"
+            >
+              <Plus size={18} />
+            </button>
+          </div>
+        </div>
+        <div className="space-y-4">
+          <label className="text-[9px] uppercase font-black text-slate-500 px-2 tracking-widest">KM Limit</label>
+          <div className="flex flex-col gap-3">
+            <div className="bg-white border border-emerald-100 p-4 rounded-2xl shadow-sm flex items-center justify-between">
+              <div className="flex flex-col"><span className="text-xl font-black text-emerald-600 leading-none">{formData.taxiTourKm} KM</span><span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">Included</span></div>
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center"><Navigation size={18} /></div>
+            </div>
+            <div className="grid grid-cols-4 gap-2">
+              {getAvailableKmLimits().map(km => (
+                <button
+                  key={km}
+                  onClick={() => setFormData(prev => ({ ...prev, taxiTourKm: km }))}
+                  className={`py-2 rounded-xl text-[10px] font-black transition-all border ${formData.taxiTourKm === km ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-white text-slate-500 border-slate-200 hover:border-emerald-300'}`}
+                >
+                  {km}KM
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+
+  const renderLocationsSection = () => (
+    <section className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3"><MapPin className="text-emerald-600" size={18} /><h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Route & Locations</h4></div>
+        {locations.length < 3 && <button onClick={handleAddLocation} className="text-[9px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 rounded-xl transition-all"><Plus size={14} /> Add Stop</button>}
+      </div>
+      <div className="space-y-3">
+        {locations.map((loc, idx) => (
+          <div key={idx} className="relative group">
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300">{idx === 0 ? <Plane size={16} /> : idx === locations.length - 1 ? <MapPin size={16} /> : <Navigation size={16} />}</div>
+            <input type="text" value={loc} ref={(el) => initAutocomplete(el, idx)} onChange={(e) => handleLocationChange(idx, e.target.value)} placeholder={idx === 0 ? "Pickup Location" : idx === locations.length - 1 ? "Final Destination" : `Stop ${idx}`} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-5 pl-16 pr-8 outline-none font-bold text-slate-900 focus:bg-white transition-all shadow-sm" />
+          </div>
+        ))}
+      </div>
+      <div className="flex flex-wrap gap-4 items-center justify-between bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100 mt-6">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">{isCalculating ? <Loader2 className="animate-spin" size={24} /> : <Navigation size={24} />}</div>
+          <div><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Distance</p><p className="text-xl font-black text-emerald-950 uppercase tracking-tight">{distance > 0 ? `${distance} KM` : 'Calculating...'}</p></div>
+        </div>
+        <div className="text-right"><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Estimated Price</p><p className="text-3xl font-black text-emerald-600 tracking-tighter">Rs. {totalPrice.toLocaleString()}.00</p></div>
+      </div>
+    </section>
+  );
+
   if (isBooked) {
     return (
       <div className="bg-white rounded-[2.5rem] p-12 text-center shadow-2xl border border-emerald-50 max-w-2xl mx-auto">
@@ -439,90 +526,17 @@ const RoundTripBooking = () => {
       </div>
 
       <div className="p-8 md:p-12 space-y-12">
-        {(tab === 'airport-round-tour' || tab === 'normal-round-tour' || tab === 'destination-based-tour') && (
-          <section className="animate-slide-up space-y-6 bg-slate-50/50 p-6 rounded-3xl border border-slate-100">
-            <div className="flex items-center justify-between px-2">
-              <div className="flex items-center gap-3"><Clock className="text-emerald-600" size={18} /><h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Duration & Limit</h4></div>
-              <div className="flex items-center gap-2 bg-emerald-100/50 px-3 py-1 rounded-full"><Sparkles size={12} className="text-emerald-600" /><span className="text-[9px] font-black text-emerald-700 uppercase tracking-tight">AI Estimated Limit</span></div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <label className="text-[9px] uppercase font-black text-slate-500 px-2 tracking-widest">Select Hours</label>
-                <div className="flex items-center bg-white border border-slate-200 p-1.5 rounded-2xl shadow-sm">
-                  <button 
-                    onClick={() => {
-                      const avHours = getAvailableHours();
-                      const currentIndex = avHours.indexOf(formData.taxiTourHours);
-                      if (currentIndex > 0) {
-                        updateDuration(avHours[currentIndex - 1]);
-                      }
-                    }} 
-                    className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-emerald-600"
-                  >
-                    <Minus size={18} />
-                  </button>
-                  <div className="flex-1 text-center"><span className="text-xl font-black text-emerald-950">{formData.taxiTourHours}</span><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1.5">Hours</span></div>
-                  <button 
-                    onClick={() => {
-                      const avHours = getAvailableHours();
-                      const currentIndex = avHours.indexOf(formData.taxiTourHours);
-                      if (currentIndex < avHours.length - 1) {
-                        updateDuration(avHours[currentIndex + 1]);
-                      } else if (currentIndex === -1 && avHours.length > 0) {
-                        updateDuration(avHours[0]);
-                      }
-                    }} 
-                    className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-emerald-600"
-                  >
-                    <Plus size={18} />
-                  </button>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <label className="text-[9px] uppercase font-black text-slate-500 px-2 tracking-widest">KM Limit</label>
-                <div className="flex flex-col gap-3">
-                  <div className="bg-white border border-emerald-100 p-4 rounded-2xl shadow-sm flex items-center justify-between">
-                    <div className="flex flex-col"><span className="text-xl font-black text-emerald-600 leading-none">{formData.taxiTourKm} KM</span><span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">Included</span></div>
-                    <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center"><Navigation size={18} /></div>
-                  </div>
-                  <div className="grid grid-cols-4 gap-2">
-                    {getAvailableKmLimits().map(km => (
-                      <button
-                        key={km}
-                        onClick={() => setFormData(prev => ({ ...prev, taxiTourKm: km }))}
-                        className={`py-2 rounded-xl text-[10px] font-black transition-all border ${formData.taxiTourKm === km ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-white text-slate-500 border-slate-200 hover:border-emerald-300'}`}
-                      >
-                        {km}KM
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
+        {tab === 'airport-round-tour' ? (
+          <>
+            {renderDurationSection()}
+            {renderLocationsSection()}
+          </>
+        ) : (
+          <>
+            {renderLocationsSection()}
+            {renderDurationSection()}
+          </>
         )}
-
-        <section className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3"><MapPin className="text-emerald-600" size={18} /><h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Route & Locations</h4></div>
-            {locations.length < 3 && <button onClick={handleAddLocation} className="text-[9px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 rounded-xl transition-all"><Plus size={14} /> Add Stop</button>}
-          </div>
-          <div className="space-y-3">
-            {locations.map((loc, idx) => (
-              <div key={idx} className="relative group">
-                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300">{idx === 0 ? <Plane size={16} /> : idx === locations.length - 1 ? <MapPin size={16} /> : <Navigation size={16} />}</div>
-                <input type="text" value={loc} ref={(el) => initAutocomplete(el, idx)} onChange={(e) => handleLocationChange(idx, e.target.value)} placeholder={idx === 0 ? "Pickup Location" : idx === locations.length - 1 ? "Final Destination" : `Stop ${idx}`} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-5 pl-16 pr-8 outline-none font-bold text-slate-900 focus:bg-white transition-all shadow-sm" />
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-4 items-center justify-between bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100 mt-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">{isCalculating ? <Loader2 className="animate-spin" size={24} /> : <Navigation size={24} />}</div>
-              <div><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Distance</p><p className="text-xl font-black text-emerald-950 uppercase tracking-tight">{distance > 0 ? `${distance} KM` : 'Calculating...'}</p></div>
-            </div>
-            <div className="text-right"><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Estimated Price</p><p className="text-3xl font-black text-emerald-600 tracking-tighter">Rs. {totalPrice.toLocaleString()}.00</p></div>
-          </div>
-        </section>
 
         <section className="space-y-4 mb-8">
           <div className="flex items-center justify-between px-2">
