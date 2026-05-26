@@ -40,12 +40,9 @@ const ensureAllVehicles = (settingsData) => {
     const updatedSettings = { ...settingsData };
     
     // Process roundTripPackages (Normal packages)
-    const hasRoundTripField = updatedSettings.roundTripPackages !== undefined;
     const existingNormalPackages = updatedSettings.roundTripPackages || [];
     const existingHours = [...new Set(existingNormalPackages.map(p => p.hours))];
-    const normalHours = (hasRoundTripField && existingHours.length > 0)
-        ? existingHours
-        : (existingHours.length > 0 ? existingHours : [4, 8, 12, 24]);
+    const normalHours = existingHours.length > 0 ? existingHours : [4, 8, 12, 24];
     
     const normalPackages = [];
     normalHours.forEach(h => {
@@ -56,7 +53,14 @@ const ensureAllVehicles = (settingsData) => {
                 while (tiers.length < 4) {
                     tiers.push({ km: (tiers.length + 1) * 10, price: 0 });
                 }
-                normalPackages.push({ ...existing, tiers });
+                const packageId = existing.id || `pkg-${h}h-${vt.value}-${Date.now()}`;
+                normalPackages.push({ 
+                    ...existing, 
+                    id: packageId, 
+                    hours: existing.hours || h,
+                    vehicleType: existing.vehicleType || vt.value,
+                    tiers 
+                });
             } else {
                 normalPackages.push({
                     id: `pkg-${h}h-${vt.value}-${Date.now()}`,
@@ -75,12 +79,9 @@ const ensureAllVehicles = (settingsData) => {
     updatedSettings.roundTripPackages = normalPackages;
 
     // Process airportRoundTripPackages
-    const hasAirportField = updatedSettings.airportRoundTripPackages !== undefined;
     const existingAirportPackages = updatedSettings.airportRoundTripPackages || [];
     const airportHours = [...new Set(existingAirportPackages.map(p => p.hours))];
-    const finalAirportHours = (hasAirportField && (airportHours.length > 0 || updatedSettings.airportRoundTripPackages !== undefined))
-        ? airportHours
-        : (airportHours.length > 0 ? airportHours : [2, 4, 6, 8, 10, 12, 14]);
+    const finalAirportHours = airportHours.length > 0 ? airportHours : [2, 4, 6, 8, 10, 12, 14];
     
     const airportPackages = [];
     finalAirportHours.forEach(h => {
@@ -91,7 +92,14 @@ const ensureAllVehicles = (settingsData) => {
                 while (tiers.length < 4) {
                     tiers.push({ km: (tiers.length + 1) * 50, price: 0 });
                 }
-                airportPackages.push({ ...existing, tiers });
+                const packageId = existing.id || `air-pkg-${h}h-${vt.value}-${Date.now()}`;
+                airportPackages.push({ 
+                    ...existing, 
+                    id: packageId, 
+                    hours: existing.hours || h,
+                    vehicleType: existing.vehicleType || vt.value,
+                    tiers 
+                });
             } else {
                 airportPackages.push({
                     id: `air-pkg-${h}h-${vt.value}-${Date.now()}`,
@@ -110,12 +118,9 @@ const ensureAllVehicles = (settingsData) => {
     updatedSettings.airportRoundTripPackages = airportPackages;
 
     // Process destinationRoundTripPackages
-    const hasDestinationField = updatedSettings.destinationRoundTripPackages !== undefined;
     const existingDestinationPackages = updatedSettings.destinationRoundTripPackages || [];
     const destinationHours = [...new Set(existingDestinationPackages.map(p => p.hours))];
-    const finalDestinationHours = (hasDestinationField && (destinationHours.length > 0 || updatedSettings.destinationRoundTripPackages !== undefined))
-        ? destinationHours
-        : (destinationHours.length > 0 ? destinationHours : [2, 4, 6, 8, 10, 12, 14]);
+    const finalDestinationHours = destinationHours.length > 0 ? destinationHours : [2, 4, 6, 8, 10, 12, 14];
     
     const destinationPackages = [];
     finalDestinationHours.forEach(h => {
@@ -126,7 +131,14 @@ const ensureAllVehicles = (settingsData) => {
                 while (tiers.length < 4) {
                     tiers.push({ km: (tiers.length + 1) * 50, price: 0 });
                 }
-                destinationPackages.push({ ...existing, tiers });
+                const packageId = existing.id || `dest-pkg-${h}h-${vt.value}-${Date.now()}`;
+                destinationPackages.push({ 
+                    ...existing, 
+                    id: packageId, 
+                    hours: existing.hours || h,
+                    vehicleType: existing.vehicleType || vt.value,
+                    tiers 
+                });
             } else {
                 destinationPackages.push({
                     id: `dest-pkg-${h}h-${vt.value}-${Date.now()}`,
