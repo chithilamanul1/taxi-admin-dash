@@ -42,7 +42,9 @@ export async function GET(req) {
                             { km: 60, price: 7500 }
                         ]
                     }
-                ]
+                ],
+                airportRoundTripPackages: [],
+                destinationRoundTripPackages: []
             });
         }
 
@@ -67,6 +69,7 @@ export async function PUT(req) {
                 waitingHourRate: Number(body.waitingHourRate || 1000),
                 roundTripPackages: body.roundTripPackages || [],
                 airportRoundTripPackages: body.airportRoundTripPackages || [],
+                destinationRoundTripPackages: body.destinationRoundTripPackages || [],
                 updatedBy: body.updatedBy || 'admin'
             },
             { new: true, upsert: true, runValidators: true }

@@ -47,6 +47,15 @@ const PricingSettingSchema = new mongoose.Schema({
             price: Number
         }]
     }],
+    destinationRoundTripPackages: [{
+        id: String,
+        hours: Number,
+        vehicleType: String,
+        tiers: [{
+            km: Number,
+            price: Number
+        }]
+    }],
     updatedBy: {
         type: String // Admin email or ID
     }

@@ -21,11 +21,16 @@ import { useCurrency } from '../context/CurrencyContext'
 import { calculateBasePrice, calculateSurcharges, calculateTrafficSurge, ROUND_TRIP_PACKAGES } from '@/lib/pricing-util';
 
 // (Helper to calculate price)
-const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, pickupName = '', dropoffName = '', destinations = [], scheduledTime = null, scheduledDate = null, surgeRules = [], roundTripPackageId = null, roundTripPackages = []) => {
+const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours, hasNameBoard, nameBoardPrice = 2000, pickupName = '', dropoffName = '', destinations = [], scheduledTime = null, scheduledDate = null, surgeRules = [], roundTripPackageId = null, roundTripPackages = [], airportRoundTripPackages = [], destinationRoundTripPackages = []) => {
     if (!pricingMap[vehicleId]) return { total: 0, surgeAmount: 0 };
     const vehicleData = pricingMap[vehicleId];
 
-    const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupName, dropoffName, destinations, { roundTripPackageId, roundTripPackages });
+    const basePrice = calculateBasePrice(distance, vehicleData, tripType, pickupName, dropoffName, destinations, { 
+        roundTripPackageId, 
+        roundTripPackages,
+        airportRoundTripPackages,
+        destinationRoundTripPackages
+    });
     const surcharges = calculateSurcharges({ waitingHours, hasNameBoard, nameBoardPrice }, vehicleData);
 
     const surgePercent = calculateTrafficSurge(scheduledTime, scheduledDate, surgeRules, distance);
@@ -571,7 +576,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         scheduledDate || currentDate,
         surgeRules,
         roundTripPackageId,
-        pricingSettings.roundTripPackages
+        pricingSettings.roundTripPackages,
+        pricingSettings.airportRoundTripPackages,
+        pricingSettings.destinationRoundTripPackages
     );
 
     // Calculate total discount from all applied offers (MAX RULE: No Stacking)
@@ -888,7 +895,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                                     scheduledDate || currentDate,
                                                                     surgeRules,
                                                                     roundTripPackageId,
-                                                                    pricingSettings.roundTripPackages
+                                                                    pricingSettings.roundTripPackages,
+                                                                    pricingSettings.airportRoundTripPackages,
+                                                                    pricingSettings.destinationRoundTripPackages
                                                                 );
                                                                 return {
                                                                     ...v,
@@ -1050,7 +1059,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         scheduledDate || currentDate,
                                                         surgeRules,
                                                         roundTripPackageId,
-                                                        pricingSettings.roundTripPackages
+                                                        pricingSettings.roundTripPackages,
+                                                        pricingSettings.airportRoundTripPackages,
+                                                        pricingSettings.destinationRoundTripPackages
                                                     );
                                                     return {
                                                         ...v,
@@ -1309,7 +1320,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         scheduledDate || currentDate,
                         surgeRules,
                         roundTripPackageId,
-                        pricingSettings.roundTripPackages
+                        pricingSettings.roundTripPackages,
+                        pricingSettings.airportRoundTripPackages,
+                        pricingSettings.destinationRoundTripPackages
                     );
                     return {
                         ...v,

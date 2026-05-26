@@ -79,7 +79,7 @@ export const findMatchingDestination = (address, destinationsList) => {
 
 export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way', pickup = '', dropoff = '', dynamicDestinations = [], options = {}) => {
     const distKm = Math.ceil(Number(distanceKm) || 0);
-    const { roundTripPackageId, roundTripPackages: normalPackages, airportRoundTripPackages } = options;
+    const { roundTripPackageId, roundTripPackages: normalPackages, airportRoundTripPackages, destinationRoundTripPackages } = options;
     const activeNormalPackages = normalPackages || ROUND_TRIP_PACKAGES;
     const activeAirportPackages = airportRoundTripPackages || [];
 
@@ -131,24 +131,42 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
     }
 
     if (tripType === 'destination-based-tour') {
-        if (options.taxiTourHours) {
-            const pkg = activeNormalPackages.find(p => 
+        const pickupOverride = findMatchingDestination(pickup, dynamicDestinations);
+        const dropoffOverride = findMatchingDestination(dropoff, dynamicDestinations);
+        const destMatch = hasPricingData(dropoffOverride) ? dropoffOverride : (hasPricingData(pickupOverride) ? pickupOverride : null);
+
+        // 1. Destination-Specific Package Tier pricing
+        if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0 && options.taxiTourHours) {
+            const pkg = destMatch.roundTripPackages.find(p => 
+                p.hours === Number(options.taxiTourHours) && 
+                (p.vehicleType === vehicleData.vehicleType || p.vehicleType === vehicleData.vehicleSlug)
+            );
+            if (pkg) {
+                const selectedKm = Number(options.taxiTourKm);
+                const matchingTier = (pkg.tiers || []).find(t => t.km === selectedKm);
+                if (matchingTier && matchingTier.price) {
+                    return Math.round(matchingTier.price);
+                }
+            }
+        }
+
+        // 2. Global Destination-Based Package Tier pricing (default fallback)
+        const activeDestPackages = destinationRoundTripPackages || [];
+        if (activeDestPackages.length > 0 && options.taxiTourHours) {
+            const pkg = activeDestPackages.find(p => 
                 p.hours === Number(options.taxiTourHours) && 
                 p.vehicleType === vehicleData.vehicleType
             );
             if (pkg) {
                 const selectedKm = Number(options.taxiTourKm);
                 const matchingTier = (pkg.tiers || []).find(t => t.km === selectedKm);
-                if (matchingTier) {
-                    return Math.round(matchingTier.price || 0);
+                if (matchingTier && matchingTier.price) {
+                    return Math.round(matchingTier.price);
                 }
             }
         }
 
-        const pickupOverride = findMatchingDestination(pickup, dynamicDestinations);
-        const dropoffOverride = findMatchingDestination(dropoff, dynamicDestinations);
-        const destMatch = hasPricingData(dropoffOverride) ? dropoffOverride : (hasPricingData(pickupOverride) ? pickupOverride : null);
-
+        // 3. Flat rate override for the matched destination
         if (destMatch && hasPricingData(destMatch)) {
             let vPricing = {};
             if (destMatch.pricing) {
@@ -162,7 +180,7 @@ export const calculateBasePrice = (distanceKm, vehicleData, tripType = 'one-way'
             }
         }
         
-        // If no fixed price mapped, return base price or 0
+        // Strictly no dynamic per-km fallback
         return Number(vehicleData.basePrice) || 0;
     }
 

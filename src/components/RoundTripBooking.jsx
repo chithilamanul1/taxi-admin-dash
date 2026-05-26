@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock, Navigation, ChevronRight, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles, CreditCard } from 'lucide-react';
-import { TAXI_TOUR_PACKAGES } from '../lib/pricing-util';
+import { TAXI_TOUR_PACKAGES, findMatchingDestination, hasPricingData } from '../lib/pricing-util';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
 
 const VehicleCarousel = dynamic(() => import('./VehicleCarousel'), { ssr: false });
@@ -23,8 +23,16 @@ const RoundTripBooking = () => {
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState('');
   const [pricingSettings, setPricingSettings] = useState(null);
+  const [destinationsList, setDestinationsList] = useState([]);
   
   useEffect(() => {
+    fetch('/api/destinations')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setDestinationsList(data.data || []);
+      })
+      .catch(err => console.error("Error fetching destinations:", err));
+
     fetch('/api/pricing?category=tours')
       .then(res => res.json())
       .then(data => {
@@ -106,17 +114,41 @@ const RoundTripBooking = () => {
   };
 
   const getAvailableHours = () => {
-    const pkgs = tab === 'airport-round-tour'
-      ? (pricingSettings?.airportRoundTripPackages || [])
-      : (pricingSettings?.roundTripPackages || []);
+    let pkgs = [];
+    if (tab === 'airport-round-tour') {
+      pkgs = pricingSettings?.airportRoundTripPackages || [];
+    } else if (tab === 'normal-round-tour') {
+      pkgs = pricingSettings?.roundTripPackages || [];
+    } else if (tab === 'destination-based-tour') {
+      const pickupOverride = findMatchingDestination(locations[0], destinationsList);
+      const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
+      const destMatch = dropoffOverride || pickupOverride;
+      if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
+        pkgs = destMatch.roundTripPackages;
+      } else {
+        pkgs = pricingSettings?.destinationRoundTripPackages || [];
+      }
+    }
     const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
     return hours.length > 0 ? hours : [2, 4, 6, 8, 10, 12]; // Fallback
   };
 
   const getAvailableKmLimits = () => {
-    const pkgs = tab === 'airport-round-tour'
-      ? (pricingSettings?.airportRoundTripPackages || [])
-      : (pricingSettings?.roundTripPackages || []);
+    let pkgs = [];
+    if (tab === 'airport-round-tour') {
+      pkgs = pricingSettings?.airportRoundTripPackages || [];
+    } else if (tab === 'normal-round-tour') {
+      pkgs = pricingSettings?.roundTripPackages || [];
+    } else if (tab === 'destination-based-tour') {
+      const pickupOverride = findMatchingDestination(locations[0], destinationsList);
+      const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
+      const destMatch = dropoffOverride || pickupOverride;
+      if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
+        pkgs = destMatch.roundTripPackages;
+      } else {
+        pkgs = pricingSettings?.destinationRoundTripPackages || [];
+      }
+    }
     const match = pkgs.filter(p => p.hours === formData.taxiTourHours);
     if (match.length > 0) {
       const kms = [];
@@ -143,21 +175,78 @@ const RoundTripBooking = () => {
       }
     }
     
-    if (tab === 'normal-round-tour' || tab === 'destination-based-tour') {
+    if (tab === 'normal-round-tour') {
       const pkg = (pricingSettings?.roundTripPackages || []).find(p => p.hours === Number(formData.taxiTourHours) && p.vehicleType === v.id);
       if (pkg) {
         const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
         if (tier && tier.price) return Math.round(tier.price);
       }
     }
+
+    if (tab === 'destination-based-tour') {
+      const pickupOverride = findMatchingDestination(locations[0], destinationsList);
+      const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
+      const destMatch = dropoffOverride || pickupOverride;
+      
+      // 1. Matched destination roundTripPackages
+      if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
+        const pkg = destMatch.roundTripPackages.find(p => 
+          p.hours === Number(formData.taxiTourHours) && 
+          (p.vehicleType === v.id || p.vehicleType === v.vehicleType)
+        );
+        if (pkg) {
+          const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
+          if (tier && tier.price) return Math.round(tier.price);
+        }
+      }
+
+      // 2. Global destinationRoundTripPackages
+      const pkg = (pricingSettings?.destinationRoundTripPackages || []).find(p => 
+        p.hours === Number(formData.taxiTourHours) && 
+        (p.vehicleType === v.id || p.vehicleType === v.vehicleType)
+      );
+      if (pkg) {
+        const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
+        if (tier && tier.price) return Math.round(tier.price);
+      }
+
+      // 3. Flat rate override for the matched destination
+      if (destMatch && hasPricingData(destMatch)) {
+        let vPricing = {};
+        if (destMatch.pricing) {
+          if (typeof destMatch.pricing.get === 'function') vPricing = Object.fromEntries(destMatch.pricing);
+          else vPricing = destMatch.pricing;
+        }
+        const vehicleSlug = v.vehicleType || v.id;
+        const fixedPrice = vPricing[vehicleSlug] || vPricing[v.id] || 0;
+        if (fixedPrice > 0) {
+          return Number(fixedPrice);
+        }
+      }
+
+      // Strictly no dynamic per-km fallback
+      return v.baseRate || 0;
+    }
     
     return v.baseRate || 0;
   };
 
   const updateDuration = (newHours) => {
-    const pkgs = tab === 'airport-round-tour'
-      ? (pricingSettings?.airportRoundTripPackages || [])
-      : (pricingSettings?.roundTripPackages || []);
+    let pkgs = [];
+    if (tab === 'airport-round-tour') {
+      pkgs = pricingSettings?.airportRoundTripPackages || [];
+    } else if (tab === 'normal-round-tour') {
+      pkgs = pricingSettings?.roundTripPackages || [];
+    } else if (tab === 'destination-based-tour') {
+      const pickupOverride = findMatchingDestination(locations[0], destinationsList);
+      const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
+      const destMatch = dropoffOverride || pickupOverride;
+      if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
+        pkgs = destMatch.roundTripPackages;
+      } else {
+        pkgs = pricingSettings?.destinationRoundTripPackages || [];
+      }
+    }
     const match = pkgs.find(p => p.hours === newHours);
     const tiers = match?.tiers || [];
     const newKm = tiers.length > 0 ? tiers[0].km : newHours * 20;
@@ -166,9 +255,21 @@ const RoundTripBooking = () => {
 
   useEffect(() => {
     if (pricingSettings) {
-      const pkgs = tab === 'airport-round-tour'
-        ? (pricingSettings.airportRoundTripPackages || [])
-        : (pricingSettings.roundTripPackages || []);
+      let pkgs = [];
+      if (tab === 'airport-round-tour') {
+        pkgs = pricingSettings.airportRoundTripPackages || [];
+      } else if (tab === 'normal-round-tour') {
+        pkgs = pricingSettings.roundTripPackages || [];
+      } else if (tab === 'destination-based-tour') {
+        const pickupOverride = findMatchingDestination(locations[0], destinationsList);
+        const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
+        const destMatch = dropoffOverride || pickupOverride;
+        if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
+          pkgs = destMatch.roundTripPackages;
+        } else {
+          pkgs = pricingSettings.destinationRoundTripPackages || [];
+        }
+      }
       const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
       if (hours.length > 0) {
         const defaultHours = hours.includes(formData.taxiTourHours) ? formData.taxiTourHours : hours[0];
@@ -182,7 +283,7 @@ const RoundTripBooking = () => {
         }));
       }
     }
-  }, [pricingSettings, tab]);
+  }, [pricingSettings, tab, locations, destinationsList]);
 
   useEffect(() => {
     loadGoogleMapsScript()

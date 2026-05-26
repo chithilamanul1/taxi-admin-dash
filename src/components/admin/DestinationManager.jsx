@@ -88,7 +88,8 @@ export default function DestinationManager() {
         const pricingMap = dest.pricing instanceof Map ? Object.fromEntries(dest.pricing) : (dest.pricing || {});
         const vehicleRatesMap = dest.vehicleRateOverrides instanceof Map ? Object.fromEntries(dest.vehicleRateOverrides) : (dest.vehicleRateOverrides || {});
         const vehicleTiersMap = dest.vehicleTiers instanceof Map ? Object.fromEntries(dest.vehicleTiers) : (dest.vehicleTiers || {});
-        setForm({ ...dest, pricing: pricingMap, vehicleRateOverrides: vehicleRatesMap, vehicleTiers: vehicleTiersMap });
+        const packagesList = dest.roundTripPackages || [];
+        setForm({ ...dest, pricing: pricingMap, vehicleRateOverrides: vehicleRatesMap, vehicleTiers: vehicleTiersMap, roundTripPackages: packagesList });
     };
 
     const updatePricing = (vehicle, value) => {
@@ -140,6 +141,7 @@ export default function DestinationManager() {
                                     pricing: {},
                                     vehicleRateOverrides: {},
                                     vehicleTiers: {},
+                                    roundTripPackages: [],
                                     perKmRateOverride: 0,
                                     sortOrder: destinations.length + 1
                                 });
@@ -496,6 +498,159 @@ export default function DestinationManager() {
                                                 )}
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div className="md:col-span-2 p-6 bg-slate-50 dark:bg-white/5 rounded-[2.5rem] border border-slate-200 dark:border-white/5 space-y-6">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <h4 className="text-sm font-black text-emerald-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                                                    <Clock size={18} className="text-emerald-500" /> Destination Tour Packages
+                                                </h4>
+                                                <p className="text-[10px] text-slate-500 font-medium">Configure tiered tour packages specifically for this destination</p>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const hoursStr = prompt("Enter hour count for this destination package (e.g. 2, 4, 8):");
+                                                    if (!hoursStr) return;
+                                                    const newHours = Number(hoursStr);
+                                                    if (isNaN(newHours) || newHours <= 0) {
+                                                        alert("Please enter a valid number of hours.");
+                                                        return;
+                                                    }
+                                                    const currentPkgs = form.roundTripPackages || [];
+                                                    const exists = currentPkgs.some(p => p.hours === newHours);
+                                                    if (exists) {
+                                                        alert(`Package for ${newHours} hours already exists.`);
+                                                        return;
+                                                    }
+                                                    // Create package for all vehicle types
+                                                    const newPackages = VEHICLE_TYPES.map(vt => ({
+                                                        id: `dest-pkg-${newHours}h-${vt.slug}-${Date.now()}`,
+                                                        hours: newHours,
+                                                        vehicleType: vt.slug,
+                                                        tiers: [
+                                                            { km: 50, price: 0 },
+                                                            { km: 100, price: 0 },
+                                                            { km: 150, price: 0 },
+                                                            { km: 200, price: 0 }
+                                                        ]
+                                                    }));
+                                                    setForm({
+                                                        ...form,
+                                                        roundTripPackages: [...currentPkgs, ...newPackages]
+                                                    });
+                                                }}
+                                                className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold flex items-center gap-2"
+                                            >
+                                                <Plus size={14} /> Add Hour Package
+                                            </button>
+                                        </div>
+
+                                        {(() => {
+                                            const currentPkgs = form.roundTripPackages || [];
+                                            const uniqueHours = [...new Set(currentPkgs.map(p => p.hours))].sort((a, b) => a - b);
+                                            if (uniqueHours.length === 0) {
+                                                return (
+                                                    <div className="py-8 text-center border-2 border-dashed border-slate-200 dark:border-white/5 rounded-2xl bg-white/50">
+                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">No packages configured for this destination</p>
+                                                        <p className="text-[8px] text-slate-400 uppercase mt-0.5">Click 'Add Hour Package' to define destination-specific packages.</p>
+                                                    </div>
+                                                );
+                                            }
+
+                                            return uniqueHours.map(hours => (
+                                                <div key={`dest-grp-${hours}`} className="bg-white dark:bg-emerald-950/45 border border-slate-205 dark:border-slate-800 rounded-3xl p-4 space-y-4">
+                                                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                                                        <span className="px-2.5 py-0.5 bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 rounded-md text-[10px] font-black uppercase tracking-wider">{hours} Hours Package</span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                if (!confirm(`Delete all packages for ${hours} hours?`)) return;
+                                                                setForm({
+                                                                    ...form,
+                                                                    roundTripPackages: (form.roundTripPackages || []).filter(p => p.hours !== hours)
+                                                                });
+                                                            }}
+                                                            className="text-[10px] font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 px-2 py-1 rounded"
+                                                        >
+                                                            Delete Group
+                                                        </button>
+                                                    </div>
+
+                                                    <div className="overflow-x-auto">
+                                                        <table className="w-full text-left">
+                                                            <thead>
+                                                                <tr className="border-b border-slate-100 dark:border-slate-800">
+                                                                    <th className="pb-2 text-[9px] font-black text-slate-400 uppercase tracking-widest w-1/4">Vehicle Type</th>
+                                                                    <th className="pb-2 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Tier 1</th>
+                                                                    <th className="pb-2 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Tier 2</th>
+                                                                    <th className="pb-2 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Tier 3</th>
+                                                                    <th className="pb-2 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Tier 4</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
+                                                                {VEHICLE_TYPES.map(vt => {
+                                                                    const pkg = (form.roundTripPackages || []).find(p => p.hours === hours && p.vehicleType === vt.slug);
+                                                                    if (!pkg) return null;
+                                                                    return (
+                                                                        <tr key={vt.slug} className="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors">
+                                                                            <td className="py-2 text-[11px] font-semibold text-slate-700 dark:text-slate-300">{vt.label}</td>
+                                                                            {[0, 1, 2, 3].map(tIdx => (
+                                                                                <td key={tIdx} className="py-2 px-1 text-center">
+                                                                                    <div className="inline-block space-y-1 text-left">
+                                                                                        <div className="flex items-center gap-1">
+                                                                                            <input
+                                                                                                type="number"
+                                                                                                placeholder="KM"
+                                                                                                className="w-10 bg-slate-50 dark:bg-zinc-800 border-none rounded px-1 py-0.5 text-[8px] font-bold text-slate-700 dark:text-slate-300"
+                                                                                                value={pkg.tiers?.[tIdx]?.km || 0}
+                                                                                                onChange={e => {
+                                                                                                    const updated = (form.roundTripPackages || []).map(p => {
+                                                                                                        if (p.id === pkg.id) {
+                                                                                                            const tiers = [...p.tiers];
+                                                                                                            tiers[tIdx] = { ...tiers[tIdx], km: Number(e.target.value) };
+                                                                                                            return { ...p, tiers };
+                                                                                                        }
+                                                                                                        return p;
+                                                                                                    });
+                                                                                                    setForm({ ...form, roundTripPackages: updated });
+                                                                                                }}
+                                                                                            />
+                                                                                            <span className="text-[7px] text-slate-300 font-bold">KM</span>
+                                                                                        </div>
+                                                                                        <div className="flex items-center gap-0.5">
+                                                                                            <span className="text-[7px] font-bold text-emerald-600">Rs.</span>
+                                                                                            <input
+                                                                                                type="number"
+                                                                                                placeholder="Price"
+                                                                                                className="w-16 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-slate-700 rounded px-1 py-0.5 text-[10px] font-bold text-emerald-600"
+                                                                                                value={pkg.tiers?.[tIdx]?.price || 0}
+                                                                                                onChange={e => {
+                                                                                                    const updated = (form.roundTripPackages || []).map(p => {
+                                                                                                        if (p.id === pkg.id) {
+                                                                                                            const tiers = [...p.tiers];
+                                                                                                            tiers[tIdx] = { ...tiers[tIdx], price: Number(e.target.value) };
+                                                                                                            return { ...p, tiers };
+                                                                                                        }
+                                                                                                        return p;
+                                                                                                    });
+                                                                                                    setForm({ ...form, roundTripPackages: updated });
+                                                                                                }}
+                                                                                            />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </td>
+                                                                            ))}
+                                                                        </tr>
+                                                                    );
+                                                                })}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            ));
+                                        })()}
                                     </div>
                                 </div>
 

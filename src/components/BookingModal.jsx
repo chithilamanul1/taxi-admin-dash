@@ -307,6 +307,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const baseTotal = calculateBasePrice(distKm, vehicleData, formData.tripType, formData.pickup, formData.dropoff, destinations, { 
                 roundTripPackageId: formData.roundTripPackageId,
                 roundTripPackages: pricingSettings?.roundTripPackages,
+                airportRoundTripPackages: pricingSettings?.airportRoundTripPackages,
+                destinationRoundTripPackages: pricingSettings?.destinationRoundTripPackages,
                 taxiTourHours: formData.taxiTourHours,
                 taxiTourKm: formData.taxiTourKm
             });
@@ -405,6 +407,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
             const baseTotal = calculateBasePrice(distKm, v, formData.tripType, formData.pickup, formData.dropoff, destinations, { 
                 roundTripPackageId: formData.roundTripPackageId,
                 roundTripPackages: pricingSettings?.roundTripPackages,
+                airportRoundTripPackages: pricingSettings?.airportRoundTripPackages,
+                destinationRoundTripPackages: pricingSettings?.destinationRoundTripPackages,
                 taxiTourHours: formData.taxiTourHours,
                 taxiTourKm: formData.taxiTourKm
             });

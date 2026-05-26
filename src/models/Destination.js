@@ -27,6 +27,15 @@ const destinationSchema = new mongoose.Schema({
             value: { type: Number }
         }]
     },
+    roundTripPackages: [{
+        id: String,
+        hours: Number,
+        vehicleType: String,
+        tiers: [{
+            km: Number,
+            price: Number
+        }]
+    }],
     isActive: { type: Boolean, default: true },
     sortOrder: { type: Number, default: 99 }
 }, {
