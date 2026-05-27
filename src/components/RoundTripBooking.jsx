@@ -561,7 +561,21 @@ const RoundTripBooking = () => {
                 <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Pickup Time</label><input type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
                 <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Full Name</label><input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
                 <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Email</label><input type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
-                <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">WhatsApp</label><input type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
+                <div className="space-y-1.5">
+                  <label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">WhatsApp</label>
+                  <div className="flex bg-slate-50 border border-slate-100 rounded-2xl overflow-hidden focus-within:bg-white transition-all shadow-sm">
+                    <div className="bg-slate-200/50 px-4 flex items-center justify-center border-r border-slate-100">
+                      <span className="text-sm font-bold text-slate-600">+94</span>
+                    </div>
+                    <input 
+                      type="tel" 
+                      placeholder="7X XXX XXXX" 
+                      value={formData.phone.replace('+94', '').replace(/^0+/, '')} 
+                      onChange={e => setFormData({ ...formData, phone: '+94' + e.target.value.replace(/[^0-9]/g, '').slice(0, 9) })} 
+                      className="w-full bg-transparent py-3 px-4 outline-none font-bold text-slate-900 text-sm" 
+                    />
+                  </div>
+                </div>
                 <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Passengers</label><div className="flex items-center bg-slate-50 border border-slate-100 rounded-2xl p-1"><button onClick={() => setFormData({ ...formData, passengers: Math.max(1, formData.passengers - 1) })} className="w-10 h-10 flex items-center justify-center text-slate-400"><Minus size={16} /></button><div className="flex-1 text-center font-black text-emerald-950 text-[10px]">{formData.passengers}</div><button onClick={() => setFormData({ ...formData, passengers: Math.min(8, formData.passengers + 1) })} className="w-10 h-10 flex items-center justify-center text-slate-400"><Plus size={16} /></button></div></div>
                 <div className="space-y-1.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Payment Method</label>

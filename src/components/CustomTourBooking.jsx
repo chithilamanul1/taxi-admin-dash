@@ -853,7 +853,18 @@ const CustomTourBooking = () => {
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">WhatsApp / Phone</label>
-                  <input type="tel" placeholder="+94 7X XXX XXXX" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-slate-900 dark:text-white" />
+                  <div className="flex border border-slate-200/80 dark:border-white/10 rounded-xl overflow-hidden focus-within:border-[#FACC15] focus-within:ring-2 focus-within:ring-[#FACC15]/20 transition-all shadow-sm">
+                    <div className="bg-slate-100 dark:bg-zinc-800/80 px-3 flex items-center justify-center border-r border-slate-200/80 dark:border-white/10">
+                      <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400">+94</span>
+                    </div>
+                    <input 
+                      type="tel" 
+                      placeholder="7X XXX XXXX" 
+                      value={formData.phone.replace('+94', '').replace(/^0+/, '')} 
+                      onChange={e => setFormData({ ...formData, phone: '+94' + e.target.value.replace(/[^0-9]/g, '').slice(0, 9) })} 
+                      className="w-full bg-white dark:bg-zinc-800 py-2 px-3 outline-none font-bold text-[11px] text-slate-900 dark:text-white" 
+                    />
+                  </div>
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Payment Method</label>
