@@ -33,6 +33,7 @@ const CustomTourBooking = () => {
     email: '',
     phone: '',
     notes: '',
+    places: '',
     taxiTourHours: 2,
     taxiTourKm: 40,
     paymentMethod: 'card'
@@ -255,31 +256,7 @@ const CustomTourBooking = () => {
     });
   };
 
-  // Route calculation
-  useEffect(() => {
-    const valid = locations.filter(l => l.trim().length > 3);
-    if (valid.length >= 2 && googleLoaded) {
-      const calculateRoute = async () => {
-        setIsCalculating(true);
-        const directionsService = new window.google.maps.DirectionsService();
-        try {
-          const result = await new Promise((resolve, reject) => {
-            directionsService.route({
-              origin: locations[0],
-              destination: locations[locations.length - 1],
-              waypoints: locations.slice(1, -1).map(l => ({ location: l, stopover: true })),
-              travelMode: window.google.maps.TravelMode.DRIVING,
-            }, (res, status) => { if (status === 'OK') resolve(res); else reject(status); });
-          });
-          const dist = result.routes[0].legs.reduce((acc, leg) => acc + leg.distance.value, 0) / 1000;
-          setDistance(Math.ceil(dist));
-          setDuration(result.routes[0].legs[0].duration.text);
-        } catch (e) { console.error(e); } finally { setIsCalculating(false); }
-      };
-      const timer = setTimeout(calculateRoute, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [locations, googleLoaded]);
+  // Route calculation is intentionally bypassed for Round Tours (fixed km/hr limits)
 
   const handleAddLocation = () => { if (locations.length < 4) setLocations([...locations, '']); };
   const handleRemoveLocation = (index) => {
@@ -345,8 +322,8 @@ const CustomTourBooking = () => {
         body: JSON.stringify({
           customer: session?.user?.id || null,
           pickupLocation: { address: locations[0] || 'Airport' },
-          dropoffLocation: { address: locations[locations.length - 1] || 'Tour Destination' },
-          waypoints: locations.slice(1, -1).map(l => ({ address: l })),
+          dropoffLocation: { address: locations[0] || 'Same as Pickup' },
+          waypoints: formData.places ? [{ address: formData.places }] : [],
           vehicleType: selectedVehicle.id,
           tripType: 'round-trip',
           type: 'tour',
@@ -373,7 +350,7 @@ const CustomTourBooking = () => {
           guestPhone: formData.phone,
           whatsappNumber: formData.phone,
           paymentMethod: formData.paymentMethod,
-          notes: `Custom Tour: ${formData.taxiTourHours} Hours, Limit: ${formData.taxiTourKm} KM. ${formData.notes || ''}`
+          notes: `Custom Tour: ${formData.taxiTourHours} Hours, Limit: ${formData.taxiTourKm} KM.\nStops/Places: ${formData.places || 'None'}\n${formData.notes || ''}`
         })
       });
       const data = await res.json();
@@ -388,7 +365,7 @@ const CustomTourBooking = () => {
                           `*Vehicle:* ${selectedVehicle.name}%0A` + 
                           `*Hours:* ${formData.taxiTourHours} Hours%0A` + 
                           `*KM Limit:* ${formData.taxiTourKm} KM%0A` + 
-                          `*Route:* ${locations.filter(Boolean).join(' ➔ ')}%0A` + 
+                          `*Route:* ${locations[0] || 'Airport'} ➔ ${formData.places || 'Custom Stops'} ➔ ${locations[0] || 'Airport'}%0A` + 
                           `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
                           `*Payment:* ${formData.paymentMethod === 'cash' ? 'Cash to Driver' : 'Pay Online (Card)'}%0A` + 
                           `*Price:* Rs. ${totalPrice.toLocaleString()}`;
@@ -464,33 +441,6 @@ const CustomTourBooking = () => {
     );
   };
 
-  const renderRoutePlanning = () => (
-    <section className="bg-slate-50 dark:bg-zinc-800/20 rounded-3xl border border-slate-100 dark:border-white/5 p-4 space-y-3">
-      <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-2">
-        <div className="flex items-center gap-1.5">
-          <MapPin className="text-emerald-600 dark:text-[#FACC15]" size={14} />
-          <h4 className="text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Pickup Location</h4>
-        </div>
-      </div>
-      <div className="space-y-2">
-        <div className="relative group flex items-center gap-1.5">
-          <div className="relative flex-1">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-              <MapPin size={14} />
-            </div>
-            <input 
-              type="text" 
-              value={locations[0] || ''} 
-              ref={(el) => initAutocomplete(el, 0)} 
-              onChange={(e) => handleLocationChange(0, e.target.value)} 
-              placeholder="Enter Pickup Location" 
-              className="w-full bg-white dark:bg-zinc-800 border border-slate-200/60 dark:border-white/10 rounded-xl py-3 pl-11 pr-4 outline-none font-bold text-[11px] text-slate-900 dark:text-white focus:border-[#FACC15] transition-all shadow-sm" 
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
 
   if (isBooked) {
     return (
@@ -556,6 +506,26 @@ const CustomTourBooking = () => {
                 >
                   <Car size={12} /> Round TOUR
                 </button>
+              </div>
+            </div>
+
+            {/* Route Planning (Pickup Location) */}
+            <div className="space-y-2 pt-2">
+              <label className="text-[9px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Pickup Location</label>
+              <div className="relative group flex items-center gap-1.5 px-2">
+                <div className="relative flex-1">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-600">
+                    <MapPin size={16} />
+                  </div>
+                  <input 
+                    type="text" 
+                    value={locations[0] || ''} 
+                    ref={(el) => initAutocomplete(el, 0)} 
+                    onChange={(e) => handleLocationChange(0, e.target.value)} 
+                    placeholder="Enter Pickup Location" 
+                    className="w-full bg-slate-50 dark:bg-zinc-850 border border-slate-200/80 dark:border-white/10 rounded-2xl py-4 pl-12 pr-4 outline-none font-bold text-sm text-slate-900 dark:text-white focus:border-[#FACC15] focus:ring-4 focus:ring-[#FACC15]/10 transition-all shadow-sm" 
+                  />
+                </div>
               </div>
             </div>
 
@@ -728,7 +698,53 @@ const CustomTourBooking = () => {
             </section>
 
             {/* Block 2: Isolated Route Planning */}
-            {renderRoutePlanning()}
+            <section className="bg-slate-50 dark:bg-zinc-800/20 rounded-3xl border border-slate-100 dark:border-white/5 p-4 space-y-4">
+              <div className="flex items-center gap-1.5 border-b border-slate-100 dark:border-white/5 pb-2">
+                <Navigation className="text-emerald-600 dark:text-[#FACC15]" size={14} />
+                <h4 className="text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Round-Trip Route</h4>
+              </div>
+
+              <div className="space-y-4">
+                {/* Start Location */}
+                <div className="flex items-center gap-3 bg-white dark:bg-zinc-800 p-3 rounded-2xl border border-slate-200/60 dark:border-white/10">
+                  <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                    <MapPin size={14} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Start Location</p>
+                    <p className="text-xs font-black text-slate-800 dark:text-white truncate">{locations[0] || 'Bandaranaike International Airport (CMB)'}</p>
+                  </div>
+                </div>
+
+                {/* Add Places Matrix */}
+                <div className="pl-4 border-l-2 border-dashed border-slate-200 dark:border-slate-700 ml-4 py-2 space-y-3">
+                  <div className="space-y-1">
+                    <label className="text-[9px] uppercase font-black text-slate-400 tracking-widest block">Add Places / Add Stops</label>
+                    <div className="relative">
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"><Sparkles size={12} /></div>
+                      <input 
+                        type="text"
+                        value={formData.places}
+                        onChange={e => setFormData({ ...formData, places: e.target.value })}
+                        placeholder="e.g. Sigiriya Rock, Safari, Local Market..."
+                        className="w-full bg-white dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 rounded-xl py-2.5 pl-9 pr-3 outline-none font-bold text-[11px] text-slate-800 dark:text-white focus:border-[#FACC15] transition-all"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* End Location */}
+                <div className="flex items-center gap-3 bg-white dark:bg-zinc-800 p-3 rounded-2xl border border-slate-200/60 dark:border-white/10 opacity-80 cursor-not-allowed">
+                  <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 shrink-0">
+                    <MapPin size={14} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">End Location (Return)</p>
+                    <p className="text-xs font-black text-slate-800 dark:text-white truncate">{locations[0] || 'Bandaranaike International Airport (CMB)'}</p>
+                  </div>
+                </div>
+              </div>
+            </section>
 
             {/* Block 3: Isolated Timing & Contact Information */}
             <section className="bg-slate-50 dark:bg-zinc-800/20 rounded-3xl border border-slate-100 dark:border-white/5 p-4 space-y-3">
