@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock, Navigation, ChevronRight, ChevronLeft, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles, CreditCard } from 'lucide-react';
 import { calculateBasePrice, calculateTrafficSurge, TAXI_TOUR_PACKAGES } from '@/lib/pricing-util';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
+import TripMap from './TripMap';
 import { useSession } from 'next-auth/react';
 
 const CustomTourBooking = () => {
@@ -483,11 +484,11 @@ const CustomTourBooking = () => {
             <Sparkles size={10} /> Premium Round Tours
           </span>
           <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
-            {step === 1 ? "Choose Your Vehicle Class" : "Configure Route & Booking Details"}
+            {step === 1 ? "Choose Your Vehicle Class" : step === 2 ? "Configure Route Details" : "Contact & Finalize Booking"}
           </span>
         </div>
         <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-          Step {step} of 2
+          Step {step} of 3
         </span>
       </div>
 
@@ -526,25 +527,7 @@ const CustomTourBooking = () => {
               </div>
             </div>
 
-            {/* Route Planning (Pickup Location) */}
-            <div className="space-y-2 pt-2 px-1">
-              <label className="text-[9px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Pickup Location</label>
-              <div className="relative group flex items-center">
-                <div className="relative flex-1">
-                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-600">
-                    <MapPin size={14} />
-                  </div>
-                  <input 
-                    type="text" 
-                    value={locations[0] || ''} 
-                    ref={(el) => initAutocomplete(el, 0)} 
-                    onChange={(e) => handleLocationChange(0, e.target.value)} 
-                    placeholder="Enter Pickup Location" 
-                    className="w-full bg-slate-100/70 dark:bg-zinc-800/60 border border-slate-200/30 dark:border-white/5 rounded-xl py-2.5 pl-9 pr-4 outline-none font-bold text-[11px] text-slate-900 dark:text-white focus:border-[#FACC15] focus:ring-2 focus:ring-[#FACC15]/20 transition-all shadow-sm" 
-                  />
-                </div>
-              </div>
-            </div>
+
 
             {/* 2. Distinct Vehicle Selection Slider/Grid */}
             <div className="space-y-2">
@@ -756,14 +739,21 @@ const CustomTourBooking = () => {
               </div>
 
               <div className="space-y-4">
-                {/* Start Location */}
-                <div className="flex items-center gap-3 bg-white dark:bg-zinc-800 p-3 rounded-2xl border border-slate-200/60 dark:border-white/10">
-                  <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
-                    <MapPin size={14} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Start Location</p>
-                    <p className="text-xs font-black text-slate-800 dark:text-white truncate">{locations[0] || 'Bandaranaike International Airport (CMB)'}</p>
+                {/* Start Location (Pickup) */}
+                <div className="relative group flex flex-col gap-1 bg-white dark:bg-zinc-800 p-3 rounded-2xl border border-slate-200/60 dark:border-white/10">
+                  <label className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Pickup Location</label>
+                  <div className="relative flex-1">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-600">
+                      <MapPin size={14} />
+                    </div>
+                    <input 
+                      type="text" 
+                      value={locations[0] || ''} 
+                      ref={(el) => initAutocomplete(el, 0)} 
+                      onChange={(e) => handleLocationChange(0, e.target.value)} 
+                      placeholder="Enter Pickup Location" 
+                      className="w-full bg-slate-50/50 dark:bg-zinc-900 border border-slate-200/30 dark:border-white/5 rounded-xl py-2.5 pl-9 pr-4 outline-none font-bold text-[11px] text-slate-900 dark:text-white focus:border-[#FACC15] focus:ring-2 focus:ring-[#FACC15]/20 transition-all shadow-sm" 
+                    />
                   </div>
                 </div>
 
@@ -826,8 +816,44 @@ const CustomTourBooking = () => {
                   </div>
                 </div>
               </div>
+                {/* Trip Map Component */}
+                <div className="w-full h-48 rounded-2xl overflow-hidden border border-slate-200/60 dark:border-white/10 mt-4 relative z-0">
+                  <TripMap 
+                    pickup={{ name: locations[0] || 'Bandaranaike International Airport' }} 
+                    dropoff={{ name: locations[0] || 'Bandaranaike International Airport' }} 
+                    waypoints={formData.placesList.filter(p => p.trim() !== '').map(p => ({ name: p }))} 
+                  />
+                </div>
+              </div>
             </section>
 
+            {/* Stepper buttons (Back & Next) */}
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <button 
+                type="button"
+                onClick={() => setStep(1)} 
+                className="py-3.5 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 text-slate-700 dark:text-white rounded-2xl font-black text-[9px] uppercase tracking-widest transition-all flex items-center justify-center gap-1 shadow-sm"
+              >
+                <ChevronLeft size={12} strokeWidth={3} /> CHANGE VEHICLE
+              </button>
+              <button 
+                type="button"
+                onClick={() => setStep(3)} 
+                className="py-3.5 bg-black hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] shadow-xl hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2"
+              >
+                NEXT <ChevronRight size={14} strokeWidth={3} />
+              </button>
+            </div>
+
+          </motion.div>
+        ) : (
+          <motion.div
+            key="step3"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="space-y-4"
+          >
             {/* Block 3: Isolated Timing & Contact Information */}
             <section className="bg-slate-50 dark:bg-zinc-800/20 rounded-3xl border border-slate-100 dark:border-white/5 p-4 space-y-3">
               <div className="flex items-center gap-1.5 border-b border-slate-100 dark:border-white/5 pb-2">
@@ -888,14 +914,25 @@ const CustomTourBooking = () => {
               </div>
             </section>
 
+            {/* Extra Usage Disclaimer Card */}
+            <div className="bg-orange-50/50 dark:bg-orange-950/20 border border-orange-200/50 dark:border-orange-900/30 rounded-2xl p-4 flex gap-3 mt-4 items-start">
+              <AlertCircle className="text-orange-500 shrink-0 mt-0.5" size={16} />
+              <div>
+                <h4 className="text-[10px] font-black text-orange-800 dark:text-orange-400 uppercase tracking-widest">Extra Usage Disclaimer</h4>
+                <p className="text-[10px] font-bold text-orange-700/80 dark:text-orange-300/80 mt-1 leading-relaxed">
+                  Your package is strictly capped at {formData.taxiTourHours} Hours & {formData.taxiTourKm} KM. Any usage extending beyond these hard boundaries will incur additional automated fees calculated separately.
+                </p>
+              </div>
+            </div>
+
             {/* Stepper buttons (Back & Complete Booking) */}
             <div className="grid grid-cols-3 gap-2 pt-1">
               <button 
                 type="button"
-                onClick={() => setStep(1)} 
+                onClick={() => setStep(2)} 
                 className="py-3.5 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 text-slate-700 dark:text-white rounded-2xl font-black text-[9px] uppercase tracking-widest transition-all flex items-center justify-center gap-1 shadow-sm"
               >
-                <ChevronLeft size={12} strokeWidth={3} /> CHANGE VEHICLE
+                <ChevronLeft size={12} strokeWidth={3} /> BACK TO ROUTE
               </button>
               <button 
                 type="button"
