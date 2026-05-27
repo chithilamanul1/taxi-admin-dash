@@ -19,9 +19,9 @@ const RoundTripBooking = () => {
   const [isBooking, setIsBooking] = useState(false);
   const [isBooked, setIsBooked] = useState(false);
   const [googleLoaded, setGoogleLoaded] = useState(false);
-  const [locations, setLocations] = useState(['', '']);
+  const [step, setStep] = useState(1);
+  const [locations, setLocations] = useState(['']);
   const [distance, setDistance] = useState(0);
-  const [duration, setDuration] = useState('');
   const [pricingSettings, setPricingSettings] = useState(null);
   const [destinationsList, setDestinationsList] = useState([]);
   
@@ -298,41 +298,11 @@ const RoundTripBooking = () => {
     autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();
       if (!place.formatted_address) return;
-      setLocations(prev => {
-        const newLocs = [...prev];
-        newLocs[index] = place.formatted_address;
-        return newLocs;
-      });
+      setLocations([place.formatted_address]);
     });
   };
 
-  useEffect(() => {
-    const valid = locations.filter(l => l.trim().length > 3);
-    if (valid.length >= 2 && googleLoaded) {
-      const calculateRoute = async () => {
-        setIsCalculating(true);
-        const directionsService = new window.google.maps.DirectionsService();
-        try {
-          const result = await new Promise((resolve, reject) => {
-            directionsService.route({
-              origin: locations[0],
-              destination: locations[locations.length - 1],
-              waypoints: locations.slice(1, -1).map(l => ({ location: l, stopover: true })),
-              travelMode: window.google.maps.TravelMode.DRIVING,
-            }, (res, status) => { if (status === 'OK') resolve(res); else reject(status); });
-          });
-          const dist = result.routes[0].legs.reduce((acc, leg) => acc + leg.distance.value, 0) / 1000;
-          setDistance(Math.ceil(dist));
-          setDuration(result.routes[0].legs[0].duration.text);
-        } catch (e) { console.error(e); } finally { setIsCalculating(false); }
-      };
-      const timer = setTimeout(calculateRoute, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [locations, googleLoaded]);
-
-  const handleAddLocation = () => { if (locations.length < 3) setLocations([...locations, '']); };
-  const handleLocationChange = (index, value) => { const newLocs = [...locations]; newLocs[index] = value; setLocations(newLocs); };
+  const handleLocationChange = (index, value) => { setLocations([value]); };
 
   const calculateTotal = () => {
     return calculateVehiclePrice(selectedVehicle);
@@ -349,8 +319,8 @@ const RoundTripBooking = () => {
     try {
       const payload = {
         pickupLocation: { address: locations[0] || 'Pickup Location' },
-        dropoffLocation: { address: locations[locations.length - 1] || 'Destination' },
-        waypoints: locations.slice(1, -1).map(l => ({ address: l })),
+        dropoffLocation: { address: locations[0] || 'Pickup Location' },
+        waypoints: [],
         vehicleType: selectedVehicle.id,
         tripType: tab,
         type: 'tour',
@@ -398,7 +368,7 @@ const RoundTripBooking = () => {
                         `*Vehicle:* ${selectedVehicle.name}%0A` +
                         `*Hours:* ${formData.taxiTourHours} Hours%0A` + 
                         `*KM Limit:* ${formData.taxiTourKm} KM%0A` +
-                        `*Route:* ${locations.filter(Boolean).join(' ➔ ')}%0A` + 
+                        `*Pickup/Dropoff:* ${locations[0] || 'Not provided'}%0A` + 
                         `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
                         `*Payment:* ${paymentStr}%0A` + 
                         `*Price:* Rs. ${totalPrice.toLocaleString()}`;
@@ -485,23 +455,13 @@ const RoundTripBooking = () => {
   const renderLocationsSection = () => (
     <section className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3"><MapPin className="text-emerald-600" size={18} /><h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Route & Locations</h4></div>
-        {locations.length < 3 && <button onClick={handleAddLocation} className="text-[9px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-2 px-4 py-2 hover:bg-emerald-50 rounded-xl transition-all"><Plus size={14} /> Add Stop</button>}
+        <div className="flex items-center gap-3"><MapPin className="text-emerald-600" size={18} /><h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Pickup Location</h4></div>
       </div>
       <div className="space-y-3">
-        {locations.map((loc, idx) => (
-          <div key={idx} className="relative group">
-            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300">{idx === 0 ? <Plane size={16} /> : idx === locations.length - 1 ? <MapPin size={16} /> : <Navigation size={16} />}</div>
-            <input type="text" value={loc} ref={(el) => initAutocomplete(el, idx)} onChange={(e) => handleLocationChange(idx, e.target.value)} placeholder={idx === 0 ? "Pickup Location" : idx === locations.length - 1 ? "Final Destination" : `Stop ${idx}`} className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-5 pl-16 pr-8 outline-none font-bold text-slate-900 focus:bg-white transition-all shadow-sm" />
-          </div>
-        ))}
-      </div>
-      <div className="flex flex-wrap gap-4 items-center justify-between bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100 mt-6">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">{isCalculating ? <Loader2 className="animate-spin" size={24} /> : <Navigation size={24} />}</div>
-          <div><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Distance</p><p className="text-xl font-black text-emerald-950 uppercase tracking-tight">{distance > 0 ? `${distance} KM` : 'Calculating...'}</p></div>
+        <div className="relative group">
+          <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300"><MapPin size={16} /></div>
+          <input type="text" value={locations[0]} ref={(el) => initAutocomplete(el, 0)} onChange={(e) => handleLocationChange(0, e.target.value)} placeholder="Pickup Location (Tour starts and ends here)" className="w-full bg-slate-50 border border-slate-100 rounded-3xl py-5 pl-16 pr-8 outline-none font-bold text-slate-900 focus:bg-white transition-all shadow-sm" />
         </div>
-        <div className="text-right"><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Estimated Price</p><p className="text-3xl font-black text-emerald-600 tracking-tighter">Rs. {totalPrice.toLocaleString()}.00</p></div>
       </div>
     </section>
   );
@@ -526,80 +486,111 @@ const RoundTripBooking = () => {
       </div>
 
       <div className="p-8 md:p-12 space-y-12">
-        {tab === 'airport-round-tour' ? (
+        {step === 1 ? (
           <>
-            {renderDurationSection()}
-            {renderLocationsSection()}
+            {tab === 'airport-round-tour' ? (
+              <>
+                {renderDurationSection()}
+                {renderLocationsSection()}
+              </>
+            ) : (
+              <>
+                {renderLocationsSection()}
+                {renderDurationSection()}
+              </>
+            )}
+
+            <section className="space-y-4 mb-8">
+              <div className="flex items-center justify-between px-2">
+                <div className="flex items-center gap-3">
+                  <Car className="text-emerald-600" size={18} />
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Select Vehicle</h4>
+                </div>
+              </div>
+              <VehicleCarousel
+                vehicles={vehicles.map(v => ({
+                  ...v,
+                  calculatedTotal: calculateVehiclePrice(v)
+                }))}
+                selectedId={selectedVehicle?.vehicleType || selectedVehicle?.id}
+                onSelect={(vType) => {
+                  const found = vehicles.find(v => v.vehicleType === vType || v.id === vType);
+                  if (found) {
+                    setSelectedVehicle(found);
+                    syncWithCalculator(tab, found);
+                  }
+                }}
+                passengerCount={{ adults: formData.passengers, children: 0, luggage: 0 }}
+              />
+            </section>
+            
+            <div className="pt-2">
+              <button onClick={() => {
+                if (!locations[0]) {
+                  alert("Please enter a pickup location.");
+                  return;
+                }
+                setStep(2);
+              }} className="w-full py-5 bg-emerald-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl flex items-center justify-center gap-3">Next Step <ChevronRight size={16} /></button>
+            </div>
           </>
         ) : (
           <>
-            {renderLocationsSection()}
-            {renderDurationSection()}
-          </>
-        )}
-
-        <section className="space-y-4 mb-8">
-          <div className="flex items-center justify-between px-2">
-            <div className="flex items-center gap-3">
-              <Car className="text-emerald-600" size={18} />
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">Select Vehicle</h4>
-            </div>
-          </div>
-          <VehicleCarousel
-            vehicles={vehicles.map(v => ({
-              ...v,
-              calculatedTotal: calculateVehiclePrice(v)
-            }))}
-            selectedId={selectedVehicle?.vehicleType || selectedVehicle?.id}
-            onSelect={(vType) => {
-              const found = vehicles.find(v => v.vehicleType === vType || v.id === vType);
-              if (found) {
-                setSelectedVehicle(found);
-                syncWithCalculator(tab, found);
-              }
-            }}
-            passengerCount={{ adults: formData.passengers, children: 0, luggage: 0 }}
-          />
-        </section>
-
-        <section className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5"><User className="text-emerald-600" size={18} /><h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Contact Details</h4></div>
-            <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/5 text-emerald-600 border border-emerald-500/10" onClick={() => alert("Optimizing...")}><Sparkles size={14} /> <span className="text-[9px] font-black uppercase tracking-widest">AI Optimizer</span></button>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Pickup Date</label><input type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
-            <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Pickup Time</label><input type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
-            <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Full Name</label><input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
-            <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Email</label><input type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
-            <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">WhatsApp</label><input type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
-            <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Passengers</label><div className="flex items-center bg-slate-50 border border-slate-100 rounded-2xl p-1"><button onClick={() => setFormData({ ...formData, passengers: Math.max(1, formData.passengers - 1) })} className="w-10 h-10 flex items-center justify-center text-slate-400"><Minus size={16} /></button><div className="flex-1 text-center font-black text-emerald-950 text-[10px]">{formData.passengers}</div><button onClick={() => setFormData({ ...formData, passengers: Math.min(8, formData.passengers + 1) })} className="w-10 h-10 flex items-center justify-center text-slate-400"><Plus size={16} /></button></div></div>
-            <div className="space-y-1.5">
-              <label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Payment Method</label>
-              <div className="flex bg-slate-50 border border-slate-100 rounded-2xl p-1 h-12 items-center gap-1">
-                <button 
-                  type="button"
-                  onClick={() => setFormData({ ...formData, paymentMethod: 'card' })}
-                  className={`flex-1 h-full rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 ${formData.paymentMethod === 'card' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-400 hover:text-emerald-600'}`}
-                >
-                  <CreditCard size={14} /> Card
-                </button>
-                <button 
-                  type="button"
-                  onClick={() => setFormData({ ...formData, paymentMethod: 'cash' })}
-                  className={`flex-1 h-full rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 ${formData.paymentMethod === 'cash' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-400 hover:text-emerald-600'}`}
-                >
-                  <Car size={14} /> Cash
-                </button>
+            <button onClick={() => setStep(1)} className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-emerald-600 flex items-center gap-2 mb-4">
+              <ChevronRight size={14} className="rotate-180" /> Back to Package Selection
+            </button>
+            
+            <div className="bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div>
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Package Summary</p>
+                <p className="text-lg font-black text-emerald-950">{selectedVehicle?.name} — {formData.taxiTourHours} Hours — {formData.taxiTourKm} KM limit</p>
+              </div>
+              <div className="md:text-right">
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total</p>
+                <p className="text-2xl font-black text-emerald-600 tracking-tighter">Rs. {totalPrice.toLocaleString()}.00</p>
               </div>
             </div>
-          </div>
-        </section>
 
-        <div className="pt-2">
-          <button onClick={handleBooking} disabled={isBooking || (tab !== 'tour' && distance === 0)} className="w-full py-5 bg-emerald-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl flex items-center justify-center gap-3 disabled:opacity-50">{isBooking ? <Loader2 className="animate-spin" size={16} /> : 'Complete Booking'} <ChevronRight size={16} /></button>
-          <div className="mt-6 p-5 bg-slate-50 rounded-2xl border border-slate-100 flex items-start gap-3"><div className="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><Info size={12} /></div><div><p className="text-[9px] font-black text-slate-900 uppercase tracking-widest mb-0.5">Hire Charge Only</p><p className="text-[8px] font-bold text-slate-400 uppercase tracking-tight">Covers vehicle hire and fuel. Parking & tolls extra.</p></div></div>
-        </div>
+            <section className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5"><User className="text-emerald-600" size={18} /><h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Contact Details</h4></div>
+                <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/5 text-emerald-600 border border-emerald-500/10" onClick={() => alert("Optimizing...")}><Sparkles size={14} /> <span className="text-[9px] font-black uppercase tracking-widest">AI Optimizer</span></button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Pickup Date</label><input type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
+                <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Pickup Time</label><input type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
+                <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Full Name</label><input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
+                <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Email</label><input type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
+                <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">WhatsApp</label><input type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm" /></div>
+                <div className="space-y-1.5"><label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Passengers</label><div className="flex items-center bg-slate-50 border border-slate-100 rounded-2xl p-1"><button onClick={() => setFormData({ ...formData, passengers: Math.max(1, formData.passengers - 1) })} className="w-10 h-10 flex items-center justify-center text-slate-400"><Minus size={16} /></button><div className="flex-1 text-center font-black text-emerald-950 text-[10px]">{formData.passengers}</div><button onClick={() => setFormData({ ...formData, passengers: Math.min(8, formData.passengers + 1) })} className="w-10 h-10 flex items-center justify-center text-slate-400"><Plus size={16} /></button></div></div>
+                <div className="space-y-1.5">
+                  <label className="text-[8px] uppercase font-black text-slate-400 px-2 tracking-widest">Payment Method</label>
+                  <div className="flex bg-slate-50 border border-slate-100 rounded-2xl p-1 h-12 items-center gap-1">
+                    <button 
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paymentMethod: 'card' })}
+                      className={`flex-1 h-full rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 ${formData.paymentMethod === 'card' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-400 hover:text-emerald-600'}`}
+                    >
+                      <CreditCard size={14} /> Card
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paymentMethod: 'cash' })}
+                      className={`flex-1 h-full rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 ${formData.paymentMethod === 'cash' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-400 hover:text-emerald-600'}`}
+                    >
+                      <Car size={14} /> Cash
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <div className="pt-2">
+              <button onClick={handleBooking} disabled={isBooking} className="w-full py-5 bg-emerald-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl flex items-center justify-center gap-3 disabled:opacity-50">{isBooking ? <Loader2 className="animate-spin" size={16} /> : 'Complete Booking'} <ChevronRight size={16} /></button>
+              <div className="mt-6 p-5 bg-slate-50 rounded-2xl border border-slate-100 flex items-start gap-3"><div className="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><Info size={12} /></div><div><p className="text-[9px] font-black text-slate-900 uppercase tracking-widest mb-0.5">Hire Charge Only</p><p className="text-[8px] font-bold text-slate-400 uppercase tracking-tight">Covers vehicle hire and fuel. Parking & tolls extra.</p></div></div>
+            </div>
+          </>
+        )}
         <div className="flex items-center justify-center gap-2 mt-8 opacity-40">
            <Sparkles size={10} className="text-emerald-600" />
            <span className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-400">Powered by Gemini 1.5 Pro</span>
