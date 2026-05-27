@@ -386,7 +386,7 @@ const CustomTourBooking = () => {
                           `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
                           `*Payment:* ${formData.paymentMethod === 'cash' ? 'Cash to Driver' : 'Pay Online (Card)'}%0A` + 
                           `*Price:* Rs. ${totalPrice.toLocaleString()}`;
-          window.open(`https://wa.me/94768743357?text=${message}`, '_blank');
+          window.open(`https://wa.me/94712100500?text=${message}`, '_blank');
         } catch (e) {
           console.error("WhatsApp companion load blocked", e);
         }
