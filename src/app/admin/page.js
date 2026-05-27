@@ -1249,7 +1249,26 @@ export default function AdminDashboard() {
                                                 <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Airport Round Tour Packages</h4>
                                                 <p className="text-xs text-emerald-800/60 font-medium mt-1">Pricing tiers for round tours starting from the Airport.</p>
                                             </div>
-                                            <button 
+                                            <div className="flex items-center gap-3">
+                                                <button
+                                                    onClick={async () => {
+                                                        const res = await fetch('/api/admin/pricing-settings', {
+                                                            method: 'PUT',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify(pricingSettings)
+                                                        });
+                                                        const data = await res.json();
+                                                        if (data.success) {
+                                                            alert('Packages saved successfully!');
+                                                        } else {
+                                                            alert('Failed to save packages.');
+                                                        }
+                                                    }}
+                                                    className="px-6 py-3 bg-emerald-950 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-black transition-all shadow-lg flex items-center gap-2"
+                                                >
+                                                    <ShieldCheck size={16} strokeWidth={3} /> Save Changes
+                                                </button>
+                                                <button 
                                                 onClick={() => {
                                                     const hoursStr = prompt("Enter hour count for the new Airport Package (e.g. 5, 8, 12):");
                                                     if (!hoursStr) return;
@@ -1304,12 +1323,13 @@ export default function AdminDashboard() {
                                                     <div className="flex items-center justify-between mb-4 pb-2 border-b border-emerald-50">
                                                         <div className="flex items-center gap-2">
                                                             <span className="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-black uppercase tracking-wider">{hours} Hours Package</span>
-                                                            <input 
-                                                                type="number"
-                                                                value={hours}
-                                                                onChange={(e) => {
-                                                                    const newHours = Number(e.target.value);
-                                                                    if (!newHours || newHours <= 0) return;
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    const val = prompt(`Change hours for this package:`, hours);
+                                                                    if (val === null) return;
+                                                                    const newHours = Number(val);
+                                                                    if (isNaN(newHours) || newHours <= 0) return;
                                                                     const updated = (pricingSettings.airportRoundTripPackages || []).map(p => {
                                                                         if (p.hours === hours) {
                                                                             return { ...p, hours: newHours };
@@ -1318,9 +1338,10 @@ export default function AdminDashboard() {
                                                                     });
                                                                     setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
                                                                 }}
-                                                                className="w-16 bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5 text-xs font-bold outline-none focus:ring-1 focus:ring-emerald-500/20"
-                                                                title="Change package hours"
-                                                            />
+                                                                className="text-[10px] font-bold text-blue-600 hover:bg-blue-50 px-2 py-1 rounded ml-1"
+                                                            >
+                                                                Edit Hours
+                                                            </button>
                                                         </div>
                                                         <button 
                                                             onClick={() => {
@@ -1580,7 +1601,26 @@ export default function AdminDashboard() {
                                                     <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Destination Round Tour Packages</h4>
                                                     <p className="text-xs text-emerald-800/60 font-medium mt-1">Default pricing tiers for destination round tours.</p>
                                                 </div>
-                                                <button 
+                                                <div className="flex items-center gap-3">
+                                                    <button
+                                                        onClick={async () => {
+                                                            const res = await fetch('/api/admin/pricing-settings', {
+                                                                method: 'PUT',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify(pricingSettings)
+                                                            });
+                                                            const data = await res.json();
+                                                            if (data.success) {
+                                                                alert('Packages saved successfully!');
+                                                            } else {
+                                                                alert('Failed to save packages.');
+                                                            }
+                                                        }}
+                                                        className="px-6 py-3 bg-emerald-950 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-black transition-all shadow-lg flex items-center gap-2"
+                                                    >
+                                                        <ShieldCheck size={16} strokeWidth={3} /> Save Changes
+                                                    </button>
+                                                    <button 
                                                     onClick={() => {
                                                         const hoursStr = prompt("Enter hour count for the new Destination Package (e.g. 5, 8, 12):");
                                                         if (!hoursStr) return;
@@ -1635,12 +1675,13 @@ export default function AdminDashboard() {
                                                         <div className="flex items-center justify-between mb-4 pb-2 border-b border-emerald-50">
                                                             <div className="flex items-center gap-2">
                                                                 <span className="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-black uppercase tracking-wider">{hours} Hours Package</span>
-                                                                <input 
-                                                                    type="number"
-                                                                    value={hours}
-                                                                    onChange={(e) => {
-                                                                        const newHours = Number(e.target.value);
-                                                                        if (!newHours || newHours <= 0) return;
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        const val = prompt(`Change hours for this package:`, hours);
+                                                                        if (val === null) return;
+                                                                        const newHours = Number(val);
+                                                                        if (isNaN(newHours) || newHours <= 0) return;
                                                                         const updated = (pricingSettings.destinationRoundTripPackages || []).map(p => {
                                                                             if (p.hours === hours) {
                                                                                 return { ...p, hours: newHours };
@@ -1649,9 +1690,10 @@ export default function AdminDashboard() {
                                                                         });
                                                                         setPricingSettings({ ...pricingSettings, destinationRoundTripPackages: updated });
                                                                     }}
-                                                                    className="w-16 bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5 text-xs font-bold outline-none focus:ring-1 focus:ring-emerald-500/20"
-                                                                    title="Change package hours"
-                                                                />
+                                                                    className="text-[10px] font-bold text-blue-600 hover:bg-blue-50 px-2 py-1 rounded ml-1"
+                                                                >
+                                                                    Edit Hours
+                                                                </button>
                                                             </div>
                                                             <button 
                                                                 onClick={() => {
