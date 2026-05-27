@@ -667,7 +667,7 @@ const CustomTourBooking = () => {
             </div>
 
           </motion.div>
-        ) : (
+        ) : step === 2 ? (
           <motion.div
             key="step2"
             initial={{ opacity: 0, x: 20 }}
@@ -824,7 +824,6 @@ const CustomTourBooking = () => {
                     waypoints={formData.placesList.filter(p => p.trim() !== '').map(p => ({ name: p }))} 
                   />
                 </div>
-              </div>
             </section>
 
             {/* Stepper buttons (Back & Next) */}
