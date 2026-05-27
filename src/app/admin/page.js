@@ -1302,6 +1302,7 @@ export default function AdminDashboard() {
                                             >
                                                 <Plus size={16} strokeWidth={3} /> Add Airport Package
                                             </button>
+                                            </div>
                                         </div>
 
                                         {(() => {
@@ -1654,6 +1655,7 @@ export default function AdminDashboard() {
                                                 >
                                                     <Plus size={16} strokeWidth={3} /> Add Destination Package
                                                 </button>
+                                                </div>
                                             </div>
 
                                             {(() => {
