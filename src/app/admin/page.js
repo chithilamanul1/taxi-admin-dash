@@ -3442,15 +3442,17 @@ export default function AdminDashboard() {
                                                     placeholder="Airport Terminal 1"
                                                 />
                                             </div>
-                                            <div className="md:col-span-2">
-                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Dropoff Location</label>
-                                                <input
-                                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
-                                                    value={manualBookingForm.dropoffLocation.address}
-                                                    onChange={e => setManualBookingForm({ ...manualBookingForm, dropoffLocation: { ...manualBookingForm.dropoffLocation, address: e.target.value } })}
-                                                    placeholder="Hotel Name / City"
-                                                />
-                                            </div>
+                                            {manualBookingForm.type === 'transfer' && (
+                                                <div className="md:col-span-2">
+                                                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Dropoff Location</label>
+                                                    <input
+                                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
+                                                        value={manualBookingForm.dropoffLocation.address}
+                                                        onChange={e => setManualBookingForm({ ...manualBookingForm, dropoffLocation: { ...manualBookingForm.dropoffLocation, address: e.target.value } })}
+                                                        placeholder="Hotel Name / City"
+                                                    />
+                                                </div>
+                                            )}
                                             <div>
                                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Date</label>
                                                 <input
@@ -3502,7 +3504,9 @@ export default function AdminDashboard() {
                                                 </select>
                                             </div>
                                             <div>
-                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Distance (KM)</label>
+                                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
+                                                    {manualBookingForm.type === 'transfer' ? 'Distance (KM)' : 'KM Limit'}
+                                                </label>
                                                 <input
                                                     type="number"
                                                     className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-600/20 outline-none text-sm"
@@ -3753,7 +3757,9 @@ export default function AdminDashboard() {
                                                     </div>
                                                     <div className="grid grid-cols-2 gap-4 pt-2">
                                                         <div>
-                                                            <span className="text-xs text-gray-500 uppercase tracking-wider block">Distance</span>
+                                                            <span className="text-xs text-gray-500 uppercase tracking-wider block">
+                                                                {selectedBooking.type === 'tour' || selectedBooking.type === 'day-trip' ? 'KM Limit' : 'Distance'}
+                                                            </span>
                                                             <span className="font-medium">{selectedBooking.distanceKm} km</span>
                                                         </div>
                                                         <div>
