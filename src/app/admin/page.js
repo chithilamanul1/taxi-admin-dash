@@ -1346,11 +1346,23 @@ export default function AdminDashboard() {
                                                         </div>
                                                         <div className="flex items-center gap-2">
                                                             <button 
-                                                                onClick={handleSave}
-                                                                disabled={isSaving}
+                                                                onClick={async (e) => {
+                                                                    e.preventDefault();
+                                                                    const res = await fetch('/api/admin/pricing-settings', {
+                                                                        method: 'PUT',
+                                                                        headers: { 'Content-Type': 'application/json' },
+                                                                        body: JSON.stringify(pricingSettings)
+                                                                    });
+                                                                    const data = await res.json();
+                                                                    if (data.success) {
+                                                                        alert(`${hours}H Package saved successfully!`);
+                                                                    } else {
+                                                                        alert('Failed to save packages.');
+                                                                    }
+                                                                }}
                                                                 className="px-3 py-1 text-[10px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1 shadow-sm"
                                                             >
-                                                                {isSaving ? 'Saving...' : `Save ${hours}H Package`}
+                                                                Save {hours}H Package
                                                             </button>
                                                             <button 
                                                                 onClick={() => {
@@ -1521,11 +1533,23 @@ export default function AdminDashboard() {
                                                         </div>
                                                         <div className="flex items-center gap-2">
                                                             <button 
-                                                                onClick={handleSave}
-                                                                disabled={isSaving}
+                                                                onClick={async (e) => {
+                                                                    e.preventDefault();
+                                                                    const res = await fetch('/api/admin/pricing-settings', {
+                                                                        method: 'PUT',
+                                                                        headers: { 'Content-Type': 'application/json' },
+                                                                        body: JSON.stringify(pricingSettings)
+                                                                    });
+                                                                    const data = await res.json();
+                                                                    if (data.success) {
+                                                                        alert(`${hours}H Package saved successfully!`);
+                                                                    } else {
+                                                                        alert('Failed to save packages.');
+                                                                    }
+                                                                }}
                                                                 className="px-3 py-1 text-[10px] font-bold text-white bg-slate-800 hover:bg-slate-900 rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1 shadow-sm"
                                                             >
-                                                                {isSaving ? 'Saving...' : `Save ${hours}H Package`}
+                                                                Save {hours}H Package
                                                             </button>
                                                             <button 
                                                                 onClick={() => {
