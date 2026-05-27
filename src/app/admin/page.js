@@ -1344,16 +1344,25 @@ export default function AdminDashboard() {
                                                                 Edit Hours
                                                             </button>
                                                         </div>
-                                                        <button 
-                                                            onClick={() => {
-                                                                if (!confirm(`Are you sure you want to delete all airport packages for ${hours} hours?`)) return;
-                                                                const updated = (pricingSettings.airportRoundTripPackages || []).filter(p => p.hours !== hours);
-                                                                setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
-                                                            }}
-                                                            className="px-3 py-1 text-[10px] font-bold text-red-500 hover:bg-red-50 rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1"
-                                                        >
-                                                            Delete Hour Group
-                                                        </button>
+                                                        <div className="flex items-center gap-2">
+                                                            <button 
+                                                                onClick={handleSave}
+                                                                disabled={isSaving}
+                                                                className="px-3 py-1 text-[10px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1 shadow-sm"
+                                                            >
+                                                                {isSaving ? 'Saving...' : `Save ${hours}H Package`}
+                                                            </button>
+                                                            <button 
+                                                                onClick={() => {
+                                                                    if (!confirm(`Are you sure you want to delete all airport packages for ${hours} hours?`)) return;
+                                                                    const updated = (pricingSettings.airportRoundTripPackages || []).filter(p => p.hours !== hours);
+                                                                    setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
+                                                                }}
+                                                                className="px-3 py-1 text-[10px] font-bold text-red-500 hover:bg-red-50 rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1"
+                                                            >
+                                                                Delete Group
+                                                            </button>
+                                                        </div>
                                                     </div>
 
                                                     <div className="overflow-x-auto">
@@ -1510,16 +1519,25 @@ export default function AdminDashboard() {
                                                                 title="Change package hours"
                                                             />
                                                         </div>
-                                                        <button 
-                                                            onClick={() => {
-                                                                if (!confirm(`Are you sure you want to delete all normal packages for ${hours} hours?`)) return;
-                                                                const updated = (pricingSettings.roundTripPackages || []).filter(p => p.hours !== hours);
-                                                                setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
-                                                            }}
-                                                            className="px-3 py-1 text-[10px] font-bold text-red-500 hover:bg-red-50 rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1"
-                                                        >
-                                                            Delete Hour Group
-                                                        </button>
+                                                        <div className="flex items-center gap-2">
+                                                            <button 
+                                                                onClick={handleSave}
+                                                                disabled={isSaving}
+                                                                className="px-3 py-1 text-[10px] font-bold text-white bg-slate-800 hover:bg-slate-900 rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1 shadow-sm"
+                                                            >
+                                                                {isSaving ? 'Saving...' : `Save ${hours}H Package`}
+                                                            </button>
+                                                            <button 
+                                                                onClick={() => {
+                                                                    if (!confirm(`Are you sure you want to delete all normal packages for ${hours} hours?`)) return;
+                                                                    const updated = (pricingSettings.roundTripPackages || []).filter(p => p.hours !== hours);
+                                                                    setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                                }}
+                                                                className="px-3 py-1 text-[10px] font-bold text-red-500 hover:bg-red-50 rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1"
+                                                            >
+                                                                Delete Group
+                                                            </button>
+                                                        </div>
                                                     </div>
 
                                                     <div className="overflow-x-auto">

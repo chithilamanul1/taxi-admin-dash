@@ -320,19 +320,32 @@ export default function DestinationManager() {
                                                         >
                                                             Edit Hours
                                                         </button>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => {
-                                                                if (!confirm(`Delete all packages for ${hours} hours?`)) return;
-                                                                setForm({
-                                                                    ...form,
-                                                                    roundTripPackages: (form.roundTripPackages || []).filter(p => p.hours !== hours)
-                                                                });
-                                                            }}
-                                                            className="text-[10px] font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 px-2 py-1 rounded"
-                                                        >
-                                                            Delete Group
-                                                        </button>
+                                                        <div className="flex items-center gap-1">
+                                                            <button
+                                                                type="button"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    handleSave(e);
+                                                                }}
+                                                                disabled={saving}
+                                                                className="px-2 py-1 text-[10px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded transition-colors shadow-sm"
+                                                            >
+                                                                {saving ? 'Saving...' : `Save ${hours}H Data`}
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    if (!confirm(`Delete all packages for ${hours} hours?`)) return;
+                                                                    setForm({
+                                                                        ...form,
+                                                                        roundTripPackages: (form.roundTripPackages || []).filter(p => p.hours !== hours)
+                                                                    });
+                                                                }}
+                                                                className="text-[10px] font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 px-2 py-1 rounded"
+                                                            >
+                                                                Delete Group
+                                                            </button>
+                                                        </div>
                                                     </div>
 
                                                     <div className="overflow-x-auto">

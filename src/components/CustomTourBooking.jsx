@@ -199,7 +199,16 @@ const CustomTourBooking = () => {
 
   const getAvailableKmLimits = () => {
     const pkgs = getActivePackages();
-    const match = pkgs.filter(p => p.hours === formData.taxiTourHours);
+    // Prioritize selected vehicle's exact configured tiers
+    let match = [];
+    if (selectedVehicle) {
+      match = pkgs.filter(p => p.hours === formData.taxiTourHours && p.vehicleType === selectedVehicle.id);
+    }
+    // Fallback to all vehicles for this hour if no vehicle selected or vehicle has no tiers configured
+    if (match.length === 0) {
+      match = pkgs.filter(p => p.hours === formData.taxiTourHours);
+    }
+    
     if (match.length > 0) {
       const kms = [];
       match.forEach(p => {
