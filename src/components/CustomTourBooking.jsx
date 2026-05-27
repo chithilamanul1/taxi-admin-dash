@@ -687,12 +687,20 @@ const CustomTourBooking = () => {
             {/* Block 1: Package Summary */}
             <section className="bg-emerald-50 dark:bg-zinc-800/40 rounded-3xl border border-emerald-100 dark:border-white/5 p-5 flex flex-col gap-4">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-10 flex items-center justify-center">
-                    <img src={selectedVehicle?.image || '/vehicles/minicar.png'} alt="Vehicle" className="max-h-full max-w-full object-contain" />
+                <div className="flex items-center gap-4 sm:gap-6">
+                  <div className="w-24 sm:w-32 h-14 sm:h-16 flex items-center justify-center relative shrink-0">
+                    <img 
+                      src={selectedVehicle?.image || '/vehicles/minicar.png'} 
+                      alt="Vehicle" 
+                      className={`max-h-full max-w-full object-contain drop-shadow-sm ${
+                        (selectedVehicle?.id?.toLowerCase().includes('sedan') || selectedVehicle?.name?.toLowerCase().includes('sedan')) ? 'scale-[1.45]' :
+                        (selectedVehicle?.id?.toLowerCase().includes('mini') || selectedVehicle?.name?.toLowerCase().includes('mini') || selectedVehicle?.name?.toLowerCase().includes('wagon')) ? 'scale-[1.15]' :
+                        'scale-[1.2]'
+                      }`} 
+                    />
                   </div>
                   <div>
-                    <h4 className="text-sm font-black text-emerald-950 dark:text-white uppercase tracking-wider">{selectedVehicle?.name || 'Selected Vehicle'}</h4>
+                    <h4 className="text-base sm:text-lg font-black text-emerald-950 dark:text-white uppercase tracking-wider leading-tight">{selectedVehicle?.name || 'Selected Vehicle'}</h4>
                     <div className="flex gap-3 text-[10px] font-bold text-emerald-700/70 dark:text-emerald-400/70 uppercase tracking-widest mt-1">
                       <span>{formData.taxiTourHours} Hours</span>
                       <span>•</span>
