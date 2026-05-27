@@ -685,23 +685,49 @@ const CustomTourBooking = () => {
           >
 
             {/* Block 1: Package Summary */}
-            <section className="bg-emerald-50 dark:bg-zinc-800/40 rounded-3xl border border-emerald-100 dark:border-white/5 p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-10 flex items-center justify-center">
-                  <img src={selectedVehicle?.image || '/vehicles/minicar.png'} alt="Vehicle" className="max-h-full max-w-full object-contain" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-black text-emerald-950 dark:text-white uppercase tracking-wider">{selectedVehicle?.name || 'Selected Vehicle'}</h4>
-                  <div className="flex gap-3 text-[10px] font-bold text-emerald-700/70 dark:text-emerald-400/70 uppercase tracking-widest mt-1">
-                    <span>{formData.taxiTourHours} Hours</span>
-                    <span>•</span>
-                    <span>{formData.taxiTourKm} KM Limit</span>
+            <section className="bg-emerald-50 dark:bg-zinc-800/40 rounded-3xl border border-emerald-100 dark:border-white/5 p-5 flex flex-col gap-4">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-10 flex items-center justify-center">
+                    <img src={selectedVehicle?.image || '/vehicles/minicar.png'} alt="Vehicle" className="max-h-full max-w-full object-contain" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-black text-emerald-950 dark:text-white uppercase tracking-wider">{selectedVehicle?.name || 'Selected Vehicle'}</h4>
+                    <div className="flex gap-3 text-[10px] font-bold text-emerald-700/70 dark:text-emerald-400/70 uppercase tracking-widest mt-1">
+                      <span>{formData.taxiTourHours} Hours</span>
+                      <span>•</span>
+                      <span>{formData.taxiTourKm} KM Limit</span>
+                    </div>
                   </div>
                 </div>
+                <div className="text-right">
+                  <p className="text-[9px] font-black text-emerald-600/70 dark:text-[#FACC15]/70 uppercase tracking-widest mb-0.5">Total Fare</p>
+                  <p className="text-xl font-black text-emerald-700 dark:text-[#FACC15]">Rs. {totalPrice.toLocaleString()}.00</p>
+                </div>
               </div>
-              <div className="text-right">
-                <p className="text-[9px] font-black text-emerald-600/70 dark:text-[#FACC15]/70 uppercase tracking-widest mb-0.5">Total Fare</p>
-                <p className="text-xl font-black text-emerald-700 dark:text-[#FACC15]">Rs. {totalPrice.toLocaleString()}.00</p>
+
+              {/* Payload Restrictions & Legal Inclusions */}
+              <div className="flex flex-col gap-3 pt-3 border-t border-emerald-200/50 dark:border-white/10">
+                <div className="bg-white/60 dark:bg-zinc-900/50 rounded-xl p-3 flex items-start gap-2 border border-orange-200/50 dark:border-orange-900/30">
+                  <AlertCircle className="text-orange-500 shrink-0 mt-0.5" size={14} />
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-orange-700 dark:text-orange-400">Strict Vehicle Capacity</p>
+                    <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 mt-0.5 leading-tight">
+                      Maximum {selectedVehicle?.capacity || 2} Passengers & {selectedVehicle?.suitcases || 4} Luggage Bags.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-white/60 dark:bg-zinc-900/50 rounded-xl p-3 flex items-start gap-2 border border-slate-200/60 dark:border-white/5">
+                  <Info className="text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" size={14} />
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-emerald-800 dark:text-emerald-400">Inclusions & Exclusions</p>
+                    <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 mt-0.5 leading-tight">
+                      Included: Vehicle + Fuel Only.<br/>
+                      Excluded: All secondary travel expenses, including Highway Tickets, Parking Fees, and Entrance Tickets, must be paid separately by the passenger.
+                    </p>
+                  </div>
+                </div>
               </div>
             </section>
 
@@ -839,9 +865,9 @@ const CustomTourBooking = () => {
               <button 
                 type="button"
                 onClick={() => setStep(1)} 
-                className="py-3.5 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 text-slate-700 dark:text-white rounded-2xl font-black text-[9px] uppercase tracking-widest transition-all flex items-center justify-center gap-1"
+                className="py-3.5 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 text-slate-700 dark:text-white rounded-2xl font-black text-[9px] uppercase tracking-widest transition-all flex items-center justify-center gap-1 shadow-sm"
               >
-                <ChevronLeft size={12} strokeWidth={3} /> BACK
+                <ChevronLeft size={12} strokeWidth={3} /> CHANGE VEHICLE
               </button>
               <button 
                 type="button"
