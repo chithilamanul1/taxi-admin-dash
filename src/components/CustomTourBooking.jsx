@@ -33,7 +33,7 @@ const CustomTourBooking = () => {
     email: '',
     phone: '',
     notes: '',
-    places: '',
+    placesList: [''],
     taxiTourHours: 2,
     taxiTourKm: 40,
     paymentMethod: 'card'
@@ -173,18 +173,32 @@ const CustomTourBooking = () => {
     }
   }, [tab]);
 
-  const getAvailableHours = () => {
-    const pkgs = tab === 'airport'
+  const getMatchingDestination = () => {
+    if (!locations[0] || destinations.length === 0) return null;
+    const searchLower = locations[0].toLowerCase();
+    // Sort destinations by length descending so "Sigiriya Rock" matches before "Sigiriya" if both exist
+    const sortedDests = [...destinations].sort((a, b) => b.name.length - a.name.length);
+    return sortedDests.find(d => d.name && searchLower.includes(d.name.toLowerCase()));
+  };
+
+  const getActivePackages = () => {
+    const destOverride = getMatchingDestination();
+    if (destOverride && destOverride.roundTripPackages && destOverride.roundTripPackages.length > 0) {
+      return destOverride.roundTripPackages;
+    }
+    return tab === 'airport'
       ? (pricingSettings?.airportRoundTripPackages || [])
-      : (pricingSettings?.roundTripPackages || []);
+      : (pricingSettings?.destinationRoundTripPackages || []);
+  };
+
+  const getAvailableHours = () => {
+    const pkgs = getActivePackages();
     const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
     return hours.length > 0 ? hours : [2, 4, 6, 8, 10, 12]; // Fallback
   };
 
   const getAvailableKmLimits = () => {
-    const pkgs = tab === 'airport'
-      ? (pricingSettings?.airportRoundTripPackages || [])
-      : (pricingSettings?.roundTripPackages || []);
+    const pkgs = getActivePackages();
     const match = pkgs.filter(p => p.hours === formData.taxiTourHours);
     if (match.length > 0) {
       const kms = [];
@@ -202,9 +216,7 @@ const CustomTourBooking = () => {
 
   // Update hours and dynamic KM limit defaults
   const updateDuration = (newHours) => {
-    const pkgs = tab === 'airport'
-      ? (pricingSettings?.airportRoundTripPackages || [])
-      : (pricingSettings?.roundTripPackages || []);
+    const pkgs = getActivePackages();
     const match = pkgs.find(p => p.hours === newHours);
     const tiers = match?.tiers || [];
     const newKm = tiers.length > 0 ? tiers[0].km : newHours * 20;
@@ -213,9 +225,7 @@ const CustomTourBooking = () => {
 
   useEffect(() => {
     if (pricingSettings) {
-      const pkgs = tab === 'airport'
-        ? (pricingSettings.airportRoundTripPackages || [])
-        : (pricingSettings.roundTripPackages || []);
+      const pkgs = getActivePackages();
       const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
       if (hours.length > 0) {
         const defaultHours = hours.includes(formData.taxiTourHours) ? formData.taxiTourHours : hours[0];
@@ -273,9 +283,7 @@ const CustomTourBooking = () => {
     if (!veh) return 0;
     
     let basePrice = 0;
-    const pkgs = tab === 'airport'
-      ? (pricingSettings?.airportRoundTripPackages || [])
-      : (pricingSettings?.roundTripPackages || []);
+    const pkgs = getActivePackages();
       
     const pkg = pkgs.find(p => p.hours === Number(formData.taxiTourHours) && p.vehicleType === veh.id);
     if (pkg) {
@@ -323,7 +331,7 @@ const CustomTourBooking = () => {
           customer: session?.user?.id || null,
           pickupLocation: { address: locations[0] || 'Airport' },
           dropoffLocation: { address: locations[0] || 'Same as Pickup' },
-          waypoints: formData.places ? [{ address: formData.places }] : [],
+          waypoints: formData.placesList.filter(Boolean).map(p => ({ address: p })),
           vehicleType: selectedVehicle.id,
           tripType: 'round-trip',
           type: 'tour',
@@ -350,7 +358,7 @@ const CustomTourBooking = () => {
           guestPhone: formData.phone,
           whatsappNumber: formData.phone,
           paymentMethod: formData.paymentMethod,
-          notes: `Custom Tour: ${formData.taxiTourHours} Hours, Limit: ${formData.taxiTourKm} KM.\nStops/Places: ${formData.places || 'None'}\n${formData.notes || ''}`
+          notes: `Custom Tour: ${formData.taxiTourHours} Hours, Limit: ${formData.taxiTourKm} KM.\nStops/Places: ${formData.placesList.filter(Boolean).join(', ') || 'None'}\n${formData.notes || ''}`
         })
       });
       const data = await res.json();
@@ -365,7 +373,7 @@ const CustomTourBooking = () => {
                           `*Vehicle:* ${selectedVehicle.name}%0A` + 
                           `*Hours:* ${formData.taxiTourHours} Hours%0A` + 
                           `*KM Limit:* ${formData.taxiTourKm} KM%0A` + 
-                          `*Route:* ${locations[0] || 'Airport'} ➔ ${formData.places || 'Custom Stops'} ➔ ${locations[0] || 'Airport'}%0A` + 
+                          `*Route:* ${locations[0] || 'Airport'} ➔ ${formData.placesList.filter(Boolean).join(', ') || 'Custom Stops'} ➔ ${locations[0] || 'Airport'}%0A` + 
                           `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
                           `*Payment:* ${formData.paymentMethod === 'cash' ? 'Cash to Driver' : 'Pay Online (Card)'}%0A` + 
                           `*Price:* Rs. ${totalPrice.toLocaleString()}`;
@@ -510,12 +518,12 @@ const CustomTourBooking = () => {
             </div>
 
             {/* Route Planning (Pickup Location) */}
-            <div className="space-y-2 pt-2">
+            <div className="space-y-2 pt-2 px-1">
               <label className="text-[9px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Pickup Location</label>
-              <div className="relative group flex items-center gap-1.5 px-2">
+              <div className="relative group flex items-center">
                 <div className="relative flex-1">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-600">
-                    <MapPin size={16} />
+                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-600">
+                    <MapPin size={14} />
                   </div>
                   <input 
                     type="text" 
@@ -523,7 +531,7 @@ const CustomTourBooking = () => {
                     ref={(el) => initAutocomplete(el, 0)} 
                     onChange={(e) => handleLocationChange(0, e.target.value)} 
                     placeholder="Enter Pickup Location" 
-                    className="w-full bg-slate-50 dark:bg-zinc-850 border border-slate-200/80 dark:border-white/10 rounded-2xl py-4 pl-12 pr-4 outline-none font-bold text-sm text-slate-900 dark:text-white focus:border-[#FACC15] focus:ring-4 focus:ring-[#FACC15]/10 transition-all shadow-sm" 
+                    className="w-full bg-slate-100/70 dark:bg-zinc-800/60 border border-slate-200/30 dark:border-white/5 rounded-xl py-2.5 pl-9 pr-4 outline-none font-bold text-[11px] text-slate-900 dark:text-white focus:border-[#FACC15] focus:ring-2 focus:ring-[#FACC15]/20 transition-all shadow-sm" 
                   />
                 </div>
               </div>
@@ -718,18 +726,49 @@ const CustomTourBooking = () => {
 
                 {/* Add Places Matrix */}
                 <div className="pl-4 border-l-2 border-dashed border-slate-200 dark:border-slate-700 ml-4 py-2 space-y-3">
-                  <div className="space-y-1">
-                    <label className="text-[9px] uppercase font-black text-slate-400 tracking-widest block">Add Places / Add Stops</label>
-                    <div className="relative">
-                      <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"><Sparkles size={12} /></div>
-                      <input 
-                        type="text"
-                        value={formData.places}
-                        onChange={e => setFormData({ ...formData, places: e.target.value })}
-                        placeholder="e.g. Sigiriya Rock, Safari, Local Market..."
-                        className="w-full bg-white dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 rounded-xl py-2.5 pl-9 pr-3 outline-none font-bold text-[11px] text-slate-800 dark:text-white focus:border-[#FACC15] transition-all"
-                      />
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[9px] uppercase font-black text-slate-400 tracking-widest block">Itinerary Stops</label>
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          if (formData.placesList.length < 10) {
+                            setFormData(prev => ({ ...prev, placesList: [...prev.placesList, ''] }))
+                          }
+                        }}
+                        className="text-[9px] font-bold text-emerald-600 dark:text-[#FACC15] uppercase hover:underline flex items-center gap-1"
+                      >
+                        <Plus size={10} strokeWidth={3} /> Add Stop
+                      </button>
                     </div>
+                    {formData.placesList.map((place, idx) => (
+                      <div key={idx} className="relative group">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"><Sparkles size={12} /></div>
+                        <input 
+                          type="text"
+                          value={place}
+                          onChange={e => {
+                            const newList = [...formData.placesList];
+                            newList[idx] = e.target.value;
+                            setFormData({ ...formData, placesList: newList });
+                          }}
+                          placeholder={`Stop ${idx + 1} (e.g. Sigiriya Rock)`}
+                          className="w-full bg-white dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 rounded-xl py-2.5 pl-9 pr-8 outline-none font-bold text-[11px] text-slate-800 dark:text-white focus:border-[#FACC15] transition-all shadow-sm"
+                        />
+                        {formData.placesList.length > 1 && (
+                          <button 
+                            type="button"
+                            onClick={() => {
+                              const newList = formData.placesList.filter((_, i) => i !== idx);
+                              setFormData({ ...formData, placesList: newList });
+                            }}
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1"
+                          >
+                            <Minus size={14} />
+                          </button>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
 
