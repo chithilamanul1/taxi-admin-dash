@@ -1405,7 +1405,7 @@ export default function AdminDashboard() {
                                                                                                 value={pkg.tiers?.[tIdx]?.km || 0}
                                                                                                 onChange={(e) => {
                                                                                                     const updated = (pricingSettings.airportRoundTripPackages || []).map(p => {
-                                                                                                        if (p.id === pkg.id) {
+                                                                                                        if (p.hours === hours && p.vehicleType === vt.value) {
                                                                                                             const tiers = [...p.tiers];
                                                                                                             tiers[tIdx] = { ...tiers[tIdx], km: Number(e.target.value) };
                                                                                                             return { ...p, tiers };
@@ -1426,7 +1426,7 @@ export default function AdminDashboard() {
                                                                                                 value={pkg.tiers?.[tIdx]?.price || 0}
                                                                                                 onChange={(e) => {
                                                                                                     const updated = (pricingSettings.airportRoundTripPackages || []).map(p => {
-                                                                                                        if (p.id === pkg.id) {
+                                                                                                        if (p.hours === hours && p.vehicleType === vt.value) {
                                                                                                             const tiers = [...p.tiers];
                                                                                                             tiers[tIdx] = { ...tiers[tIdx], price: Number(e.target.value) };
                                                                                                             return { ...p, tiers };
@@ -1592,7 +1592,7 @@ export default function AdminDashboard() {
                                                                                                 value={pkg.tiers?.[tIdx]?.km || 0}
                                                                                                 onChange={(e) => {
                                                                                                     const updated = (pricingSettings.roundTripPackages || []).map(p => {
-                                                                                                        if (p.id === pkg.id) {
+                                                                                                        if (p.hours === hours && p.vehicleType === vt.value) {
                                                                                                             const tiers = [...p.tiers];
                                                                                                             tiers[tIdx] = { ...tiers[tIdx], km: Number(e.target.value) };
                                                                                                             return { ...p, tiers };
@@ -1613,7 +1613,7 @@ export default function AdminDashboard() {
                                                                                                 value={pkg.tiers?.[tIdx]?.price || 0}
                                                                                                 onChange={(e) => {
                                                                                                     const updated = (pricingSettings.roundTripPackages || []).map(p => {
-                                                                                                        if (p.id === pkg.id) {
+                                                                                                        if (p.hours === hours && p.vehicleType === vt.value) {
                                                                                                             const tiers = [...p.tiers];
                                                                                                             tiers[tIdx] = { ...tiers[tIdx], price: Number(e.target.value) };
                                                                                                             return { ...p, tiers };
@@ -1740,10 +1740,18 @@ export default function AdminDashboard() {
                                                                 </button>
                                                             </div>
                                                             <button 
-                                                                onClick={() => {
+                                                                onClick={async () => {
                                                                     if (!confirm(`Are you sure you want to delete all destination packages for ${hours} hours?`)) return;
                                                                     const updated = (pricingSettings.destinationRoundTripPackages || []).filter(p => p.hours !== hours);
-                                                                    setPricingSettings({ ...pricingSettings, destinationRoundTripPackages: updated });
+                                                                    const updatedSettings = { ...pricingSettings, destinationRoundTripPackages: updated };
+                                                                    setPricingSettings(updatedSettings);
+                                                                    
+                                                                    // Persist deletion to DB automatically
+                                                                    await fetch('/api/admin/pricing-settings', {
+                                                                        method: 'PUT',
+                                                                        headers: { 'Content-Type': 'application/json' },
+                                                                        body: JSON.stringify(updatedSettings)
+                                                                    });
                                                                 }}
                                                                 className="px-3 py-1 text-[10px] font-bold text-red-500 hover:bg-red-50 rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1"
                                                             >
@@ -1779,7 +1787,7 @@ export default function AdminDashboard() {
                                                                                                     value={pkg.tiers?.[tIdx]?.km || 0}
                                                                                                     onChange={(e) => {
                                                                                                         const updated = (pricingSettings.destinationRoundTripPackages || []).map(p => {
-                                                                                                            if (p.id === pkg.id) {
+                                                                                                            if (p.hours === hours && p.vehicleType === vt.value) {
                                                                                                                 const tiers = [...p.tiers];
                                                                                                                 tiers[tIdx] = { ...tiers[tIdx], km: Number(e.target.value) };
                                                                                                                 return { ...p, tiers };
@@ -1800,7 +1808,7 @@ export default function AdminDashboard() {
                                                                                                     value={pkg.tiers?.[tIdx]?.price || 0}
                                                                                                     onChange={(e) => {
                                                                                                         const updated = (pricingSettings.destinationRoundTripPackages || []).map(p => {
-                                                                                                            if (p.id === pkg.id) {
+                                                                                                            if (p.hours === hours && p.vehicleType === vt.value) {
                                                                                                                 const tiers = [...p.tiers];
                                                                                                                 tiers[tIdx] = { ...tiers[tIdx], price: Number(e.target.value) };
                                                                                                                 return { ...p, tiers };

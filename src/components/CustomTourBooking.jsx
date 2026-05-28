@@ -526,9 +526,25 @@ const CustomTourBooking = () => {
                 </button>
               </div>
             </div>
-
-
-
+            {/* Route Planning (Pickup Location) */}
+            <div className="space-y-2 pt-2 px-1">
+              <label className="text-[9px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Pickup Location</label>
+              <div className="relative group flex items-center">
+                <div className="relative flex-1">
+                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-600">
+                    <MapPin size={14} />
+                  </div>
+                  <input 
+                    type="text" 
+                    value={locations[0] || ''} 
+                    ref={(el) => initAutocomplete(el, 0)} 
+                    onChange={(e) => handleLocationChange(0, e.target.value)} 
+                    placeholder="Enter Pickup Location" 
+                    className="w-full bg-slate-100/70 dark:bg-zinc-800/60 border border-slate-200/30 dark:border-white/5 rounded-xl py-2.5 pl-9 pr-4 outline-none font-bold text-[11px] text-slate-900 dark:text-white focus:border-[#FACC15] focus:ring-2 focus:ring-[#FACC15]/20 transition-all shadow-sm" 
+                  />
+                </div>
+              </div>
+            </div>
             {/* 2. Distinct Vehicle Selection Slider/Grid */}
             <div className="space-y-2">
               <label className="text-[9px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">
