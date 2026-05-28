@@ -826,12 +826,26 @@ const CustomTourBooking = () => {
                   </div>
                 </div>
               </div>
+              {/* Dynamic Route Validation Overlay */}
+              {distance > formData.taxiTourKm && (
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 p-3 sm:p-4 rounded-xl flex items-start gap-3 mt-4 animate-pulse shadow-sm">
+                  <AlertCircle className="text-red-600 dark:text-red-400 shrink-0 mt-0.5" size={18} />
+                  <div>
+                    <h5 className="text-[10px] sm:text-xs font-black text-red-700 dark:text-red-400 uppercase tracking-widest mb-1">⚠️ Package Limit Exceeded</h5>
+                    <p className="text-[9px] sm:text-[10px] font-bold text-red-600/90 dark:text-red-300/90 leading-relaxed">
+                      The requested route itinerary extends past your selected {formData.taxiTourKm} KM allowance. Please click 'Back' to adjust your vehicle selection or upgrade your hour package tier to prevent automatic overage fees.
+                    </p>
+                  </div>
+                </div>
+              )}
+
                 {/* Trip Map Component */}
                 <div className="w-full h-48 rounded-2xl overflow-hidden border border-slate-200/60 dark:border-white/10 mt-4 relative z-0">
                   <TripMap 
                     pickup={{ name: locations[0] || 'Bandaranaike International Airport' }} 
                     dropoff={{ name: locations[0] || 'Bandaranaike International Airport' }} 
                     waypoints={formData.placesList.filter(p => p.trim() !== '').map(p => ({ name: p }))} 
+                    onRouteCalculated={(stats) => setDistance(stats.distanceKm)}
                   />
                 </div>
             </section>
