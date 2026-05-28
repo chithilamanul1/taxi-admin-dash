@@ -562,14 +562,8 @@ const CustomTourBooking = () => {
                   const isMini = v.id?.toLowerCase().includes('mini') || v.name?.toLowerCase().includes('mini') || v.name?.toLowerCase().includes('wagon');
                   const isSedan = v.id?.toLowerCase().includes('sedan') || v.name?.toLowerCase().includes('sedan');
                   
-                  let imgScale = 'scale-100';
-                  if (isSedan) {
-                    imgScale = 'scale-[1.35] sm:scale-[1.4]';
-                  } else if (isMini) {
-                    imgScale = 'scale-[1.05] sm:scale-[1.1]';
-                  } else {
-                    imgScale = 'scale-[1.1] sm:scale-[1.15]';
-                  }
+                  // Uniform scaling to match the Honda Vezel / SUV baseline across the grid
+                  const imgScale = 'scale-[1.3] sm:scale-[1.35]';
                   
                   return (
                     <button 
