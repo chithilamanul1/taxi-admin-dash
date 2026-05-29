@@ -36,21 +36,55 @@ const ALL_VEHICLE_TYPES = [
 ];
 
 const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup, onEditHours, typeColor }) => {
-    const [formState, setFormState] = useState(initialPackages);
+    const [formState, setFormState] = useState(() => JSON.parse(JSON.stringify(initialPackages)));
+    const [isSaving, setIsSaving] = useState(false);
+    const [saveSuccess, setSaveSuccess] = useState(false);
+    const hasInitialized = useRef(false);
+    const lastSavedJSON = useRef(JSON.stringify(initialPackages));
 
+    // Only sync from props on first mount OR when the saved data from the server
+    // is genuinely different from what we last saved (i.e. another tab/user changed it)
     useEffect(() => {
-        setFormState(initialPackages);
+        if (!hasInitialized.current) {
+            hasInitialized.current = true;
+            return; // Skip first run, we already set initial state via useState initializer
+        }
+        const incomingJSON = JSON.stringify(initialPackages);
+        // Only overwrite local state if the incoming data is different from what we last saved
+        // This prevents parent re-renders from wiping our in-progress edits
+        if (incomingJSON !== lastSavedJSON.current) {
+            lastSavedJSON.current = incomingJSON;
+            setFormState(JSON.parse(incomingJSON));
+        }
     }, [initialPackages]);
 
     const handleInputChange = (vehicleType, tIdx, field, value) => {
         setFormState(prev => prev.map(p => {
             if (p.vehicleType === vehicleType) {
                 const tiers = [...p.tiers];
-                tiers[tIdx] = { ...tiers[tIdx], [field]: Number(value) };
+                tiers[tIdx] = { ...tiers[tIdx], [field]: value === '' ? '' : Number(value) };
                 return { ...p, tiers };
             }
             return p;
         }));
+    };
+
+    const handleSave = async () => {
+        setIsSaving(true);
+        setSaveSuccess(false);
+        // Normalize empty strings to 0 before saving
+        const normalized = formState.map(p => ({
+            ...p,
+            tiers: p.tiers.map(t => ({
+                km: Number(t.km) || 0,
+                price: Number(t.price) || 0
+            }))
+        }));
+        lastSavedJSON.current = JSON.stringify(normalized);
+        await onSaveGroup(normalized);
+        setIsSaving(false);
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 2000);
     };
 
     return (
@@ -72,11 +106,20 @@ const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup,
                     <button 
                         onClick={(e) => {
                             e.preventDefault();
-                            onSaveGroup(formState);
+                            handleSave();
                         }}
-                        className={`px-3 py-1 text-[10px] font-bold text-white bg-${typeColor === 'emerald' ? 'emerald-600 hover:bg-emerald-700' : 'slate-800 hover:bg-slate-900'} rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1 shadow-sm`}
+                        disabled={isSaving}
+                        className={`px-3 py-1 text-[10px] font-bold text-white rounded-lg transition-colors uppercase tracking-wider flex items-center gap-1 shadow-sm ${
+                            saveSuccess 
+                                ? 'bg-green-500' 
+                                : isSaving 
+                                    ? 'bg-gray-400 cursor-wait' 
+                                    : typeColor === 'emerald' 
+                                        ? 'bg-emerald-600 hover:bg-emerald-700' 
+                                        : 'bg-slate-800 hover:bg-slate-900'
+                        }`}
                     >
-                        Save {hours}H Package
+                        {saveSuccess ? '✓ Saved!' : isSaving ? 'Saving...' : `Save ${hours}H Package`}
                     </button>
                     <button 
                         onClick={() => onDeleteGroup(hours)}
@@ -112,7 +155,7 @@ const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup,
                                                     <input 
                                                         type="number"
                                                         placeholder="KM"
-                                                        value={pkg.tiers?.[tIdx]?.km || 0}
+                                                        value={pkg.tiers?.[tIdx]?.km ?? 0}
                                                         onChange={(e) => handleInputChange(vt.value, tIdx, 'km', e.target.value)}
                                                         className="w-12 bg-slate-50 border-none rounded px-1 py-0.5 text-[9px] font-black outline-none focus:ring-1 focus:ring-emerald-500/20"
                                                     />
@@ -123,7 +166,7 @@ const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup,
                                                     <input 
                                                         type="number"
                                                         placeholder="Price"
-                                                        value={pkg.tiers?.[tIdx]?.price || 0}
+                                                        value={pkg.tiers?.[tIdx]?.price ?? 0}
                                                         onChange={(e) => handleInputChange(vt.value, tIdx, 'price', e.target.value)}
                                                         className={`w-20 bg-white border border-${typeColor}-100 rounded px-1 py-0.5 text-xs font-black text-${typeColor === 'emerald' ? 'emerald-600' : 'slate-600'} outline-none focus:ring-1 focus:ring-${typeColor}-500/20`}
                                                     />
