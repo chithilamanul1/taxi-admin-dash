@@ -3,6 +3,35 @@ import RoundTripBookingWrapper from '@/components/RoundTripBookingWrapper';
 export const metadata = {
   title: 'Round Trip Booking | Airport Taxi Tours',
   description: 'Book a premium round trip or city ride. Fixed rates for Mini, Sedan, Vezel, and Van vehicles.',
+  keywords: [
+      'Sri Lanka Round Trips', 'Private Tours Sri Lanka', 'City Rides Colombo', 'Taxi Service Sri Lanka',
+      'Round Trip Cab Booking', 'Premium Cab Sri Lanka', 'Colombo Taxi Service', 'Private Taxi Sri Lanka'
+  ],
+  alternates: {
+      canonical: 'https://srilankantaxi.lk/round-trips',
+  },
+  openGraph: {
+      title: 'Round Trip Booking | Airport Taxis Sri Lanka',
+      description: 'Book a premium round trip or city ride. Professional drivers, comfortable vehicles, instant confirmation. Best rates guaranteed.',
+      url: 'https://srilankantaxi.lk/round-trips',
+      siteName: 'Airport Taxis Pvt (Ltd)',
+      images: [
+          {
+              url: '/hero-bg.png',
+              width: 1200,
+              height: 630,
+              alt: 'Round Trips and Premium City Rides',
+          }
+      ],
+      locale: 'en_US',
+      type: 'website',
+  },
+  twitter: {
+      card: 'summary_large_image',
+      title: 'Round Trip Booking | Airport Taxis Sri Lanka',
+      description: 'Instant booking for premium round trips and city rides across Sri Lanka.',
+      images: ['/hero-bg.png'],
+  }
 };
 
 export default function RoundTripsPage() {
