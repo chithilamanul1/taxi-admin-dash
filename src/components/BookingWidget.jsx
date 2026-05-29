@@ -859,7 +859,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                                 <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
                                                                     <CustomDateTimePicker date={scheduledDate} time={scheduledTime} onChange={(d, t) => { setScheduledDate(d); setScheduledTime(t); setStep1Errors(prev => ({ ...prev, dateTime: false })); }} />
                                                                     <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
-                                                                        <button onClick={() => setIsDateTimePickerOpen(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
+                                                                        <button onClick={() => { setIsDateTimePickerOpen(false); if (pickup?.lat && dropoff?.lat && scheduledDate) { setStep(2); } }} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
                                                                     </div>
                                                                 </motion.div>
                                                             </>
@@ -1017,7 +1017,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                         <div className="space-y-4 mb-6">
                                             <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-4 flex items-center gap-2">
-                                                Passenger and Luggage <span className="text-[9px] bg-red-500 text-white px-2 py-0.5 rounded-full lowercase tracking-tight">Compulsory</span>
+                                                Passenger and Luggage <span className="text-[9px] bg-emerald-600 text-white px-2 py-0.5 rounded-full lowercase tracking-tight">required</span>
                                             </label>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                                                 {[{ id: 'adults', label: 'Adults' }, { id: 'children', label: 'Children' }, { id: 'luggage', label: 'Luggage' }, { id: 'handLuggage', label: 'Hand Luggage' }].map(c => (
@@ -1098,7 +1098,13 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             <button onClick={() => setStep(1)} className="flex items-center justify-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white font-black text-xs uppercase tracking-widest px-5 py-4 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all" aria-label="Back to step 1">
                                                 <ArrowRight size={14} strokeWidth={3} className="rotate-180"/> Back
                                             </button>
-                                            <button onClick={() => setStep(3)} className="flex-1 flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98] lg:hidden" aria-label="Continue to review">
+                                            <button onClick={() => {
+                                                if (!passengerCount.adults || passengerCount.adults < 1) {
+                                                    alert('Please add at least 1 adult passenger.');
+                                                    return;
+                                                }
+                                                setStep(3);
+                                            }} className="flex-1 flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98] lg:hidden" aria-label="Continue to review">
                                                 Review Trip <ArrowRight size={16} strokeWidth={3}/>
                                             </button>
                                         </div>
