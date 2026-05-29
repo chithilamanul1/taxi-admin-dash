@@ -153,22 +153,21 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                     {displayName(vehicle.name)}
                                 </h4>
                                 <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-2">Premium Class</p>
-
                                 {/* Pricing */}
                                 {vehicle.calculatedTotal >= 0 && (
-                                    <div className="text-center relative z-10 flex flex-col items-center mb-2">
-                                        <div className="flex items-baseline justify-center gap-1">
-                                            <span className="text-sm font-black text-[#FACC15]">{convertPrice(Number(vehicle.calculatedTotal) || 0).symbol}</span>
-                                            <span className="text-3xl font-black text-black dark:text-white tracking-tighter leading-none">
+                                    <div className="text-center relative z-10 flex flex-col items-center mb-4">
+                                        <div className="flex items-baseline justify-center gap-1.5">
+                                            <span className="text-xl font-black text-[#FACC15]">{convertPrice(Number(vehicle.calculatedTotal) || 0).symbol}</span>
+                                            <span className="text-4xl sm:text-5xl font-black text-black dark:text-white tracking-tighter leading-none">
                                                 {(Number(convertPrice(Number(vehicle.calculatedTotal) || 0).value) || 0).toLocaleString()}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-2 mt-1.5 text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                                        <div className="flex items-center gap-2 mt-2 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                                             {['USD', 'EUR', 'LKR'].filter(c => c !== currency).slice(0, 1).map((c) => {
                                                 const rate = rates[c] || 1;
                                                 const symbol = c === 'USD' ? '$' : c === 'EUR' ? '€' : 'Rs';
                                                 return (
-                                                    <span key={c} className="text-slate-400">
+                                                    <span key={c} className="text-slate-500 font-bold">
                                                         {symbol} {(vehicle.calculatedTotal * rate).toLocaleString(undefined, { minimumFractionDigits: c === 'LKR' ? 0 : 2, maximumFractionDigits: c === 'LKR' ? 0 : 2 })}
                                                     </span>
                                                 );
@@ -192,23 +191,17 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
 
                             {/* Specs & CTA */}
                             <div className="px-3 sm:px-4 pb-4 mt-1 relative z-10 shrink-0">
-                                <div className="grid grid-cols-4 gap-1">
+                                <div className="grid grid-cols-4 gap-1.5">
                                     {[
                                         { icon: Users, label: 'PAX', value: vehicle.capacity || 4 },
                                         { icon: Briefcase, label: 'LUG', value: vehicle.suitcases || 2 },
                                         { icon: ShoppingBag, label: 'HAND', value: vehicle.handLuggage || 2 },
                                         { icon: Wind, label: 'AC', value: 'ON' }
                                     ].map((item, i) => (
-                                        <div key={i} className={`
-                                            rounded-xl p-2 flex flex-col items-center justify-center border transition-all duration-300
-                                            ${isSelected
-                                                ? 'bg-[#FACC15] text-black border-[#FACC15] shadow'
-                                                : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 group-hover/card:border-slate-200 dark:group-hover/card:border-white/20'
-                                            }
-                                        `}>
-                                            <item.icon size={11} className={`${isSelected ? 'text-black' : 'text-slate-400'} mb-0.5`} strokeWidth={3} />
-                                            <span className={`text-[9px] font-black leading-none ${isSelected ? 'text-black' : 'text-black dark:text-white'}`}>{item.value}</span>
-                                            <span className={`text-[6px] font-bold uppercase tracking-widest leading-none mt-0.5 ${isSelected ? 'text-black/60' : 'text-slate-400'}`}>{item.label}</span>
+                                        <div key={i} className={`flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-[14px] border ${isSelected ? 'bg-[#FACC15] border-[#FACC15] text-black shadow-md' : 'bg-zinc-900 border-black text-[#FACC15] dark:bg-black dark:border-white/10 dark:text-[#FACC15]'}`}>
+                                            <item.icon size={14} className="mb-1" strokeWidth={isSelected ? 3 : 2.5} />
+                                            <span className={`text-xs sm:text-[13px] font-black leading-none mb-0.5 ${isSelected ? 'text-black' : 'text-white'}`}>{item.value}</span>
+                                            <span className={`text-[8px] sm:text-[9px] font-black uppercase tracking-widest leading-none opacity-90 ${isSelected ? 'text-black/80' : 'text-zinc-400'}`}>{item.label}</span>
                                         </div>
                                     ))}
                                 </div>

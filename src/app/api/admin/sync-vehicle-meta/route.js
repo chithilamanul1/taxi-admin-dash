@@ -5,7 +5,7 @@ import { isAdmin } from '@/lib/admin-check';
 
 // Only vehicle metadata — NO tiers/rates. Order matches display order.
 const VEHICLE_METADATA = {
-    'mini-car': { name: 'Mini Car', image: '/vehicles/minicar.png', capacity: 2, luggage: 2, handLuggage: 2, sortOrder: 1 },
+    'mini-car': { name: 'Mini Car', image: '/vehicles/minicar.png', capacity: 2, luggage: 4, handLuggage: 2, sortOrder: 1 },
     'sedan': { name: 'Sedan', image: '/vehicles/sedan2.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 2 },
     'mini-van-every': { name: 'Mini Van (Every)', image: '/vehicles/susukievery.png', capacity: 3, luggage: 3, handLuggage: 3, sortOrder: 3 },
     'mini-van-05': { name: 'Mini Van (4 Seat)', image: '/vehicles/minivan5seat.png', capacity: 4, luggage: 4, handLuggage: 4, sortOrder: 4 },

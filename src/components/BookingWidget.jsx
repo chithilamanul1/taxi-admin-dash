@@ -1063,9 +1063,16 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         pricingSettings.airportRoundTripPackages,
                                                         pricingSettings.destinationRoundTripPackages
                                                     );
+
+                                                    // Calculate discount specifically for this vehicle's total
+                                                    const vehicleDiscount = appliedOffers.reduce((max, offer) => {
+                                                        const val = (offer.discountAmount || (priceInfo.total * (offer.discountPercentage / 100)));
+                                                        return Math.max(max, val);
+                                                    }, 0);
+
                                                     return {
                                                         ...v,
-                                                        calculatedTotal: priceInfo.total
+                                                        calculatedTotal: Math.max(0, priceInfo.total - vehicleDiscount)
                                                     };
                                                 })}
                                                 selectedId={vehicle}
