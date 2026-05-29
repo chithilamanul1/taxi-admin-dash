@@ -559,11 +559,14 @@ const CustomTourBooking = () => {
                   const dynamicPrice = calculateTotalForVehicle(v);
                   const imageClass = 'h-12 sm:h-14';
                   
-                  const isMini = v.id?.toLowerCase().includes('mini') || v.name?.toLowerCase().includes('mini') || v.name?.toLowerCase().includes('wagon');
-                  const isSedan = v.id?.toLowerCase().includes('sedan') || v.name?.toLowerCase().includes('sedan');
+                  const isSmallVehicle = v.id?.toLowerCase().match(/mini|sedan|wagon|van/) && !v.id?.toLowerCase().includes('bus');
+                  const isMiniVan = v.name?.toLowerCase().includes('mini van') || v.name?.toLowerCase().includes('van');
                   
                   // Uniform scaling to match the Honda Vezel / SUV baseline across the grid
-                  const imgScale = 'scale-[1.3] sm:scale-[1.35]';
+                  // Smaller vehicles need a higher scale factor because their source image has more padding
+                  const imgScale = (isSmallVehicle || isMiniVan) 
+                    ? 'scale-[1.65] sm:scale-[1.75]' 
+                    : 'scale-[1.3] sm:scale-[1.35]';
                   
                   return (
                     <button 
