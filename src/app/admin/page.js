@@ -18,6 +18,30 @@ import GalleryManager from '@/components/admin/GalleryManager'
 import DriverManager from '@/components/admin/DriverManager'
 import TrafficSurgeManager from '@/components/admin/TrafficSurgeManager'
 
+const LocalInput = ({ value, onChange, placeholder, className, title, type = "number" }) => {
+    const [val, setVal] = useState(value);
+    
+    useEffect(() => {
+        setVal(value);
+    }, [value]);
+
+    return (
+        <input 
+            type={type}
+            placeholder={placeholder}
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+            onBlur={() => {
+                if (Number(val) !== Number(value)) {
+                    onChange({ target: { value: val } });
+                }
+            }}
+            className={className}
+            title={title}
+        />
+    );
+};
+
 const ALL_VEHICLE_TYPES = [
     { value: 'mini-car', label: 'Wagon R (Mini Car)' },
     { value: 'sedan', label: 'Sedan' },
@@ -1399,7 +1423,7 @@ export default function AdminDashboard() {
                                                                                 <td key={tIdx} className="py-3 px-1 text-center">
                                                                                     <div className="inline-block space-y-1 text-left">
                                                                                         <div className="flex items-center gap-1">
-                                                                                            <input 
+                                                                                            <LocalInput 
                                                                                                 type="number"
                                                                                                 placeholder="KM"
                                                                                                 value={pkg.tiers?.[tIdx]?.km || 0}
@@ -1420,7 +1444,7 @@ export default function AdminDashboard() {
                                                                                         </div>
                                                                                         <div className="flex items-center gap-1">
                                                                                             <span className="text-[8px] font-black text-emerald-600">Rs.</span>
-                                                                                            <input 
+                                                                                            <LocalInput 
                                                                                                 type="number"
                                                                                                 placeholder="Price"
                                                                                                 value={pkg.tiers?.[tIdx]?.price || 0}
@@ -1586,7 +1610,7 @@ export default function AdminDashboard() {
                                                                                 <td key={tIdx} className="py-3 px-1 text-center">
                                                                                     <div className="inline-block space-y-1 text-left">
                                                                                         <div className="flex items-center gap-1">
-                                                                                            <input 
+                                                                                            <LocalInput 
                                                                                                 type="number"
                                                                                                 placeholder="KM"
                                                                                                 value={pkg.tiers?.[tIdx]?.km || 0}
@@ -1607,7 +1631,7 @@ export default function AdminDashboard() {
                                                                                         </div>
                                                                                         <div className="flex items-center gap-1">
                                                                                             <span className="text-[8px] font-black text-emerald-600">Rs.</span>
-                                                                                            <input 
+                                                                                            <LocalInput 
                                                                                                 type="number"
                                                                                                 placeholder="Price"
                                                                                                 value={pkg.tiers?.[tIdx]?.price || 0}
@@ -1781,7 +1805,7 @@ export default function AdminDashboard() {
                                                                                     <td key={tIdx} className="py-3 px-1 text-center">
                                                                                         <div className="inline-block space-y-1 text-left">
                                                                                             <div className="flex items-center gap-1">
-                                                                                                <input 
+                                                                                                <LocalInput 
                                                                                                     type="number"
                                                                                                     placeholder="KM"
                                                                                                     value={pkg.tiers?.[tIdx]?.km || 0}
@@ -1802,7 +1826,7 @@ export default function AdminDashboard() {
                                                                                             </div>
                                                                                             <div className="flex items-center gap-1">
                                                                                                 <span className="text-[8px] font-black text-emerald-600">Rs.</span>
-                                                                                                <input 
+                                                                                                <LocalInput 
                                                                                                     type="number"
                                                                                                     placeholder="Price"
                                                                                                     value={pkg.tiers?.[tIdx]?.price || 0}
