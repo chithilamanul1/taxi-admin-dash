@@ -2171,7 +2171,7 @@ export default function AdminDashboard() {
                                                             <img
                                                                 src={vehicle.image || '/vehicles/placeholder.png'}
                                                                 alt={vehicle.name}
-                                                                className="w-full h-full object-contain"
+                                                                className="w-full h-full object-contain scale-[1.3] sm:scale-[1.35]"
                                                                 onError={(e) => { e.target.src = '/vehicles/placeholder.png' }}
                                                             />
                                                         </div>

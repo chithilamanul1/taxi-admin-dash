@@ -676,7 +676,7 @@ const Prices = ({ initialDestination }) => {
                                                     <img
                                                         src={v.image}
                                                         alt={v.name}
-                                                        className={`w-full h-full object-contain transition-transform duration-700 group-hover:scale-125 ${v.imageScale ? 'scale-[1.5]' : 'scale-125'}`}
+                                                        className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-[1.4] scale-[1.3] sm:scale-[1.35]"
                                                     />
                                                 </div>
 

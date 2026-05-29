@@ -184,12 +184,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                         alt={vehicle.name}
                                         className={`
                                             object-contain transition-transform duration-500
-                                            ${mini
-                                                ? `w-[95%] h-[110px] sm:h-[130px] ${isSelected ? 'scale-[1.25] sm:scale-[1.3]' : 'scale-[1.1] sm:scale-[1.15] group-hover/card:scale-[1.2]'}`
-                                                : (vehicle.vehicleType === 'sedan' || (vehicle.name || '').toLowerCase().includes('sedan'))
-                                                    ? `w-[95%] h-[110px] sm:h-[130px] ${isSelected ? 'scale-[1.25] sm:scale-[1.3]' : 'scale-[1.1] sm:scale-[1.15] group-hover/card:scale-[1.2]'}`
-                                                    : `w-[90%] h-[100px] sm:h-[120px] ${isSelected ? 'scale-[1.2] sm:scale-[1.25]' : 'scale-[1.05] sm:scale-[1.1] group-hover/card:scale-[1.15]'}`
-                                            }
+                                            w-[90%] h-[100px] sm:h-[120px] ${isSelected ? 'scale-[1.25] sm:scale-[1.3]' : 'scale-[1.1] sm:scale-[1.15] group-hover/card:scale-[1.2]'}
                                         `}
                                     />
                                 </div>
