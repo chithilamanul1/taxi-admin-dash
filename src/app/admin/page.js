@@ -1317,7 +1317,7 @@ export default function AdminDashboard() {
                     {currentView === 'round-trips' && (
                         <div className="space-y-6">
                             {/* Round Trip Sub-Tabs */}
-                            <div className="bg-white rounded-xl shadow-sm p-4 flex gap-2">
+                            <div className="bg-white rounded-xl shadow-sm p-4 flex gap-2 flex-wrap">
                                 <button
                                     onClick={() => setRoundTripSubTab('packages')}
                                     className={`py-2 px-4 font-black text-xs uppercase tracking-widest transition-all rounded-lg ${roundTripSubTab === 'packages' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-50'}`}
@@ -1330,21 +1330,33 @@ export default function AdminDashboard() {
                                 >
                                     Destination Rates Overrides
                                 </button>
+                                <button
+                                    onClick={() => setRoundTripSubTab('airport')}
+                                    className={`py-2 px-4 font-black text-xs uppercase tracking-widest transition-all rounded-lg ${roundTripSubTab === 'airport' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-50'}`}
+                                >
+                                    Airport Round Tours
+                                </button>
+                                <button
+                                    onClick={() => setRoundTripSubTab('normal')}
+                                    className={`py-2 px-4 font-black text-xs uppercase tracking-widest transition-all rounded-lg ${roundTripSubTab === 'normal' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-50'}`}
+                                >
+                                    Normal Round Tours
+                                </button>
                             </div>
 
-                            {roundTripSubTab === 'packages' && (
+                            {roundTripSubTab === 'airport' && (
                                 <div className="bg-white rounded-xl shadow-sm p-8 animate-fade-in-up">
                                     <div className="flex items-center gap-4 mb-8">
                                         <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
                                             <Route size={24} strokeWidth={2.5} />
                                         </div>
                                         <div>
-                                            <h2 className="text-2xl font-bold text-emerald-950 uppercase tracking-tight">Round Trip & Taxi Tour Packages</h2>
-                                            <p className="text-sm text-slate-500 font-medium mt-1">Configure time and distance based hire packages with custom pricing.</p>
+                                            <h2 className="text-2xl font-bold text-emerald-950 uppercase tracking-tight">Airport Round Tour Packages</h2>
+                                            <p className="text-sm text-slate-500 font-medium mt-1">Configure hourly package configurations starting from the airport.</p>
                                         </div>
                                     </div>
 
-                                    <div className="bg-emerald-50/50 border border-emerald-100 rounded-[2rem] p-6 sm:p-8 shadow-sm mb-6">
+                                    <div className="bg-emerald-50/50 border border-emerald-100 rounded-[2rem] p-6 sm:p-8 shadow-sm">
                                         <div className="flex items-center justify-between mb-8">
                                             <div>
                                                 <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Airport Round Tour Packages</h4>
@@ -1442,6 +1454,20 @@ export default function AdminDashboard() {
                                             ));
                                         })()}
                                     </div>
+                                </div>
+                            )}
+
+                            {roundTripSubTab === 'normal' && (
+                                <div className="bg-white rounded-xl shadow-sm p-8 animate-fade-in-up">
+                                    <div className="flex items-center gap-4 mb-8">
+                                        <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
+                                            <Route size={24} strokeWidth={2.5} />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-2xl font-bold text-emerald-950 uppercase tracking-tight">Normal Round Tour Packages</h2>
+                                            <p className="text-sm text-slate-500 font-medium mt-1">Configure standard city parameters independently.</p>
+                                        </div>
+                                    </div>
 
                                     <div className="bg-white border border-slate-200 rounded-[2rem] p-6 sm:p-8 shadow-sm">
                                         <div className="flex items-center justify-between mb-8">
@@ -1537,8 +1563,23 @@ export default function AdminDashboard() {
                                                 />
                                             ));
                                         })()}
+                                    </div>
+                                </div>
+                            )}
 
-                                        <div className="bg-emerald-50/30 border border-emerald-100 rounded-[2rem] p-6 sm:p-8 shadow-sm mt-6 mb-6">
+                            {roundTripSubTab === 'packages' && (
+                                <div className="bg-white rounded-xl shadow-sm p-8 animate-fade-in-up">
+                                    <div className="flex items-center gap-4 mb-8">
+                                        <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
+                                            <Route size={24} strokeWidth={2.5} />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-2xl font-bold text-emerald-950 uppercase tracking-tight">Package Tiers</h2>
+                                            <p className="text-sm text-slate-500 font-medium mt-1">Configure destination-based round trip packages with custom pricing.</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-emerald-50/30 border border-emerald-100 rounded-[2rem] p-6 sm:p-8 shadow-sm mb-6">
                                             <div className="flex items-center justify-between mb-8">
                                                 <div>
                                                     <h4 className="font-black text-emerald-950 uppercase tracking-tight text-xl">Destination Round Tour Packages</h4>
@@ -1675,7 +1716,6 @@ export default function AdminDashboard() {
                                                 <ShieldCheck size={18} /> Update All Packages
                                             </button>
                                         </div>
-                                    </div>
                                 </div>
                             )}
 
