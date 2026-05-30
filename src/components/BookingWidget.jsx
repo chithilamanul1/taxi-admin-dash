@@ -105,6 +105,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [nameBoardPrice, setNameBoardPrice] = useState(2000); // Default, updated via API
     const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true });
     const [destinations, setDestinations] = useState([]);
+    const [airportTours, setAirportTours] = useState([]);
+    const [normalTours, setNormalTours] = useState([]);
     const [surgeRules, setSurgeRules] = useState([]);
 
     const [scheduledDate, setScheduledDate] = useState(null);
