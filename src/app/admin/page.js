@@ -524,6 +524,26 @@ export default function AdminDashboard() {
                         if (data.success && data.data) {
                             setPricingSettings(ensureAllVehicles(data.data))
                         }
+                    })
+                    .catch(err => console.error(err))
+
+                // Fetch airport tours
+                fetch('/api/admin/airport-tours', { cache: 'no-store' })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && Array.isArray(data.data)) {
+                            setAirportTours(data.data)
+                        }
+                    })
+                    .catch(err => console.error(err))
+
+                // Fetch normal tours
+                fetch('/api/admin/normal-tours', { cache: 'no-store' })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && Array.isArray(data.data)) {
+                            setNormalTours(data.data)
+                        }
                         setIsLoading(false)
                     })
                     .catch(err => {
