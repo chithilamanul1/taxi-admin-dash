@@ -300,10 +300,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         const fetchGlobalData = async () => {
             setIsLoadingCoupons(true);
             try {
-                const [marketingRes, destinationsRes, settingsRes, surgeRes, couponsRes] = await Promise.all([
+                const [marketingRes, destinationsRes, settingsRes, airportToursRes, normalToursRes, surgeRes, couponsRes] = await Promise.all([
                     fetch('/api/admin/marketing').then(r => r.json()).catch(err => { console.error("Error fetching offers:", err); return null; }),
                     fetch('/api/admin/destinations').then(r => r.json()).catch(err => { console.error("Error fetching destinations:", err); return null; }),
                     fetch('/api/admin/pricing-settings', { cache: 'no-store' }).then(r => r.json()).catch(err => { console.error("Failed to fetch pricing settings", err); return null; }),
+                    fetch('/api/admin/airport-tours', { cache: 'no-store' }).then(r => r.json()).catch(err => { console.error("Error", err); return null; }),
+                    fetch('/api/admin/normal-tours', { cache: 'no-store' }).then(r => r.json()).catch(err => { console.error("Error", err); return null; }),
                     fetch('/api/traffic-surge', { cache: 'no-store' }).then(r => r.json()).catch(err => { console.error("Failed to fetch surge rules", err); return null; }),
                     fetch('/api/coupons?public=true', { cache: 'no-store' }).then(r => r.json()).catch(err => { console.error("Error fetching coupons:", err); return null; })
                 ]);
@@ -316,6 +318,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 }
                 if (settingsRes?.success && settingsRes.data) {
                     setPricingSettings(settingsRes.data);
+                }
+                if (airportToursRes?.success && airportToursRes.data) {
+                    setAirportTours(airportToursRes.data);
+                }
+                if (normalToursRes?.success && normalToursRes.data) {
+                    setNormalTours(normalToursRes.data);
                 }
                 if (surgeRes?.success && surgeRes.data) {
                     setSurgeRules(surgeRes.data);
@@ -576,8 +584,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
         scheduledDate || currentDate,
         surgeRules,
         roundTripPackageId,
-        pricingSettings.roundTripPackages,
-        pricingSettings.airportRoundTripPackages,
+        normalTours,
+                                                                    airportTours,
         pricingSettings.destinationRoundTripPackages
     );
 
@@ -895,8 +903,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                                     scheduledDate || currentDate,
                                                                     surgeRules,
                                                                     roundTripPackageId,
-                                                                    pricingSettings.roundTripPackages,
-                                                                    pricingSettings.airportRoundTripPackages,
+                                                                    normalTours,
+                                                                    airportTours,
                                                                     pricingSettings.destinationRoundTripPackages
                                                                 );
                                                                 return {
@@ -1059,8 +1067,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         scheduledDate || currentDate,
                                                         surgeRules,
                                                         roundTripPackageId,
-                                                        pricingSettings.roundTripPackages,
-                                                        pricingSettings.airportRoundTripPackages,
+                                                        normalTours,
+                                                                    airportTours,
                                                         pricingSettings.destinationRoundTripPackages
                                                     );
 
@@ -1333,8 +1341,8 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         scheduledDate || currentDate,
                         surgeRules,
                         roundTripPackageId,
-                        pricingSettings.roundTripPackages,
-                        pricingSettings.airportRoundTripPackages,
+                        normalTours,
+                                                                    airportTours,
                         pricingSettings.destinationRoundTripPackages
                     );
                     return {

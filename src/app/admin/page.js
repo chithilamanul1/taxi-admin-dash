@@ -188,83 +188,9 @@ const ensureAllVehicles = (settingsData) => {
     if (!settingsData) return settingsData;
     const updatedSettings = { ...settingsData };
     
-    // Process roundTripPackages (Normal packages)
-    const existingNormalPackages = updatedSettings.roundTripPackages || [];
-    const existingHours = [...new Set(existingNormalPackages.map(p => p.hours))];
-    const normalHours = existingHours.length > 0 ? existingHours : [4, 8, 12, 24];
     
-    const normalPackages = [];
-    normalHours.forEach(h => {
-        ALL_VEHICLE_TYPES.forEach(vt => {
-            const existing = existingNormalPackages.find(p => p.hours === h && p.vehicleType === vt.value);
-            if (existing) {
-                const tiers = [...(existing.tiers || [])];
-                while (tiers.length < 4) {
-                    tiers.push({ km: (tiers.length + 1) * 10, price: 0 });
-                }
-                const packageId = existing.id || `pkg-${h}h-${vt.value}-${Date.now()}`;
-                normalPackages.push({ 
-                    ...existing, 
-                    id: packageId, 
-                    hours: existing.hours || h,
-                    vehicleType: existing.vehicleType || vt.value,
-                    tiers 
-                });
-            } else {
-                normalPackages.push({
-                    id: `pkg-${h}h-${vt.value}-${Date.now()}`,
-                    hours: h,
-                    vehicleType: vt.value,
-                    tiers: [
-                        { km: 10, price: 0 },
-                        { km: 20, price: 0 },
-                        { km: 30, price: 0 },
-                        { km: 40, price: 0 }
-                    ]
-                });
-            }
-        });
-    });
-    updatedSettings.roundTripPackages = normalPackages;
 
-    // Process airportRoundTripPackages
-    const existingAirportPackages = updatedSettings.airportRoundTripPackages || [];
-    const airportHours = [...new Set(existingAirportPackages.map(p => p.hours))];
-    const finalAirportHours = airportHours.length > 0 ? airportHours : [2, 4, 6, 8, 10, 12, 14];
     
-    const airportPackages = [];
-    finalAirportHours.forEach(h => {
-        ALL_VEHICLE_TYPES.forEach(vt => {
-            const existing = existingAirportPackages.find(p => p.hours === h && p.vehicleType === vt.value);
-            if (existing) {
-                const tiers = [...(existing.tiers || [])];
-                while (tiers.length < 4) {
-                    tiers.push({ km: (tiers.length + 1) * 50, price: 0 });
-                }
-                const packageId = existing.id || `air-pkg-${h}h-${vt.value}-${Date.now()}`;
-                airportPackages.push({ 
-                    ...existing, 
-                    id: packageId, 
-                    hours: existing.hours || h,
-                    vehicleType: existing.vehicleType || vt.value,
-                    tiers 
-                });
-            } else {
-                airportPackages.push({
-                    id: `air-pkg-${h}h-${vt.value}-${Date.now()}`,
-                    hours: h,
-                    vehicleType: vt.value,
-                    tiers: [
-                        { km: 50, price: 0 },
-                        { km: 100, price: 0 },
-                        { km: 150, price: 0 },
-                        { km: 200, price: 0 }
-                    ]
-                });
-            }
-        });
-    });
-    updatedSettings.airportRoundTripPackages = airportPackages;
 
     // Process destinationRoundTripPackages
     const existingDestinationPackages = updatedSettings.destinationRoundTripPackages || [];
@@ -332,6 +258,8 @@ export default function AdminDashboard() {
     const [editingVehicle, setEditingVehicle] = useState(null)
     const [editForm, setEditForm] = useState({})
     const [pricingSettings, setPricingSettings] = useState({ longDistanceThreshold: 175, longDistanceDiscountPercentage: 10, isActive: true, nameBoardPrice: 2000, waitingHourRate: 1000, roundTripPackages: [], airportRoundTripPackages: [], destinationRoundTripPackages: [] })
+    const [airportTours, setAirportTours] = useState([])
+    const [normalTours, setNormalTours] = useState([])
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     // Tours State
@@ -1399,24 +1327,7 @@ export default function AdminDashboard() {
                                                 <p className="text-xs text-emerald-800/60 font-medium mt-1">Pricing tiers for round tours starting from the Airport.</p>
                                             </div>
                                             <div className="flex items-center gap-3">
-                                                <button
-                                                    onClick={async () => {
-                                                        const res = await fetch('/api/admin/pricing-settings', {
-                                                            method: 'PUT',
-                                                            headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify(pricingSettings)
-                                                        });
-                                                        const data = await res.json();
-                                                        if (data.success) {
-                                                            alert('Packages saved successfully!');
-                                                        } else {
-                                                            alert('Failed to save packages.');
-                                                        }
-                                                    }}
-                                                    className="px-6 py-3 bg-emerald-950 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-black transition-all shadow-lg flex items-center gap-2"
-                                                >
-                                                    <ShieldCheck size={16} strokeWidth={3} /> Save Changes
-                                                </button>
+                                                
                                                 <button 
                                                 onClick={() => {
                                                     const hoursStr = prompt("Enter hour count for the new Airport Package (e.g. 5, 8, 12):");
@@ -1426,7 +1337,7 @@ export default function AdminDashboard() {
                                                         alert("Please enter a valid number of hours.");
                                                         return;
                                                     }
-                                                    const exists = (pricingSettings.airportRoundTripPackages || []).some(p => p.hours === newHours);
+                                                    const exists = airportTours.some(p => p.hours === newHours);
                                                     if (exists) {
                                                         alert(`Package for ${newHours} hours already exists.`);
                                                         return;
@@ -1442,10 +1353,7 @@ export default function AdminDashboard() {
                                                             { km: 200, price: 0 }
                                                         ]
                                                     }));
-                                                    setPricingSettings({
-                                                        ...pricingSettings,
-                                                        airportRoundTripPackages: [...(pricingSettings.airportRoundTripPackages || []), ...newPackages]
-                                                    });
+                                                    setAirportTours([...airportTours, ...newPackages]);
                                                 }}
                                                 className="px-6 py-3 bg-emerald-600 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-900/10 flex items-center gap-2"
                                             >
@@ -1455,7 +1363,7 @@ export default function AdminDashboard() {
                                         </div>
 
                                         {(() => {
-                                            const uniqueAirportHours = [...new Set((pricingSettings.airportRoundTripPackages || []).map(p => p.hours))].sort((a, b) => a - b);
+                                            const uniqueAirportHours = [...new Set(airportTours.map(p => p.hours))].sort((a, b) => a - b);
                                             if (uniqueAirportHours.length === 0) {
                                                 return (
                                                     <div className="py-12 flex flex-col items-center justify-center border-2 border-dashed border-emerald-200 rounded-3xl bg-white/50">
@@ -1473,45 +1381,36 @@ export default function AdminDashboard() {
                                                     key={`air-group-${hours}`}
                                                     hours={hours}
                                                     typeColor="emerald"
-                                                    initialPackages={(pricingSettings.airportRoundTripPackages || []).filter(p => p.hours === hours)}
+                                                    initialPackages={airportTours.filter(p => p.hours === hours)}
                                                     onEditHours={(oldHours) => {
                                                         const val = prompt(`Change hours for this package:`, oldHours);
                                                         if (val === null) return;
                                                         const newHours = Number(val);
                                                         if (isNaN(newHours) || newHours <= 0) return;
-                                                        const updated = (pricingSettings.airportRoundTripPackages || []).map(p => {
+                                                        const updated = airportTours.map(p => {
                                                             if (p.hours === oldHours) {
                                                                 return { ...p, hours: newHours };
                                                             }
                                                             return p;
                                                         });
-                                                        setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
+                                                        setAirportTours(updated);
                                                     }}
                                                     onDeleteGroup={(h) => {
                                                         if (!confirm(`Are you sure you want to delete all airport packages for ${h} hours?`)) return;
-                                                        const updated = (pricingSettings.airportRoundTripPackages || []).filter(p => p.hours !== h);
-                                                        setPricingSettings({ ...pricingSettings, airportRoundTripPackages: updated });
+                                                        const updated = airportTours.filter(p => p.hours !== h);
+                                                        setAirportTours(updated);
                                                     }}
                                                     onSaveGroup={async (updatedPackages) => {
-                                                        const updated = (pricingSettings.airportRoundTripPackages || []).map(p => {
+                                                        const updated = airportTours.map(p => {
                                                             if (p.hours === hours) {
                                                                 return updatedPackages.find(up => up.vehicleType === p.vehicleType) || p;
                                                             }
                                                             return p;
                                                         });
-                                                        const newSettings = { ...pricingSettings, airportRoundTripPackages: updated };
-                                                        setPricingSettings(newSettings);
-                                                        const res = await fetch('/api/admin/pricing-settings', {
-                                                            method: 'PUT',
-                                                            headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify(newSettings)
-                                                        });
+                                                        setAirportTours(updated);
+                                                        const res = await fetch('/api/admin/airport-tours', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ packages: updated }) });
                                                         const data = await res.json();
-                                                        if (data.success) {
-                                                            alert(`${hours}H Package saved successfully!`);
-                                                        } else {
-                                                            alert('Failed to save packages.');
-                                                        }
+                                                        if (data.success) { alert(`${hours}H Package saved successfully!`); } else { alert('Failed to save packages.'); }
                                                     }}
                                                 />
                                             ));
@@ -1533,7 +1432,7 @@ export default function AdminDashboard() {
                                                         alert("Please enter a valid number of hours.");
                                                         return;
                                                     }
-                                                    const exists = (pricingSettings.roundTripPackages || []).some(p => p.hours === newHours);
+                                                    const exists = normalTours.some(p => p.hours === newHours);
                                                     if (exists) {
                                                         alert(`Package for ${newHours} hours already exists.`);
                                                         return;
@@ -1549,10 +1448,7 @@ export default function AdminDashboard() {
                                                             { km: 40, price: 0 }
                                                         ]
                                                     }));
-                                                    setPricingSettings({
-                                                        ...pricingSettings,
-                                                        roundTripPackages: [...(pricingSettings.roundTripPackages || []), ...newPackages]
-                                                    });
+                                                    setNormalTours([...normalTours, ...newPackages]);
                                                 }}
                                                 className="px-6 py-3 bg-emerald-900 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-emerald-800 transition-all shadow-lg shadow-emerald-900/10 flex items-center gap-2"
                                             >
@@ -1561,7 +1457,7 @@ export default function AdminDashboard() {
                                         </div>
 
                                         {(() => {
-                                            const uniqueNormalHours = [...new Set((pricingSettings.roundTripPackages || []).map(p => p.hours))].sort((a, b) => a - b);
+                                            const uniqueNormalHours = [...new Set(normalTours.map(p => p.hours))].sort((a, b) => a - b);
                                             if (uniqueNormalHours.length === 0) {
                                                 return (
                                                     <div className="py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl">
@@ -1579,45 +1475,36 @@ export default function AdminDashboard() {
                                                     key={`norm-group-${hours}`}
                                                     hours={hours}
                                                     typeColor="slate"
-                                                    initialPackages={(pricingSettings.roundTripPackages || []).filter(p => p.hours === hours)}
+                                                    initialPackages={normalTours.filter(p => p.hours === hours)}
                                                     onEditHours={(oldHours) => {
                                                         const val = prompt(`Change hours for this package:`, oldHours);
                                                         if (val === null) return;
                                                         const newHours = Number(val);
                                                         if (isNaN(newHours) || newHours <= 0) return;
-                                                        const updated = (pricingSettings.roundTripPackages || []).map(p => {
+                                                        const updated = normalTours.map(p => {
                                                             if (p.hours === oldHours) {
                                                                 return { ...p, hours: newHours };
                                                             }
                                                             return p;
                                                         });
-                                                        setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                        setNormalTours(updated);
                                                     }}
                                                     onDeleteGroup={(h) => {
                                                         if (!confirm(`Are you sure you want to delete all normal packages for ${h} hours?`)) return;
-                                                        const updated = (pricingSettings.roundTripPackages || []).filter(p => p.hours !== h);
-                                                        setPricingSettings({ ...pricingSettings, roundTripPackages: updated });
+                                                        const updated = normalTours.filter(p => p.hours !== h);
+                                                        setNormalTours(updated);
                                                     }}
                                                     onSaveGroup={async (updatedPackages) => {
-                                                        const updated = (pricingSettings.roundTripPackages || []).map(p => {
+                                                        const updated = normalTours.map(p => {
                                                             if (p.hours === hours) {
                                                                 return updatedPackages.find(up => up.vehicleType === p.vehicleType) || p;
                                                             }
                                                             return p;
                                                         });
-                                                        const newSettings = { ...pricingSettings, roundTripPackages: updated };
-                                                        setPricingSettings(newSettings);
-                                                        const res = await fetch('/api/admin/pricing-settings', {
-                                                            method: 'PUT',
-                                                            headers: { 'Content-Type': 'application/json' },
-                                                            body: JSON.stringify(newSettings)
-                                                        });
+                                                        setNormalTours(updated);
+                                                        const res = await fetch('/api/admin/normal-tours', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ packages: updated }) });
                                                         const data = await res.json();
-                                                        if (data.success) {
-                                                            alert(`${hours}H Package saved successfully!`);
-                                                        } else {
-                                                            alert('Failed to save packages.');
-                                                        }
+                                                        if (data.success) { alert(`${hours}H Package saved successfully!`); } else { alert('Failed to save packages.'); }
                                                     }}
                                                 />
                                             ));
@@ -1630,24 +1517,7 @@ export default function AdminDashboard() {
                                                     <p className="text-xs text-emerald-800/60 font-medium mt-1">Default pricing tiers for destination round tours.</p>
                                                 </div>
                                                 <div className="flex items-center gap-3">
-                                                    <button
-                                                        onClick={async () => {
-                                                            const res = await fetch('/api/admin/pricing-settings', {
-                                                                method: 'PUT',
-                                                                headers: { 'Content-Type': 'application/json' },
-                                                                body: JSON.stringify(pricingSettings)
-                                                            });
-                                                            const data = await res.json();
-                                                            if (data.success) {
-                                                                alert('Packages saved successfully!');
-                                                            } else {
-                                                                alert('Failed to save packages.');
-                                                            }
-                                                        }}
-                                                        className="px-6 py-3 bg-emerald-950 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-black transition-all shadow-lg flex items-center gap-2"
-                                                    >
-                                                        <ShieldCheck size={16} strokeWidth={3} /> Save Changes
-                                                    </button>
+                                                    
                                                     <button 
                                                     onClick={() => {
                                                         const hoursStr = prompt("Enter hour count for the new Destination Package (e.g. 5, 8, 12):");
