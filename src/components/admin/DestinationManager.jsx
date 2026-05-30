@@ -22,6 +22,7 @@ export default function DestinationManager() {
     const [search, setSearch] = useState('');
     const [form, setForm] = useState({});
     const [selectedVehicle, setSelectedVehicle] = useState(VEHICLE_TYPES[0].slug);
+    const [saving, setSaving] = useState(false);
 
     const VEHICLE_ICONS = {
         "mini-car": { icon: Zap, color: "text-emerald-500", bg: "bg-emerald-500/10" },
@@ -53,6 +54,7 @@ export default function DestinationManager() {
 
     const handleSave = async (e) => {
         e.preventDefault();
+        setSaving(true);
         const method = form._id ? 'PUT' : 'POST';
         try {
             const res = await fetch('/api/admin/destinations', {
@@ -70,6 +72,8 @@ export default function DestinationManager() {
             }
         } catch (err) {
             alert('Error occurred');
+        } finally {
+            setSaving(false);
         }
     };
 
