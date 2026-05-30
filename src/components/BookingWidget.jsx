@@ -615,6 +615,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             return;
         }
 
+        if (passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.luggage < 1) {
+            alert("Please enter the number of luggage bags (enter 0 if none). Wait, luggage is mandatory.");
+            return;
+        }
+
         const currentVehicleData = vehiclePricing[vehicle];
         if (currentVehicleData) {
             const totalPax = (passengerCount.adults || 0) + (passengerCount.children || 0);
@@ -851,7 +856,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                         <div className="flex items-center gap-3">
                                                             <Calendar size={18} className={scheduledDate ? 'text-emerald-500' : step1Errors.dateTime ? 'text-red-500' : 'text-slate-400'} />
                                                             <span className="uppercase tracking-widest text-[11px]">
-                                                                {scheduledDate && scheduledTime ? `${new Date(scheduledDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${scheduledTime}` : 'Select Date & Time'}
+                                                                {scheduledDate && scheduledTime ? `${new Date(scheduledDate + (scheduledDate.includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${scheduledTime}` : 'Select Date & Time'}
                                                             </span>
                                                         </div>
                                                         <div className="flex items-center gap-2">
@@ -909,9 +914,17 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                                     airportTours,
                                                                     pricingSettings.destinationRoundTripPackages
                                                                 );
+                                                                // Calculate discount specifically for this vehicle's total
+                                                                const vehicleDiscount = appliedOffers.reduce((max, offer) => {
+                                                                    const val = (offer.discountAmount || (priceInfo.total * (offer.discountPercentage / 100)));
+                                                                    return Math.max(max, val);
+                                                                }, 0);
+
                                                                 return {
                                                                     ...v,
-                                                                    calculatedTotal: priceInfo.total
+                                                                    calculatedTotal: Math.max(0, priceInfo.total - vehicleDiscount),
+                                                                    originalTotal: priceInfo.total,
+                                                                    hasDiscount: vehicleDiscount > 0
                                                                 };
                                                             })}
                                                             selectedId={vehicle}
@@ -1082,7 +1095,9 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
                                                     return {
                                                         ...v,
-                                                        calculatedTotal: Math.max(0, priceInfo.total - vehicleDiscount)
+                                                        calculatedTotal: Math.max(0, priceInfo.total - vehicleDiscount),
+                                                        originalTotal: priceInfo.total,
+                                                        hasDiscount: vehicleDiscount > 0
                                                     };
                                                 })}
                                                 selectedId={vehicle}
@@ -1111,6 +1126,14 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             <button onClick={() => {
                                                 if (!passengerCount.adults || passengerCount.adults < 1) {
                                                     alert('Please add at least 1 adult passenger.');
+                                                    return;
+                                                }
+                                                if (passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.luggage < 1) {
+                                                    alert('Please enter at least 1 luggage bag.');
+                                                    return;
+                                                }
+                                                if (passengerCount.handLuggage === undefined || passengerCount.handLuggage === null || passengerCount.handLuggage < 1) {
+                                                    alert('Please enter at least 1 hand luggage bag.');
                                                     return;
                                                 }
                                                 setStep(3);

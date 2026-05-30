@@ -156,6 +156,12 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 {/* Pricing */}
                                 {vehicle.calculatedTotal >= 0 && (
                                     <div className="text-center relative z-10 flex flex-col items-center mb-4">
+                                        {vehicle.hasDiscount && (
+                                            <div className="text-[10px] font-bold text-slate-400 line-through mb-0.5">
+                                                {convertPrice(Number(vehicle.originalTotal) || 0).symbol}
+                                                {(Number(convertPrice(Number(vehicle.originalTotal) || 0).value) || 0).toLocaleString()}
+                                            </div>
+                                        )}
                                         <div className="flex items-baseline justify-center gap-1.5">
                                             <span className="text-xl font-black text-[#FACC15]">{convertPrice(Number(vehicle.calculatedTotal) || 0).symbol}</span>
                                             <span className="text-4xl sm:text-5xl font-black text-black dark:text-white tracking-tighter leading-none">

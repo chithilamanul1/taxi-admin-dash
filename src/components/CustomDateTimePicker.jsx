@@ -108,7 +108,7 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                     <div className="flex items-baseline gap-2">
                         {view === 'date' ? (
                             <h2 className="text-3xl font-bold text-white">
-                                {date ? new Date(date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : 'Tap to select'}
+                                {date ? new Date(date + (date.includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : 'Tap to select'}
                             </h2>
                         ) : (
                             <div className="flex items-end gap-2">

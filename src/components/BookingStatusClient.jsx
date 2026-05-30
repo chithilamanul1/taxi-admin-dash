@@ -237,7 +237,7 @@ export default function BookingStatusClient({ booking }) {
                                     </div>
                                     <div>
                                         <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Scheduled Date</p>
-                                        <p className="font-bold text-lg text-slate-800">{booking.scheduledDate ? new Date(booking.scheduledDate).toLocaleDateString() : 'TBD'}</p>
+                                        <p className="font-bold text-lg text-slate-800">{booking.scheduledDate ? new Date(booking.scheduledDate + (booking.scheduledDate.includes('T') ? '' : 'T12:00:00')).toLocaleDateString() : 'TBD'}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-5 p-4 rounded-xl bg-white border border-slate-100 shadow-sm">

@@ -561,7 +561,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 if (!formData.flightNumber) newErrors.flightNumber = true;
             }
             // Enforce luggage selection and adult count (Hard Stop)
-            if (formData.passengerCount.luggage === undefined || formData.passengerCount.luggage === null) newErrors.luggage = true;
+            if (formData.passengerCount.luggage === undefined || formData.passengerCount.luggage === null || formData.passengerCount.luggage < 1) newErrors.luggage = true;
+            if (formData.passengerCount.handLuggage === undefined || formData.passengerCount.handLuggage === null || formData.passengerCount.handLuggage < 1) newErrors.handLuggage = true;
             if (!formData.passengerCount.adults || formData.passengerCount.adults < 1) newErrors.adults = true;
         }
         
