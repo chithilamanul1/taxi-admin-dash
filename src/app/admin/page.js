@@ -35,7 +35,7 @@ const ALL_VEHICLE_TYPES = [
     { value: 'coster-coach', label: 'Coster Coach' }
 ];
 
-const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup, onEditHours, typeColor }) => {
+const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup, onEditHours, typeColor, onFocus, onBlur }) => {
     const [formState, setFormState] = useState(() => JSON.parse(JSON.stringify(initialPackages)));
     const [isSaving, setIsSaving] = useState(false);
     const [saveSuccess, setSaveSuccess] = useState(false);
@@ -157,6 +157,8 @@ const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup,
                                                         placeholder="KM"
                                                         value={pkg.tiers?.[tIdx]?.km ?? 0}
                                                         onChange={(e) => handleInputChange(vt.value, tIdx, 'km', e.target.value)}
+                                                        onFocus={onFocus}
+                                                        onBlur={onBlur}
                                                         className="w-12 bg-slate-50 border-none rounded px-1 py-0.5 text-[9px] font-black outline-none focus:ring-1 focus:ring-emerald-500/20"
                                                     />
                                                     <span className="text-[7px] font-bold text-slate-300 uppercase">KM</span>
@@ -168,6 +170,8 @@ const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup,
                                                         placeholder="Price"
                                                         value={pkg.tiers?.[tIdx]?.price ?? 0}
                                                         onChange={(e) => handleInputChange(vt.value, tIdx, 'price', e.target.value)}
+                                                        onFocus={onFocus}
+                                                        onBlur={onBlur}
                                                         className={`w-20 bg-white border border-${typeColor}-100 rounded px-1 py-0.5 text-xs font-black text-${typeColor === 'emerald' ? 'emerald-600' : 'slate-600'} outline-none focus:ring-1 focus:ring-${typeColor}-500/20`}
                                                     />
                                                 </div>
@@ -629,7 +633,7 @@ export default function AdminDashboard() {
         // Auto-refresh every 45 seconds to keep it fresh but not annoying
         // Only refresh if NO MODALS/EDITING IS ACTIVE
         const interval = setInterval(() => {
-            const isEditing = !!editingVehicle || !!editingTour || !!editingPost || !!editingTeam || !!selectedTicket || !!selectedBooking;
+            const isEditing = !!editingVehicle || !!editingTour || !!editingPost || !!editingTeam || !!selectedTicket || !!selectedBooking || isPackageEditing;
             if (!isEditing) {
                 fetchData();
             }
@@ -1402,6 +1406,8 @@ export default function AdminDashboard() {
                                                     hours={hours}
                                                     typeColor="emerald"
                                                     initialPackages={airportTours.filter(p => p.hours === hours)}
+                                                    onFocus={() => setIsPackageEditing(true)}
+                                                    onBlur={() => setIsPackageEditing(false)}
                                                     onEditHours={(oldHours) => {
                                                         const val = prompt(`Change hours for this package:`, oldHours);
                                                         if (val === null) return;
@@ -1496,6 +1502,8 @@ export default function AdminDashboard() {
                                                     hours={hours}
                                                     typeColor="slate"
                                                     initialPackages={normalTours.filter(p => p.hours === hours)}
+                                                    onFocus={() => setIsPackageEditing(true)}
+                                                    onBlur={() => setIsPackageEditing(false)}
                                                     onEditHours={(oldHours) => {
                                                         const val = prompt(`Change hours for this package:`, oldHours);
                                                         if (val === null) return;
