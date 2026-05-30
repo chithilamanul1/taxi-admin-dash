@@ -22,6 +22,7 @@ const CustomTourBooking = () => {
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState('');
   const [pricingSettings, setPricingSettings] = useState(null);
+  const [airportTours, setAirportTours] = useState([]);
   const [destinations, setDestinations] = useState([]);
   const [surgeRules, setSurgeRules] = useState([]);
 
@@ -102,6 +103,13 @@ const CustomTourBooking = () => {
         if (data.success) setPricingSettings(data.data);
       })
       .catch(err => console.error("Error fetching pricing settings:", err));
+
+    fetch('/api/admin/airport-tours')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setAirportTours(data.data);
+      })
+      .catch(err => console.error("Error fetching airport tours:", err));
 
     fetch('/api/admin/destinations')
       .then(res => res.json())
@@ -188,7 +196,7 @@ const CustomTourBooking = () => {
       return destOverride.roundTripPackages;
     }
     return tab === 'airport'
-      ? (pricingSettings?.airportRoundTripPackages || [])
+      ? (airportTours || [])
       : (pricingSettings?.destinationRoundTripPackages || []);
   };
 
