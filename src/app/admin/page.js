@@ -62,7 +62,9 @@ const AdminPackageGroup = ({ hours, initialPackages, onSaveGroup, onDeleteGroup,
         setFormState(prev => prev.map(p => {
             if (p.vehicleType === vehicleType) {
                 const tiers = [...p.tiers];
-                tiers[tIdx] = { ...tiers[tIdx], [field]: value === '' ? '' : Number(value) };
+                const parsedNumericValue = value === "" ? null : Number(value);
+                // Ensure literal 0 is processed as valid data state instead of falling back to default
+                tiers[tIdx] = { ...tiers[tIdx], [field]: parsedNumericValue !== null ? parsedNumericValue : 0 };
                 return { ...p, tiers };
             }
             return p;
@@ -1450,9 +1452,9 @@ export default function AdminDashboard() {
                                                             return p;
                                                         });
                                                         setAirportTours(updated);
-                                                        const heavyTypes = ['kdh', 'van', 'mini-bus', 'bus', 'coaster', 'coach'];
-                                                        const normalPkgs = updatedPackages.filter(p => !heavyTypes.some(t => p.vehicleType.toLowerCase().includes(t)));
-                                                        const heavyPkgs = updatedPackages.filter(p => heavyTypes.some(t => p.vehicleType.toLowerCase().includes(t)));
+                                                        const heavyTypes = ['kdh', 'van', 'mini-bus', 'bus', 'coaster', 'coach', 'kdh-van', 'kdh-flatroof', 'kdh-highroof'];
+                                                        const normalPkgs = updatedPackages.filter(p => !heavyTypes.some(t => p.vehicleType === t || p.vehicleType.includes(t)));
+                                                        const heavyPkgs = updatedPackages.filter(p => heavyTypes.some(t => p.vehicleType === t || p.vehicleType.includes(t)));
 
                                                         const promises = [];
                                                         if (normalPkgs.length > 0) promises.push(fetch('/api/admin/airport-tours/group', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ hours, packages: normalPkgs }) }));
@@ -1461,7 +1463,12 @@ export default function AdminDashboard() {
                                                         const results = await Promise.all(promises);
                                                         const allSuccess = (await Promise.all(results.map(r => r.json()))).every(data => data.success);
                                                         
-                                                        if (allSuccess) { alert(`${hours}H Package saved successfully!`); } else { alert('Failed to save some packages.'); }
+                                                        if (allSuccess) { 
+                                                            alert(`${hours}H Package saved successfully!`); 
+                                                            router.refresh(); 
+                                                        } else { 
+                                                            alert('Failed to save some packages.'); 
+                                                        }
                                                     }}
                                                 />
                                             ));
@@ -1569,9 +1576,9 @@ export default function AdminDashboard() {
                                                             return p;
                                                         });
                                                         setNormalTours(updated);
-                                                        const heavyTypes = ['kdh', 'van', 'mini-bus', 'bus', 'coaster', 'coach'];
-                                                        const normalPkgs = updatedPackages.filter(p => !heavyTypes.some(t => p.vehicleType.toLowerCase().includes(t)));
-                                                        const heavyPkgs = updatedPackages.filter(p => heavyTypes.some(t => p.vehicleType.toLowerCase().includes(t)));
+                                                        const heavyTypes = ['kdh', 'van', 'mini-bus', 'bus', 'coaster', 'coach', 'kdh-van', 'kdh-flatroof', 'kdh-highroof'];
+                                                        const normalPkgs = updatedPackages.filter(p => !heavyTypes.some(t => p.vehicleType === t || p.vehicleType.includes(t)));
+                                                        const heavyPkgs = updatedPackages.filter(p => heavyTypes.some(t => p.vehicleType === t || p.vehicleType.includes(t)));
 
                                                         const promises = [];
                                                         if (normalPkgs.length > 0) promises.push(fetch('/api/admin/normal-tours/group', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ hours, packages: normalPkgs }) }));
@@ -1580,7 +1587,12 @@ export default function AdminDashboard() {
                                                         const results = await Promise.all(promises);
                                                         const allSuccess = (await Promise.all(results.map(r => r.json()))).every(data => data.success);
                                                         
-                                                        if (allSuccess) { alert(`${hours}H Package saved successfully!`); } else { alert('Failed to save some packages.'); }
+                                                        if (allSuccess) { 
+                                                            alert(`Normal Tour ${hours}H Package saved successfully!`); 
+                                                            router.refresh();
+                                                        } else { 
+                                                            alert('Failed to save some packages.'); 
+                                                        }
                                                     }}
                                                 />
                                             ));
