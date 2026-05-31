@@ -571,10 +571,10 @@ const CustomTourBooking = () => {
                       key={v.id} 
                       type="button"
                       onClick={() => setSelectedVehicle(v)} 
-                      className={`flex-shrink-0 w-[44vw] sm:w-auto snap-start flex flex-col items-center p-2 sm:p-2.5 rounded-2xl transition-all duration-300 border text-center relative group
+                      className={`flex-shrink-0 w-[44vw] sm:w-auto snap-start flex flex-col items-center p-2 sm:p-2.5 rounded-2xl transition-all duration-300 border text-center relative overflow-hidden group
                         ${isActive 
-                          ? 'bg-[#FACC15]/10 dark:bg-zinc-800/80 border-[#FACC15] shadow-sm' 
-                          : 'bg-transparent border-transparent hover:bg-slate-50/50 dark:hover:bg-zinc-800/40 shadow-none'}`}
+                          ? 'bg-[#FACC15]/10 dark:bg-zinc-800/80 border-[#FACC15] shadow-md' 
+                          : 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 hover:shadow-sm'}`}
                     >
                       {/* Vehicle images — uniform fixed box, object-contain handles all sizing */}
                       <div className="h-24 sm:h-28 mb-1 flex items-center justify-center w-full group-hover:scale-105 transition-transform duration-300 relative overflow-hidden">
