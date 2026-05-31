@@ -581,7 +581,7 @@ const CustomTourBooking = () => {
                         <img 
                           src={v.image || '/vehicles/minicar.png'} 
                           alt={v.name} 
-                          className="w-full h-full object-contain drop-shadow-sm select-none pointer-events-none"
+                          className={`w-full h-full object-contain drop-shadow-sm select-none pointer-events-none ${v.name?.toLowerCase().includes('sedan') || v.id?.toLowerCase().includes('sedan') ? 'scale-[1.45]' : ''}`}
                         />
                       </div>
                       
