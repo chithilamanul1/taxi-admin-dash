@@ -571,19 +571,22 @@ const CustomTourBooking = () => {
                   const isMiniVan = v.name?.toLowerCase().includes('mini van') || v.name?.toLowerCase().includes('van');
                   
                   const isMiniBus = v.name?.toLowerCase().includes('mini bus') || v.id?.toLowerCase().includes('mini-bus');
-                  const isCoasterOrCoach = v.name?.toLowerCase().includes('coaster') || v.name?.toLowerCase().includes('coach');
+                  const isCoaster = v.name?.toLowerCase().includes('coaster');
+                  const isCoach = v.name?.toLowerCase().includes('coach');
                   const isSedan = v.name?.toLowerCase().includes('sedan') || v.id?.toLowerCase().includes('sedan');
                   
-                  // Uniform scaling to match the Honda Vezel / SUV baseline across the grid
-                  // Smaller vehicles need a higher scale factor because their source image has more padding
+                  // Uniform scaling — tuned per vehicle so every card matches the Van's visual footprint
+                  // Each source image has a different native size, so each needs its own multiplier
                   const imgScale = isSedan
                     ? 'scale-[2.0] sm:scale-[2.1]'
                     : (isSmallVehicle || isMiniVan) 
                     ? 'scale-[1.65] sm:scale-[1.75]' 
                     : isMiniBus 
-                    ? 'scale-[0.65] sm:scale-[0.7]'
-                    : isCoasterOrCoach
-                    ? 'scale-[2.0] sm:scale-[2.1]'
+                    ? 'scale-[0.5] sm:scale-[0.55]'
+                    : isCoaster
+                    ? 'scale-[3.0] sm:scale-[3.2]'
+                    : isCoach
+                    ? 'scale-[0.7] sm:scale-[0.75]'
                     : 'scale-[1.3] sm:scale-[1.35]';
                   
                   return (
