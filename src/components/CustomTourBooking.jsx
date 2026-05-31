@@ -580,7 +580,7 @@ const CustomTourBooking = () => {
                     : (isSmallVehicle || isMiniVan) 
                     ? 'scale-[1.65] sm:scale-[1.75]' 
                     : isBus 
-                    ? 'scale-100 sm:scale-105'
+                    ? 'scale-[0.8] sm:scale-[0.85]'
                     : 'scale-[1.3] sm:scale-[1.35]';
                   
                   return (
