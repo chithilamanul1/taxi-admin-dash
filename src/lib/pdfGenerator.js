@@ -2,8 +2,8 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 const COLORS = {
-    brand: [30, 58, 95],     // #1e3a5f — Seranex Lanka corporate blue
-    accent: [41, 98, 168],   // #2962a8 — lighter blue for highlights
+    brand: [154, 107, 0],    // #9A6B00 — Airport Taxis dark gold
+    accent: [180, 130, 10],  // #B4820A — lighter gold for highlights
     amber: [245, 158, 11],   // #f59e0b
     slate: [71, 85, 105],    // #475569
     black: [15, 23, 42]      // #0f172a
