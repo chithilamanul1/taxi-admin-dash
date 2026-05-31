@@ -570,10 +570,14 @@ const CustomTourBooking = () => {
                   const isSmallVehicle = v.id?.toLowerCase().match(/mini|sedan|wagon|van/) && !v.id?.toLowerCase().includes('bus');
                   const isMiniVan = v.name?.toLowerCase().includes('mini van') || v.name?.toLowerCase().includes('van');
                   
+                  const isBus = v.name?.toLowerCase().includes('bus') || v.id?.toLowerCase().includes('bus');
+                  
                   // Uniform scaling to match the Honda Vezel / SUV baseline across the grid
                   // Smaller vehicles need a higher scale factor because their source image has more padding
                   const imgScale = (isSmallVehicle || isMiniVan) 
                     ? 'scale-[1.65] sm:scale-[1.75]' 
+                    : isBus 
+                    ? 'scale-100 sm:scale-105'
                     : 'scale-[1.3] sm:scale-[1.35]';
                   
                   return (
