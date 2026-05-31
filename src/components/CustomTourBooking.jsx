@@ -570,7 +570,8 @@ const CustomTourBooking = () => {
                   const isSmallVehicle = v.id?.toLowerCase().match(/mini|sedan|wagon|van/) && !v.id?.toLowerCase().includes('bus');
                   const isMiniVan = v.name?.toLowerCase().includes('mini van') || v.name?.toLowerCase().includes('van');
                   
-                  const isBus = v.name?.toLowerCase().includes('bus') || v.id?.toLowerCase().includes('bus');
+                  const isMiniBus = v.name?.toLowerCase().includes('mini bus') || v.id?.toLowerCase().includes('mini-bus');
+                  const isCoasterOrCoach = v.name?.toLowerCase().includes('coaster') || v.name?.toLowerCase().includes('coach');
                   const isSedan = v.name?.toLowerCase().includes('sedan') || v.id?.toLowerCase().includes('sedan');
                   
                   // Uniform scaling to match the Honda Vezel / SUV baseline across the grid
@@ -579,8 +580,10 @@ const CustomTourBooking = () => {
                     ? 'scale-[2.0] sm:scale-[2.1]'
                     : (isSmallVehicle || isMiniVan) 
                     ? 'scale-[1.65] sm:scale-[1.75]' 
-                    : isBus 
+                    : isMiniBus 
                     ? 'scale-[0.8] sm:scale-[0.85]'
+                    : isCoasterOrCoach
+                    ? 'scale-[1.6] sm:scale-[1.7]'
                     : 'scale-[1.3] sm:scale-[1.35]';
                   
                   return (
