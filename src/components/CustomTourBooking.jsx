@@ -577,7 +577,7 @@ const CustomTourBooking = () => {
                           : 'bg-transparent border-transparent hover:bg-slate-50/50 dark:hover:bg-zinc-800/40 shadow-none'}`}
                     >
                       {/* Vehicle images — uniform fixed box, object-contain handles all sizing */}
-                      <div className="h-20 sm:h-24 mb-1 flex items-center justify-center w-full group-hover:scale-105 transition-transform duration-300 relative overflow-hidden">
+                      <div className="h-24 sm:h-28 mb-1 flex items-center justify-center w-full group-hover:scale-105 transition-transform duration-300 relative overflow-hidden">
                         <img 
                           src={v.image || '/vehicles/minicar.png'} 
                           alt={v.name} 
