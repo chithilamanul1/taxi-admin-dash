@@ -565,46 +565,23 @@ const CustomTourBooking = () => {
                 {vehicles.map((v) => {
                   const isActive = selectedVehicle?.id === v.id;
                   const dynamicPrice = calculateTotalForVehicle(v);
-                  const imageClass = 'h-12 sm:h-14';
-                  
-                  const isSmallVehicle = v.id?.toLowerCase().match(/mini|sedan|wagon|van/) && !v.id?.toLowerCase().includes('bus');
-                  const isMiniVan = v.name?.toLowerCase().includes('mini van') || v.name?.toLowerCase().includes('van');
-                  
-                  const isMiniBus = v.name?.toLowerCase().includes('mini bus') || v.id?.toLowerCase().includes('mini-bus');
-                  const isCoaster = v.name?.toLowerCase().includes('coaster');
-                  const isCoach = v.name?.toLowerCase().includes('coach');
-                  const isSedan = v.name?.toLowerCase().includes('sedan') || v.id?.toLowerCase().includes('sedan');
-                  
-                  // Uniform scaling — tuned per vehicle so every card matches the Van's visual footprint
-                  // Each source image has a different native size, so each needs its own multiplier
-                  const imgScale = isSedan
-                    ? 'scale-[2.0] sm:scale-[2.1]'
-                    : (isSmallVehicle || isMiniVan) 
-                    ? 'scale-[1.65] sm:scale-[1.75]' 
-                    : isMiniBus 
-                    ? 'scale-[0.5] sm:scale-[0.55]'
-                    : isCoaster
-                    ? 'scale-[3.0] sm:scale-[3.2]'
-                    : isCoach
-                    ? 'scale-[0.7] sm:scale-[0.75]'
-                    : 'scale-[1.3] sm:scale-[1.35]';
                   
                   return (
                     <button 
                       key={v.id} 
                       type="button"
                       onClick={() => setSelectedVehicle(v)} 
-                      className={`flex-shrink-0 w-[44vw] sm:w-auto snap-start flex flex-col items-center p-2 sm:p-2.5 rounded-2xl transition-all duration-300 border text-center relative overflow-hidden group
+                      className={`flex-shrink-0 w-[44vw] sm:w-auto snap-start flex flex-col items-center p-2 sm:p-2.5 rounded-2xl transition-all duration-300 border text-center relative group
                         ${isActive 
                           ? 'bg-[#FACC15]/10 dark:bg-zinc-800/80 border-[#FACC15] shadow-sm' 
                           : 'bg-transparent border-transparent hover:bg-slate-50/50 dark:hover:bg-zinc-800/40 shadow-none'}`}
                     >
-                      {/* Vehicle images */}
-                      <div className={`${imageClass} mb-1 flex items-center justify-center w-full group-hover:scale-105 transition-transform duration-300 relative`}>
+                      {/* Vehicle images — uniform fixed box, object-contain handles all sizing */}
+                      <div className="h-14 sm:h-16 mb-1 flex items-center justify-center w-full group-hover:scale-105 transition-transform duration-300 relative overflow-hidden">
                         <img 
                           src={v.image || '/vehicles/minicar.png'} 
                           alt={v.name} 
-                          className={`object-contain max-h-full max-w-full drop-shadow-sm select-none pointer-events-none transition-transform duration-300 ${imgScale}`}
+                          className="w-full h-full object-contain drop-shadow-sm select-none pointer-events-none"
                         />
                       </div>
                       

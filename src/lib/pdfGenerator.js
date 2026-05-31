@@ -2,20 +2,21 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 const COLORS = {
-    emerald: [6, 78, 59], // #064e3b
-    amber: [245, 158, 11], // #f59e0b
-    slate: [71, 85, 105], // #475569
-    black: [15, 23, 42]   // #0f172a
+    brand: [30, 58, 95],     // #1e3a5f — Seranex Lanka corporate blue
+    accent: [41, 98, 168],   // #2962a8 — lighter blue for highlights
+    amber: [245, 158, 11],   // #f59e0b
+    slate: [71, 85, 105],    // #475569
+    black: [15, 23, 42]      // #0f172a
 };
 
 export const generateBookingPDF = (booking) => {
     const doc = new jsPDF();
     const isCash = booking.paymentMethod === 'cash';
-    const accentColor = COLORS.emerald;
+    const accentColor = COLORS.brand;
 
     // -- Helper: Add Text Logo Only --
     doc.setFontSize(22);
-    doc.setTextColor(...COLORS.emerald);
+    doc.setTextColor(...COLORS.brand);
     doc.setFont(undefined, 'bold');
     doc.text("AIRPORT TAXIS", 15, 20);
     doc.setFontSize(8);
@@ -46,13 +47,13 @@ export const generateBookingPDF = (booking) => {
     doc.text("Email: info@srilankantaxi.lk | Web: www.srilankantaxi.lk", 15, 53);
 
     // -- Accent Line --
-    doc.setDrawColor(...COLORS.emerald);
+    doc.setDrawColor(...COLORS.brand);
     doc.setLineWidth(1);
     doc.line(15, 62, 195, 62);
 
     // -- Recipient Section --
     doc.setFontSize(11);
-    doc.setTextColor(...COLORS.emerald);
+    doc.setTextColor(...COLORS.brand);
     doc.setFont(undefined, 'bold');
     doc.text("BILL TO:", 15, 72);
 
@@ -74,7 +75,7 @@ export const generateBookingPDF = (booking) => {
     // -- Trip Status Badge --
     const badgeX = 140;
     const badgeY = 72;
-    doc.setFillColor(...(booking.paymentStatus === 'paid' ? COLORS.emerald : [220, 38, 38]));
+    doc.setFillColor(...(booking.paymentStatus === 'paid' ? COLORS.brand : [220, 38, 38]));
     doc.roundedRect(badgeX, badgeY, 55, 18, 3, 3, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(8);
@@ -112,7 +113,7 @@ export const generateBookingPDF = (booking) => {
             lineColor: [0, 0, 0], // Darker lines
             textColor: [0, 0, 0]  // Darker text
         },
-        headStyles: { fillColor: COLORS.emerald, textColor: 255, fontStyle: 'bold' },
+        headStyles: { fillColor: COLORS.brand, textColor: 255, fontStyle: 'bold' },
         columnStyles: { 0: { fontStyle: 'bold', cellWidth: 40, fillColor: [248, 250, 252] } },
     });
 
@@ -146,7 +147,7 @@ export const generateBookingPDF = (booking) => {
     if (booking.appliedCoupons && booking.appliedCoupons.length > 0) {
         booking.appliedCoupons.forEach(coupon => {
             doc.setFontSize(9);
-            doc.setTextColor(...COLORS.emerald);
+            doc.setTextColor(...COLORS.brand);
             doc.text(`Coupon (${coupon}):`, labelX, currentY);
             doc.text(`Applied`, valueX, currentY, { align: 'right' });
             currentY += 6;
@@ -168,7 +169,7 @@ export const generateBookingPDF = (booking) => {
     doc.setTextColor(...COLORS.black);
     doc.setFont(undefined, 'bold');
     doc.text("Total Amount:", labelX, currentY);
-    doc.setTextColor(...COLORS.emerald);
+    doc.setTextColor(...COLORS.brand);
     doc.text(`${currencyLabel} ${basePrice.toLocaleString(undefined, formatOptions)}`, valueX, currentY, { align: 'right' });
     currentY += 10;
 
@@ -178,7 +179,7 @@ export const generateBookingPDF = (booking) => {
         doc.setTextColor(...COLORS.black);
         doc.setFont(undefined, 'bold');
         doc.text("Amount Paid (50%):", labelX, currentY);
-        doc.setTextColor(...COLORS.emerald);
+        doc.setTextColor(...COLORS.brand);
         const paidAmount = (!isLKR && booking.displayPaidAmount) ? booking.displayPaidAmount : (booking.paidAmount || 0);
         doc.text(`${currencyLabel} ${paidAmount.toLocaleString(undefined, formatOptions)}`, valueX, currentY, { align: 'right' });
         currentY += 7;
@@ -213,7 +214,7 @@ export const generateBookingPDF = (booking) => {
     terms.forEach((line, i) => doc.text(line, 15, infoY + 6 + (i * 5)));
 
     // -- Footer --
-    doc.setFillColor(...COLORS.emerald);
+    doc.setFillColor(...COLORS.brand);
     doc.rect(0, 280, 210, 17, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(9);
