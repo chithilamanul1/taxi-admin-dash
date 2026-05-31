@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, Users, Briefcase, ShoppingBag, Wind, Lock, Check, ArrowRight } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
 
@@ -12,7 +12,15 @@ const isMiniCar = (vehicle) => {
 
 const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, pickupLocation, dropoffLocation, isCondensed = false, onToggleExpand }) => {
     const scrollRef = useRef(null);
+    const cardRefs = useRef({});
+    const [dismissedWarnings, setDismissedWarnings] = useState([]);
     const { convertPrice, rates, currency } = useCurrency();
+
+    useEffect(() => {
+        if (selectedId && cardRefs.current[selectedId]) {
+            cardRefs.current[selectedId].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+    }, [selectedId]);
 
     // Custom sorting logic for vehicles
     const sortedVehicles = [...vehicles].sort((a, b) => {
@@ -122,6 +130,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
 
                     return (
                         <div
+                            ref={(el) => (cardRefs.current[vehicle.vehicleType] = el)}
                             key={vehicle._id || vehicle.vehicleType}
                             onClick={() => suitable && onSelect(vehicle.vehicleType)}
                             className={`
@@ -137,13 +146,29 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                             `}
                             style={{ contain: 'layout' }}
                         >
-                            {!suitable && (
-                                <div className="absolute inset-0 z-30 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-[2px] flex flex-col items-center justify-center p-6 text-center rounded-[2rem]">
-                                    <div className="w-12 h-12 bg-red-50 dark:bg-red-950/30 rounded-2xl mb-4 flex items-center justify-center border border-red-100 dark:border-red-900/20">
-                                        <Lock size={22} className="text-red-500" strokeWidth={2.5} />
+                            {!suitable && !dismissedWarnings.includes(vehicle.vehicleType) && (
+                                <div 
+                                    className="absolute inset-0 z-30 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-[2px] flex flex-col items-center justify-center p-6 text-center rounded-[2rem] cursor-pointer"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setDismissedWarnings([...dismissedWarnings, vehicle.vehicleType]);
+                                    }}
+                                >
+                                    <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-3">
+                                        <Users className="text-red-600 dark:text-red-500" size={24} />
                                     </div>
                                     <p className="text-sm font-bold text-emerald-950 dark:text-white uppercase tracking-tight leading-tight">{reason}</p>
                                     <p className="text-[9px] text-red-600 font-bold mt-3 uppercase tracking-[0.2em] bg-red-50 dark:bg-red-950/30 px-4 py-1 rounded-full border border-red-100 dark:border-red-900/20">Select Larger Vehicle</p>
+                                    
+                                    <button 
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setDismissedWarnings([...dismissedWarnings, vehicle.vehicleType]);
+                                        }}
+                                        className="mt-4 bg-slate-900 dark:bg-white text-white dark:text-black px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all"
+                                    >
+                                        Close Warning
+                                    </button>
                                 </div>
                             )}
 

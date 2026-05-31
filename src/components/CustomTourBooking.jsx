@@ -548,7 +548,7 @@ const CustomTourBooking = () => {
                     ref={(el) => initAutocomplete(el, 0)} 
                     onChange={(e) => handleLocationChange(0, e.target.value)} 
                     placeholder="Enter Pickup Location" 
-                    className="w-full bg-slate-100/70 dark:bg-zinc-800/60 border border-slate-200/30 dark:border-white/5 rounded-xl py-2.5 pl-9 pr-4 outline-none font-bold text-[11px] text-slate-900 dark:text-white focus:border-[#FACC15] focus:ring-2 focus:ring-[#FACC15]/20 transition-all shadow-sm" 
+                    className="w-full bg-slate-100/70 dark:bg-zinc-800/60 border border-slate-400 dark:border-white/5 rounded-xl py-2.5 pl-9 pr-4 outline-none font-bold text-[11px] text-black dark:text-white focus:border-[#FACC15] focus:ring-2 focus:ring-[#FACC15]/20 transition-all shadow-sm" 
                   />
                 </div>
               </div>
@@ -610,11 +610,11 @@ const CustomTourBooking = () => {
             </div>
 
             {/* Stepper Selection & KM Limit (Step 1) */}
-            <div className="space-y-4 bg-slate-50/50 dark:bg-zinc-800/10 p-4 rounded-3xl border border-slate-100 dark:border-white/5">
+            <div className="space-y-4 bg-slate-50/50 dark:bg-zinc-800/10 p-4 rounded-3xl border border-slate-400 dark:border-white/5">
               {/* Stepper Selection */}
               <div className="space-y-2">
                 <label className="text-[9px] uppercase font-black text-slate-500 dark:text-slate-400 tracking-widest px-2 block">Select hours</label>
-                <div className="flex items-center bg-white dark:bg-zinc-850 border border-slate-200/80 dark:border-white/10 p-1 rounded-2xl shadow-sm">
+                <div className="flex items-center bg-white dark:bg-zinc-850 border border-slate-400 dark:border-white/10 p-1 rounded-2xl shadow-sm">
                   <button 
                     type="button"
                     onClick={() => {
@@ -624,13 +624,13 @@ const CustomTourBooking = () => {
                         updateDuration(avHours[currentIndex - 1]);
                       }
                     }} 
-                    className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-slate-600 dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
+                    className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-black dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
                   >
                     <Minus size={16} strokeWidth={3} />
                   </button>
-                  <div className="flex-1 text-center font-black text-slate-800 dark:text-white flex items-center justify-center gap-1.5">
+                  <div className="flex-1 text-center font-black text-black dark:text-white flex items-center justify-center gap-1.5">
                     <span className="text-lg font-black">{formData.taxiTourHours}</span>
-                    <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold">hours</span>
+                    <span className="text-[9px] uppercase tracking-widest text-slate-500 font-bold">hours</span>
                   </div>
                   <button 
                     type="button"
@@ -643,7 +643,7 @@ const CustomTourBooking = () => {
                         updateDuration(avHours[0]);
                       }
                     }} 
-                    className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-slate-600 dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
+                    className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-zinc-700/50 flex items-center justify-center text-black dark:text-white hover:bg-slate-100 active:scale-95 transition-all shadow-sm"
                   >
                     <Plus size={16} strokeWidth={3} />
                   </button>
@@ -664,7 +664,7 @@ const CustomTourBooking = () => {
                         className={`py-2 rounded-xl text-[10px] font-black transition-all border text-center tracking-widest
                           ${isSelected 
                             ? 'bg-[#FACC15] text-black border-[#FACC15] shadow-md' 
-                            : 'bg-white dark:bg-zinc-850 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-white/10 hover:border-yellow-400'}`}
+                            : 'bg-white dark:bg-zinc-850 text-black dark:text-slate-300 border-slate-400 dark:border-white/10 hover:border-yellow-400'}`}
                       >
                         {km} KM
                       </button>
@@ -773,7 +773,7 @@ const CustomTourBooking = () => {
                       ref={(el) => initAutocomplete(el, 0)} 
                       onChange={(e) => handleLocationChange(0, e.target.value)} 
                       placeholder="Enter Pickup Location" 
-                      className="w-full bg-slate-50/50 dark:bg-zinc-900 border border-slate-200/30 dark:border-white/5 rounded-xl py-2.5 pl-9 pr-4 outline-none font-bold text-[11px] text-slate-900 dark:text-white focus:border-[#FACC15] focus:ring-2 focus:ring-[#FACC15]/20 transition-all shadow-sm" 
+                      className="w-full bg-slate-50/50 dark:bg-zinc-900 border border-slate-400 dark:border-white/5 rounded-xl py-2.5 pl-9 pr-4 outline-none font-bold text-[11px] text-black dark:text-white focus:border-[#FACC15] focus:ring-2 focus:ring-[#FACC15]/20 transition-all shadow-sm" 
                     />
                   </div>
                 </div>
@@ -807,7 +807,7 @@ const CustomTourBooking = () => {
                             setFormData({ ...formData, placesList: newList });
                           }}
                           placeholder={`Stop ${idx + 1} (e.g. Sigiriya Rock)`}
-                          className="w-full bg-white dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 rounded-xl py-2.5 pl-9 pr-8 outline-none font-bold text-[11px] text-slate-800 dark:text-white focus:border-[#FACC15] transition-all shadow-sm"
+                          className="w-full bg-white dark:bg-zinc-800 border border-slate-400 dark:border-white/10 rounded-xl py-2.5 pl-9 pr-8 outline-none font-bold text-[11px] text-black dark:text-white focus:border-[#FACC15] transition-all shadow-sm"
                         />
                         {formData.placesList.length > 1 && (
                           <button 
@@ -897,32 +897,32 @@ const CustomTourBooking = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Pickup Date</label>
-                  <input type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-slate-900 dark:text-white" />
+                  <input type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-400 dark:border-white/10 rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white" />
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Pickup Time</label>
-                  <input type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-slate-900 dark:text-white" />
+                  <input type="time" value={formData.time} onChange={e => setFormData({ ...formData, time: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-400 dark:border-white/10 rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white" />
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Full Name</label>
-                  <input type="text" placeholder="John Doe" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-slate-900 dark:text-white" />
+                  <input type="text" placeholder="John Doe" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-400 dark:border-white/10 rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white" />
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">Email Address</label>
-                  <input type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-200/80 dark:border-white/10 rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-slate-900 dark:text-white" />
+                  <input type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} className="w-full bg-white dark:bg-zinc-800 border border-slate-400 dark:border-white/10 rounded-xl py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white" />
                 </div>
                 <div className="space-y-0.5">
                   <label className="text-[8px] uppercase font-black text-slate-400 tracking-widest px-2">WhatsApp / Phone</label>
-                  <div className="flex border border-slate-200/80 dark:border-white/10 rounded-xl overflow-hidden focus-within:border-[#FACC15] focus-within:ring-2 focus-within:ring-[#FACC15]/20 transition-all shadow-sm">
-                    <div className="bg-slate-100 dark:bg-zinc-800/80 px-3 flex items-center justify-center border-r border-slate-200/80 dark:border-white/10">
-                      <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400">+94</span>
+                  <div className="flex border border-slate-400 dark:border-white/10 rounded-xl overflow-hidden focus-within:border-[#FACC15] focus-within:ring-2 focus-within:ring-[#FACC15]/20 transition-all shadow-sm">
+                    <div className="bg-slate-100 dark:bg-zinc-800/80 px-3 flex items-center justify-center border-r border-slate-400 dark:border-white/10">
+                      <span className="text-[11px] font-bold text-black dark:text-slate-400">+94</span>
                     </div>
                     <input 
                       type="tel" 
                       placeholder="7X XXX XXXX" 
                       value={formData.phone.replace('+94', '').replace(/^0+/, '')} 
                       onChange={e => setFormData({ ...formData, phone: '+94' + e.target.value.replace(/[^0-9]/g, '').slice(0, 9) })} 
-                      className="w-full bg-white dark:bg-zinc-800 py-2 px-3 outline-none font-bold text-[11px] text-slate-900 dark:text-white" 
+                      className="w-full bg-white dark:bg-zinc-800 py-2 px-3 outline-none font-bold text-[11px] text-black dark:text-white" 
                     />
                   </div>
                 </div>

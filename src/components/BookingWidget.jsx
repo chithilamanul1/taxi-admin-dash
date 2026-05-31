@@ -1123,21 +1123,20 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             <button onClick={() => setStep(1)} className="flex items-center justify-center gap-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-white font-black text-xs uppercase tracking-widest px-5 py-4 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all" aria-label="Back to step 1">
                                                 <ArrowRight size={14} strokeWidth={3} className="rotate-180"/> Back
                                             </button>
-                                            <button onClick={() => {
-                                                if (!passengerCount.adults || passengerCount.adults < 1) {
-                                                    alert('Please add at least 1 adult passenger.');
-                                                    return;
-                                                }
-                                                if (passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.luggage < 1) {
-                                                    alert('Please enter at least 1 luggage bag.');
-                                                    return;
-                                                }
-                                                if (passengerCount.handLuggage === undefined || passengerCount.handLuggage === null || passengerCount.handLuggage < 1) {
-                                                    alert('Please enter at least 1 hand luggage bag.');
-                                                    return;
-                                                }
-                                                setStep(3);
-                                            }} className="flex-1 flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98] lg:hidden" aria-label="Continue to review">
+                                            <button 
+                                                onClick={() => {
+                                                    if (!passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null) {
+                                                        return;
+                                                    }
+                                                    setStep(3);
+                                                }} 
+                                                disabled={!passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null}
+                                                className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] lg:hidden
+                                                ${(!passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null) 
+                                                    ? 'bg-slate-400 dark:bg-zinc-700 text-white/50 opacity-60 cursor-not-allowed' 
+                                                    : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5'}`} 
+                                                aria-label="Continue to review"
+                                            >
                                                 Review Trip <ArrowRight size={16} strokeWidth={3}/>
                                             </button>
                                         </div>
@@ -1302,8 +1301,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
                                     <button
                                         onClick={handleBook}
-                                        disabled={!distance}
-                                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white min-h-16 sm:h-[72px] py-2 sm:py-0 rounded-2xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center border border-emerald-500/20"
+                                        disabled={!distance || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null}
+                                        className={`w-full min-h-16 sm:h-[72px] py-2 sm:py-0 rounded-2xl shadow-md transition-all group flex items-center justify-center border
+                                        ${(!distance || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null)
+                                            ? 'bg-slate-400 dark:bg-zinc-700 text-white/50 opacity-60 cursor-not-allowed border-transparent'
+                                            : 'bg-emerald-600 hover:bg-emerald-700 text-white hover:shadow-lg active:scale-[0.98] border-emerald-500/20'}`}
                                     >
                                         {isLoadingPricing ? (
                                             <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>

@@ -532,28 +532,32 @@ export default function AdminDashboard() {
                     .catch(err => console.error(err))
 
                 // Fetch airport tours
-                fetch('/api/admin/airport-tours', { cache: 'no-store' })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success && Array.isArray(data.data)) {
-                            setAirportTours(data.data)
-                        }
-                    })
-                    .catch(err => console.error(err))
+                Promise.all([
+                    fetch('/api/admin/airport-tours', { cache: 'no-store' }).then(res => res.json()),
+                    fetch('/api/admin/heavy-airport-tours', { cache: 'no-store' }).then(res => res.json())
+                ]).then(([normalData, heavyData]) => {
+                    const combined = [
+                        ...(normalData.success && Array.isArray(normalData.data) ? normalData.data : []),
+                        ...(heavyData.success && Array.isArray(heavyData.data) ? heavyData.data : [])
+                    ];
+                    setAirportTours(combined);
+                }).catch(err => console.error(err));
 
                 // Fetch normal tours
-                fetch('/api/admin/normal-tours', { cache: 'no-store' })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success && Array.isArray(data.data)) {
-                            setNormalTours(data.data)
-                        }
-                        setIsLoading(false)
-                    })
-                    .catch(err => {
-                        console.error(err)
-                        setIsLoading(false)
-                    })
+                Promise.all([
+                    fetch('/api/admin/normal-tours', { cache: 'no-store' }).then(res => res.json()),
+                    fetch('/api/admin/heavy-normal-tours', { cache: 'no-store' }).then(res => res.json())
+                ]).then(([normalData, heavyData]) => {
+                    const combined = [
+                        ...(normalData.success && Array.isArray(normalData.data) ? normalData.data : []),
+                        ...(heavyData.success && Array.isArray(heavyData.data) ? heavyData.data : [])
+                    ];
+                    setNormalTours(combined);
+                    setIsLoading(false);
+                }).catch(err => {
+                    console.error(err);
+                    setIsLoading(false);
+                });
             }
 
             if (currentView === 'tours') {
@@ -1446,9 +1450,18 @@ export default function AdminDashboard() {
                                                             return p;
                                                         });
                                                         setAirportTours(updated);
-                                                        const res = await fetch('/api/admin/airport-tours', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ packages: updated }) });
-                                                        const data = await res.json();
-                                                        if (data.success) { alert(`${hours}H Package saved successfully!`); } else { alert('Failed to save packages.'); }
+                                                        const heavyTypes = ['kdh', 'van', 'mini-bus', 'bus', 'coaster', 'coach'];
+                                                        const normalPkgs = updatedPackages.filter(p => !heavyTypes.some(t => p.vehicleType.toLowerCase().includes(t)));
+                                                        const heavyPkgs = updatedPackages.filter(p => heavyTypes.some(t => p.vehicleType.toLowerCase().includes(t)));
+
+                                                        const promises = [];
+                                                        if (normalPkgs.length > 0) promises.push(fetch('/api/admin/airport-tours/group', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ hours, packages: normalPkgs }) }));
+                                                        if (heavyPkgs.length > 0) promises.push(fetch('/api/admin/heavy-airport-tours/group', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ hours, packages: heavyPkgs }) }));
+
+                                                        const results = await Promise.all(promises);
+                                                        const allSuccess = (await Promise.all(results.map(r => r.json()))).every(data => data.success);
+                                                        
+                                                        if (allSuccess) { alert(`${hours}H Package saved successfully!`); } else { alert('Failed to save some packages.'); }
                                                     }}
                                                 />
                                             ));
@@ -1556,9 +1569,18 @@ export default function AdminDashboard() {
                                                             return p;
                                                         });
                                                         setNormalTours(updated);
-                                                        const res = await fetch('/api/admin/normal-tours', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ packages: updated }) });
-                                                        const data = await res.json();
-                                                        if (data.success) { alert(`${hours}H Package saved successfully!`); } else { alert('Failed to save packages.'); }
+                                                        const heavyTypes = ['kdh', 'van', 'mini-bus', 'bus', 'coaster', 'coach'];
+                                                        const normalPkgs = updatedPackages.filter(p => !heavyTypes.some(t => p.vehicleType.toLowerCase().includes(t)));
+                                                        const heavyPkgs = updatedPackages.filter(p => heavyTypes.some(t => p.vehicleType.toLowerCase().includes(t)));
+
+                                                        const promises = [];
+                                                        if (normalPkgs.length > 0) promises.push(fetch('/api/admin/normal-tours/group', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ hours, packages: normalPkgs }) }));
+                                                        if (heavyPkgs.length > 0) promises.push(fetch('/api/admin/heavy-normal-tours/group', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ hours, packages: heavyPkgs }) }));
+
+                                                        const results = await Promise.all(promises);
+                                                        const allSuccess = (await Promise.all(results.map(r => r.json()))).every(data => data.success);
+                                                        
+                                                        if (allSuccess) { alert(`${hours}H Package saved successfully!`); } else { alert('Failed to save some packages.'); }
                                                     }}
                                                 />
                                             ));

@@ -26,12 +26,36 @@ export async function PUT(req) {
             return NextResponse.json({ success: false, error: "Invalid data format. Expected 'packages' array." }, { status: 400 });
         }
 
-        // We can use a transaction or simply delete all and insert.
-        // For simplicity and to ensure sync with the frontend array:
-        await AirportRoundTour.deleteMany({});
-        const inserted = await AirportRoundTour.insertMany(body.packages);
+        // Optimized batched transactional update to prevent Vercel memory allocation limits
+        const operations = body.packages.map(pkg => {
+            const { _id, createdAt, updatedAt, __v, ...updateData } = pkg;
+            return {
+                updateOne: {
+                    filter: { hours: pkg.hours, vehicleType: pkg.vehicleType },
+                    update: { $set: updateData },
+                    upsert: true
+                }
+            };
+        });
 
-        return NextResponse.json({ success: true, data: inserted });
+        if (operations.length > 0) {
+            await AirportRoundTour.bulkWrite(operations);
+        }
+
+        // Clean up deleted packages
+        const incomingKeys = new Set(body.packages.map(p => `${p.hours}-${p.vehicleType}`));
+        const allPackages = await AirportRoundTour.find({}, { _id: 1, hours: 1, vehicleType: 1 });
+        const idsToDelete = allPackages
+            .filter(p => !incomingKeys.has(`${p.hours}-${p.vehicleType}`))
+            .map(p => p._id);
+            
+        if (idsToDelete.length > 0) {
+            await AirportRoundTour.deleteMany({ _id: { $in: idsToDelete } });
+        }
+
+        // Return the synchronized state
+        const finalPackages = await AirportRoundTour.find({}).sort({ hours: 1 });
+        return NextResponse.json({ success: true, data: finalPackages });
     } catch (error) {
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
