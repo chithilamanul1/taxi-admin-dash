@@ -53,7 +53,9 @@ const CustomTourBooking = () => {
         if (data.success && data.data.length > 0) {
           const mapped = data.data.map(v => {
             let img = v.image || '/vehicles/placeholder.png';
-            if (v.vehicleType === 'sedan') img = '/vehicles/sedan_luxury.png';
+            if (v.vehicleType?.toLowerCase() === 'sedan' || v.name?.toLowerCase().includes('sedan')) {
+              img = '/vehicles/sedan_luxury.png';
+            }
             if (v.vehicleType === 'mini-car') img = '/vehicles/minicar.png';
             return {
               ...v, // Preserve database-supplied tiers and other properties

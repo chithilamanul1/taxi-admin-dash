@@ -181,7 +181,12 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 if (!Array.isArray(vehicles)) return;
 
                 const pricingMap = {};
-                vehicles.forEach(v => { pricingMap[v.vehicleType] = v; });
+                vehicles.forEach(v => { 
+                    if (v.vehicleType?.toLowerCase() === 'sedan' || v.name?.toLowerCase().includes('sedan')) {
+                        v.image = '/vehicles/sedan_luxury.png';
+                    }
+                    pricingMap[v.vehicleType] = v; 
+                });
                 setVehiclePricing(pricingMap);
 
                 // Set Nameboard Price if available
