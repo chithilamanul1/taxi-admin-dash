@@ -380,7 +380,7 @@ const CustomTourBooking = () => {
             duration: `${formData.taxiTourHours} Hours`,
           },
           totalPrice: calculateTotalForVehicle(selectedVehicle),
-          displayPrice: convertPrice(calculateTotalForVehicle(selectedVehicle)),
+          displayPrice: convertPrice(calculateTotalForVehicle(selectedVehicle)).value,
           currency: currency || 'LKR',
           paymentMethod: 'cash',
           paymentStatus: 'pending',
@@ -419,7 +419,7 @@ const CustomTourBooking = () => {
                           `*Route:* ${locations[0] || 'Airport'} ➔ ${formData.placesList.filter(Boolean).join(', ') || 'Custom Stops'} ➔ ${locations[0] || 'Airport'}%0A` + 
                           `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
                           `*Payment:* ${formData.paymentMethod === 'cash' ? 'Cash to Driver' : 'Pay Online (Card)'}%0A` + 
-                          `*Price:* ${currency} ${convertPrice(totalPrice).toLocaleString()}`;
+                          `*Price:* ${currency} ${convertPrice(totalPrice).value.toLocaleString()}`;
           window.open(`https://wa.me/94712100500?text=${message}`, '_blank');
         } catch (e) {
           console.error("WhatsApp companion load blocked", e);
@@ -649,7 +649,7 @@ const CustomTourBooking = () => {
                       </div>
                       
                       <p className="text-[9px] font-black uppercase tracking-widest text-slate-800 dark:text-white mb-0.5">{v.name}</p>
-                      <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 mb-1">{currency} : {convertPrice(dynamicPrice).toLocaleString()}</p>
+                      <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 mb-1">{convertPrice(dynamicPrice).symbol} {convertPrice(dynamicPrice).value.toLocaleString()}</p>
                       
                       {/* Passenger capacity and baggage count details */}
                       <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 border-t border-slate-400 dark:border-white/20 pt-1 w-full justify-center">
