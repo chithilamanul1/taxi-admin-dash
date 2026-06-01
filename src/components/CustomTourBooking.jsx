@@ -53,7 +53,7 @@ const CustomTourBooking = () => {
         if (data.success && data.data.length > 0) {
           const mapped = data.data.map(v => {
             let img = v.image || '/vehicles/placeholder.png';
-            if (v.vehicleType === 'sedan') img = '/vehicles/sedan2.png';
+            if (v.vehicleType === 'sedan') img = '/vehicles/sedan_luxury.png';
             if (v.vehicleType === 'mini-car') img = '/vehicles/minicar.png';
             return {
               ...v, // Preserve database-supplied tiers and other properties
@@ -71,7 +71,7 @@ const CustomTourBooking = () => {
         } else {
           const defaults = [
             { id: 'mini-car', name: 'MINI CAR', baseRate: 5000, perKm: 100, image: '/vehicles/minicar.png', capacity: 2, suitcases: 4 },
-            { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedan2.png', capacity: 4, suitcases: 3 },
+            { id: 'sedan', name: 'SEDAN', baseRate: 6500, perKm: 130, image: '/vehicles/sedan_luxury.png', capacity: 4, suitcases: 3 },
             { id: 'vezel', name: 'HONDA VEZEL', baseRate: 8000, perKm: 135, image: '/vehicles/Hondavezel.png', capacity: 4, suitcases: 3 },
             { id: 'mini-van-every', name: 'MINI VAN (EVERY)', baseRate: 7000, perKm: 110, image: '/vehicles/susukievery.png', capacity: 4, suitcases: 4 },
             { id: 'mini-van-05', name: 'MINI VAN (5 SEATER)', baseRate: 7500, perKm: 130, image: '/vehicles/minivan5seat.png', capacity: 5, suitcases: 5 },
@@ -644,7 +644,7 @@ const CustomTourBooking = () => {
                         <img 
                           src={v.image || '/vehicles/minicar.png'} 
                           alt={v.name} 
-                          className={`w-full h-full object-contain select-none pointer-events-none ${v.name?.toLowerCase().includes('sedan') || v.id?.toLowerCase().includes('sedan') ? 'scale-[1.45]' : ''}`}
+                          className="w-full h-full object-contain select-none pointer-events-none"
                         />
                       </div>
                       
@@ -757,13 +757,12 @@ const CustomTourBooking = () => {
                 <div className="flex items-center gap-4 sm:gap-6">
                   <div className="w-24 sm:w-32 h-14 sm:h-16 flex items-center justify-center relative shrink-0">
                     <img 
-                      src={selectedVehicle?.image || '/vehicles/minicar.png'} 
+                      src={selectedVehicle?.image || '/vehicles/sedan_luxury.png'} 
                       alt="Vehicle" 
-                      className={`max-h-full max-w-full object-contain drop-shadow-sm ${
-                        (selectedVehicle?.id?.toLowerCase().includes('sedan') || selectedVehicle?.name?.toLowerCase().includes('sedan')) ? 'scale-[1.45]' :
-                        (selectedVehicle?.id?.toLowerCase().includes('mini') || selectedVehicle?.name?.toLowerCase().includes('mini') || selectedVehicle?.name?.toLowerCase().includes('wagon')) ? 'scale-[1.15]' :
-                        'scale-[1.2]'
-                      }`} 
+                      className={`max-h-full max-w-full object-contain ${
+                        (selectedVehicle?.id?.toLowerCase().includes('mini') || selectedVehicle?.name?.toLowerCase().includes('mini')) ? 'scale-[1.1]' :
+                        'scale-100'
+                      }`}
                     />
                   </div>
                   <div>
