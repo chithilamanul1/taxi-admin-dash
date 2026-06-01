@@ -636,15 +636,15 @@ const CustomTourBooking = () => {
                       onClick={() => setSelectedVehicle(v)} 
                       className={`flex-shrink-0 w-[44vw] sm:w-auto snap-start flex flex-col items-center p-2 sm:p-2.5 rounded-2xl transition-all duration-300 border text-center relative overflow-hidden group
                         ${isActive 
-                          ? 'bg-[#FACC15]/10 dark:bg-zinc-800/80 border-[#FACC15] shadow-md' 
-                          : 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 hover:shadow-sm'}`}
+                          ? 'bg-[#FACC15]/10 dark:bg-zinc-800/80 border-2 border-[#FACC15]' 
+                          : 'bg-white dark:bg-zinc-900 border border-slate-400 dark:border-white/10 hover:border-slate-500 dark:hover:border-white/20'}`}
                     >
                       {/* Vehicle images — uniform fixed box, object-contain handles all sizing */}
                       <div className="h-24 sm:h-28 mb-1 flex items-center justify-center w-full group-hover:scale-105 transition-transform duration-300 relative overflow-hidden">
                         <img 
                           src={v.image || '/vehicles/minicar.png'} 
                           alt={v.name} 
-                          className={`w-full h-full object-contain drop-shadow-sm select-none pointer-events-none ${v.name?.toLowerCase().includes('sedan') || v.id?.toLowerCase().includes('sedan') ? 'scale-[1.45]' : ''}`}
+                          className={`w-full h-full object-contain select-none pointer-events-none ${v.name?.toLowerCase().includes('sedan') || v.id?.toLowerCase().includes('sedan') ? 'scale-[1.45]' : ''}`}
                         />
                       </div>
                       
@@ -733,8 +733,9 @@ const CustomTourBooking = () => {
             <div className="pt-2 text-center">
               <button 
                 type="button"
+                disabled={!selectedVehicle || !selectedPackageId}
                 onClick={() => setStep(2)} 
-                className="w-full py-3.5 bg-black hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] shadow-xl hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2"
+                className={`w-full py-3.5 bg-black hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-2 ${(!selectedVehicle || !selectedPackageId) ? 'opacity-50 cursor-not-allowed' : 'shadow-xl hover:scale-[1.01] active:scale-95'}`}
               >
                 NEXT <ChevronRight size={14} strokeWidth={3} />
               </button>
@@ -925,8 +926,9 @@ const CustomTourBooking = () => {
               </button>
               <button 
                 type="button"
+                disabled={!formData.pickup || !formData.date || !formData.time || !formData.placesList[0]}
                 onClick={() => setStep(3)} 
-                className="py-3.5 bg-black hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] shadow-xl hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2"
+                className={`py-3.5 bg-black hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-2 ${(!formData.pickup || !formData.date || !formData.time || !formData.placesList[0]) ? 'opacity-50 cursor-not-allowed' : 'shadow-xl hover:scale-[1.01] active:scale-95'}`}
               >
                 NEXT <ChevronRight size={14} strokeWidth={3} />
               </button>
