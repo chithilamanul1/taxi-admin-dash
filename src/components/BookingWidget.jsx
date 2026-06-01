@@ -718,7 +718,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
             </div>
 
             {/* Widget Main Content - Modern Flat Luxury Style */}
-            <div className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-slate-200 dark:border-white/10 p-4 sm:p-6 md:p-8 animate-slide-up relative z-10 w-full box-border shadow-xl shadow-slate-200/50 dark:shadow-none">
+            <div className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-slate-400 dark:border-white/10 p-4 sm:p-6 md:p-8 animate-slide-up relative z-10 w-full box-border shadow-xl shadow-slate-200/50 dark:shadow-none">
 
                 {activeTab === 'tours' ? <RoundTripBooking /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,380px] gap-8 lg:gap-10 min-w-0">
@@ -809,7 +809,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     )}
                                                 </div>
                                                 {waypoints.map((wp, idx) => (
-                                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-zinc-800 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-1 sm:p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-1 mb-3">
+                                                    <div key={idx} className="relative group animate-slide-up bg-white dark:bg-zinc-800 rounded-2xl border border-slate-400 dark:border-white/10 shadow-sm p-1 sm:p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-1 mb-3">
                                                         <div className="flex items-center flex-1 min-w-0">
                                                             <div className="flex items-center justify-center text-slate-500 dark:text-slate-400 shrink-0 bg-slate-100 dark:bg-zinc-900 p-2 rounded-full ml-1 sm:ml-2"><Navigation size={16} /></div>
                                                             <input type="text" readOnly value={wp.name} className="flex-1 min-w-0 pl-3 sm:pl-4 pr-2 sm:pr-4 h-10 sm:h-12 bg-transparent border-none text-[11px] sm:text-sm font-medium text-slate-800 dark:text-white outline-none truncate" />
@@ -831,7 +831,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     <>
                                                         {waypointSearches.length === 0 && (
                                                             <div className="flex justify-start pl-10 md:pl-14 py-2">
-                                                                <button onClick={() => setWaypointSearches([{ active: true }])} aria-label="Add Stop" className="text-slate-800 dark:text-slate-100 bg-white dark:bg-zinc-800 text-[10px] font-black uppercase tracking-wider flex items-center gap-2 py-3 px-5 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                                                                <button onClick={() => setWaypointSearches([{ active: true }])} aria-label="Add Stop" className="text-slate-800 dark:text-slate-100 bg-white dark:bg-zinc-800 text-[10px] font-black uppercase tracking-wider flex items-center gap-2 py-3 px-5 rounded-xl border border-slate-400 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                                                                     <Plus size={14} strokeWidth={4} className="text-emerald-500" /> ADD STOP ({waypoints.length}/4)
                                                                 </button>
                                                             </div>
@@ -852,7 +852,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                     )}
                                                 </div>
                                                 <div ref={dateTimeRef} className="relative mt-2">
-                                                    <button onClick={() => setIsDateTimePickerOpen(!isDateTimePickerOpen)} className={`w-full h-14 bg-white dark:bg-zinc-800 border rounded-2xl px-6 flex items-center justify-between text-sm font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md transition-all group ${step1Errors.dateTime ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-200 dark:border-white/10'}`} aria-label="Select Date and Time">
+                                                    <button onClick={() => setIsDateTimePickerOpen(!isDateTimePickerOpen)} className={`w-full h-14 bg-white dark:bg-zinc-800 border rounded-2xl px-6 flex items-center justify-between text-sm font-bold text-slate-700 dark:text-white shadow-sm hover:shadow-md transition-all group ${step1Errors.dateTime ? 'border-red-500 ring-2 ring-red-500/20' : 'border-slate-400 dark:border-white/10'}`} aria-label="Select Date and Time">
                                                         <div className="flex items-center gap-3">
                                                             <Calendar size={18} className={scheduledDate ? 'text-emerald-500' : step1Errors.dateTime ? 'text-red-500' : 'text-slate-400'} />
                                                             <span className="uppercase tracking-widest text-[11px]">

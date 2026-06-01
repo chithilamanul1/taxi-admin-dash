@@ -147,10 +147,10 @@ const LocationInput = ({
                 aria-label={label || placeholder}
                 className={`w-full pl-12 sm:pl-14 pr-10 sm:pr-14 h-14 rounded-2xl text-sm sm:text-base font-medium transition-all outline-none border
                 ${disabled 
-                    ? 'bg-slate-50 dark:bg-zinc-800/50 border-slate-200 dark:border-white/5 text-slate-400 cursor-not-allowed shadow-inner' 
+                    ? 'bg-slate-50 dark:bg-zinc-800/50 border-slate-400 dark:border-white/5 text-slate-400 cursor-not-allowed shadow-inner' 
                     : error 
                         ? 'bg-white dark:bg-zinc-800 border-red-500 ring-2 ring-red-500/20 text-slate-800 dark:text-white shadow-sm'
-                        : 'bg-white dark:bg-zinc-800 border-slate-200 dark:border-white/10 text-slate-800 dark:text-white shadow-sm hover:border-slate-300 dark:hover:border-white/20 focus:border-emerald-500 dark:focus:border-[#FACC15] focus:ring-4 focus:ring-emerald-500/10 dark:focus:ring-[#FACC15]/10'}`}
+                        : 'bg-white dark:bg-zinc-800 border-slate-400 dark:border-white/10 text-slate-800 dark:text-white shadow-sm hover:border-slate-400 dark:hover:border-white/20 focus:border-emerald-500 dark:focus:border-[#FACC15] focus:ring-4 focus:ring-emerald-500/10 dark:focus:ring-[#FACC15]/10'}`}
             />
 
             {/* Clear Button */}
@@ -166,7 +166,7 @@ const LocationInput = ({
 
             {/* Suggestions Dropdown - Modern UI */}
             {isFocused && (suggestions.length > 0 || isLoading) && (
-                <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white dark:bg-zinc-800 rounded-2xl border border-slate-200 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-none p-2 z-[100] animate-fade-in overflow-hidden">
+                <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white dark:bg-zinc-800 rounded-2xl border border-slate-400 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-none p-2 z-[100] animate-fade-in overflow-hidden">
                     <div className="max-h-[300px] overflow-y-auto custom-scrollbar pr-1">
                         {isLoading ? (
                             <div className="p-8 flex items-center justify-center">
