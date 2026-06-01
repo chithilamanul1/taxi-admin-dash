@@ -510,6 +510,11 @@ export async function sendBookingConfirmation(booking) {
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Return Journey</td>
                 <td style="border-bottom: 1px solid #f3f4f6; font-size: 13px;">${booking.tripType === 'round-trip' ? `${booking.returnDate || 'N/A'} ${booking.returnTime || ''}` : 'One Way Trip'}</td>
             </tr>
+            ${(booking.tripType === 'round-trip' || booking.type === 'tour' || booking.roundTripPackageId) ? `
+            <tr>
+                <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Package Details</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.tourDetails?.duration ? `${booking.tourDetails.duration} (${booking.distanceKm || 0} KM Limit)` : (booking.roundTripPackageId || 'Custom Package')}</td>
+            </tr>` : ''}
             <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Distance</td>
                 <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.distanceKm || 0} km</td>

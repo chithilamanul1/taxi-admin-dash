@@ -733,9 +733,9 @@ const CustomTourBooking = () => {
             <div className="pt-2 text-center">
               <button 
                 type="button"
-                disabled={!selectedVehicle || !selectedPackageId}
+                disabled={!selectedVehicle || !formData.taxiTourKm}
                 onClick={() => setStep(2)} 
-                className={`w-full py-3.5 bg-black hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-2 ${(!selectedVehicle || !selectedPackageId) ? 'opacity-50 cursor-not-allowed' : 'shadow-xl hover:scale-[1.01] active:scale-95'}`}
+                className={`w-full py-3.5 bg-black hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-2 ${(!selectedVehicle || !formData.taxiTourKm) ? 'opacity-50 cursor-not-allowed' : 'shadow-xl hover:scale-[1.01] active:scale-95'}`}
               >
                 NEXT <ChevronRight size={14} strokeWidth={3} />
               </button>

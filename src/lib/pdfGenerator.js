@@ -100,6 +100,11 @@ export const generateBookingPDF = (booking) => {
         journeyBody.push(['Flight Details', `${booking.flightNumber} - Arrival: ${fdate} at ${ftime}`]);
     }
 
+    if (booking.tripType === 'round-trip' || booking.type === 'tour' || booking.roundTripPackageId) {
+        const packageDetails = booking.tourDetails?.duration ? `${booking.tourDetails.duration} (${booking.distanceKm || 0} KM Limit)` : (booking.roundTripPackageId || 'Custom Package');
+        journeyBody.push(['Round Trip Package', packageDetails]);
+    }
+
     autoTable(doc, {
         startY: 105,
         head: [['Description', 'Trip Information']],
