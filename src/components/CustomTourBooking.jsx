@@ -2,14 +2,17 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Clock, Navigation, ChevronRight, ChevronLeft, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles, CreditCard } from 'lucide-react';
+import { MapPin, Clock, Navigation, ChevronRight, ChevronLeft, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles, CreditCard, ChevronDown } from 'lucide-react';
 import { calculateBasePrice, calculateTrafficSurge, TAXI_TOUR_PACKAGES } from '@/lib/pricing-util';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
 import TripMap from './TripMap';
 import { useSession } from 'next-auth/react';
+import { useCurrency } from '@/context/CurrencyContext';
 
 const CustomTourBooking = () => {
   const { data: session } = useSession();
+  const { currency, changeCurrency, SUPPORTED_CURRENCIES, convertPrice } = useCurrency();
+  const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [tab, setTab] = useState('airport'); // 'airport' | 'tour'
   const [vehicles, setVehicles] = useState([]);
@@ -353,15 +356,19 @@ const CustomTourBooking = () => {
           vehicleType: selectedVehicle.id,
           tripType: 'round-trip',
           type: 'tour',
+          isRoundTrip: true,
           tourDetails: {
-            tourId: `custom-tour-${formData.taxiTourHours}h-${formData.taxiTourKm}km`,
-            tourTitle: `${tab === 'airport' ? 'Airport' : 'Custom'} Round Tour (${formData.taxiTourHours}h / ${formData.taxiTourKm}km)`,
-            duration: `${formData.taxiTourHours} Hours`
+            tourTitle: "Custom Round Tour",
+            duration: `${formData.taxiTourHours} Hours`,
           },
+          totalPrice: calculateTotalForVehicle(selectedVehicle),
+          displayPrice: convertPrice(calculateTotalForVehicle(selectedVehicle)),
+          currency: currency || 'LKR',
+          paymentMethod: 'cash',
+          paymentStatus: 'pending',
           roundTripPackageId: tab === 'tour' ? `custom-tour-${formData.taxiTourHours}h` : 'airport-round-tour',
           passengerCount: { adults: formData.passengers, children: 0, luggage: formData.luggage, handLuggage: 0 },
           distanceKm: distance || formData.taxiTourKm,
-          totalPrice: totalPrice,
           paidAmount: formData.paymentMethod === 'cash' ? 0 : totalPrice,
           balanceAmount: formData.paymentMethod === 'cash' ? totalPrice : 0,
           displayPrice: totalPrice,
@@ -394,7 +401,7 @@ const CustomTourBooking = () => {
                           `*Route:* ${locations[0] || 'Airport'} ➔ ${formData.placesList.filter(Boolean).join(', ') || 'Custom Stops'} ➔ ${locations[0] || 'Airport'}%0A` + 
                           `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
                           `*Payment:* ${formData.paymentMethod === 'cash' ? 'Cash to Driver' : 'Pay Online (Card)'}%0A` + 
-                          `*Price:* Rs. ${totalPrice.toLocaleString()}`;
+                          `*Price:* ${currency} ${convertPrice(totalPrice).toLocaleString()}`;
           window.open(`https://wa.me/94712100500?text=${message}`, '_blank');
         } catch (e) {
           console.error("WhatsApp companion load blocked", e);
@@ -495,9 +502,47 @@ const CustomTourBooking = () => {
             {step === 1 ? "Choose Your Vehicle Class" : step === 2 ? "Configure Route Details" : "Contact & Finalize Booking"}
           </span>
         </div>
-        <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-          Step {step} of 3
-        </span>
+        <div className="flex items-center gap-3">
+          {/* Currency Selector */}
+          <div className="relative z-50">
+            <button
+                type="button"
+                onClick={() => setIsCurrencyOpen(!isCurrencyOpen)}
+                className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-1.5 rounded-xl text-[10px] font-black text-slate-700 hover:bg-slate-50 transition-colors shadow-sm"
+                aria-label="Select Currency"
+            >
+                <div className="w-4 h-4 rounded-full overflow-hidden flex-shrink-0 bg-slate-100 flex items-center justify-center">
+                    <img src={SUPPORTED_CURRENCIES?.find(c => c.code === currency)?.flag || 'https://flagcdn.com/w40/lk.png'} alt={`${currency} flag`} className="w-full h-full object-cover scale-150" />
+                </div>
+                <span className="uppercase">{currency}</span>
+                <ChevronDown size={12} className={`opacity-70 transition-transform ${isCurrencyOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+            </button>
+            {isCurrencyOpen && (
+                <>
+                    <div className="fixed inset-0 z-40" onClick={() => setIsCurrencyOpen(false)}></div>
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-zinc-800 rounded-xl shadow-xl border border-slate-100 dark:border-zinc-700 overflow-hidden z-50 py-1">
+                        {SUPPORTED_CURRENCIES?.map(c => (
+                            <button
+                                key={c.code}
+                                type="button"
+                                onClick={() => { changeCurrency(c.code); setIsCurrencyOpen(false); }}
+                                className={`w-full text-left px-4 py-2.5 text-[10px] font-black flex items-center gap-3 hover:bg-emerald-50 hover:text-emerald-600 transition-colors ${currency === c.code ? 'text-white bg-emerald-600 border-l-4 border-emerald-800' : 'text-slate-700 dark:text-white border-b border-slate-100 last:border-0'}`}
+                            >
+                                <div className="w-4 h-4 rounded-full overflow-hidden flex-shrink-0 bg-slate-100 flex items-center justify-center">
+                                    <img src={c.flag} alt={`${c.code} flag`} className="w-full h-full object-cover scale-150" />
+                                </div>
+                                <span className="flex-1">{c.name}</span>
+                                <span className="text-[9px] font-bold opacity-70">{c.code}</span>
+                            </button>
+                        ))}
+                    </div>
+                </>
+            )}
+          </div>
+          <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest hidden sm:block">
+            Step {step} of 3
+          </span>
+        </div>
       </div>
 
       <AnimatePresence mode="wait">
@@ -586,7 +631,7 @@ const CustomTourBooking = () => {
                       </div>
                       
                       <p className="text-[9px] font-black uppercase tracking-widest text-slate-800 dark:text-white mb-0.5">{v.name}</p>
-                      <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 mb-1">RS : {dynamicPrice.toLocaleString()}</p>
+                      <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 mb-1">{currency} : {convertPrice(dynamicPrice).toLocaleString()}</p>
                       
                       {/* Passenger capacity and baggage count details */}
                       <div className="flex items-center gap-2 text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-white/5 pt-1 w-full justify-center">
