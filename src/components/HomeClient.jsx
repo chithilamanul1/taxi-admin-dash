@@ -107,7 +107,7 @@ export default function HomeClient() {
                             Explore Premium Island Tours
                         </span>
                         <h2 className="text-4xl md:text-7xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter leading-none mb-6">
-                            Tailored <span className="text-emerald-600 dark:text-[#FACC15] italic font-serif">Tour</span> Packages
+                            Tailored <span className="text-emerald-600 dark:text-[#FACC15] italic font-serif">Round Tour</span> Packages
                         </h2>
                         <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm font-bold uppercase tracking-[0.3em] max-w-xl mx-auto opacity-80">
                             Fixed Rates • Custom Stopovers • Elite Vehicles
