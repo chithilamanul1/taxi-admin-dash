@@ -874,7 +874,15 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                                                 <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
                                                                     <CustomDateTimePicker date={scheduledDate} time={scheduledTime} onChange={(d, t) => { setScheduledDate(d); setScheduledTime(t); setStep1Errors(prev => ({ ...prev, dateTime: false })); }} />
                                                                     <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
-                                                                        <button onClick={() => { setIsDateTimePickerOpen(false); if (pickup?.lat && dropoff?.lat && scheduledDate) { setStep(2); } }} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
+                                                                        <button type="button" onClick={() => { 
+                                                                            setIsDateTimePickerOpen(false); 
+                                                                            if (pickup?.lat && dropoff?.lat && scheduledDate) {
+                                                                                const parts = new Date(scheduledDate).toLocaleDateString("en-US", { timeZone: "Asia/Colombo", year: "numeric", month: "2-digit", day: "2-digit" }).split('/');
+                                                                                setScheduledDate(`${parts[2]}-${parts[0]}-${parts[1]}`);
+                                                                                setStep(2); 
+                                                                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                                            } 
+                                                                        }} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
                                                                     </div>
                                                                 </motion.div>
                                                             </>

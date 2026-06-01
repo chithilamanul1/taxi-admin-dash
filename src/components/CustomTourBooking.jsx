@@ -26,6 +26,7 @@ const CustomTourBooking = () => {
   const [duration, setDuration] = useState('');
   const [pricingSettings, setPricingSettings] = useState(null);
   const [airportTours, setAirportTours] = useState([]);
+  const [roundTours, setRoundTours] = useState([]);
   const [destinations, setDestinations] = useState([]);
   const [surgeRules, setSurgeRules] = useState([]);
 
@@ -107,12 +108,29 @@ const CustomTourBooking = () => {
       })
       .catch(err => console.error("Error fetching pricing settings:", err));
 
-    fetch('/api/admin/airport-tours')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) setAirportTours(data.data);
+    Promise.all([
+      fetch('/api/admin/airport-tours').then(res => res.json()),
+      fetch('/api/admin/heavy-airport-tours').then(res => res.json())
+    ])
+      .then(([normal, heavy]) => {
+        let combined = [];
+        if (normal.success && normal.data) combined = [...combined, ...normal.data];
+        if (heavy.success && heavy.data) combined = [...combined, ...heavy.data];
+        setAirportTours(combined);
       })
       .catch(err => console.error("Error fetching airport tours:", err));
+
+    Promise.all([
+      fetch('/api/admin/normal-tours').then(res => res.json()),
+      fetch('/api/admin/heavy-normal-tours').then(res => res.json())
+    ])
+      .then(([normal, heavy]) => {
+        let combined = [];
+        if (normal.success && normal.data) combined = [...combined, ...normal.data];
+        if (heavy.success && heavy.data) combined = [...combined, ...heavy.data];
+        setRoundTours(combined);
+      })
+      .catch(err => console.error("Error fetching round tours:", err));
 
     fetch('/api/admin/destinations')
       .then(res => res.json())
@@ -200,7 +218,7 @@ const CustomTourBooking = () => {
     }
     return tab === 'airport'
       ? (airportTours || [])
-      : (pricingSettings?.destinationRoundTripPackages || []);
+      : (roundTours || []);
   };
 
   const getAvailableHours = () => {
@@ -634,7 +652,7 @@ const CustomTourBooking = () => {
                       <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 mb-1">{currency} : {convertPrice(dynamicPrice).toLocaleString()}</p>
                       
                       {/* Passenger capacity and baggage count details */}
-                      <div className="flex items-center gap-2 text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-white/5 pt-1 w-full justify-center">
+                      <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 border-t border-slate-400 dark:border-white/20 pt-1 w-full justify-center">
                         <span className="flex items-center gap-1 text-[8px] font-bold"><User size={8} /> {v.capacity}</span>
                         <span className="flex items-center gap-0.5 text-[8px] font-bold">💼 {v.suitcases}</span>
                       </div>
