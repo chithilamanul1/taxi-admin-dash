@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Phone, User, LogOut, Calendar, ChevronDown, Globe, MessageCircle } from 'lucide-react'
+import { Menu, X, Phone, User, LogOut, Calendar, ChevronDown, Globe, MessageCircle, Car, Plane } from 'lucide-react'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import { useCurrency } from '../context/CurrencyContext'
 import ThemeToggle from './ThemeToggle'
@@ -42,12 +42,21 @@ export default function Navbar() {
     return (
         <nav className={`relative w-full z-[150] transition-all duration-500 py-3 md:py-4 bg-white border-b border-slate-100 shadow-sm`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-                <Link href="/" className="flex items-center gap-2 group">
+                <Link href="/" className="flex items-center gap-2 group shrink-0">
+                    <div className="text-emerald-950 group-hover:text-emerald-600 transition-colors hidden sm:block">
+                        <Car size={32} strokeWidth={2.5} />
+                    </div>
                     <div className="flex flex-col">
-                        <span className="font-black text-xl sm:text-3xl md:text-4xl tracking-tighter leading-tight text-emerald-950 uppercase group-hover:text-emerald-600 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-emerald-600 after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:origin-left">
-                            AIRPORT TAXIS (PVT) LTD
+                        <span className="font-black text-[17px] sm:text-2xl md:text-3xl tracking-tighter leading-tight text-emerald-950 uppercase group-hover:text-emerald-600 transition-colors">
+                            AIRPORT TAXIS <span className="font-semibold text-[13px] sm:text-lg md:text-xl">(PVT) LTD</span>
                         </span>
-                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Private Limited Company</span>
+                        <div className="flex items-center w-full opacity-80 mt-0.5">
+                            <div className="h-[2px] rounded-full bg-emerald-950 group-hover:bg-emerald-600 w-1/4 transition-colors"></div>
+                            <div className="flex-1 flex justify-center">
+                                <Plane size={16} fill="currentColor" className="text-emerald-950 group-hover:text-emerald-600 transition-colors -rotate-45" />
+                            </div>
+                            <div className="h-[2px] rounded-full bg-emerald-950 group-hover:bg-emerald-600 w-1/4 transition-colors"></div>
+                        </div>
                     </div>
                 </Link>
 
