@@ -389,7 +389,7 @@ const CustomTourBooking = () => {
     let basePrice = 0;
     const pkgs = getActivePackages();
       
-    const pkg = pkgs.find(p => p.hours === Number(formData.taxiTourHours) && p.vehicleType === veh.id);
+    const pkg = pkgs.find(p => p.hours === Number(formData.taxiTourHours) && (p.vehicleType === veh.id || (veh.id === 'normal-kdh' && p.vehicleType === 'kdh-flatroof')));
     if (pkg) {
       const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
       if (tier && tier.price) {
@@ -404,7 +404,7 @@ const CustomTourBooking = () => {
       if (veh.id === 'sedan') fallbackBasePrice *= 1.2;
       if (veh.id === 'vezel' || veh.id === 'suv') fallbackBasePrice *= 1.4;
       if (veh.id === 'mini-van-every' || veh.id === 'mini-van-05') fallbackBasePrice *= 1.3;
-      if (veh.id === 'van' || veh.id === 'kdh-van') fallbackBasePrice *= 1.7;
+      if (veh.id === 'van' || veh.id === 'kdh-van' || veh.id === 'normal-kdh' || veh.id === 'kdh-flatroof') fallbackBasePrice *= 1.7;
       if (veh.id === 'mini-bus') fallbackBasePrice *= 2.5;
       if (veh.id === 'coach-bus') fallbackBasePrice *= 4.5;
       basePrice = fallbackBasePrice;
@@ -987,9 +987,9 @@ const CustomTourBooking = () => {
               </button>
               <button 
                 type="button"
-                disabled={!formData.pickup || !formData.placesList[0]}
+                disabled={!locations[0] || !formData.placesList[0]}
                 onClick={() => setStep(3)} 
-                className={`py-3.5 bg-black hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-2 ${(!formData.pickup || !formData.placesList[0]) ? 'opacity-50 cursor-not-allowed' : 'shadow-xl hover:scale-[1.01] active:scale-95'}`}
+                className={`py-3.5 bg-black hover:bg-slate-900 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-2 ${(!locations[0] || !formData.placesList[0]) ? 'opacity-50 cursor-not-allowed' : 'shadow-xl hover:scale-[1.01] active:scale-95'}`}
               >
                 NEXT <ChevronRight size={14} strokeWidth={3} />
               </button>

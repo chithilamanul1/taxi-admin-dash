@@ -68,7 +68,7 @@ const RoundTripBooking = () => {
             { id: 'mini-car', vehicleType: 'mini-car', name: 'Mini', baseRate: 4000, perKm: 110, image: '/vehicles/minicar.png', capacity: 4, suitcases: 2, luggage: 2, handLuggage: 2 },
             { id: 'sedan', vehicleType: 'sedan', name: 'Sedan', baseRate: 8000, perKm: 130, image: '/vehicles/sedancar.png', capacity: 4, suitcases: 3, luggage: 3, handLuggage: 2 },
             { id: 'vezel', vehicleType: 'vezel', name: 'Vezel', baseRate: 12000, perKm: 160, image: '/vehicles/van.png', capacity: 4, suitcases: 4, luggage: 4, handLuggage: 2 },
-            { id: 'van', vehicleType: 'van', name: 'Van', baseRate: 15000, perKm: 180, image: '/vehicles/van.png', capacity: 7, suitcases: 5, luggage: 5, handLuggage: 4 },
+            { id: 'kdh-flatroof', vehicleType: 'kdh-flatroof', name: 'Van', baseRate: 15000, perKm: 180, image: '/vehicles/van.png', capacity: 7, suitcases: 5, luggage: 5, handLuggage: 4 },
             { id: 'suv', vehicleType: 'suv', name: 'SUV', baseRate: 20000, perKm: 220, image: '/vehicles/sedancar.png', capacity: 6, suitcases: 4, luggage: 4, handLuggage: 3 },
           ];
           setVehicles(defaults);
@@ -196,7 +196,7 @@ const RoundTripBooking = () => {
     if (!v) return 0;
     
     if (tab === 'airport-round-tour') {
-      const pkg = (airportTours || []).find(p => p.hours === Number(formData.taxiTourHours) && p.vehicleType === v.id);
+      const pkg = (airportTours || []).find(p => p.hours === Number(formData.taxiTourHours) && (p.vehicleType === v.id || p.vehicleType === v.vehicleType || (v.id === 'normal-kdh' && p.vehicleType === 'kdh-flatroof')));
       if (pkg) {
         const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
         if (tier && tier.price) {
@@ -210,7 +210,7 @@ const RoundTripBooking = () => {
     }
     
     if (tab === 'normal-round-tour') {
-      const pkg = (normalTours || []).find(p => p.hours === Number(formData.taxiTourHours) && p.vehicleType === v.id);
+      const pkg = (normalTours || []).find(p => p.hours === Number(formData.taxiTourHours) && (p.vehicleType === v.id || p.vehicleType === v.vehicleType || (v.id === 'normal-kdh' && p.vehicleType === 'kdh-flatroof')));
       if (pkg) {
         const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
         if (tier && tier.price) {
@@ -232,7 +232,7 @@ const RoundTripBooking = () => {
       if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
         const pkg = destMatch.roundTripPackages.find(p => 
           p.hours === Number(formData.taxiTourHours) && 
-          (p.vehicleType === v.id || p.vehicleType === v.vehicleType)
+          (p.vehicleType === v.id || p.vehicleType === v.vehicleType || (v.id === 'normal-kdh' && p.vehicleType === 'kdh-flatroof'))
         );
         if (pkg) {
           const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
@@ -249,7 +249,7 @@ const RoundTripBooking = () => {
       // 2. Global destinationRoundTripPackages
       const pkg = (pricingSettings?.destinationRoundTripPackages || []).find(p => 
         p.hours === Number(formData.taxiTourHours) && 
-        (p.vehicleType === v.id || p.vehicleType === v.vehicleType)
+        (p.vehicleType === v.id || p.vehicleType === v.vehicleType || (v.id === 'normal-kdh' && p.vehicleType === 'kdh-flatroof'))
       );
       if (pkg) {
         const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));

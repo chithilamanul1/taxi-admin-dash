@@ -20,20 +20,48 @@
       },
       {
         "min": 20,
-        "max": 40,
+        "max": 35,
         "type": "flat",
         "price": 4000,
         "rate": 0
       },
       {
-        "min": 40,
-        "max": 149,
+        "min": 35,
+        "max": 40,
+        "type": "flat",
+        "price": 4500,
+        "rate": 110
+      },
+      {
+        "min": 41,
+        "max": 60,
+        "type": "per_km",
+        "price": 0,
+        "rate": 115
+      },
+      {
+        "min": 61,
+        "max": 100,
         "type": "per_km",
         "price": 0,
         "rate": 110
       },
       {
-        "min": 150,
+        "min": 101,
+        "max": 139,
+        "type": "per_km",
+        "price": 0,
+        "rate": 105
+      },
+      {
+        "min": 140,
+        "max": 150,
+        "type": "flat",
+        "price": 16666,
+        "rate": 0
+      },
+      {
+        "min": 151,
         "max": 9999,
         "type": "per_km",
         "price": 0,
@@ -47,7 +75,7 @@
       "USB Charging"
     ],
     "__v": 2,
-    "updatedAt": "2026-05-13T10:58:07.611Z",
+    "updatedAt": "2026-05-23T18:01:53.888Z",
     "handLuggage": 2,
     "hourlyRate": 0,
     "isActive": true,
@@ -74,6 +102,13 @@
       },
       {
         "min": 20,
+        "max": 35,
+        "type": "flat",
+        "price": 5500,
+        "rate": 0
+      },
+      {
+        "min": 35,
         "max": 40,
         "type": "flat",
         "price": 6000,
@@ -81,17 +116,31 @@
       },
       {
         "min": 40,
+        "max": 45,
+        "type": "flat",
+        "price": 7000,
+        "rate": 150
+      },
+      {
+        "min": 45,
         "max": 50,
+        "type": "flat",
+        "price": 7500,
+        "rate": 0
+      },
+      {
+        "min": 50,
+        "max": 60,
         "type": "per_km",
         "price": 0,
         "rate": 150
       },
       {
-        "min": 50,
+        "min": 60,
         "max": 100,
         "type": "per_km",
         "price": 0,
-        "rate": 130
+        "rate": 135
       },
       {
         "min": 100,
@@ -115,7 +164,9 @@
         "rate": 110
       }
     ],
-    "waitingCharges": [],
+    "waitingCharges": [
+      750
+    ],
     "features": [
       "Air Conditioning",
       "Bluetooth",
@@ -126,7 +177,7 @@
     "hourlyRate": 0,
     "isActive": true,
     "sortOrder": 2,
-    "updatedAt": "2026-05-14T09:46:08.808Z"
+    "updatedAt": "2026-05-31T08:09:34.463Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd6fe",
@@ -414,7 +465,7 @@
     "category": "airport-transfer",
     "basePrice": 6000,
     "baseKm": 20,
-    "perKmRate": 120,
+    "perKmRate": 160,
     "capacity": 8,
     "luggage": 8,
     "image": "/vehicles/toyota-highroof.png",
@@ -428,38 +479,38 @@
       },
       {
         "min": 20,
-        "max": 40,
+        "max": 45,
         "type": "flat",
-        "price": 8500,
+        "price": 14000,
         "rate": 0
       },
       {
-        "min": 40,
+        "min": 45,
         "max": 100,
         "type": "per_km",
         "price": 0,
-        "rate": 200
+        "rate": 325
       },
       {
         "min": 100,
         "max": 140,
         "type": "per_km",
         "price": 0,
-        "rate": 160
+        "rate": 200
       },
       {
         "min": 140,
         "max": 200,
         "type": "per_km",
         "price": 0,
-        "rate": 130
+        "rate": 180
       },
       {
         "min": 200,
         "max": 9999,
         "type": "per_km",
         "price": 0,
-        "rate": 120
+        "rate": 160
       }
     ],
     "waitingCharges": [],
@@ -473,7 +524,7 @@
     "hourlyRate": 0,
     "isActive": true,
     "sortOrder": 8,
-    "updatedAt": "2026-05-08T07:02:03.199Z"
+    "updatedAt": "2026-05-20T03:37:03.819Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd717",
@@ -696,14 +747,14 @@
         "max": 140,
         "type": "per_km",
         "price": 0,
-        "rate": 130
+        "rate": 150
       },
       {
         "min": 140,
         "max": 200,
         "type": "per_km",
         "price": 0,
-        "rate": 125
+        "rate": 130
       },
       {
         "min": 200,
@@ -724,7 +775,7 @@
     "hourlyRate": 0,
     "isActive": true,
     "sortOrder": 2,
-    "updatedAt": "2026-05-14T04:29:14.424Z"
+    "updatedAt": "2026-05-25T06:56:21.727Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd729",
@@ -757,14 +808,14 @@
         "max": 100,
         "type": "per_km",
         "price": 0,
-        "rate": 150
+        "rate": 160
       },
       {
         "min": 100,
         "max": 140,
         "type": "per_km",
         "price": 0,
-        "rate": 145
+        "rate": 150
       },
       {
         "min": 140,
@@ -792,7 +843,7 @@
     "hourlyRate": 0,
     "isActive": true,
     "sortOrder": 6,
-    "updatedAt": "2026-04-29T06:38:12.342Z"
+    "updatedAt": "2026-05-25T06:58:40.006Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd72e",
@@ -944,7 +995,7 @@
     "category": "ride-now",
     "basePrice": 6500,
     "baseKm": 20,
-    "perKmRate": 135,
+    "perKmRate": 145,
     "capacity": 3,
     "luggage": 3,
     "image": "/vehicles/Hondavezel.png",
@@ -968,28 +1019,28 @@
         "max": 100,
         "type": "per_km",
         "price": 0,
-        "rate": 150
+        "rate": 180
       },
       {
         "min": 100,
         "max": 140,
         "type": "per_km",
         "price": 0,
-        "rate": 145
+        "rate": 165
       },
       {
         "min": 140,
         "max": 200,
         "type": "per_km",
         "price": 0,
-        "rate": 140
+        "rate": 150
       },
       {
         "min": 200,
         "max": 9999,
         "type": "per_km",
         "price": 0,
-        "rate": 135
+        "rate": 145
       }
     ],
     "waitingCharges": [],
@@ -1003,7 +1054,7 @@
     "hourlyRate": 0,
     "isActive": true,
     "sortOrder": 5,
-    "updatedAt": "2026-03-04T10:31:20.784Z"
+    "updatedAt": "2026-05-25T07:03:43.036Z"
   },
   {
     "_id": "69a2eb45763ebaa3526cd73d",
@@ -1224,17 +1275,17 @@
       },
       {
         "min": 20,
-        "max": 40,
+        "max": 45,
         "type": "flat",
-        "price": 8500,
+        "price": 12000,
         "rate": 0
       },
       {
-        "min": 40,
+        "min": 45,
         "max": 100,
         "type": "per_km",
         "price": 0,
-        "rate": 200
+        "rate": 280
       },
       {
         "min": 100,
@@ -1261,7 +1312,7 @@
     "isActive": true,
     "sortOrder": 7,
     "createdAt": "2026-03-03T16:19:59.364Z",
-    "updatedAt": "2026-05-09T14:45:32.164Z",
+    "updatedAt": "2026-05-20T03:35:30.983Z",
     "__v": 1
   },
   {
