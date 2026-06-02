@@ -646,7 +646,7 @@ const CustomTourBooking = () => {
                         <img 
                           src={v.image || '/vehicles/minicar.png'} 
                           alt={v.name} 
-                          className="w-full h-full object-contain select-none pointer-events-none"
+                          className="w-full h-full object-contain select-none pointer-events-none scale-[1.3]"
                         />
                       </div>
                       
@@ -761,10 +761,7 @@ const CustomTourBooking = () => {
                     <img 
                       src={selectedVehicle?.image || '/vehicles/sedan_luxury.png'} 
                       alt="Vehicle" 
-                      className={`max-h-full max-w-full object-contain ${
-                        ((selectedVehicle?.id || '').toLowerCase().includes('mini') || (selectedVehicle?.name || '').toLowerCase().includes('mini')) ? 'scale-[1.1]' :
-                        'scale-100'
-                      }`}
+                      className="max-h-full max-w-full object-contain scale-[1.4]"
                     />
                   </div>
                   <div>
