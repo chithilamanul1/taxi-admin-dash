@@ -227,6 +227,52 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
 
     }, []);
 
+    // Auto-swap vehicle if capacity exceeded
+    useEffect(() => {
+        if (!vehiclePricing || Object.keys(vehiclePricing).length === 0) return;
+        
+        const pax = passengerCount || { adults: 1, children: 0, luggage: 0, handLuggage: 0 };
+        const totalPax = (pax.adults || 0) + (pax.children || 0);
+        const totalBags = (pax.luggage || 0);
+
+        const currentVehicle = vehiclePricing[vehicle];
+        
+        const checkSuitability = (v) => {
+            if (!v) return false;
+            const vehiclePax = v.capacity || 4;
+            const vehicleLargeBags = v.luggage || 0;
+            const vehicleSmallBags = v.handLuggage || 0;
+            const spareSeats = Math.max(0, vehiclePax - totalPax);
+            const extraBagCapacity = spareSeats * 2;
+            const maxBagUnits = vehicleLargeBags + (vehicleSmallBags * 0.5) + extraBagCapacity;
+            if (totalPax > vehiclePax) return false;
+            if (totalBags > maxBagUnits) return false;
+            return true;
+        };
+
+        if (!checkSuitability(currentVehicle)) {
+            const getPriority = (type) => {
+                const t = type?.toLowerCase() || '';
+                if (t.includes('mini-car') || t.includes('wagon')) return 1;
+                if (t.includes('sedan')) return 2;
+                if (t.includes('vezel') || t.includes('vessel')) return 3;
+                if (t.includes('suv')) return 4;
+                if (t.includes('mini-van-05')) return 5;
+                if (t.includes('mini-van')) return 5.5;
+                if (t.includes('kdh-van') || t.includes('flatroof') || t.includes('kdh')) return 6;
+                if (t.includes('highroof')) return 7;
+                if (t.includes('bus') || t.includes('coach')) return 8;
+                return 10;
+            };
+            const sorted = Object.values(vehiclePricing).sort((a, b) => getPriority(a.vehicleType) - getPriority(b.vehicleType));
+            
+            const suitable = sorted.find(checkSuitability);
+            if (suitable && suitable.vehicleType !== vehicle) {
+                setVehicle(suitable.vehicleType);
+            }
+        }
+    }, [passengerCount, vehiclePricing, vehicle]);
+
     // Tab Logic - reset fields based on mode
     useEffect(() => {
         console.log("BookingWidget: Active Tab changed to:", activeTab);
