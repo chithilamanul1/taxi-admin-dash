@@ -94,7 +94,13 @@ export default function TourDetailsClient({ tour }) {
     const priceCurrency = typeof tour.price === 'object' ? tour.price.currency : (tour.currency || 'USD');
 
     // Dynamic price calculation
-    const totalPrice = (priceAmount * memberCount.adults) + (priceAmount * 0.5 * memberCount.children);
+    const basePrice = priceAmount || 0;
+    let adultsPrice = 0;
+    if (memberCount.adults > 0) {
+        adultsPrice = basePrice + (basePrice * 0.5 * (memberCount.adults - 1));
+    }
+    const childrenPrice = basePrice * 0.5 * memberCount.children;
+    const totalPrice = adultsPrice + childrenPrice;
 
     // Clean array logic for inclusions & exclusions (to avoid empty array rendering bugs and Next.js UI mismatch)
     const rawInclusions = (tour.inclusions?.length > 0 ? tour.inclusions : null) ||

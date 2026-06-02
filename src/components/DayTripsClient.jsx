@@ -97,8 +97,10 @@ export default function DayTripsClient() {
                     </div>
                 ) : (
                     <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-12">
-                        {filteredTrips.map((trip) => (
-                            <div key={trip.slug || trip._id || trip.id} className="bg-black/5 dark:bg-white/5 overflow-hidden transition-all duration-500 hover:-translate-y-2 group flex flex-col h-full border-b-8 border-[#FACC15]">
+                        {filteredTrips.map((trip) => {
+                            const priceAmount = typeof trip.price === 'object' ? trip.price.amount : trip.price;
+                            return (
+                            <div key={trip.slug || trip._id || trip.id} className="bg-white dark:bg-zinc-900 overflow-hidden transition-all duration-500 hover:-translate-y-2 group flex flex-col h-full border border-slate-200 dark:border-zinc-800 shadow-xl rounded-3xl">
                                 {/* Image Section */}
                                 <div className="relative h-80 overflow-hidden shrink-0">
                                     {trip.image || trip.heroImage || (trip.images && trip.images.length > 0) ? (
@@ -120,7 +122,7 @@ export default function DayTripsClient() {
                                         ))}
                                     </div>
                                     <div className="absolute bottom-6 left-6">
-                                        <span className="px-5 py-2.5 bg-black/80 backdrop-blur text-white text-[10px] font-black uppercase tracking-[0.2em] border-l-4 border-[#FACC15]">
+                                        <span className="px-5 py-2.5 bg-black/80 backdrop-blur text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full">
                                             {trip.category || 'Day Trip'}
                                         </span>
                                     </div>
@@ -136,14 +138,14 @@ export default function DayTripsClient() {
                                         {trip.description}
                                     </p>
 
-                                    <div className="grid grid-cols-2 gap-px bg-black/10 dark:bg-white/10 mb-10 border border-black/10 dark:border-white/10">
-                                        <div className="flex items-center gap-3 p-4 bg-white/40 dark:bg-black/40">
+                                    <div className="grid grid-cols-2 gap-3 mb-10">
+                                        <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-zinc-800/50 rounded-2xl border border-slate-100 dark:border-white/5">
                                             <Clock size={16} className="text-[#FACC15]" />
                                             <span className="text-[10px] font-black text-black/50 dark:text-white/50 uppercase tracking-widest">
                                                 {typeof trip.duration === 'object' ? `${trip.duration.days}D` : '1 DAY'}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-3 p-4 bg-white/40 dark:bg-black/40">
+                                        <div className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-zinc-800/50 rounded-2xl border border-slate-100 dark:border-white/5">
                                             <MapPin size={16} className="text-[#FACC15]" />
                                             <span className="text-[10px] font-black text-black/50 dark:text-white/50 uppercase tracking-widest line-clamp-1">
                                                 {trip.destinations?.length || 1} DEST.
@@ -151,7 +153,7 @@ export default function DayTripsClient() {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center justify-between mt-auto pt-10 border-t border-black/10 dark:border-white/10">
+                                    <div className="flex items-center justify-between mt-auto pt-8 border-t border-slate-100 dark:border-white/10">
                                         <div className="flex flex-col">
                                             <span className="text-[9px] font-black text-black/30 dark:text-white/30 uppercase tracking-[0.3em] mb-2">
                                                 {trip.price?.type === 'per-person' ? 'PER PERSON' : 'STARTING FROM'}
@@ -159,20 +161,21 @@ export default function DayTripsClient() {
                                             <div className="flex items-baseline gap-2">
                                                 <span className="text-xs font-black text-[#FACC15] uppercase">{trip.price?.currency || 'USD'}</span>
                                                 <span className="text-4xl font-black text-black dark:text-white tracking-tighter leading-none">
-                                                    {trip.price?.amount?.toLocaleString() || '0'}
+                                                    {priceAmount?.toLocaleString() || '0'}
                                                 </span>
                                             </div>
                                         </div>
                                         <Link
                                             href={`/day-trips/${trip.slug}`}
-                                            className="w-16 h-16 bg-[#FACC15] text-black flex items-center justify-center hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all transform group-hover:rotate-45"
+                                            className="w-16 h-16 bg-[#FACC15] text-black rounded-full flex items-center justify-center hover:bg-black hover:text-[#FACC15] dark:hover:bg-white dark:hover:text-black transition-all transform group-hover:scale-110 shadow-lg"
                                         >
-                                            <ArrowRight size={28} className="-rotate-45" />
+                                            <ArrowRight size={28} className="-rotate-45 group-hover:rotate-0 transition-transform duration-300" />
                                         </Link>
                                     </div>
                                 </div>
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 )}
 

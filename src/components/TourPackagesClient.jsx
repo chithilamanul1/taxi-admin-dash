@@ -97,7 +97,7 @@ export default function TourPackagesClient() {
                                     return false;
                                 })
                                 .map((tour, index) => (
-                                    <div key={tour.slug || tour._id || index} className="bg-black/5 dark:bg-white/5 overflow-hidden transition-all duration-500 hover:-translate-y-2 group flex flex-col h-full border-b-8 border-[#FACC15]">
+                                    <div key={tour.slug || tour._id || index} className="bg-white dark:bg-zinc-900 overflow-hidden transition-all duration-500 hover:-translate-y-2 group flex flex-col h-full border border-slate-200 dark:border-zinc-800 shadow-xl rounded-3xl">
                                         {/* Image Section */}
                                         <div className="relative h-80 overflow-hidden shrink-0">
                                             {tour.image || tour.heroImage || (tour.images && tour.images.length > 0) ? (
@@ -120,7 +120,7 @@ export default function TourPackagesClient() {
                                             </div>
 
                                             <div className="absolute bottom-6 left-6 right-6">
-                                                <div className="inline-flex items-center gap-3 bg-black/80 backdrop-blur px-5 py-2.5 text-white border-l-4 border-[#FACC15]">
+                                                <div className="inline-flex items-center gap-3 bg-black/80 backdrop-blur px-5 py-2.5 text-white rounded-full shadow-lg">
                                                     <Calendar size={14} className="text-[#FACC15]" />
                                                     <span className="text-[10px] font-black uppercase tracking-[0.2em]">
                                                         {typeof tour.duration === 'object' && tour.duration ? `${tour.duration.days || '?'}D / ${tour.duration.nights || '?'}N` : (tour.duration || 'N/A')}
@@ -146,7 +146,7 @@ export default function TourPackagesClient() {
                                                 </span>
                                             </div>
 
-                                            <div className="flex items-center justify-between mt-auto pt-10 border-t border-black/10 dark:border-white/10">
+                                            <div className="flex items-center justify-between mt-auto pt-8 border-t border-slate-100 dark:border-white/10">
                                                 <div className="flex flex-col">
                                                     <span className="text-[9px] font-black text-black/30 dark:text-white/30 uppercase tracking-[0.3em] mb-2">Price From</span>
                                                     <div className="flex items-baseline gap-2">
@@ -161,9 +161,9 @@ export default function TourPackagesClient() {
                                                 </div>
                                                 <Link
                                                     href={`/tour-packages/${tour.slug}`}
-                                                    className="w-16 h-16 bg-[#FACC15] text-black flex items-center justify-center hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all transform group-hover:rotate-45"
+                                                    className="w-16 h-16 bg-[#FACC15] text-black rounded-full flex items-center justify-center hover:bg-black hover:text-[#FACC15] dark:hover:bg-white dark:hover:text-black transition-all transform group-hover:scale-110 shadow-lg"
                                                 >
-                                                    <ArrowRight size={28} className="-rotate-45" />
+                                                    <ArrowRight size={28} className="-rotate-45 group-hover:rotate-0 transition-transform duration-300" />
                                                 </Link>
                                             </div>
                                         </div>
