@@ -183,7 +183,7 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                 const pricingMap = {};
                 vehicles.forEach(v => { 
                     if (v.vehicleType?.toLowerCase() === 'sedan' || v.name?.toLowerCase().includes('sedan')) {
-                        v.image = '/vehicles/sedan_luxury.png';
+                        v.image = '/vehicles/sedancar.png';
                     }
                     pricingMap[v.vehicleType] = v; 
                 });

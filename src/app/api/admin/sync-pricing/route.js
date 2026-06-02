@@ -21,7 +21,7 @@ const VEHICLE_DEFAULTS = {
     },
     'sedan': {
         name: 'Sedan',
-        image: '/vehicles/sedan2.png',
+        image: '/vehicles/sedancar.png',
         capacity: 3,
         luggage: 3,
         handLuggage: 3,
