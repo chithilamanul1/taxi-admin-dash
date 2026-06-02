@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { logoBase64 } from './logoBase64';
 
 const COLORS = {
     brand: [154, 107, 0],    // #9A6B00 — Airport Taxis dark gold
@@ -14,13 +15,16 @@ export const generateBookingPDF = (booking) => {
     const isCash = booking.paymentMethod === 'cash';
     const accentColor = COLORS.brand;
 
-    // -- Helper: Add Text Logo Only --
-    doc.setFontSize(22);
-    doc.setTextColor(...COLORS.brand);
-    doc.setFont(undefined, 'bold');
-    doc.text("AIRPORT TAXIS", 15, 20);
-    doc.setFontSize(8);
-    doc.text("PVT (LTD)", 15, 25);
+    // -- Helper: Add Image Logo --
+    try {
+        doc.addImage(logoBase64, 'PNG', 15, 15, 55, 12);
+    } catch (e) {
+        // Fallback if image fails to load
+        doc.setFontSize(22);
+        doc.setTextColor(...COLORS.brand);
+        doc.setFont(undefined, 'bold');
+        doc.text("AIRPORT TAXIS", 15, 20);
+    }
 
     // -- Header Details (Top Right) --
     doc.setFontSize(24);
