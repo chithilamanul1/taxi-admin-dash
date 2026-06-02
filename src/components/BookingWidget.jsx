@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useSearchParams } from 'next/navigation'
 import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X, ArrowRight, PlaneTakeoff, PlaneLanding, CircleDot, Route } from 'lucide-react'
 
 import Image from 'next/image'
@@ -46,7 +47,20 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     const [appliedOffers, setAppliedOffers] = useState([]); // Support multiple coupons
     const [vehiclePricing, setVehiclePricing] = useState({});
     const [isLoadingPricing, setIsLoadingPricing] = useState(true);
+    const searchParams = useSearchParams();
+    const tabParam = searchParams.get('tab');
+    
     const [activeTab, setActiveTab] = useState(defaultTab);
+    
+    useEffect(() => {
+        if (tabParam && ['pickup', 'drop', 'ride', 'tours'].includes(tabParam)) {
+            setActiveTab(tabParam);
+            const element = document.getElementById('booking');
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, [tabParam]);
     const [tripType, setTripType] = useState('one-way');
     const [pickup, setPickup] = useState({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lng: 79.8837 })
     const [dropoff, setDropoff] = useState({ name: '', lat: null, lng: null })
@@ -757,11 +771,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                             aria-label={`Switch to ${tab.label} tab`}
                             onClick={() => handleTabChange(tab.id)}
                             className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 md:gap-2.5 px-2 sm:px-6 py-3 rounded-xl text-[9px] sm:text-xs md:text-sm font-bold transition-all duration-300 ${activeTab === tab.id
-                                ? 'bg-white dark:bg-zinc-800 text-black dark:text-white shadow-sm border border-slate-200/60 dark:border-white/5'
-                                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-white/5'
+                                ? 'bg-emerald-950 dark:bg-yellow-400 text-white dark:text-black shadow-lg border-2 border-emerald-950 dark:border-yellow-400'
+                                : 'text-slate-500 dark:text-slate-400 hover:text-emerald-900 dark:hover:text-yellow-400 hover:bg-slate-200/50 dark:hover:bg-white/5'
                                 }`}
                         >
-                            <tab.icon size={16} className={activeTab === tab.id ? 'text-[#FACC15]' : 'text-slate-400'} aria-hidden="true" />
+                            <tab.icon size={16} className={activeTab === tab.id ? 'text-[#FACC15] dark:text-black' : 'text-slate-400 group-hover:text-emerald-900 dark:group-hover:text-yellow-400'} aria-hidden="true" />
                             <span className="uppercase tracking-wider">{tab.label}</span>
                         </button>
                     ))}

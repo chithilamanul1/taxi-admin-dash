@@ -51,11 +51,11 @@ export default function Navbar() {
                 {/* Desktop Navigation Menu */}
                 <div className="hidden lg:flex items-center gap-1 xl:gap-2">
                     {[
-                        { label: 'Airport', href: '/' },
-                        { label: 'Ride', href: '/ride' },
+                        { label: 'Airport', href: '/?tab=pickup#booking' },
+                        { label: 'Ride', href: '/?tab=ride#booking' },
                         { label: 'Day Tours', href: '/day-trips' },
                         { label: 'Tour Packages', href: '/tour-packages' },
-                        { label: 'Round Trips', href: '/round-trips' },
+                        { label: 'Round Trips', href: '/?tab=tours#booking' },
                         { label: 'Rates', href: '/prices' },
                         { label: 'Gallery', href: '/gallery' },
                     ].map(item => (
@@ -175,13 +175,13 @@ export default function Navbar() {
                     <div className="p-6 space-y-4">
                         <div className="grid grid-cols-1 gap-4">
                             {[
-                                { label: 'Airport Taxis', href: '/', icon: '✈️', id: 'm-drop' },
+                                { label: 'Airport Taxis', href: '/?tab=pickup#booking', icon: '✈️', id: 'm-drop' },
                                 { label: 'Home', href: '/', icon: '🏠', id: 'm-home' },
-                                { label: 'Ride', href: '/ride', icon: '🚗', id: 'm-ride' },
+                                { label: 'Ride', href: '/?tab=ride#booking', icon: '🚗', id: 'm-ride' },
                                 { label: 'Day Tours', href: '/day-trips', icon: '🌴', id: 'm-day' },
                                 { label: 'City Tours', href: '/tours', icon: '🏙️', id: 'm-city' },
                                 { label: 'Tour Packages', href: '/tour-packages', icon: '🗺️', id: 'm-pkg' },
-                                { label: 'Round Trips', href: '/round-trips', icon: '🔄', id: 'm-round' },
+                                { label: 'Round Trips', href: '/?tab=tours#booking', icon: '🔄', id: 'm-round' },
                                 { label: 'Gallery', href: '/gallery', icon: '📸', id: 'm-gallery' },
                                 { label: 'Rates', href: '/prices', icon: '💰', id: 'm-rates' },
                                 {

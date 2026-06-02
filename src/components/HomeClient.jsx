@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, MapPin, Star, Compass, Clock, Users, ShieldCheck, Sparkles } from 'lucide-react'
@@ -94,7 +94,9 @@ export default function HomeClient() {
 
     return (
         <div className="bg-white dark:bg-black overflow-hidden transition-colors duration-300">
-            <BookingWidget />
+            <Suspense fallback={<div className="h-96 w-full animate-pulse bg-slate-100 dark:bg-zinc-900 rounded-3xl" />}>
+                <BookingWidget />
+            </Suspense>
 
             <div id="calculator" className="py-20 md:py-32 relative border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2">
                 <div className="max-w-6xl mx-auto px-4 relative z-10">
