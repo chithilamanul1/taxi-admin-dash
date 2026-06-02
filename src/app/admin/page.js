@@ -24,9 +24,9 @@ const ALL_VEHICLE_TYPES = [
     { value: 'vezel', label: 'Vessel (Vezel)' },
     { value: 'suv', label: 'SUV' },
     { value: 'mini-van-05', label: 'Mini Van (5-Seater)' },
-    { value: 'mini-van-every', label: 'Mini Van' },
-    { value: 'kdh-van', label: 'KDH Van' },
-    { value: 'mini-bus', label: 'Mini Bus' },
+    { value: 'mini-van-every', label: 'Mini Van (Every)' },
+    { value: 'kdh-van', label: 'VAN' },
+    { value: 'mini-bus', label: 'KDH High Roof' },
     { value: 'bus', label: 'Bus' },
     { value: 'large-bus', label: 'Large Bus' },
     { value: 'coach-bus', label: 'Coach Bus' },
@@ -208,7 +208,7 @@ const ensureAllVehicles = (settingsData) => {
             if (existing) {
                 const tiers = [...(existing.tiers || [])];
                 while (tiers.length < 4) {
-                    tiers.push({ km: (tiers.length + 1) * 50, price: 0 });
+                    tiers.push({ km: 60 + tiers.length * 10, price: 0 });
                 }
                 const packageId = existing.id || `dest-pkg-${h}h-${vt.value}-${Date.now()}`;
                 destinationPackages.push({ 
@@ -224,10 +224,10 @@ const ensureAllVehicles = (settingsData) => {
                     hours: h,
                     vehicleType: vt.value,
                     tiers: [
-                        { km: 50, price: 0 },
-                        { km: 100, price: 0 },
-                        { km: 150, price: 0 },
-                        { km: 200, price: 0 }
+                        { km: 60, price: 0 },
+                        { km: 70, price: 0 },
+                        { km: 80, price: 0 },
+                        { km: 90, price: 0 }
                     ]
                 });
             }
@@ -1638,10 +1638,10 @@ export default function AdminDashboard() {
                                                             hours: newHours,
                                                             vehicleType: vt.value,
                                                             tiers: [
-                                                                { km: 50, price: 0 },
-                                                                { km: 100, price: 0 },
-                                                                { km: 150, price: 0 },
-                                                                { km: 200, price: 0 }
+                                                                { km: 60, price: 0 },
+                                                                { km: 70, price: 0 },
+                                                                { km: 80, price: 0 },
+                                                                { km: 90, price: 0 }
                                                             ]
                                                         }));
                                                         setPricingSettings({

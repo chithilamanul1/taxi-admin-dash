@@ -84,8 +84,8 @@ const CustomTourBooking = () => {
             { id: 'mini-van-every', name: 'MINI VAN (EVERY)', baseRate: 7000, perKm: 110, image: '/vehicles/susukievery.png', capacity: 4, suitcases: 4 },
             { id: 'mini-van-05', name: 'MINI VAN (5 SEATER)', baseRate: 7500, perKm: 130, image: '/vehicles/minivan5seat.png', capacity: 5, suitcases: 5 },
             { id: 'suv', name: 'SUV (LUXURY)', baseRate: 9000, perKm: 160, image: '/vehicles/Hondavezel.png', capacity: 4, suitcases: 4 },
-            { id: 'kdh-van', name: 'KDH HIGH ROOF', baseRate: 10000, perKm: 180, image: '/vehicles/toyota-highroof.png', capacity: 9, suitcases: 8 },
-            { id: 'mini-bus', name: 'MINI BUS (COSTER)', baseRate: 15000, perKm: 250, image: '/vehicles/costerbus.png', capacity: 20, suitcases: 15 },
+            { id: 'kdh-van', name: 'VAN', baseRate: 10000, perKm: 180, image: '/vehicles/toyota-highroof.png', capacity: 9, suitcases: 8 },
+            { id: 'mini-bus', name: 'KDH HIGH ROOF', baseRate: 15000, perKm: 250, image: '/vehicles/toyota-highroof.png', capacity: 20, suitcases: 15 },
             { id: 'coach-bus', name: 'LUXURY COACH', baseRate: 25000, perKm: 450, image: '/vehicles/coach-bus.png', capacity: 45, suitcases: 50 }
           ];
           setVehicles(defaults);
@@ -101,8 +101,8 @@ const CustomTourBooking = () => {
           { id: 'mini-van-every', name: 'MINI VAN (EVERY)', baseRate: 7000, perKm: 110, image: '/vehicles/susukievery.png', capacity: 4, suitcases: 4 },
           { id: 'mini-van-05', name: 'MINI VAN (5 SEATER)', baseRate: 7500, perKm: 130, image: '/vehicles/minivan5seat.png', capacity: 5, suitcases: 5 },
           { id: 'suv', name: 'SUV (LUXURY)', baseRate: 9000, perKm: 160, image: '/vehicles/Hondavezel.png', capacity: 4, suitcases: 4 },
-          { id: 'kdh-van', name: 'KDH HIGH ROOF', baseRate: 10000, perKm: 180, image: '/vehicles/toyota-highroof.png', capacity: 9, suitcases: 8 },
-          { id: 'mini-bus', name: 'MINI BUS (COSTER)', baseRate: 15000, perKm: 250, image: '/vehicles/costerbus.png', capacity: 20, suitcases: 15 },
+          { id: 'kdh-van', name: 'VAN', baseRate: 10000, perKm: 180, image: '/vehicles/toyota-highroof.png', capacity: 9, suitcases: 8 },
+          { id: 'mini-bus', name: 'KDH HIGH ROOF', baseRate: 15000, perKm: 250, image: '/vehicles/toyota-highroof.png', capacity: 20, suitcases: 15 },
           { id: 'coach-bus', name: 'LUXURY COACH', baseRate: 25000, perKm: 450, image: '/vehicles/coach-bus.png', capacity: 45, suitcases: 50 }
         ];
         setVehicles(defaults);
