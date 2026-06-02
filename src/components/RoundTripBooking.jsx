@@ -532,7 +532,7 @@ const RoundTripBooking = () => {
 
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
-      <div className="flex bg-slate-50 p-2 border-b border-slate-100 overflow-x-auto gap-2">
+      <div className="flex bg-slate-50 p-2 border-b border-slate-100 overflow-x-auto gap-2 [&::-webkit-scrollbar]:hidden" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <button onClick={() => { setTab('airport-round-tour'); syncWithCalculator('airport-round-tour', selectedVehicle); }} className={`flex-1 flex items-center justify-center gap-2 py-4 px-3 whitespace-nowrap rounded-2xl transition-all font-black text-[10px] uppercase tracking-[0.1em] ${tab === 'airport-round-tour' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Plane size={16} /> Airport Round Tour</button>
         <button onClick={() => { setTab('normal-round-tour'); syncWithCalculator('normal-round-tour', selectedVehicle); }} className={`flex-1 flex items-center justify-center gap-2 py-4 px-3 whitespace-nowrap rounded-2xl transition-all font-black text-[10px] uppercase tracking-[0.1em] ${tab === 'normal-round-tour' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><Sparkles size={16} /> Normal Round Tour</button>
         <button onClick={() => { setTab('destination-based-tour'); syncWithCalculator('destination-based-tour', selectedVehicle); }} className={`flex-1 flex items-center justify-center gap-2 py-4 px-3 whitespace-nowrap rounded-2xl transition-all font-black text-[10px] uppercase tracking-[0.1em] ${tab === 'destination-based-tour' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-400'}`}><MapPin size={16} /> Destination-Based Tour</button>

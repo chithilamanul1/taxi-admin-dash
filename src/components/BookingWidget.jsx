@@ -790,7 +790,11 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
             </div>
 
             {/* Widget Main Content - Modern Flat Luxury Style */}
-            <div className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-slate-400 dark:border-white/10 p-4 sm:p-6 md:p-8 animate-slide-up relative z-10 w-full box-border shadow-xl shadow-slate-200/50 dark:shadow-none">
+            <div className={`animate-slide-up relative z-10 w-full box-border ${
+                activeTab === 'tours' 
+                ? '' 
+                : 'bg-white dark:bg-zinc-900 rounded-[2rem] border border-slate-400 dark:border-white/10 p-4 sm:p-6 md:p-8 shadow-xl shadow-slate-200/50 dark:shadow-none'
+            }`}>
 
                 {activeTab === 'tours' ? <RoundTripBooking /> : (
                     <div className="grid lg:grid-cols-[1.5fr,380px] xl:grid-cols-[1fr,380px] gap-8 lg:gap-10 min-w-0">

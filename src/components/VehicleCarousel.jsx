@@ -83,7 +83,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                     <img
                         src={vehicle.image}
                         alt={vehicle.name}
-                        className="w-full h-full object-contain scale-110 group-hover/condensed:scale-125 transition-transform duration-500"
+                        className="w-[120%] max-w-[150%] h-full object-contain scale-[1.35] group-hover/condensed:scale-[1.5] transition-transform duration-500"
                     />
                 </div>
                 <div className="flex-1 min-w-0 pr-2">
@@ -208,15 +208,16 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 )}
 
                                 {/* Vehicle Image — uniform premium dimensions */}
-                                <div className="w-full flex justify-center items-center relative z-10 mt-auto min-h-[120px] sm:min-h-[140px] py-1">
+                                <div className="w-full flex justify-center items-center relative z-10 mt-auto h-[120px] sm:h-[140px] py-1">
                                     <img
                                         src={vehicle.image}
                                         alt={vehicle.name}
                                         className={`
                                             object-contain transition-transform duration-500
-                                            w-[95%] h-[110px] sm:h-[120px] 
-                                            ${isSelected ? 'scale-[1.4] sm:scale-[1.3]' : 'scale-[1.2] sm:scale-[1.1] group-hover/card:scale-[1.3]'}
+                                            w-[120%] max-w-[150%] h-[140px] sm:h-[160px] -ml-[10%]
+                                            ${isSelected ? 'scale-[1.6] sm:scale-[1.7]' : 'scale-[1.4] sm:scale-[1.5] group-hover/card:scale-[1.6]'}
                                         `}
+                                        style={{ filter: 'drop-shadow(0 15px 15px rgba(0,0,0,0.15))' }}
                                     />
                                 </div>
                             </div>
