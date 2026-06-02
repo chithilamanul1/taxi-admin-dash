@@ -43,7 +43,7 @@ export default function Navbar() {
         <nav className={`relative w-full z-[150] transition-all duration-500 py-3 md:py-4 bg-white border-b border-slate-100 shadow-sm`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <Link href="/" className="flex items-center gap-2 group shrink-0">
-                    <div className="flex flex-col justify-center -ml-2 sm:-ml-4 md:-ml-6">
+                    <div className="flex flex-col justify-center -ml-2 sm:-ml-6 md:-ml-10 lg:-ml-14">
                         <img src="/header.png" alt="Airport Taxis Sri Lanka" className="h-16 sm:h-20 md:h-24 w-auto object-contain scale-[1.1] origin-left" />
                     </div>
                 </Link>
