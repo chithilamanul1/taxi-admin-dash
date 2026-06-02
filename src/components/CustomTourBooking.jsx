@@ -963,30 +963,37 @@ const CustomTourBooking = () => {
                       </button>
                     </div>
                     {formData.placesList.map((place, idx) => (
-                      <div key={idx} className="relative group">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"><Sparkles size={12} /></div>
-                        <input 
-                          type="text"
-                          value={place}
-                          onChange={e => {
-                            const newList = [...formData.placesList];
-                            newList[idx] = e.target.value;
-                            setFormData({ ...formData, placesList: newList });
-                          }}
-                          placeholder={`Stop ${idx + 1} (e.g. Sigiriya Rock)`}
-                          className="w-full bg-white dark:bg-zinc-800 border border-slate-400 dark:border-white/10 rounded-xl py-2.5 pl-9 pr-8 outline-none font-bold text-[11px] text-black dark:text-white focus:border-[#FACC15] transition-all shadow-sm"
-                        />
-                        {formData.placesList.length > 1 && (
-                          <button 
-                            type="button"
-                            onClick={() => {
-                              const newList = formData.placesList.filter((_, i) => i !== idx);
+                      <div key={idx} className="relative group flex flex-col">
+                        <div className="relative">
+                          <div className={`absolute left-3 top-1/2 -translate-y-1/2 ${!place ? 'text-red-400' : 'text-slate-400'}`}><Sparkles size={12} /></div>
+                          <input 
+                            type="text"
+                            value={place}
+                            onChange={e => {
+                              const newList = [...formData.placesList];
+                              newList[idx] = e.target.value;
                               setFormData({ ...formData, placesList: newList });
                             }}
-                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1"
-                          >
-                            <Minus size={14} />
-                          </button>
+                            placeholder={`Stop ${idx + 1} (e.g. Sigiriya Rock)`}
+                            className={`w-full rounded-xl py-2.5 pl-9 pr-8 outline-none font-bold text-[11px] transition-all shadow-sm ${!place ? 'bg-red-50 dark:bg-red-950/20 border-2 border-red-400 text-red-900 dark:text-red-200 placeholder:text-red-400/70 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' : 'bg-white dark:bg-zinc-800 border border-slate-400 dark:border-white/10 text-black dark:text-white focus:border-[#FACC15]'}`}
+                          />
+                          {formData.placesList.length > 1 && (
+                            <button 
+                              type="button"
+                              onClick={() => {
+                                const newList = formData.placesList.filter((_, i) => i !== idx);
+                                setFormData({ ...formData, placesList: newList });
+                              }}
+                              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1"
+                            >
+                              <Minus size={14} />
+                            </button>
+                          )}
+                        </div>
+                        {!place && (
+                          <p className="text-[9px] font-bold text-red-500 px-1 uppercase tracking-widest mt-1.5 mb-1.5">
+                            <AlertCircle size={10} className="inline mr-1 -mt-0.5" /> Please specify your tour destination
+                          </p>
                         )}
                       </div>
                     ))}
