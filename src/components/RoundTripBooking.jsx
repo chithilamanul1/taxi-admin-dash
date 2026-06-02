@@ -196,7 +196,7 @@ const RoundTripBooking = () => {
     if (!v) return 0;
     
     if (tab === 'airport-round-tour') {
-      const pkg = (airportTours || []).find(p => p.hours === Number(formData.taxiTourHours) && (p.vehicleType === v.id || p.vehicleType === v.vehicleType || (v.id === 'normal-kdh' && p.vehicleType === 'kdh-flatroof')));
+      const pkg = (airportTours || []).find(p => p.hours === Number(formData.taxiTourHours) && (p.vehicleType === v.id || p.vehicleType === v.vehicleType || (v.id === 'normal-kdh' && p.vehicleType === 'kdh-van')));
       if (pkg) {
         const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
         if (tier && tier.price) {
@@ -210,7 +210,7 @@ const RoundTripBooking = () => {
     }
     
     if (tab === 'normal-round-tour') {
-      const pkg = (normalTours || []).find(p => p.hours === Number(formData.taxiTourHours) && (p.vehicleType === v.id || p.vehicleType === v.vehicleType || (v.id === 'normal-kdh' && p.vehicleType === 'kdh-flatroof')));
+      const pkg = (normalTours || []).find(p => p.hours === Number(formData.taxiTourHours) && (p.vehicleType === v.id || p.vehicleType === v.vehicleType || (v.id === 'normal-kdh' && p.vehicleType === 'kdh-van')));
       if (pkg) {
         const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
         if (tier && tier.price) {
@@ -232,7 +232,7 @@ const RoundTripBooking = () => {
       if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
         const pkg = destMatch.roundTripPackages.find(p => 
           p.hours === Number(formData.taxiTourHours) && 
-          (p.vehicleType === v.id || p.vehicleType === v.vehicleType || (v.id === 'normal-kdh' && p.vehicleType === 'kdh-flatroof'))
+          (p.vehicleType === v.id || p.vehicleType === v.vehicleType || (v.id === 'normal-kdh' && p.vehicleType === 'kdh-van'))
         );
         if (pkg) {
           const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
@@ -249,7 +249,7 @@ const RoundTripBooking = () => {
       // 2. Global destinationRoundTripPackages
       const pkg = (pricingSettings?.destinationRoundTripPackages || []).find(p => 
         p.hours === Number(formData.taxiTourHours) && 
-        (p.vehicleType === v.id || p.vehicleType === v.vehicleType || (v.id === 'normal-kdh' && p.vehicleType === 'kdh-flatroof'))
+        (p.vehicleType === v.id || p.vehicleType === v.vehicleType || (v.id === 'normal-kdh' && p.vehicleType === 'kdh-van'))
       );
       if (pkg) {
         const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));

@@ -29,7 +29,16 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
 
         try {
             const isPerPerson = tourTitle.toLowerCase().includes('per person') || !!price && price < 500; // Heuristic if type not passed
-            const totalPrice = price ? (isPerPerson ? (formData.travelers + formData.children) * price : price) : 0;
+            
+            let totalPrice = 0;
+            const totalPax = parseInt(formData.travelers || 0) + parseInt(formData.children || 0);
+            if (price) {
+                if (isPerPerson && totalPax > 0) {
+                    totalPrice = price + (totalPax - 1) * (price * 0.5);
+                } else {
+                    totalPrice = price;
+                }
+            }
 
             const res = await fetch('/api/bookings/tour', {
                 method: 'POST',
@@ -236,7 +245,12 @@ const TourBookingModal = ({ isOpen, onClose, tourTitle, tourId, duration, price,
                             <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-xl flex justify-between items-center">
                                 <span className="text-sm font-bold text-emerald-900 dark:text-emerald-100 uppercase tracking-wider">Estimated Total</span>
                                 <span className="text-xl font-black text-emerald-900 dark:text-white">
-                                    {currency} {((formData.adults + formData.children) * price).toLocaleString()}
+                                    {currency} {(() => {
+                                        const totalPax = parseInt(formData.travelers || 0) + parseInt(formData.children || 0);
+                                        const isPerPerson = tourTitle.toLowerCase().includes('per person') || !!price && price < 500;
+                                        if (!isPerPerson || totalPax === 0) return price.toLocaleString();
+                                        return (price + (totalPax - 1) * (price * 0.5)).toLocaleString();
+                                    })()}
                                 </span>
                             </div>
                         )}

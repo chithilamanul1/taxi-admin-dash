@@ -47,9 +47,7 @@ export default function Navbar() {
                         <CarFront size={32} strokeWidth={2} />
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-black text-[17px] sm:text-2xl md:text-3xl tracking-tighter leading-tight text-emerald-950 uppercase group-hover:text-emerald-600 transition-colors">
-                            <span className="text-red-600">A</span>IRPORT TAXIS <span className="font-semibold text-[13px] sm:text-lg md:text-xl tracking-normal">(PVT) LTD</span>
-                        </span>
+                        <img src="/header.png" alt="Airport Taxis Sri Lanka" className="h-10 sm:h-12 w-auto object-contain" />
                         <div className="flex items-center w-full opacity-80 mt-0.5">
                             <div className="h-[2px] rounded-full bg-emerald-950 group-hover:bg-emerald-600 w-1/4 transition-colors"></div>
                             <div className="flex-1 flex justify-center">

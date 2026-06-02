@@ -389,7 +389,7 @@ const CustomTourBooking = () => {
     let basePrice = 0;
     const pkgs = getActivePackages();
       
-    const pkg = pkgs.find(p => p.hours === Number(formData.taxiTourHours) && (p.vehicleType === veh.id || (veh.id === 'normal-kdh' && p.vehicleType === 'kdh-flatroof')));
+    const pkg = pkgs.find(p => p.hours === Number(formData.taxiTourHours) && (p.vehicleType === veh.id || (veh.id === 'normal-kdh' && p.vehicleType === 'kdh-van')));
     if (pkg) {
       const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
       if (tier && tier.price) {
