@@ -215,7 +215,7 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                         className={`
                                             object-contain transition-transform duration-500
                                             w-[95%] h-[110px] sm:h-[120px] 
-                                            ${isSelected ? 'scale-[1.9] sm:scale-[1.7]' : 'scale-[1.7] sm:scale-[1.5] group-hover/card:scale-[1.6]'}
+                                            ${isSelected ? 'scale-[1.4] sm:scale-[1.3]' : 'scale-[1.2] sm:scale-[1.1] group-hover/card:scale-[1.3]'}
                                         `}
                                     />
                                 </div>
