@@ -995,11 +995,11 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                                             {appliedOffers.length > 0 && (
                                                 <div className="flex flex-wrap gap-2 animate-fade-in">
                                                     {appliedOffers.map((offer, i) => (
-                                                        <div key={i} className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 px-3 py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-500/20 shadow-sm">
-                                                            <Tag size={12} className="text-emerald-600 dark:text-emerald-500" />
-                                                            <span className="text-[10px] font-bold uppercase tracking-widest">{offer.name}</span>
-                                                            <span className="text-[10px] font-bold opacity-70">(-{offer.discountPercentage > 0 ? `${offer.discountPercentage}%` : `Rs ${offer.discountAmount}`})</span>
-                                                            <button onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))} className="ml-1 p-0.5 hover:bg-emerald-200 dark:hover:bg-emerald-500/30 rounded-md transition-colors"><X size={12} /></button>
+                                                        <div key={i} className="flex items-center gap-2 bg-[#FACC15] dark:bg-yellow-500/20 text-black dark:text-yellow-400 px-4 py-2 rounded-xl border border-yellow-400 dark:border-yellow-500/30 shadow-md">
+                                                            <Tag size={14} className="text-black/70 dark:text-yellow-500" />
+                                                            <span className="text-xs font-black uppercase tracking-widest">{offer.name}</span>
+                                                            <span className="text-xs font-bold opacity-80">(-{offer.discountPercentage > 0 ? `${offer.discountPercentage}%` : `Rs ${offer.discountAmount}`})</span>
+                                                            <button onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))} className="ml-1.5 p-1 hover:bg-black/10 dark:hover:bg-yellow-500/30 rounded-md transition-colors"><X size={14} /></button>
                                                         </div>
                                                     ))}
                                                 </div>
