@@ -43,18 +43,8 @@ export default function Navbar() {
         <nav className={`relative w-full z-[150] transition-all duration-500 py-3 md:py-4 bg-white border-b border-slate-100 shadow-sm`}>
             <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                 <Link href="/" className="flex items-center gap-2 group shrink-0">
-                    <div className="text-emerald-950 group-hover:text-emerald-600 transition-colors hidden sm:block">
-                        <CarFront size={32} strokeWidth={2} />
-                    </div>
-                    <div className="flex flex-col">
-                        <img src="/header.png" alt="Airport Taxis Sri Lanka" className="h-10 sm:h-12 w-auto object-contain" />
-                        <div className="flex items-center w-full opacity-80 mt-0.5">
-                            <div className="h-[2px] rounded-full bg-emerald-950 group-hover:bg-emerald-600 w-1/4 transition-colors"></div>
-                            <div className="flex-1 flex justify-center">
-                                <Plane size={16} fill="currentColor" className="text-red-600 -rotate-45" />
-                            </div>
-                            <div className="h-[2px] rounded-full bg-emerald-950 group-hover:bg-emerald-600 w-1/4 transition-colors"></div>
-                        </div>
+                    <div className="flex flex-col justify-center">
+                        <img src="/header.png" alt="Airport Taxis Sri Lanka" className="h-16 sm:h-20 md:h-24 w-auto object-contain" />
                     </div>
                 </Link>
 
