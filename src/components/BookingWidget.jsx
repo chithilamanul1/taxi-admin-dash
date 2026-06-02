@@ -1402,10 +1402,6 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
                         }
                     });
                     window.dispatchEvent(event);
-                    const element = document.getElementById('calculator');
-                    if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
-                    }
                 }}
                 passengerCount={passengerCount}
                 isLoading={isLoadingPricing}
