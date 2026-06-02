@@ -42,7 +42,7 @@ const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours,
 
 // Internal Loader Component to avoid hook conflicts
 
-const BookingWidget = ({ defaultTab = 'pickup' }) => {
+const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
     const [activeOffers, setActiveOffers] = useState([]);
     const [appliedOffers, setAppliedOffers] = useState([]); // Support multiple coupons
     const [vehiclePricing, setVehiclePricing] = useState({});
@@ -1470,4 +1470,10 @@ const BookingWidget = ({ defaultTab = 'pickup' }) => {
     );
 }
 
-export default BookingWidget
+export default function BookingWidget(props) {
+    return (
+        <React.Suspense fallback={<div className="h-96 w-full animate-pulse bg-slate-100 dark:bg-zinc-900 rounded-3xl" />}>
+            <BookingWidgetContent {...props} />
+        </React.Suspense>
+    );
+}
