@@ -236,7 +236,14 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                 name: destParam
             });
             setDropoffSearch(destParam);
-            setActiveTab('pickup');
+            
+            const tab = params.get('tab');
+            if (tab === 'ride') {
+                setPickup({ name: '', lat: null, lng: null });
+                setPickupSearch('');
+            } else if (!tab) {
+                setActiveTab('pickup');
+            }
         }
 
     }, []);

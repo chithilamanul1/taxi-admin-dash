@@ -47,7 +47,7 @@ const DestinationsSection = () => {
                             transition={{ delay: idx * 0.1 }}
                             viewport={{ once: true }}
                             onClick={() => {
-                                window.location.href = `/?destination=${dest.name}#booking`;
+                                window.location.href = `/?tab=ride&destination=${encodeURIComponent(dest.name)}#booking`;
                             }}
                             className="group relative cursor-pointer"
                         >
