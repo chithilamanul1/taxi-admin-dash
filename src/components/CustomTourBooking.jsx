@@ -319,6 +319,69 @@ const CustomTourBooking = () => {
   };
   const handleLocationChange = (index, value) => { const newLocs = [...locations]; newLocs[index] = value; setLocations(newLocs); };
 
+  // Auto-adjust package based on actual route requirements
+  const handleRouteCalculated = (stats) => {
+    setDistance(stats.distanceKm);
+    
+    if (stats.distanceKm <= 0) return;
+
+    // We add 30% buffer to driving time for traffic/stops to get realistic required hours
+    const reqHours = Math.ceil((stats.durationMin * 1.3) / 60);
+    const reqKm = stats.distanceKm;
+
+    const availableHours = getAvailableHours();
+    if (availableHours.length === 0) return;
+
+    let targetHours = formData.taxiTourHours;
+    if (reqHours > targetHours) {
+        const higherHours = availableHours.filter(h => h >= reqHours);
+        targetHours = higherHours.length > 0 ? higherHours[0] : availableHours[availableHours.length - 1];
+    }
+
+    const pkgs = getActivePackages();
+    let match = [];
+    if (selectedVehicle) {
+      match = pkgs.filter(p => p.hours === targetHours && p.vehicleType === selectedVehicle.id);
+    }
+    if (match.length === 0) {
+      match = pkgs.filter(p => p.hours === targetHours);
+    }
+    
+    let targetKm = formData.taxiTourKm;
+    if (match.length > 0) {
+      const kms = [];
+      match.forEach(p => {
+        (p.tiers || []).forEach(t => {
+          if (t.km && !kms.includes(t.km)) kms.push(t.km);
+        });
+      });
+      kms.sort((a, b) => a - b);
+      
+      // Upgrade KM if needed, but ONLY if we haven't already maxed it out manually or something.
+      // Actually, if the route requires more KM than currently selected:
+      if (reqKm > targetKm || reqHours > formData.taxiTourHours) {
+          const validKms = kms.filter(k => k >= reqKm);
+          targetKm = validKms.length > 0 ? validKms[0] : kms[kms.length - 1];
+      }
+    } else {
+      // Fallback
+      if (reqKm > targetKm) {
+         const fallbacks = [20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250, 300, 400, 500];
+         const higher = fallbacks.filter(k => k >= reqKm);
+         targetKm = higher.length > 0 ? higher[0] : fallbacks[fallbacks.length - 1];
+      }
+    }
+
+    // Only update state if it actually needs an upgrade
+    if (targetHours !== formData.taxiTourHours || targetKm !== formData.taxiTourKm) {
+       setFormData(prev => ({
+          ...prev,
+          taxiTourHours: targetHours,
+          taxiTourKm: targetKm
+       }));
+    }
+  };
+
   // Calculate pricing based on selected vehicle & hours & KM limit
   const calculateTotalForVehicle = (veh) => {
     if (!veh) return 0;
@@ -908,7 +971,7 @@ const CustomTourBooking = () => {
                     pickup={{ name: locations[0] || 'Bandaranaike International Airport' }} 
                     dropoff={{ name: locations[0] || 'Bandaranaike International Airport' }} 
                     waypoints={formData.placesList.filter(p => p.trim() !== '').map(p => ({ name: p }))} 
-                    onRouteCalculated={(stats) => setDistance(stats.distanceKm)}
+                    onRouteCalculated={handleRouteCalculated}
                   />
                 </div>
             </section>
