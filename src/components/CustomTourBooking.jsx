@@ -242,10 +242,6 @@ const CustomTourBooking = () => {
     if (selectedVehicle) {
       match = pkgs.filter(p => p.hours === formData.taxiTourHours && p.vehicleType === selectedVehicle.id);
     }
-    // Fallback to all vehicles for this hour if no vehicle selected or vehicle has no tiers configured
-    if (match.length === 0) {
-      match = pkgs.filter(p => p.hours === formData.taxiTourHours);
-    }
     
     if (match.length > 0) {
       const kms = [];
@@ -256,9 +252,9 @@ const CustomTourBooking = () => {
           }
         });
       });
-      return kms.sort((a, b) => a - b);
+      if (kms.length > 0) return kms.sort((a, b) => a - b);
     }
-    return [20, 30, 40, 50]; // Fallback
+    return [20, 30, 40, 50, 100, 150, 200]; // Fallback
   };
 
   // Update hours and dynamic KM limit defaults
@@ -404,16 +400,26 @@ const CustomTourBooking = () => {
     }
     
     if (!basePrice) {
-      // Fallback
+      // Fallback calculation using taxiTourKm
       const tourPkg = TAXI_TOUR_PACKAGES.find(p => p.hours === Number(formData.taxiTourHours));
       let fallbackBasePrice = tourPkg ? tourPkg.price : (formData.taxiTourHours * 2500);
+      
+      // Calculate extra KM if the selected km limit is higher than the standard package distance
+      const defaultDist = tourPkg ? tourPkg.distance : (formData.taxiTourHours * 20);
+      if (formData.taxiTourKm > defaultDist) {
+        fallbackBasePrice += (formData.taxiTourKm - defaultDist) * (veh.perKmRate || veh.perKm || 100);
+      } else if (formData.taxiTourKm < defaultDist) {
+        fallbackBasePrice -= (defaultDist - formData.taxiTourKm) * ((veh.perKmRate || veh.perKm || 100) * 0.5);
+      }
+
       if (veh.id === 'sedan') fallbackBasePrice *= 1.2;
       if (veh.id === 'vezel' || veh.id === 'suv') fallbackBasePrice *= 1.4;
       if (veh.id === 'mini-van-every' || veh.id === 'mini-van-05') fallbackBasePrice *= 1.3;
       if (veh.id === 'van' || veh.id === 'kdh-van' || veh.id === 'normal-kdh' || veh.id === 'kdh-flatroof') fallbackBasePrice *= 1.7;
-      if (veh.id === 'mini-bus') fallbackBasePrice *= 2.5;
+      if (veh.id === 'mini-bus' || veh.id === 'minibus' || veh.name.includes('MINI BUS')) fallbackBasePrice *= 2.5;
       if (veh.id === 'coach-bus') fallbackBasePrice *= 4.5;
-      basePrice = fallbackBasePrice;
+      
+      basePrice = Math.round(fallbackBasePrice);
     }
 
     // Handle extra KMs if route exceeds selections
