@@ -84,17 +84,27 @@ const RoundTripBooking = () => {
       })
       .catch(err => console.error("Error fetching pricing settings:", err));
 
-    fetch('/api/admin/airport-tours')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) setAirportTours(data.data);
+    Promise.all([
+      fetch('/api/admin/airport-tours').then(res => res.json()),
+      fetch('/api/admin/heavy-airport-tours').then(res => res.json())
+    ])
+      .then(([normal, heavy]) => {
+        let combined = [];
+        if (normal.success) combined = [...combined, ...normal.data];
+        if (heavy.success) combined = [...combined, ...heavy.data];
+        setAirportTours(combined);
       })
       .catch(err => console.error("Error fetching airport tours:", err));
 
-    fetch('/api/admin/normal-tours')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) setNormalTours(data.data);
+    Promise.all([
+      fetch('/api/admin/normal-tours').then(res => res.json()),
+      fetch('/api/admin/heavy-normal-tours').then(res => res.json())
+    ])
+      .then(([normal, heavy]) => {
+        let combined = [];
+        if (normal.success) combined = [...combined, ...normal.data];
+        if (heavy.success) combined = [...combined, ...heavy.data];
+        setNormalTours(combined);
       })
       .catch(err => console.error("Error fetching normal tours:", err));
   }, []);
