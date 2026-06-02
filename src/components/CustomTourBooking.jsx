@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Clock, Navigation, ChevronRight, ChevronLeft, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles, CreditCard, ChevronDown } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { Tag, X, MapPin, Clock, Navigation, ChevronRight, ChevronLeft, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles, CreditCard, ChevronDown } from 'lucide-react';
 import { calculateBasePrice, calculateTrafficSurge, TAXI_TOUR_PACKAGES } from '@/lib/pricing-util';
+const SmartOfferNudge = dynamic(() => import('./SmartOfferNudge'), { ssr: false });
 import { loadGoogleMapsScript } from '@/lib/google-maps';
 import TripMap from './TripMap';
 import { useSession } from 'next-auth/react';
@@ -23,6 +25,10 @@ const CustomTourBooking = () => {
   const [googleLoaded, setGoogleLoaded] = useState(false);
   const [locations, setLocations] = useState(['', '']);
   const [distance, setDistance] = useState(0);
+  const [appliedOffers, setAppliedOffers] = useState([]);
+  const [isCouponOpen, setIsCouponOpen] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [dismissedOfferIds, setDismissedOfferIds] = useState([]);
   const [duration, setDuration] = useState('');
   const [pricingSettings, setPricingSettings] = useState(null);
   const [airportTours, setAirportTours] = useState([]);
@@ -418,7 +424,12 @@ const CustomTourBooking = () => {
     return Math.round(total);
   };
 
-  const totalPrice = calculateTotalForVehicle(selectedVehicle);
+  const baseTotal = calculateTotalForVehicle(selectedVehicle);
+  const totalDiscount = appliedOffers.reduce((max, offer) => {
+      const val = (offer.discountAmount || (baseTotal * (offer.discountPercentage / 100)));
+      return Math.max(max, val);
+  }, 0);
+  const totalPrice = Math.max(0, baseTotal - totalDiscount);
 
 
   const handleBooking = async () => {
@@ -444,8 +455,9 @@ const CustomTourBooking = () => {
             tourTitle: "Custom Round Tour",
             duration: `${formData.taxiTourHours} Hours`,
           },
-          totalPrice: calculateTotalForVehicle(selectedVehicle),
-          displayPrice: convertPrice(calculateTotalForVehicle(selectedVehicle)).value,
+          totalPrice: totalPrice,
+          displayPrice: convertPrice(totalPrice).value,
+          appliedCoupons: appliedOffers.map(o => o.code),
           currency: currency || 'LKR',
           paymentMethod: 'cash',
           paymentStatus: 'pending',
@@ -793,6 +805,46 @@ const CustomTourBooking = () => {
             </div>
 
 
+
+            {/* Smart Offers Section */}
+            <div className="mt-4 mb-2">
+              <button onClick={() => setIsCouponOpen(!isCouponOpen)} className={`flex items-center gap-3 text-[10px] font-bold min-h-[3rem] transition-all px-4 py-2 rounded-2xl w-full justify-center uppercase tracking-widest border shadow-sm hover:shadow-md ${isCouponOpen ? 'bg-amber-50 dark:bg-amber-500/20 text-amber-900 dark:text-amber-400 border-amber-200 dark:border-amber-500/30' : 'bg-white dark:bg-zinc-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:bg-slate-50'}`}>
+                  <Tag size={14} className={`${isCouponOpen ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400'} shrink-0`} fill="currentColor" />
+                  {isCouponOpen ? 'Close Offers' : 'Coupon Code?'}
+              </button>
+              {appliedOffers.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-3 animate-fade-in">
+                      {appliedOffers.map((offer, i) => (
+                          <div key={i} className="flex items-center gap-2 bg-[#FACC15] dark:bg-yellow-500/20 text-black dark:text-yellow-400 px-4 py-2 rounded-xl border border-yellow-400 dark:border-yellow-500/30 shadow-md">
+                              <Tag size={14} className="text-black/70 dark:text-yellow-500" />
+                              <span className="text-[10px] font-black uppercase tracking-widest">{offer.name}</span>
+                              <span className="text-[10px] font-bold opacity-80">(-{offer.discountPercentage > 0 ? `${offer.discountPercentage}%` : `Rs ${offer.discountAmount}`})</span>
+                              <button onClick={() => setAppliedOffers(prev => prev.filter(o => o.name !== offer.name))} className="ml-1.5 p-1 hover:bg-black/10 dark:hover:bg-yellow-500/30 rounded-md transition-colors"><X size={14} /></button>
+                          </div>
+                      ))}
+                  </div>
+              )}
+              <AnimatePresence>
+                  {isCouponOpen && (
+                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                          <div className="pt-3">
+                              <SmartOfferNudge
+                                  totalAmount={baseTotal}
+                                  onApplyOffer={(offer) => {
+                                      if (!appliedOffers.find(o => o.name === offer.name)) {
+                                          setAppliedOffers(prev => [...prev, offer]);
+                                      }
+                                  }}
+                                  couponCode={couponCode}
+                                  setCouponCode={setCouponCode}
+                                  dismissedOfferIds={dismissedOfferIds}
+                                  setDismissedOfferIds={setDismissedOfferIds}
+                              />
+                          </div>
+                      </motion.div>
+                  )}
+              </AnimatePresence>
+            </div>
 
             {/* Next Button */}
             <div className="pt-2 text-center">
