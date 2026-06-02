@@ -1,12 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import BookingWidgetSkeleton from './BookingWidgetSkeleton';
-
-const BookingWidget = dynamic(() => import('./BookingWidget'), { 
-  ssr: false,
-  loading: () => <BookingWidgetSkeleton />
-});
+import BookingWidget from './BookingWidget';
 
 export default function AirportTransferWrapper() {
   return <BookingWidget />;

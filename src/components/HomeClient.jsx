@@ -5,11 +5,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, MapPin, Star, Compass, Clock, Users, ShieldCheck, Sparkles } from 'lucide-react'
-import BookingWidgetSkeleton from './BookingWidgetSkeleton'
-const BookingWidget = dynamic(() => import('./BookingWidget'), { 
-    ssr: false,
-    loading: () => <BookingWidgetSkeleton />
-})
+import BookingWidget from './BookingWidget'
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
 const CustomTourBooking = dynamic(() => import('./CustomTourBooking'), {
     ssr: false,
