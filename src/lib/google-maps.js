@@ -7,6 +7,10 @@ export const loadGoogleMapsScript = () => {
 
         const existingScript = document.getElementById('google-maps-script');
         if (existingScript) {
+            if (window.google && window.google.maps) {
+                resolve();
+                return;
+            }
             existingScript.addEventListener('load', resolve);
             existingScript.addEventListener('error', () => reject(new Error("Google Maps script failed to load")));
             return;
