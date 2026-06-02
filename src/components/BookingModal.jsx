@@ -1035,7 +1035,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 defaultCountry="lk"
                                                 value={formData[f.key] || ''}
                                                 onChange={(phone) => setFormData({ ...formData, [f.key]: phone })}
-                                                inputClassName="!w-full !h-16 !bg-transparent !border-none !pl-2 !pr-8 !outline-none !font-black !text-black dark:!text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 !text-sm !uppercase !tracking-widest"
+                                                inputClassName="!w-full !h-16 !bg-transparent !border-none !pl-2 !pr-8 !outline-none !font-black !text-black dark:!text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 !text-sm !uppercase !tracking-widest"
                                                 countrySelectorStyleProps={{
                                                     buttonClassName: "!bg-transparent !border-none !h-16 !pl-6 !pr-2 hover:!bg-slate-100/50 dark:hover:!bg-white/5 !transition-colors !rounded-l-3xl",
                                                 }}
@@ -1055,7 +1055,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         return updated;
                                                     });
                                                 }}
-                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl outline-none font-black text-black dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm uppercase tracking-widest ${errors[f.key] ? 'border-red-500' : ''}`}
+                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-10 rounded-3xl outline-none font-black text-black dark:text-white placeholder:text-slate-700 dark:placeholder:text-slate-300 text-sm uppercase tracking-widest ${errors[f.key] ? 'border-red-500' : ''}`}
                                                 placeholder={f.placeholder}
                                             />
                                         )}
