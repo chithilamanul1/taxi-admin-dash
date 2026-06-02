@@ -129,6 +129,12 @@ export default function HomeClient() {
 
             <FleetSection />
 
+            <SpecialOffersSection />
+
+            <DestinationsSection />
+            <ReviewStatsBar />
+            <GoogleReviews />
+
             {/* Legacy & Stats Section */}
             <section className="py-24 md:py-40 relative overflow-hidden bg-slate-50/30 dark:bg-zinc-950/30">
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -238,15 +244,9 @@ export default function HomeClient() {
                 </div>
             </section>
 
-            <SpecialOffersSection />
-
-            <DestinationsSection />
             <HomeGallery />
 
-            <ReviewStatsBar />
             <MobileAppSection />
-            <GoogleReviews />
-
             <RecentPosts />
 
             <section className="py-24 md:py-40 bg-white dark:bg-black border-t border-slate-100 dark:border-white/5 transition-colors">
