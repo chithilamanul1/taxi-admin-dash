@@ -762,7 +762,7 @@ const CustomTourBooking = () => {
                       src={selectedVehicle?.image || '/vehicles/sedan_luxury.png'} 
                       alt="Vehicle" 
                       className={`max-h-full max-w-full object-contain ${
-                        (selectedVehicle?.id?.toLowerCase().includes('mini') || selectedVehicle?.name?.toLowerCase().includes('mini')) ? 'scale-[1.1]' :
+                        ((selectedVehicle?.id || '').toLowerCase().includes('mini') || (selectedVehicle?.name || '').toLowerCase().includes('mini')) ? 'scale-[1.1]' :
                         'scale-100'
                       }`}
                     />
