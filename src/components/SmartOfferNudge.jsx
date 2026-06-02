@@ -65,7 +65,7 @@ const SmartOfferNudge = ({ offer, onClose }) => {
                         e.stopPropagation();
                         onClose();
                     }}
-                    className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-slate-50 dark:bg-white/5 hover:bg-emerald-50 dark:hover:bg-emerald-500/20 rounded-full transition-all duration-300 text-slate-400 hover:text-emerald-600"
+                    className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-slate-50 dark:bg-white/5 hover:bg-emerald-50 dark:hover:bg-emerald-500/20 rounded-full transition-all duration-300 text-slate-400 hover:text-emerald-600 z-50 cursor-pointer pointer-events-auto"
                     title="Dismiss"
                 >
                     <X size={20} />
