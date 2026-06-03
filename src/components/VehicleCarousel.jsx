@@ -10,10 +10,47 @@ const isMiniCar = (vehicle) => {
     return t.includes('mini') || n.includes('mini') || n.includes('wagon');
 };
 
+// Calculate normalized scale and translation to visual alignment (wheels aligned to baseline, equal size)
+const getVehicleTransform = (imagePath, isSelected, isHovered = false, h_target = 0.58, b_target = 0.12) => {
+    const filename = (imagePath || '').split('/').pop();
+    
+    // Bounding box data for transparency correction
+    const imgData = {
+        'coach-bus.png': { h_orig: 0.7772, c_prime_orig: 1 - 183.5/359 },
+        'costerbus.png': { h_orig: 0.6373, c_prime_orig: 1 - 216.5/408 },
+        'Hondavezel.png': { h_orig: 0.6889, c_prime_orig: 1 - 216.0/360 },
+        'minicar.png': { h_orig: 0.5220, c_prime_orig: 1 - 251.0/500 },
+        'minivan5seat.png': { h_orig: 0.4642, c_prime_orig: 1 - 227.5/433 },
+        'sedancar.png': { h_orig: 0.4300, c_prime_orig: 1 - 257.0/500 },
+        'susukievery.png': { h_orig: 0.5543, c_prime_orig: 1 - 228.5/433 },
+        'toyota-highroof.png': { h_orig: 0.8168, c_prime_orig: 1 - 136.0/273 },
+        'van.png': { h_orig: 0.5497, c_prime_orig: 1 - 227.5/433 },
+    }[filename] || { h_orig: 0.55, c_prime_orig: 0.5 }; // Default fallback
+
+    // Base scale to make bbox height exactly h_target
+    let scale = h_target / imgData.h_orig;
+
+    if (isSelected) {
+        scale *= 1.15; // Selected zoom
+    } else if (isHovered) {
+        scale *= 1.08; // Hover zoom
+    }
+
+    // Centering and baseline calculations
+    const c_prime_scaled = 0.5 + scale * (imgData.c_prime_orig - 0.5);
+    const b_scaled = c_prime_scaled - (scale * imgData.h_orig) / 2;
+    const shift_up = b_target - b_scaled;
+    const translateY = -shift_up * 100;
+
+    return { scale, translateY };
+};
+
 const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, pickupLocation, dropoffLocation, isCondensed = false, onToggleExpand }) => {
     const scrollRef = useRef(null);
     const cardRefs = useRef({});
     const [dismissedWarnings, setDismissedWarnings] = useState([]);
+    const [hoveredId, setHoveredId] = useState(null);
+    const [condensedHovered, setCondensedHovered] = useState(false);
     const { convertPrice, rates, currency } = useCurrency();
 
     useEffect(() => {
@@ -74,16 +111,29 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
         const vehicle = displayVehicles[0];
         if (!vehicle) return null;
 
+        const { scale: condScale, translateY: condTranslateY } = getVehicleTransform(
+            vehicle.image,
+            false,
+            condensedHovered,
+            0.65,
+            0.12
+        );
+
         return (
             <div
                 className="relative bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-3 sm:p-4 flex items-center gap-3 sm:gap-6 animate-slide-up group/condensed shadow-sm cursor-pointer hover:shadow-md transition-all overflow-hidden"
                 onClick={onToggleExpand}
+                onMouseEnter={() => setCondensedHovered(true)}
+                onMouseLeave={() => setCondensedHovered(false)}
             >
                 <div className="w-16 sm:w-28 h-12 sm:h-20 bg-slate-50 dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-1.5 sm:p-2 shrink-0 overflow-hidden border border-slate-100 dark:border-white/5">
                     <img
                         src={vehicle.image}
                         alt={vehicle.name}
-                        className="w-[120%] max-w-[150%] h-full object-contain scale-[1.35] group-hover/condensed:scale-[1.5] transition-transform duration-500"
+                        className="w-full h-full object-contain transition-transform duration-500"
+                        style={{
+                            transform: `scale(${condScale}) translateY(${condTranslateY}%)`
+                        }}
                     />
                 </div>
                 <div className="flex-1 min-w-0 pr-2">
@@ -127,17 +177,27 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                     const { suitable, reason } = isSuitable(vehicle);
                     const isSelected = selectedId === vehicle.vehicleType;
                     const mini = isMiniCar(vehicle);
+                    const isHovered = hoveredId === vehicle.vehicleType;
+                    const { scale, translateY } = getVehicleTransform(
+                        vehicle.image,
+                        isSelected,
+                        isHovered,
+                        0.72,
+                        0.12
+                    );
 
                     return (
                         <div
                             ref={(el) => (cardRefs.current[vehicle.vehicleType] = el)}
                             key={vehicle._id || vehicle.vehicleType}
                             onClick={() => suitable && onSelect(vehicle.vehicleType)}
+                            onMouseEnter={() => suitable && setHoveredId(vehicle.vehicleType)}
+                            onMouseLeave={() => setHoveredId(null)}
                             className={`
                                 relative flex-shrink-0 w-[72vw] sm:w-[260px] md:w-[230px] snap-start
                                 cursor-${suitable ? 'pointer' : 'not-allowed'}
                                 transition-all duration-300 group/card flex flex-col
-                                rounded-[2rem] bg-white dark:bg-zinc-900
+                                rounded-[2rem] bg-white dark:bg-zinc-900 overflow-hidden
                                 ${!suitable ? 'opacity-50 grayscale' : ''}
                                 ${isSelected
                                     ? 'border-2 border-[#FACC15] bg-[#FACC15]/5 dark:bg-[#FACC15]/10'
@@ -208,16 +268,15 @@ const VehicleCarousel = ({ vehicles, selectedId, onSelect, passengerCount, picku
                                 )}
 
                                 {/* Vehicle Image — uniform premium dimensions */}
-                                <div className="w-full flex justify-center items-center relative z-10 mt-auto h-[120px] sm:h-[140px] py-1">
+                                <div className="w-full flex justify-center items-center relative z-10 mt-auto h-[110px] sm:h-[130px] py-1">
                                     <img
                                         src={vehicle.image}
                                         alt={vehicle.name}
-                                        className={`
-                                            object-contain transition-transform duration-500
-                                            w-[120%] max-w-[150%] h-[140px] sm:h-[160px] -ml-[10%]
-                                            ${isSelected ? 'scale-[1.6] sm:scale-[1.7]' : 'scale-[1.4] sm:scale-[1.5] group-hover/card:scale-[1.6]'}
-                                        `}
-                                        style={{ filter: 'drop-shadow(0 15px 15px rgba(0,0,0,0.15))' }}
+                                        className="w-full h-full object-contain transition-transform duration-500"
+                                        style={{
+                                            filter: 'drop-shadow(0 12px 12px rgba(0,0,0,0.12))',
+                                            transform: `scale(${scale}) translateY(${translateY}%)`
+                                        }}
                                     />
                                 </div>
                             </div>
