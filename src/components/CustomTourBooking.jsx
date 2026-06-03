@@ -657,24 +657,24 @@ const CustomTourBooking = () => {
           >
             {/* 1. Consolidated Category Selection (Segmented Toggle Control) */}
             <div className="flex justify-center">
-              <div className="inline-flex w-full bg-slate-100/70 dark:bg-zinc-800/60 p-1 rounded-2xl border border-slate-200/30 dark:border-white/5 relative">
+              <div className="inline-flex w-full bg-slate-900 p-1.5 rounded-2xl border border-slate-800 relative">
                 <button 
                   type="button"
                   onClick={() => setTab('airport')} 
-                  className={`flex-1 py-2 rounded-xl transition-all duration-300 font-black text-[9px] uppercase tracking-wider flex items-center justify-center gap-1.5 z-10
+                  className={`flex-1 py-2.5 rounded-xl transition-all duration-300 font-black text-[9px] uppercase tracking-wider flex items-center justify-center gap-1.5 z-10
                     ${tab === 'airport' 
-                      ? 'bg-white dark:bg-zinc-700 text-slate-900 dark:text-white shadow-md font-bold' 
-                      : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                      ? 'bg-slate-800 text-white shadow-md font-bold border border-slate-700' 
+                      : 'text-slate-400 hover:text-slate-300'}`}
                 >
                   <Plane size={12} /> AirPort Round TOUR
                 </button>
                 <button 
                   type="button"
                   onClick={() => setTab('tour')} 
-                  className={`flex-1 py-2 rounded-xl transition-all duration-300 font-black text-[9px] uppercase tracking-wider flex items-center justify-center gap-1.5 z-10
+                  className={`flex-1 py-2.5 rounded-xl transition-all duration-300 font-black text-[9px] uppercase tracking-wider flex items-center justify-center gap-1.5 z-10
                     ${tab === 'tour' 
-                      ? 'bg-white dark:bg-zinc-700 text-slate-900 dark:text-white shadow-md font-bold' 
-                      : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                      ? 'bg-slate-800 text-white shadow-md font-bold border border-slate-700' 
+                      : 'text-slate-400 hover:text-slate-300'}`}
                 >
                   <Car size={12} /> Round TOUR
                 </button>

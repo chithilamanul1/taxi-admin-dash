@@ -808,15 +808,17 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                             className={`flex items-center gap-2 ${s.mobileOnly ? 'flex lg:hidden' : 'flex'} ${s.n < step ? 'cursor-pointer' : 'cursor-default'}`}
                                             aria-label={`Step ${s.n}: ${s.label}`}
                                         >
-                                            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-300 ${
-                                                step === s.n ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/30 scale-110' :
-                                                step > s.n ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' :
-                                                'bg-slate-200 dark:bg-zinc-800 text-slate-500'
-                                            }`}>
-                                                {step > s.n ? <Check size={12} strokeWidth={3}/> : s.n}
+                                            <div className={`flex items-center justify-center transition-all duration-300 ${step === s.n ? 'w-8 h-8 rounded-full bg-black shadow-lg shadow-black/20 scale-110' : 'w-8 h-8'}`}>
+                                                <div className={`rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-300 ${
+                                                    step === s.n ? 'w-6 h-6 bg-[#FACC15] text-black' :
+                                                    step > s.n ? 'w-7 h-7 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' :
+                                                    'w-7 h-7 bg-slate-200 dark:bg-zinc-800 text-slate-500'
+                                                }`}>
+                                                    {step > s.n ? <Check size={12} strokeWidth={3}/> : s.n}
+                                                </div>
                                             </div>
                                             <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${
-                                                step === s.n ? 'text-emerald-700 dark:text-emerald-400' :
+                                                step === s.n ? 'text-slate-900 dark:text-white' :
                                                 step > s.n ? 'text-slate-500' : 'text-slate-500 dark:text-slate-600'
                                             } ${s.mobileOnly ? 'hidden sm:block lg:hidden' : 'hidden sm:block'}`}>{s.label}</span>
                                         </button>
