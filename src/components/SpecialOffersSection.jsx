@@ -144,8 +144,10 @@ export default function SpecialOffersSection() {
                                         </span>
                                     </div>
                                 </div>
-                                <div className="ml-2 w-8 h-8 bg-black rounded-full flex items-center justify-center text-[#FACC15] group-hover:scale-110 transition-transform">
-                                    <Check size={16} strokeWidth={3} />
+                                <div className="ml-2 w-10 h-10 bg-black rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform flex-shrink-0">
+                                    <div className="w-8 h-8 bg-[#FACC15] text-black rounded-full flex items-center justify-center">
+                                        <Check size={16} strokeWidth={3.5} />
+                                    </div>
                                 </div>
                             </div>
                         )}
