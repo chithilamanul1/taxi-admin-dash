@@ -808,14 +808,22 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                             className={`flex items-center gap-2 ${s.mobileOnly ? 'flex lg:hidden' : 'flex'} ${s.n < step ? 'cursor-pointer' : 'cursor-default'}`}
                                             aria-label={`Step ${s.n}: ${s.label}`}
                                         >
-                                            <div className={`flex items-center justify-center transition-all duration-300 ${step === s.n ? 'w-8 h-8 rounded-full bg-black shadow-lg shadow-black/20 scale-110' : 'w-8 h-8'}`}>
-                                                <div className={`rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-300 ${
-                                                    step === s.n ? 'w-6 h-6 bg-[#FACC15] text-black' :
-                                                    step > s.n ? 'w-7 h-7 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' :
-                                                    'w-7 h-7 bg-slate-200 dark:bg-zinc-800 text-slate-500'
-                                                }`}>
-                                                    {step > s.n ? <Check size={12} strokeWidth={3}/> : s.n}
-                                                </div>
+                                            <div className="flex items-center justify-center w-8 h-8">
+                                                {step === s.n ? (
+                                                    <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center shadow-lg shadow-black/20 scale-110 z-10">
+                                                        <div className="w-6 h-6 bg-[#FACC15] text-black rounded-full flex items-center justify-center text-[10px] font-black">
+                                                            {s.n}
+                                                        </div>
+                                                    </div>
+                                                ) : step > s.n ? (
+                                                    <div className="w-8 h-8 rounded-full border-2 border-black bg-white dark:bg-zinc-800 flex items-center justify-center text-black dark:text-white shadow-sm z-10">
+                                                        <Check size={12} strokeWidth={3} className="text-black dark:text-white" />
+                                                    </div>
+                                                ) : (
+                                                    <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-zinc-800 text-slate-500 flex items-center justify-center text-[10px] font-black">
+                                                        {s.n}
+                                                    </div>
+                                                )}
                                             </div>
                                             <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${
                                                 step === s.n ? 'text-slate-900 dark:text-white' :
@@ -823,7 +831,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                             } ${s.mobileOnly ? 'hidden sm:block lg:hidden' : 'hidden sm:block'}`}>{s.label}</span>
                                         </button>
                                         {i < arr.length - 1 && (
-                                            <div className={`flex-1 h-px transition-all duration-500 ${step > s.n ? 'bg-emerald-400' : 'bg-slate-400 dark:bg-zinc-700'} ${arr[i+1].mobileOnly ? 'flex lg:hidden' : ''}`} />
+                                            <div className={`flex-1 h-px transition-all duration-500 ${step > s.n ? 'bg-black' : 'bg-slate-300 dark:bg-zinc-700'} ${arr[i+1].mobileOnly ? 'flex lg:hidden' : ''}`} />
                                         )}
                                     </React.Fragment>
                                 ))}

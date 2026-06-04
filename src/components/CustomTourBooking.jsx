@@ -663,7 +663,7 @@ const CustomTourBooking = () => {
                   onClick={() => setTab('airport')} 
                   className={`flex-1 py-2.5 rounded-xl transition-all duration-300 font-black text-[9px] uppercase tracking-wider flex items-center justify-center gap-1.5 z-10
                     ${tab === 'airport' 
-                      ? 'bg-slate-800 text-white shadow-md font-bold border border-slate-700' 
+                      ? 'bg-[#FACC15] text-black shadow-md font-bold' 
                       : 'text-slate-400 hover:text-slate-300'}`}
                 >
                   <Plane size={12} /> AirPort Round TOUR
@@ -673,7 +673,7 @@ const CustomTourBooking = () => {
                   onClick={() => setTab('tour')} 
                   className={`flex-1 py-2.5 rounded-xl transition-all duration-300 font-black text-[9px] uppercase tracking-wider flex items-center justify-center gap-1.5 z-10
                     ${tab === 'tour' 
-                      ? 'bg-slate-800 text-white shadow-md font-bold border border-slate-700' 
+                      ? 'bg-[#FACC15] text-black shadow-md font-bold' 
                       : 'text-slate-400 hover:text-slate-300'}`}
                 >
                   <Car size={12} /> Round TOUR
