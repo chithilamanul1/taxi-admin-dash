@@ -2,7 +2,10 @@ import React, { useRef, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, Users, Briefcase, ShoppingBag, Wind, Lock, Check, ArrowRight } from 'lucide-react';
 import { useCurrency } from '../context/CurrencyContext';
 
-const displayName = (name) => (name || '').replace(/\bKDH\s*/gi, '').trim();
+const displayName = (name) => (name || '')
+    .replace(/\s*\(.*?\)/g, '')
+    .replace(/\bKDH\s*/gi, '')
+    .trim();
 
 const isMiniCar = (vehicle) => {
     const t = (vehicle.vehicleType || '').toLowerCase();
@@ -12,16 +15,19 @@ const isMiniCar = (vehicle) => {
 
 // Calculate normalized scale and translation to visual alignment (wheels aligned to baseline, equal size)
 const getVehicleTransform = (imagePath, isSelected, isHovered = false, h_target = 0.58, b_target = 0.12) => {
-    const filename = (imagePath || '').split('/').pop();
+    const filename = (imagePath || '').split('/').pop().split('?')[0].toLowerCase();
     
     // Bounding box data for transparency correction
     const imgData = {
         'coach-bus.png': { h_orig: 0.7772, c_prime_orig: 1 - 183.5/359 },
         'costerbus.png': { h_orig: 0.6373, c_prime_orig: 1 - 216.5/408 },
-        'Hondavezel.png': { h_orig: 0.6889, c_prime_orig: 1 - 216.0/360 },
+        'hondavezel.png': { h_orig: 0.6889, c_prime_orig: 1 - 216.0/360 },
         'minicar.png': { h_orig: 0.5220, c_prime_orig: 1 - 251.0/500 },
         'minivan5seat.png': { h_orig: 0.4642, c_prime_orig: 1 - 227.5/433 },
-        'sedancar.png': { h_orig: 0.4668, c_prime_orig: 0.72 },
+        'sedan.png': { h_orig: 0.3040, c_prime_orig: 0.4934 },
+        'sedan2.png': { h_orig: 0.4300, c_prime_orig: 0.4801 },
+        'sedancar.png': { h_orig: 0.4668, c_prime_orig: 0.5310 },
+        'sedancar2.png': { h_orig: 0.4300, c_prime_orig: 0.4801 },
         'susukievery.png': { h_orig: 0.5543, c_prime_orig: 1 - 228.5/433 },
         'toyota-highroof.png': { h_orig: 0.8168, c_prime_orig: 1 - 136.0/273 },
         'van.png': { h_orig: 0.5497, c_prime_orig: 1 - 227.5/433 },
