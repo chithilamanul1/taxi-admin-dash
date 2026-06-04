@@ -230,19 +230,28 @@ const CustomTourBooking = () => {
   };
 
   const getAvailableHours = () => {
-    const pkgs = getActivePackages();
+    let pkgs = getActivePackages();
+    if (selectedVehicle) {
+      pkgs = pkgs.filter(p => 
+        p.vehicleType === selectedVehicle.id || 
+        p.vehicleType === selectedVehicle.vehicleType || 
+        (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
+      );
+    }
     const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
     return hours.length > 0 ? hours : [2, 4, 6, 8, 10, 12]; // Fallback
   };
 
   const getAvailableKmLimits = () => {
-    const pkgs = getActivePackages();
-    // Prioritize selected vehicle's exact configured tiers
-    let match = [];
+    let pkgs = getActivePackages();
     if (selectedVehicle) {
-      match = pkgs.filter(p => p.hours === formData.taxiTourHours && p.vehicleType === selectedVehicle.id);
+      pkgs = pkgs.filter(p => 
+        p.vehicleType === selectedVehicle.id || 
+        p.vehicleType === selectedVehicle.vehicleType || 
+        (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
+      );
     }
-    
+    const match = pkgs.filter(p => p.hours === formData.taxiTourHours);
     if (match.length > 0) {
       const kms = [];
       match.forEach(p => {
@@ -259,7 +268,14 @@ const CustomTourBooking = () => {
 
   // Update hours and dynamic KM limit defaults
   const updateDuration = (newHours) => {
-    const pkgs = getActivePackages();
+    let pkgs = getActivePackages();
+    if (selectedVehicle) {
+      pkgs = pkgs.filter(p => 
+        p.vehicleType === selectedVehicle.id || 
+        p.vehicleType === selectedVehicle.vehicleType || 
+        (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
+      );
+    }
     const match = pkgs.find(p => p.hours === newHours);
     const tiers = match?.tiers || [];
     const newKm = tiers.length > 0 ? tiers[0].km : newHours * 20;
@@ -267,22 +283,27 @@ const CustomTourBooking = () => {
   };
 
   useEffect(() => {
-    if (pricingSettings) {
-      const pkgs = getActivePackages();
-      const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
-      if (hours.length > 0) {
-        const defaultHours = hours.includes(formData.taxiTourHours) ? formData.taxiTourHours : hours[0];
-        const pkg = pkgs.find(p => p.hours === defaultHours);
-        const tiers = pkg?.tiers || [];
-        const defaultKm = (tiers.some(t => t.km === formData.taxiTourKm)) ? formData.taxiTourKm : (tiers.length > 0 ? tiers[0].km : defaultHours * 20);
-        setFormData(prev => ({
-          ...prev,
-          taxiTourHours: defaultHours,
-          taxiTourKm: defaultKm
-        }));
-      }
+    let pkgs = getActivePackages();
+    if (selectedVehicle) {
+      pkgs = pkgs.filter(p => 
+        p.vehicleType === selectedVehicle.id || 
+        p.vehicleType === selectedVehicle.vehicleType || 
+        (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
+      );
     }
-  }, [pricingSettings, tab]);
+    const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
+    if (hours.length > 0) {
+      const defaultHours = hours.includes(formData.taxiTourHours) ? formData.taxiTourHours : hours[0];
+      const pkg = pkgs.find(p => p.hours === defaultHours);
+      const tiers = pkg?.tiers || [];
+      const defaultKm = (tiers.some(t => t.km === formData.taxiTourKm)) ? formData.taxiTourKm : (tiers.length > 0 ? tiers[0].km : defaultHours * 20);
+      setFormData(prev => ({
+        ...prev,
+        taxiTourHours: defaultHours,
+        taxiTourKm: defaultKm
+      }));
+    }
+  }, [pricingSettings, tab, selectedVehicle, airportTours, roundTours]);
 
   // Google Maps Places Autocomplete setup
   useEffect(() => {

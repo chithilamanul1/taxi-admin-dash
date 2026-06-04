@@ -157,6 +157,13 @@ const RoundTripBooking = () => {
         pkgs = pricingSettings?.destinationRoundTripPackages || [];
       }
     }
+    if (selectedVehicle) {
+      pkgs = pkgs.filter(p => 
+        p.vehicleType === selectedVehicle.id || 
+        p.vehicleType === selectedVehicle.vehicleType || 
+        (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
+      );
+    }
     const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
     return hours.length > 0 ? hours : [2, 4, 6, 8, 10, 12]; // Fallback
   };
@@ -176,6 +183,13 @@ const RoundTripBooking = () => {
       } else {
         pkgs = pricingSettings?.destinationRoundTripPackages || [];
       }
+    }
+    if (selectedVehicle) {
+      pkgs = pkgs.filter(p => 
+        p.vehicleType === selectedVehicle.id || 
+        p.vehicleType === selectedVehicle.vehicleType || 
+        (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
+      );
     }
     const match = pkgs.filter(p => p.hours === formData.taxiTourHours);
     if (match.length > 0) {
@@ -286,9 +300,9 @@ const RoundTripBooking = () => {
   const updateDuration = (newHours) => {
     let pkgs = [];
     if (tab === 'airport-round-tour') {
-      pkgs = pricingSettings?.airportRoundTripPackages || [];
+      pkgs = airportTours || [];
     } else if (tab === 'normal-round-tour') {
-      pkgs = pricingSettings?.roundTripPackages || [];
+      pkgs = normalTours || [];
     } else if (tab === 'destination-based-tour') {
       const pickupOverride = findMatchingDestination(locations[0], destinationsList);
       const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
@@ -299,6 +313,13 @@ const RoundTripBooking = () => {
         pkgs = pricingSettings?.destinationRoundTripPackages || [];
       }
     }
+    if (selectedVehicle) {
+      pkgs = pkgs.filter(p => 
+        p.vehicleType === selectedVehicle.id || 
+        p.vehicleType === selectedVehicle.vehicleType || 
+        (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
+      );
+    }
     const match = pkgs.find(p => p.hours === newHours);
     const tiers = match?.tiers || [];
     const newKm = tiers.length > 0 ? tiers[0].km : newHours * 20;
@@ -306,36 +327,41 @@ const RoundTripBooking = () => {
   };
 
   useEffect(() => {
-    if (pricingSettings) {
-      let pkgs = [];
-      if (tab === 'airport-round-tour') {
-        pkgs = pricingSettings.airportRoundTripPackages || [];
-      } else if (tab === 'normal-round-tour') {
-        pkgs = pricingSettings.roundTripPackages || [];
-      } else if (tab === 'destination-based-tour') {
-        const pickupOverride = findMatchingDestination(locations[0], destinationsList);
-        const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
-        const destMatch = dropoffOverride || pickupOverride;
-        if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
-          pkgs = destMatch.roundTripPackages;
-        } else {
-          pkgs = pricingSettings.destinationRoundTripPackages || [];
-        }
-      }
-      const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
-      if (hours.length > 0) {
-        const defaultHours = hours.includes(formData.taxiTourHours) ? formData.taxiTourHours : hours[0];
-        const pkg = pkgs.find(p => p.hours === defaultHours);
-        const tiers = pkg?.tiers || [];
-        const defaultKm = (tiers.some(t => t.km === formData.taxiTourKm)) ? formData.taxiTourKm : (tiers.length > 0 ? tiers[0].km : defaultHours * 20);
-        setFormData(prev => ({
-          ...prev,
-          taxiTourHours: defaultHours,
-          taxiTourKm: defaultKm
-        }));
+    let pkgs = [];
+    if (tab === 'airport-round-tour') {
+      pkgs = airportTours || [];
+    } else if (tab === 'normal-round-tour') {
+      pkgs = normalTours || [];
+    } else if (tab === 'destination-based-tour') {
+      const pickupOverride = findMatchingDestination(locations[0], destinationsList);
+      const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
+      const destMatch = dropoffOverride || pickupOverride;
+      if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
+        pkgs = destMatch.roundTripPackages;
+      } else {
+        pkgs = pricingSettings?.destinationRoundTripPackages || [];
       }
     }
-  }, [pricingSettings, tab, locations, destinationsList]);
+    if (selectedVehicle) {
+      pkgs = pkgs.filter(p => 
+        p.vehicleType === selectedVehicle.id || 
+        p.vehicleType === selectedVehicle.vehicleType || 
+        (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
+      );
+    }
+    const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
+    if (hours.length > 0) {
+      const defaultHours = hours.includes(formData.taxiTourHours) ? formData.taxiTourHours : hours[0];
+      const pkg = pkgs.find(p => p.hours === defaultHours);
+      const tiers = pkg?.tiers || [];
+      const defaultKm = (tiers.some(t => t.km === formData.taxiTourKm)) ? formData.taxiTourKm : (tiers.length > 0 ? tiers[0].km : defaultHours * 20);
+      setFormData(prev => ({
+        ...prev,
+        taxiTourHours: defaultHours,
+        taxiTourKm: defaultKm
+      }));
+    }
+  }, [pricingSettings, tab, locations, destinationsList, selectedVehicle, airportTours, normalTours]);
 
   useEffect(() => {
     loadGoogleMapsScript()
