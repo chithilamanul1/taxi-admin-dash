@@ -21,7 +21,7 @@ const getVehicleTransform = (imagePath, isSelected, isHovered = false, h_target 
         'Hondavezel.png': { h_orig: 0.6889, c_prime_orig: 1 - 216.0/360 },
         'minicar.png': { h_orig: 0.5220, c_prime_orig: 1 - 251.0/500 },
         'minivan5seat.png': { h_orig: 0.4642, c_prime_orig: 1 - 227.5/433 },
-        'sedancar.png': { h_orig: 0.4668, c_prime_orig: 0.5614 },
+        'sedancar.png': { h_orig: 0.4668, c_prime_orig: 0.72 },
         'susukievery.png': { h_orig: 0.5543, c_prime_orig: 1 - 228.5/433 },
         'toyota-highroof.png': { h_orig: 0.8168, c_prime_orig: 1 - 136.0/273 },
         'van.png': { h_orig: 0.5497, c_prime_orig: 1 - 227.5/433 },

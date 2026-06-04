@@ -81,10 +81,10 @@ export default function OffersPage() {
                     <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
                         {/* Image/Logo Side */}
                         <div className="w-full md:w-1/3 flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-slate-800 rounded-3xl border-2 border-black rotate-[-2deg]">
-                            <span className="text-xl font-black text-[#7c3aed] leading-none mb-1 uppercase tracking-tighter">
+                            <span className="text-xl font-black text-slate-900 dark:text-slate-100 leading-none mb-1 uppercase tracking-tighter">
                                 TODAY'S
                             </span>
-                            <span className="text-5xl md:text-6xl font-black text-amber-400 leading-none uppercase italic drop-shadow-[4px_4px_0px_#7c3aed] tracking-tighter">
+                            <span className="text-5xl md:text-6xl font-black text-[#FACC15] leading-none uppercase italic drop-shadow-[4px_4px_0px_#000000] tracking-tighter">
                                 OFFER
                             </span>
                         </div>
@@ -92,7 +92,7 @@ export default function OffersPage() {
                         {/* Content Side */}
                         <div className="flex-1 text-center md:text-left">
                             <h2 className="text-3xl md:text-5xl font-black text-black dark:text-white mb-4 uppercase tracking-tighter">
-                                FLAT 25% OFF <span className="text-[#7c3aed]">TODAY!</span>
+                                FLAT 25% OFF <span className="text-[#FACC15]">TODAY!</span>
                             </h2>
                             <p className="text-slate-600 dark:text-slate-400 text-lg font-bold mb-8 uppercase tracking-wide">
                                 Use the code below for any airport transfer booked today. Valid for all vehicle types!
@@ -100,7 +100,7 @@ export default function OffersPage() {
                             
                             <div className="flex flex-wrap items-center gap-4 justify-center md:justify-start">
                                 <div className="bg-slate-100 dark:bg-slate-800 px-8 py-4 rounded-2xl border-2 border-black border-dashed flex items-center gap-4">
-                                    <code className="text-3xl font-black text-[#7c3aed] tracking-widest uppercase">TODAY25</code>
+                                    <code className="text-3xl font-black text-[#FACC15] tracking-widest uppercase">TODAY25</code>
                                     <button 
                                         onClick={() => copyToClipboard('TODAY25')}
                                         className={`p-2 rounded-lg transition-all ${copiedCode === 'TODAY25' ? 'bg-emerald-500 text-white' : 'hover:bg-slate-200 text-slate-500'}`}

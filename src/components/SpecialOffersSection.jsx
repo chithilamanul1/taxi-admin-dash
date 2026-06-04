@@ -110,9 +110,9 @@ export default function SpecialOffersSection() {
                     {/* Header */}
                     <div className="mb-10 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
                         <div>
-                            <div className="inline-flex items-center gap-2 bg-red-600 px-4 py-1.5 mb-6 rounded-md">
-                                <Tag size={14} className="text-white" strokeWidth={3} />
-                                <span className="text-xs font-black text-white uppercase tracking-[0.2em]">Exclusive Deals</span>
+                            <div className="inline-flex items-center gap-2 bg-[#FACC15] px-4 py-1.5 mb-6 rounded-md shadow-sm">
+                                <Tag size={12} className="text-black" strokeWidth={3.5} />
+                                <span className="text-xs font-black text-black uppercase tracking-[0.2em]">Exclusive Deals</span>
                             </div>
                             <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-black mb-6 leading-none uppercase tracking-tighter">
                                 SAVE ON YOUR <br />
@@ -137,9 +137,9 @@ export default function SpecialOffersSection() {
                                 <div>
                                     <p className="text-[10px] font-black uppercase text-black leading-tight">FLAT {todayOffer.percent}% OFF</p>
                                     <p className="text-[10px] font-bold text-slate-500 mb-1">CODE: {todayOffer.code}</p>
-                                    <div className="flex items-center gap-1 bg-red-50 px-2 py-0.5 rounded border border-red-100 mt-1">
-                                        <Clock size={10} className="text-red-500 animate-pulse" />
-                                        <span className="text-[9px] font-black text-red-600 tabular-nums">
+                                    <div className="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-500/10 px-2 py-0.5 rounded border border-yellow-200 dark:border-yellow-500/20 mt-1">
+                                        <Clock size={10} className="text-yellow-600 dark:text-yellow-400 animate-pulse" />
+                                        <span className="text-[9px] font-black text-yellow-700 dark:text-yellow-400 tabular-nums">
                                             EXPIRES IN {timeLeft.h.toString().padStart(2, '0')}:{timeLeft.m.toString().padStart(2, '0')}:{timeLeft.s.toString().padStart(2, '0')}
                                         </span>
                                     </div>
@@ -184,11 +184,13 @@ export default function SpecialOffersSection() {
                                     <div className="relative z-10 flex flex-col h-full">
                                         {/* Header: Icon & Badge */}
                                         <div className="flex justify-between items-start mb-6">
-                                            <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-orange-500/20 rotate-3 group-hover/card:rotate-0 transition-transform">
-                                                <Percent size={28} strokeWidth={3} />
+                                            <div className="w-16 h-16 bg-gradient-to-br from-[#FACC15] to-amber-500 rounded-2xl flex items-center justify-center text-black shadow-lg shadow-yellow-500/20 rotate-3 group-hover/card:rotate-0 transition-transform" style={{
+                                                background: 'linear-gradient(135deg, #FACC15 0%, #F59E0B 100%)'
+                                            }}>
+                                                <Percent size={28} strokeWidth={3.5} />
                                             </div>
                                             {coupon.applicableLocations && coupon.applicableLocations.length > 0 && (
-                                                <span className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-600 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full border border-orange-100">
+                                                <span className="inline-flex items-center gap-1.5 bg-[#FACC15]/10 text-slate-800 dark:text-[#FACC15] px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full border border-[#FACC15]/20 dark:border-[#FACC15]/30">
                                                     <MapPin size={10} strokeWidth={3} />
                                                     {coupon.applicableLocations[0]}
                                                 </span>
@@ -216,10 +218,10 @@ export default function SpecialOffersSection() {
 
                                         {/* Code Bar - Pushed to Bottom */}
                                         <div className="mt-auto space-y-6">
-                                            <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 flex items-center justify-between group-hover/card:border-orange-500/30 transition-all">
+                                            <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 flex items-center justify-between group-hover/card:border-[#FACC15]/40 transition-all">
                                                 <div>
                                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Use Code</p>
-                                                    <p className="text-2xl font-black text-orange-600 tracking-tight">{coupon.code}</p>
+                                                    <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{coupon.code}</p>
                                                 </div>
                                                 <button
                                                     onClick={(e) => {
@@ -228,7 +230,7 @@ export default function SpecialOffersSection() {
                                                         setCopiedCode(coupon.code);
                                                         setTimeout(() => setCopiedCode(null), 2000);
                                                     }}
-                                                    className={`px-6 py-3 rounded-2xl font-black text-xs flex items-center gap-2 transition-all shadow-lg uppercase tracking-widest ${copiedCode === coupon.code ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-orange-500 text-black hover:bg-orange-600 shadow-orange-500/20'}`}
+                                                    className={`px-6 py-3 rounded-2xl font-black text-xs flex items-center gap-2 transition-all shadow-lg uppercase tracking-widest ${copiedCode === coupon.code ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-[#FACC15] text-black hover:bg-yellow-500 shadow-yellow-500/20'}`}
                                                 >
                                                     {copiedCode === coupon.code ? <Check size={16} strokeWidth={3} /> : <Copy size={16} strokeWidth={3} />}
                                                     {copiedCode === coupon.code ? 'COPIED' : 'COPY'}
@@ -243,7 +245,7 @@ export default function SpecialOffersSection() {
                                                         <span>Valid until {new Date(coupon.expiryDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                                                     </div>
                                                 ) : <div />}
-                                                <div className="text-[10px] font-black text-orange-600 uppercase tracking-widest flex items-center gap-1 group-hover/card:gap-3 transition-all">
+                                                <div className="text-[10px] font-black text-black dark:text-[#FACC15] uppercase tracking-widest flex items-center gap-1 group-hover/card:gap-3 transition-all">
                                                     BOOK NOW <ArrowRight size={14} />
                                                 </div>
                                             </div>
@@ -258,7 +260,7 @@ export default function SpecialOffersSection() {
                     <div className="text-center">
                         <Link
                             href="/offers"
-                            className="inline-flex items-center gap-4 bg-red-600 text-white px-10 py-4 rounded-full border border-red-600 font-black uppercase tracking-[0.2em] text-sm hover:-translate-y-1 active:translate-y-0 transition-all group shadow-md hover:shadow-lg"
+                            className="inline-flex items-center gap-4 bg-[#FACC15] text-black px-10 py-4 rounded-full border border-[#FACC15] font-black uppercase tracking-[0.2em] text-sm hover:-translate-y-1 active:translate-y-0 transition-all group shadow-md hover:shadow-lg hover:bg-black hover:text-[#FACC15] hover:border-black"
                         >
                             VIEW ALL OFFERS
                             <ArrowRight size={20} strokeWidth={3} className="group-hover:translate-x-2 transition-transform" />
