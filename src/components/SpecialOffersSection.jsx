@@ -106,6 +106,9 @@ export default function SpecialOffersSection() {
                      onMouseEnter={() => setIsPaused(true)}
                      onMouseLeave={() => setIsPaused(false)}>
 
+                {/* Background Pattern */}
+                <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-12 pointer-events-none"></div>
+
                 <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16 font-montserrat">
                     {/* Header */}
                     <div className="mb-10 md:mb-16 flex flex-col gap-8">
