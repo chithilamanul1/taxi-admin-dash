@@ -113,7 +113,7 @@ const OfferMarquee = () => {
     ];
 
     return (
-        <div className="bg-[#EF4444] py-3.5 border-b border-white/20 overflow-hidden whitespace-nowrap relative z-[100] shadow-xl">
+        <div className="bg-black py-3.5 border-b border-white/20 overflow-hidden whitespace-nowrap relative z-[100] shadow-xl">
             <div className="flex animate-marquee-slower items-center pr-[120px] md:pr-[200px]">
                 {[...offers, ...offers].map((offer, i) => (
                     <div 
