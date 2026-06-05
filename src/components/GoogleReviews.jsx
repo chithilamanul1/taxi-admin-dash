@@ -124,24 +124,15 @@ const GoogleReviews = () => {
                             Don't just take our word for it. Read honest reviews from travelers who experienced Sri Lanka with us.
                         </p>
                     </div>
-
-                    <div className="flex items-center gap-4">
-                        <button onClick={() => scroll('left')} className="w-12 h-12 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 dark:hover:bg-emerald-500/10 text-slate-600 dark:text-white flex items-center justify-center transition-all shadow-sm rounded-full active:scale-95">
-                            <ChevronLeft size={24} strokeWidth={2} />
-                        </button>
-                        <button onClick={() => scroll('right')} className="w-12 h-12 bg-emerald-600 text-white border border-transparent flex items-center justify-center transition-all hover:bg-emerald-700 shadow-md hover:shadow-lg rounded-full active:scale-95">
-                            <ChevronRight size={24} strokeWidth={2} />
-                        </button>
-                    </div>
                 </div>
 
                 {/* Source Selection Tabs */}
                 <div className="flex flex-wrap items-center gap-4 mb-12">
                     <button
                         onClick={() => setActiveSource('google')}
-                        className={`group flex items-center gap-4 p-3 pr-6 border transition-all rounded-2xl ${activeSource === 'google'
-                            ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-500/30 text-blue-900 dark:text-blue-400 shadow-sm'
-                            : 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-blue-200 dark:hover:border-blue-500/30 hover:bg-slate-50 dark:hover:bg-zinc-800'
+                        className={`group flex items-center gap-4 p-3 pr-6 border-2 transition-all rounded-2xl border-black ${activeSource === 'google'
+                            ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-400 shadow-sm'
+                            : 'bg-white dark:bg-zinc-900 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-zinc-800'
                             }`}
                     >
                         <div className="w-10 h-10 shrink-0 bg-white dark:bg-zinc-800 rounded-xl flex items-center justify-center p-2 shadow-sm border border-slate-100 dark:border-white/5">
@@ -160,9 +151,9 @@ const GoogleReviews = () => {
 
                     <button
                         onClick={() => setActiveSource('tripadvisor')}
-                        className={`group flex items-center gap-4 p-3 pr-6 border transition-all rounded-2xl ${activeSource === 'tripadvisor'
-                            ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-500/30 text-emerald-900 dark:text-emerald-400 shadow-sm'
-                            : 'bg-white dark:bg-zinc-900 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-emerald-200 dark:hover:border-emerald-500/30 hover:bg-slate-50 dark:hover:bg-zinc-800'
+                        className={`group flex items-center gap-4 p-3 pr-6 border-2 transition-all rounded-2xl border-black ${activeSource === 'tripadvisor'
+                            ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-900 dark:text-emerald-400 shadow-sm'
+                            : 'bg-white dark:bg-zinc-900 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-zinc-800'
                             }`}
                     >
                         <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-white dark:bg-zinc-800 border border-slate-100 dark:border-white/5 p-2 text-[#00AA6C] rounded-xl shadow-sm">
@@ -190,7 +181,7 @@ const GoogleReviews = () => {
                         return (
                             <div
                                 key={idx}
-                                className="snap-center shrink-0 w-[300px] md:w-[380px] bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-white/10 rounded-3xl p-8 hover:shadow-xl relative group hover:-translate-y-1 transition-all duration-300 flex flex-col"
+                                className="snap-center shrink-0 w-[300px] md:w-[380px] bg-slate-50 dark:bg-zinc-900 border-2 border-black rounded-3xl p-8 hover:shadow-xl relative group hover:-translate-y-1 transition-all duration-300 flex flex-col"
                             >
                                 <Quote size={40} strokeWidth={1} className="absolute top-6 right-6 text-slate-200 dark:text-white/5 group-hover:text-emerald-100 dark:group-hover:text-emerald-500/20 transition-colors" />
 
@@ -210,7 +201,7 @@ const GoogleReviews = () => {
                                             )}
                                         </div>
                                         {/* Source Badge */}
-                                        <div className="absolute -bottom-1 -right-1 bg-white dark:bg-zinc-800 rounded-full border border-slate-100 dark:border-white/10 w-6 h-6 flex items-center justify-center z-10 shadow-sm">
+                                        <div className="absolute -bottom-1 -right-1 bg-white dark:bg-zinc-800 rounded-full border border-black w-6 h-6 flex items-center justify-center z-10 shadow-sm">
                                             {review.source === 'tripadvisor' ? (
                                                 <div className="text-[#00AA6C]">
                                                     <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">

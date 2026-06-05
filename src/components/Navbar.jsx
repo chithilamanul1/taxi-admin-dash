@@ -45,6 +45,9 @@ export default function Navbar() {
                 <Link href="/" className="flex items-center gap-2 group shrink-0">
                     <div className="flex flex-col justify-center -ml-2 sm:-ml-6 md:-ml-10 lg:-ml-14">
                         <img src="/header.png" alt="Airport Taxis Sri Lanka" className="h-16 sm:h-20 md:h-24 w-auto object-contain scale-[1.1] origin-left" />
+                        <span className="text-[7px] sm:text-[9px] md:text-[11px] font-black tracking-[0.25em] text-[#FACC15] uppercase -mt-3 sm:-mt-4 md:-mt-5 pl-1.5 sm:pl-2 select-none font-montserrat">
+                            Your Premium Taxi Partner
+                        </span>
                     </div>
                 </Link>
 

@@ -129,18 +129,18 @@ const OfferMarquee = () => {
             </div>
             
             {/* Fixed Timer */}
-            <div className="absolute top-0 right-0 h-full flex items-center bg-red-700/95 backdrop-blur-md px-6 md:px-10 border-l border-white/10 z-10">
-                <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                    <span className="text-white font-black text-[8px] md:text-[10px] uppercase tracking-[0.2em] hidden sm:block">
-                        EXPIRES IN:
+            <div className="absolute top-0 right-0 h-full flex items-center bg-black/90 backdrop-blur-md px-3 sm:px-6 border-l border-white/10 z-10 shadow-2xl">
+                <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse shadow-lg shadow-red-500/50"></div>
+                    <span className="text-white/90 font-black text-[7px] sm:text-[9px] md:text-[10px] uppercase tracking-[0.15em] leading-none">
+                        OFFER ENDS:
                     </span>
-                    <div className="flex items-center gap-1.5 text-white font-black text-xs md:text-sm tracking-widest">
-                        <span className="bg-black/30 rounded-lg px-2 py-1 min-w-[32px] text-center">{formatNum(timeLeft.hours)}</span>
-                        <span className="text-white/30">:</span>
-                        <span className="bg-black/30 rounded-lg px-2 py-1 min-w-[32px] text-center">{formatNum(timeLeft.minutes)}</span>
-                        <span className="text-white/30">:</span>
-                        <span className="bg-black/30 rounded-lg px-2 py-1 min-w-[32px] text-center text-emerald-400">{formatNum(timeLeft.seconds)}</span>
+                    <div className="flex items-center gap-0.5 text-white font-black text-xs md:text-sm tracking-wider font-mono">
+                        <span className="bg-white/10 rounded-md px-1.5 py-0.5 min-w-[24px] sm:min-w-[28px] text-center text-[#FACC15]">{formatNum(timeLeft.hours)}</span>
+                        <span className="text-[#FACC15]/40 animate-pulse">:</span>
+                        <span className="bg-white/10 rounded-md px-1.5 py-0.5 min-w-[24px] sm:min-w-[28px] text-center text-[#FACC15]">{formatNum(timeLeft.minutes)}</span>
+                        <span className="text-[#FACC15]/40 animate-pulse">:</span>
+                        <span className="bg-white/10 rounded-md px-1.5 py-0.5 min-w-[24px] sm:min-w-[28px] text-center text-[#FACC15]">{formatNum(timeLeft.seconds)}</span>
                     </div>
                 </div>
             </div>

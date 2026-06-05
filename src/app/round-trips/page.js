@@ -36,13 +36,15 @@ export const metadata = {
 
 export default function RoundTripsPage() {
   return (
-    <main className="min-h-screen bg-slate-50 dark:bg-zinc-950 transition-colors">
+    <main className="min-h-screen bg-slate-50 dark:bg-zinc-950 transition-colors relative">
+      <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-[0.06] dark:opacity-[0.02] pointer-events-none z-0"></div>
       
       {/* Premium Compact Header */}
       <section className="pt-24 pb-32 bg-emerald-950 text-center relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <img src="/hero-bg.png" alt="" className="w-full h-full object-cover" />
         </div>
+        <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-50 dark:to-zinc-950"></div>
         
         <div className="container mx-auto px-6 relative z-10">
