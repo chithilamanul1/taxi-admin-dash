@@ -158,9 +158,9 @@ export default function SpecialOffersSection() {
                                                     <span className="text-xs font-black text-white/60 tracking-widest">CODE: </span>
                                                     <span className="text-sm font-black text-[#FACC15] tracking-wider">{todayOffer.code}</span>
                                                 </div>
-                                                <div className="flex items-center gap-1.5 bg-red-500/10 px-3 py-1.5 rounded-xl border border-red-500/20">
-                                                    <Clock size={12} className="text-red-400 animate-pulse" />
-                                                    <span className="text-xs font-black text-red-400 tabular-nums tracking-wider">
+                                                <div className="flex items-center gap-2 bg-red-500/20 px-4 py-2 rounded-2xl border-2 border-red-500/30 shadow-lg shadow-red-500/10">
+                                                    <Clock size={16} className="text-red-500 animate-pulse" />
+                                                    <span className="text-sm sm:text-base font-black text-red-500 tabular-nums tracking-wider">
                                                         {timeLeft.h.toString().padStart(2, '0')}:{timeLeft.m.toString().padStart(2, '0')}:{timeLeft.s.toString().padStart(2, '0')}
                                                     </span>
                                                 </div>

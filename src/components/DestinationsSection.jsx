@@ -25,14 +25,15 @@ const DestinationsSection = () => {
     const orderedDestinations = featuredDestinations.map(id => displayDestinations.find(d => d.id === id)).filter(Boolean);
 
     return (
-        <section className="py-24 bg-slate-50 dark:bg-[#0a0a0a] transition-colors">
+        <section className="py-24 bg-slate-50 dark:bg-black transition-colors">
             <div className="container mx-auto px-6">
                 {/* Header Section */}
                 <div className="mb-16 text-center">
-                    <h2 className="text-4xl md:text-7xl font-bold text-slate-900 dark:text-white tracking-tight mb-4">
-                        Explore Sri Lankan <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Destinations</span>
+                    <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-slate-900 dark:text-white mb-6 leading-none uppercase tracking-tighter font-montserrat">
+                        Explore Sri Lankan <br />
+                        <span className="text-[#FACC15] italic font-serif normal-case">Destinations</span>
                     </h2>
-                    <p className="text-slate-500 dark:text-slate-400 mt-4 text-base md:text-xl max-w-3xl mx-auto font-medium">
+                    <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm font-bold uppercase tracking-[0.3em] max-w-xl mx-auto opacity-80">
                         Discover amazing deals and seamless transfers across the paradise island.
                     </p>
                 </div>
@@ -67,12 +68,12 @@ const DestinationsSection = () => {
 
                                 {/* Content Overlay */}
                                 <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end">
-                                    <div className="flex items-center gap-1.5 text-white/90 text-[10px] md:text-xs font-semibold tracking-wider mb-1 md:mb-2">
-                                        <MapPin size={12} className="text-emerald-400 md:w-3.5 md:h-3.5" />
+                                    <div className="flex items-center gap-1.5 text-white/90 text-[10px] md:text-xs font-black tracking-wider mb-1 md:mb-2 font-montserrat">
+                                        <MapPin size={12} className="text-[#FACC15] md:w-3.5 md:h-3.5" />
                                         SRI LANKA
                                     </div>
                                     
-                                    <h3 className="text-xl md:text-3xl font-bold text-white tracking-tight mb-1 md:mb-2">
+                                    <h3 className="text-xl md:text-3xl font-black text-white tracking-tight mb-1 md:mb-2 uppercase font-montserrat">
                                         {dest.name}
                                     </h3>
                                     
@@ -81,11 +82,11 @@ const DestinationsSection = () => {
                                     </p>
 
                                     <div className="flex items-center justify-between mt-auto">
-                                        <div className="bg-emerald-500 text-white px-3 md:px-5 py-1.5 md:py-2 rounded-full text-[10px] md:text-xs font-semibold tracking-wide shadow-sm transition-all group-hover:bg-emerald-600">
+                                        <div className="bg-[#FACC15] text-black px-3 md:px-5 py-1.5 md:py-2 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest shadow-sm transition-all">
                                             {(idx * 3) + 12}+ Deals
                                         </div>
                                         
-                                        <div className="hidden md:flex w-8 h-8 md:w-10 md:h-10 bg-white/20 backdrop-blur-md text-white items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0 hover:bg-emerald-500 hover:text-white">
+                                        <div className="hidden md:flex w-8 h-8 md:w-10 md:h-10 bg-white/20 backdrop-blur-md text-white items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0 hover:bg-[#FACC15] hover:text-black">
                                             <ArrowRight size={16} className="md:w-5 md:h-5" />
                                         </div>
                                     </div>
