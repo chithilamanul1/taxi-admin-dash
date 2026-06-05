@@ -112,11 +112,11 @@ export default function SpecialOffersSection() {
                         <div>
                             <div className="inline-flex items-center gap-2 bg-[#FACC15] px-4 py-1.5 mb-6 rounded-md shadow-sm">
                                 <Tag size={12} className="text-black" strokeWidth={3.5} />
-                                <span className="text-xs font-black text-black uppercase tracking-[0.2em]">Exclusive Deals</span>
+                                <span className="text-xs font-black text-black uppercase tracking-[0.2em] font-montserrat">Exclusive Deals</span>
                             </div>
-                            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-black mb-6 leading-none uppercase tracking-tighter">
+                            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-black dark:text-white mb-6 leading-none uppercase tracking-tighter font-montserrat">
                                 SAVE ON YOUR <br />
-                                <span className="text-[#FACC15]">NEXT JOURNEY</span>
+                                <span className="text-[#FACC15] italic font-serif normal-case">Next Journey</span>
                             </h2>
                         </div>
                         
@@ -201,7 +201,7 @@ export default function SpecialOffersSection() {
                                         }
                                         window.location.href = `/?${params.toString()}#booking`;
                                     }}
-                                    className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(50%-16px)] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-6 md:p-8 hover:shadow-2xl transition-all cursor-pointer group/card relative overflow-visible flex flex-col h-full min-h-[380px] shadow-xl group-hover:translate-y-[-8px]"
+                                    className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(50%-16px)] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-5 md:p-7 hover:shadow-2xl transition-all cursor-pointer group/card relative overflow-visible flex flex-col h-full min-h-[295px] md:min-h-[350px] shadow-xl group-hover:translate-y-[-8px]"
                                 >
                                     {/* Ticket Notches */}
                                     <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-8 h-8 bg-white dark:bg-black rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
@@ -209,11 +209,11 @@ export default function SpecialOffersSection() {
 
                                     <div className="relative z-10 flex flex-col h-full">
                                         {/* Header: Icon & Badge */}
-                                        <div className="flex justify-between items-start mb-6">
-                                            <div className="w-16 h-16 bg-gradient-to-br from-[#FACC15] to-amber-500 rounded-2xl flex items-center justify-center text-black shadow-lg shadow-yellow-500/20 rotate-3 group-hover/card:rotate-0 transition-transform" style={{
+                                        <div className="flex justify-between items-start mb-4 md:mb-6">
+                                            <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-[#FACC15] to-amber-500 rounded-2xl flex items-center justify-center text-black shadow-lg shadow-yellow-500/20 rotate-3 group-hover/card:rotate-0 transition-transform" style={{
                                                 background: 'linear-gradient(135deg, #FACC15 0%, #F59E0B 100%)'
                                             }}>
-                                                <Percent size={28} strokeWidth={3.5} />
+                                                <Percent size={24} className="md:size-[28px]" strokeWidth={3.5} />
                                             </div>
                                             {coupon.applicableLocations && coupon.applicableLocations.length > 0 && (
                                                 <span className="inline-flex items-center gap-1.5 bg-[#FACC15]/10 text-slate-800 dark:text-[#FACC15] px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full border border-[#FACC15]/20 dark:border-[#FACC15]/30">
@@ -224,30 +224,30 @@ export default function SpecialOffersSection() {
                                         </div>
 
                                         {/* Discount Info */}
-                                        <div className="mb-2">
+                                        <div className="mb-1 md:mb-2">
                                             <div className="flex items-baseline gap-1">
-                                                <h3 className="text-6xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                                                <h3 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
                                                     {coupon.discountType === 'percentage' ? `${coupon.value}%` : `${coupon.value}`}
                                                 </h3>
-                                                <span className="text-xl font-black text-slate-400 uppercase">{coupon.discountType === 'percentage' ? 'OFF' : 'LKR OFF'}</span>
+                                                <span className="text-lg md:text-xl font-black text-slate-400 uppercase">{coupon.discountType === 'percentage' ? 'OFF' : 'LKR OFF'}</span>
                                             </div>
-                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-2">Discount Coupon</p>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1 md:mt-2">Discount Coupon</p>
                                         </div>
 
                                         {/* Description */}
-                                        <p className="text-sm font-bold text-slate-600 dark:text-slate-400 mb-6 mt-2 leading-relaxed line-clamp-2">
+                                        <p className="text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-400 mb-4 md:mb-6 mt-1 md:mt-2 leading-relaxed line-clamp-2">
                                             {coupon.description || `Valid for rides to/from ${coupon.applicableLocations?.[0] || 'selected locations'}`}
                                         </p>
 
                                         {/* Dashed Separator */}
-                                        <div className="w-full border-t-2 border-dashed border-slate-100 dark:border-slate-800 mb-6 mx-0" />
+                                        <div className="w-full border-t-2 border-dashed border-slate-100 dark:border-slate-800 mb-4 md:mb-6 mx-0" />
 
                                         {/* Code Bar - Pushed to Bottom */}
-                                        <div className="mt-auto space-y-6">
-                                            <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 flex items-center justify-between group-hover/card:border-[#FACC15]/40 transition-all">
+                                        <div className="mt-auto space-y-4 md:space-y-6">
+                                            <div className="bg-slate-50 dark:bg-slate-800/50 p-3 md:p-4 rounded-3xl border border-slate-100 dark:border-slate-800 flex items-center justify-between group-hover/card:border-[#FACC15]/40 transition-all">
                                                 <div>
                                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Use Code</p>
-                                                    <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{coupon.code}</p>
+                                                    <p className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">{coupon.code}</p>
                                                 </div>
                                                 <button
                                                     onClick={(e) => {
@@ -256,7 +256,7 @@ export default function SpecialOffersSection() {
                                                         setCopiedCode(coupon.code);
                                                         setTimeout(() => setCopiedCode(null), 2000);
                                                     }}
-                                                    className={`px-6 py-3 rounded-2xl font-black text-xs flex items-center gap-2 transition-all shadow-lg uppercase tracking-widest ${copiedCode === coupon.code ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-[#FACC15] text-black hover:bg-yellow-500 shadow-yellow-500/20'}`}
+                                                    className={`px-4 py-2 sm:px-6 sm:py-3 rounded-2xl font-black text-[10px] sm:text-xs flex items-center gap-2 transition-all shadow-lg uppercase tracking-widest ${copiedCode === coupon.code ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-[#FACC15] text-black hover:bg-yellow-500 shadow-yellow-500/20'}`}
                                                 >
                                                     {copiedCode === coupon.code ? <Check size={16} strokeWidth={3} /> : <Copy size={16} strokeWidth={3} />}
                                                     {copiedCode === coupon.code ? 'COPIED' : 'COPY'}

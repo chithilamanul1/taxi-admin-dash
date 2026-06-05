@@ -30,7 +30,8 @@ export default {
                 },
             },
             fontFamily: {
-                'sans': ['Inter', 'sans-serif', 'Montserrat'],
+                'sans': ['var(--font-inter)', 'sans-serif'],
+                'montserrat': ['var(--font-montserrat)', 'sans-serif'],
             },
             keyframes: {
                 'slide-up': {

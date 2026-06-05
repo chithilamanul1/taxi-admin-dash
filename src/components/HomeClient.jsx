@@ -113,6 +113,8 @@ export default function HomeClient() {
                 </div>
             </div>
 
+            <SpecialOffersSection />
+
             {/* Floating Check Availability Sidebar - Luxury Style */}
             <button
                 onClick={() => setIsBookingOpen(true)}
@@ -128,8 +130,6 @@ export default function HomeClient() {
             <div className="h-4 md:h-10" /> {/* Spacing */}
 
             <FleetSection />
-
-            <SpecialOffersSection />
 
             <DestinationsSection />
             <ReviewStatsBar />
