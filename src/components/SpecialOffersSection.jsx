@@ -108,7 +108,7 @@ export default function SpecialOffersSection() {
 
                 <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16">
                     {/* Header */}
-                    <div className="mb-10 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                    <div className="mb-10 md:mb-16 flex flex-col gap-8">
                         <div>
                             <div className="inline-flex items-center gap-2 bg-[#FACC15] px-4 py-1.5 mb-6 rounded-md shadow-sm">
                                 <Tag size={12} className="text-black" strokeWidth={3.5} />
@@ -120,36 +120,62 @@ export default function SpecialOffersSection() {
                             </h2>
                         </div>
                         
-                        {/* Today's Offer Quick Badge */}
+                        {/* Today's Offer — Prominent Hero Card */}
                         {todayOffer.isActive && (
-                            <div 
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5 }}
                                 onClick={() => {
                                     const params = new URLSearchParams();
                                     params.set('coupon', todayOffer.code);
                                     window.location.href = `/?${params.toString()}#booking`;
                                 }}
-                                className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 rotate-[1deg] shadow-sm cursor-pointer hover:-translate-y-1 transition-all group"
+                                className="relative cursor-pointer group"
                             >
-                                <div className="flex flex-col items-center px-3 py-1 bg-white border border-slate-200 rounded-lg">
-                                    <span className="text-[8px] font-black text-black leading-none mb-[1px]">TODAY'S</span>
-                                    <span className="text-sm font-black text-[#FACC15] leading-none italic uppercase">OFFER</span>
-                                </div>
-                                <div>
-                                    <p className="text-[10px] font-black uppercase text-black leading-tight">FLAT {todayOffer.percent}% OFF</p>
-                                    <p className="text-[10px] font-bold text-slate-500 mb-1">CODE: {todayOffer.code}</p>
-                                    <div className="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-500/10 px-2 py-0.5 rounded border border-yellow-200 dark:border-yellow-500/20 mt-1">
-                                        <Clock size={10} className="text-yellow-600 dark:text-yellow-400 animate-pulse" />
-                                        <span className="text-[9px] font-black text-yellow-700 dark:text-yellow-400 tabular-nums">
-                                            EXPIRES IN {timeLeft.h.toString().padStart(2, '0')}:{timeLeft.m.toString().padStart(2, '0')}:{timeLeft.s.toString().padStart(2, '0')}
-                                        </span>
+                                {/* Glow effect behind the card */}
+                                <div className="absolute -inset-1 bg-gradient-to-r from-[#FACC15] via-amber-400 to-[#FACC15] rounded-3xl blur-lg opacity-40 group-hover:opacity-70 transition-opacity animate-pulse" />
+                                
+                                <div className="relative bg-gradient-to-br from-black via-zinc-900 to-black rounded-3xl p-6 md:p-8 border-2 border-[#FACC15] shadow-2xl shadow-yellow-500/10 group-hover:-translate-y-1 transition-all overflow-hidden">
+                                    {/* Decorative corner accents */}
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#FACC15]/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+                                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-[#FACC15]/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+                                    
+                                    <div className="relative z-10 flex flex-col sm:flex-row items-center gap-5 md:gap-8">
+                                        {/* Today's Offer Label */}
+                                        <div className="flex flex-col items-center px-5 py-3 bg-[#FACC15] rounded-2xl shadow-lg shadow-yellow-500/30 shrink-0">
+                                            <span className="text-[10px] font-black text-black leading-none mb-0.5 tracking-widest">TODAY'S</span>
+                                            <span className="text-2xl font-black text-black leading-none italic uppercase">OFFER</span>
+                                        </div>
+
+                                        {/* Discount & Code */}
+                                        <div className="flex-1 text-center sm:text-left">
+                                            <p className="text-2xl sm:text-3xl md:text-4xl font-black text-white uppercase leading-tight tracking-tight">
+                                                FLAT <span className="text-[#FACC15]">{todayOffer.percent}%</span> OFF
+                                            </p>
+                                            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mt-2">
+                                                <div className="bg-white/10 backdrop-blur-sm px-4 py-1.5 rounded-xl border border-white/10">
+                                                    <span className="text-xs font-black text-white/60 tracking-widest">CODE: </span>
+                                                    <span className="text-sm font-black text-[#FACC15] tracking-wider">{todayOffer.code}</span>
+                                                </div>
+                                                <div className="flex items-center gap-1.5 bg-red-500/10 px-3 py-1.5 rounded-xl border border-red-500/20">
+                                                    <Clock size={12} className="text-red-400 animate-pulse" />
+                                                    <span className="text-xs font-black text-red-400 tabular-nums tracking-wider">
+                                                        {timeLeft.h.toString().padStart(2, '0')}:{timeLeft.m.toString().padStart(2, '0')}:{timeLeft.s.toString().padStart(2, '0')}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* CTA Button */}
+                                        <div className="shrink-0">
+                                            <div className="bg-[#FACC15] text-black px-6 py-3 md:px-8 md:py-4 rounded-2xl font-black text-xs md:text-sm uppercase tracking-[0.2em] shadow-lg shadow-yellow-500/30 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-yellow-500/40 transition-all flex items-center gap-2">
+                                                APPLY NOW <ArrowRight size={16} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="ml-2 w-10 h-10 bg-black rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform flex-shrink-0">
-                                    <div className="w-8 h-8 bg-[#FACC15] text-black rounded-full flex items-center justify-center">
-                                        <Check size={16} strokeWidth={3.5} />
-                                    </div>
-                                </div>
-                            </div>
+                            </motion.div>
                         )}
                     </div>
 
