@@ -102,7 +102,7 @@ export default function SpecialOffersSection() {
 
     return (
         <section id="offers" className="py-0 relative transition-colors duration-300">
-            <section className="relative py-16 md:py-32 overflow-hidden bg-[#FACC15] border-t border-yellow-500/20 transition-colors duration-300"
+            <section className="relative py-16 md:py-32 overflow-hidden bg-[#FACC15] transition-colors duration-300"
                      onMouseEnter={() => setIsPaused(true)}
                      onMouseLeave={() => setIsPaused(false)}>
 
@@ -204,12 +204,8 @@ export default function SpecialOffersSection() {
                                         }
                                         window.location.href = `/?${params.toString()}#booking`;
                                     }}
-                                    className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(50%-16px)] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-5 md:p-7 hover:shadow-2xl transition-all cursor-pointer group/card relative overflow-visible flex flex-col h-full min-h-[295px] md:min-h-[350px] shadow-xl group-hover:translate-y-[-8px]"
+                                    className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(50%-16px)] bg-white dark:bg-slate-900 rounded-[2.5rem] p-5 md:p-7 hover:shadow-2xl transition-all cursor-pointer group/card relative overflow-visible flex flex-col h-full min-h-[295px] md:min-h-[350px] shadow-xl group-hover:translate-y-[-8px] ticket-card-mask"
                                 >
-                                    {/* Ticket Notches */}
-                                    <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-8 h-8 bg-[#FACC15] rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
-                                    <div className="absolute top-1/2 -translate-y-1/2 -right-4 w-8 h-8 bg-[#FACC15] rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
-
                                     <div className="relative z-10 flex flex-col h-full">
                                         {/* Header: Icon & Badge */}
                                         <div className="flex justify-between items-start mb-4 md:mb-6">

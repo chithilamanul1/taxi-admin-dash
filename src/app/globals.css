@@ -252,3 +252,11 @@ body.booking-active nextjs-portal {
 .dark .react-international-phone-country-selector-dropdown__list-item:hover {
     background: rgba(255, 255, 255, 0.05) !important;
 }
+
+/* Custom radial gradient mask for coupon ticket notches */
+.ticket-card-mask {
+    -webkit-mask: radial-gradient(circle 16px at 0 50%, #0000 98%, #000) left/51% 100% no-repeat,
+                  radial-gradient(circle 16px at 100% 50%, #0000 98%, #000) right/51% 100% no-repeat;
+    mask: radial-gradient(circle 16px at 0 50%, #0000 98%, #000) left/51% 100% no-repeat,
+          radial-gradient(circle 16px at 100% 50%, #0000 98%, #000) right/51% 100% no-repeat;
+}
