@@ -61,8 +61,8 @@ export default function HomeGallery() {
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
                     <div>
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 bg-red-600 flex items-center justify-center border-4 border-red-600 rotate-3 shadow-lg">
-                                <Camera size={24} className="text-white" />
+                            <div className="w-12 h-12 bg-[#FACC15] flex items-center justify-center border-4 border-[#FACC15] rotate-3 shadow-lg">
+                                <Camera size={24} className="text-black" strokeWidth={2.5} />
                             </div>
                             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-800 dark:text-slate-200">Travel Memories</span>
                         </div>
@@ -74,7 +74,7 @@ export default function HomeGallery() {
                     <Link 
                         href="/gallery"
                         aria-label="View our photo gallery of Sri Lankan travel memories"
-                        className="group flex items-center gap-4 bg-red-600 text-white px-8 py-4 rounded-full font-black uppercase tracking-widest text-xs border border-red-600 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all"
+                        className="group flex items-center gap-4 bg-[#FACC15] text-black px-8 py-4 rounded-full font-black uppercase tracking-widest text-xs border border-[#FACC15] shadow-md hover:shadow-lg hover:-translate-y-1 hover:bg-black hover:text-[#FACC15] hover:border-black transition-all duration-300"
                     >
                         VIEW FULL GALLERY <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                     </Link>
