@@ -102,21 +102,24 @@ export default function SpecialOffersSection() {
 
     return (
         <section id="offers" className="py-0 relative transition-colors duration-300">
-            <section className="relative py-16 md:py-32 overflow-hidden bg-white border-t border-slate-200 transition-colors duration-300"
+            <section className="relative py-16 md:py-32 overflow-hidden bg-gradient-to-br from-[#FACC15] via-amber-400 to-[#FACC15] border-t border-yellow-500/20 transition-colors duration-300"
                      onMouseEnter={() => setIsPaused(true)}
                      onMouseLeave={() => setIsPaused(false)}>
+
+                {/* Background Pattern */}
+                <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-[0.06] mix-blend-overlay pointer-events-none"></div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16">
                     {/* Header */}
                     <div className="mb-10 md:mb-16 flex flex-col gap-8">
                         <div>
-                            <div className="inline-flex items-center gap-2 bg-[#FACC15] px-4 py-1.5 mb-6 rounded-md shadow-sm">
-                                <Tag size={12} className="text-black" strokeWidth={3.5} />
-                                <span className="text-xs font-black text-black uppercase tracking-[0.2em] font-montserrat">Exclusive Deals</span>
+                            <div className="inline-flex items-center gap-2 bg-black px-4 py-1.5 mb-6 rounded-md shadow-sm">
+                                <Tag size={12} className="text-[#FACC15]" strokeWidth={3.5} />
+                                <span className="text-xs font-black text-[#FACC15] uppercase tracking-[0.2em] font-montserrat">Exclusive Deals</span>
                             </div>
-                            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-black dark:text-white mb-6 leading-none uppercase tracking-tighter font-montserrat">
+                            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-slate-950 mb-6 leading-none uppercase tracking-tighter font-montserrat">
                                 SAVE ON YOUR <br />
-                                <span className="text-[#FACC15] italic font-serif normal-case">Next Journey</span>
+                                <span className="text-black opacity-90 italic font-serif normal-case">Next Journey</span>
                             </h2>
                         </div>
                         
@@ -204,8 +207,8 @@ export default function SpecialOffersSection() {
                                     className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(50%-16px)] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-5 md:p-7 hover:shadow-2xl transition-all cursor-pointer group/card relative overflow-visible flex flex-col h-full min-h-[295px] md:min-h-[350px] shadow-xl group-hover:translate-y-[-8px]"
                                 >
                                     {/* Ticket Notches */}
-                                    <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-8 h-8 bg-white dark:bg-black rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
-                                    <div className="absolute top-1/2 -translate-y-1/2 -right-4 w-8 h-8 bg-white dark:bg-black rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
+                                    <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-8 h-8 bg-amber-400 rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
+                                    <div className="absolute top-1/2 -translate-y-1/2 -right-4 w-8 h-8 bg-amber-400 rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
 
                                     <div className="relative z-10 flex flex-col h-full">
                                         {/* Header: Icon & Badge */}
@@ -286,7 +289,7 @@ export default function SpecialOffersSection() {
                     <div className="text-center">
                         <Link
                             href="/offers"
-                            className="inline-flex items-center gap-4 bg-[#FACC15] text-black px-10 py-4 rounded-full border border-[#FACC15] font-black uppercase tracking-[0.2em] text-sm hover:-translate-y-1 active:translate-y-0 transition-all group shadow-md hover:shadow-lg hover:bg-black hover:text-[#FACC15] hover:border-black"
+                            className="inline-flex items-center gap-4 bg-black text-[#FACC15] px-10 py-4 rounded-full border border-black font-black uppercase tracking-[0.2em] text-sm hover:-translate-y-1 active:translate-y-0 transition-all group shadow-md hover:shadow-lg hover:bg-white hover:text-black hover:border-black"
                         >
                             VIEW ALL OFFERS
                             <ArrowRight size={20} strokeWidth={3} className="group-hover:translate-x-2 transition-transform" />
