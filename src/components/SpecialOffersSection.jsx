@@ -102,14 +102,11 @@ export default function SpecialOffersSection() {
 
     return (
         <section id="offers" className="py-0 relative transition-colors duration-300">
-            <section className="relative py-16 md:py-32 overflow-hidden bg-gradient-to-br from-[#FACC15] via-amber-400 to-[#FACC15] border-t border-yellow-500/20 transition-colors duration-300"
+            <section className="relative py-16 md:py-32 overflow-hidden bg-[#FACC15] border-t border-yellow-500/20 transition-colors duration-300"
                      onMouseEnter={() => setIsPaused(true)}
                      onMouseLeave={() => setIsPaused(false)}>
 
-                {/* Background Pattern */}
-                <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-[0.06] mix-blend-overlay pointer-events-none"></div>
-
-                <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16">
+                <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16 font-montserrat">
                     {/* Header */}
                     <div className="mb-10 md:mb-16 flex flex-col gap-8">
                         <div>
@@ -207,8 +204,8 @@ export default function SpecialOffersSection() {
                                     className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(50%-16px)] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-5 md:p-7 hover:shadow-2xl transition-all cursor-pointer group/card relative overflow-visible flex flex-col h-full min-h-[295px] md:min-h-[350px] shadow-xl group-hover:translate-y-[-8px]"
                                 >
                                     {/* Ticket Notches */}
-                                    <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-8 h-8 bg-amber-400 rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
-                                    <div className="absolute top-1/2 -translate-y-1/2 -right-4 w-8 h-8 bg-amber-400 rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
+                                    <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-8 h-8 bg-[#FACC15] rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
+                                    <div className="absolute top-1/2 -translate-y-1/2 -right-4 w-8 h-8 bg-[#FACC15] rounded-full border border-slate-100 dark:border-slate-800 shadow-inner z-20" />
 
                                     <div className="relative z-10 flex flex-col h-full">
                                         {/* Header: Icon & Badge */}
