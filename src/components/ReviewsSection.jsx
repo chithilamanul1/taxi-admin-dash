@@ -107,7 +107,7 @@ export default function ReviewsSection() {
                     )}
 
                     {/* Review Card */}
-                    <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-8 md:p-12 relative">
+                    <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-8 md:p-12 relative border-2 border-black">
                         {/* Quote Icon */}
                         <div className="absolute top-6 right-6 text-emerald-100 dark:text-emerald-900/50">
                             <Quote size={60} />

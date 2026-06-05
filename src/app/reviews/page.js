@@ -160,7 +160,7 @@ export default function ReviewsPage() {
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {googleData.reviews.map((review, i) => (
-                                        <div key={i} className="bg-white dark:bg-emerald-900 p-8 rounded-3xl border border-emerald-900/5 dark:border-white/5 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                                        <div key={i} className="bg-white dark:bg-emerald-900 p-8 rounded-3xl border-2 border-black shadow-sm hover:shadow-xl transition-all duration-300 group">
                                             <div className="flex justify-between items-start mb-6">
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-12 h-12 rounded-full overflow-hidden bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center border border-emerald-200 dark:border-emerald-800 relative">
@@ -226,7 +226,7 @@ export default function ReviewsPage() {
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {tripAdvisorData.reviews.map((review, i) => (
-                                        <div key={i} className="bg-white dark:bg-emerald-900 p-8 rounded-3xl border border-[#00af87]/10 dark:border-white/5 shadow-sm hover:shadow-xl hover:shadow-[#00af87]/10 transition-all duration-300 group">
+                                        <div key={i} className="bg-white dark:bg-emerald-900 p-8 rounded-3xl border-2 border-black shadow-sm hover:shadow-xl hover:shadow-[#00af87]/10 transition-all duration-300 group">
                                             <div className="flex justify-between items-start mb-6">
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-12 h-12 rounded-full overflow-hidden bg-[#00af87]/10 flex items-center justify-center border border-[#00af87]/20 relative">

@@ -141,7 +141,7 @@ const RoundTripBooking = () => {
     }
   };
 
-  const getAvailableHours = () => {
+  const getActivePackages = () => {
     let pkgs = [];
     if (tab === 'airport-round-tour') {
       pkgs = airportTours || [];
@@ -164,33 +164,17 @@ const RoundTripBooking = () => {
         (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
       );
     }
+    return pkgs;
+  };
+
+  const getAvailableHours = () => {
+    const pkgs = getActivePackages();
     const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
     return hours.length > 0 ? hours : [2, 4, 6, 8, 10, 12]; // Fallback
   };
 
   const getAvailableKmLimits = () => {
-    let pkgs = [];
-    if (tab === 'airport-round-tour') {
-      pkgs = airportTours || [];
-    } else if (tab === 'normal-round-tour') {
-      pkgs = normalTours || [];
-    } else if (tab === 'destination-based-tour') {
-      const pickupOverride = findMatchingDestination(locations[0], destinationsList);
-      const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
-      const destMatch = dropoffOverride || pickupOverride;
-      if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
-        pkgs = destMatch.roundTripPackages;
-      } else {
-        pkgs = pricingSettings?.destinationRoundTripPackages || [];
-      }
-    }
-    if (selectedVehicle) {
-      pkgs = pkgs.filter(p => 
-        p.vehicleType === selectedVehicle.id || 
-        p.vehicleType === selectedVehicle.vehicleType || 
-        (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
-      );
-    }
+    const pkgs = getActivePackages();
     const match = pkgs.filter(p => p.hours === formData.taxiTourHours);
     if (match.length > 0) {
       const kms = [];
@@ -204,6 +188,68 @@ const RoundTripBooking = () => {
       return kms.sort((a, b) => a - b);
     }
     return [20, 30, 40, 50]; // Fallback
+  };
+
+  const handleRouteCalculated = (stats) => {
+    setDistance(stats.distanceKm);
+    
+    if (stats.distanceKm <= 0) return;
+
+    // We add 30% buffer to driving time for traffic/stops to get realistic required hours
+    const reqHours = Math.ceil((stats.durationMin * 1.3) / 60);
+    const reqKm = stats.distanceKm;
+
+    const availableHours = getAvailableHours();
+    if (availableHours.length === 0) return;
+
+    let targetHours = formData.taxiTourHours;
+    if (reqHours > targetHours) {
+        const higherHours = availableHours.filter(h => h >= reqHours);
+        targetHours = higherHours.length > 0 ? higherHours[0] : availableHours[availableHours.length - 1];
+    }
+
+    const pkgs = getActivePackages();
+    let match = [];
+    if (selectedVehicle) {
+      match = pkgs.filter(p => p.hours === targetHours && (p.vehicleType === selectedVehicle.id || p.vehicleType === selectedVehicle.vehicleType || (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')));
+    }
+    if (match.length === 0) {
+      match = pkgs.filter(p => p.hours === targetHours);
+    }
+    
+    let targetKm = formData.taxiTourKm;
+    if (match.length > 0) {
+      const kms = [];
+      match.forEach(p => {
+        (p.tiers || []).forEach(t => {
+          if (t.km && !kms.includes(t.km)) kms.push(t.km);
+        });
+      });
+      kms.sort((a, b) => a - b);
+      
+      // Upgrade KM if needed, but ONLY if we haven't already maxed it out manually or something.
+      // Actually, if the route requires more KM than currently selected:
+      if (reqKm > targetKm || reqHours > formData.taxiTourHours) {
+          const validKms = kms.filter(k => k >= reqKm);
+          targetKm = validKms.length > 0 ? validKms[0] : kms[kms.length - 1];
+      }
+    } else {
+      // Fallback
+      if (reqKm > targetKm) {
+         const fallbacks = [20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250, 300, 400, 500];
+         const higher = fallbacks.filter(k => k >= reqKm);
+         targetKm = higher.length > 0 ? higher[0] : fallbacks[fallbacks.length - 1];
+      }
+    }
+
+    // Only update state if it actually needs an upgrade
+    if (targetHours !== formData.taxiTourHours || targetKm !== formData.taxiTourKm) {
+       setFormData(prev => ({
+          ...prev,
+          taxiTourHours: targetHours,
+          taxiTourKm: targetKm
+       }));
+    }
   };
 
   const calculateVehiclePrice = (v) => {
@@ -327,28 +373,7 @@ const RoundTripBooking = () => {
   };
 
   useEffect(() => {
-    let pkgs = [];
-    if (tab === 'airport-round-tour') {
-      pkgs = airportTours || [];
-    } else if (tab === 'normal-round-tour') {
-      pkgs = normalTours || [];
-    } else if (tab === 'destination-based-tour') {
-      const pickupOverride = findMatchingDestination(locations[0], destinationsList);
-      const dropoffOverride = findMatchingDestination(locations[locations.length - 1], destinationsList);
-      const destMatch = dropoffOverride || pickupOverride;
-      if (destMatch && destMatch.roundTripPackages && destMatch.roundTripPackages.length > 0) {
-        pkgs = destMatch.roundTripPackages;
-      } else {
-        pkgs = pricingSettings?.destinationRoundTripPackages || [];
-      }
-    }
-    if (selectedVehicle) {
-      pkgs = pkgs.filter(p => 
-        p.vehicleType === selectedVehicle.id || 
-        p.vehicleType === selectedVehicle.vehicleType || 
-        (selectedVehicle.id === 'normal-kdh' && p.vehicleType === 'kdh-van')
-      );
-    }
+    const pkgs = getActivePackages();
     const hours = [...new Set(pkgs.map(p => p.hours))].sort((a, b) => a - b);
     if (hours.length > 0) {
       const defaultHours = hours.includes(formData.taxiTourHours) ? formData.taxiTourHours : hours[0];
@@ -735,7 +760,7 @@ const RoundTripBooking = () => {
                     pickup={{ name: locations[0] || 'Bandaranaike International Airport' }} 
                     dropoff={{ name: locations[0] || 'Bandaranaike International Airport' }} 
                     waypoints={formData.placesList.filter(p => p.trim() !== '').map(p => ({ name: p }))} 
-                    onRouteCalculated={(stats) => setDistance(stats.distanceKm)}
+                    onRouteCalculated={handleRouteCalculated}
                   />
                 </div>
             </section>

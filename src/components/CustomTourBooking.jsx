@@ -11,6 +11,43 @@ import TripMap from './TripMap';
 import { useSession } from 'next-auth/react';
 import { useCurrency } from '@/context/CurrencyContext';
 
+const getVehicleTransform = (imagePath, isSelected, isHovered = false, h_target = 0.58, b_target = 0.12) => {
+    const filename = (imagePath || '').split('/').pop().split('?')[0].toLowerCase();
+    
+    // Bounding box data for transparency correction
+    const imgData = {
+        'coach-bus.png': { h_orig: 0.7772, c_prime_orig: 1 - 183.5/359 },
+        'costerbus.png': { h_orig: 0.6373, c_prime_orig: 1 - 216.5/408 },
+        'hondavezel.png': { h_orig: 0.6889, c_prime_orig: 1 - 216.0/360 },
+        'minicar.png': { h_orig: 0.5220, c_prime_orig: 1 - 251.0/500 },
+        'minivan5seat.png': { h_orig: 0.4642, c_prime_orig: 1 - 227.5/433 },
+        'sedan.png': { h_orig: 0.3040, c_prime_orig: 0.4934 },
+        'sedan2.png': { h_orig: 0.4300, c_prime_orig: 0.4801 },
+        'sedancar.png': { h_orig: 0.4668, c_prime_orig: 0.5310 },
+        'sedancar2.png': { h_orig: 0.4300, c_prime_orig: 0.4801 },
+        'susukievery.png': { h_orig: 0.5543, c_prime_orig: 1 - 228.5/433 },
+        'toyota-highroof.png': { h_orig: 0.8168, c_prime_orig: 1 - 136.0/273 },
+        'van.png': { h_orig: 0.5497, c_prime_orig: 1 - 227.5/433 },
+    }[filename] || { h_orig: 0.55, c_prime_orig: 0.5 }; // Default fallback
+
+    // Base scale to make bbox height exactly h_target
+    let scale = h_target / imgData.h_orig;
+
+    if (isSelected) {
+        scale *= 1.15; // Selected zoom
+    } else if (isHovered) {
+        scale *= 1.08; // Hover zoom
+    }
+
+    // Centering and baseline calculations
+    const c_prime_scaled = 0.5 + scale * (imgData.c_prime_orig - 0.5);
+    const b_scaled = c_prime_scaled - (scale * imgData.h_orig) / 2;
+    const shift_up = b_target - b_scaled;
+    const translateY = -shift_up * 100;
+
+    return { scale, translateY };
+};
+
 const CustomTourBooking = () => {
   const { data: session } = useSession();
   const { currency, changeCurrency, SUPPORTED_CURRENCIES, convertPrice } = useCurrency();
@@ -744,13 +781,22 @@ const CustomTourBooking = () => {
                           : 'bg-white dark:bg-zinc-900 border border-slate-400 dark:border-white/10 hover:border-slate-500 dark:hover:border-white/20'}`}
                     >
                       {/* Vehicle images — uniform fixed box, object-contain handles all sizing */}
-                      <div className="h-24 sm:h-28 mb-1 flex items-center justify-center w-full group-hover:scale-105 transition-transform duration-300 relative overflow-hidden">
-                        <img 
-                          src={v.image || '/vehicles/minicar.png'} 
-                          alt={v.name} 
-                          className="w-full h-full object-contain select-none pointer-events-none scale-[1.3]"
-                        />
-                      </div>
+                      {(() => {
+                        const { scale, translateY } = getVehicleTransform(v.image, isActive, false, 0.72, 0.12);
+                        return (
+                          <div className="h-24 sm:h-28 mb-1 flex items-center justify-center w-full group-hover:scale-105 transition-transform duration-300 relative overflow-hidden">
+                            <img 
+                              src={v.image || '/vehicles/minicar.png'} 
+                              alt={v.name} 
+                              className="w-full h-full object-contain select-none pointer-events-none transition-transform duration-500"
+                              style={{
+                                transform: `scale(${scale}) translateY(${translateY}%)`,
+                                filter: 'drop-shadow(0 8px 8px rgba(0,0,0,0.08))'
+                              }}
+                            />
+                          </div>
+                        );
+                      })()}
                       
                       <p className="text-[9px] font-black uppercase tracking-widest text-slate-800 dark:text-white mb-0.5">{v.name}</p>
                       <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 mb-1">{convertPrice(dynamicPrice).symbol} {convertPrice(dynamicPrice).value.toLocaleString()}</p>
@@ -899,13 +945,21 @@ const CustomTourBooking = () => {
             <section className="bg-emerald-50 dark:bg-zinc-800/40 rounded-3xl border border-emerald-100 dark:border-white/5 p-5 flex flex-col gap-4">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-4 sm:gap-6">
-                  <div className="w-24 sm:w-32 h-14 sm:h-16 flex items-center justify-center relative shrink-0">
-                    <img 
-                      src={selectedVehicle?.image || '/vehicles/sedancar.png'}
-                      alt="Vehicle" 
-                      className="max-h-full max-w-full object-contain scale-[1.4]"
-                    />
-                  </div>
+                  {(() => {
+                    const { scale, translateY } = getVehicleTransform(selectedVehicle?.image || '/vehicles/sedancar.png', false, false, 0.75, 0.12);
+                    return (
+                      <div className="w-24 sm:w-32 h-14 sm:h-16 flex items-center justify-center relative shrink-0 overflow-hidden">
+                        <img 
+                          src={selectedVehicle?.image || '/vehicles/sedancar.png'}
+                          alt="Vehicle" 
+                          className="w-full h-full object-contain select-none pointer-events-none transition-transform duration-500"
+                          style={{
+                            transform: `scale(${scale}) translateY(${translateY}%)`
+                          }}
+                        />
+                      </div>
+                    );
+                  })()}
                   <div>
                     <h4 className="text-base sm:text-lg font-black text-emerald-950 dark:text-white uppercase tracking-wider leading-tight">{selectedVehicle?.name || 'Selected Vehicle'}</h4>
                     <div className="flex gap-3 text-[10px] font-bold text-emerald-700/70 dark:text-emerald-400/70 uppercase tracking-widest mt-1">
