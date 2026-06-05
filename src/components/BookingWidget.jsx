@@ -962,9 +962,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                                     <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
                                                                         <button type="button" onClick={() => { 
                                                                             setIsDateTimePickerOpen(false); 
-                                                                            if (pickup?.lat && dropoff?.lat && scheduledDate) {
-                                                                                const parts = new Date(scheduledDate).toLocaleDateString("en-US", { timeZone: "Asia/Colombo", year: "numeric", month: "2-digit", day: "2-digit" }).split('/');
-                                                                                setScheduledDate(`${parts[2]}-${parts[0]}-${parts[1]}`);
+                                                                            if (scheduledDate) {
                                                                                 setStep(2); 
                                                                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                                                                             } 
