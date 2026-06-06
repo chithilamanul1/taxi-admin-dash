@@ -24,19 +24,6 @@ const OfferMarquee = () => {
         console.log("OfferMarquee: Visibility Check - activeOfferDay:", activeOfferDay, "todayName:", todayName);
     }, [pathname, activeOfferDay, todayName]);
 
-    if (pathname?.startsWith('/admin')) {
-        console.log("OfferMarquee: Hidden because path starts with /admin");
-        return null;
-    }
-    if (pathname === '/driver/login') {
-        console.log("OfferMarquee: Hidden because path is /driver/login");
-        return null;
-    }
-    if (pathname === '/driver/register') {
-        console.log("OfferMarquee: Hidden because path is /driver/register");
-        return null;
-    }
-
     useEffect(() => {
         const fetchSettings = async () => {
             let targetDate = new Date();
@@ -99,6 +86,10 @@ const OfferMarquee = () => {
 
         return () => timer && clearInterval(timer);
     }, []);
+
+    if (pathname?.startsWith('/admin') || pathname?.startsWith('/driver')) {
+        return null;
+    }
 
     const formatNum = (num) => num.toString().padStart(2, '0');
 

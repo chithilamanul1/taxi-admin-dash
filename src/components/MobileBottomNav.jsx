@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 const MobileBottomNav = () => {
     const pathname = usePathname();
 
-    if (pathname?.startsWith('/admin')) return null;
+    if (pathname?.startsWith('/admin') || pathname?.startsWith('/driver')) return null;
 
     const navItems = [
         { name: 'Home', icon: Home, href: '/' },

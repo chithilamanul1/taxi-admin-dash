@@ -8,7 +8,7 @@ export default function FloatingContact() {
     const [isOpen, setIsOpen] = useState(false)
     const pathname = usePathname()
 
-    const isExcludedPage = ['/admin', '/checkout', '/payment/success'].includes(pathname)
+    const isExcludedPage = ['/admin', '/checkout', '/payment/success'].includes(pathname) || pathname?.startsWith('/driver') || pathname?.startsWith('/admin')
     if (isExcludedPage) return null
 
     return (

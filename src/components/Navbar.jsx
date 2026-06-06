@@ -30,8 +30,8 @@ export default function Navbar() {
         setIsUserMenuOpen(false)
     }, [pathname])
 
-    const isAdminRoute = pathname.startsWith('/admin')
-    if (isAdminRoute) return null
+    const isExcludedRoute = pathname?.startsWith('/admin') || pathname?.startsWith('/driver')
+    if (isExcludedRoute) return null
 
     // Helper: Pages that support transparent navbar (Home & Blog)
     const isTransparentPage = pathname === '/' || pathname.startsWith('/blog')

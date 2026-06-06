@@ -4,8 +4,12 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Phone, Mail, MapPin, Instagram, Twitter, Facebook, ArrowUpRight } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 
 const Footer = () => {
+    const pathname = usePathname()
+    if (pathname?.startsWith('/admin') || pathname?.startsWith('/driver')) return null
+
     return (
         <footer className="bg-white dark:bg-black pt-32 pb-24 md:pb-12 relative overflow-hidden text-black dark:text-white border-t-8 border-black">
             {/* Background elements - Sharp lines */}

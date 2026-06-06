@@ -16,7 +16,7 @@ const CategoryBar = () => {
         { name: 'Driver Portal', icon: User, href: '/driver/login', active: pathname === '/driver/login' },
     ];
 
-    if (pathname?.startsWith('/admin')) return null;
+    if (pathname?.startsWith('/admin') || pathname?.startsWith('/driver')) return null;
 
     return (
         <div className="bg-white py-3 px-4 md:px-6 overflow-x-auto scrollbar-hide border-b border-black/5 flex justify-start md:justify-center items-center relative z-50">
