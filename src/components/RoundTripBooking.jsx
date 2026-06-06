@@ -262,10 +262,7 @@ const RoundTripBooking = () => {
       if (pkg) {
         const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
         if (tier && tier.price) {
-          let baseP = Math.round(tier.price);
-                      // No extra distance cost for round trips
-             
-          return Math.round(baseP);
+          return Math.round(tier.price);
         }
       }
     }
@@ -275,10 +272,7 @@ const RoundTripBooking = () => {
       if (pkg) {
         const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
         if (tier && tier.price) {
-          let baseP = Math.round(tier.price);
-          // No extra distance cost for round trips
-          baseP += (distance - formData.taxiTourKm) * (v.perKmRate || v.perKm || 100);
-          return Math.round(baseP);
+          return Math.round(tier.price);
         }
       }
     }
@@ -297,14 +291,10 @@ const RoundTripBooking = () => {
         if (pkg) {
           const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
           if (tier && tier.price) {
-          let baseP = Math.round(tier.price);
-          if (distance > formData.taxiTourKm) {
-             baseP += (distance - formData.taxiTourKm) * (v.perKmRate || v.perKm || 100);
+            return Math.round(tier.price);
           }
-          return Math.round(baseP);
         }
       }
-    }
 
       // 2. Global destinationRoundTripPackages
       const pkg = (pricingSettings?.destinationRoundTripPackages || []).find(p => 
@@ -314,11 +304,7 @@ const RoundTripBooking = () => {
       if (pkg) {
         const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
         if (tier && tier.price) {
-          let baseP = Math.round(tier.price);
-          if (distance > formData.taxiTourKm) {
-             baseP += (distance - formData.taxiTourKm) * (v.perKmRate || v.perKm || 100);
-          }
-          return Math.round(baseP);
+          return Math.round(tier.price);
         }
       }
 
@@ -335,9 +321,6 @@ const RoundTripBooking = () => {
           return Number(fixedPrice);
         }
       }
-
-      // Strictly no dynamic per-km fallback
-      return v.baseRate || 0;
     }
     
     return v.baseRate || 0;

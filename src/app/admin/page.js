@@ -823,13 +823,13 @@ export default function AdminDashboard() {
                         <LifeBuoy size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Support</span>
                     </button>
-                    <button onClick={() => { setCurrentView('coupons'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'coupons' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
-                        <Percent size={20} />
-                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Coupons</span>
-                    </button>
                     <button onClick={() => { setCurrentView('reviews'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'reviews' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Activity size={20} />
                         <span className={`${!sidebarOpen && 'md:hidden'}`}>Reviews</span>
+                    </button>
+                    <button onClick={() => { setCurrentView('coupons'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'coupons' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <Percent size={20} />
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Coupons</span>
                     </button>
                     <button onClick={() => { setCurrentView('invoices'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'invoices' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <FileText size={20} />
