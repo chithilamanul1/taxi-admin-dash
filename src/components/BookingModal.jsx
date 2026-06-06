@@ -1291,7 +1291,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             {['cash', 'card'].map(m => (
                                                 <button
                                                     key={m}
-                                                    onClick={() => setFormData({ ...formData, paymentMethod: m })}
+                                                    onClick={() => setFormData({ 
+                                                        ...formData, 
+                                                        paymentMethod: m, 
+                                                        ...(m === 'cash' ? { paymentType: 'full' } : {}) 
+                                                    })}
                                                     className={`p-4 sm:p-6 rounded-3xl sm:rounded-[2rem] border transition-all flex flex-col items-center gap-2 sm:gap-3 ${formData.paymentMethod === m ? 'bg-[#FACC15] border-transparent text-white shadow-xl' : 'bg-white dark:bg-zinc-900 border-slate-100 dark:border-white/10 text-slate-600 hover:border-[#FACC15]'}`}
                                                 >
                                                     {m === 'cash' ? <Coins size={22} /> : <CreditCard size={22} />}
