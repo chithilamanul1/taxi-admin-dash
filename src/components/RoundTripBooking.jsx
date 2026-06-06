@@ -24,6 +24,10 @@ const RoundTripBooking = () => {
   const [isBooked, setIsBooked] = useState(false);
   const [googleLoaded, setGoogleLoaded] = useState(false);
   const [step, setStep] = useState(1);
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [isVerifyingCoupon, setIsVerifyingCoupon] = useState(false);
+  const [couponError, setCouponError] = useState('');
   const [locations, setLocations] = useState(['']);
   const [distance, setDistance] = useState(0);
   const [basePackage, setBasePackage] = useState({ hours: 2, km: 40 });
@@ -403,11 +407,51 @@ const RoundTripBooking = () => {
 
   const handleLocationChange = (index, value) => { setLocations([value]); };
 
+  const handleVerifyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setIsVerifyingCoupon(true);
+    setCouponError('');
+    try {
+      const res = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: couponCode,
+          pickup: locations[0],
+          dropoff: locations[0], // Tour dropoff is usually same as pickup
+          tripType: 'tour'
+        })
+      });
+      const data = await res.json();
+      if (data.valid && data.coupon) {
+        setAppliedCoupon(data.coupon);
+        setCouponError('');
+      } else {
+        setAppliedCoupon(null);
+        setCouponError(data.message || 'Invalid coupon');
+      }
+    } catch (e) {
+      setCouponError('Failed to verify coupon');
+    } finally {
+      setIsVerifyingCoupon(false);
+    }
+  };
+
   const calculateTotal = () => {
     const baseLKR = calculateVehiclePrice(selectedVehicle);
     // Card surcharge applies for all bookings including round trips (3% LKR, 3.5% USD)
     const surcharge = calculatePaymentFees(baseLKR, formData.paymentMethod, 'LKR', selectedVehicle?.vehicleType || selectedVehicle?.id, false);
-    return Math.round(baseLKR + surcharge);
+    let total = Math.round(baseLKR + surcharge);
+    
+    if (appliedCoupon) {
+      if (appliedCoupon.discountType === 'percentage') {
+        total = total - (total * (appliedCoupon.value / 100));
+      } else {
+        total = Math.max(0, total - appliedCoupon.value);
+      }
+    }
+    
+    return Math.round(total);
   };
 
   // totalPriceLKR is always in LKR; convert for display
@@ -439,6 +483,7 @@ const RoundTripBooking = () => {
         displayPaidAmount: formData.paymentMethod === 'cash' ? 0 : totalPrice,
         displayBalanceAmount: formData.paymentMethod === 'cash' ? totalPrice : 0,
         currency: currency,
+        couponCode: appliedCoupon ? appliedCoupon.code : null,
         scheduledDate: formData.date,
         scheduledTime: formData.time,
         customerName: formData.name,
@@ -824,6 +869,51 @@ const RoundTripBooking = () => {
                   </div>
                 </div>
               </div>
+            </section>
+
+            <section className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5"><Sparkles className="text-emerald-600" size={18} /><h4 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Promo Code</h4></div>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative flex-1">
+                  <input 
+                    type="text" 
+                    value={couponCode} 
+                    onChange={e => { setCouponCode(e.target.value.toUpperCase()); setAppliedCoupon(null); setCouponError(''); }}
+                    placeholder="Have a coupon code?" 
+                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-4 outline-none font-bold text-slate-900 focus:bg-white text-sm"
+                    disabled={isVerifyingCoupon || appliedCoupon}
+                  />
+                  {appliedCoupon && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500 bg-emerald-50 p-1 rounded-full">
+                      <CheckCircle2 size={16} />
+                    </div>
+                  )}
+                </div>
+                {!appliedCoupon ? (
+                  <button 
+                    onClick={handleVerifyCoupon} 
+                    disabled={!couponCode.trim() || isVerifyingCoupon}
+                    className="px-6 py-3 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-colors disabled:opacity-50"
+                  >
+                    {isVerifyingCoupon ? 'Verifying...' : 'Apply'}
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => { setAppliedCoupon(null); setCouponCode(''); }}
+                    className="px-6 py-3 bg-red-50 text-red-600 hover:bg-red-100 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-colors"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+              {couponError && <p className="text-[10px] font-bold text-red-500 pl-2">{couponError}</p>}
+              {appliedCoupon && (
+                <p className="text-[10px] font-bold text-emerald-600 pl-2">
+                  Code applied! {appliedCoupon.discountType === 'percentage' ? `${appliedCoupon.value}% off` : `Rs. ${appliedCoupon.value} off`}
+                </p>
+              )}
             </section>
 
             <div className="pt-2">

@@ -14,12 +14,12 @@ const SmartOfferNudge = ({ offer, onClose }) => {
     if (!offer) return null;
 
     return (
-        <div className="fixed top-24 bottom-auto right-6 md:top-auto md:bottom-10 md:right-10 z-[1000] max-w-[calc(100vw-48px)] w-96 group/nudge">
+        <div className="fixed top-24 bottom-auto right-4 md:top-auto md:bottom-6 md:right-6 z-[1000] max-w-[calc(100vw-32px)] w-80 group/nudge">
             <motion.div 
-                initial={{ opacity: 0, y: -50, scale: 0.9 }}
+                initial={{ opacity: 0, y: -20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                className="relative bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 p-6 flex items-start gap-5 overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] backdrop-blur-xl"
+                exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                className="relative bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 p-4 flex items-start gap-3 overflow-hidden rounded-[1.5rem] shadow-[0_10px_30px_rgba(0,0,0,0.1)] backdrop-blur-xl"
             >
                 {/* Premium Background Pattern */}
                 <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.05] pointer-events-none">
@@ -27,35 +27,35 @@ const SmartOfferNudge = ({ offer, onClose }) => {
                 </div>
 
                 {/* Animated Glow */}
-                <div className="absolute -top-12 -right-12 w-32 h-32 bg-orange-500/10 rounded-full blur-[40px] pointer-events-none"></div>
+                <div className="absolute -top-12 -right-12 w-24 h-24 bg-orange-500/10 rounded-full blur-[30px] pointer-events-none"></div>
 
                 {/* Icon Section */}
-                <div className="w-14 h-14 bg-[#FACC15] rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-yellow-200 dark:shadow-none animate-bounce-slow">
-                    <CheckCircle2 size={28} className="text-black" />
+                <div className="w-10 h-10 bg-[#FACC15] rounded-xl flex items-center justify-center shrink-0 shadow-sm shadow-yellow-200 dark:shadow-none animate-bounce-slow mt-1">
+                    <CheckCircle2 size={20} className="text-black" />
                 </div>
                 {/* Content */}
                 <div className="relative z-10 flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-black text-black uppercase tracking-widest bg-yellow-400 px-2 py-0.5 rounded-full">Active Offer</span>
+                    <div className="flex items-center gap-2 mb-0.5">
+                        <span className="text-[9px] font-black text-black uppercase tracking-widest bg-yellow-400 px-1.5 py-0.5 rounded-full">Active Offer</span>
                     </div>
                     
-                    <h4 className="font-black text-slate-900 dark:text-white leading-tight mb-1 text-xl tracking-tight">
+                    <h4 className="font-black text-slate-900 dark:text-white leading-tight mb-1 text-sm tracking-tight pr-6">
                         {offer.name} <span className="text-emerald-600">Applied!</span>
                     </h4>
 
-                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-bold opacity-80 mb-4">
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug font-bold opacity-90 mb-2">
                         {offer.description || `Luxury discount successfully applied to your booking.`}
                     </p>
 
-                    <div className="flex items-center gap-3">
-                        <div className="px-4 py-2 bg-[#FACC15] rounded-xl shadow-md">
-                            <span className="text-xs font-black text-white uppercase tracking-wider">
+                    <div className="flex items-center gap-2">
+                        <div className="px-2.5 py-1 bg-[#FACC15] rounded-lg shadow-sm">
+                            <span className="text-[10px] font-black text-white uppercase tracking-wider">
                                 {offer.discountPercentage > 0 ? `${offer.discountPercentage}% OFF` : `Save Rs. ${offer.discountAmount}`}
                             </span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none mb-1">Verified Code</span>
-                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">Price Updated</span>
+                            <span className="text-[8px] font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none mb-0.5">Verified Code</span>
+                            <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none">Price Updated</span>
                         </div>
                     </div>
                 </div>

@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 export async function POST(req) {
     await dbConnect();
     try {
-        const { code, pickup, dropoff } = await req.json(); // pickup/dropoff are strings or objects? Expecting strings or extracting address
+        const { code, pickup, dropoff, tripType } = await req.json(); // pickup/dropoff are strings or objects? Expecting strings or extracting address
         const coupon = await Coupon.findOne({ code: code.toUpperCase(), isActive: true });
 
         if (!coupon) {
@@ -20,20 +20,23 @@ export async function POST(req) {
             return NextResponse.json({ valid: false, message: 'Coupon expired' });
         }
 
-        // Airport Drop and Pickup check
+        // Airport Drop and Pickup check (unless it's a tour)
         const pickupText = (typeof pickup === 'object' ? pickup?.name : pickup || '').toLowerCase();
         const dropoffText = (typeof dropoff === 'object' ? dropoff?.name : dropoff || '').toLowerCase();
+        const incomingTripType = tripType || ''; // Extract from raw request
 
-        const isAirport = (name) => {
-            if (!name) return false;
-            const n = name.toLowerCase();
-            return (n.includes('bandaranaike') || n.includes('cmb') || n.includes('airport'));
-        };
+        if (incomingTripType !== 'tour') {
+            const isAirport = (name) => {
+                if (!name) return false;
+                const n = name.toLowerCase();
+                return (n.includes('bandaranaike') || n.includes('cmb') || n.includes('airport'));
+            };
 
-        const isAirportRide = isAirport(pickupText) || isAirport(dropoffText);
+            const isAirportRide = isAirport(pickupText) || isAirport(dropoffText);
 
-        if (!isAirportRide) {
-            return NextResponse.json({ valid: false, message: 'Coupons are only applicable for airport drop and pickup rides.' });
+            if (!isAirportRide) {
+                return NextResponse.json({ valid: false, message: 'Coupons are only applicable for airport drop and pickup rides or tours.' });
+            }
         }
 
         // Location Check
