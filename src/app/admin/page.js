@@ -4380,11 +4380,6 @@ export default function AdminDashboard() {
                     )
                     }
 
-                    {/* Drivers Fleet View */}
-                    {currentView === 'drivers' && <DriversFleetView />}
-
-                    {/* Driver Profiles (Public) */}
-                    {currentView === 'driver-profiles' && <DriverManager />}
 
                     {/* Traffic Surge Management */}
                     {currentView === 'traffic-surge' && <TrafficSurgeManager />}

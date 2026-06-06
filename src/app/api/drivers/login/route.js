@@ -56,7 +56,7 @@ export async function POST(req) {
             success: true,
             driver: {
                 id: driver._id,
-                name: driver.user.name,
+                name: driver.user ? driver.user.name : driver.name,
                 vehicleType: driver.vehicleType,
                 vehicleNumber: driver.vehicleNumber,
                 status: driver.status

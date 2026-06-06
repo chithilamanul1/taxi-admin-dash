@@ -38,6 +38,10 @@ export default function DriverRegister() {
     const handleFileChange = (e, field, isDoc = true) => {
         const file = e.target.files[0];
         if (file) {
+            if (file.size > 4.5 * 1024 * 1024) {
+                setError(`File ${file.name} is too large. Please select a file smaller than 4.5MB.`);
+                return;
+            }
             setFormData(prev => {
                 const newData = isDoc
                     ? { ...prev, documents: { ...prev.documents, [field]: file } }
@@ -60,8 +64,14 @@ export default function DriverRegister() {
         });
 
         if (!res.ok) {
-            const err = await res.json();
-            throw new Error(err.error || 'Upload failed');
+            let errorMsg = 'Upload failed';
+            try {
+                const err = await res.json();
+                errorMsg = err.error || errorMsg;
+            } catch (e) {
+                errorMsg = `Server error: ${res.statusText || res.status}`;
+            }
+            throw new Error(errorMsg);
         }
 
         const result = await res.json();
@@ -69,6 +79,11 @@ export default function DriverRegister() {
     };
 
     const handleSubmit = async () => {
+        if (!formData.phone || !formData.nic || !formData.vehicleNumber) {
+            setError('Please fill in all required fields (Phone, NIC, Vehicle Number).');
+            return;
+        }
+
         setLoading(true);
         setError(null);
         try {
