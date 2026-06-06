@@ -513,7 +513,10 @@ export async function sendBookingConfirmation(booking) {
             ${(booking.tripType === 'round-trip' || booking.type === 'tour' || booking.roundTripPackageId) ? `
             <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Package Details</td>
-                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.tourDetails?.duration ? `${booking.tourDetails.duration} (${booking.tourDetails.kmLimit || booking.taxiTourKm || booking.distanceKm || 0} KM Limit)` : (booking.roundTripPackageId || 'Custom Package')}</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">
+                    ${booking.tourDetails?.duration ? `${booking.tourDetails.duration} (${booking.tourDetails.kmLimit || booking.taxiTourKm || 0} KM Limit)` : (booking.roundTripPackageId || 'Custom Package')}
+                    ${booking.distanceKm ? `<span style="margin-left:10px; color:#059669; font-size:11px; font-weight:700; background:#f0fdf4; border:1px solid #86efac; padding:2px 8px; border-radius:20px;">Actual: ${booking.distanceKm} km</span>` : ''}
+                </td>
             </tr>` : ''}
             <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Distance</td>
