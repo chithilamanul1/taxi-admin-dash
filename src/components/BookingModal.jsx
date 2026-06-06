@@ -25,6 +25,15 @@ const displayVehicleName = (name) => (name || '').replace(/\bKDH\s*/gi, '').spli
 export default function BookingModal({ isOpen, onClose, initialData = {}, pricingCategory = 'airport-transfer' }) {
     const { data: session } = useSession();
     const [step, setStep] = useState(1);
+    const scrollContainerRef = useRef(null);
+
+    useEffect(() => {
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollTo({ top: 0, behavior: 'instant' });
+        }
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    }, [step]);
+
     const [errors, setErrors] = useState({});
     const isAirportService = pricingCategory === 'airport-transfer';
     const [loading, setLoading] = useState(false);
@@ -686,7 +695,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-6 sm:p-12 space-y-12">
+                <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-6 sm:p-12 space-y-12">
                     {step === 1 && (
                         <div className="animate-slide-up space-y-12">
                             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-slate-100 dark:border-white/10">
@@ -1155,8 +1164,8 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             </div>
                                             <div className="space-y-6">
                                                 <div className="flex flex-col sm:flex-row items-center gap-6 bg-slate-50 dark:bg-white/5 p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-slate-100 dark:border-white/10 shadow-inner">
-                                                    <div className="w-40 sm:w-32 h-28 sm:h-24 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-0.5 overflow-hidden shrink-0 shadow-sm">
-                                                        <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full h-full object-contain scale-[1.8]" />
+                                                    <div className="w-40 sm:w-32 h-28 sm:h-24 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center p-2 overflow-hidden shrink-0 shadow-sm">
+                                                        <img src={selectedVehicle?.image} alt={selectedVehicle?.name} className="w-full h-full object-contain scale-[1.2]" />
                                                     </div>
                                                     <div className="min-w-0 flex-1 text-center sm:text-left">
                                                         <p className="text-base sm:text-sm font-black text-emerald-950 dark:text-white uppercase truncate tracking-tight">{displayVehicleName(selectedVehicle?.name)}</p>

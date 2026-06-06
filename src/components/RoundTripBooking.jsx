@@ -23,6 +23,7 @@ const RoundTripBooking = () => {
   const [step, setStep] = useState(1);
   const [locations, setLocations] = useState(['']);
   const [distance, setDistance] = useState(0);
+  const [basePackage, setBasePackage] = useState({ hours: 2, km: 40 });
   const [pricingSettings, setPricingSettings] = useState(null);
   const [destinationsList, setDestinationsList] = useState([]);
   const [airportTours, setAirportTours] = useState([]);
@@ -202,11 +203,10 @@ const RoundTripBooking = () => {
     const availableHours = getAvailableHours();
     if (availableHours.length === 0) return;
 
-    let targetHours = formData.taxiTourHours;
-    if (reqHours > targetHours) {
-        const higherHours = availableHours.filter(h => h >= reqHours);
-        targetHours = higherHours.length > 0 ? higherHours[0] : availableHours[availableHours.length - 1];
-    }
+    // Baseline calculation relative to user selection
+    let targetHours = Math.max(basePackage.hours, reqHours);
+    const higherHours = availableHours.filter(h => h >= targetHours);
+    targetHours = higherHours.length > 0 ? higherHours[0] : availableHours[availableHours.length - 1];
 
     const pkgs = getActivePackages();
     let match = [];
@@ -217,7 +217,8 @@ const RoundTripBooking = () => {
       match = pkgs.filter(p => p.hours === targetHours);
     }
     
-    let targetKm = formData.taxiTourKm;
+    let targetKm = basePackage.km;
+    const minRequiredKm = Math.max(basePackage.km, reqKm);
     if (match.length > 0) {
       const kms = [];
       match.forEach(p => {
@@ -227,22 +228,16 @@ const RoundTripBooking = () => {
       });
       kms.sort((a, b) => a - b);
       
-      // Upgrade KM if needed, but ONLY if we haven't already maxed it out manually or something.
-      // Actually, if the route requires more KM than currently selected:
-      if (reqKm > targetKm || reqHours > formData.taxiTourHours) {
-          const validKms = kms.filter(k => k >= reqKm);
-          targetKm = validKms.length > 0 ? validKms[0] : kms[kms.length - 1];
-      }
+      const validKms = kms.filter(k => k >= minRequiredKm);
+      targetKm = validKms.length > 0 ? validKms[0] : kms[kms.length - 1];
     } else {
       // Fallback
-      if (reqKm > targetKm) {
-         const fallbacks = [20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250, 300, 400, 500];
-         const higher = fallbacks.filter(k => k >= reqKm);
-         targetKm = higher.length > 0 ? higher[0] : fallbacks[fallbacks.length - 1];
-      }
+      const fallbacks = [20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250, 300, 400, 500];
+      const higher = fallbacks.filter(k => k >= minRequiredKm);
+      targetKm = higher.length > 0 ? higher[0] : fallbacks[fallbacks.length - 1];
     }
 
-    // Only update state if it actually needs an upgrade
+    // Only update state if it actually needs an upgrade/downgrade relative to current form values
     if (targetHours !== formData.taxiTourHours || targetKm !== formData.taxiTourKm) {
        setFormData(prev => ({
           ...prev,
@@ -634,6 +629,7 @@ const RoundTripBooking = () => {
                   alert("Please enter a pickup location.");
                   return;
                 }
+                setBasePackage({ hours: formData.taxiTourHours, km: formData.taxiTourKm });
                 setStep(2);
               }} className="w-full py-5 bg-emerald-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl flex items-center justify-center gap-3">Next Step <ChevronRight size={16} /></button>
             </div>

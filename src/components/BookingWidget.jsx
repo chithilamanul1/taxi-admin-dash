@@ -1043,6 +1043,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                         </div>
                                         <div className="mt-6 flex items-center gap-3">
                                             <button
+                                                type="button"
                                                 onClick={() => {
                                                     if (validateStep1()) {
                                                         setStep(2);
@@ -1057,7 +1058,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                             >
                                                 Continue - Select Passengers <ArrowRight size={16} strokeWidth={3}/>
                                             </button>
-                                            <button onClick={handleGetCurrentLocation} aria-label="Auto Detect My Location" className="shrink-0 w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                                            <button type="button" onClick={handleGetCurrentLocation} aria-label="Auto Detect My Location" className="shrink-0 w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                                                 {isLocating ? <Loader2 size={16} className="animate-spin text-emerald-500"/> : <Zap size={16} className="text-emerald-500"/>}
                                             </button>
                                         </div>
@@ -1292,7 +1293,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                         <span className="text-slate-900 dark:text-slate-100">Select Vehicle</span>
                                         <div className="flex items-center gap-3 text-black dark:text-emerald-400">
                                             {vehiclePricing[vehicle]?.image && (
-                                                <div className="w-12 h-9 bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 p-0.5 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                                                <div className="w-12 h-9 p-0.5 overflow-hidden shrink-0">
                                                     <img src={vehiclePricing[vehicle].image} alt="" className="w-full h-full object-contain scale-[1.5]" />
                                                 </div>
                                             )}

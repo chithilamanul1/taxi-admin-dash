@@ -101,6 +101,7 @@ export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalcul
     // 3. Geocode and Resolve Points
     useEffect(() => {
         if (!mapInitialized || !geocoder) return;
+        let active = true;
 
         const geocodePoint = async (point: Point | null): Promise<ResolvedPoint | null> => {
             if (!point) return null;
@@ -132,8 +133,11 @@ export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalcul
 
         const resolveAll = async () => {
             const p = await geocodePoint(pickup);
+            if (!active) return;
             const d = await geocodePoint(dropoff);
+            if (!active) return;
             const w = await Promise.all(waypoints.map(wp => geocodePoint(wp)));
+            if (!active) return;
 
             setResolvedPickup(p);
             setResolvedDropoff(d);
@@ -141,6 +145,10 @@ export default function TripMap({ pickup, dropoff, waypoints = [], onRouteCalcul
         };
 
         resolveAll();
+
+        return () => {
+            active = false;
+        };
     }, [pickup, dropoff, waypoints, mapInitialized, geocoder]);
 
     // 4. Render Markers and Calculate Route
