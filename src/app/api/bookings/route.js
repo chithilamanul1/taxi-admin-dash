@@ -132,7 +132,7 @@ export async function POST(request) {
 
         // Send Email to Customer AND Owner (Skip if manual - usually handled offline)
         try {
-            if (!data.isManual) {
+            if (!data.isManual && data.paymentMethod !== 'card') {
                 await sendBookingConfirmation(booking);
             }
         } catch (emailError) {

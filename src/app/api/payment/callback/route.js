@@ -80,6 +80,8 @@ export async function GET(request) {
                     }
                 }
 
+                const { sendBookingConfirmation } = await import('@/lib/email-service');
+                await sendBookingConfirmation(booking, false).catch(err => console.error("Error sending booking confirmation:", err));
                 await sendPaymentConfirmation(booking).catch(err => console.error("Error sending receipt:", err));
 
                 // Notify Owner
@@ -167,6 +169,9 @@ export async function GET(request) {
                         Error: verification.message,
                         Code: responseCode
                     }).catch(console.error);
+
+                    const { sendBookingConfirmation } = await import('@/lib/email-service');
+                    await sendBookingConfirmation(booking, true).catch(err => console.error("Error sending booking failure email:", err));
 
                     return NextResponse.redirect(`${baseUrl}/payment/failed?bookingId=${booking._id}&reason=${encodeURIComponent(verification.message || 'payment_failed')}`);
                 }
@@ -264,6 +269,8 @@ export async function POST(request) {
 
         // Send Receipt if successful
         if (status === 'success') {
+            const { sendBookingConfirmation } = await import('@/lib/email-service');
+            await sendBookingConfirmation(booking, false).catch(err => console.error("Error sending booking confirmation:", err));
             await sendPaymentConfirmation(booking).catch(err => console.error("Error sending receipt:", err));
 
             // Notify Owner
@@ -272,6 +279,9 @@ export async function POST(request) {
                 Customer: booking.customerName,
                 Status: booking.paymentStatus
             }).catch(console.error);
+        } else {
+            const { sendBookingConfirmation } = await import('@/lib/email-service');
+            await sendBookingConfirmation(booking, true).catch(err => console.error("Error sending booking failure email:", err));
         }
 
 

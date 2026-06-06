@@ -284,30 +284,32 @@ const components = {
 // ============================================
 
 // 1. BOOKING CONFIRMATION
-export async function sendBookingConfirmation(booking) {
+export async function sendBookingConfirmation(booking, isFailed = false) {
     const pickupShort = booking.pickupLocation?.address?.split(',')[0] || 'Pickup';
     const dropoffShort = booking.dropoffLocation?.address?.split(',')[0] || 'Dropoff';
     const bookingId = booking._id?.toString().slice(-8).toUpperCase();
 
     const isRoundTrip = booking.tripType === 'round-trip';
+    const statusText = isFailed ? 'Failed Payment' : 'Confirmed';
+    
     const customerContent = `
         <!-- Hero Section -->
         <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
             <tr>
                 <td>
-                    ${components.badge(isRoundTrip ? '✓ Round Trip Confirmed' : '✓ Booking Confirmed', 'success')}
+                    ${components.badge(isFailed ? '❌ Payment Failed' : (isRoundTrip ? '✓ Round Trip Confirmed' : '✓ Booking Confirmed'), isFailed ? 'warning' : 'success')}
                     <h2 style="color: ${COLORS.text}; margin: 20px 0 10px; font-size: 24px; font-weight: 700;">
-                        Thank You, ${booking.customerName?.split(' ')[0] || 'Traveler'}!
+                        ${isFailed ? 'Payment Failed' : `Thank You, ${booking.customerName?.split(' ')[0] || 'Traveler'}!`}
                     </h2>
                     <p style="color: ${COLORS.textMuted}; margin: 0; font-size: 14px;">
-                        Your ${isRoundTrip ? 'round trip' : 'airport transfer'} has been confirmed. Here are your ${isRoundTrip ? 'round trip details' : 'trip details'}.
+                        ${isFailed ? 'Unfortunately, your online payment was unsuccessful.' : `Your ${isRoundTrip ? 'round trip' : 'airport transfer'} has been confirmed. Here are your ${isRoundTrip ? 'round trip details' : 'trip details'}.`}
                     </p>
                 </td>
             </tr>
         </table>
 
         <!-- Booking ID Card -->
-        <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, ${COLORS.primary}, #047857); border-radius: 16px; margin-bottom: 30px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, ${isFailed ? '#7f1d1d, #450a0a' : `${COLORS.primary}, #047857`}); border-radius: 16px; margin-bottom: 30px;">
             <tr>
                 <td style="padding: 24px; text-align: center;">
                     <p style="margin: 0 0 8px; color: rgba(255,255,255,0.7); font-size: 11px; text-transform: uppercase; letter-spacing: 2px;">
@@ -355,7 +357,7 @@ export async function sendBookingConfirmation(booking) {
                                     🏷️ Coupons Applied: ${booking.appliedCoupons.join(', ')}
                                 </p>` : ''}
                                 ${booking.currency !== 'LKR' ? `<p style="margin: 2px 0 0; color: ${COLORS.textMuted}; font-size: 14px; font-weight: 600;">(LKR ${(booking.totalPriceLkr || booking.totalPrice || 0).toLocaleString()})</p>` : ''}
-                                <p style="margin: 4px 0 0; color: ${COLORS.textMuted}; font-size: 12px;">${booking.paymentMethod === 'card' ? '💳 Paid Online' : '💵 Cash on Arrival'}</p>
+                                <p style="margin: 4px 0 0; color: ${COLORS.textMuted}; font-size: 12px;">${booking.paymentMethod === 'card' ? '💳 Online Payment' : '💵 Cash on Arrival'}</p>
                             </td>
                         </tr>
                     </table>
@@ -389,9 +391,13 @@ export async function sendBookingConfirmation(booking) {
             <tr>
                 <td style="padding: 20px;">
                     <p style="margin: 0 0 15px; color: ${COLORS.text}; font-size: 16px; font-weight: 600;">📋 What's Next?</p>
+                    ${isFailed ? `
+                    <p style="margin: 0 0 8px; color: ${COLORS.textMuted}; font-size: 14px; line-height: 1.6;">• You can re-attempt the payment or contact us to pay with cash.</p>
+                    ` : `
                     <p style="margin: 0 0 8px; color: ${COLORS.textMuted}; font-size: 14px; line-height: 1.6;">• We'll assign a driver and send you their details</p>
                     <p style="margin: 0 0 8px; color: ${COLORS.textMuted}; font-size: 14px; line-height: 1.6;">• Driver will contact you before pickup</p>
                     <p style="margin: 0; color: ${COLORS.textMuted}; font-size: 14px; line-height: 1.6;">• Track your ride in real-time on our website</p>
+                    `}
                 </td>
             </tr>
         </table>
@@ -418,10 +424,12 @@ export async function sendBookingConfirmation(booking) {
                 await transporter.sendMail({
                     from: FROM_EMAIL,
                     to: booking.customerEmail,
-                    subject: isRoundTrip 
-                        ? `✅ Round Trip Confirmed #${bookingId} - Airport Taxis`
-                        : `✅ Booking Confirmed #${bookingId} - Airport Taxis`,
-                    html: getPremiumTemplate(customerContent, isRoundTrip ? 'Round Trip Confirmation' : 'Booking Confirmation')
+                    subject: isFailed 
+                        ? `❌ Payment Failed #${bookingId} - Airport Taxis`
+                        : (isRoundTrip 
+                            ? `✅ Round Trip Confirmed #${bookingId} - Airport Taxis`
+                            : `✅ Booking Confirmed #${bookingId} - Airport Taxis`),
+                    html: getPremiumTemplate(customerContent, isFailed ? 'Payment Failed' : (isRoundTrip ? 'Round Trip Confirmation' : 'Booking Confirmation'))
                 });
                 console.log('[Email] Booking confirmation sent to customer:', booking.customerEmail);
             } else {
@@ -442,10 +450,10 @@ export async function sendBookingConfirmation(booking) {
 
     const ownerContent = `
         <!-- Booking ID Header -->
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 10px; border: 1px solid #064e3b; border-left: 10px solid #064e3b;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 10px; border: 1px solid ${isFailed ? '#dc2626' : '#064e3b'}; border-left: 10px solid ${isFailed ? '#dc2626' : '#064e3b'};">
             <tr>
-                <td style="background-color: #f0fdf4; color: #064e3b; padding: 12px 16px; font-size: 18px; font-weight: 800;">
-                    ${isRoundTrip ? 'NEW ROUND TRIP' : 'NEW BOOKING'} #${bookingId}
+                <td style="background-color: ${isFailed ? '#fef2f2' : '#f0fdf4'}; color: ${isFailed ? '#dc2626' : '#064e3b'}; padding: 12px 16px; font-size: 18px; font-weight: 800;">
+                    ${isFailed ? 'FAILED PAYMENT' : (isRoundTrip ? 'NEW ROUND TRIP' : 'NEW BOOKING')} #${bookingId}
                 </td>
             </tr>
         </table>
@@ -627,11 +635,13 @@ export async function sendBookingConfirmation(booking) {
     try {
         const transporter = getTransporter();
         if (transporter) {
+            const subjectTitle = isFailed ? 'FAILED PAYMENT' : (isRoundTrip ? 'NEW ROUND TRIP' : 'NEW BOOKING');
+            const htmlTitle = isFailed ? `Failed Payment #${bookingId} ` : (isRoundTrip ? `Round Trip #${bookingId} ` : `Booking #${bookingId} `);
             await transporter.sendMail({
                 from: FROM_EMAIL,
                 to: OWNER_EMAIL,
-                subject: `${isRoundTrip ? 'NEW ROUND TRIP' : 'NEW BOOKING'} #${bookingId} | ${booking.customerName || 'Guest'} | ${booking.scheduledDate || 'Today'} `,
-                html: getPrintFriendlyTemplate(ownerContent, isRoundTrip ? `Round Trip #${bookingId} ` : `Booking #${bookingId} `)
+                subject: `${subjectTitle} #${bookingId} | ${booking.customerName || 'Guest'} | ${booking.scheduledDate || 'Today'} `,
+                html: getPrintFriendlyTemplate(ownerContent, htmlTitle)
             });
             console.log('[Email] Print-friendly booking notification sent to owner');
         } else {
