@@ -214,7 +214,11 @@ export async function POST(request) {
         if (gateway === 'sampath') {
             // Sampath background notification (if any)
             bookingId = data.order_id || data.clientRef;
-            status = (data.status_code === '2' || data.status_code === '200' || data.response_code === '00') ? 'success' : 'failed';
+            
+            // SECURITY/BUG FIX: PayCorp sends a POST request upon PAYMENT_INIT with responseCode="00" 
+            // to the returnUrl (acting as a webhook). We must not treat this as a completed payment.
+            // We will evaluate the actual status below after finding the booking and doing a server-to-server check.
+            status = 'pending_verification'; 
             transactionId = data.transaction_id || data.txnId || `SAMPATH-${Date.now()}`;
             isValid = verifySampathSignature(data);
         } else if (gateway === 'payhere') {
@@ -243,6 +247,31 @@ export async function POST(request) {
         const booking = await Booking.findById(bookingId);
         if (!booking) {
             return NextResponse.json({ success: false, message: 'Booking not found' }, { status: 404 });
+        }
+
+        if (status === 'pending_verification') {
+            const { completePayCorpTransaction } = await import('@/lib/payment');
+            const currency = booking?.currency || 'LKR';
+            const config = require('@/lib/payment').GATEWAY_CONFIG.sampath;
+            const clientId = config.clientIds[currency] || config.clientId;
+            
+            const reqidToVerify = data.reqid || booking.paymentReference;
+            
+            if (!reqidToVerify) {
+                console.log('No reqid available to verify POST webhook. Ignoring.');
+                return NextResponse.json({ success: true, message: 'Ignored due to missing reqid' });
+            }
+
+            const verification = await completePayCorpTransaction(reqidToVerify, clientId);
+
+            if (verification.success) {
+                status = 'success';
+            } else {
+                // Since this POST webhook is often just an INIT notification (session created),
+                // we DO NOT mark it as failed. We simply ignore it to prevent false failures.
+                console.log('POST webhook verification did not return success. Ignored to prevent false failures.');
+                return NextResponse.json({ success: true, message: 'Ignored - payment not complete' });
+            }
         }
 
         // Update booking status

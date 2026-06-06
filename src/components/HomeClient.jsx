@@ -114,6 +114,8 @@ export default function HomeClient() {
                 </div>
             </div>
 
+            <ReviewStatsBar />
+            <GoogleReviews />
             <SpecialOffersSection />
 
             <DestinationsSection />
@@ -132,8 +134,6 @@ export default function HomeClient() {
             
             <div className="h-4 md:h-10" /> {/* Spacing */}
 
-            <ReviewStatsBar />
-            <GoogleReviews />
             <FleetSection />
 
             {/* Legacy & Stats Section */}

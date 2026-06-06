@@ -120,16 +120,6 @@ export async function POST(req) {
             });
         }
 
-        // 3. Handle CARD payments - Notify owner of the request even before payment
-        try {
-            const { sendBookingConfirmation } = require('@/lib/email-service');
-            // We call this to notify the OWNER immediately. 
-            // The customer also gets a "Booking Received" feel.
-            await sendBookingConfirmation(booking);
-        } catch (emailError) {
-            console.error('[Card Booking Init] Owner notification email failed:', emailError);
-        }
-
         // 3. Generate payment URL based on gateway (For CARD payments)
         let paymentUrl;
 

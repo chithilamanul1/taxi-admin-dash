@@ -964,7 +964,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                                             setIsDateTimePickerOpen(false); 
                                                                             if (scheduledDate) {
                                                                                 setStep(2); 
-                                                                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                                                document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                                                             } 
                                                                         }} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
                                                                     </div>
@@ -1047,6 +1047,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                 onClick={() => {
                                                     if (validateStep1()) {
                                                         setStep(2);
+                                                        document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                                     }
                                                 }}
                                                 className={`flex-1 flex items-center justify-center gap-3 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] ${
@@ -1222,7 +1223,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                         return;
                                                     }
                                                     setStep(3);
-                                                }} 
+                                                    document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                }}
                                                 disabled={!vehicle || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null}
                                                 className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] lg:hidden
                                                 ${(!vehicle || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null) 

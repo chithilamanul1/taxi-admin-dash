@@ -203,7 +203,7 @@ const montserrat = Montserrat({
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="en" suppressHydrationWarning className={`${inter.variable} ${montserrat.variable}`}>
+        <html lang="en" suppressHydrationWarning className={`${inter.variable} ${montserrat.variable} scroll-smooth scroll-pt-[240px] md:scroll-pt-[180px]`}>
             <head>
                 <meta name="theme-color" content="#059669" />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />

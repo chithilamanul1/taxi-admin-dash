@@ -163,6 +163,7 @@ const RoundTripBooking = () => {
         pkgs = destMatch.roundTripPackages;
       } else {
         pkgs = pricingSettings?.destinationRoundTripPackages || [];
+        if (pkgs.length === 0) pkgs = normalTours || [];
       }
     }
     if (selectedVehicle) {
@@ -297,7 +298,9 @@ const RoundTripBooking = () => {
       }
 
       // 2. Global destinationRoundTripPackages
-      const pkg = (pricingSettings?.destinationRoundTripPackages || []).find(p => 
+      let activeDestPackages = pricingSettings?.destinationRoundTripPackages || [];
+      if (activeDestPackages.length === 0) activeDestPackages = normalTours || [];
+      const pkg = activeDestPackages.find(p => 
         p.hours === Number(formData.taxiTourHours) && 
         (p.vehicleType === v.id || p.vehicleType === v.vehicleType || (v.id === 'normal-kdh' && p.vehicleType === 'kdh-van'))
       );
@@ -671,6 +674,7 @@ const RoundTripBooking = () => {
                 }
                 setBasePackage({ hours: formData.taxiTourHours, km: formData.taxiTourKm });
                 setStep(2);
+                document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }} className="w-full py-5 bg-emerald-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl flex items-center justify-center gap-3">Next Step <ChevronRight size={16} /></button>
             </div>
           </>
