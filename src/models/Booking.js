@@ -83,7 +83,10 @@ const bookingSchema = new mongoose.Schema({
     isManual: { type: Boolean, default: false }, // For manually generated invoices
     notes: { type: String },
     rating: { type: Number, min: 1, max: 5 }, // Customer rating (1-5)
-    review: { type: String } // Customer feedback text
+    review: { type: String }, // Customer feedback text
+    tipAmount: { type: Number, default: 0 }, // Customer tip
+    tipTransactionId: { type: String }, // Transaction reference for tip
+    actualKm: { type: Number } // Actual distance traveled
 }, {
     timestamps: true
 });

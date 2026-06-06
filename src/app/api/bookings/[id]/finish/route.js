@@ -7,7 +7,7 @@ export async function POST(req, { params }) {
     try {
         await dbConnect();
         const { id } = params;
-        const { driverId } = await req.json();
+        const { driverId, actualKm } = await req.json();
 
         const booking = await Booking.findById(id);
         if (!booking) {
@@ -21,6 +21,9 @@ export async function POST(req, { params }) {
 
         booking.status = 'completed';
         booking.paymentStatus = 'paid'; // Assumed completion means paid
+        if (actualKm) {
+            booking.actualKm = actualKm;
+        }
         await booking.save();
 
         // Broadcast to Pusher

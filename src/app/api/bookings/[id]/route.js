@@ -50,7 +50,8 @@ export async function PATCH(request, { params }) {
             completedAt,
             assignedDriver,
             rating,
-            review
+            review,
+            actualKm
         } = body;
 
         if (!id) {
@@ -62,7 +63,7 @@ export async function PATCH(request, { params }) {
 
         // Check Auth - Relaxed for ratings/reviews (Customer can submit without driver/admin token)
         const auth = await checkAuth();
-        const isFeedbackOnly = (rating || review) && !status && !assignedDriver && !driverNotes;
+        const isFeedbackOnly = (rating || review) && !status && !assignedDriver && !driverNotes && !actualKm;
 
         if (!auth && !isFeedbackOnly) {
             console.log('[Auth] Unauthorized access attempt to update booking');
@@ -91,11 +92,20 @@ export async function PATCH(request, { params }) {
         const update = {};
         if (status) update.status = status;
         if (driverNotes) update.driverNotes = driverNotes;
-        if (assignedDriver) update.driver = assignedDriver;
         if (rating) update.rating = rating;
         if (review) update.review = review;
+        if (actualKm) update.actualKm = actualKm;
         
-        if (status === 'completed') {
+        let driverNewlyAssigned = false;
+        if (assignedDriver) {
+            update.driver = assignedDriver;
+            if (existingBooking.driver?.toString() !== assignedDriver) {
+                driverNewlyAssigned = true;
+                update.status = 'assigned'; // Automatically move to assigned status
+            }
+        }
+        
+        if (status === 'completed' || update.status === 'completed') {
             update.completedAt = completedAt || new Date();
         }
 
@@ -177,6 +187,34 @@ export async function PATCH(request, { params }) {
         if (status && status !== existingBooking.status && booking.customerEmail) {
             await sendBookingStatusUpdate(booking, status);
         }
+
+        // Send notifications to newly assigned driver
+        if (driverNewlyAssigned && booking.driver) {
+            try {
+                // 1. Pusher In-App Notification
+                const { pusher } = await import('@/lib/pusher');
+                if (pusher) {
+                    await pusher.trigger(`driver-${booking.driver._id}`, 'new-assignment', {
+                        bookingId: booking._id,
+                        pickup: booking.pickupLocation?.address,
+                        dropoff: booking.dropoffLocation?.address,
+                        time: `${booking.scheduledDate} ${booking.scheduledTime}`
+                    });
+                }
+                
+                // 2. Email & SMS Notification
+                const { sendDriverAssignmentEmail } = await import('@/lib/email-service');
+                if (sendDriverAssignmentEmail) await sendDriverAssignmentEmail(booking);
+                
+                const smsService = await import('@/lib/sms').catch(() => null);
+                if (smsService && smsService.sendDriverAssignmentSMS) {
+                    await smsService.sendDriverAssignmentSMS(booking);
+                }
+            } catch (err) {
+                console.error("Failed to notify assigned driver:", err);
+            }
+        }
+
 
         return NextResponse.json({
             success: true,

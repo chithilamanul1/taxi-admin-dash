@@ -6,6 +6,7 @@ import Link from 'next/link';
 import BookingActions from '@/components/BookingActions';
 import TrackingMap from '@/components/TrackingMap';
 import RatingSystem from '@/components/RatingSystem';
+import TippingSystem from '@/components/TippingSystem';
 
 export default function BookingStatusClient({ booking }) {
     return (
@@ -226,6 +227,23 @@ export default function BookingStatusClient({ booking }) {
                                     <p className="font-bold text-slate-800 text-sm leading-tight">{booking.dropoffLocation?.address}</p>
                                 </div>
                             </div>
+                            
+                            {booking.status === 'completed' && booking.actualKm && (
+                                <div className="mt-8 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center justify-between shadow-sm">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white">
+                                            <MapPin size={18} />
+                                        </div>
+                                        <div>
+                                            <p className="text-[9px] font-bold text-emerald-700 uppercase tracking-widest mb-0.5">Actual Distance Traveled</p>
+                                            <p className="font-bold text-lg text-emerald-900">{booking.actualKm} KM</p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-[9px] font-bold text-emerald-600/70 uppercase tracking-widest">Est. {booking.distanceKm} KM</p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="space-y-6">
@@ -276,15 +294,26 @@ export default function BookingStatusClient({ booking }) {
                         </div>
                     </div>
 
-                    {/* Rating Focus */}
-                    {booking.status === 'completed' && !booking.rating && (
-                        <div className="py-8 border-y border-slate-100 bg-slate-50/50 rounded-2xl">
-                            <p className="text-center text-[10px] font-bold uppercase tracking-[.4em] mb-6 text-slate-500">Rate Your Experience</p>
-                            <RatingSystem 
-                                bookingId={booking._id} 
-                                initialRating={booking.rating} 
-                                initialReview={booking.review} 
-                            />
+                    {/* Rating & Tipping Focus */}
+                    {booking.status === 'completed' && (
+                        <div className="grid md:grid-cols-2 gap-8 py-8 border-y border-slate-100 bg-slate-50/50 rounded-2xl px-4 md:px-8">
+                            <div>
+                                <p className="text-center text-[10px] font-bold uppercase tracking-[.4em] mb-6 text-slate-500">Rate Your Experience</p>
+                                <RatingSystem 
+                                    bookingId={booking._id} 
+                                    initialRating={booking.rating} 
+                                    initialReview={booking.review} 
+                                />
+                            </div>
+                            <div>
+                                <p className="text-center text-[10px] font-bold uppercase tracking-[.4em] mb-6 text-slate-500">Driver Gratuity</p>
+                                <TippingSystem 
+                                    bookingId={booking._id}
+                                    driverId={booking.driver?._id}
+                                    initialTip={booking.tipAmount}
+                                    initialTransactionId={booking.tipTransactionId}
+                                />
+                            </div>
                         </div>
                     )}
 

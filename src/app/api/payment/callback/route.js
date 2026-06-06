@@ -122,6 +122,18 @@ export async function GET(request) {
                     await transaction.save();
                 }
 
+                // If tip, redirect to customer booking page
+                if (transaction.performedBy === 'Customer' && transaction.referenceId) {
+                    // Update the booking tip info
+                    const booking = await import('@/models/Booking').then(m => m.default).findById(transaction.referenceId);
+                    if (booking) {
+                        booking.tipAmount = transaction.amount;
+                        booking.tipTransactionId = transaction._id;
+                        await booking.save();
+                    }
+                    return NextResponse.redirect(`${baseUrl}/booking/${transaction.referenceId}?tip=success`);
+                }
+
                 return NextResponse.redirect(`${baseUrl}/driver?topup=success`);
             }
         } else {

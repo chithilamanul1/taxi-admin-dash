@@ -196,17 +196,25 @@ export default function DriverDashboard() {
         const driverId = localStorage.getItem('driver_id');
         try {
             let endpoint;
+            let actualKm = null;
             switch (action) {
                 case 'ongoing': endpoint = 'accept'; break;
-                case 'completed': endpoint = 'finish'; break;
+                case 'completed': 
+                    endpoint = 'finish'; 
+                    actualKm = window.prompt("Enter the actual distance traveled in KM:");
+                    if (actualKm === null) return; // User cancelled
+                    break;
                 case 'arrive': endpoint = 'arrive'; break;
                 default: endpoint = action;
             }
 
+            const payload = { driverId };
+            if (actualKm) payload.actualKm = parseFloat(actualKm);
+
             const res = await fetch(`/api/bookings/${bookingId}/${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ driverId })
+                body: JSON.stringify(payload)
             });
 
             if (res.ok) {

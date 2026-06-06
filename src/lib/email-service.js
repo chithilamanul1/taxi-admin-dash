@@ -1398,3 +1398,53 @@ export async function sendManualInvoice(booking) {
     }
 }
 
+// 6. NOTIFY DRIVER OF NEW ASSIGNMENT
+export async function sendDriverAssignmentEmail(booking) {
+    if (!booking.driver || !booking.driver.email) return;
+
+    const bookingId = booking._id?.toString().slice(-8).toUpperCase();
+    const pickupShort = booking.pickupLocation?.address?.split(',')[0] || 'Pickup';
+    const dropoffShort = booking.dropoffLocation?.address?.split(',')[0] || 'Dropoff';
+
+    const content = `
+        <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-bottom: 30px;">
+            <tr>
+                <td>
+                    ${components.badge('🚕 New Trip Assigned', 'success')}
+                    <h2 style="color: ${COLORS.text}; margin: 20px 0 10px; font-size: 24px; font-weight: 700;">
+                        New Ride Assignment
+                    </h2>
+                    <p style="color: ${COLORS.textMuted}; margin: 0; font-size: 14px;">
+                        You have been assigned a new trip (#${bookingId}).
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: ${COLORS.dark}; border-radius: 16px; border: 1px solid ${COLORS.border}; overflow: hidden; margin-bottom: 30px;">
+            ${components.infoCard('📍', 'Pickup', pickupShort)}
+            ${components.infoCard('🏁', 'Drop-off', dropoffShort)}
+            ${components.infoCard('📅', 'Date & Time', `${booking.scheduledDate || 'Immediate'} ${booking.scheduledTime ? `at ${booking.scheduledTime}` : ''}`)}
+            ${components.infoCard('👤', 'Customer Name', booking.customerName || 'Guest')}
+            ${components.infoCard('📞', 'Customer Contact', booking.guestPhone || 'N/A')}
+            ${components.infoCard('💰', 'Total Fare', `${booking.currency || 'LKR'} ${booking.totalPrice}`)}
+        </table>
+
+        ${components.button('Open Driver Dashboard', \`\${BASE_URL}/driver\`)}
+    `;
+
+    try {
+        const transporter = getTransporter();
+        if (transporter) {
+            await transporter.sendMail({
+                from: FROM_EMAIL,
+                to: booking.driver.email,
+                subject: \`🚕 New Trip Assigned - #\${bookingId}\`,
+                html: getPremiumTemplate(content, 'New Ride Assignment')
+            });
+            console.log('[Email] Driver assignment notification sent to:', booking.driver.email);
+        }
+    } catch (error) {
+        console.error('[Email] Failed to send driver assignment notification:', error);
+    }
+}
