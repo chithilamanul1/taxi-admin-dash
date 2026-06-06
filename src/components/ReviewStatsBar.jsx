@@ -56,7 +56,7 @@ const ReviewStatsBar = () => {
                         href="https://www.tripadvisor.com/Attraction_Review-g293962-d33986804-Reviews-Airport_Taxis_Pvt_Ltd_Sri_Lanka-Colombo_Western_Province.html"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 md:p-10 bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/5 hover:border-emerald-200 dark:hover:border-emerald-500/30 transition-all group rounded-[2.5rem] shadow-xl hover:shadow-2xl hover:-translate-y-1 gap-6"
+                        className="flex-1 flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 md:p-10 bg-white dark:bg-zinc-900 border border-black dark:border-white/20 hover:border-emerald-500 dark:hover:border-emerald-500/50 transition-all group rounded-[2.5rem] shadow-xl hover:shadow-2xl hover:-translate-y-1 gap-6"
                     >
                         <div className="flex items-center gap-4 md:gap-8">
                             <div className="w-14 h-14 md:w-20 md:h-20 bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-[#00AA6C] shrink-0 rounded-2xl group-hover:scale-110 transition-transform p-3 md:p-4">
@@ -85,7 +85,7 @@ const ReviewStatsBar = () => {
                         href="https://g.page/r/YOUR_GOOGLE_REVIEW_LINK"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 md:p-10 bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/5 hover:border-blue-200 dark:hover:border-blue-500/30 transition-all group rounded-[2.5rem] shadow-xl hover:shadow-2xl hover:-translate-y-1 gap-6"
+                        className="flex-1 flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 md:p-10 bg-white dark:bg-zinc-900 border border-black dark:border-white/20 hover:border-blue-500 dark:hover:border-blue-500/50 transition-all group rounded-[2.5rem] shadow-xl hover:shadow-2xl hover:-translate-y-1 gap-6"
                     >
                         <div className="flex items-center gap-4 md:gap-8">
                             <div className="w-14 h-14 md:w-20 md:h-20 bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center shrink-0 p-3 md:p-5 rounded-2xl group-hover:scale-110 transition-transform">
