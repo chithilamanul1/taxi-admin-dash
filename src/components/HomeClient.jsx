@@ -114,9 +114,9 @@ export default function HomeClient() {
                 </div>
             </div>
 
+            <SpecialOffersSection />
             <ReviewStatsBar />
             <GoogleReviews />
-            <SpecialOffersSection />
 
             <DestinationsSection />
 
