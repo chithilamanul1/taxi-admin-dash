@@ -513,7 +513,7 @@ export async function sendBookingConfirmation(booking) {
             ${(booking.tripType === 'round-trip' || booking.type === 'tour' || booking.roundTripPackageId) ? `
             <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Package Details</td>
-                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.tourDetails?.duration ? `${booking.tourDetails.duration} (${booking.distanceKm || 0} KM Limit)` : (booking.roundTripPackageId || 'Custom Package')}</td>
+                <td style="border-bottom: 1px solid #f3f4f6; font-weight: 600; font-size: 13px;">${booking.tourDetails?.duration ? `${booking.tourDetails.duration} (${booking.tourDetails.kmLimit || booking.taxiTourKm || booking.distanceKm || 0} KM Limit)` : (booking.roundTripPackageId || 'Custom Package')}</td>
             </tr>` : ''}
             <tr>
                 <td style="border-bottom: 1px solid #f3f4f6; color: #6b7280; font-size: 12px;">Distance</td>

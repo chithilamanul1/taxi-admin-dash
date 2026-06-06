@@ -633,7 +633,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                 flightNumber: formData.flightNumber,
                 returnDate: formData.returnDate,
                 returnTime: formData.returnTime,
-                notes: formData.notes
+                notes: formData.notes,
+                taxiTourKm: formData.taxiTourKm || null,
+                taxiTourHours: formData.taxiTourHours || null,
+                roundTripPackageId: formData.roundTripPackageId || null
             };
 
             const res = await fetch('/api/payment/initiate', {

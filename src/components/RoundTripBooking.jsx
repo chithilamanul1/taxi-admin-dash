@@ -455,7 +455,9 @@ const RoundTripBooking = () => {
       payload.tourDetails = {
         tourId: `${tab === 'destination-based-tour' ? 'dest' : tab === 'airport-round-tour' ? 'airport' : 'normal'}-tour-${formData.taxiTourHours}h-${formData.taxiTourKm}km`,
         tourTitle: `${tab === 'destination-based-tour' ? 'Destination' : tab === 'airport-round-tour' ? 'Airport' : 'Normal'} Round Tour (${formData.taxiTourHours}h / ${formData.taxiTourKm}km)`,
-        duration: `${formData.taxiTourHours} Hours`
+        duration: `${formData.taxiTourHours} Hours`,
+        kmLimit: formData.taxiTourKm,
+        hours: formData.taxiTourHours
       };
 
       const res = await fetch('/api/payment/initiate', {
