@@ -132,9 +132,9 @@ export default function HomeClient() {
             
             <div className="h-4 md:h-10" /> {/* Spacing */}
 
-            <FleetSection />
             <ReviewStatsBar />
             <GoogleReviews />
+            <FleetSection />
 
             {/* Legacy & Stats Section */}
             <section className="py-24 md:py-40 relative overflow-hidden bg-slate-50/30 dark:bg-zinc-950/30">

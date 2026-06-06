@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock, Navigation, ChevronRight, Plane, Car, Minus, Plus, Send, CheckCircle2, User, Mail, Phone, Loader2, AlertCircle, Info, Sparkles, CreditCard } from 'lucide-react';
-import { TAXI_TOUR_PACKAGES, findMatchingDestination, hasPricingData } from '../lib/pricing-util';
+import { TAXI_TOUR_PACKAGES, findMatchingDestination, hasPricingData, calculatePaymentFees } from '../lib/pricing-util';
+import { useCurrency } from '../context/CurrencyContext';
 import TripMap from './TripMap';
 import { loadGoogleMapsScript } from '@/lib/google-maps';
 
@@ -13,6 +14,8 @@ const VehicleCarousel = dynamic(() => import('./VehicleCarousel'), { ssr: false 
 const displayVehicleName = (name) => (name || '').split('(')[0].trim();
 
 const RoundTripBooking = () => {
+  const { currency, rates, changeCurrency } = useCurrency();
+  const currentSymbol = currency === 'LKR' ? 'Rs.' : currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : currency === 'INR' ? '₹' : '$';
   const [tab, setTab] = useState('airport-round-tour');
   const [vehicles, setVehicles] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
@@ -256,9 +259,9 @@ const RoundTripBooking = () => {
         const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
         if (tier && tier.price) {
           let baseP = Math.round(tier.price);
-          if (distance > formData.taxiTourKm) {
-             baseP += (distance - formData.taxiTourKm) * (v.perKmRate || v.perKm || 100);
-          }
+                      // No extra distance cost for round trips
+             
+          
           return Math.round(baseP);
         }
       }
@@ -270,7 +273,7 @@ const RoundTripBooking = () => {
         const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
         if (tier && tier.price) {
           let baseP = Math.round(tier.price);
-          if (distance > formData.taxiTourKm) {
+                      // No extra distance cost for round trips
              baseP += (distance - formData.taxiTourKm) * (v.perKmRate || v.perKm || 100);
           }
           return Math.round(baseP);
@@ -403,10 +406,16 @@ const RoundTripBooking = () => {
   const handleLocationChange = (index, value) => { setLocations([value]); };
 
   const calculateTotal = () => {
-    return calculateVehiclePrice(selectedVehicle);
+    const baseLKR = calculateVehiclePrice(selectedVehicle);
+    // Card surcharge applies for all bookings including round trips (3% LKR, 3.5% USD)
+    const surcharge = calculatePaymentFees(baseLKR, formData.paymentMethod, 'LKR', selectedVehicle?.vehicleType || selectedVehicle?.id, false);
+    return Math.round(baseLKR + surcharge);
   };
 
-  const totalPrice = calculateTotal();
+  // totalPriceLKR is always in LKR; convert for display
+  const totalPriceLKR = calculateTotal();
+  const convRate = rates?.[currency] || 1;
+  const totalPrice = currency === 'LKR' ? totalPriceLKR : Number((totalPriceLKR * convRate).toFixed(2));
 
   const handleBooking = async () => {
     if (!formData.name || !formData.email || !formData.phone || !formData.date || !formData.time) {
@@ -425,13 +434,13 @@ const RoundTripBooking = () => {
         roundTripPackageId: `tour-${formData.taxiTourHours}h`,
         passengerCount: { adults: formData.passengers, children: 0, luggage: 0, handLuggage: 0 },
         distanceKm: distance,
-        totalPrice: totalPrice,
-        paidAmount: formData.paymentMethod === 'cash' ? 0 : totalPrice,
-        balanceAmount: formData.paymentMethod === 'cash' ? totalPrice : 0,
+        totalPrice: totalPriceLKR,
+        paidAmount: formData.paymentMethod === 'cash' ? 0 : totalPriceLKR,
+        balanceAmount: formData.paymentMethod === 'cash' ? totalPriceLKR : 0,
         displayPrice: totalPrice,
         displayPaidAmount: formData.paymentMethod === 'cash' ? 0 : totalPrice,
         displayBalanceAmount: formData.paymentMethod === 'cash' ? totalPrice : 0,
-        currency: 'LKR',
+        currency: currency,
         scheduledDate: formData.date,
         scheduledTime: formData.time,
         customerName: formData.name,
@@ -470,7 +479,7 @@ const RoundTripBooking = () => {
                         `*Pickup/Dropoff:* ${locations[0] || 'Not provided'}%0A` + 
                         `*Date/Time:* ${formData.date} at ${formData.time}%0A` + 
                         `*Payment:* ${paymentStr}%0A` + 
-                        `*Price:* Rs. ${totalPrice.toLocaleString()}`;
+                        `*Price:* ${currentSymbol} ${totalPrice.toLocaleString()}`;
           window.open(`https://wa.me/94712100500?text=${message}`, '_blank');
         } catch (e) {
           console.error("WhatsApp companion load blocked", e);
@@ -621,6 +630,8 @@ const RoundTripBooking = () => {
                   }
                 }}
                 passengerCount={{ adults: formData.passengers, children: 0, luggage: 0 }}
+                currency={currency}
+                rates={rates}
               />
             </section>
             
@@ -645,10 +656,15 @@ const RoundTripBooking = () => {
               <div>
                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Package Summary</p>
                 <p className="text-lg font-black text-emerald-950">{selectedVehicle?.name} — {formData.taxiTourHours} Hours — {formData.taxiTourKm} KM limit</p>
+                {formData.paymentMethod === 'card' && (
+                  <p className="text-[9px] font-bold text-amber-600 mt-1">
+                    Incl. {currency === 'USD' ? '3.5%' : '3%'} card processing fee
+                  </p>
+                )}
               </div>
               <div className="md:text-right">
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total</p>
-                <p className="text-2xl font-black text-emerald-600 tracking-tighter">Rs. {totalPrice.toLocaleString()}.00</p>
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Fare</p>
+                <p className="text-2xl font-black text-emerald-600 tracking-tighter">{currentSymbol} {totalPrice.toLocaleString()}{currency === 'LKR' ? '.00' : ''}</p>
               </div>
             </div>
 
