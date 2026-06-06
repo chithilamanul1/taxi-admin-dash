@@ -69,7 +69,7 @@ const VehicleSelectionDrawer = ({ isOpen, onClose, pickupLocation, dropoffLocati
                             <p className="font-bold text-slate-400 uppercase tracking-widest text-xs">Calculating Luxury Rates...</p>
                         </div>
                     ) : vehicles && vehicles.length > 0 ? (
-                        <div className="space-y-10 max-w-6xl mx-auto pb-12">
+                        <div className="space-y-10 max-w-6xl mx-auto pb-24">
                             {/* Mobile Chat Button */}
                             <button 
                                 onClick={openLiveChat}
