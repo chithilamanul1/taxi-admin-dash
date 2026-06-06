@@ -1430,7 +1430,7 @@ export async function sendDriverAssignmentEmail(booking) {
             ${components.infoCard('💰', 'Total Fare', `${booking.currency || 'LKR'} ${booking.totalPrice}`)}
         </table>
 
-        ${components.button('Open Driver Dashboard', \`\${BASE_URL}/driver\`)}
+        ${components.button('Open Driver Dashboard', `${BASE_URL}/driver`)}
     `;
 
     try {
@@ -1439,7 +1439,7 @@ export async function sendDriverAssignmentEmail(booking) {
             await transporter.sendMail({
                 from: FROM_EMAIL,
                 to: booking.driver.email,
-                subject: \`🚕 New Trip Assigned - #\${bookingId}\`,
+                subject: `🚕 New Trip Assigned - #${bookingId}`,
                 html: getPremiumTemplate(content, 'New Ride Assignment')
             });
             console.log('[Email] Driver assignment notification sent to:', booking.driver.email);

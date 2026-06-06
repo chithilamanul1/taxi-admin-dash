@@ -301,6 +301,7 @@ const RoundTripBooking = () => {
           }
           return Math.round(baseP);
         }
+        }
       }
 
       // 2. Global destinationRoundTripPackages
@@ -840,6 +841,5 @@ const RoundTripBooking = () => {
       </div>
     </div>
   );
-};
 
 export default RoundTripBooking;
