@@ -25,7 +25,8 @@ const DestinationsSection = () => {
     const orderedDestinations = featuredDestinations.map(id => displayDestinations.find(d => d.id === id)).filter(Boolean);
 
     return (
-        <section className="py-24 bg-slate-50 dark:bg-black transition-colors destinations-bg">
+        <section className="py-24 bg-slate-50 dark:bg-black transition-colors relative">
+            <div className="absolute inset-0 bg-[url('/destinations_pattern.png')] bg-cover bg-center opacity-10 dark:opacity-20 pointer-events-none"></div>
             <div className="container mx-auto px-6">
                 {/* Header Section */}
                 <div className="mb-16 text-center">

@@ -261,7 +261,6 @@ const RoundTripBooking = () => {
           let baseP = Math.round(tier.price);
                       // No extra distance cost for round trips
              
-          
           return Math.round(baseP);
         }
       }
@@ -273,9 +272,8 @@ const RoundTripBooking = () => {
         const tier = (pkg.tiers || []).find(t => t.km === Number(formData.taxiTourKm));
         if (tier && tier.price) {
           let baseP = Math.round(tier.price);
-                      // No extra distance cost for round trips
-             baseP += (distance - formData.taxiTourKm) * (v.perKmRate || v.perKm || 100);
-          }
+          // No extra distance cost for round trips
+          baseP += (distance - formData.taxiTourKm) * (v.perKmRate || v.perKm || 100);
           return Math.round(baseP);
         }
       }
@@ -302,6 +300,7 @@ const RoundTripBooking = () => {
           return Math.round(baseP);
         }
       }
+    }
 
       // 2. Global destinationRoundTripPackages
       const pkg = (pricingSettings?.destinationRoundTripPackages || []).find(p => 

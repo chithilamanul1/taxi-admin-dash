@@ -109,7 +109,8 @@ const GoogleReviews = () => {
     };
 
     return (
-        <section className="py-24 bg-white dark:bg-[#0a0a0a] overflow-hidden relative transition-colors duration-300 reviews-bg">
+        <section className="py-24 bg-white dark:bg-[#0a0a0a] overflow-hidden relative transition-colors duration-300">
+            <div className="absolute inset-0 bg-[url('/destinations_pattern.png')] bg-cover bg-center opacity-5 dark:opacity-[0.02] pointer-events-none"></div>
             <div className="container mx-auto px-4 relative z-10 max-w-7xl">
                 <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-8">
                     <div className="max-w-2xl">

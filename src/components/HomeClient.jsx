@@ -212,7 +212,7 @@ export default function HomeClient() {
                                 From hidden gems to popular landmarks, let technology guide your next adventure.
                             </p>
                             <Link 
-                                href="/custom-trip"
+                                href="#calculator"
                                 className="inline-flex items-center gap-3 bg-white text-emerald-950 px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest hover:bg-[#FACC15] hover:text-black transition-all shadow-2xl group"
                             >
                                 START PLANNING NOW
