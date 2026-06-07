@@ -25,8 +25,8 @@ const DestinationsSection = () => {
     const orderedDestinations = featuredDestinations.map(id => displayDestinations.find(d => d.id === id)).filter(Boolean);
 
     return (
-        <section className="py-24 bg-white dark:bg-black transition-colors relative">
-            <div className="container mx-auto px-6">
+        <section id="destinations" className="py-8 bg-white dark:bg-[#0a0a0a] overflow-hidden transition-colors duration-300">
+            <div className="container mx-auto px-4 md:px-8 max-w-[1400px]">
                 {/* Header Section */}
                 <div className="mb-10 text-left md:text-center">
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-2 leading-none tracking-tighter font-montserrat">
@@ -42,10 +42,8 @@ const DestinationsSection = () => {
                     {orderedDestinations.map((dest, idx) => (
                         <motion.div
                             key={dest.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: idx * 0.1 }}
-                            viewport={{ once: true }}
+                            initial={{ opacity: 1, y: 0 }}
+                            animate={{ opacity: 1, y: 0 }}
                             onClick={() => {
                                 window.location.href = `/?tab=ride&destination=${encodeURIComponent(dest.name)}#booking`;
                             }}

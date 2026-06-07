@@ -687,8 +687,8 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
             return;
         }
 
-        if (passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.luggage < 1) {
-            alert("Please enter the number of luggage bags (enter 0 if none). Wait, luggage is mandatory.");
+        if (passengerCount.luggage === undefined || passengerCount.luggage === null) {
+            alert("Please enter the number of luggage bags (enter 0 if none).");
             return;
         }
 

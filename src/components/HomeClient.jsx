@@ -103,7 +103,7 @@ export default function HomeClient() {
                         <span className="text-emerald-600 dark:text-[#FACC15] text-[10px] font-black tracking-[0.4em] uppercase mb-4 block">
                             Explore Premium Island Tours
                         </span>
-                        <h2 className="text-4xl md:text-7xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter leading-none mb-6">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter leading-none mb-4">
                             Tailored <span className="text-emerald-600 dark:text-[#FACC15] italic font-serif">Round Tour</span> Packages
                         </h2>
                         <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm font-bold uppercase tracking-[0.3em] max-w-xl mx-auto opacity-80">

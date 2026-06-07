@@ -102,7 +102,7 @@ export default function SpecialOffersSection() {
 
     return (
         <section id="offers" className="py-0 relative transition-colors duration-300">
-            <section className="relative py-16 md:py-24 overflow-hidden bg-white dark:bg-black transition-colors duration-300"
+            <section className="relative py-8 overflow-hidden bg-white dark:bg-black transition-colors duration-300"
                      onMouseEnter={() => setIsPaused(true)}
                      onMouseLeave={() => setIsPaused(false)}>
 
@@ -126,10 +126,12 @@ export default function SpecialOffersSection() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5 }}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5 }}
                                 onClick={() => {
-                                    const params = new URLSearchParams();
-                                    params.set('coupon', todayOffer.code);
-                                    window.location.href = `/?${params.toString()}#booking`;
+                                    window.location.href = `/offers`;
                                 }}
                                 className="relative cursor-pointer group"
                             >
@@ -177,104 +179,7 @@ export default function SpecialOffersSection() {
                         )}
                     </div>
 
-                    {/* Coupon Slider */}
-                    <div className="relative overflow-hidden mb-12">
-                        <motion.div 
-                            className="flex gap-6 md:gap-8"
-                            animate={{ x: `-${currentIndex * (100 / (typeof window !== 'undefined' && window.innerWidth < 768 ? 1 : 2))}%` }}
-                            transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                        >
-                            {loading ? (
-                                Array(3).fill(0).map((_, i) => (
-                                    <div key={i} className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(33.33%-21px)] h-64 bg-black/5 border border-slate-200 rounded-[2.5rem] animate-pulse"></div>
-                                ))
-                            ) : coupons.map((coupon) => (
-                                <div
-                                    key={coupon._id}
-                                    onClick={() => {
-                                        const params = new URLSearchParams();
-                                        params.set('coupon', coupon.code);
-                                        if (coupon.applicableLocations && coupon.applicableLocations.length > 0) {
-                                            params.set('destination', coupon.applicableLocations[0]);
-                                        }
-                                        window.location.href = `/?${params.toString()}#booking`;
-                                    }}
-                                    className="min-w-full md:min-w-[calc(50%-16px)] lg:min-w-[calc(50%-16px)] bg-white dark:bg-slate-900 rounded-[2.5rem] p-5 md:p-7 hover:shadow-2xl transition-all cursor-pointer group/card relative overflow-visible flex flex-col h-full min-h-[295px] md:min-h-[350px] shadow-xl group-hover:translate-y-[-8px] ticket-card-mask"
-                                >
-                                    <div className="relative z-10 flex flex-col h-full">
-                                        {/* Header: Icon & Badge */}
-                                        <div className="flex justify-between items-start mb-4 md:mb-6">
-                                            <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-[#FACC15] to-amber-500 rounded-2xl flex items-center justify-center text-black shadow-lg shadow-yellow-500/20 rotate-3 group-hover/card:rotate-0 transition-transform" style={{
-                                                background: 'linear-gradient(135deg, #FACC15 0%, #F59E0B 100%)'
-                                            }}>
-                                                <Percent size={24} className="md:size-[28px]" strokeWidth={3.5} />
-                                            </div>
-                                            {coupon.applicableLocations && coupon.applicableLocations.length > 0 && (
-                                                <span className="inline-flex items-center gap-1.5 bg-[#FACC15]/10 text-slate-800 dark:text-[#FACC15] px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full border border-[#FACC15]/20 dark:border-[#FACC15]/30">
-                                                    <MapPin size={10} strokeWidth={3} />
-                                                    {coupon.applicableLocations[0]}
-                                                </span>
-                                            )}
-                                        </div>
 
-                                        {/* Discount Info */}
-                                        <div className="mb-1 md:mb-2">
-                                            <div className="flex items-baseline gap-1">
-                                                <h3 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
-                                                    {coupon.discountType === 'percentage' ? `${coupon.value}%` : `${coupon.value}`}
-                                                </h3>
-                                                <span className="text-lg md:text-xl font-black text-slate-400 uppercase">{coupon.discountType === 'percentage' ? 'OFF' : 'LKR OFF'}</span>
-                                            </div>
-                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1 md:mt-2">Discount Coupon</p>
-                                        </div>
-
-                                        {/* Description */}
-                                        <p className="text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-400 mb-4 md:mb-6 mt-1 md:mt-2 leading-relaxed line-clamp-2">
-                                            {coupon.description || `Valid for rides to/from ${coupon.applicableLocations?.[0] || 'selected locations'}`}
-                                        </p>
-
-                                        {/* Dashed Separator */}
-                                        <div className="w-full border-t-2 border-dashed border-slate-100 dark:border-slate-800 mb-4 md:mb-6 mx-0" />
-
-                                        {/* Code Bar - Pushed to Bottom */}
-                                        <div className="mt-auto space-y-4 md:space-y-6">
-                                            <div className="bg-slate-50 dark:bg-slate-800/50 p-3 md:p-4 rounded-3xl border border-slate-100 dark:border-slate-800 flex items-center justify-between group-hover/card:border-[#FACC15]/40 transition-all">
-                                                <div>
-                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Use Code</p>
-                                                    <p className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">{coupon.code}</p>
-                                                </div>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        navigator.clipboard.writeText(coupon.code);
-                                                        setCopiedCode(coupon.code);
-                                                        setTimeout(() => setCopiedCode(null), 2000);
-                                                    }}
-                                                    className={`px-4 py-2 sm:px-6 sm:py-3 rounded-2xl font-black text-[10px] sm:text-xs flex items-center gap-2 transition-all shadow-lg uppercase tracking-widest ${copiedCode === coupon.code ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-[#FACC15] text-black hover:bg-yellow-500 shadow-yellow-500/20'}`}
-                                                >
-                                                    {copiedCode === coupon.code ? <Check size={16} strokeWidth={3} /> : <Copy size={16} strokeWidth={3} />}
-                                                    {copiedCode === coupon.code ? 'COPIED' : 'COPY'}
-                                                </button>
-                                            </div>
-
-                                            {/* Final Footer Row */}
-                                            <div className="flex items-center justify-between px-2">
-                                                {coupon.expiryDate ? (
-                                                    <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                                        <Calendar size={12} />
-                                                        <span>Valid until {new Date(coupon.expiryDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                                                    </div>
-                                                ) : <div />}
-                                                <div className="text-[10px] font-black text-black dark:text-[#FACC15] uppercase tracking-widest flex items-center gap-1 group-hover/card:gap-3 transition-all">
-                                                    BOOK NOW <ArrowRight size={14} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </motion.div>
-                    </div>
 
                     {/* View All Button */}
                     <div className="text-center">

@@ -43,7 +43,7 @@ const ReviewStatsBar = () => {
     }, []);
 
     return (
-        <section className="bg-white dark:bg-black py-20 transition-colors duration-500 overflow-hidden relative">
+        <section className="bg-white dark:bg-black py-8 transition-colors duration-500 overflow-hidden relative">
             {/* Background elements */}
             <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent"></div>
             <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent"></div>
