@@ -256,13 +256,13 @@ const GoogleReviews = () => {
                     )}
                 </div>
 
-                <div className="mt-8 flex justify-center md:justify-start">
+                <div className="mt-4 flex justify-center md:justify-start">
                     <a
                         href="/reviews"
-                        className="inline-flex items-center gap-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 px-8 py-4 rounded-full font-bold text-sm uppercase tracking-widest transition-all shadow-sm hover:shadow-md group"
+                        className="inline-flex items-center gap-2 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 px-6 py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all shadow-sm hover:shadow-md group"
                     >
                         <span>Read All Reviews</span> 
-                        <ChevronRight size={18} strokeWidth={2.5} className="group-hover:translate-x-1 transition-transform" />
+                        <ChevronRight size={14} strokeWidth={2.5} className="group-hover:translate-x-1 transition-transform" />
                     </a>
                 </div>
             </div>

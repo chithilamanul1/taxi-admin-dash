@@ -137,35 +137,35 @@ export default function HomeClient() {
             {/* FleetSection removed */}
 
             {/* Legacy & Stats Section */}
-            <section className="py-16 md:py-24 relative overflow-hidden bg-slate-50/30 dark:bg-zinc-950/30">
+            <section className="py-8 md:py-12 relative overflow-hidden bg-slate-50/30 dark:bg-zinc-950/30">
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    <div className="flex flex-col items-center text-center mb-16">
-                        <div className="inline-flex items-center gap-3 bg-[#FACC15] text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] mb-6 shadow-md">
-                            <Clock size={14} strokeWidth={4} /> OUR LEGACY SINCE 2010
+                    <div className="flex flex-col items-center text-center mb-8">
+                        <div className="inline-flex items-center gap-2 bg-[#FACC15] text-black px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-[0.3em] mb-4 shadow-sm">
+                            <Clock size={12} strokeWidth={4} /> OUR LEGACY SINCE 2010
                         </div>
-                        <h2 className="text-4xl md:text-6xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter leading-[0.85] mb-6">
+                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter leading-[0.9] mb-4">
                             ELEVATING <span className="text-[#FACC15]">SRI LANKA'S</span> <br />
                             TRAVEL EXPERIENCE
                         </h2>
-                        <p className="max-w-2xl mx-auto text-slate-500 dark:text-slate-400 text-xs md:text-sm font-bold uppercase tracking-widest leading-relaxed opacity-80">
+                        <p className="max-w-2xl mx-auto text-slate-500 dark:text-slate-400 text-[10px] md:text-xs font-bold uppercase tracking-widest leading-relaxed opacity-80">
                             From humble beginnings to being the island's most trusted transfer partner. <br />
                             We don't just move people; we create journeys that last a lifetime.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                         {[
                             { label: 'Happy Clients', value: '10k+', icon: Users },
                             { label: 'Tours Completed', value: '1.2k+', icon: MapPin },
                             { label: 'Experience Years', value: '14+', icon: Star },
                             { label: 'Expert Drivers', value: '80+', icon: ShieldCheck }
                         ].map((stat, idx) => (
-                            <div key={idx} className="bg-white dark:bg-zinc-900 p-6 md:p-8 rounded-[2rem] border border-slate-100 dark:border-white/5 shadow-xl dark:shadow-none flex flex-col items-center group hover:-translate-y-2 transition-all duration-500">
-                                <div className="w-12 h-12 md:w-16 md:h-16 bg-emerald-950 dark:bg-white/5 rounded-2xl flex items-center justify-center mb-4 md:mb-6 shadow-md group-hover:bg-[#FACC15] group-hover:text-black transition-colors duration-500">
-                                    <stat.icon size={24} className="text-[#FACC15] group-hover:text-black md:w-8 md:h-8" strokeWidth={2.5} />
+                            <div key={idx} className="bg-white dark:bg-zinc-900 p-4 md:p-6 rounded-[1.5rem] border border-slate-100 dark:border-white/5 shadow-md flex flex-col items-center group hover:-translate-y-1 transition-all duration-300">
+                                <div className="w-10 h-10 md:w-12 md:h-12 bg-emerald-950 dark:bg-white/5 rounded-xl flex items-center justify-center mb-3 md:mb-4 shadow-sm group-hover:bg-[#FACC15] group-hover:text-black transition-colors duration-300">
+                                    <stat.icon size={20} className="text-[#FACC15] group-hover:text-black md:w-6 md:h-6" strokeWidth={2.5} />
                                 </div>
-                                <span className="text-3xl md:text-5xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter mb-1 md:mb-2">{stat.value}</span>
-                                <span className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-center">{stat.label}</span>
+                                <span className="text-2xl md:text-4xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter mb-1">{stat.value}</span>
+                                <span className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] text-center">{stat.label}</span>
                             </div>
                         ))}
                     </div>
