@@ -58,15 +58,15 @@ export default function HomeGallery() {
     return (
         <section className="py-4 bg-white dark:bg-black">
             <div className="container mx-auto px-6">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
                     <div>
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 bg-[#FACC15] flex items-center justify-center border-4 border-[#FACC15] rotate-3 shadow-lg">
-                                <Camera size={24} className="text-black" strokeWidth={2.5} />
+                        <div className="flex items-center gap-2 mb-2">
+                            <div className="w-10 h-10 bg-[#FACC15] flex items-center justify-center border-4 border-[#FACC15] rotate-3 shadow-sm">
+                                <Camera size={20} className="text-black" strokeWidth={2.5} />
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-800 dark:text-slate-200">Travel Memories</span>
+                            <span className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-800 dark:text-slate-200">Travel Memories</span>
                         </div>
-                        <h2 className="text-5xl md:text-8xl font-black text-black dark:text-white uppercase tracking-tighter leading-none">
+                        <h2 className="text-4xl md:text-6xl font-black text-black dark:text-white uppercase tracking-tighter leading-none">
                             EXPERIENCE <br /><span className="text-[#FACC15]">SRI LANKA</span>
                         </h2>
                     </div>
@@ -74,9 +74,9 @@ export default function HomeGallery() {
                     <Link 
                         href="/gallery"
                         aria-label="View our photo gallery of Sri Lankan travel memories"
-                        className="group flex items-center gap-4 bg-[#FACC15] text-black px-8 py-4 rounded-full font-black uppercase tracking-widest text-xs border border-[#FACC15] shadow-md hover:shadow-lg hover:-translate-y-1 hover:bg-black hover:text-[#FACC15] hover:border-black transition-all duration-300"
+                        className="group flex items-center gap-2 bg-[#FACC15] text-black px-6 py-2.5 rounded-full font-black uppercase tracking-widest text-[10px] border border-[#FACC15] shadow-sm hover:shadow-md hover:-translate-y-1 hover:bg-black hover:text-[#FACC15] hover:border-black transition-all duration-300"
                     >
-                        VIEW FULL GALLERY <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                        VIEW FULL GALLERY <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                     </Link>
                 </div>
 

@@ -199,15 +199,15 @@ export default function HomeClient() {
             {/* AI Trip Planner Section */}
             <section className="py-8 bg-emerald-950 dark:bg-[#0a0a0a] relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                         <div className="order-2 lg:order-1">
-                            <div className="inline-flex items-center gap-3 bg-[#FACC15] text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] mb-10 shadow-xl shadow-yellow-500/20">
+                            <div className="inline-flex items-center gap-2 bg-[#FACC15] text-black px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] mb-4 shadow-xl shadow-yellow-500/20">
                                 <Sparkles size={14} strokeWidth={4} /> NEW: SMART TRAVEL
                             </div>
-                            <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-[0.85] mb-10">
+                            <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-[0.85] mb-4">
                                 PLAN YOUR <span className="text-[#FACC15]">TRIP WITH AI</span>
                             </h2>
-                            <p className="text-slate-400 text-lg md:text-xl font-bold uppercase tracking-widest leading-relaxed opacity-90 mb-12">
+                            <p className="text-slate-400 text-sm md:text-base font-bold uppercase tracking-widest leading-relaxed opacity-90 mb-6">
                                 Describe your dream vacation, and our AI will craft a personalized itinerary instantly. 
                                 From hidden gems to popular landmarks, let technology guide your next adventure.
                             </p>

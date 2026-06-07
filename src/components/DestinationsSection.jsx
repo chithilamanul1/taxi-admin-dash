@@ -28,7 +28,7 @@ const DestinationsSection = () => {
         <section id="destinations" className="py-8 bg-white dark:bg-[#0a0a0a] overflow-hidden transition-colors duration-300">
             <div className="container mx-auto px-4 md:px-8 max-w-[1400px]">
                 {/* Header Section */}
-                <div className="mb-10 text-left md:text-center">
+                <div className="mb-6 text-left md:text-center">
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-2 leading-none tracking-tighter font-montserrat">
                         Top Destinations
                     </h2>
@@ -38,7 +38,7 @@ const DestinationsSection = () => {
                 </div>
 
                 {/* Destinations Slider */}
-                <div className="flex overflow-x-auto gap-4 md:gap-6 snap-x hide-scrollbar pb-8">
+                <div className="flex overflow-x-auto gap-4 md:gap-6 snap-x hide-scrollbar pb-4">
                     {orderedDestinations.map((dest, idx) => (
                         <motion.div
                             key={dest.id}

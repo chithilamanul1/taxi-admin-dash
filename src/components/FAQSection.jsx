@@ -62,21 +62,21 @@ const FAQSection = () => {
             />
 
             <div className="max-w-4xl mx-auto px-6">
-                <div className="flex flex-col items-center text-center gap-4 mb-12 md:mb-16">
-                    <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center shadow-sm mb-2">
-                        <HelpCircle size={32} className="text-emerald-600 dark:text-emerald-400" strokeWidth={2} />
+                <div className="flex flex-col items-center text-center gap-2 mb-6">
+                    <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center shadow-sm mb-2">
+                        <HelpCircle size={24} className="text-emerald-600 dark:text-emerald-400" strokeWidth={2} />
                     </div>
                     <div>
-                        <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight">
+                        <h2 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">
                             Common <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Questions</span>
                         </h2>
-                        <p className="text-slate-500 dark:text-slate-400 mt-3 text-sm md:text-base max-w-2xl mx-auto">
+                        <p className="text-slate-500 dark:text-slate-400 mt-2 text-xs md:text-sm max-w-2xl mx-auto">
                             Everything you need to know about our airport transfer and tour services in Sri Lanka.
                         </p>
                     </div>
                 </div>
 
-                <div className="space-y-4 md:space-y-6">
+                <div className="space-y-3">
                     {faqs.map((faq, index) => {
                         const isOpen = openIndex === index;
                         return (
@@ -90,29 +90,29 @@ const FAQSection = () => {
                             >
                                 <button
                                     onClick={() => setOpenIndex(isOpen ? -1 : index)}
-                                    className="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none rounded-2xl"
+                                    className="w-full flex items-center justify-between p-4 md:p-6 text-left focus:outline-none rounded-2xl"
                                 >
-                                    <h3 className={`text-base md:text-lg font-semibold pr-8 transition-colors ${
+                                    <h3 className={`text-sm md:text-base font-semibold pr-8 transition-colors ${
                                         isOpen 
                                             ? 'text-emerald-700 dark:text-emerald-400' 
                                             : 'text-slate-800 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
                                     }`}>
                                         {faq.question}
                                     </h3>
-                                    <div className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                                    <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
                                         isOpen 
                                             ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rotate-180' 
                                             : 'bg-slate-50 dark:bg-white/5 text-slate-500 dark:text-slate-400 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-900/20 group-hover:text-emerald-600'
                                     }`}>
-                                        <ChevronDown size={20} strokeWidth={2} />
+                                        <ChevronDown size={16} strokeWidth={2} />
                                     </div>
                                 </button>
                                 
                                 <div 
                                     className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
                                 >
-                                    <div className="p-6 md:p-8 pt-0 border-t border-slate-100 dark:border-white/5 mt-2">
-                                        <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+                                    <div className="p-4 md:p-6 pt-0 border-t border-slate-100 dark:border-white/5 mt-2">
+                                        <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs md:text-sm">
                                             {faq.answer}
                                         </p>
                                     </div>
