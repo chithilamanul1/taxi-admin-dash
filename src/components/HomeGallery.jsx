@@ -56,7 +56,7 @@ export default function HomeGallery() {
     const displayImages = images.length > 0 ? images : fallbackImages;
 
     return (
-        <section className="py-24 bg-white dark:bg-black">
+        <section className="py-4 bg-white dark:bg-black">
             <div className="container mx-auto px-6">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
                     <div>
@@ -126,7 +126,7 @@ export default function HomeGallery() {
                     ))}
                 </div>
 
-                <div className="mt-24 pt-12 border-t-4 border-black/5 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div className="mt-4 pt-4 border-t-4 border-black/5 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
                     <p className="text-black/40 dark:text-white/40 font-black uppercase tracking-[0.2em] text-[10px] max-w-sm text-center md:text-left">
                         Our gallery is updated daily with authentic moments from our travelers. Join the journey and share your moments with #AirportTaxisSL
                     </p>

@@ -5,7 +5,7 @@ import { FaApple, FaGooglePlay } from 'react-icons/fa';
 
 export default function MobileAppSection() {
     return (
-        <section className="py-24 px-6 relative overflow-hidden bg-slate-50 dark:bg-[#050505] transition-colors duration-300">
+        <section className="pt-4 pb-8 px-6 relative overflow-hidden bg-slate-50 dark:bg-[#050505] transition-colors duration-300">
             <div className="max-w-7xl mx-auto">
                 <div className="relative overflow-hidden bg-white dark:bg-[#111] rounded-[2.5rem] shadow-xl border border-slate-200 dark:border-white/10 transition-colors duration-300">
                     

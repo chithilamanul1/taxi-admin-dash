@@ -54,7 +54,7 @@ const FAQSection = () => {
     };
 
     return (
-        <section className="py-20 md:py-32 bg-slate-50 dark:bg-[#0a0a0a] transition-colors">
+        <section className="py-8 bg-slate-50 dark:bg-[#0a0a0a] transition-colors">
             {/* Inject Structured Data for Google */}
             <script
                 type="application/ld+json"

@@ -134,7 +134,7 @@ export default function HomeClient() {
             
             <div className="h-4 md:h-10" /> {/* Spacing */}
 
-            <FleetSection />
+            {/* FleetSection removed */}
 
             {/* Legacy & Stats Section */}
             <section className="py-16 md:py-24 relative overflow-hidden bg-slate-50/30 dark:bg-zinc-950/30">
@@ -197,7 +197,7 @@ export default function HomeClient() {
             />
 
             {/* AI Trip Planner Section */}
-            <section className="py-24 md:py-32 bg-emerald-950 dark:bg-[#0a0a0a] relative overflow-hidden">
+            <section className="py-8 bg-emerald-950 dark:bg-[#0a0a0a] relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div className="order-2 lg:order-1">
@@ -248,9 +248,9 @@ export default function HomeClient() {
             <HomeGallery />
 
             <MobileAppSection />
-            <RecentPosts />
+            {/* RecentPosts removed */}
 
-            <section className="py-24 md:py-40 bg-white dark:bg-black border-t border-slate-100 dark:border-white/5 transition-colors">
+            <section className="py-8 bg-white dark:bg-black border-t border-slate-100 dark:border-white/5 transition-colors">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="bg-emerald-950 dark:bg-zinc-900 p-12 md:p-24 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-16 rounded-[4rem] shadow-[0_50px_100px_rgba(0,0,0,0.3)] group">
                         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-emerald-600/10 rounded-full blur-[100px] group-hover:bg-emerald-600/20 transition-all duration-1000"></div>
