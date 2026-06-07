@@ -105,19 +105,14 @@ export default function SpecialOffersSection() {
             <section className="relative py-8 overflow-hidden bg-white dark:bg-black transition-colors duration-300"
                      onMouseEnter={() => setIsPaused(true)}
                      onMouseLeave={() => setIsPaused(false)}>
-
                 <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16 font-montserrat">
-                    {/* Header */}
-                    <div className="mb-10 md:mb-16 flex flex-col gap-8">
-                        <div>
-                            <div className="inline-flex items-center gap-2 bg-slate-100 dark:bg-white/5 px-4 py-1.5 mb-6 rounded-md shadow-sm">
-                                <Tag size={12} className="text-emerald-600 dark:text-[#FACC15]" strokeWidth={3.5} />
-                                <span className="text-xs font-black text-emerald-950 dark:text-white uppercase tracking-[0.2em] font-montserrat">Exclusive Deals</span>
-                            </div>
-                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 leading-none uppercase tracking-tighter font-montserrat">
-                                SAVE ON YOUR <br />
-                                <span className="text-emerald-600 dark:text-emerald-400 italic font-serif normal-case">Next Journey</span>
+                    <div className="mb-10 md:mb-12 flex flex-col gap-6">
+                        <div className="mb-2 md:mb-4 flex flex-col gap-1">
+                            <h2 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
+                                <Tag size={16} className="text-emerald-600 dark:text-[#FACC15]" strokeWidth={3} />
+                                Special Offers
                             </h2>
+                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Limited time deals for your journey</p>
                         </div>
                         
                         {/* Today's Offer — Prominent Hero Card */}
@@ -165,8 +160,8 @@ export default function SpecialOffersSection() {
 
                                         {/* CTA Button */}
                                         <div className="shrink-0">
-                                            <div className="bg-[#FACC15] text-black px-6 py-3 md:px-8 md:py-4 rounded-2xl font-black text-xs md:text-sm uppercase tracking-[0.2em] shadow-lg shadow-yellow-500/30 group-hover:scale-105 group-hover:shadow-xl group-hover:shadow-yellow-500/40 transition-all flex items-center gap-2">
-                                                APPLY NOW <ArrowRight size={16} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+                                            <div className="bg-[#FACC15] text-black px-5 py-2.5 md:px-6 md:py-3 rounded-xl font-black text-[10px] md:text-xs uppercase tracking-[0.2em] shadow-md group-hover:scale-105 group-hover:shadow-lg transition-all flex items-center gap-2">
+                                                APPLY NOW <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
                                             </div>
                                         </div>
                                     </div>
@@ -181,10 +176,10 @@ export default function SpecialOffersSection() {
                     <div className="text-center">
                         <Link
                             href="/offers"
-                            className="inline-flex items-center gap-4 bg-black text-[#FACC15] px-10 py-4 rounded-full border border-black font-black uppercase tracking-[0.2em] text-sm hover:-translate-y-1 active:translate-y-0 transition-all group shadow-md hover:shadow-lg hover:bg-white hover:text-black hover:border-black"
+                            className="inline-flex items-center gap-2 bg-black text-[#FACC15] px-6 py-2.5 rounded-full border border-black font-black uppercase tracking-[0.2em] text-[10px] hover:-translate-y-1 active:translate-y-0 transition-all group shadow-md hover:shadow-lg hover:bg-white hover:text-black hover:border-black"
                         >
                             VIEW ALL OFFERS
-                            <ArrowRight size={20} strokeWidth={3} className="group-hover:translate-x-2 transition-transform" />
+                            <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
                         </Link>
                     </div>
                 </div>

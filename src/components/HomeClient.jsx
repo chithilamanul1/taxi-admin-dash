@@ -213,10 +213,10 @@ export default function HomeClient() {
                             </p>
                             <Link 
                                 href="#calculator"
-                                className="inline-flex items-center gap-3 bg-white text-emerald-950 px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest hover:bg-[#FACC15] hover:text-black transition-all shadow-2xl group"
+                                className="inline-flex items-center gap-2 bg-white text-emerald-950 px-6 py-3 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-[#FACC15] hover:text-black transition-all shadow-xl group"
                             >
                                 START PLANNING NOW
-                                <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
+                                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                             </Link>
                         </div>
                         <div className="order-1 lg:order-2 relative group">
