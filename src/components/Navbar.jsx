@@ -59,6 +59,7 @@ export default function Navbar() {
                         { label: 'Day Tours', href: '/day-trips' },
                         { label: 'Tour Packages', href: '/tour-packages' },
                         { label: 'Round Trips', href: '/?tab=tours#booking' },
+                        { label: 'Fleet', href: '/fleet' },
                         { label: 'Rates', href: '/prices' },
                         { label: 'Gallery', href: '/gallery' },
                     ].map(item => (
@@ -185,6 +186,7 @@ export default function Navbar() {
                                 { label: 'City Tours', href: '/tours', icon: '🏙️', id: 'm-city' },
                                 { label: 'Tour Packages', href: '/tour-packages', icon: '🗺️', id: 'm-pkg' },
                                 { label: 'Round Trips', href: '/?tab=tours#booking', icon: '🔄', id: 'm-round' },
+                                { label: 'Fleet', href: '/fleet', icon: '🚘', id: 'm-fleet' },
                                 { label: 'Gallery', href: '/gallery', icon: '📸', id: 'm-gallery' },
                                 { label: 'Rates', href: '/prices', icon: '💰', id: 'm-rates' },
                                 {
