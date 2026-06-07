@@ -136,9 +136,7 @@ export default function SpecialOffersSection() {
                                 }}
                                 className="relative cursor-pointer group"
                             >
-                                {/* Glow effect behind the card */}
-                                <div className="absolute -inset-1 bg-gradient-to-r from-[#FACC15] via-amber-400 to-[#FACC15] rounded-3xl blur-lg opacity-40 group-hover:opacity-70 transition-opacity animate-pulse" />
-                                
+                                {/* Glow effect removed as requested */}
                                 <div className="relative bg-gradient-to-br from-black via-zinc-900 to-black rounded-3xl p-6 md:p-8 border-2 border-[#FACC15] shadow-2xl shadow-yellow-500/10 group-hover:-translate-y-1 transition-all overflow-hidden">
                                     {/* Decorative corner accents */}
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-[#FACC15]/5 rounded-full -translate-y-1/2 translate-x-1/2" />
