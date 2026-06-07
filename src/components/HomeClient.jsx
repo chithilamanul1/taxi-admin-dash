@@ -204,10 +204,10 @@ export default function HomeClient() {
                             <div className="inline-flex items-center gap-2 bg-[#FACC15] text-black px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] mb-4 shadow-xl shadow-yellow-500/20">
                                 <Sparkles size={14} strokeWidth={4} /> NEW: SMART TRAVEL
                             </div>
-                            <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-[0.85] mb-4">
+                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tighter leading-[0.85] mb-4">
                                 PLAN YOUR <span className="text-[#FACC15]">TRIP WITH AI</span>
                             </h2>
-                            <p className="text-slate-400 text-sm md:text-base font-bold uppercase tracking-widest leading-relaxed opacity-90 mb-6">
+                            <p className="text-slate-400 text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] leading-relaxed opacity-90 mb-6">
                                 Describe your dream vacation, and our AI will craft a personalized itinerary instantly. 
                                 From hidden gems to popular landmarks, let technology guide your next adventure.
                             </p>
