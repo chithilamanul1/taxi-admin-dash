@@ -102,24 +102,21 @@ export default function SpecialOffersSection() {
 
     return (
         <section id="offers" className="py-0 relative transition-colors duration-300">
-            <section className="relative py-16 md:py-32 overflow-hidden bg-[#FACC15] transition-colors duration-300"
+            <section className="relative py-16 md:py-24 overflow-hidden bg-white dark:bg-black transition-colors duration-300"
                      onMouseEnter={() => setIsPaused(true)}
                      onMouseLeave={() => setIsPaused(false)}>
-
-                {/* Background Pattern */}
-                <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-12 pointer-events-none"></div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16 font-montserrat">
                     {/* Header */}
                     <div className="mb-10 md:mb-16 flex flex-col gap-8">
                         <div>
-                            <div className="inline-flex items-center gap-2 bg-black px-4 py-1.5 mb-6 rounded-md shadow-sm">
-                                <Tag size={12} className="text-[#FACC15]" strokeWidth={3.5} />
-                                <span className="text-xs font-black text-[#FACC15] uppercase tracking-[0.2em] font-montserrat">Exclusive Deals</span>
+                            <div className="inline-flex items-center gap-2 bg-slate-100 dark:bg-white/5 px-4 py-1.5 mb-6 rounded-md shadow-sm">
+                                <Tag size={12} className="text-emerald-600 dark:text-[#FACC15]" strokeWidth={3.5} />
+                                <span className="text-xs font-black text-emerald-950 dark:text-white uppercase tracking-[0.2em] font-montserrat">Exclusive Deals</span>
                             </div>
-                            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-slate-950 mb-6 leading-none uppercase tracking-tighter font-montserrat">
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 leading-none uppercase tracking-tighter font-montserrat">
                                 SAVE ON YOUR <br />
-                                <span className="text-black opacity-90 italic font-serif normal-case">Next Journey</span>
+                                <span className="text-emerald-600 dark:text-emerald-400 italic font-serif normal-case">Next Journey</span>
                             </h2>
                         </div>
                         
@@ -137,7 +134,7 @@ export default function SpecialOffersSection() {
                                 className="relative cursor-pointer group"
                             >
                                 {/* Glow effect removed as requested */}
-                                <div className="relative bg-gradient-to-br from-black via-zinc-900 to-black rounded-3xl p-6 md:p-8 border-2 border-[#FACC15] shadow-2xl shadow-yellow-500/10 group-hover:-translate-y-1 transition-all overflow-hidden">
+                                <div className="relative bg-gradient-to-br from-black via-zinc-900 to-black rounded-3xl p-6 md:p-8 border border-slate-800 shadow-xl group-hover:-translate-y-1 transition-all overflow-hidden">
                                     {/* Decorative corner accents */}
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-[#FACC15]/5 rounded-full -translate-y-1/2 translate-x-1/2" />
                                     <div className="absolute bottom-0 left-0 w-24 h-24 bg-[#FACC15]/5 rounded-full translate-y-1/2 -translate-x-1/2" />

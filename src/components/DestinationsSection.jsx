@@ -28,18 +28,17 @@ const DestinationsSection = () => {
         <section className="py-24 bg-white dark:bg-black transition-colors relative">
             <div className="container mx-auto px-6">
                 {/* Header Section */}
-                <div className="mb-16 text-center">
-                    <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-slate-900 dark:text-white mb-6 leading-none uppercase tracking-tighter font-montserrat">
-                        Explore Sri Lankan <br />
-                        <span className="text-[#FACC15] italic font-serif normal-case">Destinations</span>
+                <div className="mb-10 text-left md:text-center">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-2 leading-none tracking-tighter font-montserrat">
+                        Top Destinations
                     </h2>
-                    <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm font-bold uppercase tracking-[0.3em] max-w-xl mx-auto opacity-80">
-                        Discover amazing deals and seamless transfers across the paradise island.
+                    <p className="text-slate-500 dark:text-slate-400 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] md:mx-auto opacity-80">
+                        Discover amazing deals and seamless transfers
                     </p>
                 </div>
 
-                {/* Destinations Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                {/* Destinations Slider */}
+                <div className="flex overflow-x-auto gap-4 md:gap-6 snap-x hide-scrollbar pb-8">
                     {orderedDestinations.map((dest, idx) => (
                         <motion.div
                             key={dest.id}
@@ -50,7 +49,7 @@ const DestinationsSection = () => {
                             onClick={() => {
                                 window.location.href = `/?tab=ride&destination=${encodeURIComponent(dest.name)}#booking`;
                             }}
-                            className="group relative cursor-pointer"
+                            className="group relative cursor-pointer shrink-0 snap-start w-[50vw] sm:w-[35vw] md:w-[28vw] lg:w-[20vw]"
                         >
                             {/* Card Wrapper */}
                             <div className="relative aspect-[4/5] overflow-hidden rounded-2xl md:rounded-3xl border border-slate-200 dark:border-white/10 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">

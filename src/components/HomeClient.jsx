@@ -137,35 +137,35 @@ export default function HomeClient() {
             <FleetSection />
 
             {/* Legacy & Stats Section */}
-            <section className="py-24 md:py-40 relative overflow-hidden bg-slate-50/30 dark:bg-zinc-950/30">
+            <section className="py-16 md:py-24 relative overflow-hidden bg-slate-50/30 dark:bg-zinc-950/30">
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    <div className="flex flex-col items-center text-center mb-24">
-                        <div className="inline-flex items-center gap-3 bg-[#FACC15] text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] mb-10 shadow-xl shadow-yellow-500/20">
+                    <div className="flex flex-col items-center text-center mb-16">
+                        <div className="inline-flex items-center gap-3 bg-[#FACC15] text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] mb-6 shadow-md">
                             <Clock size={14} strokeWidth={4} /> OUR LEGACY SINCE 2010
                         </div>
-                        <h2 className="text-5xl md:text-8xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter leading-[0.85] mb-12">
+                        <h2 className="text-4xl md:text-6xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter leading-[0.85] mb-6">
                             ELEVATING <span className="text-[#FACC15]">SRI LANKA'S</span> <br />
                             TRAVEL EXPERIENCE
                         </h2>
-                        <p className="max-w-2xl mx-auto text-slate-500 dark:text-slate-400 text-sm md:text-lg font-bold uppercase tracking-widest leading-relaxed opacity-80">
+                        <p className="max-w-2xl mx-auto text-slate-500 dark:text-slate-400 text-xs md:text-sm font-bold uppercase tracking-widest leading-relaxed opacity-80">
                             From humble beginnings to being the island's most trusted transfer partner. <br />
                             We don't just move people; we create journeys that last a lifetime.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                         {[
                             { label: 'Happy Clients', value: '10k+', icon: Users },
                             { label: 'Tours Completed', value: '1.2k+', icon: MapPin },
-                            { label: 'Years Excellence', value: '14+', icon: Star },
-                            { label: 'Elite Drivers', value: '80+', icon: ShieldCheck }
+                            { label: 'Experience Years', value: '14+', icon: Star },
+                            { label: 'Expert Drivers', value: '80+', icon: ShieldCheck }
                         ].map((stat, idx) => (
-                            <div key={idx} className="bg-white dark:bg-zinc-900 p-10 rounded-[3rem] border border-slate-100 dark:border-white/5 shadow-2xl shadow-slate-200/50 dark:shadow-none flex flex-col items-center group hover:-translate-y-4 transition-all duration-500">
-                                <div className="w-20 h-20 bg-emerald-950 dark:bg-white/5 rounded-3xl flex items-center justify-center mb-8 shadow-xl group-hover:bg-[#FACC15] group-hover:text-black transition-colors duration-500">
-                                    <stat.icon size={32} className="text-[#FACC15] group-hover:text-black" strokeWidth={2.5} />
+                            <div key={idx} className="bg-white dark:bg-zinc-900 p-6 md:p-8 rounded-[2rem] border border-slate-100 dark:border-white/5 shadow-xl dark:shadow-none flex flex-col items-center group hover:-translate-y-2 transition-all duration-500">
+                                <div className="w-12 h-12 md:w-16 md:h-16 bg-emerald-950 dark:bg-white/5 rounded-2xl flex items-center justify-center mb-4 md:mb-6 shadow-md group-hover:bg-[#FACC15] group-hover:text-black transition-colors duration-500">
+                                    <stat.icon size={24} className="text-[#FACC15] group-hover:text-black md:w-8 md:h-8" strokeWidth={2.5} />
                                 </div>
-                                <span className="text-5xl md:text-6xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter mb-2">{stat.value}</span>
-                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] text-center">{stat.label}</span>
+                                <span className="text-3xl md:text-5xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter mb-1 md:mb-2">{stat.value}</span>
+                                <span className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-center">{stat.label}</span>
                             </div>
                         ))}
                     </div>
