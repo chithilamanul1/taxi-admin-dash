@@ -66,7 +66,7 @@ export default function HomeGallery() {
                             </div>
                             <span className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-800 dark:text-slate-200">Travel Memories</span>
                         </div>
-                        <h2 className="text-4xl md:text-6xl font-black text-black dark:text-white uppercase tracking-tighter leading-none">
+                        <h2 className="text-3xl md:text-5xl font-extrabold text-black dark:text-white uppercase tracking-tight leading-[0.9]">
                             EXPERIENCE <br /><span className="text-[#FACC15]">SRI LANKA</span>
                         </h2>
                     </div>
@@ -74,7 +74,7 @@ export default function HomeGallery() {
                     <Link 
                         href="/gallery"
                         aria-label="View our photo gallery of Sri Lankan travel memories"
-                        className="group flex items-center gap-2 bg-[#FACC15] text-black px-6 py-2.5 rounded-full font-black uppercase tracking-widest text-[10px] border border-[#FACC15] shadow-sm hover:shadow-md hover:-translate-y-1 hover:bg-black hover:text-[#FACC15] hover:border-black transition-all duration-300"
+                        className="group flex items-center justify-center gap-2 bg-[#FACC15] text-black px-6 py-2.5 rounded-full font-black uppercase tracking-widest text-[10px] border border-[#FACC15] shadow-sm hover:shadow-md hover:-translate-y-1 hover:bg-black hover:text-[#FACC15] hover:border-black transition-all duration-300 self-start md:self-end w-fit"
                     >
                         VIEW FULL GALLERY <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                     </Link>
@@ -82,7 +82,7 @@ export default function HomeGallery() {
 
                 <div 
                     ref={scrollContainerRef}
-                    className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 scrollbar-hide scroll-smooth"
+                    className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-8 scrollbar-hide scroll-smooth -mx-4 px-4 md:mx-0 md:px-0"
                 >
                     {displayImages.map((img, idx) => (
                         <motion.div
@@ -90,9 +90,9 @@ export default function HomeGallery() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className={`group relative min-w-[85vw] md:min-w-[calc(33.333%-16px)] snap-start shrink-0 ${idx > 2 ? 'opacity-60 hover:opacity-100 transition-opacity' : ''}`}
+                            className={`group relative min-w-[65vw] sm:min-w-[40vw] md:min-w-[calc(33.333%-16px)] snap-start shrink-0 ${idx > 2 ? 'opacity-60 hover:opacity-100 transition-opacity' : ''}`}
                         >
-                            <div className="bg-black border border-slate-200 dark:border-slate-800 rounded-[2rem] shadow-lg overflow-hidden transition-all group-hover:shadow-xl group-hover:-translate-y-1">
+                            <div className="bg-black border border-slate-200 dark:border-slate-800 rounded-[1.5rem] shadow-lg overflow-hidden transition-all group-hover:shadow-xl group-hover:-translate-y-1">
                                 <div className="aspect-[4/5] relative">
                                     <Image 
                                         src={img.url} 
