@@ -96,10 +96,10 @@ export default function HomeClient() {
         <div className="bg-white dark:bg-black overflow-hidden transition-colors duration-300">
             <BookingWidget />
 
-            <div id="calculator" className="py-20 md:py-32 relative border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2">
+            <div id="calculator" className="py-8 md:py-12 relative border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/2">
                 <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-[0.06] dark:opacity-[0.02] pointer-events-none z-0"></div>
                 <div className="max-w-6xl mx-auto px-4 relative z-10">
-                    <div className="text-center mb-12">
+                    <div className="text-center mb-6">
                         <span className="text-emerald-600 dark:text-[#FACC15] text-[10px] font-black tracking-[0.4em] uppercase mb-4 block">
                             Explore Premium Island Tours
                         </span>
