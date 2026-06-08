@@ -56,14 +56,10 @@ export default function HomeGallery() {
     const displayImages = images.length > 0 ? images : fallbackImages;
 
     return (
-        <section className="py-12 relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-[#050505] border-t border-white/5">
+        <section className="py-12 relative overflow-hidden bg-[#0a0a0a] border-t border-white/5">
             <style dangerouslySetInnerHTML={{__html: `
                 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
             `}} />
-            
-            {/* Ambient Background Glows */}
-            <div className="absolute top-0 right-0 -mr-32 -mt-32 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 -ml-32 -mb-32 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="container mx-auto px-6 relative z-10">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -135,12 +131,12 @@ export default function HomeGallery() {
                     ))}
                 </div>
 
-                <div className="mt-4 pt-4 border-t-4 border-black/5 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
-                    <p className="text-black/40 dark:text-white/40 font-black uppercase tracking-[0.2em] text-[10px] max-w-sm text-center md:text-left">
+                <div className="mt-4 pt-4 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <p className="text-white/40 font-black uppercase tracking-[0.2em] text-[10px] max-w-sm text-center md:text-left">
                         Our gallery is updated daily with authentic moments from our travelers. Join the journey and share your moments with #AirportTaxisSL
                     </p>
                     <div className="flex gap-4">
-                        <div className="flex items-center gap-2 text-black dark:text-[#FACC15] font-black uppercase tracking-widest text-[10px]">
+                        <div className="flex items-center gap-2 text-white font-black uppercase tracking-widest text-[10px]">
                             <Instagram size={18} /> @AIRPORTTAXIS.SL
                         </div>
                     </div>
