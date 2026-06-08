@@ -117,10 +117,13 @@ const Footer = () => {
                 </div>
 
                 {/* Additional Info */}
-                <div className="pt-6 mt-8 flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 border-t border-white/5">
-                    
+                <div className="pt-6 mt-8 flex flex-col gap-8 border-t border-white/5">
+                    <div className="text-[7px] text-white/50 font-bold uppercase tracking-widest text-center md:text-left">
+                        Our companies: <span className="text-white">airporttaxis.lk, airportcab.lk, srilankantaxi.lk</span>
+                    </div>
+
                     {/* Payment section */}
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-3 items-center md:items-start">
                         <h4 className="text-white text-base md:text-lg font-bold tracking-wide">Ways You Can Pay</h4>
                         <div className="grid grid-cols-4 sm:grid-cols-4 gap-2 w-fit">
                             {/* PayPal */}
@@ -187,10 +190,6 @@ const Footer = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="text-[7px] text-white/50 font-bold uppercase tracking-widest text-center lg:text-right mt-4 lg:mt-0 w-full lg:w-auto">
-                        Our companies: <span className="text-white">airporttaxis.lk, airportcab.lk, srilankantaxi.lk</span>
                     </div>
                 </div>
 
