@@ -124,8 +124,33 @@ const Footer = () => {
 
                     {/* Payment section */}
                     <div className="flex flex-col gap-3 items-center md:items-start">
-                        <h4 className="text-white text-base md:text-lg font-bold tracking-wide">Ways You Can Pay</h4>
-                        <div className="grid grid-cols-4 sm:grid-cols-4 gap-2 w-fit">
+                        <div className="flex flex-col gap-2 items-center md:items-start">
+                            <h4 className="text-white text-base md:text-lg font-bold tracking-wide leading-none">Ways You Can Pay</h4>
+                            
+                            {/* Paycorp / Bancstac Auth Badge */}
+                            <div className="flex items-center gap-2 mb-1">
+                                <div className="bg-white px-2 py-1.5 rounded flex items-center gap-2 shadow-sm">
+                                    <div className="flex flex-col items-end">
+                                        <div className="flex items-center gap-0.5">
+                                            <div className="flex">
+                                                <div className="w-1 h-1.5 bg-[#1F2B3E] rotate-45 transform origin-bottom-left -translate-y-0.5"></div>
+                                                <div className="w-1 h-1.5 bg-[#1F2B3E] rotate-45 transform origin-bottom-left -translate-y-0.5"></div>
+                                                <div className="w-1 h-1.5 bg-[#1F2B3E] rotate-45 transform origin-bottom-left -translate-y-0.5"></div>
+                                            </div>
+                                            <span className="text-[#1F2B3E] font-black text-[9px] tracking-wide leading-none">Paycorp</span>
+                                        </div>
+                                        <span className="text-[#1F2B3E] font-medium text-[4px] italic leading-none">International</span>
+                                    </div>
+                                    <div className="w-px h-5 bg-slate-300"></div>
+                                    <div className="flex items-center">
+                                        <div className="relative w-3 h-3 rounded-full border border-red-500 border-t-blue-500 border-r-blue-500 border-l-red-500 flex items-center justify-center mr-1"></div>
+                                        <span className="text-[#0055A5] font-black text-[9px] tracking-wider uppercase">Bancstac</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 w-fit">
                             {/* PayPal */}
                             <div className="bg-white rounded flex items-center justify-center w-[56px] h-[36px] shadow-sm">
                                 <span className="text-[#003087] font-bold text-[11px] italic">Pay</span><span className="text-[#009cde] font-bold text-[11px] italic">Pal</span>
@@ -164,6 +189,16 @@ const Footer = () => {
                             <div className="bg-white rounded flex flex-col items-center justify-center w-[56px] h-[36px] shadow-sm">
                                 <span className="text-orange-500 font-black text-[8px] leading-[8px]">DISCOVER</span>
                                 <span className="text-black font-medium text-[4px] leading-[4px]">NETWORK</span>
+                            </div>
+                            {/* Diners Club */}
+                            <div className="bg-white rounded flex flex-col items-center justify-center w-[56px] h-[36px] shadow-sm">
+                                <div className="w-4 h-4 rounded-full border border-[#004B87] flex items-center justify-center mt-0.5 overflow-hidden">
+                                    <div className="w-1.5 h-2.5 bg-[#004B87] flex items-center justify-center">
+                                        <div className="w-0.5 h-full bg-white"></div>
+                                    </div>
+                                </div>
+                                <span className="text-[#004B87] font-serif text-[4px] mt-0.5 leading-[4px] tracking-tight">Diners Club</span>
+                                <span className="text-[#004B87] font-serif text-[3px] leading-[3px] tracking-tighter">INTERNATIONAL</span>
                             </div>
                             {/* Klarna */}
                             <div className="bg-[#FFA8C2] rounded flex items-center justify-center w-[56px] h-[36px] shadow-sm">
