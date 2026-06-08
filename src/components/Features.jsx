@@ -44,28 +44,16 @@ const Features = () => {
                     {features.map((feature, idx) => (
                         <div
                             key={idx}
-                            className={`stat-card group animate-slide-up p-6 rounded-2xl border border-black dark:border-white/20 shadow-sm hover:shadow-md transition-shadow ${
-                                idx === 1 ? 'bg-[#FF4500]' : 'bg-white dark:bg-zinc-900'
-                            }`}
+                            className={`stat-card group animate-slide-up p-4 rounded-xl border border-black dark:border-white/20 shadow-sm hover:shadow-md transition-shadow bg-white dark:bg-zinc-900`}
                             style={{ animationDelay: `${idx * 0.1}s` }}
                         >
-                            <div className={`w-12 h-12 flex items-center justify-center mb-4 transition-all rounded-xl ${
-                                idx === 1 
-                                    ? 'bg-black text-[#FACC15]' 
-                                    : 'bg-[#FACC15] text-black group-hover:bg-black group-hover:text-[#FACC15]'
-                            }`}>
-                                {React.cloneElement(feature.icon, { className: "w-6 h-6" })}
+                            <div className={`w-10 h-10 flex items-center justify-center mb-3 transition-all rounded-lg bg-[#FACC15] text-black group-hover:bg-black group-hover:text-[#FACC15]`}>
+                                {React.cloneElement(feature.icon, { className: "w-5 h-5" })}
                             </div>
-                            <h3 className={`text-xl md:text-2xl font-black mb-3 transition-colors uppercase tracking-tight leading-none ${
-                                idx === 1 
-                                    ? 'text-black' 
-                                    : 'text-black dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400'
-                            }`}>{feature.title}</h3>
-                            <p className={`text-[10px] font-bold uppercase tracking-widest leading-relaxed transition-colors ${
-                                idx === 1 
-                                    ? 'text-black/80' 
-                                    : 'text-black/60 dark:text-white/60 group-hover:text-black/80 dark:group-hover:text-white/80'
-                            }`}>
+                            <h3 className={`text-lg md:text-xl font-black mb-2 transition-colors uppercase tracking-tight leading-none text-black dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400`}>
+                                {feature.title}
+                            </h3>
+                            <p className={`text-[9px] font-bold uppercase tracking-widest leading-relaxed transition-colors text-black/60 dark:text-white/60 group-hover:text-black/80 dark:group-hover:text-white/80`}>
                                 {feature.description}
                             </p>
                         </div>

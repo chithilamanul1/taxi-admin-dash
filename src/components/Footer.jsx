@@ -189,7 +189,7 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    <div className="text-[9px] text-white/50 font-bold uppercase tracking-widest text-center lg:text-right mt-4 lg:mt-0 w-full lg:w-auto">
+                    <div className="text-[7px] text-white/50 font-bold uppercase tracking-widest text-center lg:text-right mt-4 lg:mt-0 w-full lg:w-auto">
                         Our companies: <span className="text-white">airporttaxis.lk, airportcab.lk, srilankantaxi.lk</span>
                     </div>
                 </div>

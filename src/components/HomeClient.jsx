@@ -298,30 +298,29 @@ export default function HomeClient() {
 
             <section className="py-8 bg-white dark:bg-black border-t border-slate-100 dark:border-white/5 transition-colors">
                 <div className="max-w-7xl mx-auto px-6">
-                    <div className="bg-emerald-950 dark:bg-zinc-900 p-12 md:p-24 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-16 rounded-[4rem] shadow-[0_50px_100px_rgba(0,0,0,0.3)] group">
+                    <div className="bg-emerald-950 dark:bg-zinc-900 p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 rounded-[3rem] shadow-xl group">
                         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-emerald-600/10 rounded-full blur-[100px] group-hover:bg-emerald-600/20 transition-all duration-1000"></div>
                         
                         <div className="relative z-10 max-w-xl text-center md:text-left">
-                            <h2 className="text-6xl md:text-8xl font-black mb-10 uppercase tracking-tighter leading-none text-white">ARE YOU <br /><span className="text-[#FACC15]">A DRIVER?</span></h2>
-                            <p className="text-slate-400 text-base font-medium mb-14 leading-relaxed max-w-lg">
+                            <h2 className="text-4xl md:text-6xl font-black mb-4 uppercase tracking-tighter leading-none text-white">ARE YOU <br /><span className="text-[#FACC15]">A DRIVER?</span></h2>
+                            <p className="text-slate-400 text-sm font-medium mb-8 leading-relaxed max-w-lg mx-auto md:mx-0">
                                 Join our exclusive fleet of professional chauffeurs. Get consistent bookings, fair rates, and become part of Sri Lanka's premium network.
                             </p>
-                            <div className="flex flex-wrap gap-6 justify-center md:justify-start">
-                                <Link href="/driver/register" className="bg-emerald-600 text-white px-12 py-6 font-black uppercase tracking-widest text-xs hover:bg-white hover:text-emerald-950 transition-all rounded-2xl shadow-xl shadow-emerald-900/20 flex items-center gap-3">
-                                    JOIN OUR FLEET <ArrowRight size={20} />
+                            <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+                                <Link href="/driver/register" className="bg-emerald-600 text-white px-8 py-4 font-black uppercase tracking-widest text-[10px] hover:bg-white hover:text-emerald-950 transition-all rounded-xl shadow-xl shadow-emerald-900/20 flex items-center gap-2">
+                                    JOIN OUR FLEET <ArrowRight size={16} />
                                 </Link>
-                                <Link href="/driver/login" className="px-12 py-6 font-black uppercase tracking-widest text-xs text-white border border-white/20 hover:bg-white/10 transition-all rounded-2xl">
+                                <Link href="/driver/login" className="px-8 py-4 font-black uppercase tracking-widest text-[10px] text-white border border-white/20 hover:bg-white/10 transition-all rounded-xl">
                                     DRIVER LOGIN
                                 </Link>
                             </div>
                         </div>
 
-                        <div className="relative z-10 w-full md:w-80 aspect-square bg-[#FACC15] p-12 flex flex-col items-center justify-center text-center transform md:rotate-6 border border-slate-100 dark:border-white/10 shadow-2xl transition-transform group-hover:rotate-0 duration-700 rounded-[3rem]">
-                            <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-8 backdrop-blur-md">
-                                <Star size={40} className="text-white" fill="currentColor" />
+                        <div className="relative z-10 w-full md:w-64 aspect-square bg-[#FACC15] p-8 flex flex-col items-center justify-center text-center transform md:rotate-6 border border-slate-100 dark:border-white/10 shadow-2xl transition-transform group-hover:rotate-0 duration-700 rounded-[2rem]">
+                            <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center mb-6 backdrop-blur-md">
+                                <ShieldCheck size={32} className="text-black" />
                             </div>
-                            <h3 className="text-4xl font-black text-white tracking-tighter uppercase mb-4">EARN MORE</h3>
-                            <p className="text-[10px] font-black text-white/60 uppercase tracking-[0.3em]">Accept rides • Track earnings • Weekly payouts</p>
+                            <h3 className="text-black font-black uppercase tracking-tighter text-xl mb-2 leading-none">DRIVER<br />PORTAL</h3>
                         </div>
                     </div>
                 </div>
