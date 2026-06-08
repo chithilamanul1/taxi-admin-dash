@@ -26,16 +26,16 @@ const features = [
 
 const Features = () => {
     return (
-        <section className="py-32 bg-white dark:bg-black relative overflow-hidden transition-colors border-t border-black/5 dark:border-white/5">
+        <section className="py-12 md:py-16 bg-white dark:bg-black relative overflow-hidden transition-colors border-t border-black/5 dark:border-white/5">
             <div className="container mx-auto px-6 relative z-10">
-                <div className="text-center mb-28 animate-slide-up">
-                    <div className="yellow-badge mb-8 mx-auto">
+                <div className="text-center mb-12 animate-slide-up">
+                    <div className="yellow-badge mb-4 mx-auto text-[10px] px-4 py-1.5 rounded-lg">
                         The Standard
                     </div>
-                    <h2 className="text-5xl md:text-8xl font-black mb-6 text-black dark:text-white uppercase tracking-tighter leading-none">
+                    <h2 className="text-3xl md:text-5xl font-extrabold mb-4 text-black dark:text-white uppercase tracking-tight leading-none">
                         WHY <span className="text-[#FACC15]">CHOOSE US?</span>
                     </h2>
-                    <p className="text-black/60 dark:text-white/60 max-w-2xl mx-auto text-sm font-black uppercase tracking-[0.2em]">
+                    <p className="text-black/60 dark:text-white/60 max-w-2xl mx-auto text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">
                         Setting the standard for luxury transportation since 2012.
                     </p>
                 </div>
@@ -44,14 +44,14 @@ const Features = () => {
                     {features.map((feature, idx) => (
                         <div
                             key={idx}
-                            className="stat-card group animate-slide-up"
+                            className="stat-card group animate-slide-up p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md transition-shadow"
                             style={{ animationDelay: `${idx * 0.1}s` }}
                         >
-                            <div className="w-16 h-16 bg-[#FACC15] text-black flex items-center justify-center mb-10 group-hover:bg-black group-hover:text-[#FACC15] transition-all rounded-2xl">
-                                {feature.icon}
+                            <div className="w-12 h-12 bg-[#FACC15] text-black flex items-center justify-center mb-4 group-hover:bg-black group-hover:text-[#FACC15] transition-all rounded-xl">
+                                {React.cloneElement(feature.icon, { className: "w-6 h-6" })}
                             </div>
-                            <h3 className="text-3xl font-black mb-6 text-black dark:text-white group-hover:text-black transition-colors uppercase tracking-tighter leading-none">{feature.title}</h3>
-                            <p className="text-black/60 dark:text-white/60 group-hover:text-black/80 text-xs font-black uppercase tracking-widest leading-relaxed transition-colors">
+                            <h3 className="text-xl md:text-2xl font-black mb-3 text-black dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors uppercase tracking-tight leading-none">{feature.title}</h3>
+                            <p className="text-black/60 dark:text-white/60 group-hover:text-black/80 dark:group-hover:text-white/80 text-[10px] font-bold uppercase tracking-widest leading-relaxed transition-colors">
                                 {feature.description}
                             </p>
                         </div>
