@@ -56,18 +56,27 @@ export default function HomeGallery() {
     const displayImages = images.length > 0 ? images : fallbackImages;
 
     return (
-        <section className="py-8 bg-[#0a0a0a] dark:bg-black border-t border-white/5">
-            <div className="container mx-auto px-6">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+        <section className="py-12 relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-[#050505] border-t border-white/5">
+            <style dangerouslySetInnerHTML={{__html: `
+                @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+            `}} />
+            
+            {/* Ambient Background Glows */}
+            <div className="absolute top-0 right-0 -mr-32 -mt-32 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 -ml-32 -mb-32 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div className="container mx-auto px-6 relative z-10">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
                     <div>
-                        <div className="flex items-center gap-2 mb-3">
-                            <div className="w-10 h-10 bg-[#FACC15] flex items-center justify-center rounded-xl shadow-sm rotate-3">
-                                <Camera size={20} className="text-black" strokeWidth={2.5} />
+                        <div className="flex items-center gap-2 mb-4">
+                            <div className="w-10 h-10 bg-white/5 backdrop-blur-sm border border-white/10 flex items-center justify-center rounded-xl shadow-sm rotate-3">
+                                <Camera size={20} className="text-[#FACC15]" strokeWidth={2.5} />
                             </div>
-                            <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/60">Travel Memories</span>
+                            <span className="text-[9px] font-bold uppercase tracking-[0.4em] text-white/50">Travel Memories</span>
                         </div>
-                        <h2 className="text-4xl md:text-6xl text-white leading-[1.1] font-black uppercase tracking-tighter">
-                            Experience <br /><span className="text-[#FACC15]">Sri Lanka</span>
+                        <h2 className="text-white leading-[1.1]">
+                            <span className="text-5xl md:text-7xl mb-2 block" style={{ fontFamily: "'Dancing Script', cursive" }}>Experience</span>
+                            <span className="text-4xl md:text-6xl text-[#FACC15] font-black uppercase tracking-tighter block mt-1">Sri Lanka</span>
                         </h2>
                     </div>
                     
