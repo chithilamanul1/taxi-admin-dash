@@ -56,17 +56,17 @@ export default function HomeGallery() {
     const displayImages = images.length > 0 ? images : fallbackImages;
 
     return (
-        <section className="py-4 bg-white dark:bg-black">
+        <section className="py-8 bg-[#0a0a0a] dark:bg-black border-t border-white/5">
             <div className="container mx-auto px-6">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
                     <div>
-                        <div className="flex items-center gap-2 mb-2">
-                            <div className="w-10 h-10 bg-[#FACC15] flex items-center justify-center border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rotate-3">
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="w-10 h-10 bg-[#FACC15] flex items-center justify-center rounded-xl shadow-sm rotate-3">
                                 <Camera size={20} className="text-black" strokeWidth={2.5} />
                             </div>
-                            <span className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-800 dark:text-slate-200">Travel Memories</span>
+                            <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/60">Travel Memories</span>
                         </div>
-                        <h2 className="text-3xl md:text-4xl text-black dark:text-white leading-[1.1] font-serif italic tracking-wide">
+                        <h2 className="text-4xl md:text-6xl text-white leading-[1.1] font-black uppercase tracking-tighter">
                             Experience <br /><span className="text-[#FACC15]">Sri Lanka</span>
                         </h2>
                     </div>
