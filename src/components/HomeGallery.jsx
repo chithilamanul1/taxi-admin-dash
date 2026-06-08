@@ -72,14 +72,14 @@ export default function HomeGallery() {
                         </div>
                         <h2 className="text-white leading-[1.1]">
                             <span className="text-5xl md:text-7xl mb-2 block" style={{ fontFamily: "'Dancing Script', cursive" }}>Experience</span>
-                            <span className="text-4xl md:text-6xl text-[#FACC15] font-black uppercase tracking-tighter block mt-1">Sri Lanka</span>
+                            <span className="text-3xl md:text-5xl text-[#FACC15] font-serif uppercase tracking-[0.2em] font-medium block mt-1">Sri Lanka</span>
                         </h2>
                     </div>
                     
                     <Link 
                         href="/gallery"
                         aria-label="View our photo gallery of Sri Lanka"
-                        className="group flex items-center justify-center gap-2 bg-[#FACC15] text-black px-6 py-2.5 rounded-full font-black uppercase tracking-widest text-[10px] border border-[#FACC15] shadow-sm hover:shadow-md hover:-translate-y-1 hover:bg-black hover:text-[#FACC15] hover:border-black transition-all duration-300 self-start md:self-end w-fit"
+                        className="group flex items-center justify-center gap-2 bg-white text-black px-6 py-2.5 rounded-full font-black uppercase tracking-widest text-[10px] shadow-sm hover:shadow-md hover:-translate-y-1 hover:bg-[#FACC15] transition-all duration-300 self-start md:self-end w-fit"
                     >
                         VIEW FULL GALLERY <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                     </Link>
