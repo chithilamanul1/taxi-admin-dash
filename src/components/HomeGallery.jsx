@@ -74,7 +74,7 @@ export default function HomeGallery() {
                     <Link 
                         href="/gallery"
                         aria-label="View our photo gallery of Sri Lanka"
-                        className="group flex items-center justify-center gap-2 bg-[#FACC15] text-black px-6 py-2.5 rounded-full font-black uppercase tracking-widest text-[10px] border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-[#FACC15] transition-all duration-300 self-start md:self-end w-fit"
+                        className="group flex items-center justify-center gap-2 bg-[#FACC15] text-black px-6 py-2.5 rounded-full font-black uppercase tracking-widest text-[10px] border border-[#FACC15] shadow-sm hover:shadow-md hover:-translate-y-1 hover:bg-black hover:text-[#FACC15] hover:border-black transition-all duration-300 self-start md:self-end w-fit"
                     >
                         VIEW FULL GALLERY <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                     </Link>
@@ -92,7 +92,7 @@ export default function HomeGallery() {
                             viewport={{ once: true }}
                             className="group relative min-w-[65vw] sm:min-w-[40vw] md:min-w-[calc(33.333%-16px)] snap-start shrink-0"
                         >
-                            <div className="bg-black border-[3px] border-black rounded-[1.5rem] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+                            <div className="bg-black border border-slate-200 dark:border-slate-800 rounded-[1.5rem] shadow-lg overflow-hidden">
                                 <div className="aspect-[4/5] relative">
                                     <Image 
                                         src={img.url} 
