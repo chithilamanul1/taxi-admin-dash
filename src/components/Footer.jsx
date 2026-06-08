@@ -117,11 +117,79 @@ const Footer = () => {
                 </div>
 
                 {/* Additional Info */}
-                <div className="pt-6 mt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left border-t border-white/5">
-                    <div className="text-[9px] text-white/50 font-bold uppercase tracking-widest">
-                        We accept <span className="text-[#FACC15]">Mastercard, Visa, American Express</span>, and more.
+                <div className="pt-6 mt-8 flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 border-t border-white/5">
+                    
+                    {/* Payment section */}
+                    <div className="flex flex-col gap-3">
+                        <h4 className="text-white text-base md:text-lg font-bold tracking-wide">Ways You Can Pay</h4>
+                        <div className="grid grid-cols-4 sm:grid-cols-4 gap-2 w-fit">
+                            {/* PayPal */}
+                            <div className="bg-white rounded flex items-center justify-center w-[56px] h-[36px] shadow-sm">
+                                <span className="text-[#003087] font-bold text-[11px] italic">Pay</span><span className="text-[#009cde] font-bold text-[11px] italic">Pal</span>
+                            </div>
+                            {/* Mastercard */}
+                            <div className="bg-white rounded flex flex-col items-center justify-center w-[56px] h-[36px] shadow-sm">
+                                <div className="flex items-center justify-center mt-0.5">
+                                    <div className="w-4 h-4 rounded-full bg-[#eb001b] opacity-90"></div>
+                                    <div className="w-4 h-4 rounded-full bg-[#f79e1b] opacity-90 -ml-2"></div>
+                                </div>
+                                <span className="text-[5px] text-black font-medium mt-0.5">mastercard</span>
+                            </div>
+                            {/* Visa */}
+                            <div className="bg-white rounded flex items-center justify-center w-[56px] h-[36px] shadow-sm">
+                                <span className="text-[#1434CB] font-black italic text-[16px] tracking-tighter">VISA</span>
+                            </div>
+                            {/* Maestro */}
+                            <div className="bg-white rounded flex flex-col items-center justify-center w-[56px] h-[36px] shadow-sm">
+                                <div className="flex items-center justify-center mt-0.5">
+                                    <div className="w-4 h-4 rounded-full bg-[#eb001b] opacity-90"></div>
+                                    <div className="w-4 h-4 rounded-full bg-[#00aadd] opacity-90 -ml-2"></div>
+                                </div>
+                                <span className="text-[5px] text-black font-medium mt-0.5">maestro</span>
+                            </div>
+                            {/* Amex */}
+                            <div className="bg-[#2671B9] rounded flex items-center justify-center w-[56px] h-[36px] shadow-sm">
+                                <span className="text-white font-black text-[10px] leading-[10px] text-center">AM<br/>EX</span>
+                            </div>
+                            {/* JCB */}
+                            <div className="bg-white rounded flex items-center justify-center w-[56px] h-[36px] gap-[1px] shadow-sm">
+                                <span className="text-blue-700 font-black text-[13px]">J</span>
+                                <span className="text-red-600 font-black text-[13px]">C</span>
+                                <span className="text-green-600 font-black text-[13px]">B</span>
+                            </div>
+                            {/* Discover */}
+                            <div className="bg-white rounded flex flex-col items-center justify-center w-[56px] h-[36px] shadow-sm">
+                                <span className="text-orange-500 font-black text-[8px] leading-[8px]">DISCOVER</span>
+                                <span className="text-black font-medium text-[4px] leading-[4px]">NETWORK</span>
+                            </div>
+                            {/* Klarna */}
+                            <div className="bg-[#FFA8C2] rounded flex items-center justify-center w-[56px] h-[36px] shadow-sm">
+                                <span className="text-black font-black text-[12px]">Klarna.</span>
+                            </div>
+                            {/* G Pay */}
+                            <div className="bg-white rounded flex items-center justify-center w-[56px] h-[36px] gap-1 shadow-sm">
+                                <span className="text-red-500 font-bold text-[12px]">G</span> <span className="text-slate-600 font-bold text-[11px]">Pay</span>
+                            </div>
+                            {/* Apple Pay */}
+                            <div className="bg-white rounded flex items-center justify-center w-[56px] h-[36px] gap-0.5 text-black shadow-sm">
+                                <span className="font-bold text-[13px]"></span> <span className="font-bold text-[11px]">Pay</span>
+                            </div>
+                            {/* iDeal */}
+                            <div className="bg-[#FFF0B3] rounded flex flex-col items-center justify-center w-[56px] h-[36px] shadow-sm relative">
+                                <div className="bg-[#cc0066] text-white text-[6px] font-black italic px-1.5 py-0.5 rounded-sm absolute top-1.5 left-1/2 -translate-x-1/2">iDEAL</div>
+                                <span className="text-black font-black text-[7px] mt-4 uppercase">wero</span>
+                            </div>
+                            {/* Bancontact */}
+                            <div className="bg-white rounded flex flex-col items-center justify-between w-[56px] h-[36px] overflow-hidden shadow-sm">
+                                <div className="bg-[#FF2C70] w-full text-center text-white text-[6px] font-bold py-[2px]">payconiq</div>
+                                <div className="w-full flex items-center justify-center flex-1">
+                                    <div className="text-[#004A99] font-bold text-[6px]">Bancontact</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="text-[9px] text-white/50 font-bold uppercase tracking-widest">
+
+                    <div className="text-[9px] text-white/50 font-bold uppercase tracking-widest text-center lg:text-right mt-4 lg:mt-0 w-full lg:w-auto">
                         Our companies: <span className="text-white">airporttaxis.lk, airportcab.lk, srilankantaxi.lk</span>
                     </div>
                 </div>
