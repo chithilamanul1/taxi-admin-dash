@@ -116,6 +116,16 @@ const Footer = () => {
                     </div>
                 </div>
 
+                {/* Additional Info */}
+                <div className="pt-6 mt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left border-t border-white/5">
+                    <div className="text-[9px] text-white/50 font-bold uppercase tracking-widest">
+                        We accept <span className="text-[#FACC15]">Mastercard, Visa, American Express</span>, and more.
+                    </div>
+                    <div className="text-[9px] text-white/50 font-bold uppercase tracking-widest">
+                        Our companies: <span className="text-white">airporttaxis.lk, airportcab.lk, srilankantaxi.lk</span>
+                    </div>
+                </div>
+
                 {/* Bottom Bar */}
                 <div className="pt-8 mt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-[9px] text-white/40 font-black uppercase tracking-[0.2em]">

@@ -1,10 +1,54 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, MapPin, Star, Compass, Clock, Users, ShieldCheck, Sparkles } from 'lucide-react'
+
+const StatNumber = ({ value }) => {
+    const [count, setCount] = useState(0);
+    const [hasAnimated, setHasAnimated] = useState(false);
+    const nodeRef = useRef(null);
+
+    const numericMatch = value.match(/[\d.]+/);
+    const numericStr = numericMatch ? numericMatch[0] : "0";
+    const numeric = parseFloat(numericStr);
+    const suffix = value.replace(numericStr, '');
+    const isFloat = numericStr.includes('.');
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && !hasAnimated) {
+                    setHasAnimated(true);
+                }
+            },
+            { threshold: 0.1 }
+        );
+        if (nodeRef.current) observer.observe(nodeRef.current);
+        return () => observer.disconnect();
+    }, [hasAnimated]);
+
+    useEffect(() => {
+        if (!hasAnimated) return;
+        let startTimestamp = null;
+        const duration = 2000;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            setCount(progress * numeric);
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+        window.requestAnimationFrame(step);
+    }, [hasAnimated, numeric]);
+
+    const displayValue = isFloat ? count.toFixed(1) : Math.floor(count);
+    return <span ref={nodeRef}>{displayValue}{suffix}</span>;
+}
+
 import BookingWidget from './BookingWidget'
 const BookingModal = dynamic(() => import('./BookingModal'), { ssr: false })
 const CustomTourBooking = dynamic(() => import('./CustomTourBooking'), {
@@ -155,8 +199,8 @@ export default function HomeClient() {
 
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                         {[
-                            { label: 'Happy Clients', value: '10k+', icon: Users },
-                            { label: 'Tours Completed', value: '1.2k+', icon: MapPin },
+                            { label: 'Happy Clients', value: '10K+', icon: Users },
+                            { label: 'Tours Completed', value: '1.2K+', icon: MapPin },
                             { label: 'Experience Years', value: '14+', icon: Star },
                             { label: 'Expert Drivers', value: '80+', icon: ShieldCheck }
                         ].map((stat, idx) => (
@@ -164,7 +208,9 @@ export default function HomeClient() {
                                 <div className="w-10 h-10 md:w-12 md:h-12 bg-emerald-950 dark:bg-white/5 rounded-xl flex items-center justify-center mb-3 md:mb-4 shadow-sm group-hover:bg-[#FACC15] group-hover:text-black transition-colors duration-300">
                                     <stat.icon size={20} className="text-[#FACC15] group-hover:text-black md:w-6 md:h-6" strokeWidth={2.5} />
                                 </div>
-                                <span className="text-2xl md:text-4xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter mb-1">{stat.value}</span>
+                                <span className="text-2xl md:text-4xl font-black text-emerald-950 dark:text-white uppercase tracking-tighter mb-1">
+                                    <StatNumber value={stat.value} />
+                                </span>
                                 <span className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] text-center">{stat.label}</span>
                             </div>
                         ))}

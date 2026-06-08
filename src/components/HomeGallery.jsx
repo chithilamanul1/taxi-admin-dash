@@ -61,20 +61,20 @@ export default function HomeGallery() {
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
                     <div>
                         <div className="flex items-center gap-2 mb-2">
-                            <div className="w-10 h-10 bg-[#FACC15] flex items-center justify-center border-4 border-[#FACC15] rotate-3 shadow-sm">
+                            <div className="w-10 h-10 bg-[#FACC15] flex items-center justify-center border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rotate-3">
                                 <Camera size={20} className="text-black" strokeWidth={2.5} />
                             </div>
                             <span className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-800 dark:text-slate-200">Travel Memories</span>
                         </div>
-                        <h2 className="text-3xl md:text-5xl font-extrabold text-black dark:text-white uppercase tracking-tight leading-[0.9]">
-                            EXPERIENCE <br /><span className="text-[#FACC15]">SRI LANKA</span>
+                        <h2 className="text-3xl md:text-4xl text-black dark:text-white leading-[1.1] font-serif italic tracking-wide">
+                            Experience <br /><span className="text-[#FACC15]">Sri Lanka</span>
                         </h2>
                     </div>
                     
                     <Link 
                         href="/gallery"
-                        aria-label="View our photo gallery of Sri Lankan travel memories"
-                        className="group flex items-center justify-center gap-2 bg-[#FACC15] text-black px-6 py-2.5 rounded-full font-black uppercase tracking-widest text-[10px] border border-[#FACC15] shadow-sm hover:shadow-md hover:-translate-y-1 hover:bg-black hover:text-[#FACC15] hover:border-black transition-all duration-300 self-start md:self-end w-fit"
+                        aria-label="View our photo gallery of Sri Lanka"
+                        className="group flex items-center justify-center gap-2 bg-[#FACC15] text-black px-6 py-2.5 rounded-full font-black uppercase tracking-widest text-[10px] border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-[#FACC15] transition-all duration-300 self-start md:self-end w-fit"
                     >
                         VIEW FULL GALLERY <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                     </Link>
@@ -92,7 +92,7 @@ export default function HomeGallery() {
                             viewport={{ once: true }}
                             className="group relative min-w-[65vw] sm:min-w-[40vw] md:min-w-[calc(33.333%-16px)] snap-start shrink-0"
                         >
-                            <div className="bg-black border border-slate-200 dark:border-slate-800 rounded-[1.5rem] shadow-lg overflow-hidden transition-all group-hover:shadow-xl group-hover:-translate-y-1">
+                            <div className="bg-black border-[3px] border-black rounded-[1.5rem] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
                                 <div className="aspect-[4/5] relative">
                                     <Image 
                                         src={img.url} 
