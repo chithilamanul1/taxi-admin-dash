@@ -90,7 +90,7 @@ export default function HomeGallery() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className={`group relative min-w-[65vw] sm:min-w-[40vw] md:min-w-[calc(33.333%-16px)] snap-start shrink-0 ${idx > 2 ? 'opacity-60 hover:opacity-100 transition-opacity' : ''}`}
+                            className="group relative min-w-[65vw] sm:min-w-[40vw] md:min-w-[calc(33.333%-16px)] snap-start shrink-0"
                         >
                             <div className="bg-black border border-slate-200 dark:border-slate-800 rounded-[1.5rem] shadow-lg overflow-hidden transition-all group-hover:shadow-xl group-hover:-translate-y-1">
                                 <div className="aspect-[4/5] relative">
@@ -98,7 +98,7 @@ export default function HomeGallery() {
                                         src={img.url} 
                                         alt={img.caption || 'Sri Lanka Travel Memory'}
                                         fill
-                                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                                        className="w-full h-full object-cover transition-all duration-700"
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 384px"
                                     />
                                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />

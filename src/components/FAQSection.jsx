@@ -92,7 +92,7 @@ const FAQSection = () => {
                                     onClick={() => setOpenIndex(isOpen ? -1 : index)}
                                     className="w-full flex items-center justify-between p-4 md:p-6 text-left focus:outline-none rounded-2xl"
                                 >
-                                    <h3 className={`text-sm md:text-base font-semibold pr-8 transition-colors ${
+                                    <h3 className={`text-[11px] md:text-xs font-medium tracking-wide pr-8 transition-colors ${
                                         isOpen 
                                             ? 'text-emerald-700 dark:text-emerald-400' 
                                             : 'text-slate-800 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
