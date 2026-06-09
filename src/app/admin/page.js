@@ -15,6 +15,7 @@ import RevenueStats from '@/components/RevenueStats'
 import InvoiceManager from '@/components/admin/InvoiceManager'
 import DestinationManager from '@/components/admin/DestinationManager'
 import GalleryManager from '@/components/admin/GalleryManager'
+import VideoManager from '@/components/admin/VideoManager'
 import DriverManager from '@/components/admin/DriverManager'
 import TrafficSurgeManager from '@/components/admin/TrafficSurgeManager'
 import CouponManager from '@/components/admin/CouponManager'
@@ -837,7 +838,11 @@ export default function AdminDashboard() {
                     </button>
                     <button onClick={() => { setCurrentView('gallery'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'gallery' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <ImageIcon size={20} />
-                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Gallery</span>
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Gallery Images</span>
+                    </button>
+                    <button onClick={() => { setCurrentView('videos'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'videos' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-video"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>
+                        <span className={`${!sidebarOpen && 'md:hidden'}`}>Gallery Videos</span>
                     </button>
                     <button onClick={() => { setCurrentView('round-trips'); setSidebarOpen(false); }} className={`flex items-center gap-3 p-3 w-full rounded-xl transition-all duration-200 ${currentView === 'round-trips' ? 'bg-white text-emerald-900 shadow-lg shadow-white/20 font-bold' : 'hover:bg-white/10 text-white/80 hover:text-white'}`}>
                         <Route size={20} />
@@ -3309,6 +3314,18 @@ export default function AdminDashboard() {
                                     </div>
                                 </div>
                             )}
+                        </div>
+                    )}
+
+                    {currentView === 'gallery' && (
+                        <div className="bg-white rounded-[2rem] shadow-sm border border-slate-100 p-6 lg:p-8">
+                            <GalleryManager />
+                        </div>
+                    )}
+
+                    {currentView === 'videos' && (
+                        <div className="bg-white rounded-[2rem] shadow-sm border border-slate-100 p-6 lg:p-8">
+                            <VideoManager />
                         </div>
                     )}
 

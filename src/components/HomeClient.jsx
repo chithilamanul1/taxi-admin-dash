@@ -62,11 +62,8 @@ const LoadingBox = () => <div className="w-full h-40 bg-slate-100 dark:bg-white/
 const FleetSection = dynamic(() => import('./FleetSection'), { 
     loading: () => <div className="min-h-[800px] bg-white dark:bg-zinc-900 border-t border-slate-200 dark:border-white/10 animate-pulse" />
 })
-const DestinationsSection = dynamic(() => import('./DestinationsSection'), { 
+const UnifiedMediaSection = dynamic(() => import('./UnifiedMediaSection'), { 
     loading: () => <div className="min-h-[1200px] bg-white dark:bg-zinc-900 animate-pulse" />
-})
-const HomeGallery = dynamic(() => import('./HomeGallery'), { 
-    loading: () => <div className="min-h-[600px] bg-white dark:bg-zinc-900 animate-pulse" />
 })
 const Features = dynamic(() => import('./Features'), { 
     loading: () => <div className="min-h-[400px] bg-white dark:bg-zinc-900 animate-pulse" />
@@ -162,7 +159,7 @@ export default function HomeClient() {
             <ReviewStatsBar />
             <GoogleReviews />
 
-            <DestinationsSection />
+            <UnifiedMediaSection />
 
             {/* Floating Check Availability Sidebar - Luxury Style */}
             <button
@@ -291,7 +288,7 @@ export default function HomeClient() {
                 </div>
             </section>
 
-            <HomeGallery />
+
 
             <MobileAppSection />
             {/* RecentPosts removed */}
