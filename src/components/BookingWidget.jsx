@@ -47,20 +47,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
     const [appliedOffers, setAppliedOffers] = useState([]); // Support multiple coupons
     const [vehiclePricing, setVehiclePricing] = useState({});
     const [isLoadingPricing, setIsLoadingPricing] = useState(true);
-    const searchParams = useSearchParams();
-    const tabParam = searchParams.get('tab');
-    
     const [activeTab, setActiveTab] = useState(defaultTab);
-    
-    useEffect(() => {
-        if (tabParam && ['pickup', 'drop', 'ride', 'tours'].includes(tabParam)) {
-            setActiveTab(tabParam);
-            const element = document.getElementById('booking');
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-    }, [tabParam]);
     const [tripType, setTripType] = useState('one-way');
     const [pickup, setPickup] = useState({ name: 'Bandaranaike International Airport (CMB)', lat: 7.1804, lng: 79.8837 })
     const [dropoff, setDropoff] = useState({ name: '', lat: null, lng: null })
@@ -213,19 +200,28 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
         if (activeTab !== 'tours') fetchPricing();
     }, [activeTab]);
 
-    // URL Params Effect for Offers
+    // URL Params Effect for Offers, Destination, and Tab
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const couponParam = params.get('coupon');
         const destParam = params.get('destination');
+        const tabParam = params.get('tab');
+        let needsUrlCleanup = false;
+
+        if (tabParam && ['pickup', 'drop', 'ride', 'tours'].includes(tabParam)) {
+            setActiveTab(tabParam);
+            needsUrlCleanup = true;
+            setTimeout(() => {
+                const element = document.getElementById('booking');
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+        }
 
         if (couponParam) {
             setCouponCode(couponParam);
-            // Coupon verification will happen in the modal
-
-            // Clean up URL
-            const newUrl = window.location.pathname;
-            window.history.replaceState({}, '', newUrl);
+            needsUrlCleanup = true;
         }
 
         if (destParam) {
@@ -237,13 +233,19 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
             });
             setDropoffSearch(destParam);
             
-            const tab = params.get('tab');
-            if (tab === 'ride') {
+            if (tabParam === 'ride') {
                 setPickup({ name: '', lat: null, lng: null });
                 setPickupSearch('');
-            } else if (!tab) {
+            } else if (!tabParam) {
                 setActiveTab('pickup');
             }
+            needsUrlCleanup = true;
+        }
+
+        if (needsUrlCleanup) {
+            // Clean up the URL search params so they do not cause unwanted reactive resets later
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, '', newUrl);
         }
 
     }, []);

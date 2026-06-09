@@ -75,8 +75,8 @@ const UnifiedMediaSection = () => {
                 {/* 1. Destinations Sub-Section */}
                 <div className="mb-12">
                     <div className="mb-6 text-left md:text-center">
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-2 leading-none tracking-tighter font-montserrat uppercase">
-                            Top <span className="text-emerald-600 dark:text-emerald-400">Destinations</span>
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-2 leading-none tracking-tighter font-montserrat">
+                            Top Destinations
                         </h2>
                         <p className="text-slate-500 dark:text-slate-400 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] md:mx-auto opacity-80">
                             Discover amazing deals and seamless transfers
@@ -135,7 +135,7 @@ const UnifiedMediaSection = () => {
                         {videosToDisplay.map((vid, idx) => (
                             <div 
                                 key={vid._id || idx} 
-                                className={`shrink-0 snap-center rounded-2xl md:rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white dark:border-white/10 ${videosToDisplay.length === 1 ? 'w-full max-w-4xl mx-auto' : 'w-[85vw] md:w-[60vw] lg:w-[50vw]'}`}
+                                className={`shrink-0 snap-center rounded-2xl md:rounded-[2.5rem] overflow-hidden ${videosToDisplay.length === 1 ? 'w-full max-w-4xl mx-auto' : 'w-[85vw] md:w-[60vw] lg:w-[50vw]'}`}
                             >
                                 <div className="relative w-full aspect-video bg-black flex items-center justify-center group">
                                     {getEmbedUrl(vid.url, vid.platform) ? (
@@ -165,8 +165,8 @@ const UnifiedMediaSection = () => {
                 {galleryImages.length > 0 && (
                     <div className="mb-8">
                         <div className="mb-6 text-left md:text-center">
-                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-2 leading-none tracking-tighter font-montserrat uppercase">
-                                Traveler <span className="text-emerald-600 dark:text-emerald-400">Moments</span>
+                            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-2 leading-none tracking-tighter font-montserrat">
+                                Traveler Moments
                             </h2>
                             <p className="text-slate-500 dark:text-slate-400 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] md:mx-auto opacity-80">
                                 Swipe through our latest journeys
