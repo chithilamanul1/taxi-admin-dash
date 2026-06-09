@@ -758,7 +758,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
     const pricingCategory = isAirportService ? 'airport-transfer' : 'ride-now';
 
     return (
-        <div id="booking" className="w-full max-w-6xl mx-auto pt-28 md:pt-36 pb-8 md:pb-0 relative z-40 px-3 sm:px-4">
+        <div id="booking" className="w-full max-w-6xl mx-auto pt-6 md:pt-8 pb-8 md:pb-0 relative z-40 px-3 sm:px-4">
             <h1 className="sr-only">Book Airport Taxis & Transfers in Sri Lanka - Fixed Rates</h1>
             {/* Tab Navigation - Luxury Pill Style */}
             <div className="flex bg-slate-100 dark:bg-zinc-900 rounded-2xl w-full sm:w-fit mx-auto lg:mx-0 mb-6 p-1.5 shadow-inner" role="tablist">
