@@ -68,7 +68,7 @@ export default function HomeGallery() {
                             <div className="w-10 h-10 bg-white/5 backdrop-blur-sm border border-white/10 flex items-center justify-center rounded-xl shadow-sm rotate-3">
                                 <Camera size={20} className="text-[#FACC15]" strokeWidth={2.5} />
                             </div>
-                            <span className="text-[9px] font-bold uppercase tracking-[0.4em] text-white/50">Travel Memories</span>
+                            <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-white">Travel Memories</span>
                         </div>
                         <h2 className="text-white leading-[1.1]">
                             <span className="text-5xl md:text-7xl mb-2 block" style={{ fontFamily: "'Dancing Script', cursive" }}>Experience</span>
@@ -132,7 +132,7 @@ export default function HomeGallery() {
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
-                    <p className="text-white/40 font-black uppercase tracking-[0.2em] text-[10px] max-w-sm text-center md:text-left">
+                    <p className="text-white font-medium uppercase tracking-widest text-[10px] max-w-sm text-center md:text-left">
                         Our gallery is updated daily with authentic moments from our travelers. Join the journey and share your moments with #AirportTaxisSL
                     </p>
                     <div className="flex gap-4">

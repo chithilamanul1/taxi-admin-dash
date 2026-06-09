@@ -92,6 +92,17 @@ const DestinationsSection = () => {
                         </motion.div>
                     ))}
                 </div>
+
+                {/* Featured Video */}
+                <div className="mt-10 md:mt-16 relative aspect-video w-full max-w-5xl mx-auto rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-zinc-900">
+                    <iframe 
+                        className="absolute inset-0 w-full h-full" 
+                        src="https://www.youtube.com/embed/cDo130uXlEQ?autoplay=0&rel=0" 
+                        title="Experience Sri Lanka Video" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowFullScreen>
+                    </iframe>
+                </div>
             </div>
         </section>
     );

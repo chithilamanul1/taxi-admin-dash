@@ -247,37 +247,37 @@ export default function HomeClient() {
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                         <div className="order-2 lg:order-1">
-                            <div className="inline-flex items-center gap-2 bg-[#FACC15] text-black px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] mb-4 shadow-xl shadow-yellow-500/20">
-                                <Sparkles size={14} strokeWidth={4} /> NEW: SMART TRAVEL
+                            <div className="inline-flex items-center gap-2 bg-[#FACC15] text-black px-4 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest mb-4 shadow-xl shadow-yellow-500/20">
+                                <Sparkles size={14} strokeWidth={3} /> NEW: SMART TRAVEL
                             </div>
-                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tighter leading-[0.85] mb-4">
+                            <h2 className="text-3xl md:text-4xl font-bold text-white uppercase tracking-wider leading-tight mb-4">
                                 PLAN YOUR <span className="text-[#FACC15]">TRIP WITH AI</span>
                             </h2>
-                            <p className="text-slate-400 text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] leading-relaxed opacity-90 mb-6">
+                            <p className="text-slate-400 text-sm md:text-base leading-relaxed mb-6">
                                 Describe your dream vacation, and our AI will craft a personalized itinerary instantly. 
                                 From hidden gems to popular landmarks, let technology guide your next adventure.
                             </p>
                             <Link 
                                 href="#calculator"
-                                className="inline-flex items-center gap-2 bg-white text-emerald-950 px-6 py-3 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-[#FACC15] hover:text-black transition-all shadow-xl group"
+                                className="inline-flex items-center gap-2 bg-white text-emerald-950 px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest hover:bg-[#FACC15] hover:text-black transition-all shadow-xl group"
                             >
                                 START PLANNING NOW
                                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                             </Link>
                         </div>
-                        <div className="order-1 lg:order-2 relative group">
-                            <div className="absolute inset-0 bg-gradient-to-tr from-[#FACC15]/20 to-transparent rounded-[3rem] blur-3xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
-                            <div className="relative bg-zinc-900 border border-white/10 rounded-[4rem] p-4 shadow-2xl overflow-hidden aspect-[4/3] flex items-center justify-center">
+                        <div className="order-1 lg:order-2 relative group max-w-sm mx-auto w-full">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-[#FACC15]/20 to-transparent rounded-3xl blur-2xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                            <div className="relative bg-zinc-900 border border-white/10 rounded-3xl p-4 shadow-2xl overflow-hidden aspect-video flex items-center justify-center">
                                 <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center opacity-40"></div>
                                 <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/40 to-transparent"></div>
-                                <div className="relative z-10 text-center p-10">
-                                    <div className="w-24 h-24 bg-[#FACC15] rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-yellow-500/40 -rotate-12 group-hover:rotate-0 transition-transform duration-700">
-                                        <Sparkles size={48} className="text-black" />
+                                <div className="relative z-10 text-center p-6">
+                                    <div className="w-16 h-16 bg-[#FACC15] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-yellow-500/40 -rotate-12 group-hover:rotate-0 transition-transform duration-700">
+                                        <Sparkles size={32} className="text-black" />
                                     </div>
-                                    <div className="space-y-3">
-                                        <div className="h-2 w-48 bg-white/20 rounded-full mx-auto"></div>
-                                        <div className="h-2 w-32 bg-white/10 rounded-full mx-auto"></div>
-                                        <div className="h-2 w-40 bg-white/20 rounded-full mx-auto"></div>
+                                    <div className="space-y-2">
+                                        <div className="h-1.5 w-32 bg-white/20 rounded-full mx-auto"></div>
+                                        <div className="h-1.5 w-24 bg-white/10 rounded-full mx-auto"></div>
+                                        <div className="h-1.5 w-28 bg-white/20 rounded-full mx-auto"></div>
                                     </div>
                                 </div>
                             </div>
