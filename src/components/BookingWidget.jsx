@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { MapPin, Navigation, ArrowRightLeft, Loader2, Info, Users, Briefcase, ShoppingBag, Wind, Calendar, Clock, ChevronRight, Plus, Minus, Tag, Zap, Check, Car, ChevronDown, ShieldCheck, Lock, Signpost, X, ArrowRight, PlaneTakeoff, PlaneLanding, CircleDot, Route } from 'lucide-react'
 
 import Image from 'next/image'
@@ -43,6 +43,7 @@ const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours,
 // Internal Loader Component to avoid hook conflicts
 
 const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
+    const router = useRouter();
     const [activeOffers, setActiveOffers] = useState([]);
     const [appliedOffers, setAppliedOffers] = useState([]); // Support multiple coupons
     const [vehiclePricing, setVehiclePricing] = useState({});
@@ -80,6 +81,11 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
     const [isVehicleDrawerOpen, setIsVehicleDrawerOpen] = useState(false)
     const [bookingInitialData, setBookingInitialData] = useState({})
     const [step, setStep] = useState(1); // 1=Route, 2=Passengers+Vehicle, 3=Summary(mobile)
+
+    useEffect(() => {
+        const event = new CustomEvent('bookingStepChange', { detail: { step } });
+        window.dispatchEvent(event);
+    }, [step]);
 
     const handleTabChange = (tabId) => {
         setActiveTab(tabId);
@@ -202,6 +208,11 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
 
     // URL Params Effect for Offers, Destination, and Tab
     useEffect(() => {
+        if (typeof window !== 'undefined') {
+            if (window.__urlParamsProcessed) return;
+            window.__urlParamsProcessed = true;
+        }
+
         const params = new URLSearchParams(window.location.search);
         const couponParam = params.get('coupon');
         const destParam = params.get('destination');
@@ -245,10 +256,10 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
         if (needsUrlCleanup) {
             // Clean up the URL search params so they do not cause unwanted reactive resets later
             const newUrl = window.location.pathname;
-            window.history.replaceState({}, '', newUrl);
+            router.replace(newUrl, { scroll: false });
         }
 
-    }, []);
+    }, [router]);
 
     // Auto-swap vehicle if capacity exceeded
     useEffect(() => {
