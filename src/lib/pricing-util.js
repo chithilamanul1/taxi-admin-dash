@@ -402,7 +402,8 @@ export const calculateTrafficSurge = (scheduledTime, scheduledDate, surgeRules =
     if (dist < 1 || dist > 50) return 0;
 
     try {
-        const [hours, minutes] = scheduledTime.split(':').map(Number);
+        const timePart = scheduledTime.split(' ')[0];
+        const [hours, minutes] = timePart.split(':').map(Number);
         const tripMinutes = hours * 60 + minutes;
         
         // Get day of week (0-6)

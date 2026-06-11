@@ -1090,11 +1090,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                         setStep(2);
                                                     }
                                                 }}
-                                                className={`flex-1 flex items-center justify-center gap-3 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] ${
-                                                    (pickup?.lat && dropoff?.lat && scheduledDate && scheduledTime)
-                                                        ? 'bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5'
-                                                        : 'bg-slate-400 dark:bg-zinc-700 opacity-60 cursor-not-allowed'
-                                                }`}
+                                                className="flex-1 flex items-center justify-center gap-3 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5"
                                                 aria-label="Continue to step 2"
                                             >
                                                 Continue - Select Passengers <ArrowRight size={16} strokeWidth={3}/>

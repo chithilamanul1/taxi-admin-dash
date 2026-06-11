@@ -7,7 +7,6 @@ import { Calendar, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 export default function CustomDateTimePicker({ date, time, onChange }) {
     const [view, setView] = useState('date'); // 'date' or 'time'
     const [viewDate, setViewDate] = useState(date ? new Date(date) : new Date());
-    const [clockMode, setClockMode] = useState('hours'); // 'hours' or 'minutes'
 
     // --- Calendar Logic ---
     const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
@@ -42,10 +41,9 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
     };
 
     const handleDateClick = (d) => {
-        // Adjust for timezone offset to ensure the correct date string is generated
         const offset = d.getTimezoneOffset();
         const adjustedDate = new Date(d.getTime() - (offset * 60 * 1000));
-        onChange(adjustedDate.toISOString().split('T')[0], time);
+        onChange(adjustedDate.toISOString().split('T')[0], time || `12:00 PM SLST`);
         setView('time');
     };
 
@@ -58,44 +56,45 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
             date1.getFullYear() === date2.getFullYear();
     };
 
-    // --- Clock Logic (24 Hour) ---
-    // Outer circle: 00, 13, 14... 23 (or 1-12) - Let's do standard 0-23 mixed or single ring?
-    // Material simplified: 00-23 outer ring usually for 24h is crowded. 
-    // Let's stick to a clean 0-23 in one or two rings if needed, or just 0-23 steps.
-    // For simplicity and mobile size: 0, 1, 2... 23.
-    const hours = Array.from({ length: 24 }, (_, i) => i);
-    const minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+    // --- Time & Timezone Parsing (Supporting both 24h & 12h formats) ---
+    let selectedHour = '12';
+    let selectedMin = '00';
+    let selectedPeriod = 'PM';
+    let selectedTz = 'SLST';
 
-    const handleTimeSelect = (val) => {
-        if (clockMode === 'hours') {
-            const currentMin = time ? time.split(':')[1] : '00';
-            onChange(date, `${val.toString().padStart(2, '0')}:${currentMin}`);
-            setClockMode('minutes');
-        } else {
-            const currentHour = time ? time.split(':')[0] : '00';
-            onChange(date, `${currentHour}:${val.toString().padStart(2, '0')}`);
+    if (time) {
+        const parts = time.trim().split(/\s+/);
+        const timePart = parts[0];
+        if (timePart && timePart.includes(':')) {
+            let [h, m] = timePart.split(':');
+            let hNum = parseInt(h, 10) || 12;
+            let mNum = parseInt(m, 10) || 0;
+            
+            const periodPart = parts[1];
+            if (periodPart && (periodPart.toUpperCase() === 'AM' || periodPart.toUpperCase() === 'PM')) {
+                selectedPeriod = periodPart.toUpperCase();
+                selectedHour = hNum.toString().padStart(2, '0');
+            } else {
+                // No AM/PM period, assume 24-hour format and convert to 12h
+                if (hNum >= 12) {
+                    selectedPeriod = 'PM';
+                    hNum = hNum === 12 ? 12 : hNum - 12;
+                } else {
+                    selectedPeriod = 'AM';
+                    hNum = hNum === 0 ? 12 : hNum;
+                }
+                selectedHour = hNum.toString().padStart(2, '0');
+            }
+            selectedMin = mNum.toString().padStart(2, '0');
         }
-    };
-
-    // Calculate rotation
-    const getHandRotation = () => {
-        if (!time) return 0;
-        const [h, m] = time.split(':').map(Number);
-        if (clockMode === 'hours') {
-            // Analog Hand: maps to 0-11 positions. 12 deg is same as 0 deg.
-            return (h % 12) * 30;
-        } else {
-            return m * 6;
+        
+        // Grab timezone part
+        if (parts[2]) {
+            selectedTz = parts[2];
+        } else if (parts[1] && parts[1] !== 'AM' && parts[1] !== 'PM') {
+            selectedTz = parts[1];
         }
-    };
-
-    const formatTimeDisplay = () => {
-        if (!time) return { h: '--', m: '--' };
-        let [h, m] = time.split(':');
-        return { h: h.toString().padStart(2, '0'), m };
-    };
-
-    const timeDisplay = formatTimeDisplay();
+    }
 
     return (
         <div className="bg-black rounded-[2.5rem] p-6 border-4 border-[#FACC15] text-white w-full max-w-[320px] mx-auto overflow-hidden">
@@ -107,34 +106,25 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                     </p>
                     <div className="flex items-baseline gap-2">
                         {view === 'date' ? (
-                            <h2 className="text-3xl font-bold text-white">
+                            <h2 className="text-2xl font-bold text-white leading-tight">
                                 {date ? new Date(date + (date.includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : 'Tap to select'}
                             </h2>
                         ) : (
-                            <div className="flex items-end gap-2">
-                                <div className="flex text-5xl font-thin tracking-tight">
-                                    <button
-                                        onClick={() => setClockMode('hours')}
-                                        className={`${clockMode === 'hours' ? 'text-white' : 'text-white/40'} transition-colors`}
-                                    >
-                                        {timeDisplay.h}
-                                    </button>
-                                    <span className="text-white/40 mb-1 mx-0.5">:</span>
-                                    <button
-                                        onClick={() => setClockMode('minutes')}
-                                        className={`${clockMode === 'minutes' ? 'text-white' : 'text-white/40'} transition-colors`}
-                                    >
-                                        {timeDisplay.m}
-                                    </button>
-                                </div>
-                            </div>
+                            <h2 className="text-3xl font-bold text-white leading-none">
+                                {selectedHour}:{selectedMin} <span className="text-lg text-white/60 font-black">{selectedPeriod}</span> <span className="text-lg text-[#FACC15] font-black ml-1">{selectedTz}</span>
+                            </h2>
                         )}
                     </div>
                 </div>
                 {/* View Switcher Icons */}
                 <div className="flex gap-2">
-                    <button onClick={() => setView('date')} className={`p-2 rounded-xl border-2 ${view === 'date' ? 'bg-[#FACC15] border-black text-black' : 'border-white/10 text-white/40 hover:bg-white/5'}`}>
-                        <Calendar size={20} strokeWidth={3} />
+                    <button 
+                        type="button"
+                        onClick={() => setView(view === 'date' ? 'time' : 'date')} 
+                        className="p-2 rounded-xl border-2 border-white/10 text-white/40 hover:bg-[#FACC15] hover:text-black hover:border-black transition-colors"
+                        aria-label="Toggle picker view"
+                    >
+                        {view === 'date' ? <Clock size={20} strokeWidth={3} /> : <Calendar size={20} strokeWidth={3} />}
                     </button>
                 </div>
             </div>
@@ -151,8 +141,8 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                         <div className="flex items-center justify-between mb-4 px-2">
                             <span className="text-sm font-bold">{viewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
                             <div className="flex gap-2">
-                                <button onClick={handlePrevMonth} className="p-1 hover:bg-[#FACC15] hover:text-black rounded-lg border-2 border-white/10"><ChevronLeft size={16} strokeWidth={3} /></button>
-                                <button onClick={handleNextMonth} className="p-1 hover:bg-[#FACC15] hover:text-black rounded-lg border-2 border-white/10"><ChevronRight size={16} strokeWidth={3} /></button>
+                                <button type="button" onClick={handlePrevMonth} className="p-1 hover:bg-[#FACC15] hover:text-black rounded-lg border-2 border-white/10"><ChevronLeft size={16} strokeWidth={3} /></button>
+                                <button type="button" onClick={handleNextMonth} className="p-1 hover:bg-[#FACC15] hover:text-black rounded-lg border-2 border-white/10"><ChevronRight size={16} strokeWidth={3} /></button>
                             </div>
                         </div>
 
@@ -162,14 +152,15 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                                 <span key={i} className="text-[10px] font-bold text-white/40 py-1">{d}</span>
                             ))}
                         </div>
-                        <div className="grid grid-cols-7 gap-1 place-items-center max-h-[250px] overflow-y-auto">
+                        <div className="grid grid-cols-7 gap-1 place-items-center max-h-[200px] overflow-y-auto no-scrollbar">
                             {generateCalendarGrid().map((d, i) => {
-                                if (!d) return <div key={i} className="" />;
+                                if (!d) return <div key={i} className="w-8 h-8" />;
                                 const isSelected = isSameDate(d, date);
                                 const isToday = isSameDate(d, new Date());
                                 return (
                                     <button
                                         key={i}
+                                        type="button"
                                         onClick={() => handleDateClick(d)}
                                         className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-black transition-all border-2
                                             ${isSelected ? 'bg-[#FACC15] text-black border-black scale-110 z-10' : 'hover:bg-white/10 text-white border-transparent'}
@@ -184,76 +175,118 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                     </motion.div>
                 ) : (
                     <motion.div
-                        key="clock"
+                        key="time-picker"
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="flex justify-center items-center py-4"
+                        className="py-1"
                     >
-                        <div className="relative w-64 h-64 bg-white/5 rounded-full flex items-center justify-center border-4 border-black">
-                           {/* Decorative grid for Sharp Look */}
-                           <div className="absolute inset-0 opacity-10 pointer-events-none">
-                               <div className="h-full w-px bg-white absolute left-1/2"></div>
-                               <div className="w-full h-px bg-white absolute top-1/2"></div>
-                           </div>
-                            {/* Center Dot */}
-                            <div className="absolute w-2 h-2 bg-[#FACC15] rounded-full z-20 border border-black"></div>
-
-                            {/* Hand */}
-                            <div
-                                className="absolute w-0.5 h-[40%] bg-[#FACC15] bottom-1/2 origin-bottom transition-transform duration-300 z-10"
-                                style={{ transform: `rotate(${getHandRotation()}deg)` }}
-                            >
-                                <div className="absolute -top-1 -left-2 w-5 h-5 bg-[#FACC15] rounded-full flex items-center justify-center border-2 border-black">
-                                    <div className="w-1.5 h-1.5 bg-black rounded-full"></div>
+                        {/* Multi section digital clock columns */}
+                        <div className="flex gap-2 items-stretch h-40 mb-4 border border-white/10 rounded-2xl bg-white/5 overflow-hidden">
+                            {/* Hour Column */}
+                            <div className="flex-1 flex flex-col h-full border-r border-white/10">
+                                <span className="text-[9px] font-black text-center text-white/40 py-1.5 border-b border-white/5 uppercase tracking-wider shrink-0">Hour</span>
+                                <div className="flex-1 overflow-y-auto no-scrollbar py-1">
+                                    {['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'].map(h => {
+                                        const isSelected = selectedHour === h;
+                                        return (
+                                            <button
+                                                key={h}
+                                                type="button"
+                                                onClick={() => {
+                                                    onChange(date, `${h}:${selectedMin} ${selectedPeriod} ${selectedTz}`);
+                                                }}
+                                                className={`w-full py-1.5 text-center text-xs font-black transition-all ${
+                                                    isSelected 
+                                                        ? 'bg-[#FACC15] text-black font-black scale-105' 
+                                                        : 'text-white hover:bg-white/10'
+                                                }`}
+                                            >
+                                                {h}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </div>
 
-                            {/* Numbers - 24H Layout */}
-                            {(clockMode === 'hours' ? hours : minutes).map((val, i) => {
-                                const isHours = clockMode === 'hours';
-                                let angle, radius;
+                            {/* Minute Column */}
+                            <div className="flex-1 flex flex-col h-full border-r border-white/10">
+                                <span className="text-[9px] font-black text-center text-white/40 py-1.5 border-b border-white/5 uppercase tracking-wider shrink-0">Min</span>
+                                <div className="flex-1 overflow-y-auto no-scrollbar py-1">
+                                    {['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'].map(m => {
+                                        const isSelected = selectedMin === m;
+                                        return (
+                                            <button
+                                                key={m}
+                                                type="button"
+                                                onClick={() => {
+                                                    onChange(date, `${selectedHour}:${m} ${selectedPeriod} ${selectedTz}`);
+                                                }}
+                                                className={`w-full py-1.5 text-center text-xs font-black transition-all ${
+                                                    isSelected 
+                                                        ? 'bg-[#FACC15] text-black font-black scale-105' 
+                                                        : 'text-white hover:bg-white/10'
+                                                }`}
+                                            >
+                                                {m}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
 
-                                if (isHours) {
-                                    // Material 24h Clock: 1-12 outer, 13-24 (0) inner OR 0-11 inner, 12-23 outer?
-                                    // Let's do: 12-23 Outer, 0-11 Inner (standard for many digital analogs)
-                                    const isOuter = val >= 12 || val === 0; // 0 is often outer or inner. Let's do 12-23 Outer, 0-11 Inner.
-                                    // Wait, let's do 12-23 Outer (radius 42), 0-11 Inner (radius 28)
-                                    const isInner = val < 12;
-                                    radius = isInner ? 28 : 42;
-                                    // 12h positions: val % 12. 
-                                    // 12 is at top (0 deg maps to -90 for CSS)
-                                    angle = ((val % 12) * 30) - 90;
-                                } else {
-                                    // Minutes: 0, 5, 10... (radius 42)
-                                    radius = 42;
-                                    angle = (val * 6) - 90;
-                                }
+                            {/* AM/PM Column */}
+                            <div className="flex-1 flex flex-col h-full">
+                                <span className="text-[9px] font-black text-center text-white/40 py-1.5 border-b border-white/5 uppercase tracking-wider shrink-0">AM/PM</span>
+                                <div className="flex-1 overflow-y-auto no-scrollbar py-1 flex flex-col justify-center gap-2 px-2">
+                                    {['AM', 'PM'].map(p => {
+                                        const isSelected = selectedPeriod === p;
+                                        return (
+                                            <button
+                                                key={p}
+                                                type="button"
+                                                onClick={() => {
+                                                    onChange(date, `${selectedHour}:${selectedMin} ${p} ${selectedTz}`);
+                                                }}
+                                                className={`w-full py-2 text-center text-xs font-black transition-all rounded-xl ${
+                                                    isSelected 
+                                                        ? 'bg-[#FACC15] text-black font-black scale-105 shadow-md shadow-yellow-500/20' 
+                                                        : 'text-white hover:bg-white/10 border border-white/10'
+                                                }`}
+                                            >
+                                                {p}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
 
-                                const x = 50 + radius * Math.cos(angle * Math.PI / 180);
-                                const y = 50 + radius * Math.sin(angle * Math.PI / 180);
-
-                                const isSelected = isHours
-                                    ? parseInt(timeDisplay.h) === val
-                                    : parseInt(timeDisplay.m) === val;
-
-                                return (
-                                    <button
-                                        key={val}
-                                        onClick={() => handleTimeSelect(val)}
-                                        className={`absolute w-8 h-8 flex items-center justify-center rounded-full text-[10px] font-black transition-all z-20 border-2
-                                            ${isSelected ? 'bg-[#FACC15] text-black border-black' : 'text-white/80 border-transparent hover:text-[#FACC15] hover:bg-white/5'}
-                                        `}
-                                        style={{
-                                            left: `${x}%`,
-                                            top: `${y}%`,
-                                            transform: 'translate(-50%, -50%)'
-                                        }}
-                                    >
-                                        {val.toString().padStart(clockMode === 'hours' ? 1 : 2, '0')}
-                                    </button>
-                                );
-                            })}
+                        {/* Timezone Selector */}
+                        <div className="pt-3 border-t border-white/10">
+                            <label className="text-[9px] font-black text-white/40 uppercase tracking-widest block mb-1">Time Zone</label>
+                            <div className="relative">
+                                <select
+                                    value={selectedTz}
+                                    onChange={(e) => {
+                                        onChange(date, `${selectedHour}:${selectedMin} ${selectedPeriod} ${e.target.value}`);
+                                    }}
+                                    className="w-full bg-zinc-900 border border-white/10 rounded-xl pl-3 pr-8 py-2 text-[10px] font-black text-white focus:outline-none focus:border-[#FACC15] appearance-none"
+                                >
+                                    <option value="SLST">Sri Lanka Time (SLST / UTC+5:30)</option>
+                                    <option value="UTC">UTC / GMT (UTC+0:00)</option>
+                                    <option value="IST">India Standard Time (IST / UTC+5:30)</option>
+                                    <option value="GST">Gulf Standard Time (GST / UTC+4:00)</option>
+                                    <option value="SGT">Singapore Time (SGT / UTC+8:00)</option>
+                                    <option value="CET">Central European Time (CET / UTC+1:00)</option>
+                                    <option value="BST">British Summer Time (BST / UTC+1:00)</option>
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40">
+                                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
                     </motion.div>
                 )}
