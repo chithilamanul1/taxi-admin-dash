@@ -138,8 +138,24 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         hasNameBoard: (initialData.hasNameBoard === true || initialData.hasNameBoard === false) ? initialData.hasNameBoard : null,
         nameBoardText: initialData.nameBoardText || '',
         couponCode: initialData.couponCode || '',
-        date: initialData.date || '',
-        time: initialData.time || '',
+        date: initialData.date || new Date().toISOString().split('T')[0],
+        time: initialData.time || (() => {
+            const today = new Date();
+            let hours = today.getHours() + 1;
+            const mins = Math.ceil(today.getMinutes() / 5) * 5;
+            let adjustedMins = mins;
+            if (adjustedMins === 60) {
+                adjustedMins = 0;
+                hours += 1;
+            }
+            hours = hours % 24;
+            const period = hours >= 12 ? 'PM' : 'AM';
+            let hours12 = hours % 12;
+            if (hours12 === 0) hours12 = 12;
+            const hStr = hours12.toString().padStart(2, '0');
+            const mStr = adjustedMins.toString().padStart(2, '0');
+            return `${hStr}:${mStr} ${period} SLST`;
+        })(),
         name: initialData.name || '',
         phone: initialData.phone || '',
         whatsapp: initialData.whatsapp || '',

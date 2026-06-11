@@ -146,14 +146,27 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
         if (date) {
             setSelectedDate(date.split('T')[0]);
         } else {
-            setSelectedDate('');
+            const today = new Date().toISOString().split('T')[0];
+            setSelectedDate(today);
+            const formattedTime = formatStoredTime(selectedTime24h, selectedTz);
+            onChange(today, formattedTime);
         }
     }, [date]);
 
     useEffect(() => {
-        const parsed = parseStoredTime(time);
-        setSelectedTime24h(parsed.time24h);
-        setSelectedTz(parsed.timezone);
+        if (time) {
+            const parsed = parseStoredTime(time);
+            setSelectedTime24h(parsed.time24h);
+            setSelectedTz(parsed.timezone);
+        } else {
+            const defaultTime = "12:00 PM SLST";
+            const parsed = parseStoredTime(defaultTime);
+            setSelectedTime24h(parsed.time24h);
+            setSelectedTz(parsed.timezone);
+            if (selectedDate) {
+                onChange(selectedDate, defaultTime);
+            }
+        }
     }, [time]);
 
     const handleDateChange = (e) => {
@@ -181,7 +194,7 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
         <div className="bg-white rounded-[2.5rem] p-6 border-4 border-[#FACC15] text-slate-900 w-full max-w-[320px] mx-auto overflow-hidden">
             <div className="mb-4">
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 pl-1">
-                    Select Date
+                    Select Date <span className="text-[10px] text-amber-600 font-normal normal-case">(Click field below)</span>
                 </p>
                 <input
                     type="date"
@@ -193,7 +206,7 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
 
             <div className="mb-4">
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 pl-1">
-                    Select Time
+                    Select Time <span className="text-[10px] text-amber-600 font-normal normal-case">(Click field below)</span>
                 </p>
                 <input
                     type="time"

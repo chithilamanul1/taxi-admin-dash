@@ -141,6 +141,30 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
     const [scheduledTime, setScheduledTime] = useState(null);
     const [isDateTimePickerOpen, setIsDateTimePickerOpen] = useState(false);
 
+    useEffect(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        
+        let hours = today.getHours() + 1;
+        const mins = Math.ceil(today.getMinutes() / 5) * 5;
+        let adjustedMins = mins;
+        if (adjustedMins === 60) {
+            adjustedMins = 0;
+            hours += 1;
+        }
+        hours = hours % 24;
+        const period = hours >= 12 ? 'PM' : 'AM';
+        let hours12 = hours % 12;
+        if (hours12 === 0) hours12 = 12;
+        const hStr = hours12.toString().padStart(2, '0');
+        const mStr = adjustedMins.toString().padStart(2, '0');
+        
+        setScheduledDate(`${year}-${month}-${day}`);
+        setScheduledTime(`${hStr}:${mStr} ${period} SLST`);
+    }, []);
+
     const pickupRef = useRef(null);
     const dropoffRef = useRef(null);
     const dateTimeRef = useRef(null);
