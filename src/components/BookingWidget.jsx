@@ -1001,7 +1001,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                                 <div className="fixed inset-0 z-[190]" onClick={() => setIsDateTimePickerOpen(false)} />
                                                                 <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
                                                                     <CustomDateTimePicker date={scheduledDate} time={scheduledTime} onChange={(d, t) => { setScheduledDate(d); setScheduledTime(t); setStep1Errors(prev => ({ ...prev, dateTime: false })); }} />
-                                                                    <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
+                                                                    <div className="bg-white rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
                                                                         <button type="button" onClick={() => { 
                                                                             setIsDateTimePickerOpen(false); 
                                                                         }} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>

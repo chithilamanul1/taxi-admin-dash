@@ -178,40 +178,40 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
     };
 
     return (
-        <div className="bg-black rounded-[2.5rem] p-6 border-4 border-[#FACC15] text-white w-full max-w-[320px] mx-auto overflow-hidden">
+        <div className="bg-white rounded-[2.5rem] p-6 border-4 border-[#FACC15] text-slate-900 w-full max-w-[320px] mx-auto overflow-hidden">
             <div className="mb-4">
-                <p className="text-xs font-bold text-white/50 uppercase tracking-widest mb-2 pl-1">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 pl-1">
                     Select Date
                 </p>
                 <input
                     type="date"
                     value={selectedDate}
                     onChange={handleDateChange}
-                    className="w-full h-11 bg-zinc-900 border border-white/10 rounded-xl px-4 text-xs font-bold text-white focus:outline-none focus:border-[#FACC15] cursor-pointer"
+                    className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#FACC15] cursor-pointer"
                 />
             </div>
 
             <div className="mb-4">
-                <p className="text-xs font-bold text-white/50 uppercase tracking-widest mb-2 pl-1">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 pl-1">
                     Select Time
                 </p>
                 <input
                     type="time"
                     value={selectedTime24h}
                     onChange={handleTimeChange}
-                    className="w-full h-11 bg-zinc-900 border border-white/10 rounded-xl px-4 text-xs font-bold text-white focus:outline-none focus:border-[#FACC15] cursor-pointer"
+                    className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#FACC15] cursor-pointer"
                 />
             </div>
 
             <div className="mb-2">
-                <p className="text-xs font-bold text-white/50 uppercase tracking-widest mb-2 pl-1">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 pl-1">
                     Time Zone
                 </p>
                 <div className="relative">
                     <select
                         value={selectedTz}
                         onChange={handleTzChange}
-                        className="w-full h-11 bg-zinc-900 border border-white/10 rounded-xl pl-4 pr-8 text-xs font-bold text-white focus:outline-none focus:border-[#FACC15] appearance-none cursor-pointer"
+                        className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl pl-4 pr-8 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#FACC15] appearance-none cursor-pointer"
                     >
                         {(() => {
                             const tzList = [...WORLD_TIMEZONES];
@@ -223,7 +223,7 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                             ));
                         })()}
                     </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white/40">
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
                         <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                             <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
                         </svg>

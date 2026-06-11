@@ -830,7 +830,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                             }
                                                                         }} 
                                                                     />
-                                                                    <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
+                                                                    <div className="bg-white rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
                                                                         <button type="button" onClick={() => setIsArrivalPickerOpen(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
                                                                     </div>
                                                                 </motion.div>
@@ -970,7 +970,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                 }
                                                             }} 
                                                         />
-                                                        <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
+                                                        <div className="bg-white rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
                                                             <button type="button" onClick={() => setIsPickupPickerOpen(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
                                                         </div>
                                                     </motion.div>
@@ -1136,7 +1136,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                             }
                                                         }} 
                                                     />
-                                                    <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
+                                                    <div className="bg-white rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
                                                         <button type="button" onClick={() => setIsMainPickerOpen2(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
                                                     </div>
                                                 </motion.div>
@@ -1188,7 +1188,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                 }
                                                             }} 
                                                         />
-                                                        <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
+                                                        <div className="bg-white rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
                                                             <button type="button" onClick={() => setIsReturnPickerOpen(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
                                                         </div>
                                                     </motion.div>
