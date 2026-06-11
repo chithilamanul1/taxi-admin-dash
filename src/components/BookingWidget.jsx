@@ -1091,10 +1091,10 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                     }
                                                 }}
                                                 disabled={!scheduledDate || !scheduledTime}
-                                                className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] ${(!scheduledDate || !scheduledTime) ? 'bg-slate-400 dark:bg-zinc-700 text-white/50 opacity-60 cursor-not-allowed' : 'bg-[#FACC15] hover:bg-yellow-400 text-black shadow-lg shadow-yellow-500/20 hover:shadow-xl hover:-translate-y-0.5'}`}
-                                                aria-label="Go to Booking"
+                                                className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] ${(!scheduledDate || !scheduledTime) ? 'bg-slate-400 dark:bg-zinc-700 text-white/50 opacity-60 cursor-not-allowed' : 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white shadow-lg shadow-orange-500/20 hover:shadow-xl hover:-translate-y-0.5'}`}
+                                                aria-label="Continue to Booking"
                                             >
-                                                Go to Booking <ArrowRight size={16} strokeWidth={3}/>
+                                                Continue to Booking <ArrowRight size={16} strokeWidth={3}/>
                                             </button>
                                             <button type="button" onClick={handleGetCurrentLocation} aria-label="Auto Detect My Location" className="shrink-0 w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                                                 {isLocating ? <Loader2 size={16} className="animate-spin text-emerald-500"/> : <Zap size={16} className="text-emerald-500"/>}
@@ -1269,7 +1269,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                     }
                                                     setStep(3);
                                                 }}
-                                                className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] lg:hidden bg-[#FACC15] hover:bg-yellow-400 text-black shadow-lg shadow-yellow-500/20 hover:shadow-xl hover:-translate-y-0.5" 
+                                                className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] lg:hidden bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white shadow-lg shadow-orange-500/20 hover:shadow-xl hover:-translate-y-0.5" 
                                                 aria-label="Continue to review"
                                             >
                                                 Review Trip <ArrowRight size={16} strokeWidth={3}/>
@@ -1440,16 +1440,16 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                         className={`w-full min-h-16 sm:h-[72px] py-2 sm:py-0 rounded-2xl shadow-md transition-all group flex items-center justify-center border
                                         ${isCheckoutDisabled
                                             ? 'bg-slate-400 dark:bg-zinc-700 text-white/50 opacity-60 cursor-not-allowed border-transparent'
-                                            : 'bg-[#FACC15] hover:bg-yellow-400 text-black hover:shadow-lg active:scale-[0.98] border-[#FACC15] shadow-lg shadow-yellow-500/20'}`}
+                                            : 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white hover:shadow-lg active:scale-[0.98] border-orange-500/20 shadow-lg shadow-orange-500/20'}`}
                                     >
                                         {isLoadingPricing ? (
-                                            <div className={`w-8 h-8 border-4 rounded-full animate-spin ${isCheckoutDisabled ? 'border-white/30 border-t-white' : 'border-black/30 border-t-black'}`}></div>
+                                            <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
                                         ) : (
                                             <div className="flex items-center justify-between w-full px-4 sm:px-6 gap-2">
                                                 <div className="flex-1 text-center text-base sm:text-lg font-black tracking-widest uppercase">
                                                     BOOK TRIP NOW
                                                 </div>
-                                                <div className={`w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform ${isCheckoutDisabled ? 'bg-white/20 text-white/50' : 'bg-black/10 text-black'}`}>
+                                                <div className={`w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform ${isCheckoutDisabled ? 'bg-white/20 text-white/50' : 'bg-white/20 text-white'}`}>
                                                     <ArrowRight size={18} className="sm:size-6" strokeWidth={2.5} />
                                                 </div>
                                             </div>

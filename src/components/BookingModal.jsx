@@ -1407,7 +1407,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <button
                                 onClick={handleNext}
                                 disabled={loading}
-                                className="flex-[2] sm:flex-none flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-12 py-3 sm:py-5 bg-[#FACC15] hover:bg-yellow-400 text-black hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:bg-slate-200 dark:disabled:bg-zinc-800 disabled:text-slate-400 dark:disabled:text-zinc-600 rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] shadow-xl shadow-yellow-500/20 transition-all group"
+                                className="flex-[2] sm:flex-none flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-12 py-3 sm:py-5 bg-gradient-to-br from-yellow-400 via-orange-500 to-orange-600 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 text-white rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-orange-500/40 transition-all group"
                             >
                                 {step === 1 ? 'Select Details' : step === 2 ? 'Review & Checkout' : loading ? 'Securing...' : 'Confirm Order'}
                                 <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
