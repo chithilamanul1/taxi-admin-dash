@@ -705,6 +705,11 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
             return;
         }
 
+        if (passengerCount.handLuggage > 0 && (passengerCount.luggage || 0) === 0) {
+            alert("Please select at least one standard luggage bag when hand luggage is added.");
+            return;
+        }
+
         const currentVehicleData = vehiclePricing[vehicle];
         if (currentVehicleData) {
             const totalPax = (passengerCount.adults || 0) + (passengerCount.children || 0);
@@ -769,6 +774,9 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
     // Determine Pricing Category
     const isAirportService = ['pickup', 'drop'].includes(activeTab);
     const pricingCategory = isAirportService ? 'airport-transfer' : 'ride-now';
+
+    const isStep2Disabled = !vehicle || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null || (passengerCount.handLuggage > 0 && (passengerCount.luggage || 0) === 0);
+    const isCheckoutDisabled = !distance || isStep2Disabled;
 
     return (
         <div id="booking" className="w-full max-w-6xl mx-auto pt-6 md:pt-8 pb-8 md:pb-0 relative z-40 px-3 sm:px-4">
@@ -1150,16 +1158,19 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                 Passenger and Luggage <span className="text-[9px] bg-red-600 text-white px-2 py-0.5 rounded-full lowercase tracking-tight shadow-sm">required</span>
                                             </label>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-                                                {[{ id: 'adults', label: 'Adults' }, { id: 'children', label: 'Children' }, { id: 'luggage', label: 'Luggage' }, { id: 'handLuggage', label: 'Hand Luggage' }].map(c => (
-                                                    <div key={c.id} className="bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm p-4 rounded-2xl flex items-center justify-between transition-all h-16 sm:h-18">
-                                                        <span className="text-[11px] font-black text-slate-800 dark:text-slate-100 uppercase tracking-widest w-24 flex-shrink-0 leading-tight pr-2">{c.label}</span>
-                                                        <div className="flex items-center gap-3 shrink-0 bg-slate-50 dark:bg-zinc-900 rounded-xl p-1 border border-slate-100 dark:border-white/5">
-                                                            <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(c.id === 'adults' ? 1 : 0, (Number(p[c.id]) || 0) - 1) }))} className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center hover:bg-slate-50 transition-all text-slate-600 dark:text-white active:scale-95" aria-label={`Decrease ${c.label}`}><Minus size={14} strokeWidth={2.5} /></button>
-                                                            <span className="font-bold text-base text-slate-800 dark:text-white min-w-[20px] text-center" aria-live="polite">{passengerCount[c.id] || 0}</span>
-                                                            <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))} className="w-8 h-8 rounded-lg bg-emerald-500 dark:bg-emerald-600 border border-transparent flex items-center justify-center transition-all text-white shadow-sm active:scale-95" aria-label={`Increase ${c.label}`}><Plus size={14} strokeWidth={2.5} /></button>
+                                                {[{ id: 'adults', label: 'Adults' }, { id: 'children', label: 'Children' }, { id: 'luggage', label: 'Luggage' }, { id: 'handLuggage', label: 'Hand Luggage' }].map(c => {
+                                                    const isLuggageUnselected = c.id === 'luggage' && !(passengerCount.luggage > 0);
+                                                    return (
+                                                        <div key={c.id} className={`bg-white dark:bg-zinc-800 border shadow-sm p-4 rounded-2xl flex items-center justify-between transition-all h-16 sm:h-18 ${isLuggageUnselected ? 'border-red-500 ring-2 ring-red-500/10' : 'border-slate-200 dark:border-white/10'}`}>
+                                                            <span className={`text-[11px] font-black uppercase tracking-widest w-24 flex-shrink-0 leading-tight pr-2 ${isLuggageUnselected ? 'text-red-500 dark:text-red-400 animate-pulse' : 'text-slate-800 dark:text-slate-100'}`}>{c.label}</span>
+                                                            <div className="flex items-center gap-3 shrink-0 bg-slate-50 dark:bg-zinc-900 rounded-xl p-1 border border-slate-100 dark:border-white/5">
+                                                                <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(c.id === 'adults' ? 1 : 0, (Number(p[c.id]) || 0) - 1) }))} className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center hover:bg-slate-50 transition-all text-slate-600 dark:text-white active:scale-95" aria-label={`Decrease ${c.label}`}><Minus size={14} strokeWidth={2.5} /></button>
+                                                                <span className={`font-bold text-base min-w-[20px] text-center ${isLuggageUnselected ? 'text-red-500 dark:text-red-400' : 'text-slate-800 dark:text-white'}`} aria-live="polite">{passengerCount[c.id] || 0}</span>
+                                                                <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))} className="w-8 h-8 rounded-lg bg-emerald-500 dark:bg-emerald-600 border border-transparent flex items-center justify-center transition-all text-white shadow-sm active:scale-95" aria-label={`Increase ${c.label}`}><Plus size={14} strokeWidth={2.5} /></button>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                ))}
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                         <div className="mb-6 mt-6">
@@ -1232,15 +1243,15 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                             </button>
                                             <button 
                                                 onClick={() => {
-                                                    if (!vehicle || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null) {
+                                                    if (isStep2Disabled) {
                                                         return;
                                                     }
                                                     setStep(3);
                                                     document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                                 }}
-                                                disabled={!vehicle || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null}
+                                                disabled={isStep2Disabled}
                                                 className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] lg:hidden
-                                                ${(!vehicle || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null) 
+                                                ${isStep2Disabled 
                                                     ? 'bg-slate-400 dark:bg-zinc-700 text-white/50 opacity-60 cursor-not-allowed' 
                                                     : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5'}`} 
                                                 aria-label="Continue to review"
@@ -1409,9 +1420,9 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
                                     <button
                                         onClick={handleBook}
-                                        disabled={!distance || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null}
+                                        disabled={isCheckoutDisabled}
                                         className={`w-full min-h-16 sm:h-[72px] py-2 sm:py-0 rounded-2xl shadow-md transition-all group flex items-center justify-center border
-                                        ${(!distance || !passengerCount.adults || passengerCount.adults < 1 || passengerCount.luggage === undefined || passengerCount.luggage === null || passengerCount.handLuggage === undefined || passengerCount.handLuggage === null)
+                                        ${isCheckoutDisabled
                                             ? 'bg-slate-400 dark:bg-zinc-700 text-white/50 opacity-60 cursor-not-allowed border-transparent'
                                             : 'bg-emerald-600 hover:bg-emerald-700 text-white hover:shadow-lg active:scale-[0.98] border-emerald-500/20'}`}
                                     >

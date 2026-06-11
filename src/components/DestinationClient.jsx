@@ -175,7 +175,7 @@ export default function DestinationClient({ destination }) {
                                                 Don't just travel to Kandy, experience it! Book a <strong>Round Trip Package</strong> to visit the Temple of the Tooth, Botanical Gardens, and more at your own pace.
                                             </p>
                                             <a 
-                                                href="/round-trips" 
+                                                href="/tour-packages" 
                                                 className="inline-flex items-center gap-3 bg-emerald-500 text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20"
                                             >
                                                 View Kandy Tour Packages <ArrowRight size={16} />

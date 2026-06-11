@@ -87,7 +87,33 @@ const OfferMarquee = () => {
         return () => timer && clearInterval(timer);
     }, []);
 
-    if (pathname?.startsWith('/admin') || pathname?.startsWith('/driver')) {
+    const [bookingStep, setBookingStep] = useState(1);
+    const [isModalActive, setIsModalActive] = useState(false);
+
+    useEffect(() => {
+        const handleStepChange = (e) => {
+            setBookingStep(e.detail?.step || 1);
+        };
+        window.addEventListener('bookingStepChange', handleStepChange);
+
+        if (typeof document !== 'undefined') {
+            setIsModalActive(document.body.classList.contains('booking-modal-active'));
+            
+            const observer = new MutationObserver(() => {
+                setIsModalActive(document.body.classList.contains('booking-modal-active'));
+            });
+            observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+            
+            return () => {
+                window.removeEventListener('bookingStepChange', handleStepChange);
+                observer.disconnect();
+            };
+        }
+
+        return () => window.removeEventListener('bookingStepChange', handleStepChange);
+    }, []);
+
+    if (pathname?.startsWith('/admin') || pathname?.startsWith('/driver') || bookingStep > 1 || isModalActive) {
         return null;
     }
 

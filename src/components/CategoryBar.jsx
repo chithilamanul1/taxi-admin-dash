@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Plane, Map, Compass, User, MapPin } from 'lucide-react';
 
@@ -12,11 +12,37 @@ const CategoryBar = () => {
         { name: 'Airport Taxis', icon: Plane, href: '/', active: pathname === '/' },
         { name: 'Tour Packages', icon: Map, href: '/tour-packages', active: pathname === '/tour-packages' },
         { name: 'Day Trips', icon: Compass, href: '/day-trips', active: pathname === '/day-trips' },
-        { name: 'Round Trips', icon: MapPin, href: '/custom-trip', active: pathname === '/custom-trip' },
+        { name: 'Round Trips', icon: MapPin, href: '/round-trips', active: pathname === '/round-trips' },
         { name: 'Driver Portal', icon: User, href: '/driver/login', active: pathname === '/driver/login' },
     ];
 
-    if (pathname?.startsWith('/admin') || pathname?.startsWith('/driver')) return null;
+    const [bookingStep, setBookingStep] = useState(1);
+    const [isModalActive, setIsModalActive] = useState(false);
+
+    useEffect(() => {
+        const handleStepChange = (e) => {
+            setBookingStep(e.detail?.step || 1);
+        };
+        window.addEventListener('bookingStepChange', handleStepChange);
+
+        if (typeof document !== 'undefined') {
+            setIsModalActive(document.body.classList.contains('booking-modal-active'));
+            
+            const observer = new MutationObserver(() => {
+                setIsModalActive(document.body.classList.contains('booking-modal-active'));
+            });
+            observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+            
+            return () => {
+                window.removeEventListener('bookingStepChange', handleStepChange);
+                observer.disconnect();
+            };
+        }
+
+        return () => window.removeEventListener('bookingStepChange', handleStepChange);
+    }, []);
+
+    if (pathname?.startsWith('/admin') || pathname?.startsWith('/driver') || bookingStep > 1 || isModalActive) return null;
 
     return (
         <div className="bg-white py-3 px-4 md:px-6 overflow-x-auto scrollbar-hide border-b border-black/5 flex justify-start md:justify-center items-center relative z-50">

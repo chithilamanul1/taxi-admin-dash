@@ -105,11 +105,13 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
 
             // Always hide bottom nav when modal is open to prevent overlapping buttons
             document.body.classList.add('hide-bottom-nav');
+            document.body.classList.add('booking-modal-active');
 
             return () => {
                 document.body.style.overflow = originalOverflow;
                 document.body.style.touchAction = originalTouchAction;
                 document.body.classList.remove('hide-bottom-nav');
+                document.body.classList.remove('booking-modal-active');
                 const chatTriggerBack = document.querySelector('.live-chat-trigger');
                 if (chatTriggerBack) chatTriggerBack.style.display = 'flex';
             };
