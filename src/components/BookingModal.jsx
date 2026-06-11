@@ -31,7 +31,6 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         if (scrollContainerRef.current) {
             scrollContainerRef.current.scrollTo({ top: 0, behavior: 'instant' });
         }
-        window.scrollTo({ top: 0, behavior: 'instant' });
     }, [step]);
 
     const [errors, setErrors] = useState({});

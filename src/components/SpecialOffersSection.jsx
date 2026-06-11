@@ -173,7 +173,7 @@ export default function SpecialOffersSection() {
 
 
                     {/* View All Button */}
-                    <div className="text-center">
+                    <div className="text-center mt-6 md:mt-8">
                         <Link
                             href="/offers"
                             className="inline-flex items-center gap-2 bg-black text-[#FACC15] px-6 py-2.5 rounded-full border border-black font-black uppercase tracking-[0.2em] text-[10px] hover:-translate-y-1 active:translate-y-0 transition-all group shadow-md hover:shadow-lg hover:bg-white hover:text-black hover:border-black"

@@ -49,7 +49,7 @@ const ReviewStatsBar = () => {
             <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent"></div>
 
             <div className="container mx-auto px-4 relative z-10">
-                <div className="flex flex-row gap-2 md:gap-4 w-full max-w-4xl mx-auto items-stretch justify-center">
+                <div className="flex flex-col md:flex-row gap-3 md:gap-4 w-full max-w-4xl mx-auto items-stretch justify-center">
 
                     {/* TripAdvisor Box */}
                     <a

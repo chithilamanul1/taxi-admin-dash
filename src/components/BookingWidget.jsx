@@ -87,6 +87,27 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
         window.dispatchEvent(event);
     }, [step]);
 
+    const isFirstRender = useRef(true);
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        
+        const timer = setTimeout(() => {
+            const element = document.getElementById('booking');
+            if (element) {
+                const html = document.documentElement;
+                const originalScrollBehavior = html.style.scrollBehavior;
+                html.style.scrollBehavior = 'auto';
+                element.scrollIntoView({ behavior: 'auto', block: 'start' });
+                html.style.scrollBehavior = originalScrollBehavior;
+            }
+        }, 150);
+
+        return () => clearTimeout(timer);
+    }, [step]);
+
     const handleTabChange = (tabId) => {
         setActiveTab(tabId);
         setStep(1);
@@ -985,7 +1006,6 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                                             setIsDateTimePickerOpen(false); 
                                                                             if (scheduledDate) {
                                                                                 setStep(2); 
-                                                                                document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                                                             } 
                                                                         }} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
                                                                     </div>
@@ -1068,7 +1088,6 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                 onClick={() => {
                                                     if (validateStep1()) {
                                                         setStep(2);
-                                                        document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                                     }
                                                 }}
                                                 className={`flex-1 flex items-center justify-center gap-3 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] ${
@@ -1247,7 +1266,6 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                         return;
                                                     }
                                                     setStep(3);
-                                                    document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                                 }}
                                                 disabled={isStep2Disabled}
                                                 className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] lg:hidden
