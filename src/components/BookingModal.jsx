@@ -12,6 +12,7 @@ import LocationInput from './LocationInput';
 import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import VehicleCarousel from './VehicleCarousel';
+import CustomDateTimePicker from './CustomDateTimePicker';
 
 const STEPS = [
     { id: 1, title: 'Route & Vehicle', icon: MapPin },
@@ -47,6 +48,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
     const [isVehicleExpanded, setIsVehicleExpanded] = useState(true);
     const [isFleetExpanded, setIsFleetExpanded] = useState(false);
     const [surgeRules, setSurgeRules] = useState([]);
+    const [isArrivalPickerOpen, setIsArrivalPickerOpen] = useState(false);
+    const [isPickupPickerOpen, setIsPickupPickerOpen] = useState(false);
+    const [isMainPickerOpen2, setIsMainPickerOpen2] = useState(false);
+    const [isReturnPickerOpen, setIsReturnPickerOpen] = useState(false);
 
     const { currency, rates, changeCurrency } = useCurrency();
     const currentSymbol = rates?.[currency]?.symbol || (currency === 'LKR' ? 'Rs' : currency === 'USD' ? '$' : currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : currency === 'INR' ? '₹' : '$');
@@ -789,39 +794,49 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 </div>
 
                                                 {/* Arrival Date & Time — large and prominent */}
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                                    <div className="space-y-3">
-                                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>
-                                                            Arrival Date
-                                                        </label>
-                                                        <div className="relative">
-                                                            <input
-                                                                type="date"
-                                                                value={formData.flightArrivalDate || formData.date || ''}
-                                                                onChange={e => setFormData(prev => ({ ...prev, flightArrivalDate: e.target.value, date: e.target.value }))}
-                                                                className={`w-full h-20 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-2xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.date ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
-                                                            />
-                                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                                <Calendar size={22} strokeWidth={3} />
-                                                            </div>
+                                                <div className="space-y-3 relative">
+                                                    <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date || errors.flightArrivalTime ? 'text-red-500' : 'text-slate-500'}`}>
+                                                        Arrival Date & Time <span className="text-[#FACC15]">*Required</span>
+                                                    </label>
+                                                    <div className="relative">
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => setIsArrivalPickerOpen(!isArrivalPickerOpen)} 
+                                                            className={`w-full h-20 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl sm:text-2xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all flex items-center justify-between text-left ${errors.date || errors.flightArrivalTime ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                        >
+                                                            <span className={formData.flightArrivalDate && formData.flightArrivalTime ? 'text-black dark:text-white' : 'text-slate-400'}>
+                                                                {formData.flightArrivalDate && formData.flightArrivalTime 
+                                                                    ? `${new Date(formData.flightArrivalDate + (formData.flightArrivalDate.includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${formData.flightArrivalTime}`
+                                                                    : 'Select Date & Time'}
+                                                            </span>
+                                                            <ChevronDown size={20} className={`opacity-50 transition-transform ${isArrivalPickerOpen ? 'rotate-180' : ''}`} />
+                                                        </button>
+                                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                            <Calendar size={22} strokeWidth={3} />
                                                         </div>
                                                     </div>
-                                                    <div className="space-y-3">
-                                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.flightArrivalTime ? 'text-red-500' : 'text-slate-500'}`}>
-                                                            Arrival Time <span className="text-[#FACC15]">*Required</span>
-                                                        </label>
-                                                        <div className="relative">
-                                                            <input
-                                                                type="time"
-                                                                value={formData.flightArrivalTime || ''}
-                                                                onChange={e => setFormData(prev => ({ ...prev, flightArrivalTime: e.target.value, time: e.target.value }))}
-                                                                className={`w-full h-20 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-2xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.flightArrivalTime ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
-                                                            />
-                                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                                <Clock size={22} strokeWidth={3} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <AnimatePresence>
+                                                        {isArrivalPickerOpen && (
+                                                            <>
+                                                                <div className="fixed inset-0 z-[190]" onClick={() => setIsArrivalPickerOpen(false)} />
+                                                                <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
+                                                                    <CustomDateTimePicker 
+                                                                        date={formData.flightArrivalDate} 
+                                                                        time={formData.flightArrivalTime} 
+                                                                        onChange={(d, t) => { 
+                                                                            setFormData(prev => ({ ...prev, flightArrivalDate: d, date: d, flightArrivalTime: t, time: t })); 
+                                                                            if (errors.date || errors.flightArrivalTime) {
+                                                                                setErrors(prev => ({ ...prev, date: false, flightArrivalTime: false, time: false }));
+                                                                            }
+                                                                        }} 
+                                                                    />
+                                                                    <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
+                                                                        <button type="button" onClick={() => setIsArrivalPickerOpen(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
+                                                                    </div>
+                                                                </motion.div>
+                                                            </>
+                                                        )}
+                                                    </AnimatePresence>
                                                 </div>
 
                                                 {/* Customer Name on Board — shown only when Name Board is selected */}
@@ -917,41 +932,51 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     </div>
                                 )}
 
-                                {/* Arrival Date & Time for non-airport-pickup contexts */}
+                                {/* Pickup Date & Time for non-airport-pickup contexts */}
                                 {!isAirportService && (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6 pt-8 border-t border-slate-100 dark:border-white/10">
-                                        <div className="space-y-3">
-                                            <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>
-                                                Pickup Date
-                                            </label>
-                                            <div className="relative">
-                                                <input
-                                                    type="date"
-                                                    value={formData.date || ''}
-                                                    onChange={e => setFormData(prev => ({ ...prev, date: e.target.value, flightArrivalDate: e.target.value }))}
-                                                    className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-14 rounded-3xl font-black text-base sm:text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.date ? 'border-red-500' : ''}`}
-                                                />
-                                                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                    <Calendar size={20} strokeWidth={3} />
-                                                </div>
+                                    <div className="space-y-3 mt-6 pt-8 border-t border-slate-100 dark:border-white/10 relative">
+                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date || errors.time ? 'text-red-500' : 'text-slate-500'}`}>
+                                            Pickup Date & Time <span className="text-[#FACC15]">*Required</span>
+                                        </label>
+                                        <div className="relative">
+                                            <button 
+                                                type="button"
+                                                onClick={() => setIsPickupPickerOpen(!isPickupPickerOpen)} 
+                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-base sm:text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all flex items-center justify-between text-left ${errors.date || errors.time ? 'border-red-500 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
+                                            >
+                                                <span className={formData.date && formData.time ? 'text-black dark:text-white' : 'text-slate-400'}>
+                                                    {formData.date && formData.time 
+                                                        ? `${new Date(formData.date + (formData.date.includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${formData.time}`
+                                                        : 'Select Date & Time'}
+                                                </span>
+                                                <ChevronDown size={18} className={`opacity-50 transition-transform ${isPickupPickerOpen ? 'rotate-180' : ''}`} />
+                                            </button>
+                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                <Calendar size={20} strokeWidth={3} />
                                             </div>
                                         </div>
-                                        <div className="space-y-3">
-                                            <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>
-                                                Pickup Time
-                                            </label>
-                                            <div className="relative">
-                                                <input
-                                                    type="time"
-                                                    value={formData.time || ''}
-                                                    onChange={e => setFormData(prev => ({ ...prev, time: e.target.value, flightArrivalTime: e.target.value }))}
-                                                    className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-14 rounded-3xl font-black text-base sm:text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all ${errors.time ? 'border-red-500' : ''}`}
-                                                />
-                                                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                    <Clock size={20} strokeWidth={3} />
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <AnimatePresence>
+                                            {isPickupPickerOpen && (
+                                                <>
+                                                    <div className="fixed inset-0 z-[190]" onClick={() => setIsPickupPickerOpen(false)} />
+                                                    <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
+                                                        <CustomDateTimePicker 
+                                                            date={formData.date} 
+                                                            time={formData.time} 
+                                                            onChange={(d, t) => { 
+                                                                setFormData(prev => ({ ...prev, date: d, flightArrivalDate: d, time: t, flightArrivalTime: t })); 
+                                                                if (errors.date || errors.time) {
+                                                                    setErrors(prev => ({ ...prev, date: false, time: false }));
+                                                                }
+                                                            }} 
+                                                        />
+                                                        <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
+                                                            <button type="button" onClick={() => setIsPickupPickerOpen(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
+                                                        </div>
+                                                    </motion.div>
+                                                </>
+                                            )}
+                                        </AnimatePresence>
                                     </div>
                                 )}
                                 
@@ -1076,38 +1101,48 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 ))}
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-12 border-t border-slate-200 dark:border-white/10">
+                            <div className="pt-12 border-t border-slate-200 dark:border-white/10 relative">
                                 <div className="space-y-4">
-                                    <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date ? 'text-red-500' : 'text-slate-500'}`}>
-                                        {formData.hasNameBoard ? 'Arrival Date' : 'Pickup Date'}
+                                    <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.date || errors.time ? 'text-red-500' : 'text-slate-500'}`}>
+                                        {formData.hasNameBoard ? 'Arrival Date & Time' : 'Pickup Date & Time'}
                                     </label>
                                     <div className="relative">
-                                        <input
-                                            type="date"
-                                            value={formData.date || formData.flightArrivalDate || ''}
-                                            onChange={e => setFormData(prev => ({ ...prev, date: e.target.value, flightArrivalDate: e.target.value }))}
-                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.date ? 'border-red-500' : ''}`}
-                                        />
+                                        <button 
+                                            type="button"
+                                            onClick={() => setIsMainPickerOpen2(!isMainPickerOpen2)} 
+                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all flex items-center justify-between text-left ${errors.date || errors.time ? 'border-red-500 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
+                                        >
+                                            <span className="text-black dark:text-white">
+                                                {`${new Date((formData.date || formData.flightArrivalDate || new Date().toISOString().split('T')[0]) + ((formData.date || formData.flightArrivalDate || '').includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${formData.time || formData.flightArrivalTime || '12:00 PM SLST'}`}
+                                            </span>
+                                            <ChevronDown size={20} className={`opacity-50 transition-transform ${isMainPickerOpen2 ? 'rotate-180' : ''}`} />
+                                        </button>
                                         <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
                                             <Calendar size={20} strokeWidth={3} />
                                         </div>
                                     </div>
-                                </div>
-                                <div className="space-y-4">
-                                    <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.time ? 'text-red-500' : 'text-slate-500'}`}>
-                                        {formData.hasNameBoard ? 'Arrival Time' : 'Pickup Time'}
-                                    </label>
-                                    <div className="relative">
-                                        <input
-                                            type="time"
-                                            value={formData.time || formData.flightArrivalTime || ''}
-                                            onChange={e => setFormData(prev => ({ ...prev, time: e.target.value, flightArrivalTime: e.target.value }))}
-                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.time ? 'border-red-500' : ''}`}
-                                        />
-                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                            <Clock size={20} strokeWidth={3} />
-                                        </div>
-                                    </div>
+                                    <AnimatePresence>
+                                        {isMainPickerOpen2 && (
+                                            <>
+                                                <div className="fixed inset-0 z-[190]" onClick={() => setIsMainPickerOpen2(false)} />
+                                                <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
+                                                    <CustomDateTimePicker 
+                                                        date={formData.date || formData.flightArrivalDate} 
+                                                        time={formData.time || formData.flightArrivalTime} 
+                                                        onChange={(d, t) => { 
+                                                            setFormData(prev => ({ ...prev, date: d, flightArrivalDate: d, time: t, flightArrivalTime: t })); 
+                                                            if (errors.date || errors.time) {
+                                                                setErrors(prev => ({ ...prev, date: false, time: false }));
+                                                            }
+                                                        }} 
+                                                    />
+                                                    <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
+                                                        <button type="button" onClick={() => setIsMainPickerOpen2(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
+                                                    </div>
+                                                </motion.div>
+                                            </>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                             </div>
 
@@ -1117,39 +1152,49 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         <div className="w-2 h-2 bg-[#FACC15] rounded-full animate-pulse"></div>
                                         <h4 className="text-xl font-black text-black dark:text-white uppercase tracking-tight">Return Journey <span className="text-[#FACC15]">Details</span></h4>
                                     </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                        <div className="space-y-4">
-                                            <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.returnDate ? 'text-red-500' : 'text-slate-500'}`}>
-                                                Return Date (Optional)
-                                            </label>
-                                            <div className="relative">
-                                                <input
-                                                    type="date"
-                                                    value={formData.returnDate || ''}
-                                                    onChange={e => setFormData(prev => ({ ...prev, returnDate: e.target.value }))}
-                                                    className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.returnDate ? 'border-red-500' : ''}`}
-                                                />
-                                                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                    <Calendar size={20} strokeWidth={3} />
-                                                </div>
+                                    <div className="space-y-4 relative">
+                                        <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.returnDate || errors.returnTime ? 'text-red-500' : 'text-slate-500'}`}>
+                                            Return Date & Time (Optional)
+                                        </label>
+                                        <div className="relative">
+                                            <button 
+                                                type="button"
+                                                onClick={() => setIsReturnPickerOpen(!isReturnPickerOpen)} 
+                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all flex items-center justify-between text-left ${errors.returnDate || errors.returnTime ? 'border-red-500 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
+                                            >
+                                                <span className={formData.returnDate && formData.returnTime ? 'text-black dark:text-white' : 'text-slate-400'}>
+                                                    {formData.returnDate && formData.returnTime 
+                                                        ? `${new Date(formData.returnDate + (formData.returnDate.includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${formData.returnTime}`
+                                                        : 'Select Return Date & Time'}
+                                                </span>
+                                                <ChevronDown size={20} className={`opacity-50 transition-transform ${isReturnPickerOpen ? 'rotate-180' : ''}`} />
+                                            </button>
+                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                <Calendar size={20} strokeWidth={3} />
                                             </div>
                                         </div>
-                                        <div className="space-y-4">
-                                            <label className={`text-xs font-black uppercase tracking-widest pl-4 ${errors.returnTime ? 'text-red-500' : 'text-slate-500'}`}>
-                                                Return Time (Optional)
-                                            </label>
-                                            <div className="relative">
-                                                <input
-                                                    type="time"
-                                                    value={formData.returnTime || ''}
-                                                    onChange={e => setFormData(prev => ({ ...prev, returnTime: e.target.value }))}
-                                                    className={`w-full h-16 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] ${errors.returnTime ? 'border-red-500' : ''}`}
-                                                />
-                                                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                    <Clock size={20} strokeWidth={3} />
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <AnimatePresence>
+                                            {isReturnPickerOpen && (
+                                                <>
+                                                    <div className="fixed inset-0 z-[190]" onClick={() => setIsReturnPickerOpen(false)} />
+                                                    <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.95 }} className="absolute top-full left-0 right-0 mt-3 z-[200] shadow-2xl origin-top">
+                                                        <CustomDateTimePicker 
+                                                            date={formData.returnDate} 
+                                                            time={formData.returnTime} 
+                                                            onChange={(d, t) => { 
+                                                                setFormData(prev => ({ ...prev, returnDate: d, returnTime: t })); 
+                                                                if (errors.returnDate || errors.returnTime) {
+                                                                    setErrors(prev => ({ ...prev, returnDate: false, returnTime: false }));
+                                                                }
+                                                            }} 
+                                                        />
+                                                        <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
+                                                            <button type="button" onClick={() => setIsReturnPickerOpen(false)} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
+                                                        </div>
+                                                    </motion.div>
+                                                </>
+                                            )}
+                                        </AnimatePresence>
                                     </div>
                                 </div>
                             )}
@@ -1362,7 +1407,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                             <button
                                 onClick={handleNext}
                                 disabled={loading}
-                                className="flex-[2] sm:flex-none flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-12 py-3 sm:py-5 bg-gradient-to-br from-yellow-400 via-orange-500 to-orange-600 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 text-white rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-orange-500/40 transition-all group"
+                                className="flex-[2] sm:flex-none flex items-center justify-center gap-2 sm:gap-3 px-4 sm:px-12 py-3 sm:py-5 bg-[#FACC15] hover:bg-yellow-400 text-black hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:bg-slate-200 dark:disabled:bg-zinc-800 disabled:text-slate-400 dark:disabled:text-zinc-600 rounded-[2rem] text-[9px] sm:text-xs font-black uppercase tracking-[0.2em] shadow-xl shadow-yellow-500/20 transition-all group"
                             >
                                 {step === 1 ? 'Select Details' : step === 2 ? 'Review & Checkout' : loading ? 'Securing...' : 'Confirm Order'}
                                 <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />

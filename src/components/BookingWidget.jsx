@@ -902,7 +902,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                     <button
                                                         key={c.code}
                                                         onClick={() => { changeCurrency(c.code); setIsCurrencyOpen(false); }}
-                                                        className={`w-full text-left px-4 py-2.5 text-[10px] font-black flex items-center gap-3 hover:bg-emerald-50 hover:text-emerald-600 transition-colors ${currency === c.code ? 'text-white bg-emerald-600 border-l-4 border-emerald-800' : 'text-slate-700 dark:text-white border-b border-slate-100 last:border-0'}`}
+                                                         className={`w-full text-left px-4 py-2.5 text-[10px] font-black flex items-center gap-3 hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:text-[#FACC15] transition-colors ${currency === c.code ? 'text-black bg-[#FACC15] border-l-4 border-amber-600' : 'text-slate-700 dark:text-white border-b border-slate-100 last:border-0'}`}
                                                     >
                                                         <div className="w-4 h-4 rounded-full overflow-hidden border border-slate-200"><img src={c.flag} alt={c.code} className="w-full h-full object-cover scale-150" /></div>
                                                         <span>{c.code}</span>
@@ -1016,7 +1016,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                 </div>
 
                                                 {distance && distance > 0 && (
-                                                    <div className="mt-4 animate-slide-up space-y-4">
+                                                    <div className={`mt-4 animate-slide-up space-y-4 ${(!scheduledDate || !scheduledTime) ? 'opacity-40 pointer-events-none' : ''}`}>
                                                         <div className="flex items-center justify-between px-1">
                                                             <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Select Vehicle</label>
                                                             <button
@@ -1090,10 +1090,11 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                         setStep(2);
                                                     }
                                                 }}
-                                                className="flex-1 flex items-center justify-center gap-3 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] bg-emerald-600 hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5"
-                                                aria-label="Continue to step 2"
+                                                disabled={!scheduledDate || !scheduledTime}
+                                                className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] ${(!scheduledDate || !scheduledTime) ? 'bg-slate-400 dark:bg-zinc-700 text-white/50 opacity-60 cursor-not-allowed' : 'bg-[#FACC15] hover:bg-yellow-400 text-black shadow-lg shadow-yellow-500/20 hover:shadow-xl hover:-translate-y-0.5'}`}
+                                                aria-label="Go to Booking"
                                             >
-                                                Continue - Select Passengers <ArrowRight size={16} strokeWidth={3}/>
+                                                Go to Booking <ArrowRight size={16} strokeWidth={3}/>
                                             </button>
                                             <button type="button" onClick={handleGetCurrentLocation} aria-label="Auto Detect My Location" className="shrink-0 w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                                                 {isLocating ? <Loader2 size={16} className="animate-spin text-emerald-500"/> : <Zap size={16} className="text-emerald-500"/>}
@@ -1148,7 +1149,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                         } catch (e) {
                                                             alert("Validation failed.");
                                                         }
-                                                    }} aria-label="Apply Coupon" className="absolute right-2 top-2 bottom-2 bg-emerald-600 text-white px-6 rounded-xl text-[10px] font-black uppercase hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">Apply</button>
+                                                    }} aria-label="Apply Coupon" className="absolute right-2 top-2 bottom-2 bg-[#FACC15] text-black px-6 rounded-xl text-[10px] font-black uppercase hover:bg-yellow-400 transition-all shadow-lg shadow-yellow-500/10">Apply</button>
                                                 </div>
                                             )}
                                             {filteredCoupons.length > 0 && isCouponOpen && (
@@ -1156,12 +1157,12 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                     <div className="flex items-center gap-3 px-1"><div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div><span className="text-[10px] font-black text-emerald-900/40 dark:text-white/40 uppercase tracking-[0.3em]">Exclusive Offers</span></div>
                                                     <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar snap-x touch-pan-x">
                                                         {filteredCoupons.map((c) => (
-                                                            <button key={c._id} onClick={() => { const isApplied = appliedOffers.some(o => o.name === c.code); if (isApplied) { setAppliedOffers(prev => prev.filter(o => o.name !== c.code)); } else { const couponOffer = { _id: 'coupon-' + c.code, name: c.code, discountPercentage: c.discountType === 'percentage' ? c.value : 0, discountAmount: c.discountType === 'flat' ? c.value : 0, type: 'coupon' }; setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]); } }} className={`snap-start min-w-[280px] sm:min-w-[320px] group relative flex items-center justify-between gap-4 p-5 rounded-[2rem] border transition-all text-left flex-shrink-0 shadow-lg hover:shadow-xl hover:-translate-y-1 ${appliedOffers.some(o => o.name === c.code) ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-800'}`}>
+                                                            <button key={c._id} onClick={() => { const isApplied = appliedOffers.some(o => o.name === c.code); if (isApplied) { setAppliedOffers(prev => prev.filter(o => o.name !== c.code)); } else { const couponOffer = { _id: 'coupon-' + c.code, name: c.code, discountPercentage: c.discountType === 'percentage' ? c.value : 0, discountAmount: c.discountType === 'flat' ? c.value : 0, type: 'coupon' }; setAppliedOffers(prev => [...prev.filter(o => o.type !== 'coupon'), couponOffer]); } }} className={`snap-start min-w-[280px] sm:min-w-[320px] group relative flex items-center justify-between gap-4 p-5 rounded-[2rem] border transition-all text-left flex-shrink-0 shadow-lg hover:shadow-xl hover:-translate-y-1 ${appliedOffers.some(o => o.name === c.code) ? 'border-[#FACC15] bg-[#FACC15]/5 dark:bg-[#FACC15]/10' : 'border-slate-100 dark:border-white/5 bg-white dark:bg-zinc-800'}`}>
                                                                 <div className="flex items-center gap-5 min-w-0">
-                                                                    <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-900 flex-shrink-0 flex items-center justify-center overflow-hidden border border-slate-100 dark:border-white/5">{c.imageUrl ? <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" /> : <Tag size={24} className="text-emerald-600" />}</div>
-                                                                    <div className="flex-1 min-w-0"><div className="flex flex-col"><span className="text-2xl font-black text-emerald-950 dark:text-white leading-tight tracking-tight">{c.value}{c.discountType === 'percentage' ? '%' : ''}<span className="text-emerald-600 ml-1">OFF</span></span><div className="flex items-center gap-2 mt-2"><div className="px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 flex items-center gap-2 shadow-sm"><span className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-widest">{c.code}</span><div className="h-3 w-px bg-slate-200 dark:bg-white/10"></div><span className="text-[9px] font-bold text-slate-400">{appliedOffers.some(o => o.name === c.code) ? 'Applied' : 'Apply'}</span></div></div></div></div>
+                                                                    <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-zinc-900 flex-shrink-0 flex items-center justify-center overflow-hidden border border-slate-100 dark:border-white/5">{c.imageUrl ? <img src={c.imageUrl} alt={c.code} className="w-full h-full object-cover" /> : <Tag size={24} className="text-[#FACC15]" />}</div>
+                                                                    <div className="flex-1 min-w-0"><div className="flex flex-col"><span className="text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tight">{c.value}{c.discountType === 'percentage' ? '%' : ''}<span className="text-[#FACC15] ml-1">OFF</span></span><div className="flex items-center gap-2 mt-2"><div className="px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 flex items-center gap-2 shadow-sm"><span className="text-[10px] font-black text-amber-800 dark:text-[#FACC15] uppercase tracking-widest">{c.code}</span><div className="h-3 w-px bg-slate-200 dark:bg-white/10"></div><span className="text-[9px] font-bold text-slate-400">{appliedOffers.some(o => o.name === c.code) ? 'Applied' : 'Apply'}</span></div></div></div></div>
                                                                 </div>
-                                                                {appliedOffers.some(o => o.name === c.code) ? <div className="flex-shrink-0 w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white shadow-lg animate-scale-in"><Check size={16} strokeWidth={4} /></div> : <div className="flex-shrink-0 w-8 h-8 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-300 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-600 transition-all"><Plus size={16} strokeWidth={3} /></div>}
+                                                                {appliedOffers.some(o => o.name === c.code) ? <div className="flex-shrink-0 w-8 h-8 bg-[#FACC15] rounded-full flex items-center justify-center text-black shadow-lg animate-scale-in"><Check size={16} strokeWidth={4} /></div> : <div className="flex-shrink-0 w-8 h-8 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-300 group-hover:bg-[#FACC15] group-hover:text-black group-hover:border-[#FACC15] transition-all"><Plus size={16} strokeWidth={3} /></div>}
                                                             </button>
                                                         ))}
                                                     </div>
@@ -1268,7 +1269,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                     }
                                                     setStep(3);
                                                 }}
-                                                className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] lg:hidden bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5" 
+                                                className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] lg:hidden bg-[#FACC15] hover:bg-yellow-400 text-black shadow-lg shadow-yellow-500/20 hover:shadow-xl hover:-translate-y-0.5" 
                                                 aria-label="Continue to review"
                                             >
                                                 Review Trip <ArrowRight size={16} strokeWidth={3}/>
@@ -1439,16 +1440,16 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                         className={`w-full min-h-16 sm:h-[72px] py-2 sm:py-0 rounded-2xl shadow-md transition-all group flex items-center justify-center border
                                         ${isCheckoutDisabled
                                             ? 'bg-slate-400 dark:bg-zinc-700 text-white/50 opacity-60 cursor-not-allowed border-transparent'
-                                            : 'bg-emerald-600 hover:bg-emerald-700 text-white hover:shadow-lg active:scale-[0.98] border-emerald-500/20'}`}
+                                            : 'bg-[#FACC15] hover:bg-yellow-400 text-black hover:shadow-lg active:scale-[0.98] border-[#FACC15] shadow-lg shadow-yellow-500/20'}`}
                                     >
                                         {isLoadingPricing ? (
-                                            <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                            <div className={`w-8 h-8 border-4 rounded-full animate-spin ${isCheckoutDisabled ? 'border-white/30 border-t-white' : 'border-black/30 border-t-black'}`}></div>
                                         ) : (
                                             <div className="flex items-center justify-between w-full px-4 sm:px-6 gap-2">
                                                 <div className="flex-1 text-center text-base sm:text-lg font-black tracking-widest uppercase">
                                                     BOOK TRIP NOW
                                                 </div>
-                                                <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 bg-white/20 rounded-full flex items-center justify-center text-white group-hover:translate-x-1 transition-transform">
+                                                <div className={`w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform ${isCheckoutDisabled ? 'bg-white/20 text-white/50' : 'bg-black/10 text-black'}`}>
                                                     <ArrowRight size={18} className="sm:size-6" strokeWidth={2.5} />
                                                 </div>
                                             </div>
