@@ -65,13 +65,13 @@ const DestinationBar = () => {
                     <div className="flex-1 w-full overflow-hidden relative">
                         <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 md:pb-0 px-1">
                             {locations.map((loc) => (
-                                <Link
+                                <a
                                     key={loc}
                                     href={`/?destination=${loc}#booking`}
                                     className="bg-white text-black px-4 py-1.5 rounded-full font-black text-[8px] md:text-[10px] uppercase tracking-wider whitespace-nowrap shadow-md border border-transparent hover:bg-emerald-600 hover:text-white transition-all active:scale-95"
                                 >
                                     {loc}
-                                </Link>
+                                </a>
                             ))}
                         </div>
                         {/* Fade edges */}

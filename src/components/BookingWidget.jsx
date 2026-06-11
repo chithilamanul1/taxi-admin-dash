@@ -1004,9 +1004,6 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                                     <div className="bg-black rounded-b-[2.5rem] border-x-4 border-b-4 border-[#FACC15] p-4 flex justify-center max-w-[320px] mx-auto">
                                                                         <button type="button" onClick={() => { 
                                                                             setIsDateTimePickerOpen(false); 
-                                                                            if (scheduledDate) {
-                                                                                setStep(2); 
-                                                                            } 
                                                                         }} className="px-10 py-3 bg-[#FACC15] text-black font-black text-xs uppercase tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-lg active:scale-95">Done</button>
                                                                     </div>
                                                                 </motion.div>
@@ -1090,8 +1087,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                         setStep(2);
                                                     }
                                                 }}
-                                                disabled={!scheduledDate || !scheduledTime}
-                                                className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] ${(!scheduledDate || !scheduledTime) ? 'bg-slate-400 dark:bg-zinc-700 text-white/50 opacity-60 cursor-not-allowed' : 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white shadow-lg shadow-orange-500/20 hover:shadow-xl hover:-translate-y-0.5'}`}
+                                                className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white shadow-lg shadow-orange-500/20 hover:shadow-xl hover:-translate-y-0.5"
                                                 aria-label="Continue to Booking"
                                             >
                                                 Continue to Booking <ArrowRight size={16} strokeWidth={3}/>

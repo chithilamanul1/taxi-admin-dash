@@ -176,6 +176,7 @@ const LocationInput = ({
                             suggestions.map((s, i) => (
                                 <button
                                     key={i}
+                                    type="button"
                                     onMouseDown={() => handleSelect(s)}
                                     className="w-full flex items-center gap-4 p-3 hover:bg-slate-50 dark:hover:bg-zinc-700/50 rounded-xl group transition-all text-left mb-1 last:mb-0"
                                 >
