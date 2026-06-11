@@ -62,7 +62,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
     const [waypointResults, setWaypointResults] = useState([])
 
     const [passengerCount, setPassengerCount] = useState({
-        adults: 1,
+        adults: 0,
         children: 0,
         luggage: 0,
         handLuggage: 0
@@ -1169,18 +1169,18 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                             )}
                                         </div>
                                         <div className="space-y-4 mb-6">
-                                            <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-4 flex items-center gap-2">
+<label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest pl-1 leading-none block mb-4 flex items-center gap-2">
                                                 Passenger and Luggage <span className="text-[9px] bg-red-600 text-white px-2 py-0.5 rounded-full lowercase tracking-tight shadow-sm">required</span>
                                             </label>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                                                 {[{ id: 'adults', label: 'Adults' }, { id: 'children', label: 'Children' }, { id: 'luggage', label: 'Luggage' }, { id: 'handLuggage', label: 'Hand Luggage' }].map(c => {
-                                                    const isLuggageUnselected = c.id === 'luggage' && !(passengerCount.luggage > 0);
+                                                    const isFieldUnselected = (c.id === 'luggage' && !(passengerCount.luggage > 0)) || (c.id === 'adults' && !(passengerCount.adults > 0)) || (c.id === 'handLuggage' && !(passengerCount.handLuggage > 0));
                                                     return (
-                                                        <div key={c.id} className={`bg-white dark:bg-zinc-800 border shadow-sm p-4 rounded-2xl flex items-center justify-between transition-all h-16 sm:h-18 ${isLuggageUnselected ? 'border-red-500 ring-2 ring-red-500/10' : 'border-slate-200 dark:border-white/10'}`}>
-                                                            <span className={`text-[11px] font-black uppercase tracking-widest w-24 flex-shrink-0 leading-tight pr-2 ${isLuggageUnselected ? 'text-red-500 dark:text-red-400 animate-pulse' : 'text-slate-800 dark:text-slate-100'}`}>{c.label}</span>
+                                                        <div key={c.id} className={`bg-white dark:bg-zinc-800 border shadow-sm p-4 rounded-2xl flex items-center justify-between transition-all h-16 sm:h-18 ${isFieldUnselected ? 'border-red-500 ring-2 ring-red-500/10' : 'border-slate-200 dark:border-white/10'}`}>
+                                                            <span className={`text-[11px] font-black uppercase tracking-widest w-24 flex-shrink-0 leading-tight pr-2 ${isFieldUnselected ? 'text-red-500 dark:text-red-400 animate-pulse' : 'text-slate-800 dark:text-slate-100'}`}>{c.label}</span>
                                                             <div className="flex items-center gap-3 shrink-0 bg-slate-50 dark:bg-zinc-900 rounded-xl p-1 border border-slate-100 dark:border-white/5">
-                                                                <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(c.id === 'adults' ? 1 : 0, (Number(p[c.id]) || 0) - 1) }))} className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center hover:bg-slate-50 transition-all text-slate-600 dark:text-white active:scale-95" aria-label={`Decrease ${c.label}`}><Minus size={14} strokeWidth={2.5} /></button>
-                                                                <span className={`font-bold text-base min-w-[20px] text-center ${isLuggageUnselected ? 'text-red-500 dark:text-red-400' : 'text-slate-800 dark:text-white'}`} aria-live="polite">{passengerCount[c.id] || 0}</span>
+                                                                <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: Math.max(0, (Number(p[c.id]) || 0) - 1) }))} className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center hover:bg-slate-50 transition-all text-slate-600 dark:text-white active:scale-95" aria-label={`Decrease ${c.label}`}><Minus size={14} strokeWidth={2.5} /></button>
+                                                                <span className={`font-bold text-base min-w-[20px] text-center ${isFieldUnselected ? 'text-red-500 dark:text-red-400' : 'text-slate-800 dark:text-white'}`} aria-live="polite">{passengerCount[c.id] || 0}</span>
                                                                 <button onClick={() => setPassengerCount(p => ({ ...p, [c.id]: (Number(p[c.id]) || 0) + 1 }))} className="w-8 h-8 rounded-lg bg-emerald-500 dark:bg-emerald-600 border border-transparent flex items-center justify-center transition-all text-white shadow-sm active:scale-95" aria-label={`Increase ${c.label}`}><Plus size={14} strokeWidth={2.5} /></button>
                                                             </div>
                                                         </div>
@@ -1258,16 +1258,17 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                             </button>
                                             <button 
                                                 onClick={() => {
-                                                    if (isStep2Disabled) {
+                                                    if (!passengerCount.adults || passengerCount.adults < 1) {
+                                                        alert("Please select at least one adult passenger.");
+                                                        return;
+                                                    }
+                                                    if (passengerCount.handLuggage > 0 && (passengerCount.luggage || 0) === 0) {
+                                                        alert("Please select at least one standard luggage bag when hand luggage is added.");
                                                         return;
                                                     }
                                                     setStep(3);
                                                 }}
-                                                disabled={isStep2Disabled}
-                                                className={`flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] lg:hidden
-                                                ${isStep2Disabled 
-                                                    ? 'bg-slate-400 dark:bg-zinc-700 text-white/50 opacity-60 cursor-not-allowed' 
-                                                    : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5'}`} 
+                                                className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] lg:hidden bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:-translate-y-0.5" 
                                                 aria-label="Continue to review"
                                             >
                                                 Review Trip <ArrowRight size={16} strokeWidth={3}/>

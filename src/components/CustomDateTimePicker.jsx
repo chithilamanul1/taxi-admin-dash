@@ -181,83 +181,67 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
                         exit={{ opacity: 0, scale: 0.95 }}
                         className="py-1"
                     >
-                        {/* Multi section digital clock columns */}
-                        <div className="flex gap-2 items-stretch h-40 mb-4 border border-white/10 rounded-2xl bg-white/5 overflow-hidden">
-                            {/* Hour Column */}
-                            <div className="flex-1 flex flex-col h-full border-r border-white/10">
-                                <span className="text-[9px] font-black text-center text-white/40 py-1.5 border-b border-white/5 uppercase tracking-wider shrink-0">Hour</span>
-                                <div className="flex-1 overflow-y-auto no-scrollbar py-1">
-                                    {['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'].map(h => {
-                                        const isSelected = selectedHour === h;
-                                        return (
-                                            <button
-                                                key={h}
-                                                type="button"
-                                                onClick={() => {
-                                                    onChange(date, `${h}:${selectedMin} ${selectedPeriod} ${selectedTz}`);
-                                                }}
-                                                className={`w-full py-1.5 text-center text-xs font-black transition-all ${
-                                                    isSelected 
-                                                        ? 'bg-[#FACC15] text-black font-black scale-105' 
-                                                        : 'text-white hover:bg-white/10'
-                                                }`}
-                                            >
-                                                {h}
-                                            </button>
-                                        );
-                                    })}
+                        {/* Minimalist Dropdown selects for Hour, Minute, and AM/PM */}
+                        <div className="flex gap-2 items-center justify-between my-4">
+                            {/* Hour Select */}
+                            <div className="flex-1 flex flex-col gap-1.5">
+                                <label className="text-[10px] font-black text-white/40 uppercase tracking-widest pl-1 leading-none">Hour</label>
+                                <div className="relative">
+                                    <select
+                                        value={selectedHour}
+                                        onChange={(e) => onChange(date, `${e.target.value}:${selectedMin} ${selectedPeriod} ${selectedTz}`)}
+                                        className="w-full h-11 bg-zinc-900 border border-white/10 rounded-xl px-3 text-xs font-bold text-white focus:outline-none focus:border-[#FACC15] appearance-none cursor-pointer"
+                                    >
+                                        {['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'].map(h => (
+                                            <option key={h} value={h}>{h}</option>
+                                        ))}
+                                    </select>
+                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white/40">
+                                        <svg className="fill-current h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Minute Column */}
-                            <div className="flex-1 flex flex-col h-full border-r border-white/10">
-                                <span className="text-[9px] font-black text-center text-white/40 py-1.5 border-b border-white/5 uppercase tracking-wider shrink-0">Min</span>
-                                <div className="flex-1 overflow-y-auto no-scrollbar py-1">
-                                    {['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'].map(m => {
-                                        const isSelected = selectedMin === m;
-                                        return (
-                                            <button
-                                                key={m}
-                                                type="button"
-                                                onClick={() => {
-                                                    onChange(date, `${selectedHour}:${m} ${selectedPeriod} ${selectedTz}`);
-                                                }}
-                                                className={`w-full py-1.5 text-center text-xs font-black transition-all ${
-                                                    isSelected 
-                                                        ? 'bg-[#FACC15] text-black font-black scale-105' 
-                                                        : 'text-white hover:bg-white/10'
-                                                }`}
-                                            >
-                                                {m}
-                                            </button>
-                                        );
-                                    })}
+                            {/* Minute Select */}
+                            <div className="flex-1 flex flex-col gap-1.5">
+                                <label className="text-[10px] font-black text-white/40 uppercase tracking-widest pl-1 leading-none">Minute</label>
+                                <div className="relative">
+                                    <select
+                                        value={selectedMin}
+                                        onChange={(e) => onChange(date, `${selectedHour}:${e.target.value} ${selectedPeriod} ${selectedTz}`)}
+                                        className="w-full h-11 bg-zinc-900 border border-white/10 rounded-xl px-3 text-xs font-bold text-white focus:outline-none focus:border-[#FACC15] appearance-none cursor-pointer"
+                                    >
+                                        {['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'].map(m => (
+                                            <option key={m} value={m}>{m}</option>
+                                        ))}
+                                    </select>
+                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white/40">
+                                        <svg className="fill-current h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* AM/PM Column */}
-                            <div className="flex-1 flex flex-col h-full">
-                                <span className="text-[9px] font-black text-center text-white/40 py-1.5 border-b border-white/5 uppercase tracking-wider shrink-0">AM/PM</span>
-                                <div className="flex-1 overflow-y-auto no-scrollbar py-1 flex flex-col justify-center gap-2 px-2">
-                                    {['AM', 'PM'].map(p => {
-                                        const isSelected = selectedPeriod === p;
-                                        return (
-                                            <button
-                                                key={p}
-                                                type="button"
-                                                onClick={() => {
-                                                    onChange(date, `${selectedHour}:${selectedMin} ${p} ${selectedTz}`);
-                                                }}
-                                                className={`w-full py-2 text-center text-xs font-black transition-all rounded-xl ${
-                                                    isSelected 
-                                                        ? 'bg-[#FACC15] text-black font-black scale-105 shadow-md shadow-yellow-500/20' 
-                                                        : 'text-white hover:bg-white/10 border border-white/10'
-                                                }`}
-                                            >
-                                                {p}
-                                            </button>
-                                        );
-                                    })}
+                            {/* AM/PM Select */}
+                            <div className="w-20 flex flex-col gap-1.5">
+                                <label className="text-[10px] font-black text-white/40 uppercase tracking-widest pl-1 leading-none">AM/PM</label>
+                                <div className="relative">
+                                    <select
+                                        value={selectedPeriod}
+                                        onChange={(e) => onChange(date, `${selectedHour}:${selectedMin} ${e.target.value} ${selectedTz}`)}
+                                        className="w-full h-11 bg-zinc-900 border border-white/10 rounded-xl px-3 text-xs font-bold text-white focus:outline-none focus:border-[#FACC15] appearance-none cursor-pointer"
+                                    >
+                                        <option value="AM">AM</option>
+                                        <option value="PM">PM</option>
+                                    </select>
+                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white/40">
+                                        <svg className="fill-current h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -129,7 +129,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
         roundTripPackageId: initialData.roundTripPackageId || null,
         taxiTourHours: initialData.taxiTourHours || 4,
         taxiTourKm: initialData.taxiTourKm || 80,
-        passengerCount: initialData.passengerCount || { adults: 1, children: 0, luggage: 0, handLuggage: 0 },
+        passengerCount: initialData.passengerCount || { adults: 0, children: 0, luggage: 0, handLuggage: 0 },
         hasNameBoard: (initialData.hasNameBoard === true || initialData.hasNameBoard === false) ? initialData.hasNameBoard : null,
         nameBoardText: initialData.nameBoardText || '',
         couponCode: initialData.couponCode || '',
