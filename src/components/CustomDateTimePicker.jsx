@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const WORLD_TIMEZONES = [
     { value: 'SLST', label: 'Sri Lanka Time (SLST / UTC+5:30)' },
@@ -77,14 +78,26 @@ const WORLD_TIMEZONES = [
     { value: 'UTC+14:00', label: 'UTC+14:00 (Kiritimati)' }
 ];
 
-// Helper to parse stored time string "12:00 PM SLST" into { time24h: "12:00", timezone: "SLST" }
+const generateTimeSlots = () => {
+    const slots = [];
+    for (let hour = 0; hour < 24; hour++) {
+        for (let min of [0, 30]) {
+            const h12 = hour % 12 === 0 ? 12 : hour % 12;
+            const period = hour >= 12 ? 'PM' : 'AM';
+            slots.push(`${h12}:${min.toString().padStart(2, '0')} ${period}`);
+        }
+    }
+    return slots;
+};
+
+// Helper to parse stored time string "12:00 PM SLST" into { time24h: "12:00", time12h: "12:00 PM", timezone: "SLST" }
 function parseStoredTime(timeStr) {
-    if (!timeStr) return { time24h: "12:00", timezone: "SLST" };
+    if (!timeStr) return { time24h: "12:00", time12h: "12:00 PM", timezone: "SLST" };
     
     const parts = timeStr.trim().split(/\s+/);
     const timePart = parts[0];
     if (!timePart || !timePart.includes(':')) {
-        return { time24h: "12:00", timezone: "SLST" };
+        return { time24h: "12:00", time12h: "12:00 PM", timezone: "SLST" };
     }
     
     let [hStr, mStr] = timePart.split(':');
@@ -112,43 +125,99 @@ function parseStoredTime(timeStr) {
     }
     
     const time24h = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-    return { time24h, timezone };
+    
+    const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+    const finalPeriod = hour >= 12 ? 'PM' : 'AM';
+    const time12h = `${hour12}:${minute.toString().padStart(2, '0')} ${finalPeriod}`;
+    
+    return { time24h, time12h, timezone };
 }
 
-// Helper to format native time "13:30" and timezone "SLST" to stored format "01:30 PM SLST"
-function formatStoredTime(time24h, timezone) {
-    if (!time24h) time24h = "12:00";
+// Helper to format slot time "9:30 PM" and timezone "SLST" to stored format "09:30 PM SLST"
+function formatStoredTime(slotTime, timezone) {
+    if (!slotTime) slotTime = "12:00 PM";
     if (!timezone) timezone = "SLST";
     
-    const [hStr, mStr] = time24h.split(':');
-    let hour = parseInt(hStr, 10) || 0;
+    const parts = slotTime.split(' ');
+    const timePart = parts[0];
+    const period = parts[1];
+    
+    const [hStr, mStr] = timePart.split(':');
+    let hour = parseInt(hStr, 10) || 12;
     const minute = parseInt(mStr, 10) || 0;
     
-    const period = hour >= 12 ? 'PM' : 'AM';
-    let hour12 = hour % 12;
-    if (hour12 === 0) hour12 = 12;
+    const hPad = hour.toString().padStart(2, '0');
+    const mPad = minute.toString().padStart(2, '0');
     
-    const h12Str = hour12.toString().padStart(2, '0');
-    const mStrPad = minute.toString().padStart(2, '0');
-    
-    return `${h12Str}:${mStrPad} ${period} ${timezone}`;
+    return `${hPad}:${mPad} ${period} ${timezone}`;
 }
+
+const generateCalendarGrid = (viewDate) => {
+    const year = viewDate.getFullYear();
+    const month = viewDate.getMonth();
+    
+    const firstDayIndex = new Date(year, month, 1).getDay(); 
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrevMonth = new Date(year, month, 0).getDate();
+    
+    const days = [];
+    
+    // Previous month filler days
+    for (let i = firstDayIndex - 1; i >= 0; i--) {
+        const d = daysInPrevMonth - i;
+        days.push({
+            day: d,
+            isCurrentMonth: false,
+            date: new Date(year, month - 1, d)
+        });
+    }
+    
+    // Current month days
+    for (let d = 1; d <= daysInMonth; d++) {
+        days.push({
+            day: d,
+            isCurrentMonth: true,
+            date: new Date(year, month, d)
+        });
+    }
+    
+    // Next month filler days (fill to 35 slots if possible, else 42)
+    const totalSlots = days.length <= 35 ? 35 : 42;
+    const nextMonthDaysCount = totalSlots - days.length;
+    for (let d = 1; d <= nextMonthDaysCount; d++) {
+        days.push({
+            day: d,
+            isCurrentMonth: false,
+            date: new Date(year, month + 1, d)
+        });
+    }
+    
+    return days;
+};
 
 export default function CustomDateTimePicker({ date, time, onChange }) {
     const initialParsed = parseStoredTime(time);
-    
+    const slots = generateTimeSlots();
+
     const [selectedDate, setSelectedDate] = useState('');
-    const [selectedTime24h, setSelectedTime24h] = useState(initialParsed.time24h);
+    const [selectedTime12h, setSelectedTime12h] = useState(initialParsed.time12h);
     const [selectedTz, setSelectedTz] = useState(initialParsed.timezone);
+
+    const [viewDate, setViewDate] = useState(new Date());
+    
+    const activeTimeRef = useRef(null);
 
     // Sync state with props
     useEffect(() => {
         if (date) {
+            const parsedDate = new Date(date);
             setSelectedDate(date.split('T')[0]);
+            setViewDate(parsedDate);
         } else {
             const today = new Date().toISOString().split('T')[0];
             setSelectedDate(today);
-            const formattedTime = formatStoredTime(selectedTime24h, selectedTz);
+            setViewDate(new Date());
+            const formattedTime = formatStoredTime(selectedTime12h, selectedTz);
             onChange(today, formattedTime);
         }
     }, [date]);
@@ -156,12 +225,12 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
     useEffect(() => {
         if (time) {
             const parsed = parseStoredTime(time);
-            setSelectedTime24h(parsed.time24h);
+            setSelectedTime12h(parsed.time12h);
             setSelectedTz(parsed.timezone);
         } else {
             const defaultTime = "12:00 PM SLST";
             const parsed = parseStoredTime(defaultTime);
-            setSelectedTime24h(parsed.time24h);
+            setSelectedTime12h(parsed.time12h);
             setSelectedTz(parsed.timezone);
             if (selectedDate) {
                 onChange(selectedDate, defaultTime);
@@ -169,77 +238,165 @@ export default function CustomDateTimePicker({ date, time, onChange }) {
         }
     }, [time]);
 
-    const handleDateChange = (e) => {
-        const d = e.target.value;
-        setSelectedDate(d);
-        const formattedTime = formatStoredTime(selectedTime24h, selectedTz);
-        onChange(d, formattedTime);
+    // Scroll active time slot into view when rendered
+    useEffect(() => {
+        if (activeTimeRef.current) {
+            activeTimeRef.current.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+        }
+    }, [selectedTime12h]);
+
+    const handlePrevMonth = () => {
+        setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1));
     };
 
-    const handleTimeChange = (e) => {
-        const t = e.target.value;
-        setSelectedTime24h(t);
-        const formattedTime = formatStoredTime(t, selectedTz);
+    const handleNextMonth = () => {
+        setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1));
+    };
+
+    const handleDateClick = (dayObj) => {
+        if (!dayObj.isCurrentMonth) return;
+        const dStr = dayObj.date.toISOString().split('T')[0];
+        setSelectedDate(dStr);
+        const formattedTime = formatStoredTime(selectedTime12h, selectedTz);
+        onChange(dStr, formattedTime);
+    };
+
+    const handleTimeClick = (slot) => {
+        setSelectedTime12h(slot);
+        const formattedTime = formatStoredTime(slot, selectedTz);
         onChange(selectedDate || new Date().toISOString().split('T')[0], formattedTime);
     };
 
     const handleTzChange = (e) => {
         const tz = e.target.value;
         setSelectedTz(tz);
-        const formattedTime = formatStoredTime(selectedTime24h, tz);
+        const formattedTime = formatStoredTime(selectedTime12h, tz);
         onChange(selectedDate || new Date().toISOString().split('T')[0], formattedTime);
     };
 
+    const isSameDate = (d1, d2) => {
+        if (!d1 || !d2) return false;
+        const date1 = new Date(d1);
+        const date2 = new Date(d2);
+        return date1.getDate() === date2.getDate() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getFullYear() === date2.getFullYear();
+    };
+
+    const calendarGrid = generateCalendarGrid(viewDate);
+
     return (
-        <div className="bg-white rounded-[2.5rem] p-6 border-4 border-[#FACC15] text-slate-900 w-full max-w-[320px] mx-auto overflow-hidden">
-            <div className="mb-4">
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 pl-1">
-                    Select Date <span className="text-[10px] text-amber-600 font-normal normal-case">(Click field below)</span>
-                </p>
-                <input
-                    type="date"
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#FACC15] cursor-pointer"
-                />
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl text-slate-800 w-[385px] mx-auto overflow-hidden animate-fade-in">
+            {/* Top split panel */}
+            <div className="flex divide-x divide-slate-200">
+                {/* Left side: Calendar Grid */}
+                <div className="w-[245px] p-4 flex flex-col justify-between">
+                    <div>
+                        {/* Month Selector header */}
+                        <div className="flex justify-between items-center mb-3">
+                            <span className="text-[13px] font-black text-slate-800 tracking-wide">
+                                {viewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                            </span>
+                            <div className="flex gap-1.5">
+                                <button type="button" onClick={handlePrevMonth} className="p-1 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors border border-slate-150">
+                                    <ChevronLeft size={14} strokeWidth={2.5} />
+                                </button>
+                                <button type="button" onClick={handleNextMonth} className="p-1 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors border border-slate-150">
+                                    <ChevronRight size={14} strokeWidth={2.5} />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Week headers */}
+                        <div className="grid grid-cols-7 gap-1 text-center mb-1.5">
+                            {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d, i) => (
+                                <span key={i} className="text-[10px] font-bold text-slate-400 py-1">{d}</span>
+                            ))}
+                        </div>
+
+                        {/* Day numbers grid */}
+                        <div className="grid grid-cols-7 gap-1 place-items-center">
+                            {calendarGrid.map((dayObj, i) => {
+                                const isSelected = dayObj.isCurrentMonth && isSameDate(dayObj.date, selectedDate);
+                                const isToday = dayObj.isCurrentMonth && isSameDate(dayObj.date, new Date());
+                                
+                                return (
+                                    <button
+                                        key={i}
+                                        type="button"
+                                        disabled={!dayObj.isCurrentMonth}
+                                        onClick={() => handleDateClick(dayObj)}
+                                        className={`w-7 h-7 flex items-center justify-center rounded-lg text-[11px] font-bold transition-all
+                                            ${!dayObj.isCurrentMonth 
+                                                ? 'text-slate-300 cursor-default font-normal' 
+                                                : isSelected 
+                                                    ? 'bg-[#1E5A95] text-white border-2 border-black rounded-lg scale-105 shadow-sm' 
+                                                    : 'hover:bg-slate-100 text-slate-800'
+                                            }
+                                            ${isToday && !isSelected ? 'text-[#1E5A95] font-black underline decoration-2' : ''}
+                                        `}
+                                    >
+                                        {dayObj.day}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right side: Time Slots Dropdown List */}
+                <div className="w-[140px] flex flex-col bg-slate-50">
+                    <div className="text-[11px] font-black text-slate-500 uppercase tracking-widest text-center py-2.5 border-b border-slate-200">
+                        Time
+                    </div>
+                    <div className="flex-1 overflow-y-auto max-h-[225px] custom-scrollbar p-1.5">
+                        {slots.map((slot) => {
+                            const isSelected = slot === selectedTime12h;
+                            return (
+                                <button
+                                    key={slot}
+                                    type="button"
+                                    ref={isSelected ? activeTimeRef : null}
+                                    onClick={() => handleTimeClick(slot)}
+                                    className={`w-full text-center py-1.5 text-[11px] font-bold transition-colors rounded-lg mb-1 last:mb-0 block
+                                        ${isSelected 
+                                            ? 'bg-[#1E5A95] text-white' 
+                                            : 'text-slate-700 hover:bg-slate-200'
+                                        }`}
+                                >
+                                    {slot}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
             </div>
 
-            <div className="mb-4">
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 pl-1">
-                    Select Time <span className="text-[10px] text-amber-600 font-normal normal-case">(Click field below)</span>
-                </p>
-                <input
-                    type="time"
-                    value={selectedTime24h}
-                    onChange={handleTimeChange}
-                    className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#FACC15] cursor-pointer"
-                />
-            </div>
-
-            <div className="mb-2">
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 pl-1">
-                    Time Zone
-                </p>
-                <div className="relative">
-                    <select
-                        value={selectedTz}
-                        onChange={handleTzChange}
-                        className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl pl-4 pr-8 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#FACC15] appearance-none cursor-pointer"
-                    >
-                        {(() => {
-                            const tzList = [...WORLD_TIMEZONES];
-                            if (selectedTz && !tzList.some(tz => tz.value.toUpperCase() === selectedTz.toUpperCase())) {
-                                tzList.unshift({ value: selectedTz, label: `${selectedTz} (Selected)` });
-                            }
-                            return tzList.map(tz => (
-                                <option key={tz.value} value={tz.value}>{tz.label}</option>
-                            ));
-                        })()}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
-                        <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                        </svg>
+            {/* Timezone and Actions Panel */}
+            <div className="p-3 border-t border-slate-200 bg-white flex flex-col gap-2">
+                <div>
+                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block mb-1 pl-1">Time Zone</label>
+                    <div className="relative">
+                        <select
+                            value={selectedTz}
+                            onChange={handleTzChange}
+                            className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg pl-3 pr-8 text-[10px] font-bold text-slate-700 focus:outline-none focus:border-[#FACC15] appearance-none cursor-pointer"
+                        >
+                            {(() => {
+                                const tzList = [...WORLD_TIMEZONES];
+                                if (selectedTz && !tzList.some(tz => tz.value.toUpperCase() === selectedTz.toUpperCase())) {
+                                    tzList.unshift({ value: selectedTz, label: `${selectedTz} (Selected)` });
+                                }
+                                return tzList.map(tz => (
+                                    <option key={tz.value} value={tz.value}>{tz.label}</option>
+                                ));
+                            })()}
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+                            <svg className="fill-current h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -41,6 +41,14 @@ const calculatePrice = (distance, vehicleId, tripType, pricingMap, waitingHours,
 };
 
 // Internal Loader Component to avoid hook conflicts
+const formatDisplayDateTime = (dateStr, timeStr) => {
+    if (!dateStr || !timeStr) return 'Select Date & Time';
+    const [year, month, day] = dateStr.split('-');
+    const parts = timeStr.trim().split(/\s+/);
+    const timePart = parts[0];
+    const period = parts[1] || '';
+    return `${month}/${day}/${year}, ${timePart} ${period}`;
+};
 
 const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
     const router = useRouter();
@@ -1008,7 +1016,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                         <div className="flex items-center gap-3">
                                                             <Calendar size={18} className={scheduledDate ? 'text-emerald-500' : step1Errors.dateTime ? 'text-red-500' : 'text-slate-400'} />
                                                             <span className="uppercase tracking-widest text-[11px]">
-                                                                {scheduledDate && scheduledTime ? `${new Date(scheduledDate + (scheduledDate.includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${scheduledTime}` : 'Select Date & Time'}
+                                                                {scheduledDate && scheduledTime ? formatDisplayDateTime(scheduledDate, scheduledTime) : 'Select Date & Time'}
                                                             </span>
                                                         </div>
                                                         <div className="flex items-center gap-2">

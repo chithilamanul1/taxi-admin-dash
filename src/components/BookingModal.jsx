@@ -20,6 +20,15 @@ const STEPS = [
     { id: 3, title: 'Confirm & Pay', icon: CreditCard },
 ];
 
+const formatDisplayDateTime = (dateStr, timeStr) => {
+    if (!dateStr || !timeStr) return 'Select Date & Time';
+    const [year, month, day] = dateStr.split('-');
+    const parts = timeStr.trim().split(/\s+/);
+    const timePart = parts[0];
+    const period = parts[1] || '';
+    return `${month}/${day}/${year}, ${timePart} ${period}`;
+};
+
 // Strip 'KDH' and any model details in parentheses from vehicle display names
 const displayVehicleName = (name) => (name || '').replace(/\bKDH\s*/gi, '').split('(')[0].trim();
 
@@ -822,7 +831,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         >
                                                             <span className={formData.flightArrivalDate && formData.flightArrivalTime ? 'text-black dark:text-white' : 'text-slate-400'}>
                                                                 {formData.flightArrivalDate && formData.flightArrivalTime 
-                                                                    ? `${new Date(formData.flightArrivalDate + (formData.flightArrivalDate.includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${formData.flightArrivalTime}`
+                                                                    ? formatDisplayDateTime(formData.flightArrivalDate, formData.flightArrivalTime)
                                                                     : 'Select Date & Time'}
                                                             </span>
                                                             <ChevronDown size={20} className={`opacity-50 transition-transform ${isArrivalPickerOpen ? 'rotate-180' : ''}`} />
@@ -962,7 +971,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             >
                                                 <span className={formData.date && formData.time ? 'text-black dark:text-white' : 'text-slate-400'}>
                                                     {formData.date && formData.time 
-                                                        ? `${new Date(formData.date + (formData.date.includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${formData.time}`
+                                                        ? formatDisplayDateTime(formData.date, formData.time)
                                                         : 'Select Date & Time'}
                                                 </span>
                                                 <ChevronDown size={18} className={`opacity-50 transition-transform ${isPickupPickerOpen ? 'rotate-180' : ''}`} />
@@ -999,7 +1008,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                 <div className="space-y-6">
                                     <div className="flex items-center gap-4">
                                         <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
-                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Global Pricing</span>
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Pricing</span>
                                         <div className="h-px flex-1 bg-slate-100 dark:bg-white/5"></div>
                                     </div>
                                     <div className="flex flex-wrap gap-2 justify-center">
@@ -1129,7 +1138,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all flex items-center justify-between text-left ${errors.date || errors.time ? 'border-red-500 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
                                         >
                                             <span className="text-black dark:text-white">
-                                                {`${new Date((formData.date || formData.flightArrivalDate || new Date().toISOString().split('T')[0]) + ((formData.date || formData.flightArrivalDate || '').includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${formData.time || formData.flightArrivalTime || '12:00 PM SLST'}`}
+                                                {formatDisplayDateTime(formData.date || formData.flightArrivalDate || new Date().toISOString().split('T')[0], formData.time || formData.flightArrivalTime || '12:00 PM SLST')}
                                             </span>
                                             <ChevronDown size={20} className={`opacity-50 transition-transform ${isMainPickerOpen2 ? 'rotate-180' : ''}`} />
                                         </button>
@@ -1180,7 +1189,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                             >
                                                 <span className={formData.returnDate && formData.returnTime ? 'text-black dark:text-white' : 'text-slate-400'}>
                                                     {formData.returnDate && formData.returnTime 
-                                                        ? `${new Date(formData.returnDate + (formData.returnDate.includes('T') ? '' : 'T12:00:00')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} ${formData.returnTime}`
+                                                        ? formatDisplayDateTime(formData.returnDate, formData.returnTime)
                                                         : 'Select Return Date & Time'}
                                                 </span>
                                                 <ChevronDown size={20} className={`opacity-50 transition-transform ${isReturnPickerOpen ? 'rotate-180' : ''}`} />
