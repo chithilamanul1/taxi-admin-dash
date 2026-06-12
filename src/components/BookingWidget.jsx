@@ -1072,6 +1072,11 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                             })}
                                                             selectedId={vehicle}
                                                             onSelect={(vType) => {
+                                                                if (!scheduledDate || !scheduledTime) {
+                                                                    setStep1Errors(prev => ({ ...prev, dateTime: true }));
+                                                                    dateTimeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                                                    return;
+                                                                }
                                                                 setVehicle(vType);
                                                                 setIsManualVehicle(true);
                                                                 const syncTab = ['pickup', 'drop'].includes(activeTab) ? 'airport' : 'tour';
