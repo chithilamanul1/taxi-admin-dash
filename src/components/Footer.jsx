@@ -17,8 +17,8 @@ const Footer = () => {
                     {/* Brand Section */}
                     <div className="lg:col-span-2 space-y-6">
                         <div className="flex flex-col">
-                            <span className="text-3xl font-extrabold tracking-tight uppercase leading-none text-white">
-                                AIRPORT TAXIS <span className="text-[#FACC15]">PVT LTD</span>
+                            <span className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight uppercase leading-none text-white whitespace-nowrap">
+                                AIRPORT TAXIS <span className="text-[#FACC15]">(PVT) LTD</span>
                             </span>
                             <span className="text-[9px] font-black text-[#FACC15]/80 uppercase tracking-[0.3em] mt-1.5">Private Limited Company</span>
                         </div>
