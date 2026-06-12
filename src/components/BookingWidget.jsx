@@ -1105,7 +1105,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                         setStep(2);
                                                     }
                                                 }}
-                                                className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white shadow-lg shadow-orange-500/20 hover:shadow-xl hover:-translate-y-0.5"
+                                                className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white hover:-translate-y-0.5"
                                                 aria-label="Continue to Booking"
                                             >
                                                 Continue to Booking <ArrowRight size={16} strokeWidth={3}/>
@@ -1293,10 +1293,10 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                                     }
                                                     setStep(3);
                                                 }}
-                                                className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] lg:hidden bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white shadow-lg shadow-orange-500/20 hover:shadow-xl hover:-translate-y-0.5" 
+                                                className="flex-1 flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition-all active:scale-[0.98] lg:hidden bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white hover:-translate-y-0.5" 
                                                 aria-label="Continue to review"
                                             >
-                                                Review Trip <ArrowRight size={16} strokeWidth={3}/>
+                                                Continue to Review <ArrowRight size={16} strokeWidth={3}/>
                                             </button>
                                         </div>
                                     </motion.div>
@@ -1463,8 +1463,7 @@ const BookingWidgetContent = ({ defaultTab = 'pickup' }) => {
                                         disabled={isCheckoutDisabled}
                                         className={`w-full min-h-16 sm:h-[72px] py-2 sm:py-0 rounded-2xl shadow-md transition-all group flex items-center justify-center border
                                         ${isCheckoutDisabled
-                                            ? 'bg-slate-400 dark:bg-zinc-700 text-white/50 opacity-60 cursor-not-allowed border-transparent'
-                                            : 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white hover:shadow-lg active:scale-[0.98] border-orange-500/20 shadow-lg shadow-orange-500/20'}`}
+                                            : 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white active:scale-[0.98] border-orange-500/20'}`}
                                     >
                                         {isLoadingPricing ? (
                                             <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
