@@ -731,12 +731,12 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                     </div>
                 </div>
 
-                <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-6 sm:p-12 space-y-12">
+                <div ref={scrollContainerRef} className="flex-1 overflow-y-auto overflow-x-hidden p-6 sm:p-12 space-y-12 w-full">
                     {step === 1 && (
                         <div className="animate-slide-up space-y-12">
                             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-slate-100 dark:border-white/10">
                                 <div>
-                                    <h3 className="text-4xl sm:text-6xl font-black text-black dark:text-white tracking-tighter uppercase leading-none mb-3">
+                                    <h3 className="text-3xl sm:text-5xl md:text-6xl font-black text-black dark:text-white tracking-tighter uppercase leading-none mb-3 break-words">
                                         Route <span className="text-[#FACC15]">& Vehicle</span>
                                     </h3>
                                     <p className="text-[10px] sm:text-xs font-black text-slate-400 uppercase tracking-[0.4em]">Initialize Your Elite Transfer</p>
@@ -984,9 +984,9 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                     </div>
                                 </div>
                                 {verifiedCoupons.length > 0 && (
-                                    <div className="flex items-center gap-3 bg-emerald-50 dark:bg-emerald-400/10 text-emerald-600 dark:text-emerald-400 px-6 py-3 rounded-2xl border border-emerald-100 dark:border-emerald-400/20 w-fit mx-auto animate-bounce mt-6 shadow-sm">
+                                    <div className="flex items-center justify-center text-center gap-3 bg-emerald-50 dark:bg-emerald-400/10 text-emerald-600 dark:text-emerald-400 px-4 py-3 rounded-2xl border border-emerald-100 dark:border-emerald-400/20 w-full max-w-sm mx-auto animate-bounce mt-6 shadow-sm">
                                         <Tag size={14} className="shrink-0" />
-                                        <span className="text-[10px] font-black uppercase tracking-widest">
+                                        <span className="text-[10px] font-black uppercase tracking-widest leading-tight">
                                             Special Offer "{verifiedCoupons[0].code}" Automatically Applied!
                                         </span>
                                     </div>
