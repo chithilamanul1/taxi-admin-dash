@@ -67,7 +67,7 @@ export default function FloatingContact() {
             {/* Main Toggle */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-[64px] h-[64px] flex items-center justify-center rounded-2xl transition-all duration-500 hover:scale-105 active:scale-95 z-[9999] ${isOpen ? 'bg-red-500 text-white' : 'bg-white text-emerald-950 shadow-2xl shadow-slate-200/50 hover:shadow-emerald-600/20 border border-slate-100'}`}
+                className={`w-[64px] h-[64px] flex items-center justify-center rounded-2xl transition-all duration-500 hover:scale-105 active:scale-95 z-[9999] ${isOpen ? 'bg-red-500 text-white' : 'bg-white text-emerald-950 border border-slate-100 dark:border-zinc-800'}`}
                 aria-label={isOpen ? "Close contact menu" : "Open contact menu"}
             >
                 {isOpen ? <X size={32} strokeWidth={3} /> : (
