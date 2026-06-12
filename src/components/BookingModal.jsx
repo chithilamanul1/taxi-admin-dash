@@ -776,7 +776,7 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-3">
                                             <Signpost size={14} className="text-[#FACC15]" strokeWidth={3} /> Airport Greeting Service
                                         </label>
-                                        <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                             {[
                                                 { val: true, label: 'Name Board', sub: 'Standard Service', icon: Check, color: 'emerald' },
                                                 { val: false, label: 'No Board', sub: 'Direct Pickup', icon: X, color: 'rose' }
@@ -784,18 +784,18 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                 <button
                                                     key={opt.label}
                                                     onClick={() => setFormData({ ...formData, hasNameBoard: opt.val })}
-                                                    className={`p-6 rounded-3xl border text-left transition-all relative overflow-hidden group ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-transparent text-white shadow-xl' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-[#FACC15]/50'}`}
+                                                    className={`p-4 sm:p-6 rounded-3xl border text-left transition-all relative overflow-hidden group ${formData.hasNameBoard === opt.val ? 'bg-[#FACC15] border-transparent text-white shadow-xl' : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-[#FACC15]/50'}`}
                                                 >
-                                                    <div className="flex items-center justify-between mb-4">
-                                                        <div className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all ${formData.hasNameBoard === opt.val ? 'bg-white/20' : 'bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 shadow-sm'}`}>
-                                                            <opt.icon size={18} strokeWidth={4} className={formData.hasNameBoard === opt.val ? 'text-white' : (opt.val ? 'text-emerald-500' : 'text-rose-500')} />
+                                                    <div className="flex items-center justify-between mb-2 sm:mb-4">
+                                                        <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all ${formData.hasNameBoard === opt.val ? 'bg-white/20' : 'bg-white dark:bg-zinc-900 border border-slate-100 dark:border-white/10 shadow-sm'}`}>
+                                                            <opt.icon size={16} strokeWidth={4} className={formData.hasNameBoard === opt.val ? 'text-white' : (opt.val ? 'text-emerald-500' : 'text-rose-500')} />
                                                         </div>
                                                         {formData.hasNameBoard === opt.val && (
                                                             <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>
                                                         )}
                                                     </div>
-                                                    <span className="block text-xs font-black uppercase tracking-widest mb-1">{opt.label}</span>
-                                                    <span className={`text-[9px] font-bold uppercase tracking-widest ${formData.hasNameBoard === opt.val ? 'text-white/70' : 'text-slate-400'}`}>{opt.sub}</span>
+                                                    <span className="block text-[10px] sm:text-xs font-black uppercase tracking-widest mb-1">{opt.label}</span>
+                                                    <span className={`text-[8px] sm:text-[9px] font-bold uppercase tracking-widest ${formData.hasNameBoard === opt.val ? 'text-white/70' : 'text-slate-400'}`}>{opt.sub}</span>
                                                 </button>
                                             ))}
                                         </div>
@@ -811,11 +811,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         <input
                                                             value={formData.flightNumber || ''}
                                                             onChange={e => setFormData({ ...formData, flightNumber: e.target.value })}
-                                                            className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-xs placeholder:font-black ${errors.flightNumber ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                            className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-xs placeholder:font-black ${errors.flightNumber ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
                                                             placeholder="E.G. UL 504"
                                                         />
-                                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                            <PlaneTakeoff size={20} strokeWidth={3} />
+                                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                            <PlaneTakeoff size={18} strokeWidth={3} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -835,10 +835,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                     setErrors(prev => ({ ...prev, date: false, flightArrivalTime: false, time: false }));
                                                                 }
                                                             }} 
-                                                            className={`w-full h-20 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl sm:text-2xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.flightArrivalTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                            className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.flightArrivalTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
                                                         />
-                                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
-                                                            <Calendar size={22} strokeWidth={3} />
+                                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
+                                                            <Calendar size={18} strokeWidth={3} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -860,11 +860,11 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                                         name: prev.name ? prev.name : val
                                                                     }));
                                                                 }}
-                                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-xs placeholder:font-black ${errors.nameBoardText ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
+                                                                className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all placeholder:text-[10px] sm:placeholder:text-xs placeholder:font-black ${errors.nameBoardText ? 'border-red-500 animate-shake' : 'border-slate-100 dark:border-white/10'}`}
                                                                 placeholder="ENTER NAME FOR WELCOME BOARD"
                                                             />
-                                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15]">
-                                                                <User size={20} strokeWidth={3} />
+                                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15]">
+                                                                <User size={18} strokeWidth={3} />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -952,10 +952,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         setErrors(prev => ({ ...prev, date: false, time: false }));
                                                     }
                                                 }} 
-                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-base sm:text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.time ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
+                                                className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.date || errors.time ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
                                             />
-                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
-                                                <Calendar size={20} strokeWidth={3} />
+                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
+                                                <Calendar size={18} strokeWidth={3} />
                                             </div>
                                         </div>
                                     </div>
@@ -1147,10 +1147,10 @@ export default function BookingModal({ isOpen, onClose, initialData = {}, pricin
                                                         setErrors(prev => ({ ...prev, returnDate: false, returnTime: false }));
                                                     }
                                                 }} 
-                                                className={`w-full h-16 bg-slate-50 dark:bg-white/5 border px-14 rounded-3xl font-black text-xl uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.returnDate || errors.returnTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
+                                                className={`w-full h-14 bg-slate-50 dark:bg-white/5 border px-12 rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest outline-none focus:border-[#FACC15] transition-all focus:ring-2 focus:ring-[#FACC15] ${errors.returnDate || errors.returnTime ? 'border-red-500 ring-2 ring-red-500/20 animate-shake' : 'border-slate-200 dark:border-white/10'}`}
                                             />
-                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
-                                                <Calendar size={20} strokeWidth={3} />
+                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FACC15] pointer-events-none">
+                                                <Calendar size={18} strokeWidth={3} />
                                             </div>
                                         </div>
                                     </div>
